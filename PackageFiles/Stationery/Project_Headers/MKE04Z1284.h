@@ -1178,6 +1178,9 @@ typedef struct FTM_Type {
 /** @} */
 
 /** @name STATUS - Capture and Compare Status */ /** @{ */
+#define FTM_STATUS_STATUS_MASK                   (0xFFU)                                             /**< FTM2_STATUS.STATUS Mask                 */
+#define FTM_STATUS_STATUS_SHIFT                  (0U)                                                /**< FTM2_STATUS.STATUS Position             */
+#define FTM_STATUS_STATUS(x)                     (((uint32_t)(((uint32_t)(x))<<FTM_STATUS_STATUS_SHIFT))&FTM_STATUS_STATUS_MASK) /**< FTM2_STATUS.STATUS Field                */
 #define FTM_STATUS_CH0F_MASK                     (0x1U)                                              /**< FTM2_STATUS.CH0F Mask                   */
 #define FTM_STATUS_CH0F_SHIFT                    (0U)                                                /**< FTM2_STATUS.CH0F Position               */
 #define FTM_STATUS_CH0F(x)                       (((uint32_t)(((uint32_t)(x))<<FTM_STATUS_CH0F_SHIFT))&FTM_STATUS_CH0F_MASK) /**< FTM2_STATUS.CH0F Field                  */
@@ -1235,6 +1238,9 @@ typedef struct FTM_Type {
 #define FTM_SYNC_SYNCHOM_MASK                    (0x8U)                                              /**< FTM2_SYNC.SYNCHOM Mask                  */
 #define FTM_SYNC_SYNCHOM_SHIFT                   (3U)                                                /**< FTM2_SYNC.SYNCHOM Position              */
 #define FTM_SYNC_SYNCHOM(x)                      (((uint32_t)(((uint32_t)(x))<<FTM_SYNC_SYNCHOM_SHIFT))&FTM_SYNC_SYNCHOM_MASK) /**< FTM2_SYNC.SYNCHOM Field                 */
+#define FTM_SYNC_TRIG_MASK                       (0x70U)                                             /**< FTM2_SYNC.TRIG Mask                     */
+#define FTM_SYNC_TRIG_SHIFT                      (4U)                                                /**< FTM2_SYNC.TRIG Position                 */
+#define FTM_SYNC_TRIG(x)                         (((uint32_t)(((uint32_t)(x))<<FTM_SYNC_TRIG_SHIFT))&FTM_SYNC_TRIG_MASK) /**< FTM2_SYNC.TRIG Field                    */
 #define FTM_SYNC_TRIG0_MASK                      (0x10U)                                             /**< FTM2_SYNC.TRIG0 Mask                    */
 #define FTM_SYNC_TRIG0_SHIFT                     (4U)                                                /**< FTM2_SYNC.TRIG0 Position                */
 #define FTM_SYNC_TRIG0(x)                        (((uint32_t)(((uint32_t)(x))<<FTM_SYNC_TRIG0_SHIFT))&FTM_SYNC_TRIG0_MASK) /**< FTM2_SYNC.TRIG0 Field                   */
@@ -1586,6 +1592,9 @@ typedef struct FTM_Type {
 /** @} */
 
 /** @name INVCTRL - FTM Inverting Control */ /** @{ */
+#define FTM_INVCTRL_INVEN_MASK                   (0xFU)                                              /**< FTM2_INVCTRL.INVEN Mask                 */
+#define FTM_INVCTRL_INVEN_SHIFT                  (0U)                                                /**< FTM2_INVCTRL.INVEN Position             */
+#define FTM_INVCTRL_INVEN(x)                     (((uint32_t)(((uint32_t)(x))<<FTM_INVCTRL_INVEN_SHIFT))&FTM_INVCTRL_INVEN_MASK) /**< FTM2_INVCTRL.INVEN Field                */
 #define FTM_INVCTRL_INV0EN_MASK                  (0x1U)                                              /**< FTM2_INVCTRL.INV0EN Mask                */
 #define FTM_INVCTRL_INV0EN_SHIFT                 (0U)                                                /**< FTM2_INVCTRL.INV0EN Position            */
 #define FTM_INVCTRL_INV0EN(x)                    (((uint32_t)(((uint32_t)(x))<<FTM_INVCTRL_INV0EN_SHIFT))&FTM_INVCTRL_INV0EN_MASK) /**< FTM2_INVCTRL.INV0EN Field               */
@@ -2352,6 +2361,12 @@ typedef struct KBI_Type {
 #define KBI_SC_RSTKBSP_MASK                      (0x20U)                                             /**< KBI0_SC.RSTKBSP Mask                    */
 #define KBI_SC_RSTKBSP_SHIFT                     (5U)                                                /**< KBI0_SC.RSTKBSP Position                */
 #define KBI_SC_RSTKBSP(x)                        (((uint32_t)(((uint32_t)(x))<<KBI_SC_RSTKBSP_SHIFT))&KBI_SC_RSTKBSP_MASK) /**< KBI0_SC.RSTKBSP Field                   */
+/** @} */
+
+/** @name SP - KBI Source Pin */ /** @{ */
+#define KBI_SP_SP_MASK                           (0xFFFFFFFFU)                                       /**< KBI0_SP.SP Mask                         */
+#define KBI_SP_SP_SHIFT                          (0U)                                                /**< KBI0_SP.SP Position                     */
+#define KBI_SP_SP(x)                             (((uint32_t)(((uint32_t)(x))<<KBI_SP_SP_SHIFT))&KBI_SP_SP_MASK) /**< KBI0_SP.SP Field                        */
 /** @} */
 
 /** @} */ /* End group KBI_Register_Masks_GROUP */

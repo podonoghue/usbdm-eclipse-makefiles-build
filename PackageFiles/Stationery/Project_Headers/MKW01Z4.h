@@ -44,7 +44,7 @@ typedef enum {
   DMA3_IRQn                     =   3,   /**<  19 DMA Controller                                                                   */
   FTF_Command_IRQn              =   5,   /**<  21 Flash Memory Interface                                                           */
   PMC_IRQn                      =   6,   /**<  22 Power Management Controller                                                      */
-  LLWU_IRQn                     =   7,   /**<  23 Low Leakage Wakeup                                                               */
+  LLWU_IRQn                     =   7,   /**<  23 Low leakage wakeup unit                                                          */
   I2C0_IRQn                     =   8,   /**<  24 Inter-Integrated Circuit                                                         */
   I2C1_IRQn                     =   9,   /**<  25 Inter-Integrated Circuit                                                         */
   SPI0_IRQn                     =  10,   /**<  26 Serial Peripheral Interface                                                      */
@@ -82,7 +82,7 @@ extern void DMA2_IRQHandler(void);                   /**< DMA Controller        
 extern void DMA3_IRQHandler(void);                   /**< DMA Controller                                                                   */
 extern void FTF_Command_IRQHandler(void);            /**< Flash Memory Interface                                                           */
 extern void PMC_IRQHandler(void);                    /**< Power Management Controller                                                      */
-extern void LLWU_IRQHandler(void);                   /**< Low Leakage Wakeup                                                               */
+extern void LLWU_IRQHandler(void);                   /**< Low leakage wakeup unit                                                          */
 extern void I2C0_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
 extern void I2C1_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
 extern void SPI0_IRQHandler(void);                   /**< Serial Peripheral Interface                                                      */
@@ -441,6 +441,8 @@ typedef struct ADC_Type {
 #define ADC0_BasePtr                   0x4003B000UL //!< Peripheral base address
 #define ADC0                           ((ADC_Type *) ADC0_BasePtr) //!< Freescale base pointer
 #define ADC0_BASE_PTR                  (ADC0) //!< Freescale style base pointer
+#define ADC0_IRQS { ADC0_IRQn,  }
+
 
 /** @} */ /* End group ADC_Peripheral_access_layer_GROUP */
 
@@ -574,6 +576,8 @@ typedef struct CMP_Type {
 #define CMP0_BasePtr                   0x40073000UL //!< Peripheral base address
 #define CMP0                           ((CMP_Type *) CMP0_BasePtr) //!< Freescale base pointer
 #define CMP0_BASE_PTR                  (CMP0) //!< Freescale style base pointer
+#define CMP0_IRQS { CMP0_IRQn,  }
+
 
 /** @} */ /* End group CMP_Peripheral_access_layer_GROUP */
 
@@ -699,6 +703,8 @@ typedef struct DAC_Type {
 #define DAC0_BasePtr                   0x4003F000UL //!< Peripheral base address
 #define DAC0                           ((DAC_Type *) DAC0_BasePtr) //!< Freescale base pointer
 #define DAC0_BASE_PTR                  (DAC0) //!< Freescale style base pointer
+#define DAC0_IRQS { DAC0_IRQn,  }
+
 
 /** @} */ /* End group DAC_Peripheral_access_layer_GROUP */
 
@@ -860,6 +866,8 @@ typedef struct DMA_Type {
 #define DMA0_BasePtr                   0x40008000UL //!< Peripheral base address
 #define DMA0                           ((DMA_Type *) DMA0_BasePtr) //!< Freescale base pointer
 #define DMA0_BASE_PTR                  (DMA0) //!< Freescale style base pointer
+#define DMA0_IRQS { DMA0_IRQn, DMA1_IRQn, DMA2_IRQn, DMA3_IRQn,  }
+
 
 /** @} */ /* End group DMA0_Peripheral_access_layer_GROUP */
 
@@ -1240,6 +1248,8 @@ typedef struct FTFA_Type {
 #define FTFA_BasePtr                   0x40020000UL //!< Peripheral base address
 #define FTFA                           ((FTFA_Type *) FTFA_BasePtr) //!< Freescale base pointer
 #define FTFA_BASE_PTR                  (FTFA) //!< Freescale style base pointer
+#define FTFA_IRQS { FTF_Command_IRQn,  }
+
 
 /** @} */ /* End group FTFA_Peripheral_access_layer_GROUP */
 
@@ -1562,6 +1572,8 @@ typedef struct I2C_Type {
 #define I2C0_BasePtr                   0x40066000UL //!< Peripheral base address
 #define I2C0                           ((I2C_Type *) I2C0_BasePtr) //!< Freescale base pointer
 #define I2C0_BASE_PTR                  (I2C0) //!< Freescale style base pointer
+#define I2C0_IRQS { I2C0_IRQn,  }
+
 
 /** @} */ /* End group I2C_Peripheral_access_layer_GROUP */
 
@@ -1583,6 +1595,8 @@ typedef struct I2C_Type {
 #define I2C1_BasePtr                   0x40067000UL //!< Peripheral base address
 #define I2C1                           ((I2C_Type *) I2C1_BasePtr) //!< Freescale base pointer
 #define I2C1_BASE_PTR                  (I2C1) //!< Freescale style base pointer
+#define I2C1_IRQS { I2C1_IRQn,  }
+
 
 /** @} */ /* End group I2C_Peripheral_access_layer_GROUP */
 
@@ -1894,6 +1908,8 @@ typedef struct LLWU_Type {
 #define LLWU_BasePtr                   0x4007C000UL //!< Peripheral base address
 #define LLWU                           ((LLWU_Type *) LLWU_BasePtr) //!< Freescale base pointer
 #define LLWU_BASE_PTR                  (LLWU) //!< Freescale style base pointer
+#define LLWU_IRQS { LLWU_IRQn,  }
+
 
 /** @} */ /* End group LLWU_Peripheral_access_layer_GROUP */
 
@@ -1986,6 +2002,8 @@ typedef struct LPTMR_Type {
 #define LPTMR0_BasePtr                 0x40040000UL //!< Peripheral base address
 #define LPTMR0                         ((LPTMR_Type *) LPTMR0_BasePtr) //!< Freescale base pointer
 #define LPTMR0_BASE_PTR                (LPTMR0) //!< Freescale style base pointer
+#define LPTMR0_IRQS { LPTMR0_IRQn,  }
+
 
 /** @} */ /* End group LPTMR_Peripheral_access_layer_GROUP */
 
@@ -2195,6 +2213,8 @@ typedef struct MCG_Type {
 #define MCG_BasePtr                    0x40064000UL //!< Peripheral base address
 #define MCG                            ((MCG_Type *) MCG_BasePtr) //!< Freescale base pointer
 #define MCG_BASE_PTR                   (MCG) //!< Freescale style base pointer
+#define MCG_IRQS { MCG_IRQn,  }
+
 
 /** @} */ /* End group MCG_Peripheral_access_layer_GROUP */
 
@@ -2888,6 +2908,8 @@ typedef struct PIT_Type {
 #define PIT_BasePtr                    0x40037000UL //!< Peripheral base address
 #define PIT                            ((PIT_Type *) PIT_BasePtr) //!< Freescale base pointer
 #define PIT_BASE_PTR                   (PIT) //!< Freescale style base pointer
+#define PIT_IRQS { PIT_IRQn,  }
+
 
 /** @} */ /* End group PIT_Peripheral_access_layer_GROUP */
 
@@ -2979,6 +3001,8 @@ typedef struct PMC_Type {
 #define PMC_BasePtr                    0x4007D000UL //!< Peripheral base address
 #define PMC                            ((PMC_Type *) PMC_BasePtr) //!< Freescale base pointer
 #define PMC_BASE_PTR                   (PMC) //!< Freescale style base pointer
+#define PMC_IRQS { PMC_IRQn,  }
+
 
 /** @} */ /* End group PMC_Peripheral_access_layer_GROUP */
 
@@ -3072,6 +3096,8 @@ typedef struct PORT_Type {
 #define PORTA_BasePtr                  0x40049000UL //!< Peripheral base address
 #define PORTA                          ((PORT_Type *) PORTA_BasePtr) //!< Freescale base pointer
 #define PORTA_BASE_PTR                 (PORTA) //!< Freescale style base pointer
+#define PORTA_IRQS { PORTA_IRQn,  }
+
 
 /** @} */ /* End group PORT_Peripheral_access_layer_GROUP */
 
@@ -3114,6 +3140,8 @@ typedef struct PORT_Type {
 #define PORTC_BasePtr                  0x4004B000UL //!< Peripheral base address
 #define PORTC                          ((PORT_Type *) PORTC_BasePtr) //!< Freescale base pointer
 #define PORTC_BASE_PTR                 (PORTC) //!< Freescale style base pointer
+#define PORTC_IRQS { PORTC_PORTD_IRQn,  }
+
 
 /** @} */ /* End group PORT_Peripheral_access_layer_GROUP */
 
@@ -3135,6 +3163,8 @@ typedef struct PORT_Type {
 #define PORTD_BasePtr                  0x4004C000UL //!< Peripheral base address
 #define PORTD                          ((PORT_Type *) PORTD_BasePtr) //!< Freescale base pointer
 #define PORTD_BASE_PTR                 (PORTD) //!< Freescale style base pointer
+#define PORTD_IRQS { PORTC_PORTD_IRQn,  }
+
 
 /** @} */ /* End group PORT_Peripheral_access_layer_GROUP */
 
@@ -3506,6 +3536,8 @@ typedef struct RTC_Type {
 #define RTC_BasePtr                    0x4003D000UL //!< Peripheral base address
 #define RTC                            ((RTC_Type *) RTC_BasePtr) //!< Freescale base pointer
 #define RTC_BASE_PTR                   (RTC) //!< Freescale style base pointer
+#define RTC_IRQS { RTC_Alarm_IRQn, RTC_Seconds_IRQn,  }
+
 
 /** @} */ /* End group RTC_Peripheral_access_layer_GROUP */
 
@@ -4151,6 +4183,8 @@ typedef struct SPI_Type {
 #define SPI0_BasePtr                   0x40076000UL //!< Peripheral base address
 #define SPI0                           ((SPI_Type *) SPI0_BasePtr) //!< Freescale base pointer
 #define SPI0_BASE_PTR                  (SPI0) //!< Freescale style base pointer
+#define SPI0_IRQS { SPI0_IRQn,  }
+
 
 /** @} */ /* End group SPI_Peripheral_access_layer_GROUP */
 
@@ -4172,6 +4206,8 @@ typedef struct SPI_Type {
 #define SPI1_BasePtr                   0x40077000UL //!< Peripheral base address
 #define SPI1                           ((SPI_Type *) SPI1_BasePtr) //!< Freescale base pointer
 #define SPI1_BASE_PTR                  (SPI1) //!< Freescale style base pointer
+#define SPI1_IRQS { SPI1_IRQn,  }
+
 
 /** @} */ /* End group SPI_Peripheral_access_layer_GROUP */
 
@@ -4370,6 +4406,9 @@ typedef struct TPM_Type {
 /** @} */
 
 /** @name STATUS - Capture and Compare Status */ /** @{ */
+#define TPM_STATUS_STATUS_MASK                   (0xFFFFU)                                           /**< TPM0_STATUS.STATUS Mask                 */
+#define TPM_STATUS_STATUS_SHIFT                  (0U)                                                /**< TPM0_STATUS.STATUS Position             */
+#define TPM_STATUS_STATUS(x)                     (((uint32_t)(((uint32_t)(x))<<TPM_STATUS_STATUS_SHIFT))&TPM_STATUS_STATUS_MASK) /**< TPM0_STATUS.STATUS Field                */
 #define TPM_STATUS_CH0F_MASK                     (0x1U)                                              /**< TPM0_STATUS.CH0F Mask                   */
 #define TPM_STATUS_CH0F_SHIFT                    (0U)                                                /**< TPM0_STATUS.CH0F Position               */
 #define TPM_STATUS_CH0F(x)                       (((uint32_t)(((uint32_t)(x))<<TPM_STATUS_CH0F_SHIFT))&TPM_STATUS_CH0F_MASK) /**< TPM0_STATUS.CH0F Field                  */
@@ -4424,6 +4463,8 @@ typedef struct TPM_Type {
 #define TPM0_BasePtr                   0x40038000UL //!< Peripheral base address
 #define TPM0                           ((TPM_Type *) TPM0_BasePtr) //!< Freescale base pointer
 #define TPM0_BASE_PTR                  (TPM0) //!< Freescale style base pointer
+#define TPM0_IRQS { TPM0_IRQn,  }
+
 
 /** @} */ /* End group TPM_Peripheral_access_layer_GROUP */
 
@@ -4476,6 +4517,8 @@ typedef struct TPM1_Type {
 #define TPM1_BasePtr                   0x40039000UL //!< Peripheral base address
 #define TPM1                           ((TPM1_Type *) TPM1_BasePtr) //!< Freescale base pointer
 #define TPM1_BASE_PTR                  (TPM1) //!< Freescale style base pointer
+#define TPM1_IRQS { TPM1_IRQn,  }
+
 
 /** @} */ /* End group TPM_Peripheral_access_layer_GROUP */
 
@@ -4497,6 +4540,8 @@ typedef struct TPM1_Type {
 #define TPM2_BasePtr                   0x4003A000UL //!< Peripheral base address
 #define TPM2                           ((TPM1_Type *) TPM2_BasePtr) //!< Freescale base pointer
 #define TPM2_BASE_PTR                  (TPM2) //!< Freescale style base pointer
+#define TPM2_IRQS { TPM2_IRQn,  }
+
 
 /** @} */ /* End group TPM_Peripheral_access_layer_GROUP */
 
@@ -4624,6 +4669,8 @@ typedef struct TSI_Type {
 #define TSI0_BasePtr                   0x40045000UL //!< Peripheral base address
 #define TSI0                           ((TSI_Type *) TSI0_BasePtr) //!< Freescale base pointer
 #define TSI0_BASE_PTR                  (TSI0) //!< Freescale style base pointer
+#define TSI0_IRQS { TSI0_IRQn,  }
+
 
 /** @} */ /* End group TSI_Peripheral_access_layer_GROUP */
 
@@ -4874,6 +4921,8 @@ typedef struct UART_Type {
 #define UART0_BasePtr                  0x4006A000UL //!< Peripheral base address
 #define UART0                          ((UART_Type *) UART0_BasePtr) //!< Freescale base pointer
 #define UART0_BASE_PTR                 (UART0) //!< Freescale style base pointer
+#define UART0_IRQS { UART0_IRQn,  }
+
 
 /** @} */ /* End group UART_Peripheral_access_layer_GROUP */
 
@@ -4947,6 +4996,8 @@ typedef struct UART1_Type {
 #define UART1_BasePtr                  0x4006B000UL //!< Peripheral base address
 #define UART1                          ((UART1_Type *) UART1_BasePtr) //!< Freescale base pointer
 #define UART1_BASE_PTR                 (UART1) //!< Freescale style base pointer
+#define UART1_IRQS { UART1_IRQn,  }
+
 
 /** @} */ /* End group UART_Peripheral_access_layer_GROUP */
 
@@ -4968,6 +5019,8 @@ typedef struct UART1_Type {
 #define UART2_BasePtr                  0x4006C000UL //!< Peripheral base address
 #define UART2                          ((UART1_Type *) UART2_BasePtr) //!< Freescale base pointer
 #define UART2_BASE_PTR                 (UART2) //!< Freescale style base pointer
+#define UART2_IRQS { UART2_IRQn,  }
+
 
 /** @} */ /* End group UART_Peripheral_access_layer_GROUP */
 

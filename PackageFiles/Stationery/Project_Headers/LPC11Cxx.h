@@ -38,19 +38,19 @@ typedef enum {
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
 /* ----------------------   LPC11Cxx VectorTable                     ---------------------- */
-  PIO0_0_IRQn                   =   0,   /**<  16 System configuration                                                             */
-  PIO0_1_IRQn                   =   1,   /**<  17 System configuration                                                             */
-  PIO0_2_IRQn                   =   2,   /**<  18 System configuration                                                             */
-  PIO0_3_IRQn                   =   3,   /**<  19 System configuration                                                             */
-  PIO0_4_IRQn                   =   4,   /**<  20 System configuration                                                             */
-  PIO0_5_IRQn                   =   5,   /**<  21 System configuration                                                             */
-  PIO0_6_IRQn                   =   6,   /**<  22 System configuration                                                             */
-  PIO0_7_IRQn                   =   7,   /**<  23 System configuration                                                             */
-  PIO0_8_IRQn                   =   8,   /**<  24 System configuration                                                             */
-  PIO0_9_IRQn                   =   9,   /**<  25 System configuration                                                             */
-  PIO0_10_IRQn                  =  10,   /**<  26 System configuration                                                             */
-  PIO0_11_IRQn                  =  11,   /**<  27 System configuration                                                             */
-  PIO1_0_IRQn                   =  12,   /**<  28 System configuration                                                             */
+  PIO0_0_IRQn                   =   0,   /**<  16 PIO                                                                              */
+  PIO0_1_IRQn                   =   1,   /**<  17 PIO                                                                              */
+  PIO0_2_IRQn                   =   2,   /**<  18 PIO                                                                              */
+  PIO0_3_IRQn                   =   3,   /**<  19 PIO                                                                              */
+  PIO0_4_IRQn                   =   4,   /**<  20 PIO                                                                              */
+  PIO0_5_IRQn                   =   5,   /**<  21 PIO                                                                              */
+  PIO0_6_IRQn                   =   6,   /**<  22 PIO                                                                              */
+  PIO0_7_IRQn                   =   7,   /**<  23 PIO                                                                              */
+  PIO0_8_IRQn                   =   8,   /**<  24 PIO                                                                              */
+  PIO0_9_IRQn                   =   9,   /**<  25 PIO                                                                              */
+  PIO0_10_IRQn                  =  10,   /**<  26 PIO                                                                              */
+  PIO0_11_IRQn                  =  11,   /**<  27 PIO                                                                              */
+  PIO1_0_IRQn                   =  12,   /**<  28 PIO                                                                              */
   C_CAN_IRQn                    =  13,   /**<  29 C_CAN controller                                                                 */
   SPI1_IRQn                     =  14,   /**<  30 SPI0                                                                             */
   I2C_IRQn                      =  15,   /**<  31 I2C-bus interface                                                                */
@@ -62,7 +62,7 @@ typedef enum {
   UART_IRQn                     =  21,   /**<  37 UART                                                                             */
   ADC_IRQn                      =  24,   /**<  40 10-bit ADC                                                                       */
   WDT_IRQn                      =  25,   /**<  41 Windowed WatchDog Timer                                                          */
-  BOD_IRQn                      =  26,   /**<  42 System configuration                                                             */
+  BOD_IRQn                      =  26,   /**<  42 BOD                                                                              */
   FMC_IRQn                      =  27,   /**<  43 Flash programming firmware                                                       */
   GPIO3_IRQn                    =  28,   /**<  44 GPIO0                                                                            */
   GPIO2_IRQn                    =  29,   /**<  45 GPIO0                                                                            */
@@ -78,19 +78,19 @@ extern void HardFault_Handler(void);                 /**< Hard Fault, all classe
 extern void SVC_Handler(void);                       /**< System Service Call via SVC instruction                                          */
 extern void PendSV_Handler(void);                    /**< Pendable request for system service                                              */
 extern void SysTick_Handler(void);                   /**< System Tick Timer                                                                */
-extern void PIO0_0_IRQHandler(void);                 /**< System configuration                                                             */
-extern void PIO0_1_IRQHandler(void);                 /**< System configuration                                                             */
-extern void PIO0_2_IRQHandler(void);                 /**< System configuration                                                             */
-extern void PIO0_3_IRQHandler(void);                 /**< System configuration                                                             */
-extern void PIO0_4_IRQHandler(void);                 /**< System configuration                                                             */
-extern void PIO0_5_IRQHandler(void);                 /**< System configuration                                                             */
-extern void PIO0_6_IRQHandler(void);                 /**< System configuration                                                             */
-extern void PIO0_7_IRQHandler(void);                 /**< System configuration                                                             */
-extern void PIO0_8_IRQHandler(void);                 /**< System configuration                                                             */
-extern void PIO0_9_IRQHandler(void);                 /**< System configuration                                                             */
-extern void PIO0_10_IRQHandler(void);                /**< System configuration                                                             */
-extern void PIO0_11_IRQHandler(void);                /**< System configuration                                                             */
-extern void PIO1_0_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO0_0_IRQHandler(void);                 /**< PIO                                                                              */
+extern void PIO0_1_IRQHandler(void);                 /**< PIO                                                                              */
+extern void PIO0_2_IRQHandler(void);                 /**< PIO                                                                              */
+extern void PIO0_3_IRQHandler(void);                 /**< PIO                                                                              */
+extern void PIO0_4_IRQHandler(void);                 /**< PIO                                                                              */
+extern void PIO0_5_IRQHandler(void);                 /**< PIO                                                                              */
+extern void PIO0_6_IRQHandler(void);                 /**< PIO                                                                              */
+extern void PIO0_7_IRQHandler(void);                 /**< PIO                                                                              */
+extern void PIO0_8_IRQHandler(void);                 /**< PIO                                                                              */
+extern void PIO0_9_IRQHandler(void);                 /**< PIO                                                                              */
+extern void PIO0_10_IRQHandler(void);                /**< PIO                                                                              */
+extern void PIO0_11_IRQHandler(void);                /**< PIO                                                                              */
+extern void PIO1_0_IRQHandler(void);                 /**< PIO                                                                              */
 extern void C_CAN_IRQHandler(void);                  /**< C_CAN controller                                                                 */
 extern void SPI1_IRQHandler(void);                   /**< SPI0                                                                             */
 extern void I2C_IRQHandler(void);                    /**< I2C-bus interface                                                                */
@@ -102,7 +102,7 @@ extern void SPI0_IRQHandler(void);                   /**< SPI0                  
 extern void UART_IRQHandler(void);                   /**< UART                                                                             */
 extern void ADC_IRQHandler(void);                    /**< 10-bit ADC                                                                       */
 extern void WDT_IRQHandler(void);                    /**< Windowed WatchDog Timer                                                          */
-extern void BOD_IRQHandler(void);                    /**< System configuration                                                             */
+extern void BOD_IRQHandler(void);                    /**< BOD                                                                              */
 extern void FMC_IRQHandler(void);                    /**< Flash programming firmware                                                       */
 extern void GPIO3_IRQHandler(void);                  /**< GPIO0                                                                            */
 extern void GPIO2_IRQHandler(void);                  /**< GPIO0                                                                            */

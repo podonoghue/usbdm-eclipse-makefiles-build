@@ -55,16 +55,16 @@ typedef enum {
   RIT_IRQ_IRQn                  =  12,   /**<  28 Repetitive Interrupt Timer (RI timer)                                            */
   SSP1_IRQn                     =  14,   /**<  30 SSP/SPI                                                                          */
   I2C_IRQn                      =  15,   /**<  31 I2C                                                                              */
-  CT16B0_IRQn                   =  16,   /**<  32 16-bit counter/timers CT16B0                                                     */
-  CT16B1_IRQn                   =  17,   /**<  33 16-bit counter/timers CT16B1                                                     */
-  CT32B0_IRQn                   =  18,   /**<  34 32-bit counter/timers CT32B0                                                     */
-  CT32B1_IRQn                   =  19,   /**<  35 32-bit counter/timers CT32B1                                                     */
+  CT16B0_IRQn                   =  16,   /**<  32 16-bit counter                                                                   */
+  CT16B1_IRQn                   =  17,   /**<  33 16-bit counter                                                                   */
+  CT32B0_IRQn                   =  18,   /**<  34 32-bit counter                                                                   */
+  CT32B1_IRQn                   =  19,   /**<  35 32-bit counter                                                                   */
   SSP0_IRQn                     =  20,   /**<  36 SSP/SPI                                                                          */
   USART_IRQn                    =  21,   /**<  37 USART                                                                            */
   USB_IRQ_IRQn                  =  22,   /**<  38 USB2.0 device controller                                                         */
   USB_FIQ_IRQn                  =  23,   /**<  39 USB2.0 device controller                                                         */
   ADC_IRQn                      =  24,   /**<  40 ADC                                                                              */
-  WWDT_IRQn                     =  25,   /**<  41 Windowed Watchdog Timer                                                          */
+  WWDT_IRQn                     =  25,   /**<  41 Windowed WatchDog Timer                                                          */
   BOD_IRQ_IRQn                  =  26,   /**<  42 System control block                                                             */
   FLASH_IRQ_IRQn                =  27,   /**<  43 Flash programming firmware                                                       */
   USBWAKEUP_IRQn                =  30,   /**<  46 USB2.0 device controller                                                         */
@@ -95,16 +95,16 @@ extern void GINT1_IRQHandler(void);                  /**< GPIO group interrupt  
 extern void RIT_IRQ_IRQHandler(void);                /**< Repetitive Interrupt Timer (RI timer)                                            */
 extern void SSP1_IRQHandler(void);                   /**< SSP/SPI                                                                          */
 extern void I2C_IRQHandler(void);                    /**< I2C                                                                              */
-extern void CT16B0_IRQHandler(void);                 /**< 16-bit counter/timers CT16B0                                                     */
-extern void CT16B1_IRQHandler(void);                 /**< 16-bit counter/timers CT16B1                                                     */
-extern void CT32B0_IRQHandler(void);                 /**< 32-bit counter/timers CT32B0                                                     */
-extern void CT32B1_IRQHandler(void);                 /**< 32-bit counter/timers CT32B1                                                     */
+extern void CT16B0_IRQHandler(void);                 /**< 16-bit counter                                                                   */
+extern void CT16B1_IRQHandler(void);                 /**< 16-bit counter                                                                   */
+extern void CT32B0_IRQHandler(void);                 /**< 32-bit counter                                                                   */
+extern void CT32B1_IRQHandler(void);                 /**< 32-bit counter                                                                   */
 extern void SSP0_IRQHandler(void);                   /**< SSP/SPI                                                                          */
 extern void USART_IRQHandler(void);                  /**< USART                                                                            */
 extern void USB_IRQ_IRQHandler(void);                /**< USB2.0 device controller                                                         */
 extern void USB_FIQ_IRQHandler(void);                /**< USB2.0 device controller                                                         */
 extern void ADC_IRQHandler(void);                    /**< ADC                                                                              */
-extern void WWDT_IRQHandler(void);                   /**< Windowed Watchdog Timer                                                          */
+extern void WWDT_IRQHandler(void);                   /**< Windowed WatchDog Timer                                                          */
 extern void BOD_IRQ_IRQHandler(void);                /**< System control block                                                             */
 extern void FLASH_IRQ_IRQHandler(void);              /**< Flash programming firmware                                                       */
 extern void USBWAKEUP_IRQHandler(void);              /**< USB2.0 device controller                                                         */

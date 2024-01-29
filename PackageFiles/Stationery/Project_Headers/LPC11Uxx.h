@@ -49,11 +49,11 @@ typedef enum {
   GINT0_IRQn                    =   8,   /**<  24 GPIO group interrupt                                                             */
   GINT1_IRQn                    =   9,   /**<  25 GPIO group interrupt                                                             */
   SSP1_IRQn                     =  14,   /**<  30 SSP/SPI                                                                          */
-  I2C_IRQn                      =  15,   /**<  31 I2C-bus controller                                                               */
-  CT16B0_IRQn                   =  16,   /**<  32 16-bit counter/timers CT16B0                                                     */
-  CT16B1_IRQn                   =  17,   /**<  33 16-bit counter/timers CT16B1                                                     */
-  CT32B0_IRQn                   =  18,   /**<  34 32-bit counter/timers CT32B0                                                     */
-  CT32B1_IRQn                   =  19,   /**<  35 32-bit counter/timers CT32B1                                                     */
+  I2C_IRQn                      =  15,   /**<  31 I2C-bus interface                                                                */
+  CT16B0_IRQn                   =  16,   /**<  32 16-bit counter/timer                                                             */
+  CT16B1_IRQn                   =  17,   /**<  33 16-bit counter/timer                                                             */
+  CT32B0_IRQn                   =  18,   /**<  34 32-bit counter/timer                                                             */
+  CT32B1_IRQn                   =  19,   /**<  35 32-bit counter/timer                                                             */
   SSP0_IRQn                     =  20,   /**<  36 SSP/SPI                                                                          */
   USART_IRQn                    =  21,   /**<  37 USART                                                                            */
   USB_IRQ_IRQn                  =  22,   /**<  38 USB2.0 device controller                                                         */
@@ -61,8 +61,7 @@ typedef enum {
   ADC_IRQn                      =  24,   /**<  40 ADC                                                                              */
   WDT_IRQn                      =  25,   /**<  41 Windowed Watchdog Timer                                                          */
   BOD_IRQ_IRQn                  =  26,   /**<  42 System control block                                                             */
-  FLASH_IRQ_IRQn                =  27,   /**<  43 Flash
-controller                                                                 */
+  FMC_IRQn                      =  27,   /**<  43 Flash programming firmware                                                       */
   USBWAKEUP_IRQn                =  30,   /**<  46 USB2.0 device controller                                                         */
 } IRQn_Type;
 
@@ -85,11 +84,11 @@ extern void PIN_INT7_IRQHandler(void);               /**< GPIO pin interrupt    
 extern void GINT0_IRQHandler(void);                  /**< GPIO group interrupt                                                             */
 extern void GINT1_IRQHandler(void);                  /**< GPIO group interrupt                                                             */
 extern void SSP1_IRQHandler(void);                   /**< SSP/SPI                                                                          */
-extern void I2C_IRQHandler(void);                    /**< I2C-bus controller                                                               */
-extern void CT16B0_IRQHandler(void);                 /**< 16-bit counter/timers CT16B0                                                     */
-extern void CT16B1_IRQHandler(void);                 /**< 16-bit counter/timers CT16B1                                                     */
-extern void CT32B0_IRQHandler(void);                 /**< 32-bit counter/timers CT32B0                                                     */
-extern void CT32B1_IRQHandler(void);                 /**< 32-bit counter/timers CT32B1                                                     */
+extern void I2C_IRQHandler(void);                    /**< I2C-bus interface                                                                */
+extern void CT16B0_IRQHandler(void);                 /**< 16-bit counter/timer                                                             */
+extern void CT16B1_IRQHandler(void);                 /**< 16-bit counter/timer                                                             */
+extern void CT32B0_IRQHandler(void);                 /**< 32-bit counter/timer                                                             */
+extern void CT32B1_IRQHandler(void);                 /**< 32-bit counter/timer                                                             */
 extern void SSP0_IRQHandler(void);                   /**< SSP/SPI                                                                          */
 extern void USART_IRQHandler(void);                  /**< USART                                                                            */
 extern void USB_IRQ_IRQHandler(void);                /**< USB2.0 device controller                                                         */
@@ -97,8 +96,7 @@ extern void USB_FIQ_IRQHandler(void);                /**< USB2.0 device controll
 extern void ADC_IRQHandler(void);                    /**< ADC                                                                              */
 extern void WDT_IRQHandler(void);                    /**< Windowed Watchdog Timer                                                          */
 extern void BOD_IRQ_IRQHandler(void);                /**< System control block                                                             */
-extern void FLASH_IRQ_IRQHandler(void);              /**< Flash
-controller                                                                 */
+extern void FMC_IRQHandler(void);                    /**< Flash programming firmware                                                       */
 extern void USBWAKEUP_IRQHandler(void);              /**< USB2.0 device controller                                                         */
 
 
@@ -281,6 +279,8 @@ typedef struct LPC_ADC_Type {
 #define LPC_ADC_BasePtr                0x4001C000UL //!< Peripheral base address
 #define LPC_ADC                        ((LPC_ADC_Type *) LPC_ADC_BasePtr) //!< Freescale base pointer
 #define LPC_ADC_BASE_PTR               (LPC_ADC) //!< Freescale style base pointer
+#define LPC_ADC_IRQS { ADC_IRQn,  }
+
 
 /** @} */ /* End group ADC_Peripheral_access_layer_GROUP */
 
@@ -520,6 +520,8 @@ typedef struct LPC_CT16B0_Type {
 #define LPC_CT16B0_BasePtr             0x4000C000UL //!< Peripheral base address
 #define LPC_CT16B0                     ((LPC_CT16B0_Type *) LPC_CT16B0_BasePtr) //!< Freescale base pointer
 #define LPC_CT16B0_BASE_PTR            (LPC_CT16B0) //!< Freescale style base pointer
+#define LPC_CT16B0_IRQS { CT16B0_IRQn,  }
+
 
 /** @} */ /* End group CT16B0_Peripheral_access_layer_GROUP */
 
@@ -758,6 +760,8 @@ typedef struct LPC_CT16B1_Type {
 #define LPC_CT16B1_BasePtr             0x40010000UL //!< Peripheral base address
 #define LPC_CT16B1                     ((LPC_CT16B1_Type *) LPC_CT16B1_BasePtr) //!< Freescale base pointer
 #define LPC_CT16B1_BASE_PTR            (LPC_CT16B1) //!< Freescale style base pointer
+#define LPC_CT16B1_IRQS { CT16B1_IRQn,  }
+
 
 /** @} */ /* End group CT16B_Peripheral_access_layer_GROUP */
 
@@ -997,6 +1001,8 @@ typedef struct LPC_CT32B0_Type {
 #define LPC_CT32B0_BasePtr             0x40014000UL //!< Peripheral base address
 #define LPC_CT32B0                     ((LPC_CT32B0_Type *) LPC_CT32B0_BasePtr) //!< Freescale base pointer
 #define LPC_CT32B0_BASE_PTR            (LPC_CT32B0) //!< Freescale style base pointer
+#define LPC_CT32B0_IRQS { CT32B0_IRQn,  }
+
 
 /** @} */ /* End group CT32B0_Peripheral_access_layer_GROUP */
 
@@ -1235,6 +1241,8 @@ typedef struct LPC_CT32B1_Type {
 #define LPC_CT32B1_BasePtr             0x40018000UL //!< Peripheral base address
 #define LPC_CT32B1                     ((LPC_CT32B1_Type *) LPC_CT32B1_BasePtr) //!< Freescale base pointer
 #define LPC_CT32B1_BASE_PTR            (LPC_CT32B1) //!< Freescale style base pointer
+#define LPC_CT32B1_IRQS { CT32B1_IRQn,  }
+
 
 /** @} */ /* End group CT32B_Peripheral_access_layer_GROUP */
 
@@ -1378,6 +1386,8 @@ typedef struct LPC_FLASHCTRL_Type {
 #define LPC_FLASHCTRL_BasePtr          0x4003C000UL //!< Peripheral base address
 #define LPC_FLASHCTRL                  ((LPC_FLASHCTRL_Type *) LPC_FLASHCTRL_BasePtr) //!< Freescale base pointer
 #define LPC_FLASHCTRL_BASE_PTR         (LPC_FLASHCTRL) //!< Freescale style base pointer
+#define LPC_FLASHCTRL_IRQS { FMC_IRQn,  }
+
 
 /** @} */ /* End group FLASHCTRL_Peripheral_access_layer_GROUP */
 
@@ -2952,6 +2962,8 @@ typedef struct LPC_I2C_Type {
 #define LPC_I2C_BasePtr                0x40000000UL //!< Peripheral base address
 #define LPC_I2C                        ((LPC_I2C_Type *) LPC_I2C_BasePtr) //!< Freescale base pointer
 #define LPC_I2C_BASE_PTR               (LPC_I2C) //!< Freescale style base pointer
+#define LPC_I2C_IRQS { I2C_IRQn,  }
+
 
 /** @} */ /* End group I2C_Peripheral_access_layer_GROUP */
 
@@ -4199,6 +4211,8 @@ typedef struct LPC_SSP0_Type {
 #define LPC_SSP0_BasePtr               0x40040000UL //!< Peripheral base address
 #define LPC_SSP0                       ((LPC_SSP0_Type *) LPC_SSP0_BasePtr) //!< Freescale base pointer
 #define LPC_SSP0_BASE_PTR              (LPC_SSP0) //!< Freescale style base pointer
+#define LPC_SSP0_IRQS { SSP1_IRQn, SSP0_IRQn,  }
+
 
 /** @} */ /* End group SSP0_Peripheral_access_layer_GROUP */
 
@@ -4760,6 +4774,8 @@ typedef struct LPC_SYSCON_Type {
 #define LPC_SYSCON_BasePtr             0x40048000UL //!< Peripheral base address
 #define LPC_SYSCON                     ((LPC_SYSCON_Type *) LPC_SYSCON_BasePtr) //!< Freescale base pointer
 #define LPC_SYSCON_BASE_PTR            (LPC_SYSCON) //!< Freescale style base pointer
+#define LPC_SYSCON_IRQS { PIN_INT0_IRQn, PIN_INT1_IRQn, PIN_INT2_IRQn, PIN_INT3_IRQn, PIN_INT4_IRQn, PIN_INT5_IRQn, PIN_INT6_IRQn, PIN_INT7_IRQn, GINT0_IRQn, GINT1_IRQn, BOD_IRQ_IRQn,  }
+
 
 /** @} */ /* End group SYSCON_Peripheral_access_layer_GROUP */
 
@@ -5152,6 +5168,8 @@ typedef struct LPC_USART_Type {
 #define LPC_USART_BasePtr              0x40008000UL //!< Peripheral base address
 #define LPC_USART                      ((LPC_USART_Type *) LPC_USART_BasePtr) //!< Freescale base pointer
 #define LPC_USART_BASE_PTR             (LPC_USART) //!< Freescale style base pointer
+#define LPC_USART_IRQS { USART_IRQn,  }
+
 
 /** @} */ /* End group USART_Peripheral_access_layer_GROUP */
 
@@ -5392,6 +5410,8 @@ typedef struct LPC_USB_Type {
 #define LPC_USB_BasePtr                0x40080000UL //!< Peripheral base address
 #define LPC_USB                        ((LPC_USB_Type *) LPC_USB_BasePtr) //!< Freescale base pointer
 #define LPC_USB_BASE_PTR               (LPC_USB) //!< Freescale style base pointer
+#define LPC_USB_IRQS { USB_IRQ_IRQn, USB_FIQ_IRQn, USBWAKEUP_IRQn,  }
+
 
 /** @} */ /* End group USB_Peripheral_access_layer_GROUP */
 
@@ -5499,6 +5519,8 @@ typedef struct LPC_WWDT_Type {
 #define LPC_WWDT_BasePtr               0x40004000UL //!< Peripheral base address
 #define LPC_WWDT                       ((LPC_WWDT_Type *) LPC_WWDT_BasePtr) //!< Freescale base pointer
 #define LPC_WWDT_BASE_PTR              (LPC_WWDT) //!< Freescale style base pointer
+#define LPC_WWDT_IRQS { WDT_IRQn,  }
+
 
 /** @} */ /* End group WWDT_Peripheral_access_layer_GROUP */
 

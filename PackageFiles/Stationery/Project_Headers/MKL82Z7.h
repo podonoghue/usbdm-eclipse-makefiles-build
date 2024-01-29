@@ -8624,6 +8624,9 @@ typedef struct TPM_Type {
 /** @} */
 
 /** @name STATUS - Capture and Compare Status */ /** @{ */
+#define TPM_STATUS_STATUS_MASK                   (0xFFFFU)                                           /**< TPM0_STATUS.STATUS Mask                 */
+#define TPM_STATUS_STATUS_SHIFT                  (0U)                                                /**< TPM0_STATUS.STATUS Position             */
+#define TPM_STATUS_STATUS(x)                     (((uint32_t)(((uint32_t)(x))<<TPM_STATUS_STATUS_SHIFT))&TPM_STATUS_STATUS_MASK) /**< TPM0_STATUS.STATUS Field                */
 #define TPM_STATUS_CH0F_MASK                     (0x1U)                                              /**< TPM0_STATUS.CH0F Mask                   */
 #define TPM_STATUS_CH0F_SHIFT                    (0U)                                                /**< TPM0_STATUS.CH0F Position               */
 #define TPM_STATUS_CH0F(x)                       (((uint32_t)(((uint32_t)(x))<<TPM_STATUS_CH0F_SHIFT))&TPM_STATUS_CH0F_MASK) /**< TPM0_STATUS.CH0F Field                  */

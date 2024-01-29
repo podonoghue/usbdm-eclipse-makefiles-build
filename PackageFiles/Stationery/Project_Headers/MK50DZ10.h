@@ -4580,6 +4580,9 @@ typedef struct FTM_Type {
 /** @} */
 
 /** @name STATUS - Capture and Compare Status */ /** @{ */
+#define FTM_STATUS_STATUS_MASK                   (0xFFU)                                             /**< FTM0_STATUS.STATUS Mask                 */
+#define FTM_STATUS_STATUS_SHIFT                  (0U)                                                /**< FTM0_STATUS.STATUS Position             */
+#define FTM_STATUS_STATUS(x)                     (((uint32_t)(((uint32_t)(x))<<FTM_STATUS_STATUS_SHIFT))&FTM_STATUS_STATUS_MASK) /**< FTM0_STATUS.STATUS Field                */
 #define FTM_STATUS_CH0F_MASK                     (0x1U)                                              /**< FTM0_STATUS.CH0F Mask                   */
 #define FTM_STATUS_CH0F_SHIFT                    (0U)                                                /**< FTM0_STATUS.CH0F Position               */
 #define FTM_STATUS_CH0F(x)                       (((uint32_t)(((uint32_t)(x))<<FTM_STATUS_CH0F_SHIFT))&FTM_STATUS_CH0F_MASK) /**< FTM0_STATUS.CH0F Field                  */
@@ -4643,6 +4646,9 @@ typedef struct FTM_Type {
 #define FTM_SYNC_SYNCHOM_MASK                    (0x8U)                                              /**< FTM0_SYNC.SYNCHOM Mask                  */
 #define FTM_SYNC_SYNCHOM_SHIFT                   (3U)                                                /**< FTM0_SYNC.SYNCHOM Position              */
 #define FTM_SYNC_SYNCHOM(x)                      (((uint32_t)(((uint32_t)(x))<<FTM_SYNC_SYNCHOM_SHIFT))&FTM_SYNC_SYNCHOM_MASK) /**< FTM0_SYNC.SYNCHOM Field                 */
+#define FTM_SYNC_TRIG_MASK                       (0x70U)                                             /**< FTM0_SYNC.TRIG Mask                     */
+#define FTM_SYNC_TRIG_SHIFT                      (4U)                                                /**< FTM0_SYNC.TRIG Position                 */
+#define FTM_SYNC_TRIG(x)                         (((uint32_t)(((uint32_t)(x))<<FTM_SYNC_TRIG_SHIFT))&FTM_SYNC_TRIG_MASK) /**< FTM0_SYNC.TRIG Field                    */
 #define FTM_SYNC_TRIG0_MASK                      (0x10U)                                             /**< FTM0_SYNC.TRIG0 Mask                    */
 #define FTM_SYNC_TRIG0_SHIFT                     (4U)                                                /**< FTM0_SYNC.TRIG0 Position                */
 #define FTM_SYNC_TRIG0(x)                        (((uint32_t)(((uint32_t)(x))<<FTM_SYNC_TRIG0_SHIFT))&FTM_SYNC_TRIG0_MASK) /**< FTM0_SYNC.TRIG0 Field                   */
@@ -5033,6 +5039,9 @@ typedef struct FTM_Type {
 /** @} */
 
 /** @name INVCTRL - FTM Inverting Control */ /** @{ */
+#define FTM_INVCTRL_INVEN_MASK                   (0xFU)                                              /**< FTM0_INVCTRL.INVEN Mask                 */
+#define FTM_INVCTRL_INVEN_SHIFT                  (0U)                                                /**< FTM0_INVCTRL.INVEN Position             */
+#define FTM_INVCTRL_INVEN(x)                     (((uint32_t)(((uint32_t)(x))<<FTM_INVCTRL_INVEN_SHIFT))&FTM_INVCTRL_INVEN_MASK) /**< FTM0_INVCTRL.INVEN Field                */
 #define FTM_INVCTRL_INV0EN_MASK                  (0x1U)                                              /**< FTM0_INVCTRL.INV0EN Mask                */
 #define FTM_INVCTRL_INV0EN_SHIFT                 (0U)                                                /**< FTM0_INVCTRL.INV0EN Position            */
 #define FTM_INVCTRL_INV0EN(x)                    (((uint32_t)(((uint32_t)(x))<<FTM_INVCTRL_INV0EN_SHIFT))&FTM_INVCTRL_INV0EN_MASK) /**< FTM0_INVCTRL.INV0EN Field               */

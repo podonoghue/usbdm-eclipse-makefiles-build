@@ -4438,6 +4438,9 @@ typedef struct FTM_Type {
 /** @} */
 
 /** @name STATUS - Capture and Compare Status */ /** @{ */
+#define FTM_STATUS_STATUS_MASK                   (0xFFU)                                             /**< FTM0_STATUS.STATUS Mask                 */
+#define FTM_STATUS_STATUS_SHIFT                  (0U)                                                /**< FTM0_STATUS.STATUS Position             */
+#define FTM_STATUS_STATUS(x)                     (((uint32_t)(((uint32_t)(x))<<FTM_STATUS_STATUS_SHIFT))&FTM_STATUS_STATUS_MASK) /**< FTM0_STATUS.STATUS Field                */
 #define FTM_STATUS_CH0F_MASK                     (0x1U)                                              /**< FTM0_STATUS.CH0F Mask                   */
 #define FTM_STATUS_CH0F_SHIFT                    (0U)                                                /**< FTM0_STATUS.CH0F Position               */
 #define FTM_STATUS_CH0F(x)                       (((uint32_t)(((uint32_t)(x))<<FTM_STATUS_CH0F_SHIFT))&FTM_STATUS_CH0F_MASK) /**< FTM0_STATUS.CH0F Field                  */
@@ -4894,6 +4897,9 @@ typedef struct FTM_Type {
 /** @} */
 
 /** @name INVCTRL - FTM Inverting Control */ /** @{ */
+#define FTM_INVCTRL_INVEN_MASK                   (0xFU)                                              /**< FTM0_INVCTRL.INVEN Mask                 */
+#define FTM_INVCTRL_INVEN_SHIFT                  (0U)                                                /**< FTM0_INVCTRL.INVEN Position             */
+#define FTM_INVCTRL_INVEN(x)                     (((uint32_t)(((uint32_t)(x))<<FTM_INVCTRL_INVEN_SHIFT))&FTM_INVCTRL_INVEN_MASK) /**< FTM0_INVCTRL.INVEN Field                */
 #define FTM_INVCTRL_INV0EN_MASK                  (0x1U)                                              /**< FTM0_INVCTRL.INV0EN Mask                */
 #define FTM_INVCTRL_INV0EN_SHIFT                 (0U)                                                /**< FTM0_INVCTRL.INV0EN Position            */
 #define FTM_INVCTRL_INV0EN(x)                    (((uint32_t)(((uint32_t)(x))<<FTM_INVCTRL_INV0EN_SHIFT))&FTM_INVCTRL_INV0EN_MASK) /**< FTM0_INVCTRL.INV0EN Field               */
@@ -12489,6 +12495,9 @@ typedef struct TPM_Type {
 /** @} */
 
 /** @name STATUS - Capture and Compare Status */ /** @{ */
+#define TPM_STATUS_STATUS_MASK                   (0xFFFFU)                                           /**< TPM1_STATUS.STATUS Mask                 */
+#define TPM_STATUS_STATUS_SHIFT                  (0U)                                                /**< TPM1_STATUS.STATUS Position             */
+#define TPM_STATUS_STATUS(x)                     (((uint32_t)(((uint32_t)(x))<<TPM_STATUS_STATUS_SHIFT))&TPM_STATUS_STATUS_MASK) /**< TPM1_STATUS.STATUS Field                */
 #define TPM_STATUS_CH0F_MASK                     (0x1U)                                              /**< TPM1_STATUS.CH0F Mask                   */
 #define TPM_STATUS_CH0F_SHIFT                    (0U)                                                /**< TPM1_STATUS.CH0F Position               */
 #define TPM_STATUS_CH0F(x)                       (((uint32_t)(((uint32_t)(x))<<TPM_STATUS_CH0F_SHIFT))&TPM_STATUS_CH0F_MASK) /**< TPM1_STATUS.CH0F Field                  */
@@ -12522,6 +12531,9 @@ typedef struct TPM_Type {
 /** @} */
 
 /** @name FILTER - Filter Control */ /** @{ */
+#define TPM_FILTER_CHFVAL_MASK                   (0xFFU)                                             /**< TPM1_FILTER.CHFVAL Mask                 */
+#define TPM_FILTER_CHFVAL_SHIFT                  (0U)                                                /**< TPM1_FILTER.CHFVAL Position             */
+#define TPM_FILTER_CHFVAL(x)                     (((uint32_t)(((uint32_t)(x))<<TPM_FILTER_CHFVAL_SHIFT))&TPM_FILTER_CHFVAL_MASK) /**< TPM1_FILTER.CHFVAL Field                */
 #define TPM_FILTER_CH0FVAL_MASK                  (0xFU)                                              /**< TPM1_FILTER.CH0FVAL Mask                */
 #define TPM_FILTER_CH0FVAL_SHIFT                 (0U)                                                /**< TPM1_FILTER.CH0FVAL Position            */
 #define TPM_FILTER_CH0FVAL(x)                    (((uint32_t)(((uint32_t)(x))<<TPM_FILTER_CH0FVAL_SHIFT))&TPM_FILTER_CH0FVAL_MASK) /**< TPM1_FILTER.CH0FVAL Field               */

@@ -38,10 +38,10 @@ typedef enum {
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
 /* ----------------------   MKW41Z4 VectorTable                      ---------------------- */
-  DMA0_IRQn                     =   0,   /**<  16 Enhanced direct memory access controller                                         */
-  DMA1_IRQn                     =   1,   /**<  17 Enhanced direct memory access controller                                         */
-  DMA2_IRQn                     =   2,   /**<  18 Enhanced direct memory access controller                                         */
-  DMA3_IRQn                     =   3,   /**<  19 Enhanced direct memory access controller                                         */
+  DMA0_IRQn                     =   0,   /**<  16 DMA Controller                                                                   */
+  DMA1_IRQn                     =   1,   /**<  17 DMA Controller                                                                   */
+  DMA2_IRQn                     =   2,   /**<  18 DMA Controller                                                                   */
+  DMA3_IRQn                     =   3,   /**<  19 DMA Controller                                                                   */
   FTFA_IRQn                     =   5,   /**<  21 Flash Memory Interface                                                           */
   PMC_DCDC_IRQn                 =   6,   /**<  22 Power Management Controller, DC-DC converter                                     */
   LLWU_IRQn                     =   7,   /**<  23 Low leakage wakeup unit                                                          */
@@ -57,14 +57,14 @@ typedef enum {
   TPM0_IRQn                     =  17,   /**<  33 Timer/PWM Module                                                                 */
   TPM1_IRQn                     =  18,   /**<  34 Timer/PWM Module                                                                 */
   TPM2_IRQn                     =  19,   /**<  35 Timer/PWM Module                                                                 */
-  RTC_Alarm_IRQn                =  20,   /**<  36 Secure Real Time Clock                                                           */
-  RTC_Seconds_IRQn              =  21,   /**<  37 Secure Real Time Clock                                                           */
+  RTC_Alarm_IRQn                =  20,   /**<  36 Real Time Clock                                                                  */
+  RTC_Seconds_IRQn              =  21,   /**<  37 Real Time Clock                                                                  */
   PIT_IRQn                      =  22,   /**<  38 Periodic Interrupt Timer                                                         */
   LTC0_IRQn                     =  23,   /**<  39 LTC                                                                              */
   Radio_0_IRQn                  =  24,   /**<  40 Radio 0                                                                          */
-  DAC0_IRQn                     =  25,   /**<  41 12-Bit Digital-to-Analog Converter                                               */
+  DAC0_IRQn                     =  25,   /**<  41 Digital to Analogue Converter                                                    */
   Radio_1_IRQn                  =  26,   /**<  42 Radio 0                                                                          */
-  MCG_IRQn                      =  27,   /**<  43 Multipurpose Clock Generator module                                              */
+  MCG_IRQn                      =  27,   /**<  43 Multipurpose Clock Generator                                                     */
   LPTMR0_IRQn                   =  28,   /**<  44 Low Power Timer                                                                  */
   SPI1_IRQn                     =  29,   /**<  45 Serial Peripheral Interface                                                      */
   PORTA_IRQn                    =  30,   /**<  46 General Purpose Input/Output                                                     */
@@ -79,10 +79,10 @@ extern void HardFault_Handler(void);                 /**< Hard Fault, all classe
 extern void SVC_Handler(void);                       /**< System Service Call via SVC instruction                                          */
 extern void PendSV_Handler(void);                    /**< Pendable request for system service                                              */
 extern void SysTick_Handler(void);                   /**< System Tick Timer                                                                */
-extern void DMA0_IRQHandler(void);                   /**< Enhanced direct memory access controller                                         */
-extern void DMA1_IRQHandler(void);                   /**< Enhanced direct memory access controller                                         */
-extern void DMA2_IRQHandler(void);                   /**< Enhanced direct memory access controller                                         */
-extern void DMA3_IRQHandler(void);                   /**< Enhanced direct memory access controller                                         */
+extern void DMA0_IRQHandler(void);                   /**< DMA Controller                                                                   */
+extern void DMA1_IRQHandler(void);                   /**< DMA Controller                                                                   */
+extern void DMA2_IRQHandler(void);                   /**< DMA Controller                                                                   */
+extern void DMA3_IRQHandler(void);                   /**< DMA Controller                                                                   */
 extern void FTFA_IRQHandler(void);                   /**< Flash Memory Interface                                                           */
 extern void PMC_DCDC_IRQHandler(void);               /**< Power Management Controller, DC-DC converter                                     */
 extern void LLWU_IRQHandler(void);                   /**< Low leakage wakeup unit                                                          */
@@ -98,14 +98,14 @@ extern void CMP0_IRQHandler(void);                   /**< High-Speed Comparator 
 extern void TPM0_IRQHandler(void);                   /**< Timer/PWM Module                                                                 */
 extern void TPM1_IRQHandler(void);                   /**< Timer/PWM Module                                                                 */
 extern void TPM2_IRQHandler(void);                   /**< Timer/PWM Module                                                                 */
-extern void RTC_Alarm_IRQHandler(void);              /**< Secure Real Time Clock                                                           */
-extern void RTC_Seconds_IRQHandler(void);            /**< Secure Real Time Clock                                                           */
+extern void RTC_Alarm_IRQHandler(void);              /**< Real Time Clock                                                                  */
+extern void RTC_Seconds_IRQHandler(void);            /**< Real Time Clock                                                                  */
 extern void PIT_IRQHandler(void);                    /**< Periodic Interrupt Timer                                                         */
 extern void LTC0_IRQHandler(void);                   /**< LTC                                                                              */
 extern void Radio_0_IRQHandler(void);                /**< Radio 0                                                                          */
-extern void DAC0_IRQHandler(void);                   /**< 12-Bit Digital-to-Analog Converter                                               */
+extern void DAC0_IRQHandler(void);                   /**< Digital to Analogue Converter                                                    */
 extern void Radio_1_IRQHandler(void);                /**< Radio 0                                                                          */
-extern void MCG_IRQHandler(void);                    /**< Multipurpose Clock Generator module                                              */
+extern void MCG_IRQHandler(void);                    /**< Multipurpose Clock Generator                                                     */
 extern void LPTMR0_IRQHandler(void);                 /**< Low Power Timer                                                                  */
 extern void SPI1_IRQHandler(void);                   /**< Serial Peripheral Interface                                                      */
 extern void PORTA_IRQHandler(void);                  /**< General Purpose Input/Output                                                     */
@@ -1487,6 +1487,8 @@ typedef struct DCDC_Type {
 #define DCDC_BasePtr                   0x4005A000UL //!< Peripheral base address
 #define DCDC                           ((DCDC_Type *) DCDC_BasePtr) //!< Freescale base pointer
 #define DCDC_BASE_PTR                  (DCDC) //!< Freescale style base pointer
+#define DCDC_IRQS { PMC_DCDC_IRQn,  }
+
 
 /** @} */ /* End group DCDC_Peripheral_access_layer_GROUP */
 
@@ -7103,6 +7105,9 @@ typedef struct TPM_Type {
 /** @} */
 
 /** @name STATUS - Capture and Compare Status */ /** @{ */
+#define TPM_STATUS_STATUS_MASK                   (0xFFFFU)                                           /**< TPM0_STATUS.STATUS Mask                 */
+#define TPM_STATUS_STATUS_SHIFT                  (0U)                                                /**< TPM0_STATUS.STATUS Position             */
+#define TPM_STATUS_STATUS(x)                     (((uint32_t)(((uint32_t)(x))<<TPM_STATUS_STATUS_SHIFT))&TPM_STATUS_STATUS_MASK) /**< TPM0_STATUS.STATUS Field                */
 #define TPM_STATUS_CH0F_MASK                     (0x1U)                                              /**< TPM0_STATUS.CH0F Mask                   */
 #define TPM_STATUS_CH0F_SHIFT                    (0U)                                                /**< TPM0_STATUS.CH0F Position               */
 #define TPM_STATUS_CH0F(x)                       (((uint32_t)(((uint32_t)(x))<<TPM_STATUS_CH0F_SHIFT))&TPM_STATUS_CH0F_MASK) /**< TPM0_STATUS.CH0F Field                  */
@@ -7136,6 +7141,9 @@ typedef struct TPM_Type {
 /** @} */
 
 /** @name POL - Channel Polarity */ /** @{ */
+#define TPM_POL_POL_MASK                         (0xFFU)                                             /**< TPM0_POL.POL Mask                       */
+#define TPM_POL_POL_SHIFT                        (0U)                                                /**< TPM0_POL.POL Position                   */
+#define TPM_POL_POL(x)                           (((uint32_t)(((uint32_t)(x))<<TPM_POL_POL_SHIFT))&TPM_POL_POL_MASK) /**< TPM0_POL.POL Field                      */
 #define TPM_POL_POL0_MASK                        (0x1U)                                              /**< TPM0_POL.POL0 Mask                      */
 #define TPM_POL_POL0_SHIFT                       (0U)                                                /**< TPM0_POL.POL0 Position                  */
 #define TPM_POL_POL0(x)                          (((uint32_t)(((uint32_t)(x))<<TPM_POL_POL0_SHIFT))&TPM_POL_POL0_MASK) /**< TPM0_POL.POL0 Field                     */
@@ -7277,10 +7285,10 @@ typedef struct TPM1_Type {
 /** @addtogroup TPM_Register_Masks_GROUP TPM Register Masks */
 /** @{ */
 
-/** @name POL - Channel Polarity */ /** @{ */
-#define TPM_POL_POL_MASK                         (0xFFU)                                             /**< TPM1_POL.POL Mask                       */
-#define TPM_POL_POL_SHIFT                        (0U)                                                /**< TPM1_POL.POL Position                   */
-#define TPM_POL_POL(x)                           (((uint32_t)(((uint32_t)(x))<<TPM_POL_POL_SHIFT))&TPM_POL_POL_MASK) /**< TPM1_POL.POL Field                      */
+/** @name FILTER - Filter Control */ /** @{ */
+#define TPM_FILTER_CHFVAL_MASK                   (0xFFU)                                             /**< TPM1_FILTER.CHFVAL Mask                 */
+#define TPM_FILTER_CHFVAL_SHIFT                  (0U)                                                /**< TPM1_FILTER.CHFVAL Position             */
+#define TPM_FILTER_CHFVAL(x)                     (((uint32_t)(((uint32_t)(x))<<TPM_FILTER_CHFVAL_SHIFT))&TPM_FILTER_CHFVAL_MASK) /**< TPM1_FILTER.CHFVAL Field                */
 /** @} */
 
 /** @} */ /* End group TPM_Register_Masks_GROUP */

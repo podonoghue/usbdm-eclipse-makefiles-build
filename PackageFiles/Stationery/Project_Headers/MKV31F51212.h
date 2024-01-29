@@ -42,23 +42,23 @@ typedef enum {
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
 /* ----------------------   MKV31F51212 VectorTable                  ---------------------- */
-  DMA0_IRQn                     =   0,   /**<  16 Direct memory access controller                                                  */
-  DMA1_IRQn                     =   1,   /**<  17 Direct memory access controller                                                  */
-  DMA2_IRQn                     =   2,   /**<  18 Direct memory access controller                                                  */
-  DMA3_IRQn                     =   3,   /**<  19 Direct memory access controller                                                  */
-  DMA4_IRQn                     =   4,   /**<  20 Direct memory access controller                                                  */
-  DMA5_IRQn                     =   5,   /**<  21 Direct memory access controller                                                  */
-  DMA6_IRQn                     =   6,   /**<  22 Direct memory access controller                                                  */
-  DMA7_IRQn                     =   7,   /**<  23 Direct memory access controller                                                  */
-  DMA8_IRQn                     =   8,   /**<  24 Direct memory access controller                                                  */
-  DMA9_IRQn                     =   9,   /**<  25 Direct memory access controller                                                  */
-  DMA10_IRQn                    =  10,   /**<  26 Direct memory access controller                                                  */
-  DMA11_IRQn                    =  11,   /**<  27 Direct memory access controller                                                  */
-  DMA12_IRQn                    =  12,   /**<  28 Direct memory access controller                                                  */
-  DMA13_IRQn                    =  13,   /**<  29 Direct memory access controller                                                  */
-  DMA14_IRQn                    =  14,   /**<  30 Direct memory access controller                                                  */
-  DMA15_IRQn                    =  15,   /**<  31 Direct memory access controller                                                  */
-  DMA_Error_IRQn                =  16,   /**<  32 DMA error interrupt all channels                                                 */
+  DMA0_IRQn                     =   0,   /**<  16 DMA Controller                                                                   */
+  DMA1_IRQn                     =   1,   /**<  17 DMA Controller                                                                   */
+  DMA2_IRQn                     =   2,   /**<  18 DMA Controller                                                                   */
+  DMA3_IRQn                     =   3,   /**<  19 DMA Controller                                                                   */
+  DMA4_IRQn                     =   4,   /**<  20 DMA Controller                                                                   */
+  DMA5_IRQn                     =   5,   /**<  21 DMA Controller                                                                   */
+  DMA6_IRQn                     =   6,   /**<  22 DMA Controller                                                                   */
+  DMA7_IRQn                     =   7,   /**<  23 DMA Controller                                                                   */
+  DMA8_IRQn                     =   8,   /**<  24 DMA Controller                                                                   */
+  DMA9_IRQn                     =   9,   /**<  25 DMA Controller                                                                   */
+  DMA10_IRQn                    =  10,   /**<  26 DMA Controller                                                                   */
+  DMA11_IRQn                    =  11,   /**<  27 DMA Controller                                                                   */
+  DMA12_IRQn                    =  12,   /**<  28 DMA Controller                                                                   */
+  DMA13_IRQn                    =  13,   /**<  29 DMA Controller                                                                   */
+  DMA14_IRQn                    =  14,   /**<  30 DMA Controller                                                                   */
+  DMA15_IRQn                    =  15,   /**<  31 DMA Controller                                                                   */
+  DMA_Error_IRQn                =  16,   /**<  32 DMA Controller                                                                   */
   MCM_IRQn                      =  17,   /**<  33 Miscellaneous Control Module                                                     */
   FTF_Command_IRQn              =  18,   /**<  34 Flash Memory Interface                                                           */
   FTF_ReadCollision_IRQn        =  19,   /**<  35 Flash Memory Interface                                                           */
@@ -113,23 +113,23 @@ extern void SVC_Handler(void);                       /**< System Service Call vi
 extern void DebugMon_Handler(void);                  /**< Debug Monitor                                                                    */
 extern void PendSV_Handler(void);                    /**< Pendable request for system service                                              */
 extern void SysTick_Handler(void);                   /**< System Tick Timer                                                                */
-extern void DMA0_IRQHandler(void);                   /**< Direct memory access controller                                                  */
-extern void DMA1_IRQHandler(void);                   /**< Direct memory access controller                                                  */
-extern void DMA2_IRQHandler(void);                   /**< Direct memory access controller                                                  */
-extern void DMA3_IRQHandler(void);                   /**< Direct memory access controller                                                  */
-extern void DMA4_IRQHandler(void);                   /**< Direct memory access controller                                                  */
-extern void DMA5_IRQHandler(void);                   /**< Direct memory access controller                                                  */
-extern void DMA6_IRQHandler(void);                   /**< Direct memory access controller                                                  */
-extern void DMA7_IRQHandler(void);                   /**< Direct memory access controller                                                  */
-extern void DMA8_IRQHandler(void);                   /**< Direct memory access controller                                                  */
-extern void DMA9_IRQHandler(void);                   /**< Direct memory access controller                                                  */
-extern void DMA10_IRQHandler(void);                  /**< Direct memory access controller                                                  */
-extern void DMA11_IRQHandler(void);                  /**< Direct memory access controller                                                  */
-extern void DMA12_IRQHandler(void);                  /**< Direct memory access controller                                                  */
-extern void DMA13_IRQHandler(void);                  /**< Direct memory access controller                                                  */
-extern void DMA14_IRQHandler(void);                  /**< Direct memory access controller                                                  */
-extern void DMA15_IRQHandler(void);                  /**< Direct memory access controller                                                  */
-extern void DMA_Error_IRQHandler(void);              /**< DMA error interrupt all channels                                                 */
+extern void DMA0_IRQHandler(void);                   /**< DMA Controller                                                                   */
+extern void DMA1_IRQHandler(void);                   /**< DMA Controller                                                                   */
+extern void DMA2_IRQHandler(void);                   /**< DMA Controller                                                                   */
+extern void DMA3_IRQHandler(void);                   /**< DMA Controller                                                                   */
+extern void DMA4_IRQHandler(void);                   /**< DMA Controller                                                                   */
+extern void DMA5_IRQHandler(void);                   /**< DMA Controller                                                                   */
+extern void DMA6_IRQHandler(void);                   /**< DMA Controller                                                                   */
+extern void DMA7_IRQHandler(void);                   /**< DMA Controller                                                                   */
+extern void DMA8_IRQHandler(void);                   /**< DMA Controller                                                                   */
+extern void DMA9_IRQHandler(void);                   /**< DMA Controller                                                                   */
+extern void DMA10_IRQHandler(void);                  /**< DMA Controller                                                                   */
+extern void DMA11_IRQHandler(void);                  /**< DMA Controller                                                                   */
+extern void DMA12_IRQHandler(void);                  /**< DMA Controller                                                                   */
+extern void DMA13_IRQHandler(void);                  /**< DMA Controller                                                                   */
+extern void DMA14_IRQHandler(void);                  /**< DMA Controller                                                                   */
+extern void DMA15_IRQHandler(void);                  /**< DMA Controller                                                                   */
+extern void DMA_Error_IRQHandler(void);              /**< DMA Controller                                                                   */
 extern void MCM_IRQHandler(void);                    /**< Miscellaneous Control Module                                                     */
 extern void FTF_Command_IRQHandler(void);            /**< Flash Memory Interface                                                           */
 extern void FTF_ReadCollision_IRQHandler(void);      /**< Flash Memory Interface                                                           */
@@ -507,6 +507,8 @@ typedef struct ADC_Type {
 #define ADC0_BasePtr                   0x4003B000UL //!< Peripheral base address
 #define ADC0                           ((ADC_Type *) ADC0_BasePtr) //!< Freescale base pointer
 #define ADC0_BASE_PTR                  (ADC0) //!< Freescale style base pointer
+#define ADC0_IRQS { ADC0_IRQn,  }
+
 
 /** @} */ /* End group ADC_Peripheral_access_layer_GROUP */
 
@@ -528,6 +530,8 @@ typedef struct ADC_Type {
 #define ADC1_BasePtr                   0x40027000UL //!< Peripheral base address
 #define ADC1                           ((ADC_Type *) ADC1_BasePtr) //!< Freescale base pointer
 #define ADC1_BASE_PTR                  (ADC1) //!< Freescale style base pointer
+#define ADC1_IRQS { ADC1_IRQn,  }
+
 
 /** @} */ /* End group ADC_Peripheral_access_layer_GROUP */
 
@@ -658,6 +662,8 @@ typedef struct CMP_Type {
 #define CMP0_BasePtr                   0x40073000UL //!< Peripheral base address
 #define CMP0                           ((CMP_Type *) CMP0_BasePtr) //!< Freescale base pointer
 #define CMP0_BASE_PTR                  (CMP0) //!< Freescale style base pointer
+#define CMP0_IRQS { CMP0_IRQn,  }
+
 
 /** @} */ /* End group CMP_Peripheral_access_layer_GROUP */
 
@@ -679,6 +685,8 @@ typedef struct CMP_Type {
 #define CMP1_BasePtr                   0x40073008UL //!< Peripheral base address
 #define CMP1                           ((CMP_Type *) CMP1_BasePtr) //!< Freescale base pointer
 #define CMP1_BASE_PTR                  (CMP1) //!< Freescale style base pointer
+#define CMP1_IRQS { CMP1_IRQn,  }
+
 
 /** @} */ /* End group CMP_Peripheral_access_layer_GROUP */
 
@@ -999,6 +1007,8 @@ typedef struct DAC_Type {
 #define DAC0_BasePtr                   0x4003F000UL //!< Peripheral base address
 #define DAC0                           ((DAC_Type *) DAC0_BasePtr) //!< Freescale base pointer
 #define DAC0_BASE_PTR                  (DAC0) //!< Freescale style base pointer
+#define DAC0_IRQS { DAC0_IRQn,  }
+
 
 /** @} */ /* End group DAC_Peripheral_access_layer_GROUP */
 
@@ -1020,6 +1030,8 @@ typedef struct DAC_Type {
 #define DAC1_BasePtr                   0x40028000UL //!< Peripheral base address
 #define DAC1                           ((DAC_Type *) DAC1_BasePtr) //!< Freescale base pointer
 #define DAC1_BASE_PTR                  (DAC1) //!< Freescale style base pointer
+#define DAC1_IRQS { DAC1_IRQn,  }
+
 
 /** @} */ /* End group DAC_Peripheral_access_layer_GROUP */
 
@@ -1770,6 +1782,8 @@ typedef struct DMA_Type {
 #define DMA0_BasePtr                   0x40008000UL //!< Peripheral base address
 #define DMA0                           ((DMA_Type *) DMA0_BasePtr) //!< Freescale base pointer
 #define DMA0_BASE_PTR                  (DMA0) //!< Freescale style base pointer
+#define DMA0_IRQS { DMA0_IRQn, DMA1_IRQn, DMA2_IRQn, DMA3_IRQn, DMA3_IRQn, DMA4_IRQn, DMA5_IRQn, DMA6_IRQn, DMA7_IRQn, DMA8_IRQn, DMA9_IRQn, DMA10_IRQn, DMA11_IRQn, DMA12_IRQn, DMA13_IRQn, DMA14_IRQn, DMA15_IRQn, DMA_Error_IRQn,  }
+
 
 /** @} */ /* End group DMA0_Peripheral_access_layer_GROUP */
 
@@ -2546,6 +2560,8 @@ typedef struct FTFA_Type {
 #define FTFA_BasePtr                   0x40020000UL //!< Peripheral base address
 #define FTFA                           ((FTFA_Type *) FTFA_BasePtr) //!< Freescale base pointer
 #define FTFA_BASE_PTR                  (FTFA) //!< Freescale style base pointer
+#define FTFA_IRQS { FTF_Command_IRQn, FTF_ReadCollision_IRQn,  }
+
 
 /** @} */ /* End group FTFA_Peripheral_access_layer_GROUP */
 
@@ -2683,6 +2699,9 @@ typedef struct FTM_Type {
 /** @} */
 
 /** @name STATUS - Capture and Compare Status */ /** @{ */
+#define FTM_STATUS_STATUS_MASK                   (0xFFU)                                             /**< FTM0_STATUS.STATUS Mask                 */
+#define FTM_STATUS_STATUS_SHIFT                  (0U)                                                /**< FTM0_STATUS.STATUS Position             */
+#define FTM_STATUS_STATUS(x)                     (((uint32_t)(((uint32_t)(x))<<FTM_STATUS_STATUS_SHIFT))&FTM_STATUS_STATUS_MASK) /**< FTM0_STATUS.STATUS Field                */
 #define FTM_STATUS_CH0F_MASK                     (0x1U)                                              /**< FTM0_STATUS.CH0F Mask                   */
 #define FTM_STATUS_CH0F_SHIFT                    (0U)                                                /**< FTM0_STATUS.CH0F Position               */
 #define FTM_STATUS_CH0F(x)                       (((uint32_t)(((uint32_t)(x))<<FTM_STATUS_CH0F_SHIFT))&FTM_STATUS_CH0F_MASK) /**< FTM0_STATUS.CH0F Field                  */
@@ -3139,6 +3158,9 @@ typedef struct FTM_Type {
 /** @} */
 
 /** @name INVCTRL - FTM Inverting Control */ /** @{ */
+#define FTM_INVCTRL_INVEN_MASK                   (0xFU)                                              /**< FTM0_INVCTRL.INVEN Mask                 */
+#define FTM_INVCTRL_INVEN_SHIFT                  (0U)                                                /**< FTM0_INVCTRL.INVEN Position             */
+#define FTM_INVCTRL_INVEN(x)                     (((uint32_t)(((uint32_t)(x))<<FTM_INVCTRL_INVEN_SHIFT))&FTM_INVCTRL_INVEN_MASK) /**< FTM0_INVCTRL.INVEN Field                */
 #define FTM_INVCTRL_INV0EN_MASK                  (0x1U)                                              /**< FTM0_INVCTRL.INV0EN Mask                */
 #define FTM_INVCTRL_INV0EN_SHIFT                 (0U)                                                /**< FTM0_INVCTRL.INV0EN Position            */
 #define FTM_INVCTRL_INV0EN(x)                    (((uint32_t)(((uint32_t)(x))<<FTM_INVCTRL_INV0EN_SHIFT))&FTM_INVCTRL_INV0EN_MASK) /**< FTM0_INVCTRL.INV0EN Field               */
@@ -3250,6 +3272,8 @@ typedef struct FTM_Type {
 #define FTM0_BasePtr                   0x40038000UL //!< Peripheral base address
 #define FTM0                           ((FTM_Type *) FTM0_BasePtr) //!< Freescale base pointer
 #define FTM0_BASE_PTR                  (FTM0) //!< Freescale style base pointer
+#define FTM0_IRQS { FTM0_IRQn,  }
+
 
 /** @} */ /* End group FTM_Peripheral_access_layer_GROUP */
 
@@ -3346,6 +3370,8 @@ typedef struct FTMQUAD_Type {
 #define FTM1_BasePtr                   0x40039000UL //!< Peripheral base address
 #define FTM1                           ((FTMQUAD_Type *) FTM1_BasePtr) //!< Freescale base pointer
 #define FTM1_BASE_PTR                  (FTM1) //!< Freescale style base pointer
+#define FTM1_IRQS { FTM1_IRQn,  }
+
 
 /** @} */ /* End group FTM_Peripheral_access_layer_GROUP */
 
@@ -3367,6 +3393,8 @@ typedef struct FTMQUAD_Type {
 #define FTM2_BasePtr                   0x4003A000UL //!< Peripheral base address
 #define FTM2                           ((FTMQUAD_Type *) FTM2_BasePtr) //!< Freescale base pointer
 #define FTM2_BASE_PTR                  (FTM2) //!< Freescale style base pointer
+#define FTM2_IRQS { FTM2_IRQn,  }
+
 
 /** @} */ /* End group FTM_Peripheral_access_layer_GROUP */
 
@@ -3388,6 +3416,8 @@ typedef struct FTMQUAD_Type {
 #define FTM3_BasePtr                   0x40026000UL //!< Peripheral base address
 #define FTM3                           ((FTM_Type *) FTM3_BasePtr) //!< Freescale base pointer
 #define FTM3_BASE_PTR                  (FTM3) //!< Freescale style base pointer
+#define FTM3_IRQS { FTM3_IRQn,  }
+
 
 /** @} */ /* End group FTM_Peripheral_access_layer_GROUP */
 
@@ -3735,6 +3765,8 @@ typedef struct I2C_Type {
 #define I2C0_BasePtr                   0x40066000UL //!< Peripheral base address
 #define I2C0                           ((I2C_Type *) I2C0_BasePtr) //!< Freescale base pointer
 #define I2C0_BASE_PTR                  (I2C0) //!< Freescale style base pointer
+#define I2C0_IRQS { I2C0_IRQn,  }
+
 
 /** @} */ /* End group I2C_Peripheral_access_layer_GROUP */
 
@@ -3756,6 +3788,8 @@ typedef struct I2C_Type {
 #define I2C1_BasePtr                   0x40067000UL //!< Peripheral base address
 #define I2C1                           ((I2C_Type *) I2C1_BasePtr) //!< Freescale base pointer
 #define I2C1_BASE_PTR                  (I2C1) //!< Freescale style base pointer
+#define I2C1_IRQS { I2C1_IRQn,  }
+
 
 /** @} */ /* End group I2C_Peripheral_access_layer_GROUP */
 
@@ -4067,6 +4101,8 @@ typedef struct LLWU_Type {
 #define LLWU_BasePtr                   0x4007C000UL //!< Peripheral base address
 #define LLWU                           ((LLWU_Type *) LLWU_BasePtr) //!< Freescale base pointer
 #define LLWU_BASE_PTR                  (LLWU) //!< Freescale style base pointer
+#define LLWU_IRQS { LLWU_IRQn,  }
+
 
 /** @} */ /* End group LLWU_Peripheral_access_layer_GROUP */
 
@@ -4159,6 +4195,8 @@ typedef struct LPTMR_Type {
 #define LPTMR0_BasePtr                 0x40040000UL //!< Peripheral base address
 #define LPTMR0                         ((LPTMR_Type *) LPTMR0_BasePtr) //!< Freescale base pointer
 #define LPTMR0_BASE_PTR                (LPTMR0) //!< Freescale style base pointer
+#define LPTMR0_IRQS { LPTMR0_IRQn,  }
+
 
 /** @} */ /* End group LPTMR_Peripheral_access_layer_GROUP */
 
@@ -4445,6 +4483,8 @@ typedef struct LPUART_Type {
 #define LPUART0_BasePtr                0x4002A000UL //!< Peripheral base address
 #define LPUART0                        ((LPUART_Type *) LPUART0_BasePtr) //!< Freescale base pointer
 #define LPUART0_BASE_PTR               (LPUART0) //!< Freescale style base pointer
+#define LPUART0_IRQS { LPUART0_IRQn,  }
+
 
 /** @} */ /* End group LPUART_Peripheral_access_layer_GROUP */
 
@@ -4667,6 +4707,8 @@ typedef struct MCG_Type {
 #define MCG_BasePtr                    0x40064000UL //!< Peripheral base address
 #define MCG                            ((MCG_Type *) MCG_BasePtr) //!< Freescale base pointer
 #define MCG_BASE_PTR                   (MCG) //!< Freescale style base pointer
+#define MCG_IRQS { MCG_IRQn,  }
+
 
 /** @} */ /* End group MCG_Peripheral_access_layer_GROUP */
 
@@ -4783,6 +4825,8 @@ typedef struct MCM_Type {
 #define MCM_BasePtr                    0xE0080000UL //!< Peripheral base address
 #define MCM                            ((MCM_Type *) MCM_BasePtr) //!< Freescale base pointer
 #define MCM_BASE_PTR                   (MCM) //!< Freescale style base pointer
+#define MCM_IRQS { MCM_IRQn,  }
+
 
 /** @} */ /* End group MCM_Peripheral_access_layer_GROUP */
 
@@ -5136,6 +5180,8 @@ typedef struct PDB_Type {
 #define PDB0_BasePtr                   0x40036000UL //!< Peripheral base address
 #define PDB0                           ((PDB_Type *) PDB0_BasePtr) //!< Freescale base pointer
 #define PDB0_BASE_PTR                  (PDB0) //!< Freescale style base pointer
+#define PDB0_IRQS { PDB0_IRQn,  }
+
 
 /** @} */ /* End group PDB_Peripheral_access_layer_GROUP */
 
@@ -5224,6 +5270,8 @@ typedef struct PIT_Type {
 #define PIT_BasePtr                    0x40037000UL //!< Peripheral base address
 #define PIT                            ((PIT_Type *) PIT_BasePtr) //!< Freescale base pointer
 #define PIT_BASE_PTR                   (PIT) //!< Freescale style base pointer
+#define PIT_IRQS { PIT0_IRQn, PIT1_IRQn, PIT2_IRQn, PIT3_IRQn,  }
+
 
 /** @} */ /* End group PIT_Peripheral_access_layer_GROUP */
 
@@ -5315,6 +5363,8 @@ typedef struct PMC_Type {
 #define PMC_BasePtr                    0x4007D000UL //!< Peripheral base address
 #define PMC                            ((PMC_Type *) PMC_BasePtr) //!< Freescale base pointer
 #define PMC_BASE_PTR                   (PMC) //!< Freescale style base pointer
+#define PMC_IRQS { PMC_IRQn,  }
+
 
 /** @} */ /* End group PMC_Peripheral_access_layer_GROUP */
 
@@ -5414,6 +5464,8 @@ typedef struct PORT_Type {
 #define PORTA_BasePtr                  0x40049000UL //!< Peripheral base address
 #define PORTA                          ((PORT_Type *) PORTA_BasePtr) //!< Freescale base pointer
 #define PORTA_BASE_PTR                 (PORTA) //!< Freescale style base pointer
+#define PORTA_IRQS { PORTA_IRQn,  }
+
 
 /** @} */ /* End group PORT_Peripheral_access_layer_GROUP */
 
@@ -5435,6 +5487,8 @@ typedef struct PORT_Type {
 #define PORTB_BasePtr                  0x4004A000UL //!< Peripheral base address
 #define PORTB                          ((PORT_Type *) PORTB_BasePtr) //!< Freescale base pointer
 #define PORTB_BASE_PTR                 (PORTB) //!< Freescale style base pointer
+#define PORTB_IRQS { PORTB_IRQn,  }
+
 
 /** @} */ /* End group PORT_Peripheral_access_layer_GROUP */
 
@@ -5456,6 +5510,8 @@ typedef struct PORT_Type {
 #define PORTC_BasePtr                  0x4004B000UL //!< Peripheral base address
 #define PORTC                          ((PORT_Type *) PORTC_BasePtr) //!< Freescale base pointer
 #define PORTC_BASE_PTR                 (PORTC) //!< Freescale style base pointer
+#define PORTC_IRQS { PORTC_IRQn,  }
+
 
 /** @} */ /* End group PORT_Peripheral_access_layer_GROUP */
 
@@ -5517,6 +5573,8 @@ typedef struct PORT_DFER_Type {
 #define PORTD_BasePtr                  0x4004C000UL //!< Peripheral base address
 #define PORTD                          ((PORT_DFER_Type *) PORTD_BasePtr) //!< Freescale base pointer
 #define PORTD_BASE_PTR                 (PORTD) //!< Freescale style base pointer
+#define PORTD_IRQS { PORTD_IRQn,  }
+
 
 /** @} */ /* End group PORT_Peripheral_access_layer_GROUP */
 
@@ -5538,6 +5596,8 @@ typedef struct PORT_DFER_Type {
 #define PORTE_BasePtr                  0x4004D000UL //!< Peripheral base address
 #define PORTE                          ((PORT_Type *) PORTE_BasePtr) //!< Freescale base pointer
 #define PORTE_BASE_PTR                 (PORTE) //!< Freescale style base pointer
+#define PORTE_IRQS { PORTE_IRQn,  }
+
 
 /** @} */ /* End group PORT_Peripheral_access_layer_GROUP */
 
@@ -6716,6 +6776,8 @@ typedef struct SPI_Type {
 #define SPI0_BasePtr                   0x4002C000UL //!< Peripheral base address
 #define SPI0                           ((SPI_Type *) SPI0_BasePtr) //!< Freescale base pointer
 #define SPI0_BASE_PTR                  (SPI0) //!< Freescale style base pointer
+#define SPI0_IRQS { SPI0_IRQn,  }
+
 
 /** @} */ /* End group SPI_Peripheral_access_layer_GROUP */
 
@@ -6737,6 +6799,8 @@ typedef struct SPI_Type {
 #define SPI1_BasePtr                   0x4002D000UL //!< Peripheral base address
 #define SPI1                           ((SPI_Type *) SPI1_BasePtr) //!< Freescale base pointer
 #define SPI1_BASE_PTR                  (SPI1) //!< Freescale style base pointer
+#define SPI1_IRQS { SPI1_IRQn,  }
+
 
 /** @} */ /* End group SPI_Peripheral_access_layer_GROUP */
 
@@ -7358,6 +7422,8 @@ typedef struct UART_Type {
 #define UART0_BasePtr                  0x4006A000UL //!< Peripheral base address
 #define UART0                          ((UART_Type *) UART0_BasePtr) //!< Freescale base pointer
 #define UART0_BASE_PTR                 (UART0) //!< Freescale style base pointer
+#define UART0_IRQS { UART0_RxTx_IRQn, UART0_Error_IRQn,  }
+
 
 /** @} */ /* End group UART_Peripheral_access_layer_GROUP */
 
@@ -7421,6 +7487,8 @@ typedef struct UART1_Type {
 #define UART1_BasePtr                  0x4006B000UL //!< Peripheral base address
 #define UART1                          ((UART1_Type *) UART1_BasePtr) //!< Freescale base pointer
 #define UART1_BASE_PTR                 (UART1) //!< Freescale style base pointer
+#define UART1_IRQS { UART1_RxTx_IRQn, UART1_Error_IRQn,  }
+
 
 /** @} */ /* End group UART_Peripheral_access_layer_GROUP */
 
@@ -7442,6 +7510,8 @@ typedef struct UART1_Type {
 #define UART2_BasePtr                  0x4006C000UL //!< Peripheral base address
 #define UART2                          ((UART1_Type *) UART2_BasePtr) //!< Freescale base pointer
 #define UART2_BASE_PTR                 (UART2) //!< Freescale style base pointer
+#define UART2_IRQS { UART2_RxTx_IRQn, UART2_Error_IRQn,  }
+
 
 /** @} */ /* End group UART_Peripheral_access_layer_GROUP */
 
@@ -7668,6 +7738,8 @@ typedef struct WDOG_Type {
 #define WDOG_BasePtr                   0x40052000UL //!< Peripheral base address
 #define WDOG                           ((WDOG_Type *) WDOG_BasePtr) //!< Freescale base pointer
 #define WDOG_BASE_PTR                  (WDOG) //!< Freescale style base pointer
+#define WDOG_IRQS { WDOG_IRQn,  }
+
 
 /** @} */ /* End group WDOG_Peripheral_access_layer_GROUP */
 

@@ -2583,6 +2583,9 @@ typedef struct FTM_Type {
 /** @} */
 
 /** @name STATUS - Capture and Compare Status */ /** @{ */
+#define FTM_STATUS_STATUS_MASK                   (0xFFU)                                             /**< FTM0_STATUS.STATUS Mask                 */
+#define FTM_STATUS_STATUS_SHIFT                  (0U)                                                /**< FTM0_STATUS.STATUS Position             */
+#define FTM_STATUS_STATUS(x)                     (((uint32_t)(((uint32_t)(x))<<FTM_STATUS_STATUS_SHIFT))&FTM_STATUS_STATUS_MASK) /**< FTM0_STATUS.STATUS Field                */
 #define FTM_STATUS_CH0F_MASK                     (0x1U)                                              /**< FTM0_STATUS.CH0F Mask                   */
 #define FTM_STATUS_CH0F_SHIFT                    (0U)                                                /**< FTM0_STATUS.CH0F Position               */
 #define FTM_STATUS_CH0F(x)                       (((uint32_t)(((uint32_t)(x))<<FTM_STATUS_CH0F_SHIFT))&FTM_STATUS_CH0F_MASK) /**< FTM0_STATUS.CH0F Field                  */
@@ -3039,6 +3042,9 @@ typedef struct FTM_Type {
 /** @} */
 
 /** @name INVCTRL - FTM Inverting Control */ /** @{ */
+#define FTM_INVCTRL_INVEN_MASK                   (0xFU)                                              /**< FTM0_INVCTRL.INVEN Mask                 */
+#define FTM_INVCTRL_INVEN_SHIFT                  (0U)                                                /**< FTM0_INVCTRL.INVEN Position             */
+#define FTM_INVCTRL_INVEN(x)                     (((uint32_t)(((uint32_t)(x))<<FTM_INVCTRL_INVEN_SHIFT))&FTM_INVCTRL_INVEN_MASK) /**< FTM0_INVCTRL.INVEN Field                */
 #define FTM_INVCTRL_INV0EN_MASK                  (0x1U)                                              /**< FTM0_INVCTRL.INV0EN Mask                */
 #define FTM_INVCTRL_INV0EN_SHIFT                 (0U)                                                /**< FTM0_INVCTRL.INV0EN Position            */
 #define FTM_INVCTRL_INV0EN(x)                    (((uint32_t)(((uint32_t)(x))<<FTM_INVCTRL_INV0EN_SHIFT))&FTM_INVCTRL_INV0EN_MASK) /**< FTM0_INVCTRL.INV0EN Field               */
