@@ -20,6 +20,8 @@
 #ifndef PROJECT_HEADERS_USB_IMPLEMENTATION_COMPOSITE_H_
 #define PROJECT_HEADERS_USB_IMPLEMENTATION_COMPOSITE_H_
 
+#include <stdint.h>
+
 /*
  * Under Windows 8, or 10 there is no need to install a driver for
  * the bulk end-points if the MS_COMPATIBLE_ID_FEATURE is enabled.
@@ -31,11 +33,8 @@
  * Under Linux drivers for bulk and CDC are automatically loaded
  */
 
-#define MS_COMPATIBLE_ID_FEATURE
+//#define MS_COMPATIBLE_ID_FEATURE // Incompatible with CDC
 #include "usb_cdc_interface.h"
-
-/** Causes a semi-unique serial number to be generated for each USB device */
-#define UNIQUE_ID
 //#include "configure.h"
 
 namespace USBDM {
@@ -44,29 +43,20 @@ namespace USBDM {
 // Customise for each USB device
 //
 
-#ifndef SERIAL_NO
+/** Causes a semi-unique serial number to be generated for each USB device */
+#define UNIQUE_ID
+
 #ifdef UNIQUE_ID
-#define SERIAL_NO           "USBDM-%lu"
+#define SERIAL_NO           "USBDM-"
 #else
 #define SERIAL_NO           "USBDM-0001"
 #endif
-#endif
-#ifndef PRODUCT_DESCRIPTION
 #define PRODUCT_DESCRIPTION "USB-Test"
-#endif
-#ifndef MANUFACTURER
 #define MANUFACTURER        "pgo"
-#endif
 
-#ifndef VENDOR_ID
-#define VENDOR_ID             (0x16D0)    // Vendor (actually MCS)
-#endif
-#ifndef PRODUCT_ID
-#define PRODUCT_ID            (0xFFFF)    // Product ID
-#endif
-#ifndef VERSION_ID
-#define VERSION_ID            (0x0200)
-#endif
+static constexpr uint16_t  VENDOR_ID   = 0x16D0;    // Vendor ID (actually MCS)
+static constexpr uint16_t  PRODUCT_ID  = 0x4999;    // Product ID
+static constexpr uint16_t  VERSION_ID  = 0x0100;    // Version ID
 
 //======================================================================
 // Maximum packet sizes for each endpoint
@@ -85,12 +75,21 @@ static constexpr unsigned  CDC_DATA_IN_EP_MAXSIZE       = 16; //!< CDC data in
 /**
  * Class representing USB0
  */
-class Usb0 : public UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE> {
+class Usb0 : private UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE> {
 
    // Allow superclass to access handleTokenComplete(void);
-   //friend UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE>;
+   friend UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE>;
+
+   static LineCodingStructure lineCoding;
+   static UartQueue<uint8_t, CDC_DATA_IN_EP_MAXSIZE>  inQueue;
+   static UartQueue<uint8_t, CDC_DATA_OUT_EP_MAXSIZE> outQueue;
 
 public:
+   using UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE>::getUserEventName;
+   using UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE>::isConfigured;
+   using UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE>::UserEvent;
+   using UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE>::irqHandler;
+   using UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE>::setUserCallback;
 
    /**
     * String indexes
@@ -172,6 +171,141 @@ public:
     */
    static const uint8_t *const stringDescriptors[];
 
+protected:
+   /* Additional end-points */
+
+   /** Out end-point for Bulk */
+   static OutEndpoint <Usb0Info, Usb0::BULK_OUT_ENDPOINT, BULK_OUT_EP_MAXSIZE> epBulkOut;
+
+   /** In end-point for Bulk */
+   static InEndpoint  <Usb0Info, Usb0::BULK_IN_ENDPOINT,  BULK_IN_EP_MAXSIZE>  epBulkIn;
+
+   /** In end-point for CDC notifications */
+   static InEndpoint  <Usb0Info, Usb0::CDC_NOTIFICATION_ENDPOINT, CDC_NOTIFICATION_EP_MAXSIZE>  epCdcNotification;
+
+   /** Out end-point for CDC data out */
+   static OutEndpoint <Usb0Info, Usb0::CDC_DATA_OUT_ENDPOINT,     CDC_DATA_OUT_EP_MAXSIZE>      epCdcDataOut;
+
+   /** In end-point for CDC data in */
+   static InEndpoint  <Usb0Info, Usb0::CDC_DATA_IN_ENDPOINT,      CDC_DATA_IN_EP_MAXSIZE>       epCdcDataIn;
+
+   /*
+    * TODO Add additional End-points here
+    */
+
+   using cdcInterface = USBDM::CDC_Interface;
+
+public:
+
+   /**
+    * Initialise the USB0 interface
+    *
+    *  @note Assumes clock set up for USB operation (48MHz)
+    */
+   static void initialise();
+
+   //_______ Bulk Transmission ________________________________________________________________
+
+   /**
+    *  Non-blocking transmission of data over bulk IN end-point
+    *
+    *  @param size         Number of bytes to send
+    *  @param buffer       Pointer to bytes to send
+    *
+    *  @return E_WRONG_STATE  In wrong state e.g. Busy or Stalled
+    *  @return E_NO_ERROR     Transmission successfully commenced
+    */
+   static ErrorCode startSendBulkData(uint16_t size, const uint8_t *buffer);
+
+   /**
+    *  Check if transmission completed
+    *
+    *  @return E_BUSY      Busy with last transmission - retry
+    *  @return E_NO_ERROR  Transmission successfully completed
+    */
+   static ErrorCode pollSendBulkData();
+
+   /**
+    *  Blocking transmission of data over bulk IN end-point
+    *
+    *  @param size            Number of bytes to send
+    *  @param buffer          Pointer to bytes to send
+    *  @param timeoutMS       Timeout in milliseconds (may be zero to suppress)
+    *
+    *  @return E_NO_ERROR     Transmission successfully completed
+    *  @return E_TIMEOUT      Transmission not completed within timeout (transmission is aborted)
+    *  @return E_WRONG_STATE  In wrong state e.g. Busy or Stalled (transmission is aborted)
+    */
+   static ErrorCode sendBulkData(uint16_t size, const uint8_t *buffer, int timeoutMS);
+
+
+   //_______ Bulk Reception ________________________________________________________________
+
+   /**
+    *  Non-blocking reception of data over bulk OUT end-point
+    *
+    *   @param size           Maximum number of bytes to receive
+    *   @param buffer         Pointer to buffer for bytes received
+    *
+    *   @return E_NO_ERROR    Transmission started
+    *   @return E_WRONG_STATE In unexpected state e.g. Busy or Stalled
+    */
+   static ErrorCode startReceiveBulkData(uint16_t size, uint8_t *buffer);
+
+   /**
+    *  Check for completion of reception of data over bulk OUT end-point.
+    *  Reception will have been previously configured by startReceiveBulkData().
+    *
+    *   @param  size          Number of bytes received
+    *
+    *   @return E_BUSY        Reception not complete. (size == 0)
+    *   @return E_NO_ERROR    Reception complete. Buffer has data.
+    *   @return E_WRONG_STATE In unexpected state e.g. Idle or Stalled
+    */
+   static ErrorCode pollReceiveBulkData(uint16_t &size);
+
+   /**
+    *  Blocking reception of data over bulk OUT end-point
+    *
+    *  @param size           Maximum number of bytes to receive/Number of bytes received
+    *  @param buffer         Pointer to buffer for bytes received
+    *  @param timeoutMS      Timeout in milliseconds (may be zero to suppress)
+    *
+    *  @return E_NO_ERROR    Reception completed
+    *  @return E_TIMEOUT     Reception not completed within timeout (reception is aborted)
+    *  @return E_WRONG_STATE In unexpected state e.g. Busy or Stalled (reception is aborted)
+    */
+   static ErrorCode receiveBulkData(uint16_t &size, uint8_t *buffer, int timeoutMS);
+
+   //_______ CDC Transmission ________________________________________________________________
+
+   /**
+    * CDC Transmit
+    *
+    * @param[in] data Pointer to data to transmit
+    * @param[in] size Number of bytes to transmit
+    */
+   static void sendCdcData(const uint8_t *data, unsigned size);
+
+   //_______ Reception ________________________________________________________________
+
+   /**
+    * CDC Receive
+    *
+    * @param[in] data    Pointer to data to receive
+    * @param[in] maxSize Maximum number of bytes to receive
+    *
+    * @return Number of bytes received
+    */
+   static int receiveCdcData(uint8_t *data, unsigned maxSize);
+
+   /**
+    * Notify IN (device->host) endpoint that data is available
+    *
+    * @return Not used
+    */
+   static bool notify();
+
    /**
     * Device Descriptor
     */
@@ -208,13 +342,7 @@ public:
     */
    static const Descriptors otherDescriptors;
 
-   /**
-    * Handler for Token Complete USB interrupts for
-    * end-points other than EP0
-    *
-    * @param usbStat USB Status value from USB hardware
-    */
-   static void handleTokenComplete(UsbStat usbStat);
+protected:
    /**
     * Clear value reflecting selected hardware based ping-pong buffer.
     * This would normally only be called when resetting the USB hardware or using
@@ -248,7 +376,7 @@ public:
       epCdcDataOut.setCallback(cdcOutTransactionCallback);
 
       // Make sure epCdcDataOut is ready for polling (interrupt OUT)
-      epCdcDataOut.startRxStage(EPDataOut, epCdcDataOut.getMaximumTransferSize());
+      epCdcDataOut.startRxTransfer(EPDataOut, epCdcDataOut.getMaximumTransferSize());
 
       epCdcDataIn.initialise(clearToggles);
       addEndpoint(&epCdcDataIn);
@@ -265,92 +393,11 @@ public:
    }
 
    /**
-    *  Blocking transmission of data over bulk IN end-point
-    *
-    *  @param[in] size   Number of bytes to send
-    *  @param[in] buffer Pointer to bytes to send
-    *
-    *  @note : Waits for idle BEFORE transmission but\n
-    *          returns before data has been transmitted
-    */
-   static void sendBulkData(const uint8_t size, const uint8_t *buffer);
-
-   /**
-    *  Blocking reception of data over bulk OUT end-point
-    *
-    *   @param[in] maxSize Maximum number of bytes to receive
-    *   @param[in] buffer  Pointer to buffer for bytes received
-    *
-    *   @return Number of bytes received
-    *
-    *   @note Doesn't return until command has been received.
-    */
-   static int receiveBulkData(uint8_t maxSize, uint8_t *buffer);
-
-   /**
-    * Initialise the USB0 interface
-    *
-    *  @note Assumes clock set up for USB operation (48MHz)
-    */
-   static void initialise();
-
-protected:
-   /* end-points */
-
-   /** Out end-point for Bulk */
-   static OutEndpoint <Usb0Info, Usb0::BULK_OUT_ENDPOINT, BULK_OUT_EP_MAXSIZE> epBulkOut;
-
-   /** In end-point for Bulk */
-   static InEndpoint  <Usb0Info, Usb0::BULK_IN_ENDPOINT,  BULK_IN_EP_MAXSIZE>  epBulkIn;
-
-   /** In end-point for CDC notifications */
-   static InEndpoint  <Usb0Info, Usb0::CDC_NOTIFICATION_ENDPOINT, CDC_NOTIFICATION_EP_MAXSIZE>  epCdcNotification;
-
-   /** Out end-point for CDC data out */
-   static OutEndpoint <Usb0Info, Usb0::CDC_DATA_OUT_ENDPOINT,     CDC_DATA_OUT_EP_MAXSIZE>      epCdcDataOut;
-
-   /** In end-point for CDC data in */
-   static InEndpoint  <Usb0Info, Usb0::CDC_DATA_IN_ENDPOINT,      CDC_DATA_IN_EP_MAXSIZE>       epCdcDataIn;
-   /*
-    * TODO Add additional End-points here
-    */
-
-   using cdcInterface = USBDM::CDC_Interface;
-
-
-   /**
-    * CDC Transmit
-    *
-    * @param[in] data Pointer to data to transmit
-    * @param[in] size Number of bytes to transmit
-    */
-   static void sendCdcData(const uint8_t *data, unsigned size);
-
-   /**
-    * CDC Receive
-    *
-    * @param[in] data    Pointer to data to receive
-    * @param[in] maxSize Maximum number of bytes to receive
-    *
-    * @return Number of bytes received
-    */
-   static int receiveCdcData(uint8_t *data, unsigned maxSize);
-
-   /**
-    * Notify IN (device->host) endpoint that data is available
-    *
-    * @return Not used
-    */
-   static bool notify();
-
-protected:
-
-   /**
-    * Callback for SOF tokens
+    * Handler for Start of Frame Token interrupt (~1ms interval)
     *
     * @param frameNumber Frame number from SOF token
     *
-    * @return  Error code
+    * @return  E_NO_ERROR on success
     */
    static ErrorCode sofCallback(uint16_t frameNumber);
 
@@ -377,9 +424,9 @@ protected:
     * Checks for data and schedules transfer as necessary\n
     * Each transfer will have a ZLP as necessary.
     *
-    * @param[in] state Current end-point state
+    * @param[in] state Current end-point state (always EPDataIn)
     *
-    * @return The endpoint state to set after call-back (EPIdle)
+    * @return The endpoint state to set after call-back (EPIdle/EPDataIn)
     */
    static EndpointState cdcInTransactionCallback(EndpointState state);
 
@@ -387,11 +434,19 @@ protected:
     * Call-back handling CDC-OUT transaction complete\n
     * Data received is passed to the cdcInterface
     *
-    * @param[in] state Current end-point state
+    * @param[in] state Current end-point state (always EPDataOut)
     *
-    * @return The endpoint state to set after call-back (EPIdle)
+    * @return The endpoint state to set after call-back (EPDataOut)
     */
    static EndpointState cdcOutTransactionCallback(EndpointState state);
+
+   /**
+    * Handler for Token Complete USB interrupts for
+    * end-points other than EP0
+    *
+    * @param usbStat USB Status value from USB hardware
+    */
+   static void handleTokenComplete(UsbStat usbStat);
 
    /**
     * Start CDC IN transaction\n
@@ -432,6 +487,7 @@ protected:
     * CDC Send break handler
     */
    static void handleSendBreak();
+
 };
 
 using UsbImplementation = Usb0;

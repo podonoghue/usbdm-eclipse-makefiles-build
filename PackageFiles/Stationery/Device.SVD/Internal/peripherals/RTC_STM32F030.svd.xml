@@ -1,0 +1,793 @@
+<!--
+Devices using this peripheral: 
+      STM32F030
+-->
+      <peripheral>
+         <?sourceFile "RTC_STM32F030" ?>
+         <name>RTC</name>
+         <description>Real-time clock</description>
+         <groupName>RTC</groupName>
+         <headerStructName>RTC</headerStructName>
+         <baseAddress>0x40002800</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x14</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x1C</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x24</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x28</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x2C</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x30</offset>
+            <size>0x18</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x50</offset>
+            <size>0x14</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>TR</name>
+               <description>time register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>SU</name>
+                     <description>Second units in BCD format</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>ST</name>
+                     <description>Second tens in BCD format</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>MNU</name>
+                     <description>Minute units in BCD format</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>MNT</name>
+                     <description>Minute tens in BCD format</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>HU</name>
+                     <description>Hour units in BCD format</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>HT</name>
+                     <description>Hour tens in BCD format</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PM</name>
+                     <description>AM/PM notation</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DR</name>
+               <description>date register</description>
+               <addressOffset>0x4</addressOffset>
+               <resetValue>0x2101</resetValue>
+               <fields>
+                  <field>
+                     <name>DU</name>
+                     <description>Date units in BCD format</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>DT</name>
+                     <description>Date tens in BCD format</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>MU</name>
+                     <description>Month units in BCD format</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>MT</name>
+                     <description>Month tens in BCD format</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>WDU</name>
+                     <description>Week day units</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>YU</name>
+                     <description>Year units in BCD format</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>YT</name>
+                     <description>Year tens in BCD format</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR</name>
+               <description>control register</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>TSEDGE</name>
+                     <description>Time-stamp event active
+              edge</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>REFCKON</name>
+                     <description>RTC_REFIN reference clock detection
+              enable (50 or 60 Hz)</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BYPSHAD</name>
+                     <description>Bypass the shadow</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>FMT</name>
+                     <description>Hour format</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ALRAE</name>
+                     <description>Alarm A enable</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSE</name>
+                     <description>timestamp enable</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ALRAIE</name>
+                     <description>Alarm A interrupt enable</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSIE</name>
+                     <description>Time-stamp interrupt
+              enable</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADD1H</name>
+                     <description>Add 1 hour (summer time
+              change)</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>SUB1H</name>
+                     <description>Subtract 1 hour (winter time
+              change)</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>BKP</name>
+                     <description>Backup</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>COSEL</name>
+                     <description>Calibration output
+              selection</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>POL</name>
+                     <description>Output polarity</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>OSEL</name>
+                     <description>Output selection</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>COE</name>
+                     <description>Calibration output enable</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ISR</name>
+               <description>initialization and status
+          register</description>
+               <addressOffset>0xC</addressOffset>
+               <resetValue>0x7</resetValue>
+               <fields>
+                  <field>
+                     <name>ALRAWF</name>
+                     <description>Alarm A write flag</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>SHPF</name>
+                     <description>Shift operation pending</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>INITS</name>
+                     <description>Initialization status flag</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>RSF</name>
+                     <description>Registers synchronization
+              flag</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>INITF</name>
+                     <description>Initialization flag</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>INIT</name>
+                     <description>Initialization mode</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ALRAF</name>
+                     <description>Alarm A flag</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSF</name>
+                     <description>Time-stamp flag</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSOVF</name>
+                     <description>Time-stamp overflow flag</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TAMP1F</name>
+                     <description>RTC_TAMP1 detection flag</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TAMP2F</name>
+                     <description>RTC_TAMP2 detection flag</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RECALPF</name>
+                     <description>Recalibration pending Flag</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PRER</name>
+               <description>prescaler register</description>
+               <addressOffset>0x10</addressOffset>
+               <resetValue>0x7F00FF</resetValue>
+               <fields>
+                  <field>
+                     <name>PREDIV_S</name>
+                     <description>Synchronous prescaler
+              factor</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>15</bitWidth>
+                  </field>
+                  <field>
+                     <name>PREDIV_A</name>
+                     <description>Asynchronous prescaler
+              factor</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ALRMAR</name>
+               <description>alarm A register</description>
+               <addressOffset>0x1C</addressOffset>
+               <fields>
+                  <field>
+                     <name>SU</name>
+                     <description>Second units in BCD
+              format</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>ST</name>
+                     <description>Second tens in BCD format</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>MSK1</name>
+                     <description>Alarm A seconds mask</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>MNU</name>
+                     <description>Minute units in BCD
+              format</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>MNT</name>
+                     <description>Minute tens in BCD format</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>MSK2</name>
+                     <description>Alarm A minutes mask</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HU</name>
+                     <description>Hour units in BCD format</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>HT</name>
+                     <description>Hour tens in BCD format</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PM</name>
+                     <description>AM/PM notation</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>MSK3</name>
+                     <description>Alarm A hours mask</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DU</name>
+                     <description>Date units or day in BCD
+              format</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>DT</name>
+                     <description>Date tens in BCD format</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>WDSEL</name>
+                     <description>Week day selection</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>MSK4</name>
+                     <description>Alarm A date mask</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WPR</name>
+               <description>write protection register</description>
+               <addressOffset>0x24</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>KEY</name>
+                     <description>Write protection key</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SSR</name>
+               <description>sub second register</description>
+               <addressOffset>0x28</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>SS</name>
+                     <description>Sub second value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SHIFTR</name>
+               <description>shift control register</description>
+               <addressOffset>0x2C</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>SUBFS</name>
+                     <description>Subtract a fraction of a
+              second</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>15</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADD1S</name>
+                     <description>Reserved</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TSTR</name>
+               <description>timestamp time register</description>
+               <addressOffset>0x30</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>SU</name>
+                     <description>Second units in BCD
+              format</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>ST</name>
+                     <description>Second tens in BCD format</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>MNU</name>
+                     <description>Minute units in BCD
+              format</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>MNT</name>
+                     <description>Minute tens in BCD format</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>HU</name>
+                     <description>Hour units in BCD format</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>HT</name>
+                     <description>Hour tens in BCD format</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PM</name>
+                     <description>AM/PM notation</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TSDR</name>
+               <description>timestamp date register</description>
+               <addressOffset>0x34</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>DU</name>
+                     <description>Date units in BCD format</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>DT</name>
+                     <description>Date tens in BCD format</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>MU</name>
+                     <description>Month units in BCD format</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>MT</name>
+                     <description>Month tens in BCD format</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>WDU</name>
+                     <description>Week day units</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TSSSR</name>
+               <description>time-stamp sub second register</description>
+               <addressOffset>0x38</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>SS</name>
+                     <description>Sub second value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CALR</name>
+               <description>calibration register</description>
+               <addressOffset>0x3C</addressOffset>
+               <fields>
+                  <field>
+                     <name>CALM</name>
+                     <description>Calibration minus</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>9</bitWidth>
+                  </field>
+                  <field>
+                     <name>CALW16</name>
+                     <description>Reserved</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CALW8</name>
+                     <description>Use a 16-second calibration cycle
+              period</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CALP</name>
+                     <description>Use an 8-second calibration cycle
+              period</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TAFCR</name>
+               <description>tamper and alternate function configuration
+          register</description>
+               <addressOffset>0x40</addressOffset>
+               <fields>
+                  <field>
+                     <name>TAMP1E</name>
+                     <description>RTC_TAMP1 input detection
+              enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TAMP1TRG</name>
+                     <description>Active level for RTC_TAMP1
+              input</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TAMPIE</name>
+                     <description>Tamper interrupt enable</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TAMP2E</name>
+                     <description>RTC_TAMP2 input detection
+              enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TAMP2_TRG</name>
+                     <description>Active level for RTC_TAMP2
+              input</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TAMPTS</name>
+                     <description>Activate timestamp on tamper detection
+              event</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TAMPFREQ</name>
+                     <description>Tamper sampling frequency</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>TAMPFLT</name>
+                     <description>RTC_TAMPx filter count</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>TAMP_PRCH</name>
+                     <description>RTC_TAMPx precharge
+              duration</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>TAMP_PUDIS</name>
+                     <description>RTC_TAMPx pull-up disable</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PC13VALUE</name>
+                     <description>RTC_ALARM output type/PC13
+              value</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PC13MODE</name>
+                     <description>PC13 mode</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PC14VALUE</name>
+                     <description>PC14 value</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PC14MODE</name>
+                     <description>PC14 mode</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PC15VALUE</name>
+                     <description>PC15 value</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PC15MODE</name>
+                     <description>PC15 mode</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ALRMASSR</name>
+               <description>alarm A sub second register</description>
+               <addressOffset>0x44</addressOffset>
+               <fields>
+                  <field>
+                     <name>SS</name>
+                     <description>Sub seconds value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>15</bitWidth>
+                  </field>
+                  <field>
+                     <name>MASKSS</name>
+                     <description>Mask the most-significant bits starting
+              at this bit</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>BKP0R</name>
+               <description>backup register</description>
+               <addressOffset>0x50</addressOffset>
+               <fields>
+                  <field>
+                     <name>BKP</name>
+                     <description>BKP</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>32</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register derivedFrom="BKP0R"> <name>BKP1R</name> <addressOffset>0x54</addressOffset> </register>
+            <register derivedFrom="BKP0R"> <name>BKP2R</name> <addressOffset>0x58</addressOffset> </register>
+            <register derivedFrom="BKP0R"> <name>BKP3R</name> <addressOffset>0x5C</addressOffset> </register>
+            <register derivedFrom="BKP0R"> <name>BKP4R</name> <addressOffset>0x60</addressOffset> </register>
+         </registers>
+      </peripheral>

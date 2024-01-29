@@ -18,7 +18,7 @@
 
 #include "usb.h"
 #include "usb_implementation_bulk.h"
-#include "pit.h"
+#include "hardware.h"
 
 namespace USBDM {
 
@@ -26,7 +26,7 @@ namespace USBDM {
  * Interface numbers for USB descriptors
  */
 enum InterfaceNumbers {
-   /** Interface number for BDM channel */
+   /** Interface number for Bulk interface */
    BULK_INTF_ID,
    /*
     * TODO Add additional Interface numbers here
@@ -45,6 +45,7 @@ static const uint8_t s_serial[]          = SERIAL_NO;                   //!< Ser
 static const uint8_t s_config[]          = "Default configuration";     //!< Configuration name
 
 static const uint8_t s_bulk_interface[]  = "Bulk Interface";            //!< Bulk Interface
+
 
 /*
  * Add additional String descriptors here
@@ -135,11 +136,11 @@ const Usb0::Descriptors Usb0::otherDescriptors = {
        */
 };
 
-/** Out end-point for BULK data out */
-OutEndpoint <Usb0Info, Usb0::BULK_OUT_ENDPOINT,         BULK_OUT_EP_MAXSIZE>          Usb0::epBulkOut(EndPointType_Bulk);
+/** Out end-point for BULK data out HOST -> DEVICE */
+OutEndpoint <Usb0Info, Usb0::BULK_OUT_ENDPOINT, BULK_OUT_EP_MAXSIZE>  Usb0::epBulkOut(EndPointType_Bulk);
 
-/** In end-point for BULK data in */
-InEndpoint  <Usb0Info, Usb0::BULK_IN_ENDPOINT,          BULK_IN_EP_MAXSIZE>           Usb0::epBulkIn(EndPointType_Bulk);
+/** In end-point for BULK data in DEVICE -> HOST*/
+InEndpoint  <Usb0Info, Usb0::BULK_IN_ENDPOINT,  BULK_IN_EP_MAXSIZE>   Usb0::epBulkIn(EndPointType_Bulk);
 
 /*
  * TODO Add additional end-points here
@@ -163,7 +164,7 @@ ErrorCode Usb0::sofCallback(uint16_t frameNumber) {
       switch ((frameNumber>>8)&0x3) {
          case 0:
             // LED on if configured, off if not
-            // UsbLed::write(fConnectionState == USBconfigured);
+            UsbLed::write(fConnectionState == USBconfigured);
             break;
          case 1:
          case 2:
@@ -172,7 +173,7 @@ ErrorCode Usb0::sofCallback(uint16_t frameNumber) {
          default :
             if (fActivityFlag) {
                // Flash LED to indicate activity
-               // UsbLed::toggle();
+               UsbLed::toggle();
                fActivityFlag = false;
             }
             break;
@@ -186,7 +187,7 @@ ErrorCode Usb0::sofCallback(uint16_t frameNumber) {
  * Handler for Token Complete USB interrupts for
  * end-points other than EP0
  *
- * @param[in] usbStat USB Status value from USB hardware
+ * @param usbStat USB Status value from USB hardware
  */
 void Usb0::handleTokenComplete(UsbStat usbStat) {
 
@@ -200,6 +201,7 @@ void Usb0::handleTokenComplete(UsbStat usbStat) {
          epBulkOut.handleOutToken();
          return;
       case BULK_IN_ENDPOINT: // Accept IN token
+         setActive();
          epBulkIn.handleInToken();
          return;
       /*
@@ -208,12 +210,14 @@ void Usb0::handleTokenComplete(UsbStat usbStat) {
    }
 }
 
+//_______ Bulk Call-backs ________________________________________________________________
+
 /**
  * Call-back handling BULK-OUT transaction complete
  *
  * @param[in] state Current end-point state (always EPDataOut)
  *
- * @return The endpoint state to set after call-back (EPIdle/EPDataOut)
+ * @return The endpoint state to set after call-back (e.g. EPIdle/EPDataOut/EPComplete)
  */
 EndpointState Usb0::bulkOutTransactionCallback(EndpointState state) {
    (void)state;
@@ -225,7 +229,7 @@ EndpointState Usb0::bulkOutTransactionCallback(EndpointState state) {
  *
  * @param[in] state Current end-point state (always EPDataIn)
  *
- * @return The endpoint state to set after call-back (EPIdle/EPDataIn)
+ * @return The endpoint state to set after call-back (e.g. EPIdle/EPDataIn/EPComplete)
  */
 EndpointState Usb0::bulkInTransactionCallback(EndpointState state) {
    (void)state;
@@ -239,70 +243,180 @@ EndpointState Usb0::bulkInTransactionCallback(EndpointState state) {
  */
 void Usb0::initialise() {
    UsbBase_T::initialise();
-   setUserCallback(fUserCallbackFunction);
-}
 
-   // Add extra handling of CDC packets directed to EP0
-//   setUnhandledSetupCallback(handleUserEp0SetupRequests);
+   UsbLed::setOutput(PinDriveStrength_High, PinDriveMode_PushPull, PinSlewRate_Slow);
 
-   Pit::configure();
+   // Add extra handling of packets directed to EP0
+   //   setUnhandledSetupCallback(handleUserEp0SetupRequests);
+
+   // Set SOF handler
    setSOFCallback(sofCallback);
+
    /*
     * TODO Additional initialisation
     */
 }
 
-/**
- *  Blocking reception of data over bulk OUT end-point
- *
- *   @param[IN/OUT] size    Max Number of bytes to receive/Actual number received
- *   @param[IN]     buffer  Pointer to buffer for bytes received
- *
- *   @return Error code
- *
- *   @note Doesn't return until some bytes have been received or timeout
- */
-ErrorCode Usb0::receiveBulkData(uint16_t &size, uint8_t *buffer) {
-   epBulkOut.startRxStage(EPDataOut, size, buffer);
+//_______ Bulk Transmission ________________________________________________________________
 
-   while (epBulkOut.getState() != EPIdle) {
-      __WFI();
+/**
+ *  Non-blocking transmission of data over bulk IN end-point
+ *
+ *  @param size         Number of bytes to send
+ *  @param buffer       Pointer to bytes to send
+ *
+ *  @return E_WRONG_STATE  In wrong state e.g. Busy or Stalled
+ *  @return E_NO_ERROR     Transmission successfully commenced
+ */
+ErrorCode Usb0::startSendBulkData(uint16_t size, const uint8_t *buffer) {
+
+   EndpointState state = epBulkIn.getState();
+
+   if (state != EPIdle) {
+      return E_WRONG_STATE;
    }
-   setActive();
-   size = epBulkOut.getDataTransferredSize();
+   // Use ZLP as needed
+   epBulkIn.setNeedZLP();
+   epBulkIn.startTxTransfer(EPDataIn, size, buffer);
    return E_NO_ERROR;
+}
+
+/**
+ *  Check if transmission completed
+ *
+ *  @return E_BUSY      Busy with last transmission - retry
+ *  @return E_NO_ERROR  Transmission successfully completed
+ */
+ErrorCode Usb0::pollSendBulkData() {
+
+   EndpointState state = epBulkIn.getState();
+   switch(state) {
+      case EPComplete:
+         setActive();
+         epBulkIn.setState(EPIdle);
+         return E_NO_ERROR;
+      case EPDataIn:
+         return E_BUSY;
+      default:
+         return E_WRONG_STATE;
+   }
 }
 
 /**
  *  Blocking transmission of data over bulk IN end-point
  *
- *  @param[IN] size    Number of bytes to send
- *  @param[IN] buffer  Pointer to bytes to send
- *  @param[IN] timeout Maximum time to wait for idle before transmission
+ *  @param size            Number of bytes to send
+ *  @param buffer          Pointer to bytes to send
+ *  @param timeoutMS       Timeout in milliseconds (may be zero to suppress)
  *
- *  @note : Waits for idle BEFORE transmission but\n
- *          returns before data has been transmitted
+ *  @return E_NO_ERROR     Transmission successfully completed
+ *  @return E_TIMEOUT      Transmission not completed within timeout (transmission is aborted)
+ *  @return E_WRONG_STATE  In wrong state e.g. Busy or Stalled (transmission is aborted)
  */
-ErrorCode Usb0::sendBulkData(uint16_t size, const uint8_t *buffer, uint32_t timeout) {
-   static bool expired = false;
+ErrorCode Usb0::sendBulkData(uint16_t size, const uint8_t *buffer, int timeoutMS) {
 
-   USBDM::PitChannelNum pitChannel = Pit::allocateChannel();
-   static auto cb = [] () {
-      expired = true;
-   };
-   if (pitChannel != PitChannelNum_None) {
-      Pit::oneShotInMilliseconds(pitChannel, cb, timeout);
+   ErrorCode rc = startSendBulkData(size, buffer);
+
+   if (rc == E_NO_ERROR) {
+      for(;;) {
+         rc = pollSendBulkData();
+         if (rc != E_BUSY) {
+            break;
+         }
+         waitMS(1);
+         if ((timeoutMS>0) && (--timeoutMS == 0)) {
+            rc = E_TIMEOUT;
+            break;
+         }
+      }
    }
-   while (!expired && (epBulkIn.getState() != EPIdle)) {
-      __WFI();
+   if (rc != E_NO_ERROR) {
+      epBulkIn.initialise(false);
    }
-   Pit::freeChannel(pitChannel);
-   if (epBulkIn.getState() != EPIdle) {
-      return E_TIMEOUT;
+   return rc;
+}
+
+//_______ Bulk Reception ________________________________________________________________
+
+/**
+ *  Non-blocking reception of data over bulk OUT end-point
+ *
+ *   @param size           Maximum number of bytes to receive
+ *   @param buffer         Pointer to buffer for bytes received
+ *
+ *   @return E_NO_ERROR    Transmission started
+ *   @return E_WRONG_STATE In unexpected state e.g. Busy or Stalled
+ */
+ErrorCode Usb0::startReceiveBulkData(uint16_t size, uint8_t *buffer) {
+   EndpointState state = epBulkOut.getState();
+   if (state != EPIdle) {
+      return E_WRONG_STATE;
    }
-   epBulkIn.startTxStage(EPDataIn, size, buffer);
+   epBulkOut.startRxTransfer(EPDataOut, size, buffer);
    return E_NO_ERROR;
 }
+
+/**
+ *  Check for completion of reception of data over bulk OUT end-point.
+ *  Reception will have been previously configured by startReceiveBulkData().
+ *
+ *   @param  size          Number of bytes received
+ *
+ *   @return E_BUSY        Reception not complete. (size == 0)
+ *   @return E_NO_ERROR    Reception complete. Buffer has data.
+ *   @return E_WRONG_STATE In unexpected state e.g. Idle or Stalled
+ */
+ErrorCode Usb0::pollReceiveBulkData(uint16_t &size) {
+
+   size = 0;
+   EndpointState state = epBulkOut.getState();
+   switch(state) {
+      case EPComplete:
+         setActive();
+         size = epBulkOut.getDataTransferredSize();
+         epBulkOut.setState(EPIdle);
+         return E_NO_ERROR;
+      case EPDataOut:
+         return E_BUSY;
+      default:
+         return E_WRONG_STATE;
+   }
+}
+
+/**
+ *  Blocking reception of data over bulk OUT end-point
+ *
+ *  @param size           Maximum number of bytes to receive/Number of bytes received
+ *  @param buffer         Pointer to buffer for bytes received
+ *  @param timeoutMS      Timeout in milliseconds (may be zero to suppress)
+ *
+ *  @return E_NO_ERROR    Reception completed
+ *  @return E_TIMEOUT     Reception not completed within timeout (reception is aborted)
+ *  @return E_WRONG_STATE In unexpected state e.g. Busy or Stalled (reception is aborted)
+ */
+ErrorCode Usb0::receiveBulkData(uint16_t &size, uint8_t *buffer, int timeoutMS) {
+
+   ErrorCode rc = startReceiveBulkData(size, buffer);
+   if (rc == E_NO_ERROR) {
+      for(;;) {
+         rc = pollReceiveBulkData(size);
+         if (rc != E_BUSY) {
+            break;
+         }
+         waitMS(1);
+         if ((timeoutMS>0) && (--timeoutMS==0)) {
+            rc = E_TIMEOUT;
+            break;
+         }
+      }
+   }
+   if (rc != E_NO_ERROR) {
+      epBulkOut.initialise(false);
+   }
+
+   return rc;
+}
+
 
 } // End namespace USBDM
 

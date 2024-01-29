@@ -1,0 +1,92 @@
+<!--
+Devices using this peripheral: 
+      STM32F030
+-->
+      <peripheral>
+         <?sourceFile "CRC_STM32F030" ?>
+         <name>CRC</name>
+         <description>cyclic redundancy check calculation
+      unit</description>
+         <groupName>CRC</groupName>
+         <headerStructName>CRC</headerStructName>
+         <baseAddress>0x40023000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>DR</name>
+               <description>Data register</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0xFFFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>DR</name>
+                     <description>Data register bits</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>32</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IDR</name>
+               <description>Independent data register</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>IDR</name>
+                     <description>General-purpose 8-bit data register
+              bits</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR</name>
+               <description>Control register</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>RESET</name>
+                     <description>reset bit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>REV_IN</name>
+                     <description>Reverse input data</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>REV_OUT</name>
+                     <description>Reverse output data</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>INIT</name>
+               <description>Initial CRC value</description>
+               <addressOffset>0xC</addressOffset>
+               <resetValue>0xFFFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>INIT</name>
+                     <description>Programmable initial CRC
+              value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>32</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

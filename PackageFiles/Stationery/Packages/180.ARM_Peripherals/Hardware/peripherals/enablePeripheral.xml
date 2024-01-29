@@ -53,12 +53,12 @@
    <if condition="!/$(_STRUCTNAME)/generateSharedInfo">
 
       <!-- Construct equation to check if any instance sharing the same struct is enabled -->
-      <equation key="_enable" value="=&quot;false&quot;" />
+      <equation key="_enable" value='="false"' />
       <for keys="instance" values="=_instanceList" >
          <equation
             key="_enable"
-            condition="=&quot;$(_STRUCTNAME)&quot;==/%(instance)/structName"
-            value="=_enable+&quot;||/&quot;+&quot;%(instance)&quot;+&quot;/enablePeripheralSupport&quot;"
+            condition='="$(_STRUCTNAME)"==/%(instance)/structName'
+            value='=_enable+"||/%(instance)/enablePeripheralSupport"'
          />
       </for>
       <!-- stringOption key="yyy" value="=_enable"/ -->
@@ -80,11 +80,11 @@
    <if condition="!/$(_BASENAME)/enablePeripheralSupport">
 
       <!-- Construct equation to check if any instance sharing the same struct is enabled -->
-      <equation key="_enable" value="=&quot;false&quot;" />
+      <equation key="_enable" value='="false"' />
       <for keys="instance" values="=_instanceList" >
          <equation
             key="_enable"
-            value="=_enable+&quot;||/&quot;+&quot;%(instance)&quot;+&quot;/enablePeripheralSupport&quot;"
+            value='=_enable+"||/%(instance)/enablePeripheralSupport"'
          />
       </for>
       <!-- stringOption key="yyy" value="=_enable"/ -->
@@ -203,8 +203,8 @@
       <constant key="irqEnable"        type="Boolean" value="true"  condition="!irqEnable"/>
 
       <!-- Default IRQ vector patterns if none specified -->
-      <constant key="irq_pattern"      type="String"  value="&quot;^$(_NAME)$&quot;" condition="!irq_pattern" />
-      <constant key="irq_ClassHandler" type="String"  value="&quot;$(_Class)::irqHandler&quot;" condition="!irq_ClassHandler" />
+      <constant key="irq_pattern"      type="String"  value='"^$(_NAME)$"'            condition="!irq_pattern" />
+      <constant key="irq_ClassHandler" type="String"  value='"$(_Class)::irqHandler"' condition="!irq_ClassHandler" />
 
       <!-- Create only if needed -->
       <if condition="!irqHandlingMethod">
@@ -227,17 +227,17 @@
          <if condition="!/$(_STRUCTNAME)/generateSharedIrqInfo">
 
             <!-- Construct equation to check if interrupts are enabled on any instance sharing the same struct -->
-            <equation key="_enable" value="=&quot;false&quot;" />
+            <equation key="_enable" value='="false"' />
             <for keys="instance" values="=_instanceList" >
                <if condition="/%(instance)/_irqCount" >
                   <equation
                      key="_enable"
-                     condition="=&quot;$(_STRUCTNAME)&quot;==/%(instance)/structName"
-                     value="=_enable+&quot;||/&quot;+&quot;%(instance)&quot;+&quot;/irqHandlingMethod&quot;"
+                     condition='="$(_STRUCTNAME)"==/%(instance)/structName'
+                     value='=_enable+"||/%(instance)/irqHandlingMethod"'
                   />
                </if>
             </for>
-            <!--  printVar key="_enable"/ -->
+            <!-- printVar key="_enable"/ -->
 
             <!-- Enable for shared code needed by all instances of peripheral -->
             <binaryOption key="/$(_STRUCTNAME)/generateSharedIrqInfo" name="/$(_STRUCTNAME)/generateSharedIrqInfo"
@@ -256,12 +256,12 @@
          <if condition="!/$(_BASENAME)/irqHandlingMethod">
 
             <!-- Construct equation to check if interrupts are enabled on any instance -->
-            <equation key="_enable" value="=&quot;false&quot;" />
+            <equation key="_enable" value='="false"' />
             <for keys="instance" values="=_instanceList" >
                <if condition="/%(instance)/_irqCount" >
                   <equation
                      key="_enable"
-                     value="=_enable+&quot;||/&quot;+&quot;%(instance)&quot;+&quot;/irqHandlingMethod&quot;"
+                     value='=_enable+"||/%(instance)/irqHandlingMethod"'
                   />
                </if>
             </for>
@@ -412,7 +412,7 @@
 
    <constant key="_clockInfo"  value="=/$(_BASENAME)/_clockMask"   type="String"  condition="/$(_BASENAME)/_clockMask"           />
    <constant key="_clockInfo"  value="=_clockMask"                 type="String"  condition="_clockMask&amp;&amp;!_clockInfo[]"  />
-   <constant key="_scgc_clock" value="&quot;/SIM/&quot;+ToLowerCase(&quot;sim_&quot;+@_clockInfo[0]+&quot;_&quot;+@_clockInfo[1])"
+   <constant key="_scgc_clock" value='"/SIM/"+ToLowerCase("sim_"+@_clockInfo[0]+"_"+@_clockInfo[1])'
              type="String" condition="_clockInfo[]" />
 
    <template condition="_clockInfo[]" codeGenCondition="enablePeripheralSupport"
@@ -570,7 +570,7 @@
    ]]></template>
 
    <!-- Don't generate instance if suppressed or empty -->
-   <template condition="!suppressInstance&amp;&amp;&quot;$(_instance)&quot;!=&quot;&quot;" ><![CDATA[
+   <template condition='!suppressInstance&amp;&amp;"$(_instance)"!=""' ><![CDATA[
       \t//! Peripheral instance number
       \tstatic constexpr unsigned instance = $(_instance);
       \t\n

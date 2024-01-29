@@ -5,15 +5,36 @@
  * @version  V4.12.1.210
  * @date     13 April 2016
  *      Author: podonoghue
- */
+\verbatim
+    Kinetis USB Code
 
-/**
- * Terminology (from USB Specification)
+    Copyright (C) 2008-24  Peter O'Donoghue
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+\endverbatim
+
+ * <H2> Terminology (from USB Specification) </H2>
  *
  * Packet
- * - A bundle of data organised in a group for transmission. Packets typically
- * contain three elements: control information (e.g., source, destination, and
- * length), the data to be transferred, and error detection and correction bits.
+ * - A bundle of data organised in a group for transmission. \n
+ *   Packets typically contain three elements:
+ *    - Control information (e.g., source, destination, and length)
+ *    - Data to be transferred
+ *    - Error detection and correction bits.
+ *
+\verbatim
  *      8       7         4        5
  *   +-----+---------+----------+------+
  *   | PID | Address | Endpoint | CRC5 | Token packets : IN, OUT, SETUP
@@ -30,6 +51,7 @@
  *   +-----+
  *   | PID | Handshake packet : ACK, NAK
  *   +-----+
+\endverbatim
  *
  * Phase - transaction has three phases.
  *  - Token packet
@@ -38,28 +60,35 @@
  *
  * Transaction
  *  - The delivery of service to an endpoint; consists of a token packet, optional data
- * packet, and optional handshake packet. Specific packets are allowed/required
- * based on the transaction type.
+ *    packet, and optional handshake packet.
+ *  -  Specific packets are allowed/required based on the transaction type.
  *
  * Transfer
  * - One or more transactions to move information between a software client
  *   and its function.
  *
- * Bulk Reads and Writes
+ * Bulk Read and Write transfers
  * - Consist of a series of either OUT or IN transactions
  * - Each transaction includes all three phases.
+ * - If needed, the length of transfer is agreed between sender and receiver and/or a
+ *   Zero-Length-Packet (ZLP) is used to indicate the (early) end of a transfer.
+ *
+\verbatim
  *   +--------+  +--------+  +--------+ // +--------+
  *   | OUT(0) |  | OUT(1) |  | OUT(0) | // |OUT(0/1)|
  *   +--------+  +--------+  +--------+ // +--------+
  *   +--------+  +--------+  +--------+ // +--------+
  *   |  IN(0) |  |  IN(1) |  |  IN(0) | // | IN(0/1)|
  *   +--------+  +--------+  +--------+ // +--------+
+\endverbatim
  *
- * Control Setup Reads and Writes
+ * Control Setup Read and Write transfers
  * - Consists of 3 stages
- *   SETUP  stage (1 SETUP transaction),
- *   DATA   stage (0 or more IN/OUT transactions)
- *   STATUS stage (1 IN/OUT transaction opposite to that of DATA stage or IN if no DATA stage)
+ *   - SETUP  stage (1 SETUP transaction),
+ *   - DATA   stage (0 or more IN/OUT transactions)
+ *   - STATUS stage (1 IN/OUT transaction opposite to that of DATA stage or IN if no DATA stage)
+ *
+\verbatim
  *   +--------+  +--------+  +--------+ // +--------+  +--------+
  *   |SETUP(0)|  | OUT(1) |  | OUT(0) | // |OUT(0/1)|  |  IN(1) |
  *   +--------+  +--------+  +--------+ // +--------+  +--------+
@@ -69,6 +98,7 @@
  *   +--------+  +--------+
  *   |SETUP(0)|  |  IN(1) |
  *   +--------+  +--------+
+\endverbatim
  */
 
 #ifndef HEADER_USB_H
@@ -81,12 +111,15 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
+#if $(/USB0/enablePeripheralSupport) // /USB0/enablePeripheralSupport
+
 #include <cstring>
 #include "pin_mapping.h"
 #include "usb_defs.h"
 #include "utilities.h"
 #include "usb_endpoint.h"
 #include "stringFormatter.h"
+
 
 namespace USBDM {
 
@@ -159,6 +192,15 @@ public:
     */
    typedef ErrorCode (*SetupCallbackFunction)(const SetupPacket &setup);
 
+   /**
+    * Get name of User event
+    *
+    * @param[in]  userEvent
+    *
+    * @return Pointer to static string
+    */
+   static const char *getUserEventName(UserEvent userEvent);
+
 protected:
    /**
     * Dummy callback used to catch use of unset required callback
@@ -224,7 +266,7 @@ protected:
    static void reportBdt(const char *name, BdtEntry *bdt);
 
    /**
-    * Report contents of LineCodingStructure
+    * Report line code structure values
     *
     * @param[in] lineCodingStructure
     */
@@ -447,8 +489,10 @@ protected:
          bufSize = (uint8_t)fEp0SetupBuffer.wLength;
       }
       // If short response we may need ZLP
-      fControlEndpoint.setNeedZLP(bufSize < fEp0SetupBuffer.wLength);
-      fControlEndpoint.startTxStage(EPDataIn, bufSize, bufPtr);
+      if (bufSize < fEp0SetupBuffer.wLength) {
+         fControlEndpoint.setNeedZLP();
+      }
+      fControlEndpoint.startTxTransfer(EPDataIn, bufSize, bufPtr);
    }
 
    /**
@@ -750,7 +794,7 @@ ControlEndpoint<Info, EP0_SIZE> UsbBase_T<Info, EP0_SIZE>::fControlEndpoint;
 /*
  * Implementation class
  */
-//#include "usb_implementation.h"
+#include "usb_implementation.h"
 
 /*
  * Implementation of methods for UsbBase_T
@@ -940,7 +984,7 @@ bool UsbBase_T<Info, EP0_SIZE>::handleTokenComplete(UsbStat usbStat) {
 // Must have handler installed in USBDM configuration
 static_assert(Usb0Info::irqHandlerInstalled);
 
-#if 0
+#if 1
 /**
  * Handler for USB Bus reset\n
  * Re-initialises the interface
@@ -1061,10 +1105,10 @@ EndpointState UsbBase_T<Info, EP0_SIZE>::ep0DummyTransactionCallback(EndpointSta
  */
 template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::initialise() {
-   enable();
+   Info::enable();
 
    // Make sure no interrupt during setup
-   disableNvicInterrupts();
+   Info::disableNvicInterrupts();
 
    fUsb->OTGISTAT = 0;
    fUsb->OTGICR   = 0;
@@ -1092,10 +1136,11 @@ void UsbBase_T<Info, EP0_SIZE>::initialise() {
 
 #ifdef USB_CLK_RECOVER_IRC_EN_IRC_EN
    // IRC clock enable
-   fUsb->CLK_RECOVER_IRC_EN = Usb0Info::usb_clk_recover_irc_en;
+   fUsb->CLK_RECOVER_IRC_EN = Usb0Info::DefaultClockRecovery.clk_recover_irc_en;
 
    // Clock recovery options
-   fUsb->CLK_RECOVER_CTRL = Usb0Info::usb_clk_recover_ctrl;
+   fUsb->CLK_RECOVER_CTRL = Usb0Info::DefaultClockRecovery.clk_recover_ctrl;
+
 #endif
 
 #if 0
@@ -1142,7 +1187,7 @@ void UsbBase_T<Info, EP0_SIZE>::initialise() {
    initialiseEndpoints(true);
 
    // Enable USB interrupts
-   enableNvicInterrupts(NvicPriority_Normal);
+   Info::enableNvicInterrupts(NvicPriority_Normal);
 }
 
 /**
@@ -1526,7 +1571,7 @@ void UsbBase_T<Info, EP0_SIZE>::irqHandler() {
       }
       if ((pendingInterruptFlags&USB_ISTAT_ERROR_MASK) != 0) {
          // Any Error
-         console.WRITELN("Error = 0b", fUsb->ERRSTAT, Radix_2);
+         console.WRITELN("ERRSTAT = 0b", fUsb->ERRSTAT, Radix_2);
          fUsb->ERRSTAT = 0xFF;
       }
       fUsb->ISTAT = pendingInterruptFlags;
@@ -1538,12 +1583,13 @@ void UsbBase_T<Info, EP0_SIZE>::irqHandler() {
 }
 #endif
 
-$(/USB/declarations)
+
 /**
  * End USB_Group
  * @}
  */
 
 } // End namespace USBDM
+#endif // /USB0/enablePeripheralSupport
 
 #endif /* HEADER_USB_H */

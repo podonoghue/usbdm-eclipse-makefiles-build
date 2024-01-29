@@ -4,9 +4,9 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <constant key="irq_parameters"            type="String"  value="&quot;&quot;"  />
-   <constant key="irq_dummy_parameters"      type="String"  value="&quot;&quot;"  />
-   <constant key="irq_call"                  type="String"  value="&quot;&quot;"  />
+   <constant key="irq_parameters"            type="String"  value='""'  />
+   <constant key="irq_dummy_parameters"      type="String"  value='""'  />
+   <constant key="irq_call"                  type="String"  value='""'  />
    <constant key="generateDefault"           type="Boolean" value="false"         />
    <constant key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
@@ -211,7 +211,8 @@
             typeName="LlwuPinMode"
             description="Unused input %(p)"
             valueFormat="(LLWU_PE%(r)_WUPE%(p)_MASK&amp;(%s))"
-            toolTip="Enables and configures the edge detection for the wake-up pin">
+            toolTip="Enables and configures the edge detection for the wake-up pin"
+            signal="LLWU_P%(p)" >
             <choice name="Wake-up pin disabled"        value="LlwuPinMode_Disabled"    enum="Disabled"     isDefault="true" />
             <choice name="Wake-up on pin rising edge"  value="LlwuPinMode_RisingEdge"  enum="RisingEdge"    />
             <choice name="Wake-up on pin falling edge" value="LlwuPinMode_FallingEdge" enum="FallingEdge"   />

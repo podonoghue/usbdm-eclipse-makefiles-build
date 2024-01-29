@@ -365,30 +365,45 @@
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
    </validate>
 
-   <projectActionList id="usb_files">
-      <copy source="Project_Headers/usb.h"                     target="Project_Headers/usb.h"                     overwrite="true"  derived="true" />
-      <copy source="Project_Headers/usb_defs.h"                target="Project_Headers/usb_defs.h"                overwrite="true"  derived="true" />
-      <copy source="Project_Headers/usb_endpoint.h"            target="Project_Headers/usb_endpoint.h"            overwrite="true"  derived="true" />
-      <copy source="Snippets/usb_cdc_interface.cpp"            target="Snippets/usb_cdc_interface.cpp"            overwrite="true"  derived="true" />
-      <copy source="Snippets/usb_cdc_interface.h"              target="Snippets/usb_cdc_interface.h"              overwrite="true"  derived="true" />
-      <copy source="Snippets/usb_implementation_bulk.cpp"      target="Snippets/usb_implementation_bulk.cpp"      overwrite="true"  derived="true" />
-      <copy source="Snippets/usb_implementation_bulk.h"        target="Snippets/usb_implementation_bulk.h"        overwrite="true"  derived="true" />
-      <copy source="Snippets/usb_implementation_cdc.cpp"       target="Snippets/usb_implementation_cdc.cpp"       overwrite="true"  derived="true" />
-      <copy source="Snippets/usb_implementation_cdc.h"         target="Snippets/usb_implementation_cdc.h"         overwrite="true"  derived="true" />
-      <copy source="Snippets/usb_implementation_composite.cpp" target="Snippets/usb_implementation_composite.cpp" overwrite="true"  derived="true" />
-      <copy source="Snippets/usb_implementation_composite.h"   target="Snippets/usb_implementation_composite.h"   overwrite="true"  derived="true" />
-      <copy source="Snippets/usb_implementation.h"             target="Snippets/usb_implementation.h"             overwrite="true"  derived="true" />
-      <copy source="Snippets/usb.cpp"                          target="Snippets/usb.cpp"                          overwrite="true"  derived="true" />
+   <projectActionList id="usb_files" >
+      <copy source="Snippets/usb.cpp"                             target="Snippets/usb.cpp"                             overwrite="true"  derived="true" />
+      <copy source="Project_Headers/usb.h"                        target="Project_Headers/usb.h"                        overwrite="true"  derived="true" />
+      <copy source="Project_Headers/usb_defs.h"                   target="Project_Headers/usb_defs.h"                   overwrite="true"  derived="true" />
+      <copy source="Project_Headers/usb_endpoint.h"               target="Project_Headers/usb_endpoint.h"               overwrite="true"  derived="true" />
+      <copy source="Snippets/usb_cdc_interface.cpp"               target="Snippets/usb_cdc_interface.cpp"               overwrite="true"  derived="true" />
+      <copy source="Snippets/usb_cdc_interface.h"                 target="Snippets/usb_cdc_interface.h"                 overwrite="true"  derived="true" />
+      <copy source="Snippets/usb_implementation_bulk.cpp"         target="Snippets/usb_implementation_bulk.cpp"         overwrite="true"  derived="true" />
+      <copy source="Snippets/usb_implementation_bulk.h"           target="Snippets/usb_implementation_bulk.h"           overwrite="true"  derived="true" />
+      <copy source="Snippets/usb_implementation_cdc.cpp"          target="Snippets/usb_implementation_cdc.cpp"          overwrite="true"  derived="true" />
+      <copy source="Snippets/usb_implementation_cdc.h"            target="Snippets/usb_implementation_cdc.h"            overwrite="true"  derived="true" />
+      <copy source="Snippets/usb_implementation_composite.cpp"    target="Snippets/usb_implementation_composite.cpp"    overwrite="true"  derived="true" />
+      <copy source="Snippets/usb_implementation_composite.h"      target="Snippets/usb_implementation_composite.h"      overwrite="true"  derived="true" />
+      <copy source="Snippets/usb_implementation.h"                target="Snippets/usb_implementation.h"                overwrite="true"  derived="true" />
+      <copy source="Snippets/usb_TestBulkLoopback.cpp"            target="Snippets/usb_TestBulkLoopback.cpp"            overwrite="true"  derived="true" />
+      <copy source="Snippets/usb_TestCdcLoopback.cpp"             target="Snippets/usb_TestCdcLoopback.cpp"             overwrite="true"  derived="true" />
+      <copy source="Snippets/usb_TestCompositeBulkLoopback.cpp"   target="Snippets/usb_TestCompositeBulkLoopback.cpp"   overwrite="true"  derived="true" />
    </projectActionList>
 
-   <!-- ************* SIM configuration ****************** -->
-   <category name="Advanced" description="SIM configuration" >
+   <!-- ____ SIM configuration __________________ -->
+
+   <category name="Advanced" description="SIM configuration"
+      toolTip="These settings only have effect if the SIM configuration is enabled" >
+      <title description="$(_BASENAME) Shared" />
+      <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+      <title description="$(_NAME) Specific" />
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+      <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
       <aliasOption key="/SIM/sim_sopt1_usbregen"   locked="false" optional="true" />
       <aliasOption key="/SIM/sim_sopt1_usbsstby"   locked="false" optional="true" />
       <aliasOption key="/SIM/sim_sopt1_usbvstby"   locked="false" optional="true" />
-      <aliasOption key="=_scgc_clock"              locked="false" condition="_scgc_clock" />
    </category>
+   <deleteVariables variables="_scgc_clock" mustExist="false" />
 
+   <!--  ____ Signal mapping __________________ -->
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 
 </peripheralPage>

@@ -5,9 +5,9 @@
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
    <constant key="irq_common"                type="Boolean" value="true"          />
-   <constant key="irq_parameters"            type="String"  value="&quot;&quot;"  />
-   <constant key="irq_dummy_parameters"      type="String"  value="&quot;&quot;"  />
-   <constant key="irq_call"                  type="String"  value="&quot;&quot;"  />
+   <constant key="irq_parameters"            type="String"  value='""'  />
+   <constant key="irq_dummy_parameters"      type="String"  value='""'  />
+   <constant key="irq_call"                  type="String"  value='""'  />
    <constant key="generateDefault"           type="Boolean" value="false"         />
    <constant key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml" />
@@ -30,10 +30,10 @@
       derived="true"
       description="Active clock selection"
       toolTip="Selects the clock configuration used for general peripheral timing calculations" >
-      <choice value="0" name="@ClockConfig[0]" ref="&quot;0: &quot;+ClockConfig[0]" isDefault="true" />
-      <choice value="1" name="@ClockConfig[1]" ref="&quot;1: &quot;+ClockConfig[1]" />
-      <choice value="2" name="@ClockConfig[2]" ref="&quot;2: &quot;+ClockConfig[2]" />
-      <choice value="3" name="@ClockConfig[3]" ref="&quot;3: &quot;+ClockConfig[3]" />
+      <choice value="0" name="@ClockConfig[0]" ref='"0: "+ClockConfig[0]' isDefault="true" />
+      <choice value="1" name="@ClockConfig[1]" ref='"1: "+ClockConfig[1]' />
+      <choice value="2" name="@ClockConfig[2]" ref='"2: "+ClockConfig[2]' />
+      <choice value="3" name="@ClockConfig[3]" ref='"3: "+ClockConfig[3]' />
    </clockSelectionOption>
 
    <aliasOption key="/SIM/numberOfClockSettings" />
@@ -92,9 +92,9 @@
       <choice value="0,1-1" name="32kHz Oscillator driven by RTC" enum="RTC_Controlled"       condition="/SIM/RtcForcing"     enabledBy="/RTC/enablePeripheralSupport"  />
    </choiceOption>
 
-   <constant key="/OscMode_NotConfigured"  type="Long" value="0"                                condition="mcg_c2_erefs0_present"/>
-   <constant key="/OscMode_ExternalClock"  type="Long" value="1"                                condition="mcg_c2_erefs0_present"/>
-   <constant key="/OscMode_RTC_Controlled" type="Long" value="Exists(mcg_c2_hgo0_present)?4:3"  condition="mcg_c2_erefs0_present"/>
+   <constant key="/OscMode_NotConfigured"  type="Long" value="0"                                 condition="mcg_c2_erefs0_present"/>
+   <constant key="/OscMode_ExternalClock"  type="Long" value="1"                                 condition="mcg_c2_erefs0_present"/>
+   <constant key="/OscMode_RTC_Controlled" type="Long" value='Exists("mcg_c2_hgo0_present")?4:3' condition="mcg_c2_erefs0_present"/>
 
    <choiceOption key="mcg_c2_erefs0"  condition="mcg_c2_erefs0_present"
       hidden="true"
@@ -125,7 +125,7 @@
          toolTip="Clock configurations for different run modes"
          value="ClockConfig_%(n)"
          locked="false"
-         disabledValue="=(%(n)==0)?&quot;Reset Configuration&quot;:&quot;Disabled&quot;" >
+         disabledValue='=(%(n)==0)?"Reset Configuration":"Disabled"' >
 
          <if condition="%(n)==0" >
             <aliasOption key="enableClockConfiguration[%(n)]" />
@@ -1266,7 +1266,7 @@
       \t}\n\n
       ]]></clockCodeTemplate>
 
-   <clockCodeTemplate variables="mcg_c2_ircs[], mcg_c1_irclken[]"
+   <clockCodeTemplate variable="mcg_c2_ircs[], mcg_c1_irclken[]"
       returnFormat="%s"
    ><![CDATA[
       \t/**

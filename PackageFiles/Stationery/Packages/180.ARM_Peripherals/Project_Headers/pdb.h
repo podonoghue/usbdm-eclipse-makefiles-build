@@ -685,7 +685,6 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
        *
        * This allows multiple different ADC channels to be converted in a sequence.
        *
-       * @param pdbChannel       Pretrigger being modified
        * @param pdbPretrigger    Pretrigger settings
        * @param delay            Delay in ticks - only needed for PdbPretrigger_Delayed
        */
@@ -707,7 +706,6 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
        *
        * This allows multiple different ADC channels to be converted in a sequence.
        *
-       * @param pdbChannel       Pretrigger being modified
        * @param pdbPretrigger    Pretrigger settings
        * @param delay            Delay in ticks - only needed for PdbPretrigger_Delayed
        */
@@ -729,7 +727,6 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
        *
        * This allows multiple different ADC channels to be converted in a sequence.
        *
-       * @param pdbChannel       Pretrigger being modified
        * @param pdbPretrigger    Pretrigger settings
        * @param delay            Delay - only needed for PdbPretrigger_Delayed
        */
@@ -751,7 +748,6 @@ $(/PDB/InitMethod: // /PDB/InitMethod Not found)
        *
        * This allows multiple different ADC channels to be converted in a sequence.
        *
-       * @param pdbChannel       Pretrigger being modified
        * @param pdbPretrigger    Pretrigger settings
        * @param delay            Delay - only needed for PdbPretrigger_Delayed
        */

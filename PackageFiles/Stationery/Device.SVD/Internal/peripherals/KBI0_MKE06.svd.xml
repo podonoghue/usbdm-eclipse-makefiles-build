@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral:
+Devices using this peripheral: 
       MKE04Z1284
       MKE06Z4
       SKEAZ1284
@@ -174,8 +174,6 @@ This field is read only, it indicates the active pin defined as keyboard interru
 individual bit is set to 1 when corresponding keyboard pin is effective pushed, only system reset or writting
 1 to RSTKBSP bit can clear this register</description>
                <addressOffset>0xC</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
                <fields>
                   <field>
                      <name>SP</name>

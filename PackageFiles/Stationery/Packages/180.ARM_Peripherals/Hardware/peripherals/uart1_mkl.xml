@@ -65,9 +65,9 @@
 
    <constant key="irq_pattern"               type="String"  value="&quot;^$(_BASENAME)%i_?(RxTx|Error|Lon)?$&quot;"  />
    <constant key="irq_ClassHandler"          type="String"  value="&quot;%c%i::irq$1Handler&quot;"                        />
-   <constant key="irq_parameters"            type="String"  value="&quot;&quot;"                      />
-   <constant key="irq_dummy_parameters"      type="String"  value="&quot;&quot;"                      />
-   <constant key="irq_call"                  type="String"  value="&quot;&quot;"                      />
+   <constant key="irq_parameters"            type="String"  value='""'                      />
+   <constant key="irq_dummy_parameters"      type="String"  value='""'                      />
+   <constant key="irq_call"                  type="String"  value='""'                      />
    <constant key="generateDefault"           type="Boolean" value="false"         />
    <constant key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />

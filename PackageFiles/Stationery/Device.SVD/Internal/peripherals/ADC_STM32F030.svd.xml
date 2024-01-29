@@ -1,0 +1,492 @@
+<!--
+Devices using this peripheral: 
+      STM32F030
+-->
+      <peripheral>
+         <?sourceFile "ADC_STM32F030" ?>
+         <name>ADC</name>
+         <description>Analog-to-digital converter</description>
+         <groupName>ADC</groupName>
+         <headerStructName>ADC</headerStructName>
+         <baseAddress>0x40012400</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x18</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x20</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x28</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x40</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x308</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>ISR</name>
+               <description>interrupt and status register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>ADRDY</name>
+                     <description>ADC ready</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EOSMP</name>
+                     <description>End of sampling flag</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EOC</name>
+                     <description>End of conversion flag</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EOS</name>
+                     <description>End of sequence flag</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>OVR</name>
+                     <description>ADC overrun</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AWD</name>
+                     <description>Analog watchdog flag</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IER</name>
+               <description>interrupt enable register</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>ADRDYIE</name>
+                     <description>ADC ready interrupt enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EOSMPIE</name>
+                     <description>End of sampling flag interrupt
+              enable</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EOCIE</name>
+                     <description>End of conversion interrupt
+              enable</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EOSIE</name>
+                     <description>End of conversion sequence interrupt
+              enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>OVRIE</name>
+                     <description>Overrun interrupt enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AWDIE</name>
+                     <description>Analog watchdog interrupt
+              enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR</name>
+               <description>control register</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>ADEN</name>
+                     <description>ADC enable command</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADDIS</name>
+                     <description>ADC disable command</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADSTART</name>
+                     <description>ADC start conversion
+              command</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADSTP</name>
+                     <description>ADC stop conversion
+              command</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADCAL</name>
+                     <description>ADC calibration</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CFGR1</name>
+               <description>configuration register 1</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>DMAEN</name>
+                     <description>Direct memory access
+              enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DMACFG</name>
+                     <description>Direct memery access
+              configuration</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SCANDIR</name>
+                     <description>Scan sequence direction</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RES</name>
+                     <description>Data resolution</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>ALIGN</name>
+                     <description>Data alignment</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EXTSEL</name>
+                     <description>External trigger selection</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>EXTEN</name>
+                     <description>External trigger enable and polarity
+              selection</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>OVRMOD</name>
+                     <description>Overrun management mode</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CONT</name>
+                     <description>Single / continuous conversion
+              mode</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AUTDLY</name>
+                     <description>Auto-delayed conversion
+              mode</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AUTOFF</name>
+                     <description>Auto-off mode</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DISCEN</name>
+                     <description>Discontinuous mode</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AWDSGL</name>
+                     <description>Enable the watchdog on a single channel
+              or on all channels</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AWDEN</name>
+                     <description>Analog watchdog enable</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AWDCH</name>
+                     <description>Analog watchdog channel
+              selection</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CFGR2</name>
+               <description>configuration register 2</description>
+               <addressOffset>0x10</addressOffset>
+               <resetValue>0x8000</resetValue>
+               <fields>
+                  <field>
+                     <name>JITOFF_D2</name>
+                     <description>JITOFF_D2</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>JITOFF_D4</name>
+                     <description>JITOFF_D4</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SMPR</name>
+               <description>sampling time register</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>SMPR</name>
+                     <description>Sampling time selection</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TR</name>
+               <description>watchdog threshold register</description>
+               <addressOffset>0x20</addressOffset>
+               <resetValue>0xFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>LT</name>
+                     <description>Analog watchdog lower
+              threshold</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>HT</name>
+                     <description>Analog watchdog higher
+              threshold</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CHSELR</name>
+               <description>channel selection register</description>
+               <addressOffset>0x28</addressOffset>
+               <fields>
+                  <field>
+                     <name>CHSEL0</name>
+                     <description>Channel-x selection</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CHSEL1</name>
+                     <description>Channel-x selection</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CHSEL2</name>
+                     <description>Channel-x selection</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CHSEL3</name>
+                     <description>Channel-x selection</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CHSEL4</name>
+                     <description>Channel-x selection</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CHSEL5</name>
+                     <description>Channel-x selection</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CHSEL6</name>
+                     <description>Channel-x selection</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CHSEL7</name>
+                     <description>Channel-x selection</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CHSEL8</name>
+                     <description>Channel-x selection</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CHSEL9</name>
+                     <description>Channel-x selection</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CHSEL10</name>
+                     <description>Channel-x selection</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CHSEL11</name>
+                     <description>Channel-x selection</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CHSEL12</name>
+                     <description>Channel-x selection</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CHSEL13</name>
+                     <description>Channel-x selection</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CHSEL14</name>
+                     <description>Channel-x selection</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CHSEL15</name>
+                     <description>Channel-x selection</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CHSEL16</name>
+                     <description>Channel-x selection</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CHSEL17</name>
+                     <description>Channel-x selection</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CHSEL18</name>
+                     <description>Channel-x selection</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DR</name>
+               <description>data register</description>
+               <addressOffset>0x40</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>DATA</name>
+                     <description>Converted data</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CCR</name>
+               <description>common configuration register</description>
+               <addressOffset>0x308</addressOffset>
+               <fields>
+                  <field>
+                     <name>VREFEN</name>
+                     <description>Temperature sensor and VREFINT
+              enable</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSEN</name>
+                     <description>Temperature sensor enable</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>VBATEN</name>
+                     <description>VBAT enable</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

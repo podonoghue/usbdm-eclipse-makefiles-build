@@ -1,0 +1,640 @@
+<!--
+Devices using this peripheral: 
+      STM32F030
+-->
+      <peripheral>
+         <?sourceFile "I2C1_STM32F030" ?>
+         <name>I2C1</name>
+         <description>Inter-integrated circuit</description>
+         <groupName>I2C</groupName>
+         <headerStructName>I2C1</headerStructName>
+         <baseAddress>0x40005400</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x1C</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x1C</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x20</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CR1</name>
+               <description>Control register 1</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>PE</name>
+                     <description>Peripheral enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXIE</name>
+                     <description>TX Interrupt enable</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXIE</name>
+                     <description>RX Interrupt enable</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADDRIE</name>
+                     <description>Address match interrupt enable (slave
+              only)</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>NACKIE</name>
+                     <description>Not acknowledge received interrupt
+              enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>STOPIE</name>
+                     <description>STOP detection Interrupt
+              enable</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TCIE</name>
+                     <description>Transfer Complete interrupt
+              enable</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ERRIE</name>
+                     <description>Error interrupts enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DNF</name>
+                     <description>Digital noise filter</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>ANFOFF</name>
+                     <description>Analog noise filter OFF</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SWRST</name>
+                     <description>Software reset</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>TXDMAEN</name>
+                     <description>DMA transmission requests
+              enable</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXDMAEN</name>
+                     <description>DMA reception requests
+              enable</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SBC</name>
+                     <description>Slave byte control</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>NOSTRETCH</name>
+                     <description>Clock stretching disable</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>WUPEN</name>
+                     <description>Wakeup from STOP enable</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>GCEN</name>
+                     <description>General call enable</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SMBHEN</name>
+                     <description>SMBus Host address enable</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SMBDEN</name>
+                     <description>SMBus Device Default address
+              enable</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ALERTEN</name>
+                     <description>SMBUS alert enable</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PECEN</name>
+                     <description>PEC enable</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR2</name>
+               <description>Control register 2</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>SADD0</name>
+                     <description>Slave address bit 0 (master mode)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SADD1</name>
+                     <description>Slave address bit 7:1 (master mode)</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>SADD8</name>
+                     <description>Slave address bit 9:8 (master mode)</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>RD_WRN</name>
+                     <description>Transfer direction (master mode)</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADD10</name>
+                     <description>10-bit addressing mode (master mode)</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HEAD10R</name>
+                     <description>10-bit address header only read
+              direction (master receiver mode)</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>START</name>
+                     <description>Start generation</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>STOP</name>
+                     <description>Stop generation (master mode)</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>NACK</name>
+                     <description>NACK generation (slave
+              mode)</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>NBYTES</name>
+                     <description>Number of bytes</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>RELOAD</name>
+                     <description>NBYTES reload mode</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AUTOEND</name>
+                     <description>Automatic end mode (master mode)</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PECBYTE</name>
+                     <description>Packet error checking byte</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>OAR1</name>
+               <description>Own address register 1</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>OA1_0</name>
+                     <description>Interface address</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>OA1_1</name>
+                     <description>Interface address</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>OA1_8</name>
+                     <description>Interface address</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>OA1MODE</name>
+                     <description>Own Address 1 10-bit mode</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>OA1EN</name>
+                     <description>Own Address 1 enable</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>OAR2</name>
+               <description>Own address register 2</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>OA2</name>
+                     <description>Interface address</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>OA2MSK</name>
+                     <description>Own Address 2 masks</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>OA2EN</name>
+                     <description>Own Address 2 enable</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TIMINGR</name>
+               <description>Timing register</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>SCLL</name>
+                     <description>SCL low period (master mode)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>SCLH</name>
+                     <description>SCL high period (master mode)</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>SDADEL</name>
+                     <description>Data hold time</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>SCLDEL</name>
+                     <description>Data setup time</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRESC</name>
+                     <description>Timing prescaler</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TIMEOUTR</name>
+               <description>Status register 1</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>TIMEOUTA</name>
+                     <description>Bus timeout A</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>TIDLE</name>
+                     <description>Idle clock timeout
+              detection</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TIMOUTEN</name>
+                     <description>Clock timeout enable</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TIMEOUTB</name>
+                     <description>Bus timeout B</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>TEXTEN</name>
+                     <description>Extended clock timeout
+              enable</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ISR</name>
+               <description>Interrupt and Status register</description>
+               <addressOffset>0x18</addressOffset>
+               <resetValue>0x1</resetValue>
+               <fields>
+                  <field>
+                     <name>TXE</name>
+                     <description>Transmit data register empty
+              (transmitters)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXIS</name>
+                     <description>Transmit interrupt status
+              (transmitters)</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXNE</name>
+                     <description>Receive data register not empty
+              (receivers)</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>ADDR</name>
+                     <description>Address matched (slave
+              mode)</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>NACKF</name>
+                     <description>Not acknowledge received
+              flag</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>STOPF</name>
+                     <description>Stop detection flag</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TC</name>
+                     <description>Transfer Complete (master mode)</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TCR</name>
+                     <description>Transfer Complete Reload</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>BERR</name>
+                     <description>Bus error</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>ARLO</name>
+                     <description>Arbitration lost</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>OVR</name>
+                     <description>Overrun/Underrun (slave
+              mode)</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>PECERR</name>
+                     <description>PEC Error in reception</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TIMEOUT</name>
+                     <description>Timeout or t_low detection
+              flag</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>ALERT</name>
+                     <description>SMBus alert</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>BUSY</name>
+                     <description>Bus busy</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>DIR</name>
+                     <description>Transfer direction (Slave
+              mode)</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>ADDCODE</name>
+                     <description>Address match code (Slave
+              mode)</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>7</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ICR</name>
+               <description>Interrupt clear register</description>
+               <addressOffset>0x1C</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>ADDRCF</name>
+                     <description>Address Matched flag clear</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>NACKCF</name>
+                     <description>Not Acknowledge flag clear</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>STOPCF</name>
+                     <description>Stop detection flag clear</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BERRCF</name>
+                     <description>Bus error flag clear</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ARLOCF</name>
+                     <description>Arbitration lost flag
+              clear</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>OVRCF</name>
+                     <description>Overrun/Underrun flag
+              clear</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PECCF</name>
+                     <description>PEC Error flag clear</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TIMOUTCF</name>
+                     <description>Timeout detection flag
+              clear</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ALERTCF</name>
+                     <description>Alert flag clear</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PECR</name>
+               <description>PEC register</description>
+               <addressOffset>0x20</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>PEC</name>
+                     <description>Packet error checking
+              register</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RXDR</name>
+               <description>Receive data register</description>
+               <addressOffset>0x24</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>RXDATA</name>
+                     <description>8-bit receive data</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TXDR</name>
+               <description>Transmit data register</description>
+               <addressOffset>0x28</addressOffset>
+               <fields>
+                  <field>
+                     <name>TXDATA</name>
+                     <description>8-bit transmit data</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

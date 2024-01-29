@@ -17,9 +17,9 @@
       <choice value="3"  enum="Error"         name="Ethernet MAC-NET Core" />
    </choiceOption>
 
-   <constant key="irq_parameters"            type="String"  value="&quot;&quot;"  />
-   <constant key="irq_dummy_parameters"      type="String"  value="&quot;&quot;"  />
-   <constant key="irq_call"                  type="String"  value="&quot;&quot;"  />
+   <constant key="irq_parameters"            type="String"  value='""'  />
+   <constant key="irq_dummy_parameters"      type="String"  value='""'  />
+   <constant key="irq_call"                  type="String"  value='""'  />
    <constant key="generateDefault"           type="Boolean" value="false"         />
    <constant key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />

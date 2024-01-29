@@ -19,9 +19,9 @@
    <stringOption key="irq_ClassHandler"   locked="true" value="$(_Class)::irqHandler&lt;$(_Class)IrqNum_$1&gt;" hidden="true" />
 
    <constant key="suppressInstance"          type="Boolean" value="false"         />
-   <constant key="irq_parameters"            type="String"  value="&quot;&quot;"  />
-   <constant key="irq_dummy_parameters"      type="String"  value="&quot;&quot;"  />
-   <constant key="irq_call"                  type="String"  value="&quot;&quot;"  />
+   <constant key="irq_parameters"            type="String"  value='""'  />
+   <constant key="irq_dummy_parameters"      type="String"  value='""'  />
+   <constant key="irq_call"                  type="String"  value='""'  />
    <constant key="generateDefault"           type="Boolean" value="false"         />
    <constant key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
@@ -1148,13 +1148,14 @@
    <variableTemplate
       variables="channelNum, i2s_rdr_rdr"
       nonDefaultParams="2"
+      params=",*"
    ><![CDATA[
       \t/**
       \t * Read %description1
       \t *
       %paramDescription
       \t */
-      \tstatic %paramType1 readData(%param0) {
+      \tstatic %paramType1 readData(%params) {
       \t   return %paramType1(%register1[%paramName0]);
       \t}
       \t\n

@@ -1,85 +1,86 @@
 <!--
 Devices using this vector table: 
    LPC11Cxx
+   LPC11xx
 -->
 <interrupts>
    <name>LPC11Cxx_VectorTable</name>
    <description>LPC11Cxx VectorTable</description>
    <interrupt>
       <name>PIO0_0</name>
-      <description>System configuration</description>
+      <description>PIO</description>
       <value>0</value>
       <peripheral>SYSCON</peripheral>
    </interrupt>
    <interrupt>
       <name>PIO0_1</name>
-      <description>System configuration</description>
+      <description>PIO</description>
       <value>1</value>
       <peripheral>SYSCON</peripheral>
    </interrupt>
    <interrupt>
       <name>PIO0_2</name>
-      <description>System configuration</description>
+      <description>PIO</description>
       <value>2</value>
       <peripheral>SYSCON</peripheral>
    </interrupt>
    <interrupt>
       <name>PIO0_3</name>
-      <description>System configuration</description>
+      <description>PIO</description>
       <value>3</value>
       <peripheral>SYSCON</peripheral>
    </interrupt>
    <interrupt>
       <name>PIO0_4</name>
-      <description>System configuration</description>
+      <description>PIO</description>
       <value>4</value>
       <peripheral>SYSCON</peripheral>
    </interrupt>
    <interrupt>
       <name>PIO0_5</name>
-      <description>System configuration</description>
+      <description>PIO</description>
       <value>5</value>
       <peripheral>SYSCON</peripheral>
    </interrupt>
    <interrupt>
       <name>PIO0_6</name>
-      <description>System configuration</description>
+      <description>PIO</description>
       <value>6</value>
       <peripheral>SYSCON</peripheral>
    </interrupt>
    <interrupt>
       <name>PIO0_7</name>
-      <description>System configuration</description>
+      <description>PIO</description>
       <value>7</value>
       <peripheral>SYSCON</peripheral>
    </interrupt>
    <interrupt>
       <name>PIO0_8</name>
-      <description>System configuration</description>
+      <description>PIO</description>
       <value>8</value>
       <peripheral>SYSCON</peripheral>
    </interrupt>
    <interrupt>
       <name>PIO0_9</name>
-      <description>System configuration</description>
+      <description>PIO</description>
       <value>9</value>
       <peripheral>SYSCON</peripheral>
    </interrupt>
    <interrupt>
       <name>PIO0_10</name>
-      <description>System configuration</description>
+      <description>PIO</description>
       <value>10</value>
       <peripheral>SYSCON</peripheral>
    </interrupt>
    <interrupt>
       <name>PIO0_11</name>
-      <description>System configuration</description>
+      <description>PIO</description>
       <value>11</value>
       <peripheral>SYSCON</peripheral>
    </interrupt>
    <interrupt>
       <name>PIO1_0</name>
-      <description>System configuration</description>
+      <description>PIO</description>
       <value>12</value>
       <peripheral>SYSCON</peripheral>
    </interrupt>
@@ -151,7 +152,7 @@ Devices using this vector table:
    </interrupt>
    <interrupt>
       <name>BOD</name>
-      <description>System configuration</description>
+      <description>BOD</description>
       <value>26</value>
       <peripheral>SYSCON</peripheral>
    </interrupt>

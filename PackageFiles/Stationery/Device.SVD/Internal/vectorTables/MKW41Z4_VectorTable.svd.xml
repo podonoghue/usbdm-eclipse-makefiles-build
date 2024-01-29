@@ -7,25 +7,25 @@ Devices using this vector table:
    <description>MKW41Z4 VectorTable</description>
    <interrupt>
       <name>DMA0</name>
-      <description>Enhanced direct memory access controller</description>
+      <description>DMA Controller</description>
       <value>0</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA1</name>
-      <description>Enhanced direct memory access controller</description>
+      <description>DMA Controller</description>
       <value>1</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA2</name>
-      <description>Enhanced direct memory access controller</description>
+      <description>DMA Controller</description>
       <value>2</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA3</name>
-      <description>Enhanced direct memory access controller</description>
+      <description>DMA Controller</description>
       <value>3</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
@@ -40,6 +40,7 @@ Devices using this vector table:
       <description>Power Management Controller, DC-DC converter</description>
       <value>6</value>
       <peripheral>PMC</peripheral>
+      <peripheral>DCDC</peripheral>
    </interrupt>
    <interrupt>
       <name>LLWU</name>
@@ -121,13 +122,13 @@ Devices using this vector table:
    </interrupt>
    <interrupt>
       <name>RTC_Alarm</name>
-      <description>Secure Real Time Clock</description>
+      <description>Real Time Clock</description>
       <value>20</value>
       <peripheral>RTC</peripheral>
    </interrupt>
    <interrupt>
       <name>RTC_Seconds</name>
-      <description>Secure Real Time Clock</description>
+      <description>Real Time Clock</description>
       <value>21</value>
       <peripheral>RTC</peripheral>
    </interrupt>
@@ -151,7 +152,7 @@ Devices using this vector table:
    </interrupt>
    <interrupt>
       <name>DAC0</name>
-      <description>12-Bit Digital-to-Analog Converter</description>
+      <description>Digital to Analogue Converter</description>
       <value>25</value>
       <peripheral>DAC0</peripheral>
    </interrupt>
@@ -163,7 +164,7 @@ Devices using this vector table:
    </interrupt>
    <interrupt>
       <name>MCG</name>
-      <description>Multipurpose Clock Generator module</description>
+      <description>Multipurpose Clock Generator</description>
       <value>27</value>
       <peripheral>MCG</peripheral>
    </interrupt>

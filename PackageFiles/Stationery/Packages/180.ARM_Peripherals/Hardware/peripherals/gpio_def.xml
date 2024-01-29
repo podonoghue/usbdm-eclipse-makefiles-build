@@ -10,9 +10,9 @@
 
    <constant key="suppressInstance"          type="Boolean"  value="true"         />
    <constant key="suppressIrqArray"          type="Boolean" value="true"                />
-   <constant key="irq_parameters"            type="String"  value="&quot;&quot;"        />
-   <constant key="irq_dummy_parameters"      type="String"  value="&quot;&quot;"        />
-   <constant key="irq_call"                  type="String"  value="&quot;&quot;"        />
+   <constant key="irq_parameters"            type="String"  value='""'        />
+   <constant key="irq_dummy_parameters"      type="String"  value='""'        />
+   <constant key="irq_call"                  type="String"  value='""'        />
    <constant key="generateDefault"           type="Boolean" value="true"          />
    <constant key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
@@ -176,8 +176,8 @@
       \t *
       \t * @return pinIndex
       \t */
-      \tconstexpr PinIndex mapPortToPin(PortIndex pinIndex) {
-      \t   return PinIndex(int(pinIndex)*32);
+      \tconstexpr PinIndex mapPortToPin(PortIndex portIndex) {
+      \t   return PinIndex(int(portIndex)*32);
       \t}
       \t\n
    ]]></template>
@@ -187,7 +187,7 @@
       \t/**
       \t * Get default PCR value for a pin
       \t *
-      \t * @param pinIndex Pin index e.g. PTB3.
+      \t * @param pinIndx Pin index e.g. PTB3.
       \t *
       \t * @return PCR value determined by Configure.usbdm setting
       \t */
@@ -317,9 +317,9 @@
    <template key="/PORT/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t/**
-      \t * Get IRQ number from pinIndex
+      \t * Get PORT IRQ number from portIndex
       \t *
-      \t * @param pinIndex Pin index e.g. PTB3. Used to determine return value
+      \t * @param portIndex Port index e.g. PortB. Used to determine return value
       \t *
       \t * @return IRQ number
       \t */

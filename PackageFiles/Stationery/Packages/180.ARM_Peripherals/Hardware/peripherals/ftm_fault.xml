@@ -7,9 +7,9 @@
    <!--  ____ FTM Fault Controls ____= -->
 
    <categoryOption key="faultControl" description="Fault Input Configuration" 
-     condition="_control&amp;&amp;
-         (SignalExists(&quot;$(_NAME)_FLT0&quot;)||SignalExists(&quot;$(_NAME)_FLT1&quot;)||
-          SignalExists(&quot;$(_NAME)_FLT2&quot;)||SignalExists(&quot;$(_NAME)_FLT2&quot;))"
+     condition='_control&amp;&amp;
+         (SignalExists("$(_NAME)_FLT0")||SignalExists("$(_NAME)_FLT1")||
+          SignalExists("$(_NAME)_FLT2")||SignalExists("$(_NAME)_FLT2"))'
       hiddenBy="mode!=(Left,Centre)"
    >
       <!-- ************* MODE ****************** -->
@@ -72,7 +72,7 @@
        />
 
       <for keys="inp" dim="4" >
-         <if condition="SignalExists(&quot;$(_NAME)_FLT%(inp)&quot;)" >
+         <if condition='SignalExists("$(_NAME)_FLT%(inp)")' >
          
             <!--  Default mapping to FLT pins -->
             <constant key="faultPinMap[%(inp)]" value='"$(_NAME)_FLT%(inp)"' type="String" condition="!faultPinMap[%(inp)]"/>
@@ -245,7 +245,10 @@
 
       <!-- ____ DefaultFaultInitValue value ____ -->
       
-      <if condition="SignalExists(&quot;$(_NAME)_FLT0&quot;)||SignalExists(&quot;$(_NAME)_FLT1&quot;)||SignalExists(&quot;$(_NAME)_FLT2&quot;)||SignalExists(&quot;$(_NAME)_FLT3&quot;)">
+      <if condition='SignalExists("$(_NAME)_FLT0")||
+                     SignalExists("$(_NAME)_FLT1")||
+                     SignalExists("$(_NAME)_FLT2")||
+                     SignalExists("$(_NAME)_FLT3")' >
          <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;(mode!=Quad)"
             separator=","
             terminator=","
@@ -264,7 +267,7 @@
    
          <for keys="inp" dim="4" >
             <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;(mode!=Quad)"
-               condition="SignalExists(&quot;$(_NAME)_FLT%(inp)&quot;)"
+               condition='SignalExists("$(_NAME)_FLT%(inp)")'
                separator=","
                terminator=","
                variables="

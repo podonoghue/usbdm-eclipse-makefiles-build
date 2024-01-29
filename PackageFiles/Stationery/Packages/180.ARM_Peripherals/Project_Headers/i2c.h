@@ -459,7 +459,7 @@ $(/I2C/public:// /I2C/public not found)
  *
  * @tparam Info            Class describing I2C hardware
  */
-template<class Info> class I2cBase_T : public I2c {
+template<class Info> class I2cBase_T : public I2c, public Info {
 
 public:
    // Handle on I2C hardware

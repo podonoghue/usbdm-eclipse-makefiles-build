@@ -1,0 +1,942 @@
+<!--
+Devices using this peripheral: 
+      STM32F030
+-->
+      <peripheral>
+         <?sourceFile "RCC_STM32F030" ?>
+         <name>RCC</name>
+         <description>Reset and clock control</description>
+         <groupName>RCC</groupName>
+         <headerStructName>RCC</headerStructName>
+         <baseAddress>0x40021000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x38</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CR</name>
+               <description>Clock control register</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0x83</resetValue>
+               <fields>
+                  <field>
+                     <name>HSION</name>
+                     <description>Internal High Speed clock
+              enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HSIRDY</name>
+                     <description>Internal High Speed clock ready
+              flag</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>HSITRIM</name>
+                     <description>Internal High Speed clock
+              trimming</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>HSICAL</name>
+                     <description>Internal High Speed clock
+              Calibration</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>HSEON</name>
+                     <description>External High Speed clock
+              enable</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HSERDY</name>
+                     <description>External High Speed clock ready
+              flag</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>HSEBYP</name>
+                     <description>External High Speed clock
+              Bypass</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CSSON</name>
+                     <description>Clock Security System
+              enable</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLLON</name>
+                     <description>PLL enable</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLLRDY</name>
+                     <description>PLL clock ready flag</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CFGR</name>
+               <description>Clock configuration register
+          (RCC_CFGR)</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>SW</name>
+                     <description>System clock Switch</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>SWS</name>
+                     <description>System Clock Switch Status</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>HPRE</name>
+                     <description>AHB prescaler</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>PPRE</name>
+                     <description>APB Low speed prescaler
+              (APB1)</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADCPRE</name>
+                     <description>ADC prescaler</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLLSRC</name>
+                     <description>PLL input clock source</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLLXTPRE</name>
+                     <description>HSE divider for PLL entry</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLLMUL</name>
+                     <description>PLL Multiplication Factor</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>MCO</name>
+                     <description>Microcontroller clock
+              output</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>MCOPRE</name>
+                     <description>Microcontroller Clock Output
+              Prescaler</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLLNODIV</name>
+                     <description>PLL clock not divided for
+              MCO</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CIR</name>
+               <description>Clock interrupt register
+          (RCC_CIR)</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>LSIRDYF</name>
+                     <description>LSI Ready Interrupt flag</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>LSERDYF</name>
+                     <description>LSE Ready Interrupt flag</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>HSIRDYF</name>
+                     <description>HSI Ready Interrupt flag</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>HSERDYF</name>
+                     <description>HSE Ready Interrupt flag</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>PLLRDYF</name>
+                     <description>PLL Ready Interrupt flag</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>HSI14RDYF</name>
+                     <description>HSI14 ready interrupt flag</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>HSI48RDYF</name>
+                     <description>HSI48 ready interrupt flag</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>CSSF</name>
+                     <description>Clock Security System Interrupt
+              flag</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>LSIRDYIE</name>
+                     <description>LSI Ready Interrupt Enable</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LSERDYIE</name>
+                     <description>LSE Ready Interrupt Enable</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HSIRDYIE</name>
+                     <description>HSI Ready Interrupt Enable</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HSERDYIE</name>
+                     <description>HSE Ready Interrupt Enable</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLLRDYIE</name>
+                     <description>PLL Ready Interrupt Enable</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HSI14RDYE</name>
+                     <description>HSI14 ready interrupt
+              enable</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HSI48RDYIE</name>
+                     <description>HSI48 ready interrupt
+              enable</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LSIRDYC</name>
+                     <description>LSI Ready Interrupt Clear</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>LSERDYC</name>
+                     <description>LSE Ready Interrupt Clear</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>HSIRDYC</name>
+                     <description>HSI Ready Interrupt Clear</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>HSERDYC</name>
+                     <description>HSE Ready Interrupt Clear</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>PLLRDYC</name>
+                     <description>PLL Ready Interrupt Clear</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>HSI14RDYC</name>
+                     <description>HSI 14 MHz Ready Interrupt
+              Clear</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>HSI48RDYC</name>
+                     <description>HSI48 Ready Interrupt
+              Clear</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>CSSC</name>
+                     <description>Clock security system interrupt
+              clear</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>APB2RSTR</name>
+               <description>APB2 peripheral reset register
+          (RCC_APB2RSTR)</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>SYSCFGRST</name>
+                     <description>SYSCFG and COMP reset</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADCRST</name>
+                     <description>ADC interface reset</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TIM1RST</name>
+                     <description>TIM1 timer reset</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SPI1RST</name>
+                     <description>SPI 1 reset</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>USART1RST</name>
+                     <description>USART1 reset</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TIM15RST</name>
+                     <description>TIM15 timer reset</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TIM16RST</name>
+                     <description>TIM16 timer reset</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TIM17RST</name>
+                     <description>TIM17 timer reset</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DBGMCURST</name>
+                     <description>Debug MCU reset</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>APB1RSTR</name>
+               <description>APB1 peripheral reset register
+          (RCC_APB1RSTR)</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>TIM3RST</name>
+                     <description>Timer 3 reset</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TIM6RST</name>
+                     <description>Timer 6 reset</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TIM14RST</name>
+                     <description>Timer 14 reset</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>WWDGRST</name>
+                     <description>Window watchdog reset</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SPI2RST</name>
+                     <description>SPI2 reset</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>USART2RST</name>
+                     <description>USART 2 reset</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>I2C1RST</name>
+                     <description>I2C1 reset</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>I2C2RST</name>
+                     <description>I2C2 reset</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PWRRST</name>
+                     <description>Power interface reset</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AHBENR</name>
+               <description>AHB Peripheral Clock enable register
+          (RCC_AHBENR)</description>
+               <addressOffset>0x14</addressOffset>
+               <resetValue>0x14</resetValue>
+               <fields>
+                  <field>
+                     <name>DMAEN</name>
+                     <description>DMA1 clock enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SRAMEN</name>
+                     <description>SRAM interface clock
+              enable</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>FLITFEN</name>
+                     <description>FLITF clock enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CRCEN</name>
+                     <description>CRC clock enable</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>IOPAEN</name>
+                     <description>I/O port A clock enable</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>IOPBEN</name>
+                     <description>I/O port B clock enable</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>IOPCEN</name>
+                     <description>I/O port C clock enable</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>IOPDEN</name>
+                     <description>I/O port D clock enable</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>IOPFEN</name>
+                     <description>I/O port F clock enable</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>APB2ENR</name>
+               <description>APB2 peripheral clock enable register
+          (RCC_APB2ENR)</description>
+               <addressOffset>0x18</addressOffset>
+               <fields>
+                  <field>
+                     <name>SYSCFGEN</name>
+                     <description>SYSCFG clock enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADCEN</name>
+                     <description>ADC 1 interface clock
+              enable</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TIM1EN</name>
+                     <description>TIM1 Timer clock enable</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SPI1EN</name>
+                     <description>SPI 1 clock enable</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>USART1EN</name>
+                     <description>USART1 clock enable</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TIM15EN</name>
+                     <description>TIM15 timer clock enable</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TIM16EN</name>
+                     <description>TIM16 timer clock enable</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TIM17EN</name>
+                     <description>TIM17 timer clock enable</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DBGMCUEN</name>
+                     <description>MCU debug module clock
+              enable</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>APB1ENR</name>
+               <description>APB1 peripheral clock enable register
+          (RCC_APB1ENR)</description>
+               <addressOffset>0x1C</addressOffset>
+               <fields>
+                  <field>
+                     <name>TIM3EN</name>
+                     <description>Timer 3 clock enable</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TIM6EN</name>
+                     <description>Timer 6 clock enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TIM14EN</name>
+                     <description>Timer 14 clock enable</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>WWDGEN</name>
+                     <description>Window watchdog clock
+              enable</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SPI2EN</name>
+                     <description>SPI 2 clock enable</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>USART2EN</name>
+                     <description>USART 2 clock enable</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>I2C1EN</name>
+                     <description>I2C 1 clock enable</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>I2C2EN</name>
+                     <description>I2C 2 clock enable</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PWREN</name>
+                     <description>Power interface clock
+              enable</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>BDCR</name>
+               <description>Backup domain control register
+          (RCC_BDCR)</description>
+               <addressOffset>0x20</addressOffset>
+               <fields>
+                  <field>
+                     <name>LSEON</name>
+                     <description>External Low Speed oscillator
+              enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LSERDY</name>
+                     <description>External Low Speed oscillator
+              ready</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>LSEBYP</name>
+                     <description>External Low Speed oscillator
+              bypass</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LSEDRV</name>
+                     <description>LSE oscillator drive
+              capability</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>RTCSEL</name>
+                     <description>RTC clock source selection</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>RTCEN</name>
+                     <description>RTC clock enable</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BDRST</name>
+                     <description>Backup domain software
+              reset</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CSR</name>
+               <description>Control/status register
+          (RCC_CSR)</description>
+               <addressOffset>0x24</addressOffset>
+               <resetValue>0xC000000</resetValue>
+               <fields>
+                  <field>
+                     <name>LSION</name>
+                     <description>Internal low speed oscillator
+              enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LSIRDY</name>
+                     <description>Internal low speed oscillator
+              ready</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>RMVF</name>
+                     <description>Remove reset flag</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>OBLRSTF</name>
+                     <description>Option byte loader reset
+              flag</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PINRSTF</name>
+                     <description>PIN reset flag</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PORRSTF</name>
+                     <description>POR/PDR reset flag</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SFTRSTF</name>
+                     <description>Software reset flag</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>IWDGRSTF</name>
+                     <description>Independent watchdog reset
+              flag</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>WWDGRSTF</name>
+                     <description>Window watchdog reset flag</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPWRRSTF</name>
+                     <description>Low-power reset flag</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AHBRSTR</name>
+               <description>AHB peripheral reset register</description>
+               <addressOffset>0x28</addressOffset>
+               <fields>
+                  <field>
+                     <name>IOPARST</name>
+                     <description>I/O port A reset</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>IOPBRST</name>
+                     <description>I/O port B reset</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>IOPCRST</name>
+                     <description>I/O port C reset</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>IOPDRST</name>
+                     <description>I/O port D reset</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>IOPFRST</name>
+                     <description>I/O port F reset</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CFGR2</name>
+               <description>Clock configuration register 2</description>
+               <addressOffset>0x2C</addressOffset>
+               <fields>
+                  <field>
+                     <name>PREDIV</name>
+                     <description>PREDIV division factor</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CFGR3</name>
+               <description>Clock configuration register 3</description>
+               <addressOffset>0x30</addressOffset>
+               <fields>
+                  <field>
+                     <name>USART1SW</name>
+                     <description>USART1 clock source
+              selection</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>I2C1SW</name>
+                     <description>I2C1 clock source
+              selection</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADCSW</name>
+                     <description>ADC clock source selection</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>USART2SW</name>
+                     <description>USART2 clock source
+              selection</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR2</name>
+               <description>Clock control register 2</description>
+               <addressOffset>0x34</addressOffset>
+               <resetValue>0x80</resetValue>
+               <fields>
+                  <field>
+                     <name>HSI14ON</name>
+                     <description>HSI14 clock enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HSI14RDY</name>
+                     <description>HR14 clock ready flag</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>HSI14DIS</name>
+                     <description>HSI14 clock request from ADC
+              disable</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HSI14TRIM</name>
+                     <description>HSI14 clock trimming</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>HSI14CAL</name>
+                     <description>HSI14 clock calibration</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>HSI48ON</name>
+                     <description>HSI48 clock enable</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HSI48RDY</name>
+                     <description>HSI48 clock ready flag</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>HSI48CAL</name>
+                     <description>HSI48 factory clock
+              calibration</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

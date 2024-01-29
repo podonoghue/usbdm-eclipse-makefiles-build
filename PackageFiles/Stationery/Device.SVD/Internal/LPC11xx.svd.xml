@@ -42,6 +42,6 @@
       <xi:include href="peripherals/WWDT_LPC11Cxx.svd.xml"/>
    </peripherals>
    <vendorExtensions>
-   <xi:include href="vectorTables/LPC11xx_VectorTable.svd.xml"/>
+   <xi:include href="vectorTables/LPC11Cxx_VectorTable.svd.xml"/>
    </vendorExtensions>
 </device>

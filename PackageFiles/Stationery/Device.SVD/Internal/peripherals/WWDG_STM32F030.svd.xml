@@ -1,0 +1,83 @@
+<!--
+Devices using this peripheral: 
+      STM32F030
+-->
+      <peripheral>
+         <?sourceFile "WWDG_STM32F030" ?>
+         <name>WWDG</name>
+         <description>Window watchdog</description>
+         <groupName>WWDG</groupName>
+         <headerStructName>WWDG</headerStructName>
+         <baseAddress>0x40002C00</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CR</name>
+               <description>Control register</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0x7F</resetValue>
+               <fields>
+                  <field>
+                     <name>T</name>
+                     <description>7-bit counter</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>WDGA</name>
+                     <description>Activation bit</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CFR</name>
+               <description>Configuration register</description>
+               <addressOffset>0x4</addressOffset>
+               <resetValue>0x7F</resetValue>
+               <fields>
+                  <field>
+                     <name>W</name>
+                     <description>7-bit window value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>WDGTB</name>
+                     <description>Timer base</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>EWI</name>
+                     <description>Early wakeup interrupt</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SR</name>
+               <description>Status register</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>EWIF</name>
+                     <description>Early wakeup interrupt
+              flag</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

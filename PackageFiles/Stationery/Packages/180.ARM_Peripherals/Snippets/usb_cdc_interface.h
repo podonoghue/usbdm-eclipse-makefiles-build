@@ -41,6 +41,8 @@ protected:
    CDC_Interface() {}
    virtual ~CDC_Interface() {}
 
+   static LineCodingStructure fLineCoding;
+
 public:
    /**
     * Initialise class
@@ -65,9 +67,9 @@ public:
     * Process data received from host
     *
     * @param size Amount of data
-    * @param buff Buffer for data
+    * @param buff Buffer containing data
     *
-    * @note The data is volatile so should be processed or saved immediately.
+    * @note the Data is volatile so should be processed or saved immediately.
     */
    static void putData(int size, const volatile uint8_t *buff);
 
@@ -83,11 +85,22 @@ public:
 
 public:
    /**
-    * Set line coding
+    *  Set CDC communication characteristics
     *
-    * @param lineCoding Line coding information
+    * @param[in] lineCoding - Structure describing desired settings
+    *
+    * The UART is quite limited when compared to the serial interface implied
+    * by LineCodingStructure.
+    * It does not support many of the combinations available.
     */
-   static void setLineCoding(volatile LineCodingStructure &lineCoding);
+   static void setLineCoding(const LineCodingStructure *lineCoding);
+
+   /**
+    * Get line coding
+    *
+    * @param[out] lineCoding Line coding information
+    */
+   static const LineCodingStructure * getLineCoding();
 
    /**
     *  Set CDC Line values

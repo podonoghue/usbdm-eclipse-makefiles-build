@@ -17,8 +17,8 @@ read -d '' TOx <<EOF
       \</for\> 
 EOF
 
-FROM="Ftm%(f)ClockIn"
-TO="Ftm%(f)ExternalClock"
+FROM='\"&quot;&quot;\"'
+TO=\'\"\"\'
 
 echo from "${FROM}"
 echo to "${TO}"

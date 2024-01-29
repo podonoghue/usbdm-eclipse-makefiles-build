@@ -58,7 +58,7 @@
             enabledBy="enablePeripheralSupport"
             typeName="Sim%(Name)Clock"
             description="%(Name) Clock Gate Control"
-            toolTip="This clock gate must be enabled to access %(Name)\n
+            toolTip="This clock gate must be enabled to access %(Name). \n
                      This may be done here or when the individual peripheral is configured." >
             <choice name="%(Name) Clock disabled"  value="0" enum="Disabled"/>
             <choice name="%(Name) Clock enabled"   value="1" enum="Enabled" isDefault="%(isDefault)" />

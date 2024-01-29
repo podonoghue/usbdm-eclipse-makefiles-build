@@ -1,0 +1,160 @@
+<!--
+Devices using this vector table: 
+   STM32F030
+-->
+<interrupts>
+   <name>STM32F030_VectorTable</name>
+   <description>STM32F030 VectorTable</description>
+   <interrupt>
+      <name>WWDG</name>
+      <description>Window Watchdog interrupt</description>
+      <value>0</value>
+      <peripheral>TIM1</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>PVD</name>
+      <description>PVD and VDDIO2 supply comparator
+        interrupt</description>
+      <value>1</value>
+      <peripheral>RCC</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>RCC_CRS</name>
+      <description>RCC and CRS global interrupts</description>
+      <value>4</value>
+      <peripheral>USART1</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>EXTI0_1</name>
+      <description>EXTI Line[1:0] interrupts</description>
+      <value>5</value>
+      <peripheral>RCC</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>EXTI2_3</name>
+      <description>EXTI Line[3:2] interrupts</description>
+      <value>6</value>
+      <peripheral>RCC</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>EXTI4_15</name>
+      <description>EXTI Line15 and EXTI4 interrupts</description>
+      <value>7</value>
+      <peripheral>RCC</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>DMA_CH1</name>
+      <description>DMA channel 1 interrupt</description>
+      <value>9</value>
+      <peripheral>ADC</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>DMA_CH2_3</name>
+      <description>DMA channel 2 and 3 interrupts</description>
+      <value>10</value>
+      <peripheral>ADC</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>DMA_CH4_5_6_7</name>
+      <description>DMA channel 4, 5, 6 and 7
+        interrupts</description>
+      <value>11</value>
+      <peripheral>ADC</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>ADC_COMP</name>
+      <description>ADC and comparator interrupts</description>
+      <value>12</value>
+      <peripheral>RTC</peripheral>
+      <peripheral>DBGMCU</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>TIM1_BRK_UP_TRG_COM</name>
+      <description>TIM1 break, update, trigger and commutation
+        interrupt</description>
+      <value>13</value>
+      <peripheral>TIM3</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>TIM1_CC</name>
+      <description>TIM1 Capture Compare interrupt</description>
+      <value>14</value>
+      <peripheral>TIM3</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>TIM2</name>
+      <description>TIM2 global interrupt</description>
+      <value>15</value>
+      <peripheral>TIM14</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>TIM3</name>
+      <description>TIM3 global interrupt</description>
+      <value>16</value>
+      <peripheral>TIM6</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>TIM6_DAC</name>
+      <description>TIM6 global interrupt and DAC underrun
+        interrupt</description>
+      <value>17</value>
+      <peripheral>PWR</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>TIM7</name>
+      <description>TIM7 global interrupt</description>
+      <value>18</value>
+      <peripheral>DMA</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>TIM14</name>
+      <description>TIM14 global interrupt</description>
+      <value>19</value>
+      <peripheral>EXTI</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>I2C1</name>
+      <description>I2C1 global interrupt</description>
+      <value>23</value>
+      <peripheral>I2C2</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>I2C2</name>
+      <description>I2C2 global interrupt</description>
+      <value>24</value>
+      <peripheral>IWDG</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>SPI1</name>
+      <description>SPI1_global_interrupt</description>
+      <value>25</value>
+      <peripheral>SPI1</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>SPI2</name>
+      <description>SPI2 global interrupt</description>
+      <value>26</value>
+      <peripheral>SPI2</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>USART1</name>
+      <description>USART1 global interrupt</description>
+      <value>27</value>
+      <peripheral>TIM15</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>USART2</name>
+      <description>USART2 global interrupt</description>
+      <value>28</value>
+      <peripheral>TIM16</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>USART3_4</name>
+      <description>USART3 and USART4 global
+        interrupt</description>
+      <value>29</value>
+      <peripheral>TIM17</peripheral>
+      <peripheral>Flash</peripheral>
+   </interrupt>
+</interrupts>
+

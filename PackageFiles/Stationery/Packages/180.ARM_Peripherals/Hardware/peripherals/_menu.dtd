@@ -203,8 +203,6 @@
    <!-- Value expressed as equation for immediate evaluation?? -->
    <!ATTLIST equation  value           CDATA        #REQUIRED>
 
-
-
 <!ELEMENT deleteVariables EMPTY >
    <!-- Key for variable to delete -->
    <!ATTLIST deleteVariables variables      CDATA        #REQUIRED>
@@ -342,6 +340,8 @@
    <!ATTLIST intOption addToVar      CDATA        #IMPLIED>
    <!-- Log changes to associated variable -->
    <!ATTLIST intOption logging       (true)       #IMPLIED>
+   <!-- Name of associate signal -->
+   <!ATTLIST intOption signal        CDATA        #IMPLIED>
    
   
 <!ELEMENT bitmaskOption EMPTY >
@@ -402,6 +402,8 @@
    <!ATTLIST bitmaskOption logging        (true)       #IMPLIED>
    <!-- Used to control generation of enum (default is true) -->
    <!ATTLIST bitmaskOption generateEnum   (empty|false)  #IMPLIED>
+   <!-- Name of associate signal -->
+   <!ATTLIST bitmaskOption signal          CDATA #IMPLIED>
 
 <!ELEMENT floatOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
@@ -454,6 +456,8 @@
    <!ATTLIST floatOption addToVar      CDATA        #IMPLIED>
    <!-- Log changes to associated variable -->
    <!ATTLIST floatOption logging       (true)       #IMPLIED>
+   <!-- Name of associate signal -->
+   <!ATTLIST floatOption signal        CDATA        #IMPLIED>
 
 <!ELEMENT stringOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
@@ -690,6 +694,8 @@
    <!ATTLIST choiceOption logging             (true) #IMPLIED>
    <!-- Create choice values as constants rather than as an enum -->
    <!ATTLIST choiceOption createAsConstants   (true) #IMPLIED>
+   <!-- Name of associate signal -->
+   <!ATTLIST choiceOption signal              CDATA #IMPLIED>
 
 <!ELEMENT choice EMPTY >
 
@@ -818,6 +824,8 @@
    <!ATTLIST binaryOption disabledPinMap      CDATA        #IMPLIED>
    <!-- Log changes to associated variable -->
    <!ATTLIST binaryOption logging             (true)       #IMPLIED>
+   <!-- Name of associate signal -->
+   <!ATTLIST binaryOption signal              CDATA #IMPLIED>
 
 <!ELEMENT irqOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->

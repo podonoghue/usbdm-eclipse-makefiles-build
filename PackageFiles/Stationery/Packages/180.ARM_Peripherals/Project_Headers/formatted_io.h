@@ -1868,7 +1868,6 @@ public:
     * Receives an integer and then discards characters until end of line.
     *
     * @param[out] value Where to place value read
-    * @param[in]  radix The radix to use
     *
     * @return Reference to self
     *

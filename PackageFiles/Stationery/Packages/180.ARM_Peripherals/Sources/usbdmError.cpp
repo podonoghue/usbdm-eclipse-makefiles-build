@@ -36,6 +36,7 @@ static const char *messages[] {
       "Interrupt occurred during operation",
       "Device is busy",
       "Match event",
+      "Wrong state",
 };
 #endif
 

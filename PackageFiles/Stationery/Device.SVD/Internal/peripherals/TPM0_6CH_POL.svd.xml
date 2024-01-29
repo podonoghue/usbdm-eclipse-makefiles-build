@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral:
+Devices using this peripheral: 
       MKL17Z4
       MKL27Z4
       MKL27Z644
@@ -399,7 +399,7 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                      <?ignoreOverlap?>
                      <?hide?>
                      <description>Channel Event Flags\n
-These flags are cleared by writting 1.  Writing 0 has no effect.</description>
+These flags are cleared by writting 1.  Writing 0 has no effect</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>16</bitWidth>
                   </field>

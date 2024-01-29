@@ -303,20 +303,19 @@ $(/CMP/set_output: // /CMP/set_output not found)
     */
    static Seconds convertTicksToSeconds(const Ticks &ticks) {
 
-      return (float)ticks/Cmp0Info::getClockFrequency();
+      return (float)ticks/Info::getClockFrequency();
    }
 
    /**
     * Converts time in seconds to time in ticks
     *
     * @param[in] seconds Time interval in seconds
-    * @param[in] scValue PDB SC register value for clock divider
     *
     * @return Time in ticks
     */
    static Ticks convertSecondsToTicks(const Seconds &seconds) {
 
-      uint32_t res = roundf((float)seconds*Cmp0Info::getClockFrequency());
+      uint32_t res = roundf((float)seconds*Info::getClockFrequency());
       if (res >= 256) {
          setErrorCode(E_TOO_LARGE);
       }
@@ -360,7 +359,7 @@ $(/CMP/set_output: // /CMP/set_output not found)
     * 4b   Sampled, Filtered, internal         1      0      0     >=2            >=1    COUTA combinational, COUT filtered by busclk/PFR
     *
     * @param[in] cmpFilterSamples         Number samples that must agree before COUT changes (>=2)
-    * @param[in] CmpSampleEnable          Filter clock source
+    * @param[in] cmpSampleEnable          Filter clock source
     * @param[in] cmpFilterSamplePeriod    Period of internal sample filter (1..255). \n
     *                                     Only applicable if CmpSampleEnable_Internal
     */

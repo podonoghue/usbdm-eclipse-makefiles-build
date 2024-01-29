@@ -1,0 +1,2655 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- gpioa_stm32f030.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="General-purpose I/Os" >
+
+   <constant key="suppressInstance"          type="Boolean" value="false"     />
+
+   <constant key="irq_parameters"            type="String"  value='""'        />
+   <constant key="irq_dummy_parameters"      type="String"  value='""'        />
+   <constant key="irq_call"                  type="String"  value='""'        />
+   <constant key="generateDefault"           type="Boolean" value="false"     />
+   <constant key="configureInStartupDefault" type="Boolean" value="false"     />
+   <xi:include href="enablePeripheral.xml"  />
+   <title />
+
+   <!-- ____ Class Declaration ________ -->
+   <constant key="_class_declaration" type="String"
+      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+
+   <!-- ____ MODER ____ -->
+   <title description="GPIO port mode register" />
+
+   <choiceOption key="gpio_moder_moder15" condition="gpio_moder_moder15_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioModerModer15"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_moder_moder14" condition="gpio_moder_moder14_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioModerModer14"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_moder_moder13" condition="gpio_moder_moder13_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioModerModer13"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_moder_moder12" condition="gpio_moder_moder12_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioModerModer12"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_moder_moder11" condition="gpio_moder_moder11_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioModerModer11"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_moder_moder10" condition="gpio_moder_moder10_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioModerModer10"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_moder_moder9" condition="gpio_moder_moder9_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioModerModer9"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_moder_moder8" condition="gpio_moder_moder8_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioModerModer8"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_moder_moder7" condition="gpio_moder_moder7_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioModerModer7"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_moder_moder6" condition="gpio_moder_moder6_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioModerModer6"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_moder_moder5" condition="gpio_moder_moder5_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioModerModer5"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_moder_moder4" condition="gpio_moder_moder4_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioModerModer4"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_moder_moder3" condition="gpio_moder_moder3_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioModerModer3"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_moder_moder2" condition="gpio_moder_moder2_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioModerModer2"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_moder_moder1" condition="gpio_moder_moder1_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioModerModer1"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_moder_moder0" condition="gpio_moder_moder0_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioModerModer0"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <!-- ____ OTYPER ____ -->
+   <title description="GPIO port output type register" />
+
+   <binaryOption key="gpio_otyper_ot15" condition="gpio_otyper_ot15_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOtyperOt15"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_otyper_ot14" condition="gpio_otyper_ot14_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOtyperOt14"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_otyper_ot13" condition="gpio_otyper_ot13_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOtyperOt13"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_otyper_ot12" condition="gpio_otyper_ot12_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOtyperOt12"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_otyper_ot11" condition="gpio_otyper_ot11_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOtyperOt11"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_otyper_ot10" condition="gpio_otyper_ot10_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOtyperOt10"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_otyper_ot9" condition="gpio_otyper_ot9_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOtyperOt9"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_otyper_ot8" condition="gpio_otyper_ot8_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOtyperOt8"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_otyper_ot7" condition="gpio_otyper_ot7_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOtyperOt7"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_otyper_ot6" condition="gpio_otyper_ot6_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOtyperOt6"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_otyper_ot5" condition="gpio_otyper_ot5_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOtyperOt5"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_otyper_ot4" condition="gpio_otyper_ot4_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOtyperOt4"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_otyper_ot3" condition="gpio_otyper_ot3_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOtyperOt3"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_otyper_ot2" condition="gpio_otyper_ot2_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOtyperOt2"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_otyper_ot1" condition="gpio_otyper_ot1_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOtyperOt1"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_otyper_ot0" condition="gpio_otyper_ot0_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOtyperOt0"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <!-- ____ OSPEEDR ____ -->
+   <title description="GPIO port output speed
+          register" />
+
+   <choiceOption key="gpio_ospeedr_ospeedr15" condition="gpio_ospeedr_ospeedr15_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOspeedrOspeedr15"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_ospeedr_ospeedr14" condition="gpio_ospeedr_ospeedr14_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOspeedrOspeedr14"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_ospeedr_ospeedr13" condition="gpio_ospeedr_ospeedr13_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOspeedrOspeedr13"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_ospeedr_ospeedr12" condition="gpio_ospeedr_ospeedr12_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOspeedrOspeedr12"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_ospeedr_ospeedr11" condition="gpio_ospeedr_ospeedr11_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOspeedrOspeedr11"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_ospeedr_ospeedr10" condition="gpio_ospeedr_ospeedr10_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOspeedrOspeedr10"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_ospeedr_ospeedr9" condition="gpio_ospeedr_ospeedr9_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOspeedrOspeedr9"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_ospeedr_ospeedr8" condition="gpio_ospeedr_ospeedr8_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOspeedrOspeedr8"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_ospeedr_ospeedr7" condition="gpio_ospeedr_ospeedr7_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOspeedrOspeedr7"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_ospeedr_ospeedr6" condition="gpio_ospeedr_ospeedr6_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOspeedrOspeedr6"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_ospeedr_ospeedr5" condition="gpio_ospeedr_ospeedr5_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOspeedrOspeedr5"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_ospeedr_ospeedr4" condition="gpio_ospeedr_ospeedr4_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOspeedrOspeedr4"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_ospeedr_ospeedr3" condition="gpio_ospeedr_ospeedr3_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOspeedrOspeedr3"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_ospeedr_ospeedr2" condition="gpio_ospeedr_ospeedr2_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOspeedrOspeedr2"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_ospeedr_ospeedr1" condition="gpio_ospeedr_ospeedr1_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOspeedrOspeedr1"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_ospeedr_ospeedr0" condition="gpio_ospeedr_ospeedr0_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOspeedrOspeedr0"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <!-- ____ PUPDR ____ -->
+   <title description="GPIO port pull-up/pull-down
+          register" />
+
+   <choiceOption key="gpio_pupdr_pupdr15" condition="gpio_pupdr_pupdr15_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioPupdrPupdr15"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_pupdr_pupdr14" condition="gpio_pupdr_pupdr14_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioPupdrPupdr14"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_pupdr_pupdr13" condition="gpio_pupdr_pupdr13_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioPupdrPupdr13"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_pupdr_pupdr12" condition="gpio_pupdr_pupdr12_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioPupdrPupdr12"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_pupdr_pupdr11" condition="gpio_pupdr_pupdr11_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioPupdrPupdr11"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_pupdr_pupdr10" condition="gpio_pupdr_pupdr10_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioPupdrPupdr10"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_pupdr_pupdr9" condition="gpio_pupdr_pupdr9_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioPupdrPupdr9"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_pupdr_pupdr8" condition="gpio_pupdr_pupdr8_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioPupdrPupdr8"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_pupdr_pupdr7" condition="gpio_pupdr_pupdr7_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioPupdrPupdr7"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_pupdr_pupdr6" condition="gpio_pupdr_pupdr6_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioPupdrPupdr6"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_pupdr_pupdr5" condition="gpio_pupdr_pupdr5_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioPupdrPupdr5"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_pupdr_pupdr4" condition="gpio_pupdr_pupdr4_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioPupdrPupdr4"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_pupdr_pupdr3" condition="gpio_pupdr_pupdr3_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioPupdrPupdr3"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_pupdr_pupdr2" condition="gpio_pupdr_pupdr2_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioPupdrPupdr2"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_pupdr_pupdr1" condition="gpio_pupdr_pupdr1_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioPupdrPupdr1"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="gpio_pupdr_pupdr0" condition="gpio_pupdr_pupdr0_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioPupdrPupdr0"
+      baseType="uint32_t"
+      description="Port x configuration bits (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <!-- ____ IDR ____ -->
+   <title description="GPIO port input data register" />
+
+   <binaryOption key="gpio_idr_idr15" condition="gpio_idr_idr15_present"
+      hidden="true"
+      typeName="GpioIdrIdr15"
+      baseType="uint32_t"
+      description="Port input data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_idr_idr14" condition="gpio_idr_idr14_present"
+      hidden="true"
+      typeName="GpioIdrIdr14"
+      baseType="uint32_t"
+      description="Port input data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_idr_idr13" condition="gpio_idr_idr13_present"
+      hidden="true"
+      typeName="GpioIdrIdr13"
+      baseType="uint32_t"
+      description="Port input data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_idr_idr12" condition="gpio_idr_idr12_present"
+      hidden="true"
+      typeName="GpioIdrIdr12"
+      baseType="uint32_t"
+      description="Port input data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_idr_idr11" condition="gpio_idr_idr11_present"
+      hidden="true"
+      typeName="GpioIdrIdr11"
+      baseType="uint32_t"
+      description="Port input data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_idr_idr10" condition="gpio_idr_idr10_present"
+      hidden="true"
+      typeName="GpioIdrIdr10"
+      baseType="uint32_t"
+      description="Port input data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_idr_idr9" condition="gpio_idr_idr9_present"
+      hidden="true"
+      typeName="GpioIdrIdr9"
+      baseType="uint32_t"
+      description="Port input data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_idr_idr8" condition="gpio_idr_idr8_present"
+      hidden="true"
+      typeName="GpioIdrIdr8"
+      baseType="uint32_t"
+      description="Port input data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_idr_idr7" condition="gpio_idr_idr7_present"
+      hidden="true"
+      typeName="GpioIdrIdr7"
+      baseType="uint32_t"
+      description="Port input data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_idr_idr6" condition="gpio_idr_idr6_present"
+      hidden="true"
+      typeName="GpioIdrIdr6"
+      baseType="uint32_t"
+      description="Port input data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_idr_idr5" condition="gpio_idr_idr5_present"
+      hidden="true"
+      typeName="GpioIdrIdr5"
+      baseType="uint32_t"
+      description="Port input data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_idr_idr4" condition="gpio_idr_idr4_present"
+      hidden="true"
+      typeName="GpioIdrIdr4"
+      baseType="uint32_t"
+      description="Port input data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_idr_idr3" condition="gpio_idr_idr3_present"
+      hidden="true"
+      typeName="GpioIdrIdr3"
+      baseType="uint32_t"
+      description="Port input data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_idr_idr2" condition="gpio_idr_idr2_present"
+      hidden="true"
+      typeName="GpioIdrIdr2"
+      baseType="uint32_t"
+      description="Port input data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_idr_idr1" condition="gpio_idr_idr1_present"
+      hidden="true"
+      typeName="GpioIdrIdr1"
+      baseType="uint32_t"
+      description="Port input data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_idr_idr0" condition="gpio_idr_idr0_present"
+      hidden="true"
+      typeName="GpioIdrIdr0"
+      baseType="uint32_t"
+      description="Port input data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <!-- ____ ODR ____ -->
+   <title description="GPIO port output data register" />
+
+   <binaryOption key="gpio_odr_odr15" condition="gpio_odr_odr15_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOdrOdr15"
+      baseType="uint32_t"
+      description="Port output data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_odr_odr14" condition="gpio_odr_odr14_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOdrOdr14"
+      baseType="uint32_t"
+      description="Port output data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_odr_odr13" condition="gpio_odr_odr13_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOdrOdr13"
+      baseType="uint32_t"
+      description="Port output data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_odr_odr12" condition="gpio_odr_odr12_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOdrOdr12"
+      baseType="uint32_t"
+      description="Port output data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_odr_odr11" condition="gpio_odr_odr11_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOdrOdr11"
+      baseType="uint32_t"
+      description="Port output data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_odr_odr10" condition="gpio_odr_odr10_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOdrOdr10"
+      baseType="uint32_t"
+      description="Port output data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_odr_odr9" condition="gpio_odr_odr9_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOdrOdr9"
+      baseType="uint32_t"
+      description="Port output data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_odr_odr8" condition="gpio_odr_odr8_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOdrOdr8"
+      baseType="uint32_t"
+      description="Port output data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_odr_odr7" condition="gpio_odr_odr7_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOdrOdr7"
+      baseType="uint32_t"
+      description="Port output data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_odr_odr6" condition="gpio_odr_odr6_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOdrOdr6"
+      baseType="uint32_t"
+      description="Port output data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_odr_odr5" condition="gpio_odr_odr5_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOdrOdr5"
+      baseType="uint32_t"
+      description="Port output data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_odr_odr4" condition="gpio_odr_odr4_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOdrOdr4"
+      baseType="uint32_t"
+      description="Port output data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_odr_odr3" condition="gpio_odr_odr3_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOdrOdr3"
+      baseType="uint32_t"
+      description="Port output data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_odr_odr2" condition="gpio_odr_odr2_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOdrOdr2"
+      baseType="uint32_t"
+      description="Port output data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_odr_odr1" condition="gpio_odr_odr1_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOdrOdr1"
+      baseType="uint32_t"
+      description="Port output data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_odr_odr0" condition="gpio_odr_odr0_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioOdrOdr0"
+      baseType="uint32_t"
+      description="Port output data (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <!-- ____ BSRR ____ -->
+   <title description="GPIO port bit set/reset
+          register" />
+
+   <binaryOption key="gpio_bsrr_br15" condition="gpio_bsrr_br15_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBr15"
+      baseType="uint32_t"
+      description="Port x reset bit y (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_br14" condition="gpio_bsrr_br14_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBr14"
+      baseType="uint32_t"
+      description="Port x reset bit y (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_br13" condition="gpio_bsrr_br13_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBr13"
+      baseType="uint32_t"
+      description="Port x reset bit y (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_br12" condition="gpio_bsrr_br12_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBr12"
+      baseType="uint32_t"
+      description="Port x reset bit y (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_br11" condition="gpio_bsrr_br11_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBr11"
+      baseType="uint32_t"
+      description="Port x reset bit y (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_br10" condition="gpio_bsrr_br10_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBr10"
+      baseType="uint32_t"
+      description="Port x reset bit y (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_br9" condition="gpio_bsrr_br9_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBr9"
+      baseType="uint32_t"
+      description="Port x reset bit y (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_br8" condition="gpio_bsrr_br8_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBr8"
+      baseType="uint32_t"
+      description="Port x reset bit y (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_br7" condition="gpio_bsrr_br7_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBr7"
+      baseType="uint32_t"
+      description="Port x reset bit y (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_br6" condition="gpio_bsrr_br6_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBr6"
+      baseType="uint32_t"
+      description="Port x reset bit y (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_br5" condition="gpio_bsrr_br5_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBr5"
+      baseType="uint32_t"
+      description="Port x reset bit y (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_br4" condition="gpio_bsrr_br4_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBr4"
+      baseType="uint32_t"
+      description="Port x reset bit y (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_br3" condition="gpio_bsrr_br3_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBr3"
+      baseType="uint32_t"
+      description="Port x reset bit y (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_br2" condition="gpio_bsrr_br2_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBr2"
+      baseType="uint32_t"
+      description="Port x reset bit y (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_br1" condition="gpio_bsrr_br1_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBr1"
+      baseType="uint32_t"
+      description="Port x reset bit y (y = 0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_br0" condition="gpio_bsrr_br0_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBr0"
+      baseType="uint32_t"
+      description="Port x set bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_bs15" condition="gpio_bsrr_bs15_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBs15"
+      baseType="uint32_t"
+      description="Port x set bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_bs14" condition="gpio_bsrr_bs14_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBs14"
+      baseType="uint32_t"
+      description="Port x set bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_bs13" condition="gpio_bsrr_bs13_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBs13"
+      baseType="uint32_t"
+      description="Port x set bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_bs12" condition="gpio_bsrr_bs12_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBs12"
+      baseType="uint32_t"
+      description="Port x set bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_bs11" condition="gpio_bsrr_bs11_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBs11"
+      baseType="uint32_t"
+      description="Port x set bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_bs10" condition="gpio_bsrr_bs10_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBs10"
+      baseType="uint32_t"
+      description="Port x set bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_bs9" condition="gpio_bsrr_bs9_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBs9"
+      baseType="uint32_t"
+      description="Port x set bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_bs8" condition="gpio_bsrr_bs8_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBs8"
+      baseType="uint32_t"
+      description="Port x set bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_bs7" condition="gpio_bsrr_bs7_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBs7"
+      baseType="uint32_t"
+      description="Port x set bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_bs6" condition="gpio_bsrr_bs6_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBs6"
+      baseType="uint32_t"
+      description="Port x set bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_bs5" condition="gpio_bsrr_bs5_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBs5"
+      baseType="uint32_t"
+      description="Port x set bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_bs4" condition="gpio_bsrr_bs4_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBs4"
+      baseType="uint32_t"
+      description="Port x set bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_bs3" condition="gpio_bsrr_bs3_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBs3"
+      baseType="uint32_t"
+      description="Port x set bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_bs2" condition="gpio_bsrr_bs2_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBs2"
+      baseType="uint32_t"
+      description="Port x set bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_bs1" condition="gpio_bsrr_bs1_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBs1"
+      baseType="uint32_t"
+      description="Port x set bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_bsrr_bs0" condition="gpio_bsrr_bs0_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBsrrBs0"
+      baseType="uint32_t"
+      description="Port x set bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <!-- ____ LCKR ____ -->
+   <title description="GPIO port configuration lock
+          register" />
+
+   <binaryOption key="gpio_lckr_lckk" condition="gpio_lckr_lckk_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioLckrLckk"
+      baseType="uint32_t"
+      description="Apply Port Lock bits"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_lckr_lck15" condition="gpio_lckr_lck15_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioLckrLck15"
+      baseType="uint32_t"
+      description="Port x lock bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_lckr_lck14" condition="gpio_lckr_lck14_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioLckrLck14"
+      baseType="uint32_t"
+      description="Port x lock bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_lckr_lck13" condition="gpio_lckr_lck13_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioLckrLck13"
+      baseType="uint32_t"
+      description="Port x lock bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_lckr_lck12" condition="gpio_lckr_lck12_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioLckrLck12"
+      baseType="uint32_t"
+      description="Port x lock bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_lckr_lck11" condition="gpio_lckr_lck11_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioLckrLck11"
+      baseType="uint32_t"
+      description="Port x lock bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_lckr_lck10" condition="gpio_lckr_lck10_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioLckrLck10"
+      baseType="uint32_t"
+      description="Port x lock bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_lckr_lck9" condition="gpio_lckr_lck9_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioLckrLck9"
+      baseType="uint32_t"
+      description="Port x lock bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_lckr_lck8" condition="gpio_lckr_lck8_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioLckrLck8"
+      baseType="uint32_t"
+      description="Port x lock bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_lckr_lck7" condition="gpio_lckr_lck7_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioLckrLck7"
+      baseType="uint32_t"
+      description="Port x lock bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_lckr_lck6" condition="gpio_lckr_lck6_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioLckrLck6"
+      baseType="uint32_t"
+      description="Port x lock bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_lckr_lck5" condition="gpio_lckr_lck5_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioLckrLck5"
+      baseType="uint32_t"
+      description="Port x lock bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_lckr_lck4" condition="gpio_lckr_lck4_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioLckrLck4"
+      baseType="uint32_t"
+      description="Port x lock bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_lckr_lck3" condition="gpio_lckr_lck3_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioLckrLck3"
+      baseType="uint32_t"
+      description="Port x lock bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_lckr_lck2" condition="gpio_lckr_lck2_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioLckrLck2"
+      baseType="uint32_t"
+      description="Port x lock bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_lckr_lck1" condition="gpio_lckr_lck1_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioLckrLck1"
+      baseType="uint32_t"
+      description="Port x lock bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_lckr_lck0" condition="gpio_lckr_lck0_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioLckrLck0"
+      baseType="uint32_t"
+      description="Port x lock bit y (y=0..15)"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <!-- ____ AFRL ____ -->
+   <title description="GPIO alternate function low
+          register" />
+
+   <intOption key="gpio_afrl_afrl7" condition="gpio_afrl_afrl7_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioAfrlAfrl7"
+      baseType="uint8_t"
+      description="Alternate function selection for port x bit y (y = 0..7)"
+      toolTip=""
+      value="0"
+      min="0" max="15"
+   />
+
+   <intOption key="gpio_afrl_afrl6" condition="gpio_afrl_afrl6_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioAfrlAfrl6"
+      baseType="uint8_t"
+      description="Alternate function selection for port x bit y (y = 0..7)"
+      toolTip=""
+      value="0"
+      min="0" max="15"
+   />
+
+   <intOption key="gpio_afrl_afrl5" condition="gpio_afrl_afrl5_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioAfrlAfrl5"
+      baseType="uint8_t"
+      description="Alternate function selection for port x bit y (y = 0..7)"
+      toolTip=""
+      value="0"
+      min="0" max="15"
+   />
+
+   <intOption key="gpio_afrl_afrl4" condition="gpio_afrl_afrl4_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioAfrlAfrl4"
+      baseType="uint8_t"
+      description="Alternate function selection for port x bit y (y = 0..7)"
+      toolTip=""
+      value="0"
+      min="0" max="15"
+   />
+
+   <intOption key="gpio_afrl_afrl3" condition="gpio_afrl_afrl3_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioAfrlAfrl3"
+      baseType="uint8_t"
+      description="Alternate function selection for port x bit y (y = 0..7)"
+      toolTip=""
+      value="0"
+      min="0" max="15"
+   />
+
+   <intOption key="gpio_afrl_afrl2" condition="gpio_afrl_afrl2_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioAfrlAfrl2"
+      baseType="uint8_t"
+      description="Alternate function selection for port x bit y (y = 0..7)"
+      toolTip=""
+      value="0"
+      min="0" max="15"
+   />
+
+   <intOption key="gpio_afrl_afrl1" condition="gpio_afrl_afrl1_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioAfrlAfrl1"
+      baseType="uint8_t"
+      description="Alternate function selection for port x bit y (y = 0..7)"
+      toolTip=""
+      value="0"
+      min="0" max="15"
+   />
+
+   <intOption key="gpio_afrl_afrl0" condition="gpio_afrl_afrl0_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioAfrlAfrl0"
+      baseType="uint8_t"
+      description="Alternate function selection for port x bit y (y = 0..7)"
+      toolTip=""
+      value="0"
+      min="0" max="15"
+   />
+
+   <!-- ____ AFRH ____ -->
+   <title description="GPIO alternate function high
+          register" />
+
+   <intOption key="gpio_afrh_afrh15" condition="gpio_afrh_afrh15_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioAfrhAfrh15"
+      baseType="uint8_t"
+      description="Alternate function selection for port x bit y (y = 8..15)"
+      toolTip=""
+      value="0"
+      min="0" max="15"
+   />
+
+   <intOption key="gpio_afrh_afrh14" condition="gpio_afrh_afrh14_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioAfrhAfrh14"
+      baseType="uint8_t"
+      description="Alternate function selection for port x bit y (y = 8..15)"
+      toolTip=""
+      value="0"
+      min="0" max="15"
+   />
+
+   <intOption key="gpio_afrh_afrh13" condition="gpio_afrh_afrh13_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioAfrhAfrh13"
+      baseType="uint8_t"
+      description="Alternate function selection for port x bit y (y = 8..15)"
+      toolTip=""
+      value="0"
+      min="0" max="15"
+   />
+
+   <intOption key="gpio_afrh_afrh12" condition="gpio_afrh_afrh12_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioAfrhAfrh12"
+      baseType="uint8_t"
+      description="Alternate function selection for port x bit y (y = 8..15)"
+      toolTip=""
+      value="0"
+      min="0" max="15"
+   />
+
+   <intOption key="gpio_afrh_afrh11" condition="gpio_afrh_afrh11_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioAfrhAfrh11"
+      baseType="uint8_t"
+      description="Alternate function selection for port x bit y (y = 8..15)"
+      toolTip=""
+      value="0"
+      min="0" max="15"
+   />
+
+   <intOption key="gpio_afrh_afrh10" condition="gpio_afrh_afrh10_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioAfrhAfrh10"
+      baseType="uint8_t"
+      description="Alternate function selection for port x bit y (y = 8..15)"
+      toolTip=""
+      value="0"
+      min="0" max="15"
+   />
+
+   <intOption key="gpio_afrh_afrh9" condition="gpio_afrh_afrh9_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioAfrhAfrh9"
+      baseType="uint8_t"
+      description="Alternate function selection for port x bit y (y = 8..15)"
+      toolTip=""
+      value="0"
+      min="0" max="15"
+   />
+
+   <intOption key="gpio_afrh_afrh8" condition="gpio_afrh_afrh8_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioAfrhAfrh8"
+      baseType="uint8_t"
+      description="Alternate function selection for port x bit y (y = 8..15)"
+      toolTip=""
+      value="0"
+      min="0" max="15"
+   />
+
+   <!-- ____ BRR ____ -->
+   <title description="Port bit reset register" />
+
+   <binaryOption key="gpio_brr_br15" condition="gpio_brr_br15_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBrrBr15"
+      baseType="uint32_t"
+      description="Port x Reset bit y"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_brr_br14" condition="gpio_brr_br14_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBrrBr14"
+      baseType="uint32_t"
+      description="Port x Reset bit y"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_brr_br13" condition="gpio_brr_br13_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBrrBr13"
+      baseType="uint32_t"
+      description="Port x Reset bit y"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_brr_br12" condition="gpio_brr_br12_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBrrBr12"
+      baseType="uint32_t"
+      description="Port x Reset bit y"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_brr_br11" condition="gpio_brr_br11_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBrrBr11"
+      baseType="uint32_t"
+      description="Port x Reset bit y"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_brr_br10" condition="gpio_brr_br10_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBrrBr10"
+      baseType="uint32_t"
+      description="Port x Reset bit y"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_brr_br9" condition="gpio_brr_br9_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBrrBr9"
+      baseType="uint32_t"
+      description="Port x Reset bit y"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_brr_br8" condition="gpio_brr_br8_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBrrBr8"
+      baseType="uint32_t"
+      description="Port x Reset bit y"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_brr_br7" condition="gpio_brr_br7_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBrrBr7"
+      baseType="uint32_t"
+      description="Port x Reset bit y"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_brr_br6" condition="gpio_brr_br6_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBrrBr6"
+      baseType="uint32_t"
+      description="Port x Reset bit y"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_brr_br5" condition="gpio_brr_br5_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBrrBr5"
+      baseType="uint32_t"
+      description="Port x Reset bit y"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_brr_br4" condition="gpio_brr_br4_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBrrBr4"
+      baseType="uint32_t"
+      description="Port x Reset bit y"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_brr_br3" condition="gpio_brr_br3_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBrrBr3"
+      baseType="uint32_t"
+      description="Port x Reset bit y"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_brr_br2" condition="gpio_brr_br2_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBrrBr2"
+      baseType="uint32_t"
+      description="Port x Reset bit y"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_brr_br1" condition="gpio_brr_br1_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBrrBr1"
+      baseType="uint32_t"
+      description="Port x Reset bit y"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="gpio_brr_br0" condition="gpio_brr_br0_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="GpioBrrBr0"
+      baseType="uint32_t"
+      description="Port x Reset bit y"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <!-- ____ Setters and Getters ____________ -->
+
+   <for keys="field                     : set   : get   : clear : genCode                 : name"
+        values="
+
+         gpio_moder_moder15             : true  : true  : false : enableGettersAndSetters : ModerModer15;
+         gpio_moder_moder14             : true  : true  : false : enableGettersAndSetters : ModerModer14;
+         gpio_moder_moder13             : true  : true  : false : enableGettersAndSetters : ModerModer13;
+         gpio_moder_moder12             : true  : true  : false : enableGettersAndSetters : ModerModer12;
+         gpio_moder_moder11             : true  : true  : false : enableGettersAndSetters : ModerModer11;
+         gpio_moder_moder10             : true  : true  : false : enableGettersAndSetters : ModerModer10;
+         gpio_moder_moder9              : true  : true  : false : enableGettersAndSetters : ModerModer9;
+         gpio_moder_moder8              : true  : true  : false : enableGettersAndSetters : ModerModer8;
+         gpio_moder_moder7              : true  : true  : false : enableGettersAndSetters : ModerModer7;
+         gpio_moder_moder6              : true  : true  : false : enableGettersAndSetters : ModerModer6;
+         gpio_moder_moder5              : true  : true  : false : enableGettersAndSetters : ModerModer5;
+         gpio_moder_moder4              : true  : true  : false : enableGettersAndSetters : ModerModer4;
+         gpio_moder_moder3              : true  : true  : false : enableGettersAndSetters : ModerModer3;
+         gpio_moder_moder2              : true  : true  : false : enableGettersAndSetters : ModerModer2;
+         gpio_moder_moder1              : true  : true  : false : enableGettersAndSetters : ModerModer1;
+         gpio_moder_moder0              : true  : true  : false : enableGettersAndSetters : ModerModer0;
+
+         gpio_otyper_ot15               : true  : true  : false : enableGettersAndSetters : OtyperOt15;
+         gpio_otyper_ot14               : true  : true  : false : enableGettersAndSetters : OtyperOt14;
+         gpio_otyper_ot13               : true  : true  : false : enableGettersAndSetters : OtyperOt13;
+         gpio_otyper_ot12               : true  : true  : false : enableGettersAndSetters : OtyperOt12;
+         gpio_otyper_ot11               : true  : true  : false : enableGettersAndSetters : OtyperOt11;
+         gpio_otyper_ot10               : true  : true  : false : enableGettersAndSetters : OtyperOt10;
+         gpio_otyper_ot9                : true  : true  : false : enableGettersAndSetters : OtyperOt9;
+         gpio_otyper_ot8                : true  : true  : false : enableGettersAndSetters : OtyperOt8;
+         gpio_otyper_ot7                : true  : true  : false : enableGettersAndSetters : OtyperOt7;
+         gpio_otyper_ot6                : true  : true  : false : enableGettersAndSetters : OtyperOt6;
+         gpio_otyper_ot5                : true  : true  : false : enableGettersAndSetters : OtyperOt5;
+         gpio_otyper_ot4                : true  : true  : false : enableGettersAndSetters : OtyperOt4;
+         gpio_otyper_ot3                : true  : true  : false : enableGettersAndSetters : OtyperOt3;
+         gpio_otyper_ot2                : true  : true  : false : enableGettersAndSetters : OtyperOt2;
+         gpio_otyper_ot1                : true  : true  : false : enableGettersAndSetters : OtyperOt1;
+         gpio_otyper_ot0                : true  : true  : false : enableGettersAndSetters : OtyperOt0;
+
+         gpio_ospeedr_ospeedr15         : true  : true  : false : enableGettersAndSetters : OspeedrOspeedr15;
+         gpio_ospeedr_ospeedr14         : true  : true  : false : enableGettersAndSetters : OspeedrOspeedr14;
+         gpio_ospeedr_ospeedr13         : true  : true  : false : enableGettersAndSetters : OspeedrOspeedr13;
+         gpio_ospeedr_ospeedr12         : true  : true  : false : enableGettersAndSetters : OspeedrOspeedr12;
+         gpio_ospeedr_ospeedr11         : true  : true  : false : enableGettersAndSetters : OspeedrOspeedr11;
+         gpio_ospeedr_ospeedr10         : true  : true  : false : enableGettersAndSetters : OspeedrOspeedr10;
+         gpio_ospeedr_ospeedr9          : true  : true  : false : enableGettersAndSetters : OspeedrOspeedr9;
+         gpio_ospeedr_ospeedr8          : true  : true  : false : enableGettersAndSetters : OspeedrOspeedr8;
+         gpio_ospeedr_ospeedr7          : true  : true  : false : enableGettersAndSetters : OspeedrOspeedr7;
+         gpio_ospeedr_ospeedr6          : true  : true  : false : enableGettersAndSetters : OspeedrOspeedr6;
+         gpio_ospeedr_ospeedr5          : true  : true  : false : enableGettersAndSetters : OspeedrOspeedr5;
+         gpio_ospeedr_ospeedr4          : true  : true  : false : enableGettersAndSetters : OspeedrOspeedr4;
+         gpio_ospeedr_ospeedr3          : true  : true  : false : enableGettersAndSetters : OspeedrOspeedr3;
+         gpio_ospeedr_ospeedr2          : true  : true  : false : enableGettersAndSetters : OspeedrOspeedr2;
+         gpio_ospeedr_ospeedr1          : true  : true  : false : enableGettersAndSetters : OspeedrOspeedr1;
+         gpio_ospeedr_ospeedr0          : true  : true  : false : enableGettersAndSetters : OspeedrOspeedr0;
+
+         gpio_pupdr_pupdr15             : true  : true  : false : enableGettersAndSetters : PupdrPupdr15;
+         gpio_pupdr_pupdr14             : true  : true  : false : enableGettersAndSetters : PupdrPupdr14;
+         gpio_pupdr_pupdr13             : true  : true  : false : enableGettersAndSetters : PupdrPupdr13;
+         gpio_pupdr_pupdr12             : true  : true  : false : enableGettersAndSetters : PupdrPupdr12;
+         gpio_pupdr_pupdr11             : true  : true  : false : enableGettersAndSetters : PupdrPupdr11;
+         gpio_pupdr_pupdr10             : true  : true  : false : enableGettersAndSetters : PupdrPupdr10;
+         gpio_pupdr_pupdr9              : true  : true  : false : enableGettersAndSetters : PupdrPupdr9;
+         gpio_pupdr_pupdr8              : true  : true  : false : enableGettersAndSetters : PupdrPupdr8;
+         gpio_pupdr_pupdr7              : true  : true  : false : enableGettersAndSetters : PupdrPupdr7;
+         gpio_pupdr_pupdr6              : true  : true  : false : enableGettersAndSetters : PupdrPupdr6;
+         gpio_pupdr_pupdr5              : true  : true  : false : enableGettersAndSetters : PupdrPupdr5;
+         gpio_pupdr_pupdr4              : true  : true  : false : enableGettersAndSetters : PupdrPupdr4;
+         gpio_pupdr_pupdr3              : true  : true  : false : enableGettersAndSetters : PupdrPupdr3;
+         gpio_pupdr_pupdr2              : true  : true  : false : enableGettersAndSetters : PupdrPupdr2;
+         gpio_pupdr_pupdr1              : true  : true  : false : enableGettersAndSetters : PupdrPupdr1;
+         gpio_pupdr_pupdr0              : true  : true  : false : enableGettersAndSetters : PupdrPupdr0;
+
+         gpio_idr_idr15                 : false : true  : false : enableGettersAndSetters : IdrIdr15;
+         gpio_idr_idr14                 : false : true  : false : enableGettersAndSetters : IdrIdr14;
+         gpio_idr_idr13                 : false : true  : false : enableGettersAndSetters : IdrIdr13;
+         gpio_idr_idr12                 : false : true  : false : enableGettersAndSetters : IdrIdr12;
+         gpio_idr_idr11                 : false : true  : false : enableGettersAndSetters : IdrIdr11;
+         gpio_idr_idr10                 : false : true  : false : enableGettersAndSetters : IdrIdr10;
+         gpio_idr_idr9                  : false : true  : false : enableGettersAndSetters : IdrIdr9;
+         gpio_idr_idr8                  : false : true  : false : enableGettersAndSetters : IdrIdr8;
+         gpio_idr_idr7                  : false : true  : false : enableGettersAndSetters : IdrIdr7;
+         gpio_idr_idr6                  : false : true  : false : enableGettersAndSetters : IdrIdr6;
+         gpio_idr_idr5                  : false : true  : false : enableGettersAndSetters : IdrIdr5;
+         gpio_idr_idr4                  : false : true  : false : enableGettersAndSetters : IdrIdr4;
+         gpio_idr_idr3                  : false : true  : false : enableGettersAndSetters : IdrIdr3;
+         gpio_idr_idr2                  : false : true  : false : enableGettersAndSetters : IdrIdr2;
+         gpio_idr_idr1                  : false : true  : false : enableGettersAndSetters : IdrIdr1;
+         gpio_idr_idr0                  : false : true  : false : enableGettersAndSetters : IdrIdr0;
+
+         gpio_odr_odr15                 : true  : true  : false : enableGettersAndSetters : OdrOdr15;
+         gpio_odr_odr14                 : true  : true  : false : enableGettersAndSetters : OdrOdr14;
+         gpio_odr_odr13                 : true  : true  : false : enableGettersAndSetters : OdrOdr13;
+         gpio_odr_odr12                 : true  : true  : false : enableGettersAndSetters : OdrOdr12;
+         gpio_odr_odr11                 : true  : true  : false : enableGettersAndSetters : OdrOdr11;
+         gpio_odr_odr10                 : true  : true  : false : enableGettersAndSetters : OdrOdr10;
+         gpio_odr_odr9                  : true  : true  : false : enableGettersAndSetters : OdrOdr9;
+         gpio_odr_odr8                  : true  : true  : false : enableGettersAndSetters : OdrOdr8;
+         gpio_odr_odr7                  : true  : true  : false : enableGettersAndSetters : OdrOdr7;
+         gpio_odr_odr6                  : true  : true  : false : enableGettersAndSetters : OdrOdr6;
+         gpio_odr_odr5                  : true  : true  : false : enableGettersAndSetters : OdrOdr5;
+         gpio_odr_odr4                  : true  : true  : false : enableGettersAndSetters : OdrOdr4;
+         gpio_odr_odr3                  : true  : true  : false : enableGettersAndSetters : OdrOdr3;
+         gpio_odr_odr2                  : true  : true  : false : enableGettersAndSetters : OdrOdr2;
+         gpio_odr_odr1                  : true  : true  : false : enableGettersAndSetters : OdrOdr1;
+         gpio_odr_odr0                  : true  : true  : false : enableGettersAndSetters : OdrOdr0;
+
+         gpio_bsrr_br15                 : true  : true  : false : enableGettersAndSetters : BsrrBr15;
+         gpio_bsrr_br14                 : true  : true  : false : enableGettersAndSetters : BsrrBr14;
+         gpio_bsrr_br13                 : true  : true  : false : enableGettersAndSetters : BsrrBr13;
+         gpio_bsrr_br12                 : true  : true  : false : enableGettersAndSetters : BsrrBr12;
+         gpio_bsrr_br11                 : true  : true  : false : enableGettersAndSetters : BsrrBr11;
+         gpio_bsrr_br10                 : true  : true  : false : enableGettersAndSetters : BsrrBr10;
+         gpio_bsrr_br9                  : true  : true  : false : enableGettersAndSetters : BsrrBr9;
+         gpio_bsrr_br8                  : true  : true  : false : enableGettersAndSetters : BsrrBr8;
+         gpio_bsrr_br7                  : true  : true  : false : enableGettersAndSetters : BsrrBr7;
+         gpio_bsrr_br6                  : true  : true  : false : enableGettersAndSetters : BsrrBr6;
+         gpio_bsrr_br5                  : true  : true  : false : enableGettersAndSetters : BsrrBr5;
+         gpio_bsrr_br4                  : true  : true  : false : enableGettersAndSetters : BsrrBr4;
+         gpio_bsrr_br3                  : true  : true  : false : enableGettersAndSetters : BsrrBr3;
+         gpio_bsrr_br2                  : true  : true  : false : enableGettersAndSetters : BsrrBr2;
+         gpio_bsrr_br1                  : true  : true  : false : enableGettersAndSetters : BsrrBr1;
+         gpio_bsrr_br0                  : true  : true  : false : enableGettersAndSetters : BsrrBr0;
+         gpio_bsrr_bs15                 : true  : true  : false : enableGettersAndSetters : BsrrBs15;
+         gpio_bsrr_bs14                 : true  : true  : false : enableGettersAndSetters : BsrrBs14;
+         gpio_bsrr_bs13                 : true  : true  : false : enableGettersAndSetters : BsrrBs13;
+         gpio_bsrr_bs12                 : true  : true  : false : enableGettersAndSetters : BsrrBs12;
+         gpio_bsrr_bs11                 : true  : true  : false : enableGettersAndSetters : BsrrBs11;
+         gpio_bsrr_bs10                 : true  : true  : false : enableGettersAndSetters : BsrrBs10;
+         gpio_bsrr_bs9                  : true  : true  : false : enableGettersAndSetters : BsrrBs9;
+         gpio_bsrr_bs8                  : true  : true  : false : enableGettersAndSetters : BsrrBs8;
+         gpio_bsrr_bs7                  : true  : true  : false : enableGettersAndSetters : BsrrBs7;
+         gpio_bsrr_bs6                  : true  : true  : false : enableGettersAndSetters : BsrrBs6;
+         gpio_bsrr_bs5                  : true  : true  : false : enableGettersAndSetters : BsrrBs5;
+         gpio_bsrr_bs4                  : true  : true  : false : enableGettersAndSetters : BsrrBs4;
+         gpio_bsrr_bs3                  : true  : true  : false : enableGettersAndSetters : BsrrBs3;
+         gpio_bsrr_bs2                  : true  : true  : false : enableGettersAndSetters : BsrrBs2;
+         gpio_bsrr_bs1                  : true  : true  : false : enableGettersAndSetters : BsrrBs1;
+         gpio_bsrr_bs0                  : true  : true  : false : enableGettersAndSetters : BsrrBs0;
+
+         gpio_lckr_lckk                 : true  : true  : false : enableGettersAndSetters : LckrLckk;
+         gpio_lckr_lck15                : true  : true  : false : enableGettersAndSetters : LckrLck15;
+         gpio_lckr_lck14                : true  : true  : false : enableGettersAndSetters : LckrLck14;
+         gpio_lckr_lck13                : true  : true  : false : enableGettersAndSetters : LckrLck13;
+         gpio_lckr_lck12                : true  : true  : false : enableGettersAndSetters : LckrLck12;
+         gpio_lckr_lck11                : true  : true  : false : enableGettersAndSetters : LckrLck11;
+         gpio_lckr_lck10                : true  : true  : false : enableGettersAndSetters : LckrLck10;
+         gpio_lckr_lck9                 : true  : true  : false : enableGettersAndSetters : LckrLck9;
+         gpio_lckr_lck8                 : true  : true  : false : enableGettersAndSetters : LckrLck8;
+         gpio_lckr_lck7                 : true  : true  : false : enableGettersAndSetters : LckrLck7;
+         gpio_lckr_lck6                 : true  : true  : false : enableGettersAndSetters : LckrLck6;
+         gpio_lckr_lck5                 : true  : true  : false : enableGettersAndSetters : LckrLck5;
+         gpio_lckr_lck4                 : true  : true  : false : enableGettersAndSetters : LckrLck4;
+         gpio_lckr_lck3                 : true  : true  : false : enableGettersAndSetters : LckrLck3;
+         gpio_lckr_lck2                 : true  : true  : false : enableGettersAndSetters : LckrLck2;
+         gpio_lckr_lck1                 : true  : true  : false : enableGettersAndSetters : LckrLck1;
+         gpio_lckr_lck0                 : true  : true  : false : enableGettersAndSetters : LckrLck0;
+
+         gpio_afrl_afrl7                : true  : true  : false : enableGettersAndSetters : AfrlAfrl7;
+         gpio_afrl_afrl6                : true  : true  : false : enableGettersAndSetters : AfrlAfrl6;
+         gpio_afrl_afrl5                : true  : true  : false : enableGettersAndSetters : AfrlAfrl5;
+         gpio_afrl_afrl4                : true  : true  : false : enableGettersAndSetters : AfrlAfrl4;
+         gpio_afrl_afrl3                : true  : true  : false : enableGettersAndSetters : AfrlAfrl3;
+         gpio_afrl_afrl2                : true  : true  : false : enableGettersAndSetters : AfrlAfrl2;
+         gpio_afrl_afrl1                : true  : true  : false : enableGettersAndSetters : AfrlAfrl1;
+         gpio_afrl_afrl0                : true  : true  : false : enableGettersAndSetters : AfrlAfrl0;
+
+         gpio_afrh_afrh15               : true  : true  : false : enableGettersAndSetters : AfrhAfrh15;
+         gpio_afrh_afrh14               : true  : true  : false : enableGettersAndSetters : AfrhAfrh14;
+         gpio_afrh_afrh13               : true  : true  : false : enableGettersAndSetters : AfrhAfrh13;
+         gpio_afrh_afrh12               : true  : true  : false : enableGettersAndSetters : AfrhAfrh12;
+         gpio_afrh_afrh11               : true  : true  : false : enableGettersAndSetters : AfrhAfrh11;
+         gpio_afrh_afrh10               : true  : true  : false : enableGettersAndSetters : AfrhAfrh10;
+         gpio_afrh_afrh9                : true  : true  : false : enableGettersAndSetters : AfrhAfrh9;
+         gpio_afrh_afrh8                : true  : true  : false : enableGettersAndSetters : AfrhAfrh8;
+
+         gpio_brr_br15                  : true  : true  : false : enableGettersAndSetters : BrrBr15;
+         gpio_brr_br14                  : true  : true  : false : enableGettersAndSetters : BrrBr14;
+         gpio_brr_br13                  : true  : true  : false : enableGettersAndSetters : BrrBr13;
+         gpio_brr_br12                  : true  : true  : false : enableGettersAndSetters : BrrBr12;
+         gpio_brr_br11                  : true  : true  : false : enableGettersAndSetters : BrrBr11;
+         gpio_brr_br10                  : true  : true  : false : enableGettersAndSetters : BrrBr10;
+         gpio_brr_br9                   : true  : true  : false : enableGettersAndSetters : BrrBr9;
+         gpio_brr_br8                   : true  : true  : false : enableGettersAndSetters : BrrBr8;
+         gpio_brr_br7                   : true  : true  : false : enableGettersAndSetters : BrrBr7;
+         gpio_brr_br6                   : true  : true  : false : enableGettersAndSetters : BrrBr6;
+         gpio_brr_br5                   : true  : true  : false : enableGettersAndSetters : BrrBr5;
+         gpio_brr_br4                   : true  : true  : false : enableGettersAndSetters : BrrBr4;
+         gpio_brr_br3                   : true  : true  : false : enableGettersAndSetters : BrrBr3;
+         gpio_brr_br2                   : true  : true  : false : enableGettersAndSetters : BrrBr2;
+         gpio_brr_br1                   : true  : true  : false : enableGettersAndSetters : BrrBr1;
+         gpio_brr_br0                   : true  : true  : false : enableGettersAndSetters : BrrBr0" >
+      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(%params) {
+         \t   %fieldAssignment;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %returnType get%(name)() {
+         \t   return %fieldExtract;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Clear %description
+         \t *
+         \t */
+         \tstatic void clear%(name)() {
+         \t   %register = %register|%mask;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <!-- ____ class $(_Structname)BasicInfo ____________ -->
+
+   <template where="basicInfo" ><![CDATA[
+      class $(_Structname)BasicInfo {
+      \t
+      public:\n
+   ]]></template>
+
+   <!-- ________ GPIO Init class ____________________________ -->
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_Baseclass)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t * Parameters available may vary with device - see $(_Class)::DefaultInitValue for relevant example.
+      \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * ///
+      \t * /// $(_NAME) call-back
+      \t * ///
+      \t * /// @param status  Status reflecting active inputs
+      \t * ///
+      \t * void $(_name)Callback(ErrorCode ec) {
+      \t *    ....
+      \t * }
+      \t *
+      \t * static const $(_Class)::Init $(_name)Init {
+      \t *
+      \t *   // Setup values
+XXXXXXXXXXXXXXXXXXXXXX
+      \t *
+      \t *   $(_name)Callback,                 // Call-back to execute on event - call-back function name
+      \t *   NvicPriority_Low,                 // Priority for interrupt - Low
+      \t *
+      \t *   // Optional base value to start with (must be last parameter)
+      \t *   $(_Class)::DefaultInitValue   // Used as base value modified by above
+      \t * };
+      \t *
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure($(_name)Init)
+      \t * @endcode
+      \t */
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____ Init class Member variables ________ -->
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="irqHandlingMethod"
+   ><![CDATA[
+      \t   /// %description
+      \t   %params = nullptr;\n\n
+   ]]></variableTemplate>
+
+   <for keys=" type        : variables                                            : init    "
+       values="%baseType   : gpio_moder_moder15,gpio_moder_moder14,gpio_moder_moder13,
+                             gpio_moder_moder12,gpio_moder_moder11,gpio_moder_moder10,
+                             gpio_moder_moder9,gpio_moder_moder8,gpio_moder_moder7,
+                             gpio_moder_moder6,gpio_moder_moder5,gpio_moder_moder4,
+                             gpio_moder_moder3,gpio_moder_moder2,gpio_moder_moder1,
+                             gpio_moder_moder0                                    :   0      ;
+               %baseType   : gpio_otyper_ot15,gpio_otyper_ot14,gpio_otyper_ot13,
+                             gpio_otyper_ot12,gpio_otyper_ot11,gpio_otyper_ot10,
+                             gpio_otyper_ot9,gpio_otyper_ot8,gpio_otyper_ot7,
+                             gpio_otyper_ot6,gpio_otyper_ot5,gpio_otyper_ot4,
+                             gpio_otyper_ot3,gpio_otyper_ot2,gpio_otyper_ot1,
+                             gpio_otyper_ot0                                      :   0      ;
+               %baseType   : gpio_ospeedr_ospeedr15,gpio_ospeedr_ospeedr14,
+                             gpio_ospeedr_ospeedr13,gpio_ospeedr_ospeedr12,
+                             gpio_ospeedr_ospeedr11,gpio_ospeedr_ospeedr10,
+                             gpio_ospeedr_ospeedr9,gpio_ospeedr_ospeedr8,
+                             gpio_ospeedr_ospeedr7,gpio_ospeedr_ospeedr6,
+                             gpio_ospeedr_ospeedr5,gpio_ospeedr_ospeedr4,
+                             gpio_ospeedr_ospeedr3,gpio_ospeedr_ospeedr2,
+                             gpio_ospeedr_ospeedr1,gpio_ospeedr_ospeedr0          :   0      ;
+               %baseType   : gpio_pupdr_pupdr15,gpio_pupdr_pupdr14,gpio_pupdr_pupdr13,
+                             gpio_pupdr_pupdr12,gpio_pupdr_pupdr11,gpio_pupdr_pupdr10,
+                             gpio_pupdr_pupdr9,gpio_pupdr_pupdr8,gpio_pupdr_pupdr7,
+                             gpio_pupdr_pupdr6,gpio_pupdr_pupdr5,gpio_pupdr_pupdr4,
+                             gpio_pupdr_pupdr3,gpio_pupdr_pupdr2,gpio_pupdr_pupdr1,
+                             gpio_pupdr_pupdr0                                    :   0      ;
+               %baseType   : gpio_odr_odr15,gpio_odr_odr14,gpio_odr_odr13,
+                             gpio_odr_odr12,gpio_odr_odr11,gpio_odr_odr10,
+                             gpio_odr_odr9,gpio_odr_odr8,gpio_odr_odr7,
+                             gpio_odr_odr6,gpio_odr_odr5,gpio_odr_odr4,
+                             gpio_odr_odr3,gpio_odr_odr2,gpio_odr_odr1,
+                             gpio_odr_odr0                                        :   0      ;
+               %baseType   : gpio_bsrr_br15,gpio_bsrr_br14,gpio_bsrr_br13,
+                             gpio_bsrr_br12,gpio_bsrr_br11,gpio_bsrr_br10,
+                             gpio_bsrr_br9,gpio_bsrr_br8,gpio_bsrr_br7,
+                             gpio_bsrr_br6,gpio_bsrr_br5,gpio_bsrr_br4,
+                             gpio_bsrr_br3,gpio_bsrr_br2,gpio_bsrr_br1,
+                             gpio_bsrr_br0,gpio_bsrr_bs15,gpio_bsrr_bs14,
+                             gpio_bsrr_bs13,gpio_bsrr_bs12,gpio_bsrr_bs11,
+                             gpio_bsrr_bs10,gpio_bsrr_bs9,gpio_bsrr_bs8,
+                             gpio_bsrr_bs7,gpio_bsrr_bs6,gpio_bsrr_bs5,
+                             gpio_bsrr_bs4,gpio_bsrr_bs3,gpio_bsrr_bs2,
+                             gpio_bsrr_bs1,gpio_bsrr_bs0                          :   0      ;
+               %baseType   : gpio_lckr_lckk,gpio_lckr_lck15,gpio_lckr_lck14,
+                             gpio_lckr_lck13,gpio_lckr_lck12,gpio_lckr_lck11,
+                             gpio_lckr_lck10,gpio_lckr_lck9,gpio_lckr_lck8,
+                             gpio_lckr_lck7,gpio_lckr_lck6,gpio_lckr_lck5,
+                             gpio_lckr_lck4,gpio_lckr_lck3,gpio_lckr_lck2,
+                             gpio_lckr_lck1,gpio_lckr_lck0                        :   0      ;
+               %baseType   : gpio_afrl_afrl7,gpio_afrl_afrl6,gpio_afrl_afrl5,
+                             gpio_afrl_afrl4,gpio_afrl_afrl3,gpio_afrl_afrl2,
+                             gpio_afrl_afrl1,gpio_afrl_afrl0                      :   0      ;
+               %baseType   : gpio_afrh_afrh15,gpio_afrh_afrh14,gpio_afrh_afrh13,
+                             gpio_afrh_afrh12,gpio_afrh_afrh11,gpio_afrh_afrh10,
+                             gpio_afrh_afrh9,gpio_afrh_afrh8                      :   0      ;
+               %baseType   : gpio_brr_br15,gpio_brr_br14,gpio_brr_br13,
+                             gpio_brr_br12,gpio_brr_br11,gpio_brr_br10,
+                             gpio_brr_br9,gpio_brr_br8,gpio_brr_br7,gpio_brr_br6,
+                             gpio_brr_br5,gpio_brr_br4,gpio_brr_br3,gpio_brr_br2,
+                             gpio_brr_br1,gpio_brr_br0                            :   0      " >
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(variables)"
+         linePadding="xxx"
+      ><![CDATA[
+         %multilineDescription
+         \t   %(type) %registerName = %(init);\n\n
+      ]]></variableTemplate>
+   </for>
+
+   <!-- ____ Init class Constructors ____________ -->
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      this->%paramName0 = %paramExpression;
+      \t   }\n\n
+   ]]></variableTemplate>
+
+   <for keys="r"
+      values="
+            gpio_moder_moder15;gpio_moder_moder14;gpio_moder_moder13;
+            gpio_moder_moder12;gpio_moder_moder11;gpio_moder_moder10;
+            gpio_moder_moder9;gpio_moder_moder8;gpio_moder_moder7;
+            gpio_moder_moder6;gpio_moder_moder5;gpio_moder_moder4;
+            gpio_moder_moder3;gpio_moder_moder2;gpio_moder_moder1;
+            gpio_moder_moder0;
+            gpio_otyper_ot15;gpio_otyper_ot14;gpio_otyper_ot13;
+            gpio_otyper_ot12;gpio_otyper_ot11;gpio_otyper_ot10;
+            gpio_otyper_ot9;gpio_otyper_ot8;gpio_otyper_ot7;
+            gpio_otyper_ot6;gpio_otyper_ot5;gpio_otyper_ot4;
+            gpio_otyper_ot3;gpio_otyper_ot2;gpio_otyper_ot1;
+            gpio_otyper_ot0;
+            gpio_ospeedr_ospeedr15;gpio_ospeedr_ospeedr14;
+            gpio_ospeedr_ospeedr13;gpio_ospeedr_ospeedr12;
+            gpio_ospeedr_ospeedr11;gpio_ospeedr_ospeedr10;
+            gpio_ospeedr_ospeedr9;gpio_ospeedr_ospeedr8;
+            gpio_ospeedr_ospeedr7;gpio_ospeedr_ospeedr6;
+            gpio_ospeedr_ospeedr5;gpio_ospeedr_ospeedr4;
+            gpio_ospeedr_ospeedr3;gpio_ospeedr_ospeedr2;
+            gpio_ospeedr_ospeedr1;gpio_ospeedr_ospeedr0;
+            gpio_pupdr_pupdr15;gpio_pupdr_pupdr14;gpio_pupdr_pupdr13;
+            gpio_pupdr_pupdr12;gpio_pupdr_pupdr11;gpio_pupdr_pupdr10;
+            gpio_pupdr_pupdr9;gpio_pupdr_pupdr8;gpio_pupdr_pupdr7;
+            gpio_pupdr_pupdr6;gpio_pupdr_pupdr5;gpio_pupdr_pupdr4;
+            gpio_pupdr_pupdr3;gpio_pupdr_pupdr2;gpio_pupdr_pupdr1;
+            gpio_pupdr_pupdr0;
+            gpio_odr_odr15;gpio_odr_odr14;gpio_odr_odr13;
+            gpio_odr_odr12;gpio_odr_odr11;gpio_odr_odr10;
+            gpio_odr_odr9;gpio_odr_odr8;gpio_odr_odr7;
+            gpio_odr_odr6;gpio_odr_odr5;gpio_odr_odr4;
+            gpio_odr_odr3;gpio_odr_odr2;gpio_odr_odr1;
+            gpio_odr_odr0;
+            gpio_bsrr_br15;gpio_bsrr_br14;gpio_bsrr_br13;
+            gpio_bsrr_br12;gpio_bsrr_br11;gpio_bsrr_br10;
+            gpio_bsrr_br9;gpio_bsrr_br8;gpio_bsrr_br7;
+            gpio_bsrr_br6;gpio_bsrr_br5;gpio_bsrr_br4;
+            gpio_bsrr_br3;gpio_bsrr_br2;gpio_bsrr_br1;
+            gpio_bsrr_br0;gpio_bsrr_bs15;gpio_bsrr_bs14;
+            gpio_bsrr_bs13;gpio_bsrr_bs12;gpio_bsrr_bs11;
+            gpio_bsrr_bs10;gpio_bsrr_bs9;gpio_bsrr_bs8;
+            gpio_bsrr_bs7;gpio_bsrr_bs6;gpio_bsrr_bs5;
+            gpio_bsrr_bs4;gpio_bsrr_bs3;gpio_bsrr_bs2;
+            gpio_bsrr_bs1;gpio_bsrr_bs0;
+            gpio_lckr_lckk;gpio_lckr_lck15;gpio_lckr_lck14;
+            gpio_lckr_lck13;gpio_lckr_lck12;gpio_lckr_lck11;
+            gpio_lckr_lck10;gpio_lckr_lck9;gpio_lckr_lck8;
+            gpio_lckr_lck7;gpio_lckr_lck6;gpio_lckr_lck5;
+            gpio_lckr_lck4;gpio_lckr_lck3;gpio_lckr_lck2;
+            gpio_lckr_lck1;gpio_lckr_lck0;
+            gpio_afrl_afrl7;gpio_afrl_afrl6;gpio_afrl_afrl5;
+            gpio_afrl_afrl4;gpio_afrl_afrl3;gpio_afrl_afrl2;
+            gpio_afrl_afrl1;gpio_afrl_afrl0;
+            gpio_afrh_afrh15;gpio_afrh_afrh14;gpio_afrh_afrh13;
+            gpio_afrh_afrh12;gpio_afrh_afrh11;gpio_afrh_afrh10;
+            gpio_afrh_afrh9;gpio_afrh_afrh8;
+            gpio_brr_br15;gpio_brr_br14;gpio_brr_br13;
+            gpio_brr_br12;gpio_brr_br11;gpio_brr_br10;
+            gpio_brr_br9;gpio_brr_br8;gpio_brr_br7;gpio_brr_br6;
+            gpio_brr_br5;gpio_brr_br4;gpio_brr_br3;gpio_brr_br2;
+            gpio_brr_br1;gpio_brr_br0" >
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(r)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    * (%(r))
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %constructorFieldAssignment;
+         \t   }
+         \t\n
+      ]]>
+      </variableTemplate>
+   </for>
+
+   <!-- ____ Init class Configure method ____ -->
+
+   <template codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(DefaultInitValue);
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const Init &init) {
+      \t
+      \t   // Enable peripheral clock
+      \t   enable();
+      \t\n
+   ]]></template>
+   <template codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t   // Only set call-backs if feature enabled
+      \t   setCallback(init.callbackFunction);
+      \t   enableNvicInterrupts(init.irqlevel);
+      \t\n
+   ]]></template>
+   <for keys=
+             " var                                                    : statement            "
+      values=" gpio_moder_moder15,gpio_moder_moder14,gpio_moder_moder13,
+               gpio_moder_moder12,gpio_moder_moder11,gpio_moder_moder10,
+               gpio_moder_moder9,gpio_moder_moder8,gpio_moder_moder7,
+               gpio_moder_moder6,gpio_moder_moder5,gpio_moder_moder4,
+               gpio_moder_moder3,gpio_moder_moder2,gpio_moder_moder1,
+               gpio_moder_moder0                                      : %configRegAssignment ;
+               gpio_otyper_ot15,gpio_otyper_ot14,gpio_otyper_ot13,
+               gpio_otyper_ot12,gpio_otyper_ot11,gpio_otyper_ot10,
+               gpio_otyper_ot9,gpio_otyper_ot8,gpio_otyper_ot7,
+               gpio_otyper_ot6,gpio_otyper_ot5,gpio_otyper_ot4,
+               gpio_otyper_ot3,gpio_otyper_ot2,gpio_otyper_ot1,
+               gpio_otyper_ot0                                        : %configRegAssignment ;
+               gpio_ospeedr_ospeedr15,gpio_ospeedr_ospeedr14,
+               gpio_ospeedr_ospeedr13,gpio_ospeedr_ospeedr12,
+               gpio_ospeedr_ospeedr11,gpio_ospeedr_ospeedr10,
+               gpio_ospeedr_ospeedr9,gpio_ospeedr_ospeedr8,
+               gpio_ospeedr_ospeedr7,gpio_ospeedr_ospeedr6,
+               gpio_ospeedr_ospeedr5,gpio_ospeedr_ospeedr4,
+               gpio_ospeedr_ospeedr3,gpio_ospeedr_ospeedr2,
+               gpio_ospeedr_ospeedr1,gpio_ospeedr_ospeedr0            : %configRegAssignment ;
+               gpio_pupdr_pupdr15,gpio_pupdr_pupdr14,gpio_pupdr_pupdr13,
+               gpio_pupdr_pupdr12,gpio_pupdr_pupdr11,gpio_pupdr_pupdr10,
+               gpio_pupdr_pupdr9,gpio_pupdr_pupdr8,gpio_pupdr_pupdr7,
+               gpio_pupdr_pupdr6,gpio_pupdr_pupdr5,gpio_pupdr_pupdr4,
+               gpio_pupdr_pupdr3,gpio_pupdr_pupdr2,gpio_pupdr_pupdr1,
+               gpio_pupdr_pupdr0                                      : %configRegAssignment ;
+               gpio_odr_odr15,gpio_odr_odr14,gpio_odr_odr13,
+               gpio_odr_odr12,gpio_odr_odr11,gpio_odr_odr10,
+               gpio_odr_odr9,gpio_odr_odr8,gpio_odr_odr7,
+               gpio_odr_odr6,gpio_odr_odr5,gpio_odr_odr4,
+               gpio_odr_odr3,gpio_odr_odr2,gpio_odr_odr1,
+               gpio_odr_odr0                                          : %configRegAssignment ;
+               gpio_bsrr_br15,gpio_bsrr_br14,gpio_bsrr_br13,
+               gpio_bsrr_br12,gpio_bsrr_br11,gpio_bsrr_br10,
+               gpio_bsrr_br9,gpio_bsrr_br8,gpio_bsrr_br7,
+               gpio_bsrr_br6,gpio_bsrr_br5,gpio_bsrr_br4,
+               gpio_bsrr_br3,gpio_bsrr_br2,gpio_bsrr_br1,
+               gpio_bsrr_br0,gpio_bsrr_bs15,gpio_bsrr_bs14,
+               gpio_bsrr_bs13,gpio_bsrr_bs12,gpio_bsrr_bs11,
+               gpio_bsrr_bs10,gpio_bsrr_bs9,gpio_bsrr_bs8,
+               gpio_bsrr_bs7,gpio_bsrr_bs6,gpio_bsrr_bs5,
+               gpio_bsrr_bs4,gpio_bsrr_bs3,gpio_bsrr_bs2,
+               gpio_bsrr_bs1,gpio_bsrr_bs0                            : %configRegAssignment ;
+               gpio_lckr_lckk,gpio_lckr_lck15,gpio_lckr_lck14,
+               gpio_lckr_lck13,gpio_lckr_lck12,gpio_lckr_lck11,
+               gpio_lckr_lck10,gpio_lckr_lck9,gpio_lckr_lck8,
+               gpio_lckr_lck7,gpio_lckr_lck6,gpio_lckr_lck5,
+               gpio_lckr_lck4,gpio_lckr_lck3,gpio_lckr_lck2,
+               gpio_lckr_lck1,gpio_lckr_lck0                          : %configRegAssignment ;
+               gpio_afrl_afrl7,gpio_afrl_afrl6,gpio_afrl_afrl5,
+               gpio_afrl_afrl4,gpio_afrl_afrl3,gpio_afrl_afrl2,
+               gpio_afrl_afrl1,gpio_afrl_afrl0                        : %configRegAssignment ;
+               gpio_afrh_afrh15,gpio_afrh_afrh14,gpio_afrh_afrh13,
+               gpio_afrh_afrh12,gpio_afrh_afrh11,gpio_afrh_afrh10,
+               gpio_afrh_afrh9,gpio_afrh_afrh8                        : %configRegAssignment ;
+               gpio_brr_br15,gpio_brr_br14,gpio_brr_br13,
+               gpio_brr_br12,gpio_brr_br11,gpio_brr_br10,
+               gpio_brr_br9,gpio_brr_br8,gpio_brr_br7,gpio_brr_br6,
+               gpio_brr_br5,gpio_brr_br4,gpio_brr_br3,gpio_brr_br2,
+               gpio_brr_br1,gpio_brr_br0                              : %configRegAssignment " >
+      <variableTemplate codeGenCondition="enablePeripheralSupport"
+      variables="%(var)"
+      linePadding="xxx"
+      ><![CDATA[
+         \t
+         %multilineDescription
+         \t   %(statement);\n
+      ]]></variableTemplate>
+   </for>
+   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____  Default Initialisation value ____ -->
+
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
+      separator=","
+      terminator=","
+      variables="
+            gpio_moder_moder15,gpio_moder_moder14,gpio_moder_moder13,
+            gpio_moder_moder12,gpio_moder_moder11,gpio_moder_moder10,
+            gpio_moder_moder9,gpio_moder_moder8,gpio_moder_moder7,
+            gpio_moder_moder6,gpio_moder_moder5,gpio_moder_moder4,
+            gpio_moder_moder3,gpio_moder_moder2,gpio_moder_moder1,
+            gpio_moder_moder0,
+            gpio_otyper_ot15,gpio_otyper_ot14,gpio_otyper_ot13,
+            gpio_otyper_ot12,gpio_otyper_ot11,gpio_otyper_ot10,
+            gpio_otyper_ot9,gpio_otyper_ot8,gpio_otyper_ot7,
+            gpio_otyper_ot6,gpio_otyper_ot5,gpio_otyper_ot4,
+            gpio_otyper_ot3,gpio_otyper_ot2,gpio_otyper_ot1,
+            gpio_otyper_ot0,
+            gpio_ospeedr_ospeedr15,gpio_ospeedr_ospeedr14,
+            gpio_ospeedr_ospeedr13,gpio_ospeedr_ospeedr12,
+            gpio_ospeedr_ospeedr11,gpio_ospeedr_ospeedr10,
+            gpio_ospeedr_ospeedr9,gpio_ospeedr_ospeedr8,
+            gpio_ospeedr_ospeedr7,gpio_ospeedr_ospeedr6,
+            gpio_ospeedr_ospeedr5,gpio_ospeedr_ospeedr4,
+            gpio_ospeedr_ospeedr3,gpio_ospeedr_ospeedr2,
+            gpio_ospeedr_ospeedr1,gpio_ospeedr_ospeedr0,
+            gpio_pupdr_pupdr15,gpio_pupdr_pupdr14,gpio_pupdr_pupdr13,
+            gpio_pupdr_pupdr12,gpio_pupdr_pupdr11,gpio_pupdr_pupdr10,
+            gpio_pupdr_pupdr9,gpio_pupdr_pupdr8,gpio_pupdr_pupdr7,
+            gpio_pupdr_pupdr6,gpio_pupdr_pupdr5,gpio_pupdr_pupdr4,
+            gpio_pupdr_pupdr3,gpio_pupdr_pupdr2,gpio_pupdr_pupdr1,
+            gpio_pupdr_pupdr0,
+            gpio_odr_odr15,gpio_odr_odr14,gpio_odr_odr13,
+            gpio_odr_odr12,gpio_odr_odr11,gpio_odr_odr10,
+            gpio_odr_odr9,gpio_odr_odr8,gpio_odr_odr7,
+            gpio_odr_odr6,gpio_odr_odr5,gpio_odr_odr4,
+            gpio_odr_odr3,gpio_odr_odr2,gpio_odr_odr1,
+            gpio_odr_odr0,
+            gpio_bsrr_br15,gpio_bsrr_br14,gpio_bsrr_br13,
+            gpio_bsrr_br12,gpio_bsrr_br11,gpio_bsrr_br10,
+            gpio_bsrr_br9,gpio_bsrr_br8,gpio_bsrr_br7,
+            gpio_bsrr_br6,gpio_bsrr_br5,gpio_bsrr_br4,
+            gpio_bsrr_br3,gpio_bsrr_br2,gpio_bsrr_br1,
+            gpio_bsrr_br0,gpio_bsrr_bs15,gpio_bsrr_bs14,
+            gpio_bsrr_bs13,gpio_bsrr_bs12,gpio_bsrr_bs11,
+            gpio_bsrr_bs10,gpio_bsrr_bs9,gpio_bsrr_bs8,
+            gpio_bsrr_bs7,gpio_bsrr_bs6,gpio_bsrr_bs5,
+            gpio_bsrr_bs4,gpio_bsrr_bs3,gpio_bsrr_bs2,
+            gpio_bsrr_bs1,gpio_bsrr_bs0,
+            gpio_lckr_lckk,gpio_lckr_lck15,gpio_lckr_lck14,
+            gpio_lckr_lck13,gpio_lckr_lck12,gpio_lckr_lck11,
+            gpio_lckr_lck10,gpio_lckr_lck9,gpio_lckr_lck8,
+            gpio_lckr_lck7,gpio_lckr_lck6,gpio_lckr_lck5,
+            gpio_lckr_lck4,gpio_lckr_lck3,gpio_lckr_lck2,
+            gpio_lckr_lck1,gpio_lckr_lck0,
+            gpio_afrl_afrl7,gpio_afrl_afrl6,gpio_afrl_afrl5,
+            gpio_afrl_afrl4,gpio_afrl_afrl3,gpio_afrl_afrl2,
+            gpio_afrl_afrl1,gpio_afrl_afrl0,
+            gpio_afrh_afrh15,gpio_afrh_afrh14,gpio_afrh_afrh13,
+            gpio_afrh_afrh12,gpio_afrh_afrh11,gpio_afrh_afrh10,
+            gpio_afrh_afrh9,gpio_afrh_afrh8,
+            gpio_brr_br15,gpio_brr_br14,gpio_brr_br13,
+            gpio_brr_br12,gpio_brr_br11,gpio_brr_br10,
+            gpio_brr_br9,gpio_brr_br8,gpio_brr_br7,gpio_brr_br6,
+            gpio_brr_br5,gpio_brr_br4,gpio_brr_br3,gpio_brr_br2,
+            gpio_brr_br1,gpio_brr_br0" >
+   <![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};
+      \t\n
+   ]]></variableTemplate>
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t}; // class $(_Structname)BasicInfo::Init
+      \t\n
+   ]]>
+   </template>
+
+   <template where="basicInfo" >
+   <![CDATA[
+      }; // class $(_Structname)BasicInfo
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____ Common __________________ -->
+
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Class representing $(_NAME)
+      \t */
+      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};
+      \t//typedef $(_Baseclass)Base_T<$(_Class)Info> $(_Class);
+      \t\n
+   ]]>
+   </template>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
+   </validate>
+
+   <projectActionList id="gpio_files" >
+      <copy source="Project_Headers/gpio-MKE.h"  target="Project_Headers/gpio.h"  overwrite="true"  derived="true" />
+   </projectActionList>
+
+   <!-- ____ Startup __________________ -->
+
+   <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
+      <![CDATA[#include "$(_basename).h"\n
+   ]]></template>
+
+   <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
+   <![CDATA[
+      \t/*  Initialise $(_Class) */
+      \tUSBDM::$(_Class)::defaultConfigure();\n
+   ]]></template>
+
+   <!-- ____ SIM configuration __________________ -->
+
+   <category name="Advanced" description="SIM configuration"
+      toolTip="These settings only have effect if the SIM configuration is enabled" >
+      <title description="$(_BASENAME) Shared" />
+      <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+      <title description="$(_NAME) Specific" />
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+      <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+   </category>
+
+   <!--  ____ Signal mapping __________________ -->
+   <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
+
+</peripheralPage>

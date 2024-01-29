@@ -147,14 +147,15 @@
 
    <xi:include href="simCommon.xml"/>
 
-   <!-- ************* Class Declaration ****************** -->
+   <!-- _____________ Class Declaration __________________ -->
    <constant key="_class_declaration" type="String"
       value='"$(_Class)Info : public $(_Baseclass)BasicInfo"' />
 
 
-   <!-- ************* USB Clock ****************** -->
+   <!-- _____________ USB Clock __________________ -->
 
    <intOption key="system_usb_clkin_clock"
+      addToVar="Usb0ExternalItems"
       hidden="true"
       origin="USB Clock In pin"
       units="Hz"
@@ -162,7 +163,7 @@
       toolTip="Externally provided clock for USB on USB_CLKIN"
       value="0" />
 
-   <!-- ************* SOPT1 ****************** -->
+   <!-- _____________ SOPT1 __________________ -->
 
    <category name="SOPT1" description="RTC clocks" >
 
@@ -172,6 +173,7 @@
       <aliasOption key="system_erclk32k_clock" />
 
       <choiceOption key="sim_sopt1_usbpower" condition="sim_sopt1_usbregen_present &amp;&amp; sim_sopt1_usbsstby_present &amp;&amp; sim_sopt1_usbvstby_present"
+         addToVar="Usb0ExternalItems"
          enabledBy="enablePeripheralSupport"
          valueFormat="SIM_SOPT1_USBREGEN(%s),SIM_SOPT1_USBSSTBY(%s),SIM_SOPT1_USBVSTBY(%s)"
          typeName="SimUsbPower"
@@ -196,7 +198,7 @@
       </choiceOption>
    </category>
 
-   <!-- ************* SOPT2 ****************** -->
+   <!-- _____________ SOPT2 __________________ -->
 
    <category name="SOPT2" description="Clock Gating" >
 
@@ -213,6 +215,7 @@
       <aliasOption key="/MCG/system_mcgirclk_clock[]"    optional="true" />
 
       <binaryOption key="sim_sopt2_ptd7pad" condition="sim_sopt2_ptd7pad_present"
+         addToVar="CmtExternalItems"
          typeName="SimPortDPad"
          description="PTD7 pad drive strength"
          toolTip="Controls the output drive strength of the PTD7 pin\n
@@ -270,6 +273,7 @@
          toolTip="Clock available on a pin for tracing" />
 
       <binaryOption key="sim_sopt2_usbregen" condition="sim_sopt2_usbregen_present"
+         addToVar="Usb0ExternalItems"
          typeName="SimUsbPhyRegEn"
          description="USB PHY PLL Regulator Enable"
          toolTip="Enables the PLL regulator in the USB PHY.\n
@@ -279,6 +283,7 @@
       </binaryOption>
 
       <binaryOption key="sim_sopt2_usbslsrc" condition="sim_sopt2_usbslsrc_present"
+         addToVar="Usb0ExternalItems"
          typeName="SimUsbSlowClock"
          description="USB Slow Clock Source"
          toolTip="Configures the clock source for the USB PHY and HS Controller slow clock,\n
@@ -288,7 +293,7 @@
       </binaryOption>
    </category>
 
-   <!-- ************* SOPT4 ****************** -->
+   <!-- _____________ SOPT4 __________________ -->
 
    <category name="SOPT4" description="FTM signals" >
 
@@ -320,19 +325,19 @@
          <binaryOption key="sim_sopt4_ftm0trg0src" condition="sim_sopt4_ftm0trg0src_present&amp;&amp;(%(f)==0)"
             addToVar="Ftm%(f)ExternalItems"
             enabledBy="enablePeripheralSupport"
-            typeName="SimFtm0Trg0Src"
-            description="FTM0 Hardware Trigger 0 Source"
-            toolTip="Source of FTM hardware trigger 0" >
+            typeName="SimFtm%(f)Trg0Src"
+            description="FTM%(f) Hardware Trigger 0 Source"
+            toolTip="Source of FTM %(f) hardware trigger 0" >
             <choice value="0"  name="CMP0 output"        enum="Cmp0" isDefault="true" />
-            <choice value="1"  name="FTM1 channel match" enum="Ftm1Match" />
+            <choice value="1"  name="FTM1 channel match (enable FTM1.EXTTRIG)" enum="Ftm1Match" />
          </binaryOption>
 
          <binaryOption key="sim_sopt4_ftm0trg1src" condition="sim_sopt4_ftm0trg1src_present&amp;&amp;(%(f)==0)"
             addToVar="Ftm%(f)ExternalItems"
             enabledBy="enablePeripheralSupport"
-            typeName="SimFtm0Trg1Src"
-            description="FTM0 Hardware Trigger 1 Source"
-            toolTip="Source of FTM hardware trigger 1" >
+            typeName="SimFtm%(f)Trg1Src"
+            description="FTM%(f) Hardware Trigger 1 Source"
+            toolTip="Source of FTM %(f) hardware trigger 1" >
             <choice value="0"  name="PDB output trigger 1" enum="PdbTrigger1" isDefault="true" />
             <choice value="1"  name="FTM2 channel match"   enum="Ftm2Match" />
          </binaryOption>
@@ -379,7 +384,7 @@
          </for>
 
          <choiceOption key="sim_sopt4_ftm1ch0src" condition="sim_sopt4_ftm1ch0src_present&amp;&amp;(%(f)==1)"
-            addToVar="Ftm%(f)ExternalItems"
+            addToVar="Ftm%(f)ExternalItems,Usb0ExternalItems"
             enabledBy="enablePeripheralSupport"
             typeName="SimFtm1Ch0Src"
             description="FTM 1 channel 0 input capture source"
@@ -501,7 +506,7 @@
       </for>
    </category>
 
-   <!-- ************* SOPT5 ****************** -->
+   <!-- _____________ SOPT5 __________________ -->
 
    <category name="SOPT5" description="UART signals" >
 
@@ -534,7 +539,7 @@
       </for>
    </category>
 
-   <!-- ************* SOPT7 ****************** -->
+   <!-- _____________ SOPT7 __________________ -->
 
    <category name="SOPT7" description="ADC signals" >
       <for keys="adc" values="0;1" >
@@ -579,7 +584,7 @@
       </for>
    </category>
 
-   <!-- ************* SOPT8 ****************** -->
+   <!-- _____________ SOPT8 __________________ -->
 
    <category name="SOPT8" description="FTM output modulation" >
       <for keys="ch" values="0;1;2;3;4;5;6;7" >
@@ -605,6 +610,7 @@
       </for>
 
       <choiceOption key="sim_sopt8_ftm_syncbits" condition="sim_sopt8_ftm0syncbit_present"
+         addToVar="FtmExternalItems"
          typeName="SimFtmSync"
          valueFormat="%s"
          hidden="true"
@@ -619,7 +625,7 @@
       </choiceOption>
    </category>
 
-   <!-- ************* FCFG1 ****************** -->
+   <!-- _____________ FCFG1 __________________ -->
 
    <category name="Flash" description="Flash control" >
       <binaryOption key="sim_fcfg1_flashdoze" condition="sim_fcfg1_flashdoze_present"
@@ -653,7 +659,9 @@
          <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]"          locked="false" />
 
          <category name="Peripheral Clocks" description="Peripheral Clock Selection" >
+
             <intOption key="system_irc48m_clock[%(n)]"
+               addToVar="Usb0ExternalItems"
                enabledBy="/SMC/smc_pmctrl_runm[%(n)]!=1##IRC48M Disabled in VLPR"
                locked="true"
                derived="true"
@@ -689,6 +697,7 @@
                toolTip="Clock available on CLKOUT pin" />
 
             <intOption key="usb1pfdclk_Clock[%(n)]" condition="/USBPHY1/_present"
+               addToVar="Usb0ExternalItems"
                max="USB1PFDCLK_max[/SMC/smc_pmctrl_runm[%(n)]]"
                enabledBy="/SMC/smc_pmctrl_runm[%(n)]!=1"
                derived="true"
@@ -698,6 +707,7 @@
                toolTip="USB1PFD Clock available as peripheral clock" />
 
             <choiceOption key="sim_sopt2_pllfllsel[%(n)]"
+               addToVar="Usb0ExternalItems"
                typeName="SimPeripheralClockSource"
                target="system_peripheral_clock[%(n)]"
                description="Peripheral Clock"
@@ -720,6 +730,7 @@
                toolTip="Frequency of Peripheral Clock available to various peripherals"  />
 
             <choiceOption key="sim_clkdiv2_usb[%(n)]" condition="sim_clkdiv2_usbdiv_present"
+               addToVar="Usb0ExternalItems"
                valueFormat="(%s)"
                target="clkdiv2_clock[%(n)]"
                typeName="SimUsbClockDivider"
@@ -745,6 +756,7 @@
             </choiceOption>
 
             <intOption key="clkdiv2_clock[%(n)]"  condition="sim_clkdiv2_usbdiv_present"
+               addToVar="Usb0ExternalItems"
                hidden="true"
                derived="true"
                locked="true"
@@ -754,6 +766,7 @@
                value="0" />
 
             <choiceOption key="sim_sopt2_usbsrc[%(n)]" condition="sim_sopt2_usbsrc_present"
+               addToVar="Usb0ExternalItems"
                target="system_usbfs_clock[%(n)]"
                typeName="SimUsbFullSpeedClockSource"
                description="USB Clock"
@@ -765,6 +778,7 @@
             <aliasOption key="system_usb_clkin_clock" locked="false" optional="true" />
 
             <intOption key="system_usbfs_clock[%(n)]"  condition="sim_sopt2_usbsrc_present"
+               addToVar="Usb0ExternalItems"
                errorPropagate="error"
                derived="true"
                locked="true"
@@ -812,6 +826,7 @@
                        2 : System bus clock  : SystemBusClock  : system_bus_clock[%(n)]" >
 
                <choiceOption key="system_uart%(u)_fixedclocksource[%(n)]"
+                  addToVar="Uart%(u)ExternalItems"
                   target="system_uart%(u)_clock[%(n)]"
                   locked="true"
                   derived="true"
@@ -821,6 +836,7 @@
                </choiceOption>
 
                <intOption key="system_uart%(u)_clock[%(n)]"
+                  addToVar="Uart%(u)ExternalItems"
                   locked="true"
                   derived="true"
                   units="Hz"
@@ -830,6 +846,7 @@
             </for>
 
             <choiceOption key="sim_sopt2_lpuartsrc[%(n)]" condition="sim_sopt2_lpuartsrc_present"
+               addToVar="Lpuart%(n)ExternalItems"
                typeName="SimLpuartClockSource"
                target="system_lpuart_clock[%(n)]"
                description="LPUART Clock select"
@@ -843,6 +860,7 @@
             </choiceOption>
 
             <intOption key="system_lpuart_clock[%(n)]" condition="sim_sopt2_lpuartsrc_present"
+               addToVar="Lpuart%(n)ExternalItems"
                max="LPUART_max[/SMC/smc_pmctrl_runm[%(n)]]"
                derived="true"
                locked="true"
@@ -852,6 +870,7 @@
                value="0"/>
 
             <choiceOption key="sim_sopt2_flexiosrc[%(n)]" condition="sim_sopt2_flexiosrc_present"
+               addToVar="Flexio%(n)ExternalItems"
                typeName="SimFlexioClockSource"
                target="system_flexio_clock[%(n)]"
                description="FLEXIO Clock source"
@@ -863,6 +882,7 @@
             </choiceOption>
 
             <intOption key="system_flexio_clock[%(n)]" condition="sim_sopt2_flexiosrc_present"
+               addToVar="Flexio%(n)ExternalItems"
                derived="true"
                locked="true"
                units="Hz"
@@ -872,6 +892,7 @@
                max="120MHz" />
 
             <choiceOption key="sim_sopt2_tpmsrc[%(n)]" condition="sim_sopt2_tpmsrc_present"
+               addToVar="Tpm%(n)ExternalItems"
                typeName="SimTpmClockSource"
                target="system_tpm_clock[%(n)]"
                description="TPM Clock source"
@@ -883,6 +904,7 @@
             </choiceOption>
 
             <intOption key="system_tpm_clock[%(n)]" condition="sim_sopt2_tpmsrc_present"
+               addToVar="Tpm%(n)ExternalItems"
                max="TPM_max[/SMC/smc_pmctrl_runm[%(n)]]"
                derived="true"
                locked="true"
@@ -974,7 +996,7 @@
             units="Hz"
             description="System Bus Clock"
             toolTip="Clocks the bus slaves and peripherals\n
-                     Must be &lt;= Core Clock frequency and an integer divisor"
+                     - Must be &lt;= Core Clock frequency and an integer divisor"
             value="40_MHz"
             disabledValue="0" />
 
@@ -986,7 +1008,7 @@
             units="Hz"
             description="System Flexbus Clock"
             toolTip="Clocks the flexbus interface\n
-                     Must be &lt;= Bus Clock frequency"
+                     - Must be &lt;= Bus Clock frequency"
             value="26666666"
             disabledValue="0" />
 
@@ -998,13 +1020,13 @@
             units="Hz"
             description="System Flash Clock"
             toolTip="Clocks the flash memory\n
-                     Must be an integer divisor of the Core Clock.\n
-                     Must be &lt;= Bus Clock frequency[%(n)]\n
-                     Must be &gt;= Core clock / 8"
+                     - Must be an integer divisor of the Core Clock.\n
+                     - Must be &lt;= Bus Clock frequency[%(n)]\n
+                     - Must be &gt;= Core clock / 8"
             value="26666666"
             disabledValue="0" />
 
-   <!-- ************* CLKDIV1 ****************** -->
+   <!-- _____________ CLKDIV1 __________________ -->
 
          <category name="CLKDIV1" description="System Clock Dividers" >
             <choiceOption key="sim_clkdiv1_outdiv1[%(n)]"  condition="sim_clkdiv1_outdiv1_present"
@@ -1038,7 +1060,7 @@
                derivedFrom="sim_clkdiv1_outdiv1[%(n)]"
                typeName="SimBusClkDivider"
                description="Bus Clock Divider (OUTDIV2) - Divide by [1-16]"
-               toolTip="Clocks the bus slaves and peripheral\n
+               toolTip="Clocks the bus slaves and peripheral.\n
                         Divides MCGOUTCLK Clock to generate system_bus_clock."/>
 
             <choiceOption key="sim_clkdiv1_outdiv3[%(n)]" condition="sim_clkdiv1_outdiv3_present"
@@ -1047,7 +1069,7 @@
                derivedFrom="sim_clkdiv1_outdiv1[%(n)]"
                typeName="SimFlexbusClkDivider"
                description="Flexbus Clock Divider (OUTDIV3) - Divide by [1-16]"
-               toolTip="Clocks the flexbus interface\n
+               toolTip="Clocks the flexbus interface.\n
                         Divides MCGOUTCLK Clock to generate system_flexbus_clock."/>
 
             <choiceOption key="sim_clkdiv1_outdiv4[%(n)]"  condition="sim_clkdiv1_outdiv4_present"
@@ -1056,7 +1078,7 @@
                derivedFrom="sim_clkdiv1_outdiv1[%(n)]"
                typeName="SimFlashClkDivider"
                description="Flash Clock Divider (OUTDIV4) - Divide by [1-16]"
-               toolTip="Clocks the flash memory\n
+               toolTip="Clocks the flash memory.\n
                         Divides MCGOUTCLK Clock to generate system_flash_clock." />
          </category>
       </aliasCategoryOption>
@@ -1066,7 +1088,7 @@
 
    <xi:include href="sim_commonTemplates.xml" />
 
-   <!-- ************* Clock Variables ****************** -->
+   <!-- _____________ Clock Variables __________________ -->
 
    <template namespace="usbdm" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
       \t/*
@@ -1141,7 +1163,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <!-- ************* Common ****************** -->
+   <!-- _____________ Common __________________ -->
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate" dim="=numberOfClockSettings" >
@@ -1161,7 +1183,7 @@
       <param type="long" value="27MHz"  />     <!-- HSRUN Flash       -->
    </validate>
 
-   <!-- ************* Startup ****************** -->
+   <!-- _____________ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n

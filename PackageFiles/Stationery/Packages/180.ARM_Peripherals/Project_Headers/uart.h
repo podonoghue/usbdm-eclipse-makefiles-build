@@ -187,8 +187,8 @@ public:
       uint8_t c2Value = uart->C2;
       uart->C2 = 0;
 
-      // Calculate UART clock setting (5-bit fraction at right)
-      int divider = (2*clockFrequency)/baudrate;
+      // Calculate UART clock setting (5-bit fraction at right, +16 for rounding after /32)
+      int divider = ((2*clockFrequency)/baudrate) + 16;
 
       // Set Baud rate register
       uart->BDH = (uart->BDH&~UART_BDH_SBR_MASK) | UART_BDH_SBR((divider>>(8+5)));

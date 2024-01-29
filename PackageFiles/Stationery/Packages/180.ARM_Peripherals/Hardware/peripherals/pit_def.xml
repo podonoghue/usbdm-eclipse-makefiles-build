@@ -17,9 +17,9 @@
       <choice value="3"  enum="Ch3"     name="Periodic Interrupt Timer" />
    </choiceOption>
 
-   <constant key="irq_parameters"           type="String"  value="&quot;&quot;"  />
-   <constant key="irq_dummy_parameters"     type="String"  value="&quot;&quot;"  />
-   <constant key="irq_call"                 type="String"  value="&quot;&quot;"  />
+   <constant key="irq_parameters"           type="String"  value='""'  />
+   <constant key="irq_dummy_parameters"     type="String"  value='""'  />
+   <constant key="irq_call"                 type="String"  value='""'  />
    <if condition="@_irqCount==1" >
       <!-- PIT_IRQHandler => Pit::irqHandler -->
       <constant key="irq_pattern"              type="String"  value="&quot;^$(_NAME)$&quot;"           />
@@ -264,13 +264,16 @@
          typeName="PitChannelEnable"
          baseType="uint8_t"
          description="Timer Channel Enable"
-         toolTip="Allows operation of this channel" >
+         toolTip="Allows operation of this channel" 
+         signal="PIT_CH%(ch)"
+         >
          <choice value="0" name="Channel disabled" enum="Disabled" isDefault="true"/>
          <choice value="1" name="Channel enabled"  enum="Enabled"  />
       </binaryOption>
 
       <intOption key="pit_ldval_tsv[%(ch)]" condition="pit_ldval_tsv_present"
          enabledBy="pit_tctrl_ten[%(ch)]"
+         hiddenBy="!pit_tctrl_ten[%(ch)]"
          valueFormat="%s"
          units="ticks"
          baseType="uint32_t"
@@ -281,6 +284,7 @@
 
       <floatOption key="pit_period[%(ch)]" condition="pit_ldval_tsv_present"
          enabledBy="pit_tctrl_ten[%(ch)]"
+         hiddenBy="!pit_tctrl_ten[%(ch)]"
          description="Default period of timer"
          toolTip="Used to calculate the timer load value"
          derived="true"
@@ -288,6 +292,7 @@
 
       <binaryOption key="pit_tctrl_chn[%(ch)]"  condition="pit_tctrl_chn_present &amp;&amp; (%(ch)>0)"
          enabledBy="pit_tctrl_ten[%(ch)]"
+         hiddenBy="!pit_tctrl_ten[%(ch)]"
          typeName="PitChannelChain"
          baseType="uint8_t"
          description="Chain with previous channel"
@@ -296,8 +301,27 @@
          <choice value="1" name="Timers are chained"     enum="Enabled"  />
       </binaryOption>
 
+      <intOption key="pit_tctrl_chnTicks[%(ch)]" condition="pit_tctrl_chn_present &amp;&amp; (%(ch)>0)"
+         hiddenBy="!pit_tctrl_chn[%(ch)]"
+         locked="true"
+         derived="true"
+         ref="(pit_ldval_tsv[%(ch)-1]+1)*(pit_ldval_tsv[%(ch)]+1)"
+         description="Duration of chained timers"
+         units="ticks"
+      />
+
+      <floatOption key="pit_tctrl_chnDelay[%(ch)]" condition="pit_tctrl_chn_present &amp;&amp; (%(ch)>0)"
+         hiddenBy="!pit_tctrl_chn[%(ch)]"
+         locked="true"
+         derived="true"
+         ref="pit_tctrl_chnTicks[%(ch)]/(pitInputClock)"
+         description="Duration of chained timers"
+         units="s"
+      />
+
       <binaryOption key="pit_tctrl_tie[%(ch)]"  condition="pit_tctrl_tie_present"
          enabledBy="pit_tctrl_ten[%(ch)] &amp;&amp;irqHandlingMethod"
+         hiddenBy="!pit_tctrl_ten[%(ch)]"
          typeName="PitChannelIrq"
          baseType="uint8_t"
          description="Timer Interrupt Enable"

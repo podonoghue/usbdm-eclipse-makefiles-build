@@ -19,7 +19,17 @@ namespace USBDM {
 // Which UART to use
 using UartInfo = Uart0Info;
 
-static UartBuffered_basic_T<UartInfo, 20, 20> uart;
+class CdcUart : public UartBuffered_basic_T<UartInfo, 20, 20> {
+
+public:
+   using UartBuffered_basic_T<UartInfo, 20, 20>::txQueue;
+   using UartBuffered_basic_T<UartInfo, 20, 20>::rxQueue;
+
+};
+
+static CdcUart uart;
+
+LineCodingStructure CDC_Interface::fLineCoding;
 
 static volatile uint8_t  cdcStatus            = 0;
 static volatile uint8_t  breakCount           = 0;
@@ -113,18 +123,21 @@ CdcLineState CDC_Interface::getSerialState() {
 /**
  *  Set CDC communication characteristics
  *
- * @param lineCodingStructure - Structure describing desired settings
+ * @param[in] lineCoding - Structure describing desired settings
  *
  * The UART is quite limited when compared to the serial interface implied
  * by LineCodingStructure.
  * It does not support many of the combinations available.
  */
-void CDC_Interface::setLineCoding(volatile LineCodingStructure &lineCoding) {
+void CDC_Interface::setLineCoding(const LineCodingStructure *lineCoding) {
+
+   fLineCoding = *lineCoding;
+
    uint8_t  UARTC1Value = 0x00;
    uint8_t  UARTC3Value = 0x00;
 
    // Ignore illegal values
-   volatile unsigned newBaud = lineCoding.dwDTERate;
+   volatile unsigned newBaud = fLineCoding.dwDTERate;
    if ((newBaud == 0) || (newBaud>115200)) {
       return;
    }
@@ -142,10 +155,10 @@ void CDC_Interface::setLineCoding(volatile LineCodingStructure &lineCoding) {
    UartInfo::initPCRs();
 
    // Disable the transmitter and receiver while changing settings.
-   UartInfo::uart().C2 &= ~(UART_C2_TE_MASK | UART_C2_RE_MASK );
+   UartInfo::uart->C2 &= ~(UART_C2_TE_MASK | UART_C2_RE_MASK );
 
-   // Note: lineCoding.bCharFormat is ignored (always 1 stop bit)
-   //   switch (lineCoding.bCharFormat) {
+   // Note: fLineCoding.bCharFormat is ignored (always 1 stop bit)
+   //   switch (fLineCoding.bCharFormat) {
    //      case 0:  // 1 bits
    //      case 1:  // 1.5 bits
    //      case 2:  // 2 bits
@@ -165,17 +178,17 @@ void CDC_Interface::setLineCoding(volatile LineCodingStructure &lineCoding) {
    //--------------------------------------------
    //   All other values default to 8-None-1
 
-   switch (lineCoding.bDataBits) {
+   switch (fLineCoding.bDataBits) {
    // 5,6,7,8,16
    case 7 :
-      switch (lineCoding.bParityType) {
+      switch (fLineCoding.bParityType) {
       case 1:  UARTC1Value = UART_C1_PE_MASK|UART_C1_PT_MASK; break; // Odd
       case 2:  UARTC1Value = UART_C1_PE_MASK;                 break; // Even
       }
       break;
    case 8 :
       UARTC1Value = UART_C1_M_MASK; // 9-data or 8-data+parity
-      switch (lineCoding.bParityType) {
+      switch (fLineCoding.bParityType) {
       case 0:  UARTC1Value  = 0;                               break; // None
       case 1:  UARTC1Value |= UART_C1_PE_MASK|UART_C1_PT_MASK; break; // Odd
       case 2:  UARTC1Value |= UART_C1_PE_MASK;                 break; // Even
@@ -186,18 +199,27 @@ void CDC_Interface::setLineCoding(volatile LineCodingStructure &lineCoding) {
    default :
       break;
    }
-   UartInfo::uart().C1 = UARTC1Value;
-   UartInfo::uart().C2 =
+   UartInfo::uart->C1 = UARTC1Value;
+   UartInfo::uart->C2 =
          UART_C2_RIE_MASK| // Receive interrupts (Transmit interrupts enabled when data written)
          UART_C2_RE_MASK|  // Receiver enable
          UART_C2_TE_MASK;  // Transmitter enable
-   UartInfo::uart().C3 = UARTC3Value|
+   UartInfo::uart->C3 = UARTC3Value|
          UART_C3_FEIE_MASK| // Framing error
          UART_C3_NEIE_MASK| // Noise error
          UART_C3_ORIE_MASK| // Overrun error
          UART_C3_PEIE_MASK; // Parity error
 
-   NVIC_EnableIRQ(UartInfo::irqNums[0]);
+   uart.enableNvicInterrupts();
+}
+
+/**
+ * Get line coding
+ *
+ * @return lineCoding Line coding information
+ */
+const LineCodingStructure * CDC_Interface::getLineCoding() {
+   return &fLineCoding;
 }
 
 /**

@@ -11,38 +11,6 @@
    <constant key="configureInStartupDefault" type="Boolean" value="false"  />
    <xi:include href="enablePeripheral.xml"  />
 
-<!-- ____ General substitutions ____
-    *  $(_NAME)         => e.g FTM2 => FTM2
-    *  $(_name)         => e.g FTM2 => ftm2
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
-    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
-    *  $(_Class)        => e.g FTM2 => Ftm2
-    *  $(_Baseclass)    => e.g FTM0 => Ftm
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A
--->
-
-<!-- ____ Template substitutions ________
-    *
-    * <li>%paramExpression            Parameters ORed together e.g. adcPretrigger|adcRefSel
-    * <li>%valueExpression            Numeric variable value e.g. 0x3
-    * <li>%symbolicExpression[index]  Symbolic formatted value e.g. AdcCompare_Disabled
-    * <li>%variable[index]            Variable name /ADC0/adc_sc2_acfe
-    * <li>%macro[index](value)        C register macro e.g. ADC_SC2_ACFGT(value)
-    * <li>%description[index]         Description from controlVar e.g. Compare Function Enable
-    * <li>%shortDescription[index]    Short description from controlVar e.g. Compare Function Enable
-    * <li>%tooltip[index]             Tool-tip from controlVar e.g. Each bit disables the GPIO function
-    * <li>%params                     Formatted parameter list for function
-    * <li>%paramDescription[index]    Tool-tip from controlVar formatted as param description @param ...
-    * <li>%paramType[index]           Based on typeName e.g. AdcCompare (or uint32_t)
-    * <li>%paramName[index]           Based on typeName with lower-case first letter adcCompare
-    * <li>%fieldAssignment            Expression of form '%register <= (%register & ~%mask)|%paramExpression
-    * <li>%maskingExpression          Based on variable etc. Similar to (%register&%mask)
-    * <li>%mask[index]                From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
-    * <li>%register[index]            Register associated with variable e.g. adc->APCTL1
-    * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
-    * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
--->
-
    <constant key="disable_peripheral" value='"adc->SC1[0] = ADC_SC1_ADCH(-1);"'  type="String" />
 
    <!-- ____ Class Declaration ________ -->
@@ -460,12 +428,12 @@
          \t\n
       ]]></variableTemplate>
    </for>
-   
-   <!-- 
+
+   <!--
    <deleteVariables variables="adc_sc1_dim"           />
    <constant key="adc_sc1_dim" type="Long" value="2"  />
    -->
-   
+
    <choiceOption key="adc_index" condition="=adc_sc1_dim>1"
       hidden="true"
       derived="true"
@@ -475,23 +443,23 @@
       description="Index for SC1 or R registers"
       toolTip="Some ADCs have multiple SC1[] or R[] registers to\n
                allow multiple hardware triggers while retaining results" >
-      <choiceExpansion value="%(i)" name="Index %(i)" enum="%(i)" keys="i" values="0" />      
+      <choiceExpansion value="%(i)" name="Index %(i)" enum="%(i)" keys="i" values="0" />
    </choiceOption>
-   
+
    <constant key="sc1_index" type="String" value='"0"'        condition="=(adc_sc1_dim==1)" />
    <constant key="sc1_index" type="String" value='"adcIndex"' condition="=(adc_sc1_dim>1)"  />
-   <!-- 
+   <!--
    <printVar key="adc_sc1_dim" />
    <printVar key="sc1_index" />
    -->
-   
+
    <for keys="field                     : set   : get   : clear : genCode                 : context              : name"
         values="
          adc_sc1_coco,adc_index         : false : true  : false : true                    : SC1[$(sc1_index)]    : ConversionComplete;
          adc_sc1_aien,adc_index         : true  : true  : false : enableGettersAndSetters : SC1[$(sc1_index)]    : InterruptEnable;
          adc_sc1_adco,adc_index         : true  : true  : false : enableGettersAndSetters : SC1[$(sc1_index)]    : ContinuousConversion;
          adc_sc1_adch,adc_index         : true  : true  : false : true                    : SC1[$(sc1_index)]    : Channel;
-         
+
          adc_r_d,adc_index              : false : true  : false : true                    : R[$(sc1_index)]      : ConversionResult" >
       <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)" multipleParamsOnNewline="true"
       immediateVariables="sc1_index"

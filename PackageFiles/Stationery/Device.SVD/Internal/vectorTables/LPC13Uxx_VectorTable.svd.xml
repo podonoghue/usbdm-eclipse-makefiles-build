@@ -85,25 +85,25 @@ Devices using this vector table:
    </interrupt>
    <interrupt>
       <name>CT16B0</name>
-      <description>16-bit counter/timers CT16B0</description>
+      <description>16-bit counter</description>
       <value>16</value>
       <peripheral>CT16B0</peripheral>
    </interrupt>
    <interrupt>
       <name>CT16B1</name>
-      <description>16-bit counter/timers CT16B1</description>
+      <description>16-bit counter</description>
       <value>17</value>
       <peripheral>CT16B1</peripheral>
    </interrupt>
    <interrupt>
       <name>CT32B0</name>
-      <description>32-bit counter/timers CT32B0</description>
+      <description>32-bit counter</description>
       <value>18</value>
       <peripheral>CT32B0</peripheral>
    </interrupt>
    <interrupt>
       <name>CT32B1</name>
-      <description>32-bit counter/timers CT32B1</description>
+      <description>32-bit counter</description>
       <value>19</value>
       <peripheral>CT32B1</peripheral>
    </interrupt>
@@ -139,7 +139,7 @@ Devices using this vector table:
    </interrupt>
    <interrupt>
       <name>WWDT</name>
-      <description>Windowed Watchdog Timer</description>
+      <description>Windowed WatchDog Timer</description>
       <value>25</value>
       <peripheral>WWDT</peripheral>
    </interrupt>

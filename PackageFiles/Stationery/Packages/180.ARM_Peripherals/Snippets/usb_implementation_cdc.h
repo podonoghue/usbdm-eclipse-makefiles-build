@@ -18,6 +18,9 @@
 #ifndef PROJECT_HEADERS_USB_IMPLEMENTATION_CDC_H_
 #define PROJECT_HEADERS_USB_IMPLEMENTATION_CDC_H_
 
+#include <stdint.h>
+#include <uart_queue.h>
+
 /*
  * Under Windows 8, or 10 there is no need to install a driver for
  * the bulk end-points if the MS_COMPATIBLE_ID_FEATURE is enabled.
@@ -30,9 +33,7 @@
  */
 
 //#define MS_COMPATIBLE_ID_FEATURE // Incompatible with CDC
-#include "usb_cdc_interface.h"
 
-#define UNIQUE_ID
 //#include "configure.h"
 
 namespace USBDM {
@@ -44,29 +45,17 @@ namespace USBDM {
 /** Causes a semi-unique serial number to be generated for each USB device */
 #define UNIQUE_ID
 
-#ifndef SERIAL_NO
 #ifdef UNIQUE_ID
 #define SERIAL_NO           "USBDM-"
 #else
 #define SERIAL_NO           "USBDM-0001"
 #endif
-#endif
-#ifndef PRODUCT_DESCRIPTION
 #define PRODUCT_DESCRIPTION "USB-Test"
-#endif
-#ifndef MANUFACTURER
 #define MANUFACTURER        "pgo"
-#endif
 
-#ifndef VENDOR_ID
-#define VENDOR_ID             (0x16D0)    // Vendor (actually MCS)
-#endif
-#ifndef PRODUCT_ID
-#define PRODUCT_ID            (0x8888)    // Product ID
-#endif
-#ifndef VERSION_ID
-#define VERSION_ID (0x0100)
-#endif
+static constexpr uint16_t  VENDOR_ID   = 0x16D0;    // Vendor ID (actually MCS)
+static constexpr uint16_t  PRODUCT_ID  = 0x4999;    // Product ID
+static constexpr uint16_t  VERSION_ID  = 0x0100;    // Version ID
 
 //======================================================================
 // Maximum packet sizes for each endpoint
@@ -76,19 +65,27 @@ static constexpr unsigned  CONTROL_EP_MAXSIZE           = 64; //!< Control in/ou
  *  TODO Define additional end-point sizes
  */
 static constexpr unsigned  CDC_NOTIFICATION_EP_MAXSIZE  = 16; //!< CDC notification
-static constexpr unsigned  CDC_DATA_OUT_EP_MAXSIZE      = 16; //!< CDC data out
-static constexpr unsigned  CDC_DATA_IN_EP_MAXSIZE       = 16; //!< CDC data in
+static constexpr unsigned  CDC_DATA_OUT_EP_MAXSIZE      = 64; //!< CDC data out
+static constexpr unsigned  CDC_DATA_IN_EP_MAXSIZE       = 64; //!< CDC data in
 
-#ifdef USBDM_USB0_IS_DEFINED
 /**
  * Class representing USB0
  */
-class Usb0 : public UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE> {
+class Usb0 : private UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE> {
 
    // Allow superclass to access handleTokenComplete(void);
    friend UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE>;
 
+   static LineCodingStructure lineCoding;
+   static UartQueue<uint8_t, CDC_DATA_IN_EP_MAXSIZE>  inQueue;
+   static UartQueue<uint8_t, CDC_DATA_OUT_EP_MAXSIZE> outQueue;
+
 public:
+   using UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE>::getUserEventName;
+   using UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE>::isConfigured;
+   using UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE>::UserEvent;
+   using UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE>::irqHandler;
+   using UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE>::setUserCallback;
 
    /**
     * String indexes
@@ -172,13 +169,10 @@ protected:
 
    /** In end-point for CDC data in */
    static InEndpoint  <Usb0Info, Usb0::CDC_DATA_IN_ENDPOINT,      CDC_DATA_IN_EP_MAXSIZE>       epCdcDataIn;
+
    /*
     * TODO Add additional End-points here
     */
-
-   static LineCodingStructure lineCoding;
-
-   using cdcInterface = USBDM::CDC_Interface;
 
 public:
 
@@ -189,13 +183,22 @@ public:
     */
    static void initialise();
 
+   //_______ CDC Transmission ________________________________________________________________
+
    /**
     * CDC Transmit
     *
     * @param[in] data Pointer to data to transmit
     * @param[in] size Number of bytes to transmit
     */
-//   static void sendCdcData(const uint8_t *data, unsigned size);
+   static ErrorCode sendCdcData(const uint8_t *data, unsigned size);
+
+   /**
+    * Flush send buffer
+    */
+   static ErrorCode sendNow();
+
+   //_______ Reception ________________________________________________________________
 
    /**
     * CDC Receive
@@ -205,14 +208,7 @@ public:
     *
     * @return Number of bytes received
     */
-//   static int receiveCdcData(uint8_t *data, unsigned maxSize);
-
-   /**
-    * Notify IN (device->host) endpoint that data is available
-    *
-    * @return Not used
-    */
-   static bool notify();
+   static int receiveCdcData(uint8_t *data, unsigned maxSize);
 
    /**
     * Device Descriptor
@@ -247,68 +243,76 @@ public:
 
 protected:
    /**
+    * Clear value reflecting selected hardware based ping-pong buffer.
+    * This would normally only be called when resetting the USB hardware or using
+    * USBx_CTL_ODDRST.
+    */
+   static void clearPinPongToggle() {
+      epCdcDataIn.clearPinPongToggle();
+      epCdcDataOut.clearPinPongToggle();
+   }
+
+   /**
     * Initialises all end-points
     */
-   static void initialiseEndpoints(void) {
-      epCdcNotification.initialise();
+   static void initialiseEndpoints(bool clearToggle) {
+
+      epCdcNotification.initialise(clearToggle);
       addEndpoint(&epCdcNotification);
 
-      epCdcDataOut.initialise();
+      epCdcDataOut.initialise(clearToggle);
       addEndpoint(&epCdcDataOut);
       epCdcDataOut.setCallback(cdcOutTransactionCallback);
 
-      // Make sure epCdcDataOut is ready for polling (interrupt OUT)
-      epCdcDataOut.startRxStage(EPDataOut, epCdcDataOut.getMaximumTransferSize());
+      // Make sure epCdcDataOut is ready for transfer (interrupt OUT)
+//      epCdcDataOut.startRxStage(EPDataOut, epCdcDataOut.getMaximumTransferSize());
 
-      epCdcDataIn.initialise();
+      epCdcDataIn.initialise(clearToggle);
       addEndpoint(&epCdcDataIn);
       epCdcDataIn.setCallback(cdcInTransactionCallback);
 
       // Start CDC status transmission
       epCdcSendNotification();
 
-      // Connect notify callback
-      cdcInterface::setUsbInNotifyCallback(notify);
       /*
        * TODO Initialise additional End-points here
        */
    }
 
    /**
-    * Callback for SOF tokens
+    * Handler for Start of Frame Token interrupt (~1ms interval)
     *
     * @param frameNumber Frame number from SOF token
     *
-    * @return  Error code
+    * @return  E_NO_ERROR on success
     */
    static ErrorCode sofCallback(uint16_t frameNumber);
 
    /**
-    * Call-back handling CDC-IN transaction complete\n
-    * Checks for data and schedules transfer as necessary\n
-    * Each transfer will have a ZLP as necessary.
+    * Call-back handling CDC-IN transaction complete
     *
-    * @param[in] state Current end-point state
+    * @param[in] state Current end-point state (always EPDataOut)
     *
     * @return The endpoint state to set after call-back (EPIdle)
     */
    static EndpointState cdcInTransactionCallback(EndpointState state);
 
    /**
-    * Call-back handling CDC-OUT transaction complete\n
-    * Data received is passed to the cdcInterface
+    * Call-back handling CDC-OUT transaction complete
     *
-    * @param[in] state Current end-point state
+    * @param[in] state Current end-point state (always EPDataIn)
     *
     * @return The endpoint state to set after call-back (EPIdle)
     */
    static EndpointState cdcOutTransactionCallback(EndpointState state);
 
    /**
-    * Handler for Token Complete USB interrupts for\n
+    * Handler for Token Complete USB interrupts for \n
     * end-points other than EP0
+    *
+    * @param usbStat USB Status value from USB hardware
     */
-   static void handleTokenComplete(UsbStat   usbStat);
+   static void handleTokenComplete(UsbStat usbStat);
 
    /**
     * Start CDC IN transaction\n
@@ -353,8 +357,6 @@ protected:
 };
 
 using UsbImplementation = Usb0;
-
-#endif // USBDM_USB0_IS_DEFINED
 
 } // End namespace USBDM
 

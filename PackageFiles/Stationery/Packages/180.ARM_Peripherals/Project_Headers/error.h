@@ -42,6 +42,7 @@ enum ErrorCode {
    E_INTERRUPTED,                 //!< Interrupt occurred during operation
    E_BUSY,                        //!< Device is busy
    E_MATCH,                       //!< Match event on SPI
+   E_WRONG_STATE,                 //!< Device is in wrong state for action
 
    E_CMSIS_ERR_OFFSET = 1<<20,    //!< Offset added to CMSIS error codes
 };

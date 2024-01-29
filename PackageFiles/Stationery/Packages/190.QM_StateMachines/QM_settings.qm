@@ -23,10 +23,10 @@ This example is integrated into a USBDM project</documentation>
    <statechart properties="0x02">
     <initial target="../1">
      <action>// Initialise hardware
-RGB_Blue::setOutput();
+Led::setOutput();
 
 (void)e; // unused parameter
-console.writeln(&quot;Starting&quot;);
+//console.writeln(&quot;Starting&quot;);
 </action>
      <initial_glyph conn="8,4,5,1,14,4,-2">
       <action box="0,-2,6,2"/>
@@ -37,8 +37,8 @@ console.writeln(&quot;Starting&quot;);
  * Arm the private time event to expire in 1s
  */
 m_timeEvt.armX(BSP::TICKS_PER_SEC, 0);
-RGB_Blue::off();
-console.writeln(&quot;led off!&quot;);</entry>
+Led::off();
+//console.writeln(&quot;led off!&quot;);</entry>
      <tran trig="TIMEOUT" target="../../2">
       <tran_glyph conn="20,14,1,1,2,11,-2">
        <action box="-9,-1,9,2"/>
@@ -53,8 +53,8 @@ console.writeln(&quot;led off!&quot;);</entry>
  * Arm the private time event to expire in 1/4s
  */
 m_timeEvt.armX(BSP::TICKS_PER_SEC/4, 0);
-RGB_Blue::on();
-console.writeln(&quot;led on!&quot;);</entry>
+Led::on();
+//console.writeln(&quot;led on!&quot;);</entry>
      <tran trig="TIMEOUT" target="../../1">
       <tran_glyph conn="4,26,5,3,-2,-12,2">
        <action box="0,-1,9,2"/>
@@ -140,8 +140,10 @@ void QF::onStartup() {
     // Start SYSTICK Timer at given rate
    SysTick_Config(SystemCoreClock / BSP::TICKS_PER_SEC);
 
+#ifdef SCB_AIRCR_PRIGROUP_Msk
    // Assign all priority bits for preemption-prio. and none to sub-prio.
    NVIC_SetPriorityGrouping(0U);
+#endif
 
    // Set priorities of ISRs used in the system, see NOTE1
    NVIC_SetPriority(SysTick_IRQn, QF_AWARE_ISR_CMSIS_PRI + 1U);
@@ -162,7 +164,9 @@ void SysTick_Handler() {
 
 #if USE_CONSOLE
 void Q_onAssert(char const * const module, int loc) {
+#if USE_CONSOLE
     console.writeln(&quot;Assertion failed in &quot;, module, &quot;:&quot;, loc);
+#endif
     exit(-1);
 }
 #else // !USE_CONSOLE

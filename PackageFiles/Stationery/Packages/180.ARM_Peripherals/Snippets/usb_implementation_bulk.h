@@ -30,9 +30,8 @@
  * Under Linux drivers for bulk and CDC are automatically loaded
  */
 
-#define MS_COMPATIBLE_ID_FEATURE
+//#define MS_COMPATIBLE_ID_FEATURE
 
-#define UNIQUE_ID
 //#include "configure.h"
 
 namespace USBDM {
@@ -49,11 +48,11 @@ namespace USBDM {
 #else
 #define SERIAL_NO           "USBDM-0001"
 #endif
-#define PRODUCT_DESCRIPTION "Kinetis"
+#define PRODUCT_DESCRIPTION "USB-Test"
 #define MANUFACTURER        "pgo"
 
 static constexpr uint16_t  VENDOR_ID   = 0x16D0;    // Vendor ID (actually MCS)
-static constexpr uint16_t  PRODUCT_ID  = 0x4325;    // Product ID
+static constexpr uint16_t  PRODUCT_ID  = 0x4999;    // Product ID
 static constexpr uint16_t  VERSION_ID  = 0x0100;    // Version ID
 
 //======================================================================
@@ -69,13 +68,16 @@ static constexpr unsigned  BULK_IN_EP_MAXSIZE           = 64; //!< Bulk in
 /**
  * Class representing USB0
  */
-class Usb0 : public UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE> {
+class Usb0 : private UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE> {
 
    // Allow superclass to access handleTokenComplete(void);
    friend UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE>;
 
 public:
-
+   using UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE>::getUserEventName;
+   using UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE>::isConfigured;
+   using UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE>::UserEvent;
+   using UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE>::irqHandler;
    using UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE>::setUserCallback;
 
    /**
@@ -121,7 +123,6 @@ public:
       /** Bulk in endpoint number */
       BULK_IN_ENDPOINT,
 
-
       /*
        * TODO Add additional Endpoint numbers here
        */
@@ -147,7 +148,7 @@ public:
    static const uint8_t *const stringDescriptors[];
 
 protected:
-   /* end-points */
+   /* Additional end-points */
 
    /** Out end-point for Bulk */
    static OutEndpoint <Usb0Info, Usb0::BULK_OUT_ENDPOINT, BULK_OUT_EP_MAXSIZE> epBulkOut;
@@ -168,40 +169,78 @@ public:
     */
    static void initialise();
 
+   //_______ Bulk Transmission ________________________________________________________________
+
+   /**
+    *  Non-blocking transmission of data over bulk IN end-point
+    *
+    *  @param size         Number of bytes to send
+    *  @param buffer       Pointer to bytes to send
+    *
+    *  @return E_WRONG_STATE  In wrong state e.g. Busy or Stalled
+    *  @return E_NO_ERROR     Transmission successfully commenced
+    */
+   static ErrorCode startSendBulkData(uint16_t size, const uint8_t *buffer);
+
+   /**
+    *  Check if transmission completed
+    *
+    *  @return E_BUSY      Busy with last transmission - retry
+    *  @return E_NO_ERROR  Transmission successfully completed
+    */
+   static ErrorCode pollSendBulkData();
+
    /**
     *  Blocking transmission of data over bulk IN end-point
     *
-    *  @param[IN] size    Number of bytes to send
-    *  @param[IN] buffer  Pointer to bytes to send
-    *  @param[IN] timeout Maximum time to wait for packet
+    *  @param size            Number of bytes to send
+    *  @param buffer          Pointer to bytes to send
+    *  @param timeoutMS       Timeout in milliseconds (may be zero to suppress)
     *
-    *  @note : Waits for idle BEFORE transmission but\n
-    *          returns before data has been transmitted
+    *  @return E_NO_ERROR     Transmission successfully completed
+    *  @return E_TIMEOUT      Transmission not completed within timeout (transmission is aborted)
+    *  @return E_WRONG_STATE  In wrong state e.g. Busy or Stalled (transmission is aborted)
     */
-   static ErrorCode sendBulkData(const uint16_t size, const uint8_t *buffer, uint32_t timeout);
+   static ErrorCode sendBulkData(uint16_t size, const uint8_t *buffer, int timeoutMS);
 
-   static ErrorCode startReceiveBulkData(uint16_t size, uint8_t *buffer);
+
+   //_______ Bulk Reception ________________________________________________________________
+
    /**
-    * Poll for receive data on USB.
-    * If the interface is idle it is set up for reception using the parameters provided.
-    * This is non-blocking.
+    *  Non-blocking reception of data over bulk OUT end-point
     *
-    * @return  <0  => No data available
-    * @return  >=0 => Data has been received and copied to buffer
+    *   @param size           Maximum number of bytes to receive
+    *   @param buffer         Pointer to buffer for bytes received
+    *
+    *   @return E_NO_ERROR    Transmission started
+    *   @return E_WRONG_STATE In unexpected state e.g. Busy or Stalled
     */
-   static int       pollReceiveBulkData();
+   static ErrorCode startReceiveBulkData(uint16_t size, uint8_t *buffer);
+
+   /**
+    *  Check for completion of reception of data over bulk OUT end-point.
+    *  Reception will have been previously configured by startReceiveBulkData().
+    *
+    *   @param  size          Number of bytes received
+    *
+    *   @return E_BUSY        Reception not complete. (size == 0)
+    *   @return E_NO_ERROR    Reception complete. Buffer has data.
+    *   @return E_WRONG_STATE In unexpected state e.g. Idle or Stalled
+    */
+   static ErrorCode pollReceiveBulkData(uint16_t &size);
 
    /**
     *  Blocking reception of data over bulk OUT end-point
     *
-    *   @param[IN/OUT] size    Max Number of bytes to receive/Actual number received
-    *   @param[IN]     buffer  Pointer to buffer for bytes received
+    *  @param size           Maximum number of bytes to receive/Number of bytes received
+    *  @param buffer         Pointer to buffer for bytes received
+    *  @param timeoutMS      Timeout in milliseconds (may be zero to suppress)
     *
-    *   @return Error code
-    *
-    *   @note Doesn't return until some bytes have been received
+    *  @return E_NO_ERROR    Reception completed
+    *  @return E_TIMEOUT     Reception not completed within timeout (reception is aborted)
+    *  @return E_WRONG_STATE In unexpected state e.g. Busy or Stalled (reception is aborted)
     */
-   static ErrorCode receiveBulkData(uint16_t &size, uint8_t *buffer);
+   static ErrorCode receiveBulkData(uint16_t &size, uint8_t *buffer, int timeoutMS);
 
    /**
     * Device Descriptor
@@ -242,12 +281,12 @@ protected:
    /**
     * Initialises all end-points
     */
-   static void initialiseEndpoints(void) {
-      epBulkOut.initialise();
+   static void initialiseEndpoints(bool clearToggle) {
+      epBulkOut.initialise(clearToggle);
       addEndpoint(&epBulkOut);
       epBulkOut.setCallback(bulkOutTransactionCallback);
 
-      epBulkIn.initialise();
+      epBulkIn.initialise(clearToggle);
       addEndpoint(&epBulkIn);
       epBulkIn.setCallback(bulkInTransactionCallback);
 
@@ -257,11 +296,11 @@ protected:
    }
 
    /**
-    * Callback for SOF tokens
+    * Handler for Start of Frame Token interrupt (~1ms interval)
     *
     * @param frameNumber Frame number from SOF token
     *
-    * @return  Error code
+    * @return  E_NO_ERROR on success
     */
    static ErrorCode sofCallback(uint16_t frameNumber);
 
@@ -270,7 +309,7 @@ protected:
     *
     * @param[in] state Current end-point state (always EPDataOut)
     *
-    * @return The endpoint state to set after call-back (EPDataOut)
+    * @return The endpoint state to set after call-back (EPIdle/EPDataOut)
     */
    static EndpointState bulkOutTransactionCallback(EndpointState state);
 

@@ -20,7 +20,7 @@
 
    <if condition="!/SYSTEM/$pcrPattern">
       <!-- PCRs not used -->
-      <constant key="/SYSTEM/$pcrPattern"          type="String"  value="&quot;&quot;"                                          />
+      <constant key="/SYSTEM/$pcrPattern"          type="String"  value='""'                                          />
       <!-- Standard Gpio format
           * %i = port instance e.g."A"
           * %n = bit number

@@ -21,6 +21,7 @@
 
 #include "usb.h"
 #include "usb_implementation_composite.h"
+#include "hardware.h"
 
 namespace USBDM {
 
@@ -28,7 +29,7 @@ namespace USBDM {
  * Interface numbers for USB descriptors
  */
 enum InterfaceNumbers {
-   /** Interface number for BDM channel */
+   /** Interface number for Bulk interface */
    BULK_INTF_ID,
 
    /** Interface number for CDC Control channel */
@@ -274,7 +275,7 @@ ErrorCode Usb0::sofCallback(uint16_t frameNumber) {
       switch ((frameNumber>>8)&0x3) {
          case 0:
             // LED on if configured, off if not
-//            UsbLed::write(fConnectionState == USBconfigured);
+            UsbLed::write(fConnectionState == USBconfigured);
             break;
          case 1:
          case 2:
@@ -282,36 +283,22 @@ ErrorCode Usb0::sofCallback(uint16_t frameNumber) {
          case 3:
          default :
             if (fActivityFlag) {
-               // Activity LED flashes
-//               UsbLed::toggle();
-               setActive(false);
+               // Flash LED to indicate activity
+               UsbLed::toggle();
+               fActivityFlag = false;
             }
             break;
       }
    }
-   // Check CDC status
+   // Notify any changes in CDC status
    epCdcSendNotification();
 
    return E_NO_ERROR;
 }
 
-ErrorCode userCallbackFunction(const Usb0::UserEvent event) {
-   switch(event) {
-      case Usb0::UserEvent_Suspend:
-      case Usb0::UserEvent_Reset:
-//         UsbLed::off();
-         break;
-
-      case Usb0::UserEvent_Resume:
-      case Usb0::UserEvent_Configure:
-         break;
-   }
-   return E_NO_ERROR;
-}
-
 /**
- * Configure epCdcNotification for an IN status transaction [Tx, device -> host, DATA0/1]\n
- * A packet is only sent if there has been a change in status
+ * Check for change in CDC status
+ * Notify as needed (IN status transaction [Tx, device -> host, DATA0/1])
  */
 void Usb0::epCdcSendNotification() {
 //   if (fConnectionState != USBconfigured) {
@@ -348,7 +335,7 @@ void Usb0::epCdcSendNotification() {
 
    // Set up to Tx packet
 //   console.write("epCdcSendNotification() 0x").writeln(epCdcNotification.getBuffer()[sizeof(cdcNotification)+0], USBDM::Radix_16);
-   epCdcNotification.startTxStage(EPDataIn, sizeof(cdcNotification));
+   epCdcNotification.startTxTransfer(EPDataIn, sizeof(cdcNotification));
 }
 
 static uint8_t cdcOutBuff[10] = "Welcome\n";
@@ -361,10 +348,10 @@ static int cdcOutByteCount    = 8;
 void Usb0::startCdcIn() {
    if ((epCdcDataIn.getState() == EPIdle) && (cdcOutByteCount>0)) {
       static_assert(epCdcDataIn.BUFFER_SIZE>sizeof(cdcOutBuff), "Buffer too small");
-      Endpoint::safeCopy(epCdcDataIn.getBuffer(), cdcOutBuff, cdcOutByteCount);
+      Endpoint::safeCopy(epCdcDataIn.getTxBuffer(), cdcOutBuff, cdcOutByteCount);
       //TODO Check if need ZLP
       epCdcDataIn.setNeedZLP();
-      epCdcDataIn.startTxStage(EPDataIn, cdcOutByteCount);
+      epCdcDataIn.startTxTransfer(EPDataIn, cdcOutByteCount);
       cdcOutByteCount = 0;
    }
 }
@@ -373,7 +360,7 @@ void Usb0::startCdcIn() {
  * Handler for Token Complete USB interrupts for
  * end-points other than EP0
  *
- * @param[in] usbStat USB Status value from USB hardware
+ * @param usbStat USB Status value from USB hardware
  */
 void Usb0::handleTokenComplete(UsbStat usbStat) {
 
@@ -383,9 +370,11 @@ void Usb0::handleTokenComplete(UsbStat usbStat) {
    fEndPoints[endPoint]->flipOddEven(usbStat);
    switch (endPoint) {
       case BULK_OUT_ENDPOINT: // Accept OUT token
+         setActive();
          epBulkOut.handleOutToken();
          return;
       case BULK_IN_ENDPOINT: // Accept IN token
+         setActive();
          epBulkIn.handleInToken();
          return;
 
@@ -409,6 +398,8 @@ void Usb0::handleTokenComplete(UsbStat usbStat) {
    }
 }
 
+//_______ CDC Call-backs ________________________________________________________________
+
 /**
  * Call-back handling CDC-OUT transaction complete\n
  * Data received is passed to the cdcInterface
@@ -420,9 +411,9 @@ void Usb0::handleTokenComplete(UsbStat usbStat) {
 EndpointState Usb0::cdcOutTransactionCallback(EndpointState state) {
    //   console.WRITELN("cdc_out");
    usbdm_assert(state == EPDataOut, "Incorrect endpoint state");
-   cdcInterface::putData(epCdcDataOut.getDataTransferredSize(), epCdcDataOut.getBuffer());
+   cdcInterface::putData(epCdcDataOut.getDataTransferredSize(), epCdcDataOut.getRxBuffer());
    // Set up for next transfer
-   epCdcDataOut.startRxStage(EPDataOut, epCdcDataOut.BUFFER_SIZE);
+   epCdcDataOut.startRxTransfer(EPDataOut, epCdcDataOut.BUFFER_SIZE);
    return EPDataOut;
 }
 
@@ -444,9 +435,10 @@ EndpointState Usb0::cdcInTransactionCallback(EndpointState state) {
       if (size != 0) {
          // Schedules transfer
          epCdcDataIn.setNeedZLP();
-         epCdcDataIn.startTxTransaction(EPDataIn, size, buffer);
+         epCdcDataIn.startTxTransfer(EPDataIn, size, buffer);
       }
    }
+   return EPDataIn;
 }
 
 /**
@@ -462,30 +454,30 @@ bool Usb0::notify() {
    return true;
 }
 
+//_______ Bulk Call-backs ________________________________________________________________
+
 /**
  * Call-back handling BULK-OUT transaction complete
  *
- * @param[in] state Current end-point state
+ * @param[in] state Current end-point state (always EPDataOut)
  *
- * @return The endpoint state to set after call-back (EPIdle)
+ * @return The endpoint state to set after call-back (e.g. EPIdle/EPDataOut/EPComplete)
  */
 EndpointState Usb0::bulkOutTransactionCallback(EndpointState state) {
    (void)state;
-   // No actions - End-point is polled
-   return EPIdle;
+   return EPComplete;
 }
 
 /**
  * Call-back handling BULK-IN transaction complete
  *
- * @param[in] state Current end-point state
+ * @param[in] state Current end-point state (always EPDataIn)
  *
- * @return The endpoint state to set after call-back (EPIdle)
+ * @return The endpoint state to set after call-back (e.g. EPIdle/EPDataIn/EPComplete)
  */
 EndpointState Usb0::bulkInTransactionCallback(EndpointState state) {
    (void)state;
-   // No actions - End-point is polled
-   return EPIdle;
+   return EPComplete;
 }
 
 /**
@@ -496,9 +488,12 @@ EndpointState Usb0::bulkInTransactionCallback(EndpointState state) {
 void Usb0::initialise() {
    UsbBase_T::initialise();
 
+   UsbLed::setOutput(PinDriveStrength_High, PinDriveMode_PushPull, PinSlewRate_Slow);
+
    // Add extra handling of CDC requests directed to EP0
    setUnhandledSetupCallback(handleUserEp0SetupRequests);
 
+   // Set SOF handler
    setSOFCallback(sofCallback);
 
    cdcInterface::initialise();
@@ -508,44 +503,167 @@ void Usb0::initialise() {
     */
 }
 
+//_______ Bulk Transmission ________________________________________________________________
+
 /**
- *  Blocking reception of data over bulk OUT end-point
+ *  Non-blocking transmission of data over bulk IN end-point
  *
- *   @param[in] maxSize  Maximum # of bytes to receive
- *   @param[in] buffer   Pointer to buffer for bytes received
+ *  @param size         Number of bytes to send
+ *  @param buffer       Pointer to bytes to send
  *
- *   @return Number of bytes received
- *
- *   @note Doesn't return until command has been received.
+ *  @return E_WRONG_STATE  In wrong state e.g. Busy or Stalled
+ *  @return E_NO_ERROR     Transmission successfully commenced
  */
-int Usb0::receiveBulkData(uint8_t maxSize, uint8_t *buffer) {
-   epBulkOut.startRxStage(EPDataOut, maxSize, buffer);
-   while(epBulkOut.getState() != EPIdle) {
-      __enable_irq();
-      __WFI();
+ErrorCode Usb0::startSendBulkData(uint16_t size, const uint8_t *buffer) {
+
+   EndpointState state = epBulkIn.getState();
+
+   if (state != EPIdle) {
+      return E_WRONG_STATE;
    }
-   setActive();
-   return epBulkOut.getDataTransferredSize();
+   // Use ZLP as needed
+   epBulkIn.setNeedZLP();
+   epBulkIn.startTxTransfer(EPDataIn, size, buffer);
+   return E_NO_ERROR;
+}
+
+/**
+ *  Check if transmission completed
+ *
+ *  @return E_BUSY      Busy with last transmission - retry
+ *  @return E_NO_ERROR  Transmission successfully completed
+ */
+ErrorCode Usb0::pollSendBulkData() {
+
+   EndpointState state = epBulkIn.getState();
+   switch(state) {
+      case EPComplete:
+         setActive();
+         epBulkIn.setState(EPIdle);
+         return E_NO_ERROR;
+      case EPDataIn:
+         return E_BUSY;
+      default:
+         return E_WRONG_STATE;
+   }
 }
 
 /**
  *  Blocking transmission of data over bulk IN end-point
  *
- *  @param[in] size   Number of bytes to send
- *  @param[in] buffer Pointer to bytes to send
+ *  @param size            Number of bytes to send
+ *  @param buffer          Pointer to bytes to send
+ *  @param timeoutMS       Timeout in milliseconds (may be zero to suppress)
  *
- *   @note : Waits for idle BEFORE transmission but\n
- *   returns before data has been transmitted
- *
+ *  @return E_NO_ERROR     Transmission successfully completed
+ *  @return E_TIMEOUT      Transmission not completed within timeout (transmission is aborted)
+ *  @return E_WRONG_STATE  In wrong state e.g. Busy or Stalled (transmission is aborted)
  */
-void Usb0::sendBulkData(uint8_t size, const uint8_t *buffer) {
-//   commandBusyFlag = false;
-   //   enableUSBIrq();
-   while (epBulkIn.getState() != EPIdle) {
-      __WFI();
+ErrorCode Usb0::sendBulkData(uint16_t size, const uint8_t *buffer, int timeoutMS) {
+
+   ErrorCode rc = startSendBulkData(size, buffer);
+
+   if (rc == E_NO_ERROR) {
+      for(;;) {
+         rc = pollSendBulkData();
+         if (rc != E_BUSY) {
+            break;
+         }
+         waitMS(1);
+         if ((timeoutMS>0) && (--timeoutMS == 0)) {
+            rc = E_TIMEOUT;
+            break;
+         }
+      }
    }
-   epBulkIn.startTxStage(EPDataIn, size, buffer);
+   if (rc != E_NO_ERROR) {
+      epBulkIn.initialise(false);
+   }
+   return rc;
 }
+
+//_______ Bulk Reception ________________________________________________________________
+
+/**
+ *  Non-blocking reception of data over bulk OUT end-point
+ *
+ *   @param size           Maximum number of bytes to receive
+ *   @param buffer         Pointer to buffer for bytes received
+ *
+ *   @return E_NO_ERROR    Transmission started
+ *   @return E_WRONG_STATE In unexpected state e.g. Busy or Stalled
+ */
+ErrorCode Usb0::startReceiveBulkData(uint16_t size, uint8_t *buffer) {
+   EndpointState state = epBulkOut.getState();
+   if (state != EPIdle) {
+      return E_WRONG_STATE;
+   }
+   epBulkOut.startRxTransfer(EPDataOut, size, buffer);
+   return E_NO_ERROR;
+}
+
+/**
+ *  Check for completion of reception of data over bulk OUT end-point.
+ *  Reception will have been previously configured by startReceiveBulkData().
+ *
+ *   @param  size          Number of bytes received
+ *
+ *   @return E_BUSY        Reception not complete. (size == 0)
+ *   @return E_NO_ERROR    Reception complete. Buffer has data.
+ *   @return E_WRONG_STATE In unexpected state e.g. Idle or Stalled
+ */
+ErrorCode Usb0::pollReceiveBulkData(uint16_t &size) {
+
+   size = 0;
+   EndpointState state = epBulkOut.getState();
+   switch(state) {
+      case EPComplete:
+         setActive();
+         size = epBulkOut.getDataTransferredSize();
+         epBulkOut.setState(EPIdle);
+         return E_NO_ERROR;
+      case EPDataOut:
+         return E_BUSY;
+      default:
+         return E_WRONG_STATE;
+   }
+}
+
+/**
+ *  Blocking reception of data over bulk OUT end-point
+ *
+ *  @param size           Maximum number of bytes to receive/Number of bytes received
+ *  @param buffer         Pointer to buffer for bytes received
+ *  @param timeoutMS      Timeout in milliseconds (may be zero to suppress)
+ *
+ *  @return E_NO_ERROR    Reception completed
+ *  @return E_TIMEOUT     Reception not completed within timeout (reception is aborted)
+ *  @return E_WRONG_STATE In unexpected state e.g. Busy or Stalled (reception is aborted)
+ */
+ErrorCode Usb0::receiveBulkData(uint16_t &size, uint8_t *buffer, int timeoutMS) {
+
+   ErrorCode rc = startReceiveBulkData(size, buffer);
+   if (rc == E_NO_ERROR) {
+      for(;;) {
+         rc = pollReceiveBulkData(size);
+         if (rc != E_BUSY) {
+            break;
+         }
+         waitMS(1);
+         if ((timeoutMS>0) && (--timeoutMS==0)) {
+            rc = E_TIMEOUT;
+            break;
+         }
+      }
+   }
+   if (rc != E_NO_ERROR) {
+      epBulkOut.initialise(false);
+   }
+
+   return rc;
+}
+
+//_______ CDC Control ________________________________________________________________
 
 /**
  * CDC Set line coding handler
@@ -554,9 +672,9 @@ void Usb0::handleSetLineCoding() {
 //   console.WRITELN("handleSetLineCoding()");
 
    // Call-back to do after transaction complete
-   static auto callback = []() {
+   static auto callback = [](EndpointState) {
       // The controlEndpoint buffer will contain the LineCodingStructure data at call-back time
-      cdcInterface::setLineCoding((LineCodingStructure *)fControlEndpoint.getRxBuffer());
+      cdcInterface::setLineCoding((const LineCodingStructure *)fControlEndpoint.getRxBuffer());
       fControlEndpoint.setCallback(nullptr);
       return EPIdle;
    };
@@ -564,7 +682,7 @@ void Usb0::handleSetLineCoding() {
 
    // Don't use external buffer - this requires response to fit in internal EP buffer
    static_assert(sizeof(LineCodingStructure) < fControlEndpoint.BUFFER_SIZE, "Buffer insufficient size");
-   fControlEndpoint.startRxStage(EPDataOut, sizeof(LineCodingStructure));
+   fControlEndpoint.startRxTransfer(EPDataOut, sizeof(LineCodingStructure));
 }
 
 /**

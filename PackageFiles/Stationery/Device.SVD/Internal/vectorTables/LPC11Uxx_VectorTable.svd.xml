@@ -9,127 +9,151 @@ Devices using this vector table:
       <name>PIN_INT0</name>
       <description>GPIO pin interrupt</description>
       <value>0</value>
+      <peripheral>SYSCON</peripheral>
    </interrupt>
    <interrupt>
       <name>PIN_INT1</name>
       <description>GPIO pin interrupt</description>
       <value>1</value>
+      <peripheral>SYSCON</peripheral>
    </interrupt>
    <interrupt>
       <name>PIN_INT2</name>
       <description>GPIO pin interrupt</description>
       <value>2</value>
+      <peripheral>SYSCON</peripheral>
    </interrupt>
    <interrupt>
       <name>PIN_INT3</name>
       <description>GPIO pin interrupt</description>
       <value>3</value>
+      <peripheral>SYSCON</peripheral>
    </interrupt>
    <interrupt>
       <name>PIN_INT4</name>
       <description>GPIO pin interrupt</description>
       <value>4</value>
+      <peripheral>SYSCON</peripheral>
    </interrupt>
    <interrupt>
       <name>PIN_INT5</name>
       <description>GPIO pin interrupt</description>
       <value>5</value>
+      <peripheral>SYSCON</peripheral>
    </interrupt>
    <interrupt>
       <name>PIN_INT6</name>
       <description>GPIO pin interrupt</description>
       <value>6</value>
+      <peripheral>SYSCON</peripheral>
    </interrupt>
    <interrupt>
       <name>PIN_INT7</name>
       <description>GPIO pin interrupt</description>
       <value>7</value>
+      <peripheral>SYSCON</peripheral>
    </interrupt>
    <interrupt>
       <name>GINT0</name>
       <description>GPIO group interrupt</description>
       <value>8</value>
+      <peripheral>SYSCON</peripheral>
    </interrupt>
    <interrupt>
       <name>GINT1</name>
       <description>GPIO group interrupt</description>
       <value>9</value>
+      <peripheral>SYSCON</peripheral>
    </interrupt>
    <interrupt>
       <name>SSP1</name>
       <description>SSP/SPI</description>
       <value>14</value>
+      <peripheral>SSP0</peripheral>
    </interrupt>
    <interrupt>
       <name>I2C</name>
-      <description>I2C-bus controller</description>
+      <description>I2C-bus interface</description>
       <value>15</value>
+      <peripheral>I2C</peripheral>
    </interrupt>
    <interrupt>
       <name>CT16B0</name>
-      <description>16-bit counter/timers CT16B0</description>
+      <description>16-bit counter/timer</description>
       <value>16</value>
+      <peripheral>CT16B0</peripheral>
    </interrupt>
    <interrupt>
       <name>CT16B1</name>
-      <description>16-bit counter/timers CT16B1</description>
+      <description>16-bit counter/timer</description>
       <value>17</value>
+      <peripheral>CT16B1</peripheral>
    </interrupt>
    <interrupt>
       <name>CT32B0</name>
-      <description>32-bit counter/timers CT32B0</description>
+      <description>32-bit counter/timer</description>
       <value>18</value>
+      <peripheral>CT32B0</peripheral>
    </interrupt>
    <interrupt>
       <name>CT32B1</name>
-      <description>32-bit counter/timers CT32B1</description>
+      <description>32-bit counter/timer</description>
       <value>19</value>
+      <peripheral>CT32B1</peripheral>
    </interrupt>
    <interrupt>
       <name>SSP0</name>
       <description>SSP/SPI</description>
       <value>20</value>
+      <peripheral>SSP0</peripheral>
    </interrupt>
    <interrupt>
       <name>USART</name>
       <description>USART</description>
       <value>21</value>
+      <peripheral>USART</peripheral>
    </interrupt>
    <interrupt>
       <name>USB_IRQ</name>
       <description>USB2.0 device controller</description>
       <value>22</value>
+      <peripheral>USB</peripheral>
    </interrupt>
    <interrupt>
       <name>USB_FIQ</name>
       <description>USB2.0 device controller</description>
       <value>23</value>
+      <peripheral>USB</peripheral>
    </interrupt>
    <interrupt>
       <name>ADC</name>
       <description>ADC</description>
       <value>24</value>
+      <peripheral>ADC</peripheral>
    </interrupt>
    <interrupt>
       <name>WDT</name>
       <description>Windowed Watchdog Timer</description>
       <value>25</value>
+      <peripheral>WWDT</peripheral>
    </interrupt>
    <interrupt>
       <name>BOD_IRQ</name>
       <description>System control block</description>
       <value>26</value>
+      <peripheral>SYSCON</peripheral>
    </interrupt>
    <interrupt>
-      <name>FLASH_IRQ</name>
-      <description>Flash
-controller</description>
+      <name>FMC</name>
+      <description>Flash programming firmware</description>
       <value>27</value>
+      <peripheral>FLASHCTRL</peripheral>
    </interrupt>
    <interrupt>
       <name>USBWAKEUP</name>
       <description>USB2.0 device controller</description>
       <value>30</value>
+      <peripheral>USB</peripheral>
    </interrupt>
 </interrupts>
 

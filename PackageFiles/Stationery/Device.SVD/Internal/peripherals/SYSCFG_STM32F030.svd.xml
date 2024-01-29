@@ -1,0 +1,327 @@
+<!--
+Devices using this peripheral: 
+      STM32F030
+-->
+      <peripheral>
+         <?sourceFile "SYSCFG_STM32F030" ?>
+         <name>SYSCFG</name>
+         <description>System configuration controller</description>
+         <groupName>SYSCFG</groupName>
+         <headerStructName>SYSCFG</headerStructName>
+         <baseAddress>0x40010000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x8</offset>
+            <size>0x14</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CFGR1</name>
+               <description>configuration register 1</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>MEM_MODE</name>
+                     <description>Memory mapping selection
+              bits</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADC_DMA_RMP</name>
+                     <description>ADC DMA remapping bit</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>USART1_TX_DMA_RMP</name>
+                     <description>USART1_TX DMA remapping
+              bit</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>USART1_RX_DMA_RMP</name>
+                     <description>USART1_RX DMA request remapping
+              bit</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TIM16_DMA_RMP</name>
+                     <description>TIM16 DMA request remapping
+              bit</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TIM17_DMA_RMP</name>
+                     <description>TIM17 DMA request remapping
+              bit</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>I2C_PB6_FM</name>
+                     <description>Fast Mode Plus (FM plus) driving
+              capability activation bits</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>I2C_PB7_FM</name>
+                     <description>Fast Mode Plus (FM+) driving capability
+              activation bits</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>I2C_PB8_FM</name>
+                     <description>Fast Mode Plus (FM+) driving capability
+              activation bits</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>I2C_PB9_FM</name>
+                     <description>Fast Mode Plus (FM+) driving capability
+              activation bits</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>I2C1_FM_plus</name>
+                     <description>FM+ driving capability activation for
+              I2C1</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>I2C2_FM_plus</name>
+                     <description>FM+ driving capability activation for
+              I2C2</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SPI2_DMA_RMP</name>
+                     <description>SPI2 DMA request remapping
+              bit</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>USART2_DMA_RMP</name>
+                     <description>USART2 DMA request remapping
+              bit</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>USART3_DMA_RMP</name>
+                     <description>USART3 DMA request remapping
+              bit</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>I2C1_DMA_RMP</name>
+                     <description>I2C1 DMA request remapping
+              bit</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TIM1_DMA_RMP</name>
+                     <description>TIM1 DMA request remapping
+              bit</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TIM2_DMA_RMP</name>
+                     <description>TIM2 DMA request remapping
+              bit</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TIM3_DMA_RMP</name>
+                     <description>TIM3 DMA request remapping
+              bit</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EXTICR1</name>
+               <description>external interrupt configuration register
+          1</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>EXTI0</name>
+                     <description>EXTI 0 configuration bits</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>EXTI1</name>
+                     <description>EXTI 1 configuration bits</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>EXTI2</name>
+                     <description>EXTI 2 configuration bits</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>EXTI3</name>
+                     <description>EXTI 3 configuration bits</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EXTICR2</name>
+               <description>external interrupt configuration register
+          2</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>EXTI4</name>
+                     <description>EXTI 4 configuration bits</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>EXTI5</name>
+                     <description>EXTI 5 configuration bits</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>EXTI6</name>
+                     <description>EXTI 6 configuration bits</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>EXTI7</name>
+                     <description>EXTI 7 configuration bits</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EXTICR3</name>
+               <description>external interrupt configuration register
+          3</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>EXTI8</name>
+                     <description>EXTI 8 configuration bits</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>EXTI9</name>
+                     <description>EXTI 9 configuration bits</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>EXTI10</name>
+                     <description>EXTI 10 configuration bits</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>EXTI11</name>
+                     <description>EXTI 11 configuration bits</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EXTICR4</name>
+               <description>external interrupt configuration register
+          4</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>EXTI12</name>
+                     <description>EXTI 12 configuration bits</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>EXTI13</name>
+                     <description>EXTI 13 configuration bits</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>EXTI14</name>
+                     <description>EXTI 14 configuration bits</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>EXTI15</name>
+                     <description>EXTI 15 configuration bits</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CFGR2</name>
+               <description>configuration register 2</description>
+               <addressOffset>0x18</addressOffset>
+               <fields>
+                  <field>
+                     <name>LOCUP_LOCK</name>
+                     <description>Cortex-M0 LOCKUP bit enable
+              bit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SRAM_PARITY_LOCK</name>
+                     <description>SRAM parity lock bit</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PVD_LOCK</name>
+                     <description>PVD lock enable bit</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SRAM_PEF</name>
+                     <description>SRAM parity flag</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

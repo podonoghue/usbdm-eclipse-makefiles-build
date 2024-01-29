@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE device>
+<device
+   schemaVersion="1.1"
+   xmlns:xi="http://www.w3.org/2001/XInclude"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd"
+>
+   <name>STM32F030</name>
+   <version>1.0</version>
+   <description>STM32F030</description>
+   <cpu>
+      <name>CM0PLUS</name>
+      <revision>r1p0</revision>
+      <endian>little</endian>
+      <mpuPresent>false</mpuPresent>
+      <fpuPresent>false</fpuPresent>
+      <vtorPresent>true</vtorPresent>
+      <nvicPrioBits>2</nvicPrioBits>
+      <vendorSystickConfig>false</vendorSystickConfig>
+   </cpu>
+   <addressUnitBits>8</addressUnitBits>
+   <width>32</width>
+   <peripherals>
+      <xi:include href="peripherals/ADC_STM32F030.svd.xml"/>
+      <xi:include href="peripherals/CRC_STM32F030.svd.xml"/>
+      <xi:include href="peripherals/DBGMCU_STM32F030.svd.xml"/>
+      <xi:include href="peripherals/DMA_STM32F030.svd.xml"/>
+      <xi:include href="peripherals/EXTI_STM32F030.svd.xml"/>
+      <xi:include href="peripherals/Flash_STM32F030.svd.xml"/>
+      <xi:include href="peripherals/GPIOA_STM32F030.svd.xml"/>
+      <peripheral derivedFrom="GPIOA"><name>GPIOB</name><baseAddress>0x48000400</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOC</name><baseAddress>0x48000800</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOD</name><baseAddress>0x48000C00</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOF</name><baseAddress>0x48001400</baseAddress></peripheral>
+      <xi:include href="peripherals/I2C1_STM32F030.svd.xml"/>
+      <peripheral derivedFrom="I2C1"><name>I2C2</name><baseAddress>0x40005800</baseAddress></peripheral>
+      <xi:include href="peripherals/IWDG_STM32F030.svd.xml"/>
+      <xi:include href="peripherals/NVIC_STM32F030.svd.xml"/>
+      <xi:include href="peripherals/PWR_STM32F030.svd.xml"/>
+      <xi:include href="peripherals/RCC_STM32F030.svd.xml"/>
+      <xi:include href="peripherals/RTC_STM32F030.svd.xml"/>
+      <xi:include href="peripherals/SPI1_STM32F030.svd.xml"/>
+      <peripheral derivedFrom="SPI1"><name>SPI2</name><baseAddress>0x40003800</baseAddress></peripheral>
+      <xi:include href="peripherals/SYSCFG_STM32F030.svd.xml"/>
+      <xi:include href="peripherals/TIM1_STM32F030.svd.xml"/>
+      <xi:include href="peripherals/TIM14_STM32F030.svd.xml"/>
+      <xi:include href="peripherals/TIM15_STM32F030.svd.xml"/>
+      <xi:include href="peripherals/TIM16_STM32F030.svd.xml"/>
+      <peripheral derivedFrom="TIM16"><name>TIM17</name><baseAddress>0x40014800</baseAddress></peripheral>
+      <xi:include href="peripherals/TIM3_STM32F030.svd.xml"/>
+      <xi:include href="peripherals/TIM6_STM32F030.svd.xml"/>
+      <xi:include href="peripherals/USART1_STM32F030.svd.xml"/>
+      <peripheral derivedFrom="USART1"><name>USART2</name><baseAddress>0x40004400</baseAddress></peripheral>
+      <xi:include href="peripherals/WWDG_STM32F030.svd.xml"/>
+   </peripherals>
+   <vendorExtensions>
+   <xi:include href="vectorTables/STM32F030_VectorTable.svd.xml"/>
+   </vendorExtensions>
+</device>

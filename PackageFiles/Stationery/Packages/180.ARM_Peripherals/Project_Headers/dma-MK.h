@@ -939,13 +939,13 @@ $(/DMA/Setters:#error "/DMA/Setters not found" )
 /** Bit-mask of allocated channels */
 template<class Info> uint32_t DmaBase_T<Info>::allocatedChannels = (1<<Info::NumChannels)-1;
 
-#endif
-
 $(/DMA/declarations: // No declaractions found)
+
 /**
  * End DMA_Group
  * @}
  */
+#endif
 } // End namespace USBDM
 
 #endif /* INCLUDE_USBDM_DMA_H_ */
