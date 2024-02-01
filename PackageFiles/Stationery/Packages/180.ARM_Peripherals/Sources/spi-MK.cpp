@@ -5,7 +5,6 @@
  * @date     13 April 2016
  */
 #include "spi.h"
-#include <cfloat>
 
 /*
  * *****************************
@@ -55,16 +54,18 @@ uint32_t Spi::calculateSpeed(uint32_t clockFrequency, uint32_t spiCtarValue) {
  *
  * Note: Determines bestPrescaler and bestDivider for the smallest delay that is not less than delay.
  */
-void Spi::calculateDelay(float clockFrequency, float delay, int &bestPrescale, int &bestDivider) {
-   const float clockPeriod = (1/clockFrequency);
-   float bestDifference = FLT_MAX;
+void Spi::calculateDelay(uint32_t clockFrequency, uint32_t delay_ns, int &bestPrescale, int &bestDivider) {
+
+   const uint32_t clockPeriod_ns = (1'000'000'000+clockFrequency/2)/clockFrequency;
+
+   int bestDifference = std::numeric_limits<int>::max();
 
    bestPrescale = 0;
    bestDivider  = 0;
    for (int prescale = 3; prescale >= 0; prescale--) {
       for (int divider = 15; divider >= 0; divider--) {
-         float calculatedDelay = clockPeriod*((prescale<<1)+1)*(1UL<<(divider+1));
-         float difference = calculatedDelay - delay;
+         uint32_t calculatedDelay = clockPeriod_ns*((prescale<<1)+1)*(1UL<<(divider+1));
+         int32_t  difference = calculatedDelay - delay_ns;
          if (difference < 0) {
             // Too short - stop looking here
             break;
@@ -89,7 +90,7 @@ void Spi::calculateDelay(float clockFrequency, float delay, int &bestPrescale, i
  *
  * Note: Chooses the highest speed that is not greater than frequency.
  */
-uint32_t Spi::calculateDividers(uint32_t clockFrequency, Hertz frequency) {
+uint32_t Spi::calculateDividers(uint32_t clockFrequency, uint32_t frequency) {
 
    if (clockFrequency <= (2*(unsigned)frequency)) {
       // Use highest possible rate

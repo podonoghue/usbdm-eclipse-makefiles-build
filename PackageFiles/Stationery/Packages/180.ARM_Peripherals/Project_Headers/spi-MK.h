@@ -152,7 +152,7 @@ protected:
     *
     * Note: Determines bestPrescaler and bestDivider for the smallest delay that is not less than delay.
     */
-   static void calculateDelay(float clockFrequency, float delay, int &bestPrescale, int &bestDivider);
+   static void calculateDelay(uint32_t clockFrequency, uint32_t delay_ns, int &bestPrescale, int &bestDivider);
 
    /**
     * Calculate communication speed factors for SPI
@@ -164,37 +164,7 @@ protected:
     *
     * Note: Chooses the highest speed that is not greater than frequency.
     */
-   static uint32_t calculateDividers(uint32_t clockFrequency, Hertz frequency);
-
-   /**
-    * Calculate CTAR timing related values
-    *
-    * @param[in]  clockFrequency Clock frequency of SPI in Hz
-    * @param[in]  frequency      Communication frequency in Hz
-    * @param[in]  cssck          PCS assertion to SCK Delay Scaler
-    * @param[in]  asc            SCK to PCS negation delay
-    * @param[in]  dt             PCS negation to PCS assertion delay between transfers
-    *
-    * @return Combined masks for CTAR (BR, PBR, PCSSCK, CSSCK, PDT, DT, PCSSCK and CSSCK)
-    */
-   static uint32_t calculateCtarTiming(uint32_t clockFrequency, uint32_t frequency, float cssck, float asc, float dt) {
-
-      int bestPrescale, bestDivider;
-      uint32_t ctarValue;
-
-      ctarValue = calculateDividers(clockFrequency, frequency);
-
-      calculateDelay(clockFrequency, cssck, bestPrescale, bestDivider);
-      ctarValue |= SPI_CTAR_PCSSCK(bestPrescale)|SPI_CTAR_CSSCK(bestDivider);
-
-      calculateDelay(clockFrequency, asc, bestPrescale, bestDivider);
-      ctarValue |= SPI_CTAR_PASC(bestPrescale)|SPI_CTAR_ASC(bestDivider);
-
-      calculateDelay(clockFrequency, dt, bestPrescale, bestDivider);
-      ctarValue |= SPI_CTAR_PDT(bestPrescale)|SPI_CTAR_DT(bestDivider);
-
-      return ctarValue;
-   }
+   static uint32_t calculateDividers(uint32_t clockFrequency, uint32_t frequency);
 
    /**
     * Get the frequency of the input clock to the SPI
@@ -371,22 +341,23 @@ public:
     * @return Combined masks for CTAR (BR, PBR, PCSSCK, CSSCK, PDT, DT, PCSSCK and CSSCK)
     */
     
-   static uint32_t calculateCtarTiming(uint32_t clockFrequency, Hertz frequency) {
+   static uint32_t calculateCtarTiming(uint32_t clockFrequency, uint32_t frequency) {
 
       int bestPrescale, bestDivider;
       uint32_t ctarValue;
 
-      float SPI_PADDING2 = 1/(5.0*clockFrequency);
+      // These do a rounding division while maintaining maximum resolution
+      const uint32_t clockPeriodDiv5_ns = (200'000'000+(clockFrequency/2))/clockFrequency;
 
       ctarValue = calculateDividers(clockFrequency, frequency);
 
-      calculateDelay(clockFrequency, SPI_PADDING2, bestPrescale, bestDivider);
+      calculateDelay(clockFrequency, clockPeriodDiv5_ns, bestPrescale, bestDivider);
       ctarValue |= SPI_CTAR_PCSSCK(bestPrescale)|SPI_CTAR_CSSCK(bestDivider);
 
-      calculateDelay(clockFrequency, SPI_PADDING2, bestPrescale, bestDivider);
+      calculateDelay(clockFrequency, clockPeriodDiv5_ns, bestPrescale, bestDivider);
       ctarValue |= SPI_CTAR_PASC(bestPrescale)|SPI_CTAR_ASC(bestDivider);
 
-      calculateDelay(clockFrequency, SPI_PADDING2, bestPrescale, bestDivider);
+      calculateDelay(clockFrequency, 5*clockPeriodDiv5_ns, bestPrescale, bestDivider);
       ctarValue |= SPI_CTAR_PDT(bestPrescale)|SPI_CTAR_DT(bestDivider);
 
       return ctarValue;
