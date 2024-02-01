@@ -111,9 +111,15 @@
    <constant name="Linker Extra Regions" key="/LINKER/extraRegions" type="String" />
    <constant name="Linker Information"   key="/LINKER/information"  type="String" />
 
-   <stringOption name="Linker script"        key="/LINKER/scriptFilename"   locked="true" description="File used as linker script"       />
-   <stringOption name="Linker memory map"    key="/LINKER/mapFilename"      locked="true" description="File used for target memory map"  />
-   <stringOption name="Linker vector table"  key="/LINKER/vectorsFilename"  locked="true" description="File used for target vector table"  />
+   <stringOption name="Vector table template"  key="/LINKER/vectorsFilename"  locked="true" description="File used for target vector table"  />
+
+   <binaryOption key="RegenerateLinkerFiles" name="Regenerate Linker files" description="Causes the linker scripts to be regenerated" >
+      <choice name="Don't modify linker files" value="false" isDefault="true" />
+      <choice name="Update linker files"       value="true" />
+   </binaryOption>
+
+   <stringOption name="Linker script template"        key="/LINKER/scriptFilename"   locked="true" description="File used as linker script"       />
+   <stringOption name="Linker memory map template"    key="/LINKER/mapFilename"      locked="true" description="File used for target memory map"  />
 
    <category name="Section placement in Flash" description="How regions are mapped to available Flash"
      toolTip=
@@ -121,7 +127,7 @@
        for non-volatile memory (FlexRAM -> FlexNVM.)\n
        If not used for this purpose, FlexNVM may be used to hold code or constant data.\n
        These settings control which region (regular flash or FlexNVM) is used for various linker sections"
-   >
+      >
 
       <choiceOption name="Startup code" key="/LINKER/startup_rom" description="Segment allocation"
          toolTip="Fixed placement for vector table and reset code"
@@ -400,11 +406,15 @@
    /* END Template:_common_settings.xml */\n\n
 ]]></template>
 
-<projectActionList id = "common_files" >
+
+<projectActionList id="common_files_always" >
    <copy source="Sources/delay.cpp"                                        target="Sources/delay.cpp"                            overwrite="true"  derived="true" />
    <copy source="Project_Headers/delay.h"                                  target="Project_Headers/delay.h"                      overwrite="true"  derived="true" />
    <copy source="Snippets/bitband-example.cpp"                             target="Snippets/bitband-example.cpp"                 overwrite="true"  derived="true" />
    <copy source="Startup_Code/$(/LINKER/vectorsFilename)"                  target="Startup_Code/vectors.cpp"                     overwrite="true"  derived="true" />
+</projectActionList>
+
+<projectActionList id="common_files_conditional" codeGenCondition='Exists("Initial_Build")||RegenerateLinkerFiles'>
    <copy source="Project_Settings/Linker_Files/$(/LINKER/scriptFilename)"  target="Project_Settings/Linker_Files/Linker-rom.ld"  overwrite="true"  derived="true" />
    <copy source="Project_Settings/Linker_Files/$(/LINKER/mapFilename)"     target="Project_Settings/Linker_Files/MemoryMap.ld"   overwrite="true"  derived="true" />
 </projectActionList>

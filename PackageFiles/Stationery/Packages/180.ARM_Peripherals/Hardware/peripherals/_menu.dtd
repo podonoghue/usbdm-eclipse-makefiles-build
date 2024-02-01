@@ -473,9 +473,11 @@
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST stringOption condition        CDATA        #IMPLIED>
    <!-- Locks option in GUI -->
-   <!ATTLIST stringOption locked         (false|true) #IMPLIED>
+   <!ATTLIST stringOption locked           (false|true) #IMPLIED>
    <!-- Hides option in GUI -->
    <!ATTLIST stringOption hidden           (false|true) #IMPLIED>
+   <!-- Dynamic expression that disables and hides this list -->
+   <!ATTLIST stringOption hiddenBy         CDATA        #IMPLIED>
    <!-- Option value is derived and should not be saved -->
    <!ATTLIST stringOption derived          (true)       #IMPLIED>
 
@@ -1078,11 +1080,13 @@
 
 <!-- List of actions to be applied to a project -->
 <!ELEMENT projectActionList ((deleteResource|copy|constant|createFolder)*) >
-   <!ATTLIST projectActionList id            ID            #REQUIRED>
-   <!ATTLIST projectActionList root          CDATA         #IMPLIED>
-   <!ATTLIST projectActionList doOnceOnly    (true|false)  "true">
-   <!-- Condition evaluated during parsing that enables processing of this option -->
-   <!ATTLIST projectActionList condition     CDATA         #IMPLIED>
+   <!ATTLIST projectActionList id                  ID            #REQUIRED>
+   <!ATTLIST projectActionList root                CDATA         #IMPLIED>
+   <!ATTLIST projectActionList doOnceOnly          (true|false)  "true">
+   <!-- Condition evaluated during parsing that enables processing of this action list -->
+   <!ATTLIST projectActionList condition           CDATA         #IMPLIED>
+   <!-- Condition evaluated during code generation that enables this action list -->
+   <!ATTLIST projectActionList codeGenCondition    CDATA         #IMPLIED>
       
 <!-- Exclude/include source file in Eclipse project -->
 <!ELEMENT excludeSourceFile EMPTY >
