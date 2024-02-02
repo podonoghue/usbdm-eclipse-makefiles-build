@@ -751,15 +751,18 @@
       \t */
       \tstatic inline void disableWdog() {
       \t
-      \t   // Unlock before changing settings
-      \t   wdog->UNLOCK  = WdogUnlock_1;
-      \t   wdog->UNLOCK  = WdogUnlock_2;
+      \t   if (wdog->STCTRLH&WdogEnable_Enabled) {
       \t
-      \t   // Read-back to delay until change effected
-      \t   (void)(wdog->UNLOCK);
+      \t      // Unlock before changing settings
+      \t      wdog->UNLOCK  = WdogUnlock_1;
+      \t      wdog->UNLOCK  = WdogUnlock_2;
       \t
-      \t   // Disable watchdog
-      \t   wdog->STCTRLH = WdogEnable_Disabled|WdogAllowUpdate_Disabled;
+      \t      // Read-back to delay until change effected
+      \t      (void)(wdog->UNLOCK);
+      \t
+      \t      // Disable watchdog
+      \t      wdog->STCTRLH = WdogEnable_Disabled|WdogAllowUpdate_Disabled;
+      \t   }
       \t}
       \t\n
    ]]></template>
