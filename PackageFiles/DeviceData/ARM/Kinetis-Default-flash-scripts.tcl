@@ -21,6 +21,7 @@
 #####################################################################################
 #  History
 #
+#  V4.12.1.330 - Added updated return code handling
 #  V4.12.1.180 - Removed unnecessary semi-colons
 #  V4.12.1.180 - Messages directed to stderr
 #  V4.19.4.250 - Created
@@ -418,44 +419,65 @@ proc massEraseTargetKE { } {
 ######################################################################################
 #  Target is mass erased and left unsecured (non-blank!)
 #
-proc massEraseTargetK { } {
+proc massEraseTarget { } {
 
-   puts "$::NAME.massEraseTargetK{}"
+   puts "============================================="
+   puts "$::NAME.massEraseTarget"
    
-   # hold target reset to be sure
+   # Apply hardware reset
+   puts "massEraseTarget{} - Applying hardware reset"
    pinSet rst=0
 
-   # Cycle power if feature available
+   # Cycle power if feature available   
+   # May upset things on MK devices ??
    if [expr ( [getcap] & $::BDM_CAP_VDDCONTROL) != 0] {
-      puts "massEraseTarget{} - Cycling Vdd"
+      puts "massEraseTarget{} - Cycling Vdd (with rst=0)"
       settargetvdd off
-      after 200
+      after $::RESET_DURATION
       settargetvdd on
-      after 100
+      after $::POWER_ON_RECOVERY
    }
+
    # Connect with reset asserted, ignore errors as may be secured
    puts "massEraseTarget{} - Connecting (Ignoring errors)"
    catch { connect }
-   
-   # Wait for Flash ready
+   rcreg $::MDM_AP_Status
+
+   puts "massEraseTarget{} - Doing reset s v (Ignoring errors)"
+   catch { reset s v }
+   rcreg $::MDM_AP_Control
+   rcreg $::MDM_AP_Status
+
+   # Wait for Flash Ready
    for {set retry 0} {$retry < 20} {incr retry} {
       puts "massEraseTarget{} - Waiting for Flash ready"
       set mdmApStatus [rcreg $::MDM_AP_Status]
       if [expr (($mdmApStatus & $::MDM_AP_ST_MASS_FLASH_RDY) != 0)] {
-         puts "massEraseTarget{} - MDM_AP_ST_MASS_FLASH_RDY success"
+         puts "massEraseTarget{} - MDM_AP_ST_MASS_FLASH_RDY asserted OK"
          break;
       }
       after 50
    }
+
+   puts "massEraseTarget{} - Asserting MDM_AP_C_DEBUG_REQUEST|MDM_AP_C_SYSTEM_RESET"
+   wcreg $::MDM_AP_Control [expr $::MDM_AP_C_DEBUG_REQUEST|$::MDM_AP_C_SYSTEM_RESET]
+   rcreg $::MDM_AP_Control; rcreg $::MDM_AP_Status
    
-   puts "massEraseTarget{} - Applying MDM_AP_C_DEBUG_REQUEST"
-   wcreg $::MDM_AP_Control $::MDM_AP_C_DEBUG_REQUEST
+   puts "massEraseTarget{} - Asserting MDM_AP_C_DEBUG_REQUEST|MDM_AP_C_SYSTEM_RESET|MDM_AP_C_MASS_ERASE"
+   wcreg $::MDM_AP_Control [expr $::MDM_AP_C_DEBUG_REQUEST|$::MDM_AP_C_SYSTEM_RESET|$::MDM_AP_C_MASS_ERASE]
    rcreg $::MDM_AP_Control
-   
-   puts "massEraseTarget{} - Applying MDM_AP_C_DEBUG_REQUEST|MDM_AP_C_MASS_ERASE"
-   wcreg $::MDM_AP_Control [expr $::MDM_AP_C_DEBUG_REQUEST | $::MDM_AP_C_MASS_ERASE]
-   rcreg $::MDM_AP_Control
-   
+
+   # Wait for Flash Mass Erase ACK
+   for {set retry 0} {$retry < 20} {incr retry} {
+      puts "massEraseTarget{} - Waiting for Flash Erase ACK"
+      set mdmApStatus [rcreg $::MDM_AP_Status]
+      if [expr (($mdmApStatus & $::MDM_AP_ST_MASS_ERASE_ACK) != 0)] {
+         puts "massEraseTarget{} - MDM_AP_ST_MASS_ERASE_ACK asserted OK"
+         break;
+      }
+      after 20
+   }
+
    # Wait for Flash Mass Erase to complete
    for {set retry 0} {$retry < 20} {incr retry} {
       puts "massEraseTarget{} - Waiting for Flash Mass Erase to complete"
@@ -466,11 +488,38 @@ proc massEraseTargetK { } {
       }
       after 50
    }
-   
-   puts "massEraseTarget{} - Doing reset sh"
-   reset sh
+   rcreg $::MDM_AP_Status
 
-   return [ isUnsecure ] 
+   puts "massEraseTarget{} - Releasing MDM_AP_C_DEBUG_REQUEST|MDM_AP_C_SYSTEM_RESET|MDM_AP_C_MASS_ERASE"
+   wcreg $::MDM_AP_Control 0
+   rcreg $::MDM_AP_Control; rcreg $::MDM_AP_Status
+
+   # Release target reset
+   puts "massEraseTarget{} - Releasing reset pin"
+   pinSet
+   
+   # Reset recovery
+   puts "massEraseTarget{} - Waiting reset recovery time ($::RESET_RECOVERY)"
+   after $::RESET_RECOVERY
+
+   # catch {rcreg $::MDM_AP_Control; rcreg $::MDM_AP_Status } fails on secured device
+
+   puts "massEraseTarget{} - reset s v (Ignoring errors)"
+   catch {reset s v}
+   
+   rcreg $::MDM_AP_Control; 
+   rcreg $::MDM_AP_Status
+
+   set rc [ isUnsecure ]
+   
+   # For debug
+   rcreg $::MDM_AP_Status
+   rcreg $::MDM_AP_Control
+   
+   if [expr ( $rc != 0 )] {
+      puts "massEraseTarget{} - Target is still secured!"
+      return -code error $::PROGRAMMING_RC_ERROR_SECURED
+   }
 }
 
 ######################################################################################

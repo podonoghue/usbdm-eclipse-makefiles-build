@@ -296,9 +296,9 @@ proc massEraseTarget { } {
    pinSet rst=0
 
    # Cycle power if feature available   
-   # Upsets things on MK devices
+   # May upset things on MK devices ??
    if [expr ( [getcap] & $::BDM_CAP_VDDCONTROL) != 0] {
-      puts "massEraseTarget{} - Cycling Vdd"
+      puts "massEraseTarget{} - Cycling Vdd (with rst=0)"
       settargetvdd off
       after $::RESET_DURATION
       settargetvdd on
@@ -419,6 +419,29 @@ proc isUnsecure { } {
    }
    puts "isUnsecure{} - Target is unsecured"
    return $::PROGRAMMING_RC_OK
+}
+
+######################################################################################
+######################################################################################
+# For testing
+######################################################################################
+######################################################################################
+
+
+# For testing
+proc dopen { } {
+
+   # These variables are available from driver
+   set ::RESET_DURATION       200
+   set ::RESET_RECOVERY       100
+   set ::RESET_RELEASE        100
+   set ::POWER_OFF_DURATION   1000
+   set ::POWER_ON_RECOVERY    200
+   set ::RESET_METHOD         TargetDefault ;# TargetDefault/ResetHardware/ResetSoftware/ResetVendor/ResetNone
+   set ::ERASE_METHOD         TargetDefault ;# TargetDefault/EraseNone/EraseMass/EraseAll/EraseSelective
+   
+   settarget arm
+   openbdm
 }
 
 # For testing

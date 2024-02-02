@@ -278,14 +278,14 @@ proc massEraseTarget { } {
    pinSet rst=0
 
    # Cycle power if feature available   
-   # Upsets things on MK devices
-   #if [expr ( [getcap] & $::BDM_CAP_VDDCONTROL) != 0] {
-   #   puts "massEraseTarget{} - Cycling Vdd"
-   #   settargetvdd off
-   #   after $::RESET_DURATION
-   #   settargetvdd on
-   #   after $::POWER_ON_RECOVERY
-   #}
+   # May upset things on MK devices ??
+   if [expr ( [getcap] & $::BDM_CAP_VDDCONTROL) != 0] {
+      puts "massEraseTarget{} - Cycling Vdd (with rst=0)"
+      settargetvdd off
+      after $::RESET_DURATION
+      settargetvdd on
+      after $::POWER_ON_RECOVERY
+   }
 
    # Connect with reset asserted, ignore errors as may be secured
    puts "massEraseTarget{} - Connecting (Ignoring errors)"
@@ -299,13 +299,13 @@ proc massEraseTarget { } {
 
    # Wait for Flash Ready
    for {set retry 0} {$retry < 20} {incr retry} {
-      puts -nonewline stderr "massEraseTarget{} - Waiting for Flash ready  "
+      puts "massEraseTarget{} - Waiting for Flash ready"
       set mdmApStatus [rcreg $::MDM_AP_Status]
       if [expr (($mdmApStatus & $::MDM_AP_ST_MASS_FLASH_RDY) != 0)] {
          puts "massEraseTarget{} - MDM_AP_ST_MASS_FLASH_RDY asserted OK"
          break;
       }
-      after 20
+      after 50
    }
 
    puts "massEraseTarget{} - Asserting MDM_AP_C_DEBUG_REQUEST|MDM_AP_C_SYSTEM_RESET"
@@ -337,8 +337,7 @@ proc massEraseTarget { } {
       }
       after 50
    }
-
-   rcreg $::MDM_AP_Control; rcreg $::MDM_AP_Status
+   rcreg $::MDM_AP_Status
 
    puts "massEraseTarget{} - Releasing MDM_AP_C_DEBUG_REQUEST|MDM_AP_C_SYSTEM_RESET|MDM_AP_C_MASS_ERASE"
    wcreg $::MDM_AP_Control 0
@@ -352,13 +351,13 @@ proc massEraseTarget { } {
    puts "massEraseTarget{} - Waiting reset recovery time ($::RESET_RECOVERY)"
    after $::RESET_RECOVERY
 
-   rcreg $::MDM_AP_Control; rcreg $::MDM_AP_Status
+   # catch {rcreg $::MDM_AP_Control; rcreg $::MDM_AP_Status } fails on secured device
 
    puts "massEraseTarget{} - reset s v (Ignoring errors)"
    catch {reset s v}
+   
+   rcreg $::MDM_AP_Control; 
    rcreg $::MDM_AP_Status
-  
-   rcreg $::MDM_AP_Control; rcreg $::MDM_AP_Status
 
    set rc [ isUnsecure ]
    
@@ -393,6 +392,29 @@ proc isUnsecure { } {
    }
    puts "isUnsecure{} - Target is unsecured"
    return $::PROGRAMMING_RC_OK
+}
+
+######################################################################################
+######################################################################################
+# For testing
+######################################################################################
+######################################################################################
+
+
+# For testing
+proc dopen { } {
+
+   # These variables are available from driver
+   set ::RESET_DURATION       200
+   set ::RESET_RECOVERY       100
+   set ::RESET_RELEASE        100
+   set ::POWER_OFF_DURATION   1000
+   set ::POWER_ON_RECOVERY    200
+   set ::RESET_METHOD         TargetDefault ;# TargetDefault/ResetHardware/ResetSoftware/ResetVendor/ResetNone
+   set ::ERASE_METHOD         TargetDefault ;# TargetDefault/EraseNone/EraseMass/EraseAll/EraseSelective
+   
+   settarget arm
+   openbdm
 }
 
 # For testing
