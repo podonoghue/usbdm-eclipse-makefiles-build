@@ -144,35 +144,62 @@ static void checkRC(USBDM_ErrorCode rc) {
    }
 }
 
-static int getQuietReqArg(Tcl_Interp *interp, int argc, Tcl_Obj *const *argv, bool &quiet, int &regNo) {
+/**
+ * Partially parse command arguments
+ * Accepts:
+ * - -q = quite mode (optional)
+ * - register number (required)
+ *
+ * @param interp
+ * @param argc
+ * @param argv       Count of arguments (includes command name)
+ * @param currentArg Current argument after processing expected
+ * @param quiet      Whether '-q' was found
+ * @param regNo      Register number
+ *
+ * @return Usual TCL error code
+ */
+static int getQuietReqArg(Tcl_Interp *interp, int argc, Tcl_Obj *const *argv, int &currentArg, bool &quiet, int &regNo) {
 
    const char *currentToken;
+   quiet = false;
 
-   if (argc < 2) {
-      Tcl_WrongNumArgs(interp, argc-1, argv, "[-q] <address>");
+   // argc/argv include the command name
+   // true arguments are from [1..argc-1]
+   currentArg = 1;
+
+   // Must have at least 1 argument i.e. argc > 1
+
+//   PRINT("getQuietReqArg: argc=%d, currentArg=%d\n", argc, currentArg);
+
+   if (argc <= currentArg) {
+      Tcl_WrongNumArgs(interp, currentArg, argv, "[-q] <address> ...");
       return TCL_ERROR;
    }
+
    // Register # or "-q"
-   currentToken = Tcl_GetString(argv[1]);
+   currentToken = Tcl_GetString(argv[currentArg]);
 
-   if (argc > 3) {
-      Tcl_WrongNumArgs(interp, argc-1, argv, "[-q] <address>");
-      return TCL_ERROR;
-   }
-   // Register #
-   currentToken = Tcl_GetString(argv[1]);
-   if (argc == 3) {
-      if ((currentToken[0] != '-') || (toupper(currentToken[1]) != 'Q')) {
-         Tcl_WrongNumArgs(interp, argc-1, argv, "[-q] <address>");
+   if ((currentToken[0] == '-') || (toupper(currentToken[1]) == 'Q')) {
+      quiet = true;
+      currentArg++;
+
+//      PRINT("getQuietReqArg: argc=%d, currentArg=%d\n", argc, currentArg);
+
+      if (argc <= currentArg) {
+         Tcl_WrongNumArgs(interp, currentArg, argv, "<address> ...");
          return TCL_ERROR;
       }
-      currentToken = Tcl_GetString(argv[2]);
-      quiet = true;
+      currentToken = Tcl_GetString(argv[currentArg]);
    }
+
+   // Register #
    if (sscanf(currentToken,"%i",&regNo) != 1) {
-      Tcl_WrongNumArgs(interp, argc-1, argv, "[-q] <address>");
+      Tcl_WrongNumArgs(interp, 1, argv, "[-q] <address> ...");
       return TCL_ERROR;
    }
+   currentArg++;
+
    return TCL_OK;
 }
 
@@ -2412,24 +2439,29 @@ static int cmd_writeProgramCounter(ClientData, Tcl_Interp *interp, int argc, Tcl
  * @return
  */
 static int cmd_writeReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-   // wreg <addr> <data>
-   int  data;
-   int  regNo;
+   static const char* prompt="[-q] <address> <value>";
+   int regNo;
+   bool quiet;
+   int currentArg;
 
-   if (argc != 3) {
-      Tcl_WrongNumArgs(interp, 1, argv, "<address> <value>");
+   // [-q] regNum
+   int rc = getQuietReqArg(interp, argc, argv, currentArg, quiet, regNo);
+   if (rc != TCL_OK) {
+      return rc;
+   }
+
+   if (argc <= currentArg) {
+      Tcl_WrongNumArgs(interp, 1, argv, prompt);
       return TCL_ERROR;
    }
-   // Register #
-   if (Tcl_GetIntFromObj(interp, argv[1], &regNo) != TCL_OK) {
-      Tcl_WrongNumArgs(interp, 1, argv, "<address> <value>");
-      return TCL_ERROR;
-   }
+
    // # data
-   if (Tcl_GetIntFromObj(interp, argv[2], &data) != TCL_OK) {
-      Tcl_WrongNumArgs(interp, 1, argv, "<address> <value>");
+   int  data;
+   if (Tcl_GetIntFromObj(interp, argv[currentArg], &data) != TCL_OK) {
+      Tcl_WrongNumArgs(interp, 1, argv, prompt);
       return TCL_ERROR;
    }
+
    if (checkUsbdmRC(interp,  bdmInterface->writeReg(regNo, data)) != TCL_OK) {
       PRINT(":wReg Failed\n");
       return TCL_ERROR;
@@ -2450,24 +2482,29 @@ static int cmd_writeReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
  * @return
  */
 static int cmd_writeDReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-   // wdreg <addr> <data>
-   int  data;
-   int  regNo;
+   static const char* prompt="[-q] <address> <value>";
+   int regNo;
+   bool quiet;
+   int currentArg;
 
-   if (argc != 3) {
-      Tcl_WrongNumArgs(interp, 1, argv, "<address> <value>");
+   // [-q] regNum
+   int rc = getQuietReqArg(interp, argc, argv, currentArg, quiet, regNo);
+   if (rc != TCL_OK) {
+      return rc;
+   }
+
+   if (argc <= currentArg) {
+      Tcl_WrongNumArgs(interp, 1, argv, prompt);
       return TCL_ERROR;
    }
-   // Register #
-   if (Tcl_GetIntFromObj(interp, argv[1], &regNo) != TCL_OK) {
-      Tcl_WrongNumArgs(interp, 1, argv, "<address> <value>");
-      return TCL_ERROR;
-   }
+
    // # data
-   if (Tcl_GetIntFromObj(interp, argv[2], &data) != TCL_OK) {
-      Tcl_WrongNumArgs(interp, 1, argv, "<address> <value>");
+   int  data;
+   if (Tcl_GetIntFromObj(interp, argv[currentArg], &data) != TCL_OK) {
+      Tcl_WrongNumArgs(interp, 1, argv, prompt);
       return TCL_ERROR;
    }
+
    if (checkUsbdmRC(interp,  bdmInterface->writeDReg(regNo, data)) != 0) {
       PRINT(":wDReg Failed\n");
       return TCL_ERROR;
@@ -2475,19 +2512,19 @@ static int cmd_writeDReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
    TargetType_t targetType = bdmInterface->getBdmOptions().targetType;
    switch (targetType) {
       case T_CFV1 :
-         PRINT(":wDreg r=0x%X(%s)<-0x%08X\n", regNo, getCFV1DebugRegName(regNo), data);
+         PRINT(":wDreg %s(0x%X) <= 0x%08X\n", getCFV1DebugRegName(regNo), regNo, data);
          break;
       case T_CFVx :
-         PRINT(":wDreg r=0x%X(%s)<-0x%08X\n", regNo, getCFVxDebugRegName(regNo), data);
+         PRINT(":wDreg %s(0x%X) <= 0x%08X\n", getCFVxDebugRegName(regNo), regNo, data);
          break;
       case T_HC12 :
-         PRINT(":wDreg addr=0x%X(%s)<-0x%08X\n", regNo, getHCS12DebugRegName(regNo), data);
+         PRINT(":wDreg %s(0x%X) <= 0x%08X\n", getHCS12DebugRegName(regNo), regNo, data);
          break;
       case T_ARM :
-         PRINT(":wDreg r=0x%X(%s)<-0x%08X\n", regNo, getSWDDebugRegName(regNo), data);
+         PRINT(":wDreg %s(0x%X) <= 0x%08X\n", getSWDDebugRegName(regNo), regNo, data);
          break;
       default :
-         PRINT(":wDreg r=0x%X<-0x%08X\n", regNo, data);
+         PRINT(":wDreg r=0x%X <= 0x%08X\n", regNo, data);
          break;
    }
    return TCL_OK;
@@ -2503,27 +2540,29 @@ static int cmd_writeDReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
  * @return
  */
 static int cmd_writeCReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-   // wcreg <addr> <data>
-   int data;
+   static const char* prompt="[-q] <address> <value>";
    int regNo;
-   int rc;
+   bool quiet;
+   int currentArg;
 
-   if (argc != 3) {
-      Tcl_WrongNumArgs(interp, 1, argv, "<address> <value>");
-      return TCL_ERROR;
-   }
-   // Register #
-   rc = Tcl_GetIntFromObj(interp, argv[1], &regNo);
+   // [-q] regNum
+   int rc = getQuietReqArg(interp, argc, argv, currentArg, quiet, regNo);
    if (rc != TCL_OK) {
-      Tcl_WrongNumArgs(interp, 1, argv, "<address> <value>1");
+      return rc;
+   }
+
+   if (argc <= currentArg) {
+      Tcl_WrongNumArgs(interp, 1, argv, prompt);
       return TCL_ERROR;
    }
+
    // # data
-   rc = Tcl_GetIntFromObj(interp, argv[2], &data);
-   if (rc != TCL_OK) {
-      Tcl_WrongNumArgs(interp, 1, argv, "<address> <value>2");
+   int  data;
+   if (Tcl_GetIntFromObj(interp, argv[currentArg], &data) != TCL_OK) {
+      Tcl_WrongNumArgs(interp, 1, argv, prompt);
       return TCL_ERROR;
    }
+
    if (checkUsbdmRC(interp,  bdmInterface->writeCReg(regNo, data)) != 0) {
       PRINT(":wCReg Failed\n");
       return TCL_ERROR;
@@ -2531,26 +2570,26 @@ static int cmd_writeCReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
    TargetType_t targetType = bdmInterface->getBdmOptions().targetType;
    switch(targetType) {
       case T_CFV1 :
-         PRINT(":wCreg r=0x%X(%s)<-0x%08X\n", regNo, getCFV1ControlRegName(regNo), data);
+         PRINT(":wCreg %s(0x%X) <= 0x%08X\n", getCFV1ControlRegName(regNo), regNo, data);
          break;
       case T_CFVx :
-         PRINT(":wCreg r=0x%X(%s)<-0x%08X\n", regNo, getCFVxControlRegName(regNo), data);
+         PRINT(":wCreg %s(0x%X) <= 0x%08X\n", getCFVxControlRegName(regNo), regNo, data);
          break;
       case T_ARM :
          switch (regNo) {
             case ARM_CRegMDM_AP_Status:
-               PRINT("reg=MDM-AP.Status(0x%08X)<-%s(0x%08X)\n", regNo, getMDM_APStatusName(data), data);
+               PRINT(":wCreg MDM-AP.Status(0x%08X)  <= %s(0x%08X)\n", regNo, getMDM_APStatusName(data), data);
                break;
             case ARM_CRegMDM_AP_Control:
-               PRINT("reg=MDM-AP.Control(0x%08X)<-%s(0x%08X)\n", regNo, getMDM_APControlName(data), data);
+               PRINT(":wCreg MDM-AP.Control(0x%08X) <= %s(0x%08X)\n", regNo, getMDM_APControlName(data), data);
                break;
             default:
-               PRINT(":rCreg r=0x%08X(%s)<-0x%08X\n", regNo, getARMControlRegName(regNo), (int)data);
+               PRINT(":wCreg %s(0x%08X) <= 0x%08X\n", getARMControlRegName(regNo), regNo, (int)data);
                break;
          }
          break;
             default :
-               PRINT(":wCreg r=0x%X<-0x%08X\n", regNo, data);
+               PRINT(":wCreg r(0x%X) <= 0x%08X\n", regNo, data);
                break;
    }
    return TCL_OK;
@@ -2566,13 +2605,23 @@ static int cmd_writeCReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
  * @return
  */
 static int cmd_readReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-   // rreg<addr> <data>
+
+   static const char* prompt="[-q] <address>";
    int regNo;
    bool quiet;
-   int tclError = getQuietReqArg(interp, argc, argv, quiet, regNo);
-   if (tclError != TCL_OK) {
-      return tclError;
+   int currentArg;
+
+   // [-q] regNum
+   int rc = getQuietReqArg(interp, argc, argv, currentArg, quiet, regNo);
+   if (rc != TCL_OK) {
+      return rc;
    }
+
+   if (argc > currentArg) {
+      Tcl_WrongNumArgs(interp, 1, argv, prompt);
+      return TCL_ERROR;
+   }
+
    unsigned long data;
    if (checkUsbdmRC(interp,  bdmInterface->readReg(regNo, &data)) != 0) {
       PRINT(":rReg Failed\n");
@@ -2598,14 +2647,23 @@ static int cmd_readReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const 
  * @return
  */
 static int cmd_readDReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-   // rdreg <addr>
 
+   static const char* prompt="[-q] <address>";
    int regNo;
    bool quiet;
-   int tclError = getQuietReqArg(interp, argc, argv, quiet, regNo);
-   if (tclError != TCL_OK) {
-      return tclError;
+   int currentArg;
+
+   // [-q] regNum
+   int rc = getQuietReqArg(interp, argc, argv, currentArg, quiet, regNo);
+   if (rc != TCL_OK) {
+      return rc;
    }
+
+   if (argc > currentArg) {
+      Tcl_WrongNumArgs(interp, 1, argv, prompt);
+      return TCL_ERROR;
+   }
+
    unsigned long data;
    if (checkUsbdmRC(interp,  bdmInterface->readDReg(regNo, &data)) != 0) {
       PRINT(":rReg Failed\n");
@@ -2618,19 +2676,19 @@ static int cmd_readDReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
    TargetType_t targetType = bdmInterface->getBdmOptions().targetType;
    switch (targetType) {
       case T_CFV1 :
-         PRINT(":rDreg r=0x%X(%s)->0x%08X\n", regNo, getCFV1DebugRegName(regNo), (int)data);
+         PRINT(":rDreg %s(0x%X) => 0x%08X\n", getCFV1DebugRegName(regNo), regNo, (int)data);
          break;
       case T_CFVx :
-         PRINT(":rDreg r=0x%X(%s)->0x%08X\n", regNo, getCFVxDebugRegName(regNo), (int)data);
+         PRINT(":rDreg %s(0x%X) => 0x%08X\n", getCFVxDebugRegName(regNo), regNo, (int)data);
          break;
       case T_HC12 :
-         PRINT(":rDreg addr=0x%X(%s)->0x%08X\n", regNo, getHCS12DebugRegName(regNo), (int)data);
+         PRINT(":rDreg %s(0x%X) => 0x%08X\n", getHCS12DebugRegName(regNo), regNo, (int)data);
          break;
       case T_ARM :
-         PRINT(":rDreg r=0x%X(%s)->0x%08X\n", regNo, getSWDDebugRegName(regNo), (int)data);
+         PRINT(":rDreg %s(0x%X) => 0x%08X\n", getSWDDebugRegName(regNo), regNo, (int)data);
          break;
       default :
-         PRINT(":rDreg r=0x%X->0x%08X\n", regNo, (int)data);
+         PRINT(":rDreg r(0x%X) => 0x%08X\n", regNo, (int)data);
          break;
    }
    return TCL_OK;
@@ -2646,17 +2704,26 @@ static int cmd_readDReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
  * @return
  */
 static int cmd_readCReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-   // rcreg <addr>
 
+   static const char* prompt="[-q] <address>";
    int regNo;
    bool quiet;
-   int tclError = getQuietReqArg(interp, argc, argv, quiet, regNo);
-   if (tclError != TCL_OK) {
-      return tclError;
+   int currentArg;
+
+   // [-q] regNum
+   int rc = getQuietReqArg(interp, argc, argv, currentArg, quiet, regNo);
+   if (rc != TCL_OK) {
+      return rc;
    }
+
+   if (argc > currentArg) {
+      Tcl_WrongNumArgs(interp, 1, argv, prompt);
+      return TCL_ERROR;
+   }
+
    unsigned long data;
    if (checkUsbdmRC(interp,  bdmInterface->readCReg(regNo, &data)) != 0) {
-      PRINT(":rReg Failed\n");
+      PRINT(":rCreg Failed\n");
       return TCL_ERROR;
    }
    Tcl_SetObjResult(interp, Tcl_NewIntObj(data));
@@ -2674,21 +2741,21 @@ static int cmd_readCReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
       case T_ARM :
          switch (regNo) {
             case ARM_CRegMDM_AP_Status:
-               PRINT("reg=MDM-AP.Status(0x%08X)->%s(0x%08X)\n", regNo, getMDM_APStatusName(data), (int)data);
+               PRINT(":rCreg MDM-AP.Status(0x%08X)  => %s(0x%08X)\n", regNo, getMDM_APStatusName(data), (int)data);
                break;
             case ARM_CRegMDM_AP_Control:
-               PRINT("reg=MDM-AP.Control(0x%08X)->%s(0x%08X)\n", regNo, getMDM_APControlName(data), (int)data);
+               PRINT(":rCreg MDM-AP.Control(0x%08X) => %s(0x%08X)\n", regNo, getMDM_APControlName(data), (int)data);
                break;
             case ARM_CRegMDM_AP_Ident:
-               PRINT("reg=MDM-AP.IDR(0x%08X)->0x%08X\n", regNo, (int)data);
+               PRINT(":rCreg MDM-AP.IDR(0x%08X) => 0x%08X\n", regNo, (int)data);
                break;
             default:
-               PRINT(":rCreg r=0x%08X(%s)->0x%08X\n", regNo, getARMControlRegName(regNo), (int)data);
+               PRINT(":rCreg %s(0x%08X) => 0x%08X\n", getARMControlRegName(regNo), regNo, (int)data);
                break;
          }
          break;
             default :
-               PRINT(":rCreg r=0x%X->0x%08X\n", regNo, (int)data);
+               PRINT(":rCreg r=0x%X => 0x%08X\n", regNo, (int)data);
                break;
    }
    return TCL_OK;
