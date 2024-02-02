@@ -94,7 +94,7 @@ Reset_Handler:
  *     Loop to copy data from read only memory to RAM. The ranges of copy from/to are
  *     specified by following symbols evaluated in linker script (4-byte aligned).
  *
- *      __data_image_start__ : Begin of data sections to copy from. (Usually end of code section).
+ *      __data_image_start__ : Beginning of data sections to copy from. (Usually end of code section).
  *      __data_start__       : Start of data area (in RAM) that data should be copied to.
  *      __data_end__         : End of data area (in RAM) that data should be copied to.
  *
@@ -141,14 +141,15 @@ Reset_Handler:
 #define __START _start
 #endif
 #ifndef __NO_SYSTEM_INIT
-// Now done as constructor after __START
-//    bl    SystemInit
+   // Now done as constructor after __START
+   // May need some objects created by C startup
+   // bl    SystemInit
 #endif
 
     // Make sure hook is provided for CMSIS (fix for KDS compiler)
     bl	  	software_init_hook
 
-    bl        __START
+    b       __START
     .pool
     .size Reset_Handler, . - Reset_Handler
     

@@ -98,7 +98,7 @@ $(/SYSTEM/WatchdogInitialise)
 __attribute__ ((constructor))
 void SystemInit(void) {
    /*
-    * This is generic initialization code
+    * This is generic initialisation code
     * It may not be correct for a specific target
     */
 
