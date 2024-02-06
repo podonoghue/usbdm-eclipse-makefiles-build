@@ -1,0 +1,2056 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- lpuart_def.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="$(_BASENAME)">
+
+   <!-- Enable for this peripheral -->
+   <binaryOption key="usedAsConsole"
+      description="usedAsConsole"
+      toolTip="Indicates if this device is allocated as the Console for I/O"
+      ref='(/Console/consoleEnable)&amp;&amp;(/Console/consoleDevice.name=="$(_Baseclass) $(_instance)")'
+      locked="true"
+      derived="true" >
+      <choice value="0" name="Not used as console" />
+      <choice value="1" name="Used as console" />
+   </binaryOption>
+
+   <binaryOption key="enablePeripheralSupport"
+      enabledBy="!usedAsConsole"
+      hidden="true"
+      description="Enable peripheral support"
+      toolTip="Code will also be generated if this UART is used as the console"
+      disabledValue="true"
+      >
+      <choice value="false" name="Minimal code for $(_NAME)"  />
+      <choice value="true"  name="Generate code for $(_NAME)"/>
+   </binaryOption>
+
+   <constant key="irq_pattern"               type="String"  value='"^$(_BASENAME)%i_?((RxTx|Error|Lon)|.*)?$"'  />
+   <constant key="irq_ClassHandler"          type="String"  value='"%c%i::$2_irqHandler"'                        />
+   <constant key="irq_parameters"            type="String"  value='""'     />
+   <constant key="irq_dummy_parameters"      type="String"  value='""'     />
+   <constant key="irq_call"                  type="String"  value='""'     />
+   <constant key="generateDefault"           type="Boolean" value="false"  />
+   <constant key="configureInStartupDefault" type="Boolean" value="false"  />
+   <xi:include href="enablePeripheral.xml"  />
+
+   <!-- ____ Class Declaration ________ -->
+   <constant key="_class_declaration" type="String"
+      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+
+   <binaryOption key="uart_c2_tcie" condition="uart_c2_tcie_present"
+      enabledBy="irqHandlingMethod"
+      typeName="UartTxCompleteAction"
+      baseType="uint8_t"
+      description="Transmit complete action"
+      toolTip="Enable interrupt on transmission complete">
+      <choice value="0"   name="None"      enum="None"      />
+      <choice value="1"   name="Interrupt" enum="Interrupt" />
+   </binaryOption>
+
+   <binaryOption key="uart_c2_ilie" condition="uart_c2_ilie_present"
+      enabledBy="irqHandlingMethod"
+      typeName="UartIdleLineDetectAction"
+      baseType="uint8_t"
+      description="Idle line detect action"
+      toolTip="Enable interrupt on tidele line detect">
+      <choice value="0"   name="None"      enum="None"      />
+      <choice value="1"   name="Interrupt" enum="Interrupt" />
+   </binaryOption>
+
+   <binaryOption key="uart_c2_tie" condition="uart_c2_tie_present&amp;&amp;!uart_c5_tdmas_present"
+      enabledBy="irqHandlingMethod"
+      valueFormat="UART_C2_TIE(%s)"
+      typeName="UartTxEmptyAction"
+      baseType="uint8_t"
+      description="Transmit empty DMA/Interrupt action"
+      toolTip="Enable transmit holding register empty DMA/Interrupt action">
+      <choice value="0"   name="None"      enum="None"      />
+      <choice value="1"   name="Interrupt" enum="Interrupt" />
+   </binaryOption>
+
+   <choiceOption key="uart_c5_tdmas" condition="uart_c2_tie_present&amp;&amp;uart_c5_tdmas_present"
+      enabledBy="irqHandlingMethod"
+      valueFormat="(UART_C5_TDMAS(%s)&lt;&lt;8),UART_C2_TIE(%s)"
+      typeName="UartTxEmptyAction"
+      baseType="uint16_t"
+      description="Transmit empty DMA/Interrupt action"
+      toolTip="Enable transmit holding register empty DMA/Interrupt action">
+      <choice value="0,0"   name="None"      enum="None"      />
+      <choice value="0,1"   name="Interrupt" enum="Interrupt" />
+      <choice value="1,1"   name="DMA"       enum="Dma"       />
+   </choiceOption>
+
+   <binaryOption key="uart_c2_rie" condition="uart_c2_rie_present&amp;&amp;!uart_c5_rdmas_present"
+      enabledBy="irqHandlingMethod"
+      valueFormat="UART_C2_RIE(%s)"
+      typeName="UartRxFullAction"
+      baseType="uint8_t"
+      description="Receive full action"
+      toolTip="Enable receive buffer full interrupt action">
+      <choice value="0"   name="None"      enum="None"      />
+      <choice value="1"   name="Interrupt" enum="Interrupt" />
+   </binaryOption>
+
+   <choiceOption key="uart_c5_rdmas" condition="uart_c2_rie_present&amp;&amp;uart_c5_rdmas_present"
+      enabledBy="irqHandlingMethod"
+      valueFormat="(UART_C5_RDMAS(%s)&lt;&lt;8),UART_C2_RIE(%s)"
+      typeName="UartRxFullAction"
+      baseType="uint16_t"
+      description="Receive full DMA/interrupt action"
+      toolTip="Enable receive buffer full DMA/interrupt action">
+      <choice value="0,0"   name="None"      enum="None"      />
+      <choice value="0,1"   name="Interrupt" enum="Interrupt" />
+      <choice value="1,1"   name="DMA"       enum="Dma"       />
+   </choiceOption>
+
+   <binaryOption key="uart_bdh_lbkdie" condition="uart_bdh_lbkdie_present"
+      enabledBy="irqHandlingMethod"
+      typeName="UartLinBreakAction"
+      baseType="uint8_t"
+      description="LIN break detect action"
+      toolTip="" >
+      <choice name="None"        value="0" enum="None" />
+      <choice name="Interrupt"   value="1" enum="Interrupt" />
+   </binaryOption >
+
+   <binaryOption key="uart_bdh_rxedgie" condition="uart_bdh_rxedgie_present"
+      enabledBy="irqHandlingMethod"
+      typeName="UartRxdActiveEdgeAction"
+      baseType="uint8_t"
+      description="RxD input active edge action"
+      toolTip="" >
+      <choice name="None"        value="0" enum="None" />
+      <choice name="Interrupt"   value="1" enum="Interrupt" />
+   </binaryOption >
+
+   <title />
+
+   <intOption key="uart_c4_osr"  condition="uart_c4_osr_present"
+      baseType="uint8_t"
+      description="Number of samples per bit"
+      toolTip="This value determines the number of times an Rx bit is sampled.\n
+               This also affects the clock divider and hence the range of baud rates available"
+       value="8" min="4" max="32"
+      />
+
+   <template  condition="uart_c4_osr" ><![CDATA[
+   \t//! Number of samples per bit
+   \tstatic constexpr uint32_t oversampleRatio = $(uart_c4_osr);\n\n
+   ]]></template>
+
+   <choiceOption key="uart_baudrate"
+      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      valueFormat="%s"
+      typeName="UartBaudRate"
+      baseType="uint32_t"
+      description="UART baud rate"
+      toolTip="Baud rate for UART\n
+               Values available will depend on clock source frequency" >
+      <choice value="110"     name="110"     enum="110"    />
+      <choice value="300"     name="300"     enum="300"    />
+      <choice value="600"     name="600"     enum="600"    />
+      <choice value="1200"    name="1200"    enum="1200"   />
+      <choice value="2400"    name="2400"    enum="2400"   />
+      <choice value="4800"    name="4800"    enum="4800"   />
+      <choice value="9600"    name="9600"    enum="9600"   />
+      <choice value="14400"   name="14400"   enum="14400"  />
+      <choice value="19200"   name="19200"   enum="19200"  />
+      <choice value="28800"   name="28800"   enum="28800"  />
+      <choice value="38400"   name="38400"   enum="38400"  />
+      <choice value="56000"   name="56000"   enum="56000"  />
+      <choice value="57600"   name="57600"   enum="57600"  />
+      <choice value="115200"  name="115200"  enum="115200" isDefault="true" />
+   </choiceOption>
+
+   <binaryOption key="uart_bdh_rxedgie" condition="uart_bdh_rxedgie_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartBdhRxedgie"
+      baseType="uint8_t"
+      description="RxD Input Active Edge Interrupt Enable"
+      toolTip="" >
+      <choice name="Disabled"    value="0" enum="Disabled" />
+      <choice name="Enabled"     value="1" enum="Enabled" />
+   </binaryOption >
+
+   <!-- ____ C1 ____ -->
+   <title description="Control Register 1" />
+
+   <binaryOption key="uart_c1_loops" condition="uart_c1_loops_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC1Loops"
+      baseType="uint8_t"
+      description="Loop Mode Select"
+      toolTip="Controls loop mode where transmitter output is internally connected to receiver input. [See also RSRC]" >
+      <choice name="Normal operation"  value="0" enum="NormalOperation" />
+      <choice name="Loop mode"         value="1" enum="LoopMode" />
+   </binaryOption >
+
+   <binaryOption key="uart_c1_rsrc" condition="uart_c1_rsrc_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC1Rsrc"
+      baseType="uint8_t"
+      description="Receiver Source Select\nSelect between loop-back and single-wire mode"
+      toolTip="" >
+      <choice name="Internal loop back mode"  value="0" enum="InternalLoopBackMode" />
+      <choice name="Single-wire mode"         value="1" enum="SingleWireMode" />
+   </binaryOption >
+
+   <binaryOption key="uart_c1_m" condition="uart_c1_m_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC1M"
+      baseType="uint8_t"
+      description="9-Bit or 8-Bit Mode Select"
+      toolTip="" >
+      <choice name="8-bit"       value="0" enum="8Bit" />
+      <choice name="9-bit"       value="1" enum="9Bit" />
+   </binaryOption >
+
+   <binaryOption key="uart_c1_wake" condition="uart_c1_wake_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC1Wake"
+      baseType="uint8_t"
+      description="Receiver Wakeup Method Select"
+      toolTip="" >
+      <choice name="Idle-line wakeup"     value="0" enum="IdleLineWakeup" />
+      <choice name="Address-mark wakeup"  value="1" enum="AddressMarkWakeup" />
+   </binaryOption >
+
+   <binaryOption key="uart_c1_ilt" condition="uart_c1_ilt_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC1Ilt"
+      baseType="uint8_t"
+      description="Idle Line Type Select"
+      toolTip="Determines if idle character bit count starts after start bit or stop bit" >
+      <choice name="After start bit"  value="0" enum="AfterStartBit" />
+      <choice name="After stop bit"   value="1" enum="AfterStopBit" />
+   </binaryOption >
+
+   <binaryOption key="uart_c1_pe" condition="uart_c1_pe_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC1Pe"
+      baseType="uint8_t"
+      description="Parity Enable"
+      toolTip="" >
+      <choice name="Disabled"    value="0" enum="Disabled" />
+      <choice name="Enabled"     value="1" enum="Enabled" />
+   </binaryOption >
+
+   <binaryOption key="uart_c1_pt" condition="uart_c1_pt_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC1Pt"
+      baseType="uint8_t"
+      description="Parity Type"
+      toolTip="" >
+      <choice name="Even parity"  value="0" enum="EvenParity" />
+      <choice name="Odd parity"   value="1" enum="OddParity" />
+   </binaryOption >
+
+   <!-- ____ C2 ____ -->
+   <title description="Control Register 2" />
+
+   <binaryOption key="uart_c2_tie" condition="uart_c2_tie_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC2Tie"
+      baseType="uint8_t"
+      description="Transmitter Interrupt/DMA Transfer Enable"
+      toolTip="" >
+      <choice name="Disabled"    value="0" enum="Disabled" />
+      <choice name="Enabled"     value="1" enum="Enabled" />
+   </binaryOption >
+
+   <binaryOption key="uart_c2_tcie" condition="uart_c2_tcie_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC2Tcie"
+      baseType="uint8_t"
+      description="Transmission Complete Interrupt/DMA requests"
+      toolTip="Allows interrupt or DMA requests triggered by TDRE" >
+      <choice name="Disabled"    value="0" enum="Disabled" />
+      <choice name="Enabled"     value="1" enum="Enabled" />
+   </binaryOption >
+
+   <binaryOption key="uart_c2_rie" condition="uart_c2_rie_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC2Rie"
+      baseType="uint8_t"
+      description="Receiver Full Interrupt/DMA requests"
+      toolTip="Allows interrupt or DMA requests triggered by RDRF" >
+      <choice name="Disabled"    value="0" enum="Disabled" />
+      <choice name="Enabled"     value="1" enum="Enabled" />
+   </binaryOption >
+
+   <binaryOption key="uart_c2_ilie" condition="uart_c2_ilie_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC2Ilie"
+      baseType="uint8_t"
+      description="Idle Line Interrupt Enable"
+      toolTip="Enables the idle line flag, S1[IDLE], to generate interrupt requests , based on the state of C5[ILDMAS]" >
+      <choice name="Disabled"    value="0" enum="Disabled" />
+      <choice name="Enabled"     value="1" enum="Enabled" />
+   </binaryOption >
+
+   <binaryOption key="uart_c2_te" condition="uart_c2_te_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC2Te"
+      baseType="uint8_t"
+      description="Transmitter Enable"
+      toolTip="" >
+      <choice name="Disabled"    value="0" enum="Disabled" />
+      <choice name="Enabled"     value="1" enum="Enabled" />
+   </binaryOption >
+
+   <binaryOption key="uart_c2_re" condition="uart_c2_re_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC2Re"
+      baseType="uint8_t"
+      description="Receiver Enable"
+      toolTip="" >
+      <choice name="Disabled"    value="0" enum="Disabled" />
+      <choice name="Enabled"     value="1" enum="Enabled" />
+   </binaryOption >
+
+   <binaryOption key="uart_c2_rwu" condition="uart_c2_rwu_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC2Rwu"
+      baseType="uint8_t"
+      description="Receiver Wakeup Control"
+      toolTip="Setting RWU enables the wakeup function and inhibits further receiver interrupt requests.\n
+Normally, hardware wakes the receiver by automatically clearing RWU" >
+      <choice name="Normal operation"         value="0" enum="NormalOperation" />
+      <choice name="Wakeup function enabled"  value="1" enum="WakeupFunctionEnabled" />
+   </binaryOption >
+
+   <binaryOption key="uart_c2_sbk" condition="uart_c2_sbk_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC2Sbk"
+      baseType="uint8_t"
+      description="Send Break"
+      toolTip="" >
+      <choice name="Normal operation"       value="0" enum="NormalOperation" />
+      <choice name="Queue break character"  value="1" enum="QueueBreakCharacter" />
+   </binaryOption >
+
+   <!-- ____ S1 ____ -->
+   <title description="Status Register 1" />
+
+   <binaryOption key="uart_s1_tdre" condition="uart_s1_tdre_present"
+      hidden="true"
+      typeName="UartS1Tdre"
+      baseType="uint8_t"
+      description="Transmit Data Register Empty Flag"
+      toolTip="" >
+      <choice name="Transmit data buffer is full"   value="0" enum="TransmitDataBufferIsFull" />
+      <choice name="Transmit data buffer is empty"  value="1" enum="TransmitDataBufferIsEmpty" />
+   </binaryOption >
+
+   <binaryOption key="uart_s1_tc" condition="uart_s1_tc_present"
+      hidden="true"
+      typeName="UartS1Tc"
+      baseType="uint8_t"
+      description="Transmit Complete Flag"
+      toolTip="Set when the transmit buffer is empty and no data, preamble, or break character is being transmitted.\n
+               Cleared by reading S1 with TC set and then doing one of the following:\n
+               - Write to the data register to transmit new data\n
+               - Queue a preamble by changing TE from 0 to 1\n
+               - Queue a break character by writing 1 to C2.SBK" >
+      <choice name="Active"      value="0" enum="Active" />
+      <choice name="Idle"        value="1" enum="Idle" />
+   </binaryOption >
+
+   <binaryOption key="uart_s1_rdrf" condition="uart_s1_rdrf_present"
+      hidden="true"
+      typeName="UartS1Rdrf"
+      baseType="uint8_t"
+      description="Receive Data Register Full Flag"
+      toolTip="" >
+      <choice name="Receive data buffer is empty"  value="0" enum="ReceiveDataBufferIsEmpty" />
+      <choice name="Receive data buffer is full"   value="1" enum="ReceiveDataBufferIsFull" />
+   </binaryOption >
+
+   <binaryOption key="uart_s1_idle" condition="uart_s1_idle_present"
+      hidden="true"
+      typeName="UartS1Idle"
+      baseType="uint8_t"
+      description="Idle Line Flag"
+      toolTip="After the IDLE flag is cleared, a frame must be received or a LIN break character must set the S2[LBKDIF] flag before an idle
+condition can set the IDLE flag.\n
+               To clear IDLE, read S1 with IDLE set and then read D" >
+      <choice name="Not detected"  value="0" enum="NotDetected" />
+      <choice name="Detected"      value="1" enum="Detected" />
+   </binaryOption >
+
+   <binaryOption key="uart_s1_or" condition="uart_s1_or_present"
+      hidden="true"
+      typeName="UartS1Or"
+      baseType="uint8_t"
+      description="Receiver Overrun Flag"
+      toolTip="OR is set when software fails to prevent the receive data register from overflowing with data.\n
+               To clear OR, read S1 when OR is set and then read D" >
+      <choice name="No error"    value="0" enum="NoError" />
+      <choice name="Error"       value="1" enum="Error" />
+   </binaryOption >
+
+   <binaryOption key="uart_s1_nf" condition="uart_s1_nf_present"
+      hidden="true"
+      typeName="UartS1Nf"
+      baseType="uint8_t"
+      description="Noise Flag"
+      toolTip="NF is set when the UART detects noise on the receiver input.\n
+               To clear NF, read S1 and then read D" >
+      <choice name="No error"    value="0" enum="NoError" />
+      <choice name="Error"       value="1" enum="Error" />
+   </binaryOption >
+
+   <binaryOption key="uart_s1_fe" condition="uart_s1_fe_present"
+      hidden="true"
+      typeName="UartS1Fe"
+      baseType="uint8_t"
+      description="Framing Error Flag"
+      toolTip="FE is set when a logic 0 is accepted as the stop bit.\n
+               To clear FE, read S1 with FE set and then read D" >
+      <choice name="No error"    value="0" enum="NoError" />
+      <choice name="Error"       value="1" enum="Error" />
+   </binaryOption >
+
+   <binaryOption key="uart_s1_pf" condition="uart_s1_pf_present"
+      hidden="true"
+      typeName="UartS1Pf"
+      baseType="uint8_t"
+      description="Parity Error Flag"
+      toolTip="PF is set when PE is set and the parity of the received data does not match its parity bit.\n
+               To clear PF, read S1 with PF set and then read D" >
+      <choice name="No error"    value="0" enum="NoError" />
+      <choice name="Error"       value="1" enum="Error" />
+   </binaryOption >
+
+   <!-- ____ S2 ____ -->
+   <title description="Status Register 2" />
+
+   <binaryOption key="uart_s2_rxedgif" condition="uart_s2_rxedgif_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartS2Rxedgif"
+      baseType="uint8_t"
+      description="RxD Pin Active Edge Interrupt Flag"
+      toolTip="RXEDGIF is set when an active edge occurs on the RxD pin.\n
+               The active edge is falling if RXINV = 0, and rising if RXINV=1.\n
+               RXEDGIF is cleared by writing a 1 to it" >
+      <choice name="No interrupt"       value="0" enum="NoInterrupt" />
+      <choice name="Interrupt pending"  value="1" enum="InterruptPending" />
+   </binaryOption >
+
+   <binaryOption key="uart_s2_msbf" condition="uart_s2_msbf_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartS2Msbf"
+      baseType="uint8_t"
+      description="Most Significant Bit First"
+      toolTip="Setting this field reverses the order of the bits that are transmitted and received on the wire" >
+      <choice name="LSB first"   value="0" enum="LsbFirst" />
+      <choice name="MSB first"   value="1" enum="MsbFirst" />
+   </binaryOption >
+
+   <binaryOption key="uart_s2_rxinv" condition="uart_s2_rxinv_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartS2Rxinv"
+      baseType="uint8_t"
+      description="Receive Data Inversion"
+      toolTip="Setting this field reverses the polarity of the received data input" >
+      <choice name="RxD not inverted"  value="0" enum="RxdNotInverted" />
+      <choice name="RxD inverted"      value="1" enum="RxdInverted" />
+   </binaryOption >
+
+   <binaryOption key="uart_s2_rwuid" condition="uart_s2_rwuid_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartS2Rwuid"
+      baseType="uint8_t"
+      description="Receive Wakeup Idle Detect"
+      toolTip="When RWU is set and WAKE is cleared, this field controls whether the idle character that wakes the
+receiver sets S1[IDLE]" >
+      <choice name="Idle chars ignored"        value="0" enum="IdleCharsIgnored" />
+      <choice name="Idle detect sets S1.IDLE"  value="1" enum="IdleDetectSetsS1Idle" />
+   </binaryOption >
+
+   <binaryOption key="uart_s2_brk13" condition="uart_s2_brk13_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartS2Brk13"
+      baseType="uint8_t"
+      description="Break Transmit Character Length"
+      toolTip="Determines whether the transmit break character is 10, 11, or 12 bits long, or 13 or 14 bits long" >
+      <choice name="Short"       value="0" enum="Short" />
+      <choice name="Long"        value="1" enum="Long" />
+   </binaryOption >
+
+   <binaryOption key="uart_s2_raf" condition="uart_s2_raf_present"
+      hidden="true"
+      typeName="UartS2Raf"
+      baseType="uint8_t"
+      description="Receiver Active Flag"
+      toolTip="" >
+      <choice name="Receiver idle"    value="0" enum="ReceiverIdle" />
+      <choice name="Receiver active"  value="1" enum="ReceiverActive" />
+   </binaryOption >
+
+   <!-- ____ C3 ____ -->
+   <title description="Control Register 3" />
+
+   <binaryOption key="uart_c3_r8" condition="uart_c3_r8_present"
+      hidden="true"
+      typeName="UartC3R8"
+      baseType="uint8_t"
+      description="Received Bit 8"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="uart_c3_t8" condition="uart_c3_t8_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC3T8"
+      baseType="uint8_t"
+      description="Transmit Bit 8"
+      toolTip="" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <binaryOption key="uart_c3_txdir" condition="uart_c3_txdir_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC3Txdir"
+      baseType="uint8_t"
+      description="Transmitter Pin Direction in Single-Wire mode"
+      toolTip="" >
+      <choice name="TxD pin is input"   value="0" enum="TxdPinIsInput" />
+      <choice name="TxD pin is output"  value="1" enum="TxdPinIsOutput" />
+   </binaryOption >
+
+   <binaryOption key="uart_c3_txinv" condition="uart_c3_txinv_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC3Txinv"
+      baseType="uint8_t"
+      description="Transmit Data Inversion"
+      toolTip="" >
+      <choice name="TxD not inverted"  value="0" enum="TxdNotInverted" />
+      <choice name="TxD inverted"      value="1" enum="TxdInverted" />
+   </binaryOption >
+
+   <binaryOption key="uart_c3_orie" condition="uart_c3_orie_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC3Orie"
+      baseType="uint8_t"
+      description="Overrun Error Interrupt Enable"
+      toolTip="" >
+      <choice name="Disabled"    value="0" enum="Disabled" />
+      <choice name="Enabled"     value="1" enum="Enabled" />
+   </binaryOption >
+
+   <binaryOption key="uart_c3_neie" condition="uart_c3_neie_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC3Neie"
+      baseType="uint8_t"
+      description="Noise Error Interrupt Enable"
+      toolTip="" >
+      <choice name="Disabled"    value="0" enum="Disabled" />
+      <choice name="Enabled"     value="1" enum="Enabled" />
+   </binaryOption >
+
+   <binaryOption key="uart_c3_feie" condition="uart_c3_feie_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC3Feie"
+      baseType="uint8_t"
+      description="Framing Error Interrupt Enable"
+      toolTip="" >
+      <choice name="Disabled"    value="0" enum="Disabled" />
+      <choice name="Enabled"     value="1" enum="Enabled" />
+   </binaryOption >
+
+   <binaryOption key="uart_c3_peie" condition="uart_c3_peie_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC3Peie"
+      baseType="uint8_t"
+      description="Parity Error Interrupt Enable"
+      toolTip="" >
+      <choice name="Disabled"    value="0" enum="Disabled" />
+      <choice name="Enabled"     value="1" enum="Enabled" />
+   </binaryOption >
+
+   <!-- ____ D ____ -->
+   <title description="Data Register\n
+Reads return the contents of the read-only receive data buffer and \n
+writes go to the write-only transmit data buffer. \n
+Reads and writes of this register are also involved in the automatic flag clearing mechanisms for the UART status flags" />
+
+   <intOption key="uart_d_rt" condition="uart_d_rt_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartDRt"
+      baseType="uint8_t"
+      description="Read receive data or write transmit data"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <!-- ____ MA ____ -->
+   <title description="Match Address Registers %s" />
+
+   <intOption key="uart_ma_ma" condition="uart_ma_ma_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartMaMa"
+      baseType="uint8_t"
+      description="Match Address"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <!-- ____ C4 ____ -->
+   <title description="Control Register 4" />
+
+   <binaryOption key="uart_c4_maen1" condition="uart_c4_maen1_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC4Maen1"
+      baseType="uint8_t"
+      description="Match Address Mode Enable 1"
+      toolTip="" >
+      <choice name="All data received is transferred to the data buffer if MAEN2 is cleared"  value="0" enum="AllDataReceivedIsTransferredToTheDataBufferIfMaen2IsCleared" />
+      <choice name="All data received with the most significant bit cleared, is discarded. "  value="1" enum="AllDataReceivedWithTheMostSignificantBitCleared_IsDiscarded" />
+   </binaryOption >
+
+   <binaryOption key="uart_c4_maen2" condition="uart_c4_maen2_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC4Maen2"
+      baseType="uint8_t"
+      description="Match Address Mode Enable 2"
+      toolTip="" >
+      <choice name="All data received is transferred to the data buffer if MAEN1 is cleared"  value="0" enum="AllDataReceivedIsTransferredToTheDataBufferIfMaen1IsCleared" />
+      <choice name="All data received with the most significant bit cleared, is discarded. "  value="1" enum="AllDataReceivedWithTheMostSignificantBitCleared_IsDiscarded" />
+   </binaryOption >
+
+   <binaryOption key="uart_c4_m10" condition="uart_c4_m10_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC4M10"
+      baseType="uint8_t"
+      description="10-bit Mode select"
+      toolTip="" >
+      <choice name="8 or 9-bit chars"  value="0" enum="8Or9BitChars" />
+      <choice name="10-bit chars"      value="1" enum="10BitChars" />
+   </binaryOption >
+
+   <intOption key="uart_c4_brfa" condition="uart_c4_brfa_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC4Brfa"
+      baseType="uint8_t"
+      description="Baud Rate Fine Adjust"
+      toolTip="This bit field is used to add more timing resolution to the average baud frequency, in increments of 1/32"
+      value="0"
+      min="0" max="31"
+   />
+
+   <!-- ____ C5 ____ -->
+   <title description="Control Register 5" />
+
+   <binaryOption key="uart_c5_tdmas" condition="uart_c5_tdmas_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC5Tdmas"
+      baseType="uint8_t"
+      description="Transmitter Interrupt/DMA Select"
+      toolTip="Selects between DMA and interrupt requests when C2[TIE] and S1[TDRE] flags are set" >
+      <choice name="Interrupt request"  value="0" enum="InterruptRequest" />
+      <choice name="DMA request"        value="1" enum="DmaRequest" />
+   </binaryOption >
+
+   <binaryOption key="uart_c5_rdmas" condition="uart_c5_rdmas_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC5Rdmas"
+      baseType="uint8_t"
+      description="Receiver Full Interrupt/DMA Select"
+      toolTip="Selects between DMA and interrupt requests when C2[RIE] and S1[RDRF] flags are set" >
+      <choice name="Interrupt request"  value="0" enum="InterruptRequest" />
+      <choice name="DMA request"        value="1" enum="DmaRequest" />
+   </binaryOption >
+
+   <!-- ____ C7816 ____ -->
+   <title description="7816 Control Register" />
+
+   <binaryOption key="uart_c7816_onack" condition="uart_c7816_onack_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC7816Onack"
+      baseType="uint8_t"
+      description="Generate NACK on Overflow"
+      toolTip="A NACK may be automatically sent if a receive buffer overrun occurs" >
+      <choice name="No action"   value="0" enum="NoAction" />
+      <choice name="Send NACK"   value="1" enum="SendNack" />
+   </binaryOption >
+
+   <binaryOption key="uart_c7816_anack" condition="uart_c7816_anack_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC7816Anack"
+      baseType="uint8_t"
+      description="Generate NACK on Error"
+      toolTip="A NACK may be automatically generated if a parity error is detected or if an invalid initial character is detected" >
+      <choice name="No action"   value="0" enum="NoAction" />
+      <choice name="Send NACK"   value="1" enum="SendNack" />
+   </binaryOption >
+
+   <binaryOption key="uart_c7816_init" condition="uart_c7816_init_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC7816Init"
+      baseType="uint8_t"
+      description="Detect Initial Character"
+      toolTip="When this field is set, all received characters are searched for a valid initial character.\n
+               If an invalid initial character is identified, and ANACK is set, a NACK is sent" >
+      <choice name="Normal operating mode"  value="0" enum="NormalOperatingMode" />
+      <choice name="Search mode"            value="1" enum="SearchMode" />
+   </binaryOption >
+
+   <binaryOption key="uart_c7816_ttype" condition="uart_c7816_ttype_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC7816Ttype"
+      baseType="uint8_t"
+      description="Transfer Type\nIndicates the transfer protocol being used"
+      toolTip="" >
+      <choice name="ISO-7816 T = 0 specification"  value="0" enum="Iso7816T0Specification" />
+      <choice name="ISO-7816 T = 1 specification"  value="1" enum="Iso7816T1Specification" />
+   </binaryOption >
+
+   <binaryOption key="uart_c7816_iso_7816e" condition="uart_c7816_iso_7816e_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartC7816Iso7816e"
+      baseType="uint8_t"
+      description="ISO-7816 Functionality Enabled"
+      toolTip="" >
+      <choice name="Disabled"    value="0" enum="Disabled" />
+      <choice name="Enabled"     value="1" enum="Enabled" />
+   </binaryOption >
+
+   <!-- ____ IE7816 ____ -->
+   <title description="7816 Interrupt Enable Register" />
+
+   <binaryOption key="uart_ie7816_wte" condition="uart_ie7816_wte_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartIe7816Wte"
+      baseType="uint8_t"
+      description="Wait Timer Interrupt Enable"
+      toolTip="" >
+      <choice name="Interrupt disabled"  value="0" enum="InterruptDisabled" />
+      <choice name="Interrupt enabled"   value="1" enum="InterruptEnabled" />
+   </binaryOption >
+
+   <binaryOption key="uart_ie7816_cwte" condition="uart_ie7816_cwte_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartIe7816Cwte"
+      baseType="uint8_t"
+      description="Character Wait Timer (CWT) Interrupt Enable"
+      toolTip="" >
+      <choice name="Interrupt disabled"  value="0" enum="InterruptDisabled" />
+      <choice name="Interrupt enabled"   value="1" enum="InterruptEnabled" />
+   </binaryOption >
+
+   <binaryOption key="uart_ie7816_bwte" condition="uart_ie7816_bwte_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartIe7816Bwte"
+      baseType="uint8_t"
+      description="Block Wait Timer (BWT) Interrupt Enable"
+      toolTip="" >
+      <choice name="Interrupt disabled"  value="0" enum="InterruptDisabled" />
+      <choice name="Interrupt enabled"   value="1" enum="InterruptEnabled" />
+   </binaryOption >
+
+   <binaryOption key="uart_ie7816_initde" condition="uart_ie7816_initde_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartIe7816Initde"
+      baseType="uint8_t"
+      description="Initial Character Detected (INITD) Interrupt Enable"
+      toolTip="" >
+      <choice name="Interrupt disabled"  value="0" enum="InterruptDisabled" />
+      <choice name="Interrupt enabled"   value="1" enum="InterruptEnabled" />
+   </binaryOption >
+
+   <binaryOption key="uart_ie7816_adte" condition="uart_ie7816_adte_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartIe7816Adte"
+      baseType="uint8_t"
+      description="ATR Duration Timer Interrupt Enable"
+      toolTip="" >
+      <choice name="Interrupt disabled"  value="0" enum="InterruptDisabled" />
+      <choice name="Interrupt enabled"   value="1" enum="InterruptEnabled" />
+   </binaryOption >
+
+   <binaryOption key="uart_ie7816_gtve" condition="uart_ie7816_gtve_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartIe7816Gtve"
+      baseType="uint8_t"
+      description="Guard Timer Violated (GTV) Interrupt Enable"
+      toolTip="" >
+      <choice name="Interrupt disabled"  value="0" enum="InterruptDisabled" />
+      <choice name="Interrupt enabled"   value="1" enum="InterruptEnabled" />
+   </binaryOption >
+
+   <binaryOption key="uart_ie7816_txte" condition="uart_ie7816_txte_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartIe7816Txte"
+      baseType="uint8_t"
+      description="Transmit Threshold Exceeded (TXT) Interrupt Enable"
+      toolTip="" >
+      <choice name="Interrupt disabled"  value="0" enum="InterruptDisabled" />
+      <choice name="Interrupt enabled"   value="1" enum="InterruptEnabled" />
+   </binaryOption >
+
+   <binaryOption key="uart_ie7816_rxte" condition="uart_ie7816_rxte_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartIe7816Rxte"
+      baseType="uint8_t"
+      description="Receive Threshold Exceeded Interrupt Enable"
+      toolTip="" >
+      <choice name="Interrupt disabled"  value="0" enum="InterruptDisabled" />
+      <choice name="Interrupt enabled"   value="1" enum="InterruptEnabled" />
+   </binaryOption >
+
+   <!-- ____ IS7816 ____ -->
+   <title description="7816 Interrupt Status Register" />
+
+   <binaryOption key="uart_is7816_wt" condition="uart_is7816_wt_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartIs7816Wt"
+      baseType="uint8_t"
+      description="Wait Timer Interrupt"
+      toolTip="Set when the Wait Time (WT) has been violated" >
+      <choice name="Negated"                    value="0" enum="Negated" />
+      <choice name="Asserted/Write 1 to clear"  value="1" enum="AssertedWrite1ToClear" />
+   </binaryOption >
+
+   <binaryOption key="uart_is7816_cwt" condition="uart_is7816_cwt_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartIs7816Cwt"
+      baseType="uint8_t"
+      description="Character Wait Timer Interrupt"
+      toolTip="Set when the Character Wait Time (CWT) has been violated" >
+      <choice name="Negated"                    value="0" enum="Negated" />
+      <choice name="Asserted/Write 1 to clear"  value="1" enum="AssertedWrite1ToClear" />
+   </binaryOption >
+
+   <binaryOption key="uart_is7816_bwt" condition="uart_is7816_bwt_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartIs7816Bwt"
+      baseType="uint8_t"
+      description="Block Wait Timer Interrupt"
+      toolTip="Set when the Block Wait Time (BWT) has been violated" >
+      <choice name="Negated"                    value="0" enum="Negated" />
+      <choice name="Asserted/Write 1 to clear"  value="1" enum="AssertedWrite1ToClear" />
+   </binaryOption >
+
+   <binaryOption key="uart_is7816_initd" condition="uart_is7816_initd_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartIs7816Initd"
+      baseType="uint8_t"
+      description="Initial Character Detected Interrupt"
+      toolTip="Set when a valid initial character has been received" >
+      <choice name="Negated"                    value="0" enum="Negated" />
+      <choice name="Asserted/Write 1 to clear"  value="1" enum="AssertedWrite1ToClear" />
+   </binaryOption >
+
+   <binaryOption key="uart_is7816_adt" condition="uart_is7816_adt_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartIs7816Adt"
+      baseType="uint8_t"
+      description="ATR Duration Time Interrupt"
+      toolTip="Indicates that the ATR duration time, the time between the leading edge of the TS character being
+received and the leading edge of the next response character, has exceeded the programmed value" >
+      <choice name="Negated"                    value="0" enum="Negated" />
+      <choice name="Asserted/Write 1 to clear"  value="1" enum="AssertedWrite1ToClear" />
+   </binaryOption >
+
+   <binaryOption key="uart_is7816_gtv" condition="uart_is7816_gtv_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartIs7816Gtv"
+      baseType="uint8_t"
+      description="Guard Timer Violated Interrupt"
+      toolTip="Set if a guard time (GT, CGT or BGT) has been violated" >
+      <choice name="Negated"                    value="0" enum="Negated" />
+      <choice name="Asserted/Write 1 to clear"  value="1" enum="AssertedWrite1ToClear" />
+   </binaryOption >
+
+   <binaryOption key="uart_is7816_txt" condition="uart_is7816_txt_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartIs7816Txt"
+      baseType="uint8_t"
+      description="Transmit Threshold Exceeded Interrupt"
+      toolTip="Set if the number of retries and corresponding NACKS &gt; the value in the ET7816[TXTHRESHOLD] field" >
+      <choice name="Negated"                    value="0" enum="Negated" />
+      <choice name="Asserted/Write 1 to clear"  value="1" enum="AssertedWrite1ToClear" />
+   </binaryOption >
+
+   <binaryOption key="uart_is7816_rxt" condition="uart_is7816_rxt_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartIs7816Rxt"
+      baseType="uint8_t"
+      description="Receive Threshold Exceeded Interrupt"
+      toolTip="Set if the number of consecutive NACKS generated as a result of parity errors and buffer overruns is &gt;= the value in ET7816[RXTHRESHOLD]" >
+      <choice name="Negated"                    value="0" enum="Negated" />
+      <choice name="Asserted/Write 1 to clear"  value="1" enum="AssertedWrite1ToClear" />
+   </binaryOption >
+
+   <!-- ____ WP7816 ____ -->
+   <title description="7816 Wait Parameter Register" />
+
+   <intOption key="uart_wp7816_wtx" condition="uart_wp7816_wtx_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartWp7816Wtx"
+      baseType="uint8_t"
+      description="Wait Time Multiplier (C7816[TTYPE] = 1)"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <!-- ____ WN7816 ____ -->
+   <title description="7816 Wait N Register" />
+
+   <intOption key="uart_wn7816_gtn" condition="uart_wn7816_gtn_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartWn7816Gtn"
+      baseType="uint8_t"
+      description="Guard Band N"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <!-- ____ WF7816 ____ -->
+   <title description="7816 Wait FD Register" />
+
+   <intOption key="uart_wf7816_gtfd" condition="uart_wf7816_gtfd_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartWf7816Gtfd"
+      baseType="uint8_t"
+      description="FD Multiplier"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <!-- ____ ET7816 ____ -->
+   <title description="7816 Error Threshold Register" />
+
+   <intOption key="uart_et7816_txthreshold" condition="uart_et7816_txthreshold_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartEt7816Txthreshold"
+      baseType="uint8_t"
+      description="Transmit NACK Threshold"
+      toolTip="The value written to this field indicates the maximum number of failed attempts (NACKs) a transmitted
+character can have before the host processor is notified"
+      value="0"
+      min="0" max="15"
+   />
+
+   <intOption key="uart_et7816_rxthreshold" condition="uart_et7816_rxthreshold_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartEt7816Rxthreshold"
+      baseType="uint8_t"
+      description="Receive NACK Threshold"
+      toolTip="The value written to this field indicates the maximum number of consecutive NACKs generated as a result
+of a parity error or receiver buffer overruns before the host processor is notified"
+      value="0"
+      min="0" max="15"
+   />
+
+   <!-- ____ TL7816 ____ -->
+   <title description="7816 Transmit Length Register" />
+
+   <intOption key="uart_tl7816_tlen" condition="uart_tl7816_tlen_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartTl7816Tlen"
+      baseType="uint8_t"
+      description="Transmit Length"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <!-- ____ AP7816A_T0 ____ -->
+   <title description="7816 ATR Duration Timer Register A" />
+
+   <intOption key="uart_ap7816a_t0_adti_h" condition="uart_ap7816a_t0_adti_h_present"
+      enabledBy="enablePeripheralSupport"
+      register="ap7816a_t0"
+      typeName="UartAp7816aT0AdtiH"
+      baseType="uint8_t"
+      description="ATR Duration Time Integer High (C7816[TTYPE] = 0)"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <!-- ____ AP7816B_T0 ____ -->
+   <title description="7816 ATR Duration Timer Register B" />
+
+   <intOption key="uart_ap7816b_t0_adti_l" condition="uart_ap7816b_t0_adti_l_present"
+      enabledBy="enablePeripheralSupport"
+      register="ap7816b_t0"
+      typeName="UartAp7816bT0AdtiL"
+      baseType="uint8_t"
+      description="ATR Duration Time Integer Low (C7816[TTYPE] = 0)"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <!-- ____ WP7816A_T0 ____ -->
+   <title description="7816 Wait Parameter Register A" />
+
+   <intOption key="uart_wp7816a_t0_wi_h" condition="uart_wp7816a_t0_wi_h_present"
+      enabledBy="enablePeripheralSupport"
+      register="wp7816a_t0"
+      typeName="UartWp7816aT0WiH"
+      baseType="uint8_t"
+      description="Wait Time Integer High (C7816[TTYPE] = 0)"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <!-- ____ WP7816A_T1 ____ -->
+   <title description="7816 Wait Parameter Register A" />
+
+   <intOption key="uart_wp7816a_t1_bwi_h" condition="uart_wp7816a_t1_bwi_h_present"
+      enabledBy="enablePeripheralSupport"
+      register="wp7816a_t1"
+      typeName="UartWp7816aT1BwiH"
+      baseType="uint8_t"
+      description="Block Wait Time Integer High (C7816[TTYPE] = 1)"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <!-- ____ WP7816B_T0 ____ -->
+   <title description="7816 Wait Parameter Register B" />
+
+   <intOption key="uart_wp7816b_t0_wi_l" condition="uart_wp7816b_t0_wi_l_present"
+      enabledBy="enablePeripheralSupport"
+      register="wp7816b_t0"
+      typeName="UartWp7816bT0WiL"
+      baseType="uint8_t"
+      description="Wait Time Integer Low (C7816[TTYPE] = 0)"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <!-- ____ WP7816B_T1 ____ -->
+   <title description="7816 Wait Parameter Register B" />
+
+   <intOption key="uart_wp7816b_t1_bwi_l" condition="uart_wp7816b_t1_bwi_l_present"
+      enabledBy="enablePeripheralSupport"
+      register="wp7816b_t1"
+      typeName="UartWp7816bT1BwiL"
+      baseType="uint8_t"
+      description="Block Wait Time Integer Low (C7816[TTYPE] = 1)"
+      toolTip=""
+      value="0"
+      min="0" max="255"
+   />
+
+   <!-- ____ WGP7816_T1 ____ -->
+   <title description="7816 Wait and Guard Parameter Register" />
+
+   <intOption key="uart_wgp7816_t1_cwi1" condition="uart_wgp7816_t1_cwi1_present"
+      enabledBy="enablePeripheralSupport"
+      register="wgp7816_t1"
+      typeName="UartWgp7816T1Cwi1"
+      baseType="uint8_t"
+      description="Character Wait Time Integer 1 (C7816[TTYPE] = 1)"
+      toolTip=""
+      value="0"
+      min="0" max="15"
+   />
+
+   <intOption key="uart_wgp7816_t1_bgi" condition="uart_wgp7816_t1_bgi_present"
+      enabledBy="enablePeripheralSupport"
+      register="wgp7816_t1"
+      typeName="UartWgp7816T1Bgi"
+      baseType="uint8_t"
+      description="Block Guard Time Integer (C7816[TTYPE] = 1)"
+      toolTip=""
+      value="0"
+      min="0" max="15"
+   />
+
+   <!-- ____ WP7816C_T1 ____ -->
+   <title description="7816 Wait Parameter Register C" />
+
+   <intOption key="uart_wp7816c_t1_cwi2" condition="uart_wp7816c_t1_cwi2_present"
+      enabledBy="enablePeripheralSupport"
+      register="wp7816c_t1"
+      typeName="UartWp7816cT1Cwi2"
+      baseType="uint8_t"
+      description="Character Wait Time Integer 2 (C7816[TTYPE] = 1)"
+      toolTip=""
+      value="0"
+      min="0" max="31"
+   />
+
+   <!-- ____ Setters and Getters ____________ -->
+
+   <for keys="field                     : set   : get   : clear : genCode                 : name"
+        values="
+
+         uart_bdh_rxedgie               : true  : true  : false : enableGettersAndSetters : BdhRxedgie;
+
+         uart_c1_loops                  : true  : true  : false : enableGettersAndSetters : C1Loops;
+         uart_c1_rsrc                   : true  : true  : false : enableGettersAndSetters : C1Rsrc;
+         uart_c1_m                      : true  : true  : false : enableGettersAndSetters : C1M;
+         uart_c1_wake                   : true  : true  : false : enableGettersAndSetters : C1Wake;
+         uart_c1_ilt                    : true  : true  : false : enableGettersAndSetters : C1Ilt;
+         uart_c1_pe                     : true  : true  : false : enableGettersAndSetters : C1Pe;
+         uart_c1_pt                     : true  : true  : false : enableGettersAndSetters : C1Pt;
+
+         uart_c2_tie                    : true  : true  : false : enableGettersAndSetters : C2Tie;
+         uart_c2_tcie                   : true  : true  : false : enableGettersAndSetters : C2Tcie;
+         uart_c2_rie                    : true  : true  : false : enableGettersAndSetters : C2Rie;
+         uart_c2_ilie                   : true  : true  : false : enableGettersAndSetters : C2Ilie;
+         uart_c2_te                     : true  : true  : false : enableGettersAndSetters : C2Te;
+         uart_c2_re                     : true  : true  : false : enableGettersAndSetters : C2Re;
+         uart_c2_rwu                    : true  : true  : false : enableGettersAndSetters : C2Rwu;
+         uart_c2_sbk                    : true  : true  : false : enableGettersAndSetters : C2Sbk;
+
+         uart_s1_tdre                   : false : true  : false : enableGettersAndSetters : S1Tdre;
+         uart_s1_tc                     : false : true  : false : enableGettersAndSetters : S1Tc;
+         uart_s1_rdrf                   : false : true  : false : enableGettersAndSetters : S1Rdrf;
+         uart_s1_idle                   : false : true  : false : enableGettersAndSetters : S1Idle;
+         uart_s1_or                     : false : true  : false : enableGettersAndSetters : S1Or;
+         uart_s1_nf                     : false : true  : false : enableGettersAndSetters : S1Nf;
+         uart_s1_fe                     : false : true  : false : enableGettersAndSetters : S1Fe;
+         uart_s1_pf                     : false : true  : false : enableGettersAndSetters : S1Pf;
+
+         uart_s2_rxedgif                : true  : true  : false : enableGettersAndSetters : S2Rxedgif;
+         uart_s2_msbf                   : true  : true  : false : enableGettersAndSetters : S2Msbf;
+         uart_s2_rxinv                  : true  : true  : false : enableGettersAndSetters : S2Rxinv;
+         uart_s2_rwuid                  : true  : true  : false : enableGettersAndSetters : S2Rwuid;
+         uart_s2_brk13                  : true  : true  : false : enableGettersAndSetters : S2Brk13;
+         uart_s2_raf                    : false : true  : false : enableGettersAndSetters : S2Raf;
+
+         uart_c3_r8                     : false : true  : false : enableGettersAndSetters : C3R8;
+         uart_c3_t8                     : true  : true  : false : enableGettersAndSetters : C3T8;
+         uart_c3_txdir                  : true  : true  : false : enableGettersAndSetters : C3Txdir;
+         uart_c3_txinv                  : true  : true  : false : enableGettersAndSetters : C3Txinv;
+         uart_c3_orie                   : true  : true  : false : enableGettersAndSetters : C3Orie;
+         uart_c3_neie                   : true  : true  : false : enableGettersAndSetters : C3Neie;
+         uart_c3_feie                   : true  : true  : false : enableGettersAndSetters : C3Feie;
+         uart_c3_peie                   : true  : true  : false : enableGettersAndSetters : C3Peie;
+
+         uart_d_rt                      : true  : true  : false : enableGettersAndSetters : DRt;
+
+         uart_c4_maen1                  : true  : true  : false : enableGettersAndSetters : C4Maen1;
+         uart_c4_maen2                  : true  : true  : false : enableGettersAndSetters : C4Maen2;
+         uart_c4_m10                    : true  : true  : false : enableGettersAndSetters : C4M10;
+         uart_c4_brfa                   : true  : true  : false : enableGettersAndSetters : C4Brfa;
+
+         uart_c5_tdmas                  : true  : true  : false : enableGettersAndSetters : C5Tdmas;
+         uart_c5_rdmas                  : true  : true  : false : enableGettersAndSetters : C5Rdmas;
+
+         uart_c7816_onack               : true  : true  : false : enableGettersAndSetters : C7816Onack;
+         uart_c7816_anack               : true  : true  : false : enableGettersAndSetters : C7816Anack;
+         uart_c7816_init                : true  : true  : false : enableGettersAndSetters : C7816Init;
+         uart_c7816_ttype               : true  : true  : false : enableGettersAndSetters : C7816Ttype;
+         uart_c7816_iso_7816e           : true  : true  : false : enableGettersAndSetters : C7816Iso7816e;
+
+         uart_ie7816_wte                : true  : true  : false : enableGettersAndSetters : Ie7816Wte;
+         uart_ie7816_cwte               : true  : true  : false : enableGettersAndSetters : Ie7816Cwte;
+         uart_ie7816_bwte               : true  : true  : false : enableGettersAndSetters : Ie7816Bwte;
+         uart_ie7816_initde             : true  : true  : false : enableGettersAndSetters : Ie7816Initde;
+         uart_ie7816_adte               : true  : true  : false : enableGettersAndSetters : Ie7816Adte;
+         uart_ie7816_gtve               : true  : true  : false : enableGettersAndSetters : Ie7816Gtve;
+         uart_ie7816_txte               : true  : true  : false : enableGettersAndSetters : Ie7816Txte;
+         uart_ie7816_rxte               : true  : true  : false : enableGettersAndSetters : Ie7816Rxte;
+
+         uart_is7816_wt                 : true  : true  : false : enableGettersAndSetters : Is7816Wt;
+         uart_is7816_cwt                : true  : true  : false : enableGettersAndSetters : Is7816Cwt;
+         uart_is7816_bwt                : true  : true  : false : enableGettersAndSetters : Is7816Bwt;
+         uart_is7816_initd              : true  : true  : false : enableGettersAndSetters : Is7816Initd;
+         uart_is7816_adt                : true  : true  : false : enableGettersAndSetters : Is7816Adt;
+         uart_is7816_gtv                : true  : true  : false : enableGettersAndSetters : Is7816Gtv;
+         uart_is7816_txt                : true  : true  : false : enableGettersAndSetters : Is7816Txt;
+         uart_is7816_rxt                : true  : true  : false : enableGettersAndSetters : Is7816Rxt;
+
+         uart_wp7816_wtx                : true  : true  : false : enableGettersAndSetters : Wp7816Wtx;
+
+         uart_wn7816_gtn                : true  : true  : false : enableGettersAndSetters : Wn7816Gtn;
+
+         uart_wf7816_gtfd               : true  : true  : false : enableGettersAndSetters : Wf7816Gtfd;
+
+         uart_et7816_txthreshold        : true  : true  : false : enableGettersAndSetters : Et7816Txthreshold;
+         uart_et7816_rxthreshold        : true  : true  : false : enableGettersAndSetters : Et7816Rxthreshold;
+
+         uart_tl7816_tlen               : true  : true  : false : enableGettersAndSetters : Tl7816Tlen;
+
+         uart_ap7816a_t0_adti_h         : true  : true  : false : enableGettersAndSetters : Ap7816aT0AdtiH;
+
+         uart_ap7816b_t0_adti_l         : true  : true  : false : enableGettersAndSetters : Ap7816bT0AdtiL;
+
+         uart_wp7816a_t0_wi_h           : true  : true  : false : enableGettersAndSetters : Wp7816aT0WiH;
+
+         uart_wp7816a_t1_bwi_h          : true  : true  : false : enableGettersAndSetters : Wp7816aT1BwiH;
+
+         uart_wp7816b_t0_wi_l           : true  : true  : false : enableGettersAndSetters : Wp7816bT0WiL;
+
+         uart_wp7816b_t1_bwi_l          : true  : true  : false : enableGettersAndSetters : Wp7816bT1BwiL;
+
+         uart_wgp7816_t1_cwi1           : true  : true  : false : enableGettersAndSetters : Wgp7816T1Cwi1;
+         uart_wgp7816_t1_bgi            : true  : true  : false : enableGettersAndSetters : Wgp7816T1Bgi;
+
+         uart_wp7816c_t1_cwi2           : true  : true  : false : enableGettersAndSetters : Wp7816cT1Cwi2" >
+      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(%params) {
+         \t   %fieldAssignment;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %returnType get%(name)() {
+         \t   return %fieldExtract;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Clear %description
+         \t *
+         \t */
+         \tstatic void clear%(name)() {
+         \t   %register = %register|%mask;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <for keys="field                     : set   : get   : clear : genCode                 : context                 : name"
+        values="
+
+         uart_ma_ma                     : true  : true  : false : enableGettersAndSetters : MA[index]            : MaMa" >
+      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(int index, %params) {
+         \t   $(_basename)->%(context) = ($(_basename)->%(context) & ~%mask)|%paramExpression;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)(int index) {
+         \t   return %paramType($(_basename)->%(context)&%mask);
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Clear %description
+         \t *
+         \tstatic void clear%(name)(int index) {
+         \t   $(_basename)->%(context) = $(_basename)->%(context)|%mask;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <!-- ____ class $(_Structname)BasicInfo ____________ -->
+
+   <template where="basicInfo" ><![CDATA[
+      class $(_Structname)BasicInfo {
+      \t
+      public:\n
+   ]]></template>
+
+   <!-- ____ Interrupt handling _____________ -->
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo&amp;&amp;false"
+      variables="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   ><![CDATA[
+       \t//! Common class based callback code has been generated for this class of peripheral
+       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
+       \t\n
+   ]]></variableTemplate>
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <![CDATA[
+      \t/**
+      \t * Type definition for $(_Baseclass) interrupt call back.
+      \t */
+      \ttypedef void (*CallbackFunction)($(irq_dummy_parameters));
+      \t
+      \t/**
+      \t * Callback to catch unhandled interrupt
+      \t */
+      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
+      \t   setAndCheckErrorCode(E_NO_HANDLER);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <variableTemplate codeGenCondition="irqHandlingMethod"
+      variables="irq_enum" >
+   <![CDATA[
+      \t/** Callback functions for $(_Baseclass) */
+      \tstatic CallbackFunction sCallbacks[irqCount];
+      \t
+      \t/**
+      \t * Set interrupt callback function.
+      \t *
+      %paramDescription0
+      \t * @param $(_basename)Callback Callback function to execute on interrupt
+      \t *                     Use nullptr to remove callback.
+      \t */
+      \tstatic void setCallback(%param0, CallbackFunction $(_basename)Callback) {
+      \t   if ($(_basename)Callback == nullptr) {
+      \t      $(_basename)Callback = unhandledCallback;
+      \t   }
+      \t   // Allow either no handler set yet or removing handler
+      \t   usbdm_assert(
+      \t         (sCallbacks[%paramName0] == unhandledCallback) || ($(_basename)Callback == unhandledCallback),
+      \t         "Handler already set");
+      \t   sCallbacks[%paramName0] = $(_basename)Callback;
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <for keys="irqName" values="=_irqNums" >
+
+      <constant key="prettyIrqName" value='Prettify(ReplaceAll("%(irqName)", "$(_NAME)_([a-z|A-Z|0-9]+)_IRQn", "$1"))' type="String"/>
+
+      <variableTemplate codeGenCondition="irqHandlingMethod"
+         variables="irq_enum"
+         immediateVariables="prettyIrqName"
+         >
+      <![CDATA[
+         \t/**
+         \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
+         \t *
+         \t * @tparam channel Channel number
+         \t */
+         \tstatic void $(prettyIrqName)_irqHandler() {
+         \t
+         \t   // Execute call-back
+         \t   sCallbacks[$(_Class)IrqNum_$(prettyIrqName)]($(irq_call));
+         \t}
+         \t\n
+      ]]>
+      </variableTemplate>
+      <deleteVariables variables="prettyIrqName" />
+   </for>
+
+   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t/**
+      \t * Callback table of programmatically set handlers for $(_Class)
+      \t */
+      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallbacks[] = {\n
+   ]]></template>
+   <for keys="ch" dim="=_irqCount" >
+      <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
+         \t   $(_Class)Info::unhandledCallback,\n
+      ]]></template>
+   </for>
+   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
+      \t};\n\n
+   ]]></template>
+
+   <template condition="false" ><![CDATA[
+      \t//! Indicates whether the $(_BASENAME) needs a write to clear status errors
+      \tstatic constexpr bool statusNeedsWrite = true;
+      \t
+      \t//! Default Baud rate used if not explicitly given
+      \tstatic constexpr UartBaudRate defaultBaudRate = UartBaudRate($(uart_baudrate));
+      \t
+      \t//! Default buffer size for receive queue when interrupt driven
+      \tstatic constexpr unsigned receiveBufferSize = $(receiveBufferSize);
+      \t
+      \t//! Default buffer size for transmit queue when interrupt driven
+      \tstatic constexpr unsigned transmitBufferSize = $(transmitBufferSize);
+      \t\n
+   ]]></template>
+
+   <template><![CDATA[
+      \t/**
+      \t * Clear UART error status
+      \t * This also discards the current received data value
+      \t */
+      \tstatic void clearError() {
+      \t      (void)uart->S1;
+      \t      (void)uart->D;
+      \t}
+      \t\n
+   ]]></template>
+
+   <template><![CDATA[
+      \t/**
+      \t * Get input clock frequency
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic inline uint32_t getInputClockFrequency() {
+      \t   return SimInfo::getUart$(_instance)Clock();
+      \t}\n\n
+   ]]></template>
+
+   <!-- ____  BAUD rate calculations ____________________ -->
+
+   <variableTemplate where="basicInfo" variables="uart_baudrate, uart_c4_osr" condition="!uart_c4_osr&amp;&amp;!uart_c4_brfa" >
+   <![CDATA[
+      \t/**
+      \t * Set baud rate
+      \t * (for UART with fixed /16 prescaler)
+      \t *
+      %paramDescription
+      \t */
+      \tstatic void setBaudRate(volatile $(_STRUCTNAME)_Type *const $(_basename), uint32_t clockFrequency, %params) {
+      \t
+      \t   // Disable UART before changing registers
+      \t   uint8_t c2Value = uart->C2;
+      \t   uart->C2 = 0;
+      \t
+      \t   // Fixed over-sample ratio
+      \t   constexpr unsigned overSample=16;
+      \t
+      \t   /*
+      \t    * Baudrate = ClockFrequency / (OverSample x Divider)
+      \t    * Divider  = ClockFrequency / (OverSample x Baudrate)
+      \t    */
+      \t   // Calculate UART divisor with rounding
+      \t   uint32_t divisor = (clockFrequency<<1)/(overSample * %paramName0);
+      \t   divisor = (divisor>>1)|(divisor&0b1);
+      \t
+      \t   // Set Baud rate register
+      \t   uart->BDH = (uart->BDH&~UART_BDH_SBR_MASK) | UART_BDH_SBR((divisor>>8));
+      \t   uart->BDL = UART_BDL_SBR(divisor);
+      \t
+      \t   // Restore UART settings
+      \t   uart->C2 = c2Value;
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <variableTemplate where="basicInfo" variables="uart_baudrate, uart_c4_osr" condition="uart_c4_osr"
+   params=", overSample" >
+   <![CDATA[
+      \t/**
+      \t * Set baud rate
+      \t * (for UART with variable prescaler)
+      \t *
+      \t * @param uart             UART hardware instance pointer
+      \t * @param clockFrequency   UART clock frequency
+      %paramDescription
+      \t */
+      \tstatic void setBaudRate(
+      \t      volatile $(_STRUCTNAME)_Type *const $(_basename),
+      \t      uint32_t     clockFrequency, %params) {
+      \t
+      \t   // Disable UART before changing registers
+      \t   uint8_t c2Value = uart->C2;
+      \t   uart->C2 = 0;
+      \t
+      \t   // Set over-sample ratio
+      \t   uart->C4 = (uart->C4&~UART_C4_OSR_MASK)|UART_C4_OSR(%paramName1-1);
+      \t
+      \t   /*
+      \t    * Baudrate = ClockFrequency / (OverSample x Divider)
+      \t    * Divider  = ClockFrequency / (OverSample x Baudrate)
+      \t    */
+      \t   // Calculate UART divisor with rounding
+      \t   uint32_t divisor = (clockFrequency<<1)/(%paramName0 * %paramName1);
+      \t   divisor = (divisor>>1)|(divisor&0b1);
+      \t
+      \t   // Set Baud rate register
+      \t   uart->BDH = (uart->BDH&~UART_BDH_SBR_MASK) | UART_BDH_SBR((divisor>>8));
+      \t   uart->BDL = UART_BDL_SBR(divisor);
+      \t
+      \t   // Restore UART settings
+      \t   uart->C2 = c2Value;
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <variableTemplate where="basicInfo" variables="uart_baudrate" condition="uart_c4_brfa" >
+   <![CDATA[
+      \t/**
+      \t * Set baud rate
+      \t * (for UART with fractional divider)
+      \t *
+      %paramDescription
+      \t */
+      \tstatic void setBaudRate(volatile $(_STRUCTNAME)_Type *const $(_basename), uint32_t clockFrequency, %params) {
+      \t   /*
+      \t    * Baudrate = clockFrequency / (OSR x (SBR + BRFD))
+      \t    * Fixed OSR = 16
+      \t    *
+      \t    * (OSR x (SBR + BRFD/32)) = clockFrequency/Baudrate
+      \t    * (SBR + BRFD/32) = clockFrequency/(Baudrate*OSR)
+      \t    * 32*SBR + BRFD = 2*clockFrequency/Baudrate
+      \t    * SBR  = (2*clockFrequency/Baudrate)>>5
+      \t    * BRFD = (2*clockFrequency/Baudrate)&0x1F
+      \t    */
+      \t   // Disable UART before changing registers
+      \t   uint8_t c2Value = uart->C2;
+      \t   uart->C2 = 0;
+      \t
+      \t   // Calculate UART clock setting (5-bit fraction at right, +16 for rounding after /32)
+      \t   int divider = ((2*clockFrequency)/baudrate) + 16;
+      \t
+      \t   // Set Baud rate register
+      \t   uart->BDH = (uart->BDH&~UART_BDH_SBR_MASK) | UART_BDH_SBR((divider>>(8+5)));
+      \t   uart->BDL = UART_BDL_SBR(divider>>5);
+      \t   // Fractional divider to get closer to the baud rate
+      \t   uart->C4 = (uart->C4&~UART_C4_BRFA_MASK) | UART_C4_BRFA(divider);
+      \t
+      \t   // Restore UART settings
+      \t   uart->C2 = c2Value;
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <variableTemplate where="info" variables="uart_baudrate" >
+   <![CDATA[
+      \t/**
+      \t * Set baud rate
+      \t *
+      %paramDescription
+      \t */
+      \tstatic void setBaudRate(%params) {
+      \t
+      \t   $(_Structname)BasicInfo::setBaudRate(uart, getInputClockFrequency(), %paramName);
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <!-- ________ UART Init class ____________________________ -->
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_Baseclass)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t * Parameters available may vary with device - see $(_Class)::DefaultInitValue for relevant example.
+      \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * ///
+      \t * /// $(_NAME) call-back
+      \t * ///
+      \t * /// @param status  Status reflecting active inputs
+      \t * ///
+      \t * void $(_name)Callback(ErrorCode ec) {
+      \t *    ....
+      \t * }
+      \t *
+      \t * static const $(_Class)::Init $(_name)Init {
+      \t *
+      \t *   // Setup values
+XXXXXXXXXXXXXXXXXXXXXX
+      \t *
+      \t *   $(_name)Callback,                 // Call-back to execute on event - call-back function name
+      \t *   NvicPriority_Low,                 // Priority for interrupt - Low
+      \t *
+      \t *   // Optional base value to start with (must be last parameter)
+      \t *   $(_Class)::DefaultInitValue   // Used as base value modified by above
+      \t * };
+      \t *
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure($(_name)Init)
+      \t * @endcode
+      \t */
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____ Init class Member variables ________ -->
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      condition="false"
+      variables="irqHandlingMethod"
+   ><![CDATA[
+      \t   /// %description
+      \t   %params = nullptr;\n\n
+   ]]></variableTemplate>
+
+   <for keys=" type        : variables                                            : init    "
+       values="%returnType : uart_baudrate                                        :   UartBaudRate(0)      ;
+               %baseType   : uart_bdh_lbkdie,uart_bdh_rxedgie                     :   0      ;
+               %baseType   : uart_c1_loops,uart_c1_uartswai,uart_c1_rsrc,
+                             uart_c1_m,uart_c1_wake,uart_c1_ilt,uart_c1_pe,
+                             uart_c1_pt                                           :   0      ;
+               %baseType   : uart_c2_tie,uart_c2_tcie,uart_c2_rie,uart_c2_ilie,
+                             uart_c2_te,uart_c2_re,uart_c2_rwu,uart_c2_sbk        :   0      ;
+               %baseType   : uart_s2_lbkdif,uart_s2_rxedgif,uart_s2_msbf,
+                             uart_s2_rxinv,uart_s2_rwuid,uart_s2_brk13,
+                             uart_s2_lbkde                                        :   0      ;
+               %baseType   : uart_c3_t8,uart_c3_txdir,uart_c3_txinv,uart_c3_orie,
+                             uart_c3_neie,uart_c3_feie,uart_c3_peie               :   0      ;
+               %baseType   : uart_d_rt                                            :   0      ;
+               %baseType   : uart_ma_ma                                           :   0      ;
+               %baseType   : uart_c4_maen1,uart_c4_maen2,uart_c4_m10,uart_c4_brfa,
+                             uart_c4_osr                                          :   0      ;
+               uint8_t     : uart_c5_tdmas,uart_c5_rdmas                          :   0      ;
+
+               %baseType   : uart_c7816_onack,uart_c7816_anack,uart_c7816_init,
+                             uart_c7816_ttype,uart_c7816_iso_7816e                :   0      ;
+               %baseType   : uart_ie7816_wte,uart_ie7816_cwte,uart_ie7816_bwte,
+                             uart_ie7816_initde,uart_ie7816_adte,uart_ie7816_gtve,
+                             uart_ie7816_txte,uart_ie7816_rxte                    :   0      ;
+               %baseType   : uart_is7816_wt,uart_is7816_cwt,uart_is7816_bwt,
+                             uart_is7816_initd,uart_is7816_adt,uart_is7816_gtv,
+                             uart_is7816_txt,uart_is7816_rxt                      :   0      ;
+               %baseType   : uart_wp7816_wtx                                      :   0      ;
+               %baseType   : uart_wn7816_gtn                                      :   0      ;
+               %baseType   : uart_wf7816_gtfd                                     :   0      ;
+               %baseType   : uart_et7816_txthreshold,uart_et7816_rxthreshold      :   0      ;
+               %baseType   : uart_tl7816_tlen                                     :   0      ;
+
+               %baseType   : uart_ap7816a_t0_adti_h                               :   0      ;
+               %baseType   : uart_ap7816b_t0_adti_l                               :   0      ;
+               %baseType   : uart_wp7816a_t0_wi_h                                 :   0      ;
+               %baseType   : uart_wp7816a_t1_bwi_h                                :   0      ;
+               %baseType   : uart_wp7816b_t0_wi_l                                 :   0      ;
+               %baseType   : uart_wp7816b_t1_bwi_l                                :   0      ;
+               %baseType   : uart_wgp7816_t1_cwi1,uart_wgp7816_t1_bgi             :   0      ;
+               %baseType   : uart_wp7816c_t1_cwi2                                 :   0      ;
+
+               %baseType   : uart_modem_rxrtse,uart_modem_txrtspol,uart_modem_txrtse,
+                             uart_modem_txctse                                    :   0      ;
+               %baseType   : uart_ir_iren,uart_ir_tnp                             :   0      ;
+               %baseType   : uart_pfifo_txfe,uart_pfifo_rxfe                      :   0      ;
+               %baseType   : uart_cfifo_txflush,uart_cfifo_rxflush,uart_cfifo_rxofe,
+                             uart_cfifo_txofe,uart_cfifo_rxufe                    :   0      ;
+               %baseType   : uart_sfifo_rxof,uart_sfifo_txof,uart_sfifo_rxuf      :   0      ;
+               %baseType   : uart_twfifo_txwater                                  :   0      ;
+               %baseType   : uart_rwfifo_rxwater                                  :   0      " >
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(variables)"
+         linePadding="xxx"
+      ><![CDATA[
+         %multilineDescription
+         \t   %(type) %registerName = %(init);\n\n
+      ]]></variableTemplate>
+   </for>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="/PCR/nvic_irqLevel,irqLevel"
+      condition="false"
+   ><![CDATA[
+      \t   /// %description
+      \t   %paramType %registerName0 = %defaultValue;
+      \t\n
+   ]]></variableTemplate>
+
+   <!-- ____ Init class Constructors ____________ -->
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      condition="false"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      this->%paramName0 = %paramExpression;
+      \t   }\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      condition="false"
+      variables="/PCR/nvic_irqLevel"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName = %paramExpression;
+      \t   }\n\n
+   ]]></variableTemplate>
+
+   <for keys="r"
+      values="
+            uart_baudrate;
+            uart_bdh_lbkdie;uart_bdh_rxedgie;
+            uart_c1_loops;uart_c1_uartswai;uart_c1_rsrc;
+            uart_c1_m;uart_c1_wake;uart_c1_ilt;uart_c1_pe;
+            uart_c1_pt;
+            uart_c2_tie;uart_c2_tcie;uart_c2_rie;uart_c2_ilie;
+            uart_c2_te;uart_c2_re;uart_c2_rwu;uart_c2_sbk;
+            uart_s2_lbkdif;uart_s2_rxedgif;uart_s2_msbf;
+            uart_s2_rxinv;uart_s2_rwuid;uart_s2_brk13;
+            uart_s2_lbkde;
+            uart_c3_t8;uart_c3_txdir;uart_c3_txinv;uart_c3_orie;
+            uart_c3_neie;uart_c3_feie;uart_c3_peie;
+            uart_d_rt;
+            uart_ma_ma;
+            uart_c4_maen1;uart_c4_maen2;uart_c4_m10;
+            uart_c4_brfa;uart_c4_osr;
+            uart_c5_tdmas;uart_c5_rdmas;
+            uart_c7816_onack;uart_c7816_anack;uart_c7816_init;
+            uart_c7816_ttype;uart_c7816_iso_7816e;
+            uart_ie7816_wte;uart_ie7816_cwte;uart_ie7816_bwte;
+            uart_ie7816_initde;uart_ie7816_adte;uart_ie7816_gtve;
+            uart_ie7816_txte;uart_ie7816_rxte;
+            uart_is7816_wt;uart_is7816_cwt;uart_is7816_bwt;
+            uart_is7816_initd;uart_is7816_adt;uart_is7816_gtv;
+            uart_is7816_txt;uart_is7816_rxt;
+            uart_wp7816_wtx;
+            uart_wn7816_gtn;
+            uart_wf7816_gtfd;
+            uart_et7816_txthreshold;uart_et7816_rxthreshold;
+            uart_tl7816_tlen;
+
+            uart_ap7816a_t0_adti_h;
+            uart_ap7816b_t0_adti_l;
+            uart_wp7816a_t0_wi_h;
+            uart_wp7816a_t1_bwi_h;
+            uart_wp7816b_t0_wi_l;
+            uart_wp7816b_t1_bwi_l;
+            uart_wgp7816_t1_cwi1;uart_wgp7816_t1_bgi;
+            uart_wp7816c_t1_cwi2;
+
+            uart_modem_rxrtse;uart_modem_txrtspol;uart_modem_txrtse;
+            uart_modem_txctse;
+            uart_ir_iren;uart_ir_tnp;
+            uart_pfifo_txfe;uart_pfifo_rxfe;
+            uart_cfifo_txflush;uart_cfifo_rxflush;uart_cfifo_rxofe;
+            uart_cfifo_txofe;uart_cfifo_rxufe;
+            uart_sfifo_rxof;uart_sfifo_txof;uart_sfifo_rxuf;
+            uart_twfifo_txwater;
+            uart_rwfifo_rxwater" >
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(r)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    * (%(r))
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %constructorFieldAssignment;
+         \t   }
+         \t\n
+      ]]>
+      </variableTemplate>
+   </for>
+
+   <!-- ____ Init class Configure method ____ -->
+
+   <template codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(DefaultInitValue);
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const Init &init) {
+      \t
+      \t   // Enable peripheral clock
+      \t   enable();
+      \t\n
+   ]]></template>
+
+   <!-- Don't include IRQ handler in init -->
+   <template codeGenCondition="irqHandlingMethod"
+      condition-"false" >
+   <![CDATA[
+      \t   // Only set call-backs if feature enabled
+      \t   setCallback(init.callbackFunction);
+      \t   enableNvicInterrupts(init.irqlevel);
+      \t\n
+   ]]></template>
+   <for keys=
+             " var                                                    : statement            "
+      values=" uart_bdh_lbkdie,uart_bdh_rxedgie,uart_bdh_sbr          : %configRegAssignment ;
+               uart_c1_loops,uart_c1_uartswai,uart_c1_rsrc,
+               uart_c1_m,uart_c1_wake,uart_c1_ilt,uart_c1_pe,
+               uart_c1_pt                                             : %configRegAssignment ;
+               uart_c2_tie,uart_c2_tcie,uart_c2_rie,uart_c2_ilie,
+               uart_c2_te,uart_c2_re,uart_c2_rwu,uart_c2_sbk          : %configRegAssignment ;
+               uart_s2_lbkdif,uart_s2_rxedgif,uart_s2_msbf,
+               uart_s2_rxinv,uart_s2_rwuid,uart_s2_brk13,
+               uart_s2_lbkde                                          : %configRegAssignment ;
+               uart_c3_t8,uart_c3_txdir,uart_c3_txinv,uart_c3_orie,
+               uart_c3_neie,uart_c3_feie,uart_c3_peie                 : %configRegAssignment ;
+               uart_d_rt                                              : %configRegAssignment ;
+               uart_ma_ma                                             : %configRegAssignment ;
+               uart_c4_maen1,uart_c4_maen2,uart_c4_m10,uart_c4_brfa,
+               uart_c4_osr                                            : %configRegAssignment ;
+               uart_c5_tdmas,uart_c5_rdmas                            : %configRegAssignment ;
+
+               uart_c7816_onack,uart_c7816_anack,uart_c7816_init,
+               uart_c7816_ttype,uart_c7816_iso_7816e                  : %configRegAssignment ;
+               uart_ie7816_wte,uart_ie7816_cwte,uart_ie7816_bwte,
+               uart_ie7816_initde,uart_ie7816_adte,uart_ie7816_gtve,
+               uart_ie7816_txte,uart_ie7816_rxte                      : %configRegAssignment ;
+               uart_is7816_wt,uart_is7816_cwt,uart_is7816_bwt,
+               uart_is7816_initd,uart_is7816_adt,uart_is7816_gtv,
+               uart_is7816_txt,uart_is7816_rxt                        : %configRegAssignment ;
+               uart_wp7816_wtx                                        : %configRegAssignment ;
+               uart_wn7816_gtn                                        : %configRegAssignment ;
+               uart_wf7816_gtfd                                       : %configRegAssignment ;
+               uart_et7816_txthreshold,uart_et7816_rxthreshold        : %configRegAssignment ;
+               uart_tl7816_tlen                                       : %configRegAssignment ;
+
+               uart_ap7816a_t0_adti_h                                 : %configRegAssignment ;
+               uart_ap7816b_t0_adti_l                                 : %configRegAssignment ;
+               uart_wp7816a_t0_wi_h                                   : %configRegAssignment ;
+               uart_wp7816a_t1_bwi_h                                  : %configRegAssignment ;
+               uart_wp7816b_t0_wi_l                                   : %configRegAssignment ;
+               uart_wp7816b_t1_bwi_l                                  : %configRegAssignment ;
+               uart_wgp7816_t1_cwi1,uart_wgp7816_t1_bgi               : %configRegAssignment ;
+               uart_wp7816c_t1_cwi2                                   : %configRegAssignment ;
+
+               uart_modem_rxrtse,uart_modem_txrtspol,uart_modem_txrtse,
+               uart_modem_txctse                                      : %configRegAssignment ;
+
+               uart_ir_iren,uart_ir_tnp                               : %configRegAssignment ;
+               uart_pfifo_txfe,uart_pfifo_rxfe                        : %configRegAssignment ;
+               uart_cfifo_txflush,uart_cfifo_rxflush,uart_cfifo_rxofe,
+               uart_cfifo_txofe,uart_cfifo_rxufe                      : %configRegAssignment ;
+               uart_sfifo_rxof,uart_sfifo_txof,uart_sfifo_rxuf        : %configRegAssignment ;
+               uart_twfifo_txwater                                    : %configRegAssignment ;
+               uart_rwfifo_rxwater                                    : %configRegAssignment ;
+
+               uart_baudrate                                          : setBaudRate(init.baudrate) " >
+      <variableTemplate codeGenCondition="enablePeripheralSupport"
+      variables="%(var)"
+      linePadding="xxx"
+      ><![CDATA[
+         \t
+         %multilineDescription
+         \t   %(statement);\n
+      ]]></variableTemplate>
+   </for>
+   <template codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____  Default Initialisation value ____ -->
+
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
+      separator=","
+      terminator=","
+      variables="
+            uart_baudrate,
+
+            uart_bdh_lbkdie,uart_bdh_rxedgie,
+            uart_c1_loops,uart_c1_uartswai,uart_c1_rsrc,
+            uart_c1_m,uart_c1_wake,uart_c1_ilt,uart_c1_pe,
+            uart_c1_pt,
+            uart_c2_tie,uart_c2_tcie,uart_c2_rie,uart_c2_ilie,
+            uart_c2_te,uart_c2_re,uart_c2_rwu,uart_c2_sbk,
+            uart_s2_lbkdif,uart_s2_rxedgif,uart_s2_msbf,
+            uart_s2_rxinv,uart_s2_rwuid,uart_s2_brk13,
+            uart_s2_lbkde,
+            uart_c3_t8,uart_c3_txdir,uart_c3_txinv,uart_c3_orie,
+            uart_c3_neie,uart_c3_feie,uart_c3_peie,
+            uart_d_rt,
+            uart_ma_ma,
+            uart_c4_maen1,uart_c4_maen2,uart_c4_m10,
+            uart_c4_brfa,uart_c4_osr,
+            uart_c5_tdmas,uart_c5_rdmas,
+
+            uart_c7816_onack,uart_c7816_anack,uart_c7816_init,
+            uart_c7816_ttype,uart_c7816_iso_7816e,
+            uart_ie7816_wte,uart_ie7816_cwte,uart_ie7816_bwte,
+            uart_ie7816_initde,uart_ie7816_adte,uart_ie7816_gtve,
+            uart_ie7816_txte,uart_ie7816_rxte,
+            uart_is7816_wt,uart_is7816_cwt,uart_is7816_bwt,
+            uart_is7816_initd,uart_is7816_adt,uart_is7816_gtv,
+            uart_is7816_txt,uart_is7816_rxt,
+            uart_wp7816_wtx,
+            uart_wn7816_gtn,
+            uart_wf7816_gtfd,
+            uart_et7816_txthreshold,uart_et7816_rxthreshold,
+            uart_tl7816_tlen,
+
+            uart_ap7816a_t0_adti_h,
+            uart_ap7816b_t0_adti_l,
+            uart_wp7816a_t0_wi_h,
+            uart_wp7816a_t1_bwi_h,
+            uart_wp7816b_t0_wi_l,
+            uart_wp7816b_t1_bwi_l,
+            uart_wgp7816_t1_cwi1,uart_wgp7816_t1_bgi,
+            uart_wp7816c_t1_cwi2,
+
+            uart_modem_rxrtse,uart_modem_txrtspol,uart_modem_txrtse,
+            uart_modem_txctse,
+
+            uart_ir_iren,uart_ir_tnp,
+
+            uart_pfifo_txfe,uart_pfifo_rxfe,
+            uart_cfifo_txflush,uart_cfifo_rxflush,uart_cfifo_rxofe,
+            uart_cfifo_txofe,uart_cfifo_rxufe,
+            uart_sfifo_rxof,uart_sfifo_txof,uart_sfifo_rxuf,
+            uart_twfifo_txwater,
+            uart_rwfifo_rxwater" >
+   <![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};
+      \t\n
+   ]]></variableTemplate>
+
+   <!-- ____ End of Info classes __________________ -->
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t}; // class $(_Structname)BasicInfo::Init
+      \t\n
+   ]]>
+   </template>
+
+   <template where="basicInfo" >
+   <![CDATA[
+      }; // class $(_Structname)BasicInfo
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____ Common __________________ -->
+
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Class representing $(_NAME) interface
+      \t *
+      \t * <b>Example</b>
+      \t * @code
+      \t *  // Instantiate interface
+      \t *  USBDM::$(_Class) $(_basename);
+      \t *
+      \t *  for(int i=0; i++;) {
+      \t *     $(_basename).writeln("Hello world ", i);
+      \t *  }
+      \t *  @endcode
+      \t */
+      \tclass $(_Class) : public $(_Baseclass)_T<$(_Class)Info> {};
+      \t\n
+   ]]>
+   </template>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.UartValidate">
+   </validate>
+
+   <projectActionList id="uart_files">
+      <copy source="Snippets/uart-example.cpp"     target="Snippets/uart-example.cpp"  overwrite="true"  derived="true" />
+      <copy source="Project_Headers/uart.h"        target="Project_Headers/uart.h"     overwrite="true"  derived="true" macroReplace="true" />
+      <copy source="Project_Headers/uart_queue.h"  target="Project_Headers/uart_queue.h"    overwrite="true"  derived="true" />
+   </projectActionList>
+
+   <!-- ____ Startup __________________ -->
+
+   <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
+      <![CDATA[#include "$(_basename).h"\n
+   ]]></template>
+
+   <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
+   <![CDATA[
+      \t/*  Initialise $(_Class) */
+      \tUSBDM::$(_Class)::defaultConfigure();\n
+   ]]></template>
+
+   <!-- ____ SIM configuration __________________ -->
+
+   <category name="Advanced" description="SIM configuration"
+      toolTip="These settings only have effect if the SIM configuration is enabled" >
+      <title description="$(_BASENAME) Shared" />
+      <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+      <title description="$(_NAME) Specific" />
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+      <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+   </category>
+
+   <!--  ____ Signal mapping __________________ -->
+   <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
+
+</peripheralPage>

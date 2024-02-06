@@ -33,6 +33,7 @@ namespace USBDM {
  * @brief C++ Class allowing access to UART interface
  * @{
  */
+#if $(/UART/enablePeripheralSupport) // /UART/enablePeripheralSupport
 
 /**
  * @brief Abstract Base class for UART interface
@@ -133,13 +134,6 @@ protected:
       }
    }
 
-   /**
-    * Handler for interrupts when no handler set
-    */
-   static void unhandledCallback(uint8_t) {
-      setAndCheckErrorCode(E_NO_HANDLER);
-   }
-
 public:
 
    /**
@@ -195,14 +189,7 @@ $(/UART/commonMethods: // /UART/commonMethods found)
 };
 
 /**
- * Type definition for UART interrupt call back
- *
- *  @param[in]  status - Interrupt flags e.g. UART_S1_TDRE, UART_S1_RDRF etc
- */
-typedef void (*UARTCallbackFunction)(uint8_t status);
-
-/**
- * @brief Abstract template class representing an UART interface with associated hardware
+ * @brief Template class representing an UART interface
  *
  * @tparam Info   Class describing UART hardware
  */
@@ -213,13 +200,13 @@ private:
    Uart_T(Uart_T&&) = delete;
 
 public:
-   /** Get reference to UART hardware as struct */
+   /** Get reference to hardware as struct */
    static volatile UART_Type &uartPtr() { return Info::uart(); }
 
-   /** Base address of LPUART hardware as uint32_t */
+   /** Base address of hardware as uint32_t */
    static constexpr uint32_t uartBase = Info::baseAddress;
 
-   /** Address of UART.D register as uint32_t */
+   /** Address of DATA register as uint32_t */
    static constexpr uint32_t uartD = Info::baseAddress + offsetof(UART_Type, D);
 
 #ifdef __CMSIS_RTOS
@@ -319,7 +306,7 @@ protected:
     * Clear UART error status
     */
    virtual void clearError() override {
-      Uart0Info::clearError();
+      Info::clearError();
    }
 
 public:
@@ -540,6 +527,8 @@ template<class Info, int rxSize, int txSize> volatile uint32_t   UartBuffered_T<
 #endif
 
 $(/UART/declarations: // No declarations found)
+#endif // /UART/enablePeripheralSupport
+
 /**
  * End UART_Group
  * @}

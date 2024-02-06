@@ -30,7 +30,7 @@ namespace USBDM {
 
 /**
  * @addtogroup LPUART_Group LPUART, Low Power Universal Asynchronous Receiver/Transmitter
- * @brief C++ Class allowing access to UART interface
+ * @brief C++ Class allowing access to LPUART interface
  * @{
  */
 #if $(/LPUART/enablePeripheralSupport) // /LPUART/enablePeripheralSupport
@@ -54,7 +54,7 @@ enum LpuartDma {
 };
 
 /**
- * @brief Virtual Base class for UART interface
+ * @brief Virtual Base class for LPUART interface
  */
 class Lpuart : public FormattedIO {
 
@@ -66,7 +66,7 @@ private:
 protected:
 #ifdef __CMSIS_RTOS
    /**
-    * Obtain UART mutex.
+    * Obtain LPUART mutex.
     *
     * @param[in]  milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
     *
@@ -81,7 +81,7 @@ protected:
    virtual osStatus startTransaction(int milliseconds=osWaitForever) = 0;
 
    /**
-    * Release UART mutex.
+    * Release LPUART mutex.
     *
     * @return osOK:              The mutex has been correctly released.
     * @return osErrorResource:   The mutex was not obtained before.
@@ -92,13 +92,13 @@ protected:
    virtual osStatus endTransaction() = 0;
 #else
    /**
-    * Obtain UART - dummy routine (non RTOS)
+    * Obtain LPUART - dummy routine (non RTOS)
     */
    int startTransaction(int =0) {
       return 0;
    }
    /**
-    * Release UART - dummy routine (non RTOS)
+    * Release LPUART - dummy routine (non RTOS)
     */
    int endTransaction() {
       return 0;
@@ -122,14 +122,14 @@ protected:
     */
    virtual int _readChar() override {
 
-      // Get status from UART
+      // Get status from LPUART
       uint32_t status;
       do {
-         // Get status from UART
+         // Get status from LPUART
          status = lpuart->STAT;
          // Clear & ignore pending errors
          if ((status & (LPUART_STAT_FE_MASK|LPUART_STAT_OR_MASK|LPUART_STAT_PF_MASK|LPUART_STAT_NF_MASK)) != 0) {
-            lpuart->STAT = LPUART_STAT_FE_MASK|LPUART_STAT_OR_MASK|LPUART_STAT_PF_MASK|LPUART_STAT_NF_MASK;
+            lpuart->STAT = lpuart->STAT|LPUART_STAT_FE_MASK|LPUART_STAT_OR_MASK|LPUART_STAT_PF_MASK|LPUART_STAT_NF_MASK;
          }
          // Check for Rx buffer full
       } while ((status & LPUART_STAT_RDRF_MASK) == 0);
@@ -160,9 +160,9 @@ public:
    const HardwarePtr<LPUART_Type> lpuart;
 
    /**
-    * Construct UART interface
+    * Construct LPUART interface
     *
-    * @param[in]  baseAddress Base address of UART hardware
+    * @param[in]  baseAddress Base address of LPUART hardware
     */
    Lpuart(uint32_t baseAddress) : lpuart(baseAddress) {
    }
@@ -174,41 +174,19 @@ public:
    }
 
    /**
-    * Set baud factor value for interface.
-    *
-    * This is calculated from baud rate and UART clock frequency
-    *
-    * @param[in]  baudrate       Interface speed in bits-per-second
-    * @param[in]  clockFrequency Frequency of UART clock
-    * @param[in]  oversample     Over-sample ratio to use when calculating divider
-    */
-   void __attribute__((noinline)) setBaudRate(uint32_t baudrate, uint32_t clockFrequency, uint32_t oversample) {
-
-      // Disable UART before changing registers
-      uint32_t ctrl = lpuart->CTRL;
-      lpuart->CTRL = 0;
-
-      // Calculate UART divider with rounding
-      uint32_t divider = (clockFrequency<<1)/(oversample * baudrate);
-      divider = (divider>>1)|(divider&0b1);
-
-      // Set Baud rate register
-      lpuart->BAUD = (lpuart->BAUD&~(LPUART_BAUD_SBR_MASK|LPUART_BAUD_OSR_MASK))|
-            LPUART_BAUD_SBR(divider)|LPUART_BAUD_OSR(oversample-1);
-
-      // Restore UART settings
-      lpuart->CTRL = ctrl;
-   }
-
-   /**
     * Set baud factor value for interface
     *
     * This is calculated from baud rate and LPUART clock frequency
     *
     * @param[in]  baudrate  Interface speed in bits-per-second
     */
-   virtual void setBaudRate(unsigned baudrate) = 0;
+   virtual void setBaudRate(UartBaudRate uartBaudRate) = 0;
 
+   /**
+    * Clear LPUART error status
+    */
+   virtual void clearError() = 0;
+$(/LPUART/commonMethods: // /LPUART/commonMethods found)
    /**
     * Enable/disable an interrupt source
     *
@@ -264,26 +242,9 @@ public:
 };
 
 /**
- * Type definition for UART interrupt call back
+ * @brief Template class representing an LPUART interface
  *
- *  @param[in]  status - Interrupt flags e.g. UART_S1_TDRE, UART_S1_RDRF etc
- */
-typedef void (*LPUARTCallbackFunction)(uint8_t status);
-
-/**
- * @brief Template class representing an UART interface
- *
- * <b>Example</b>
- * @code
- *  // Instantiate interface
- *  Uart *uart0 = new USBDM::Lpuart_T<Uart0Info>(115200);
- *
- *  for(int i=0; i++;) {
- *     lpuart->write("Hello world,").writeln(i)
- *  }
- *  @endcode
- *
- * @tparam Info   Class describing UART hardware
+ * @tparam Info   Class describing LPUART hardware
  */
 template<class Info> class Lpuart_T : public Info, public Lpuart {
 
@@ -292,13 +253,13 @@ private:
    Lpuart_T(Lpuart_T&&) = delete;
 
 public:
-   /** Get reference to LPUART hardware as struct */
+   /** Get reference to hardware as struct */
    using Info::lpuart;
 
-   /** Get base address of LPUART hardware as uint32_t */
+   /** Base address of hardware as uint32_t */
    static constexpr uint32_t uartBase() { return Info::baseAddress; }
 
-   /** Get base address of UART.DATA register as uint32_t */
+   /** Address of DATA register as uint32_t */
    static constexpr uint32_t uartDATA() { return uartBase() + offsetof(LPUART_Type, DATA); }
 
 #ifdef __CMSIS_RTOS
@@ -310,14 +271,14 @@ protected:
     * @return mutex
     */
    static CMSIS::Mutex &mutex(int =0) {
-      /** Mutex to protect access - static so per UART */
+      /** Mutex to protect access - static so per LPUART */
       static CMSIS::Mutex mutex;
       return mutex;
    }
 
 public:
    /**
-    * Obtain UART mutex.
+    * Obtain LPUART mutex.
     *
     * @param[in]  milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
     *
@@ -339,7 +300,7 @@ public:
    }
 
    /**
-    * Release UART mutex
+    * Release LPUART mutex
     *
     * @return osOK:              The mutex has been correctly released.
     * @return osErrorResource:   The mutex was not obtained before.
@@ -357,17 +318,17 @@ public:
    }
 #endif
 
+   virtual void setBaudRate(UartBaudRate uartBaudRate) override {
+      Info::setBaudRate(uartBaudRate);
+   }
+
 public:
    $(/LPUART/classInfo: // No class Info found)
 
    /**
-    * Construct UART interface
+    * Construct LPUART interface
     */
    Lpuart_T() : Lpuart(Info::baseAddress) {
-      // Enable clock to UART interface
-#ifdef PCC_BASE_PTR
-      Info::setClockSource(Info::defaultClockSource);
-#endif
 #ifdef PORT_PCR_MUX
       // Check pin assignments
       static_assert(Info::info[0].pinIndex >= PinIndex::MIN_PIN_INDEX, "LpUart_Tx has not been assigned to a pin - Modify Configure.usbdm");
@@ -379,7 +340,7 @@ public:
 
    void initialise() {
 
-      // Enable clock to UART interface
+      // Enable clock to LPUART interface
       Info::enableClock();
 
       if constexpr (Info::mapPinsOnEnable) {
@@ -393,39 +354,20 @@ public:
     */
    ~Lpuart_T() {}
 
-   /**
-    * Set baud factor value for interface
-    *
-    * This is calculated from baud rate and LPUART clock frequency
-    *
-    * @param[in]  baudrate Interface speed in bits-per-second
-    */
-   void setBaudRate(unsigned baudrate) {
-      // Over-sample ratio
-      static constexpr uint32_t OVER_SAMPLE = Info::oversampleRatio;
-
-      Lpuart::setBaudRate(baudrate, Info::getClockFrequency(), OVER_SAMPLE);
-   }
-
-   /**
-    * Set baud factor value for interface
-    *
-    * This is calculated from baud rate and LPUART clock frequency
-    *
-    * @param[in]  baudrate    Interface speed in bits-per-second
-    * @param[in]  oversample  Over-sample ratio to use when calculating divider
-    */
-   void setBaudRate(unsigned baudrate, unsigned oversample) {
-      Lpuart::setBaudRate(baudrate, Info::getClockFrequency(), oversample);
-   }
-
 protected:
+   /**
+    * Clear UART error status
+    */
+   virtual void clearError() override {
+      Info::clearError();
+   }
 
 public:
 };
 
+#if 0
 /**
- * @brief Template class representing an UART interface with buffered reception
+ * @brief Template class representing an LPUART interface with buffered reception
  *
  * <b>Example</b>
  * @code
@@ -437,7 +379,7 @@ public:
  *  }
  *  @endcode
  *
- * @tparam Info   Class describing UART hardware
+ * @tparam Info   Class describing LPUART hardware
  */
 template<class Info, int rxSize=Info::receiveBufferSize, int txSize=Info::transmitBufferSize>
 class LpuartBuffered_T : public Lpuart_T<Info> {
@@ -484,6 +426,7 @@ protected:
       lock(&fWriteLock);
       // Add character to buffer
       while (!txQueue.enQueueDiscardOnFull(ch)) {
+         __asm__("nop");
       }
       lpuart->CTRL = lpuart->CTRL | LPUART_CTRL_TIE_MASK;
       unlock(&fWriteLock);
@@ -568,6 +511,7 @@ template<class Info, int rxSize, int txSize> UartQueue<char, rxSize> LpuartBuffe
 template<class Info, int rxSize, int txSize> UartQueue<char, txSize> LpuartBuffered_T<Info, rxSize, txSize>::txQueue;
 template<class Info, int rxSize, int txSize> volatile uint32_t   LpuartBuffered_T<Info, rxSize, txSize>::fReadLock  = 0;
 template<class Info, int rxSize, int txSize> volatile uint32_t   LpuartBuffered_T<Info, rxSize, txSize>::fWriteLock = 0;
+#endif
 
 $(/LPUART/declarations: // No declarations found)
 #endif // /LPUART/enablePeripheralSupport

@@ -87,7 +87,7 @@ namespace USBDM {
  */
 
 //! Default baud rate for console
-constexpr UartBaudRate defaultBaudRate = UartBaudRate($(/Console/defaultBaudRate));
+constexpr UartBaudRate defaultBaudRate = UartBaudRate($(/Console/console_baudrate));
 
 //! Maps console to UART used
 using  Console = $(/Console/consoleDevice);

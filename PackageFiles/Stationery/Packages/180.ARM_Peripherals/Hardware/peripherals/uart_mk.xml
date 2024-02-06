@@ -2,7 +2,7 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- lpuart_def.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Universal Asynchronous Receiver/Transmitter" >
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="$(_BASENAME)">
 
    <!-- Enable for this peripheral -->
    <binaryOption key="usedAsConsole"
@@ -128,7 +128,7 @@
    <title />
 
    <intOption key="uart_c4_osr"  condition="uart_c4_osr_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      baseType="uint8_t"
       description="Number of samples per bit"
       toolTip="This value determines the number of times an Rx bit is sampled.\n
                This also affects the clock divider and hence the range of baud rates available"
@@ -140,11 +140,12 @@
    \tstatic constexpr uint32_t oversampleRatio = $(uart_c4_osr);\n\n
    ]]></template>
 
-   <choiceOption key="uart_baud_rate"
+   <choiceOption key="uart_baudrate"
       enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       valueFormat="%s"
       typeName="UartBaudRate"
-      description="$(_BASENAME) baud rate"
+      baseType="uint32_t"
+      description="UART baud rate"
       toolTip="Baud rate for UART\n
                Values available will depend on clock source frequency" >
       <choice value="110"     name="110"     enum="110"    />
@@ -226,7 +227,7 @@
       variables="uart_c2_rie" ><![CDATA[
       \t}\n\n
    ]]></variableTemplate>
-<!-- 
+<!--
    <if condition="uart_c4_brfa_present">
       <binaryOption key="uartClass"
          description="Input buffering"
@@ -306,7 +307,7 @@
    <variableTemplate codeGenCondition="irqHandlingMethod"
       variables="irq_enum" >
    <![CDATA[
-      \t/** Callback functions for UART */
+      \t/** Callback functions for $(_Baseclass) */
       \tstatic CallbackFunction sCallbacks[irqCount];
       \t
       \t/**
@@ -376,7 +377,7 @@
       \tstatic constexpr bool statusNeedsWrite = true;
       \t
       \t//! Default Baud rate used if not explicitly given
-      \tstatic constexpr UartBaudRate defaultBaudRate = UartBaudRate($(uart_baud_rate));
+      \tstatic constexpr UartBaudRate defaultBaudRate = UartBaudRate($(uart_baudrate));
       \t
       \t//! Default buffer size for receive queue when interrupt driven
       \tstatic constexpr unsigned receiveBufferSize = $(receiveBufferSize);
@@ -385,7 +386,7 @@
       \tstatic constexpr unsigned transmitBufferSize = $(transmitBufferSize);
       \t\n
    ]]></template>
-   
+
    <template><![CDATA[
       \t/**
       \t * Clear UART error status
@@ -397,7 +398,7 @@
       \t}
       \t\n
    ]]></template>
-      
+
    <template><![CDATA[
       \t/**
       \t * Get input clock frequency
@@ -411,7 +412,7 @@
 
    <!-- ____  BAUD rate calculations ____________________ -->
 
-   <variableTemplate where="basicInfo" variables="uart_baud_rate, uart_c4_osr" condition="!uart_c4_osr&amp;&amp;!uart_c4_brfa" >
+   <variableTemplate where="basicInfo" variables="uart_baudrate, uart_c4_osr" condition="!uart_c4_osr&amp;&amp;!uart_c4_brfa" >
    <![CDATA[
       \t/**
       \t * Set baud rate
@@ -447,23 +448,27 @@
    ]]>
    </variableTemplate>
 
-   <variableTemplate where="basicInfo" variables="uart_baud_rate, uart_c4_osr" condition="uart_c4_osr"
+   <variableTemplate where="basicInfo" variables="uart_baudrate, uart_c4_osr" condition="uart_c4_osr"
    params=", overSample" >
    <![CDATA[
       \t/**
       \t * Set baud rate
       \t * (for UART with variable prescaler)
       \t *
+      \t * @param uart             UART hardware instance pointer
+      \t * @param clockFrequency   UART clock frequency
       %paramDescription
       \t */
-      \tstatic void setBaudRate(volatile $(_STRUCTNAME)_Type *const $(_basename), uint32_t clockFrequency, %params) {
+      \tstatic void setBaudRate(
+      \t      volatile $(_STRUCTNAME)_Type *const $(_basename),
+      \t      uint32_t     clockFrequency, %params) {
       \t
       \t   // Disable UART before changing registers
       \t   uint8_t c2Value = uart->C2;
       \t   uart->C2 = 0;
       \t
       \t   // Set over-sample ratio
-      \t   uart->C4 = (uart->C4&~UART_C4_OSR_MASK)|UART_C4_OSR(overSample-1);
+      \t   uart->C4 = (uart->C4&~UART_C4_OSR_MASK)|UART_C4_OSR(%paramName1-1);
       \t
       \t   /*
       \t    * Baudrate = ClockFrequency / (OverSample x Divider)
@@ -484,7 +489,7 @@
    ]]>
    </variableTemplate>
 
-   <variableTemplate where="basicInfo" variables="uart_baud_rate" condition="uart_c4_brfa" >
+   <variableTemplate where="basicInfo" variables="uart_baudrate" condition="uart_c4_brfa" >
    <![CDATA[
       \t/**
       \t * Set baud rate
@@ -523,7 +528,7 @@
    ]]>
    </variableTemplate>
 
-   <variableTemplate where="info" variables="uart_baud_rate" >
+   <variableTemplate where="info" variables="uart_baudrate" >
    <![CDATA[
       \t/**
       \t * Set baud rate
@@ -605,7 +610,7 @@ XXXXXXXXXXXXXXXXXXXXXX
    ]]></variableTemplate>
 
    <for keys=" type        : variables                                            : init    "
-       values="%baseType   : uart_baud_rate                                       :   UartBaudRate(0)      ;
+       values="%returnType : uart_baudrate                                        :   UartBaudRate(0)      ;
                %baseType   : uart_bdh_lbkdie,uart_bdh_rxedgie                     :   0      ;
                %baseType   : uart_c1_loops,uart_c1_uartswai,uart_c1_rsrc,
                              uart_c1_m,uart_c1_wake,uart_c1_ilt,uart_c1_pe,
@@ -619,9 +624,33 @@ XXXXXXXXXXXXXXXXXXXXXX
                              uart_c3_neie,uart_c3_feie,uart_c3_peie               :   0      ;
                %baseType   : uart_d_rt                                            :   0      ;
                %baseType   : uart_ma_ma                                           :   0      ;
-               %baseType   : uart_c4_maen1,uart_c4_maen2,uart_c4_m10,uart_c4_brfa
+               %baseType   : uart_c4_maen1,uart_c4_maen2,uart_c4_m10,uart_c4_brfa,
                              uart_c4_osr                                          :   0      ;
                uint8_t     : uart_c5_tdmas,uart_c5_rdmas                          :   0      ;
+
+               %baseType   : uart_c7816_onack,uart_c7816_anack,uart_c7816_init,
+                             uart_c7816_ttype,uart_c7816_iso_7816e                :   0      ;
+               %baseType   : uart_ie7816_wte,uart_ie7816_cwte,uart_ie7816_bwte,
+                             uart_ie7816_initde,uart_ie7816_adte,uart_ie7816_gtve,
+                             uart_ie7816_txte,uart_ie7816_rxte                    :   0      ;
+               %baseType   : uart_is7816_wt,uart_is7816_cwt,uart_is7816_bwt,
+                             uart_is7816_initd,uart_is7816_adt,uart_is7816_gtv,
+                             uart_is7816_txt,uart_is7816_rxt                      :   0      ;
+               %baseType   : uart_wp7816_wtx                                      :   0      ;
+               %baseType   : uart_wn7816_gtn                                      :   0      ;
+               %baseType   : uart_wf7816_gtfd                                     :   0      ;
+               %baseType   : uart_et7816_txthreshold,uart_et7816_rxthreshold      :   0      ;
+               %baseType   : uart_tl7816_tlen                                     :   0      ;
+
+               %baseType   : uart_ap7816a_t0_adti_h                               :   0      ;
+               %baseType   : uart_ap7816b_t0_adti_l                               :   0      ;
+               %baseType   : uart_wp7816a_t0_wi_h                                 :   0      ;
+               %baseType   : uart_wp7816a_t1_bwi_h                                :   0      ;
+               %baseType   : uart_wp7816b_t0_wi_l                                 :   0      ;
+               %baseType   : uart_wp7816b_t1_bwi_l                                :   0      ;
+               %baseType   : uart_wgp7816_t1_cwi1,uart_wgp7816_t1_bgi             :   0      ;
+               %baseType   : uart_wp7816c_t1_cwi2                                 :   0      ;
+
                %baseType   : uart_modem_rxrtse,uart_modem_txrtspol,uart_modem_txrtse,
                              uart_modem_txctse                                    :   0      ;
                %baseType   : uart_ir_iren,uart_ir_tnp                             :   0      ;
@@ -735,7 +764,7 @@ XXXXXXXXXXXXXXXXXXXXXX
    </variableTemplate>
    <for keys="r"
       values="
-            uart_baud_rate;
+            uart_baudrate;
             uart_bdh_lbkdie;uart_bdh_rxedgie;
             uart_c1_loops;uart_c1_uartswai;uart_c1_rsrc;
             uart_c1_m;uart_c1_wake;uart_c1_ilt;uart_c1_pe;
@@ -751,6 +780,30 @@ XXXXXXXXXXXXXXXXXXXXXX
             uart_ma_ma;
             uart_c4_maen1;uart_c4_maen2;uart_c4_m10;
             uart_c4_brfa;uart_c4_osr;
+            uart_c5_tdmas;uart_c5_rdmas;
+            uart_c7816_onack;uart_c7816_anack;uart_c7816_init;
+            uart_c7816_ttype;uart_c7816_iso_7816e;
+            uart_ie7816_wte;uart_ie7816_cwte;uart_ie7816_bwte;
+            uart_ie7816_initde;uart_ie7816_adte;uart_ie7816_gtve;
+            uart_ie7816_txte;uart_ie7816_rxte;
+            uart_is7816_wt;uart_is7816_cwt;uart_is7816_bwt;
+            uart_is7816_initd;uart_is7816_adt;uart_is7816_gtv;
+            uart_is7816_txt;uart_is7816_rxt;
+            uart_wp7816_wtx;
+            uart_wn7816_gtn;
+            uart_wf7816_gtfd;
+            uart_et7816_txthreshold;uart_et7816_rxthreshold;
+            uart_tl7816_tlen;
+
+            uart_ap7816a_t0_adti_h;
+            uart_ap7816b_t0_adti_l;
+            uart_wp7816a_t0_wi_h;
+            uart_wp7816a_t1_bwi_h;
+            uart_wp7816b_t0_wi_l;
+            uart_wp7816b_t1_bwi_l;
+            uart_wgp7816_t1_cwi1;uart_wgp7816_t1_bgi;
+            uart_wp7816c_t1_cwi2;
+
             uart_modem_rxrtse;uart_modem_txrtspol;uart_modem_txrtse;
             uart_modem_txctse;
             uart_ir_iren;uart_ir_tnp;
@@ -810,7 +863,8 @@ XXXXXXXXXXXXXXXXXXXXXX
    ]]></template>
 
    <!-- Don't include IRQ handler in init -->
-   <template codeGenCondition="irqHandlingMethod&amp;&amp;false" >
+   <template codeGenCondition="irqHandlingMethod"
+      condition-"false" >
    <![CDATA[
       \t   // Only set call-backs if feature enabled
       \t   setCallback(init.callbackFunction);
@@ -820,7 +874,6 @@ XXXXXXXXXXXXXXXXXXXXXX
    <for keys=
              " var                                                    : statement            "
       values=" uart_bdh_lbkdie,uart_bdh_rxedgie,uart_bdh_sbr          : %configRegAssignment ;
-               uart_baud_rate                                         : setBaudRate(init.baud) ;
                uart_c1_loops,uart_c1_uartswai,uart_c1_rsrc,
                uart_c1_m,uart_c1_wake,uart_c1_ilt,uart_c1_pe,
                uart_c1_pt                                             : %configRegAssignment ;
@@ -836,15 +889,42 @@ XXXXXXXXXXXXXXXXXXXXXX
                uart_c4_maen1,uart_c4_maen2,uart_c4_m10,uart_c4_brfa,
                uart_c4_osr                                            : %configRegAssignment ;
                uart_c5_tdmas,uart_c5_rdmas                            : %configRegAssignment ;
+
+               uart_c7816_onack,uart_c7816_anack,uart_c7816_init,
+               uart_c7816_ttype,uart_c7816_iso_7816e                  : %configRegAssignment ;
+               uart_ie7816_wte,uart_ie7816_cwte,uart_ie7816_bwte,
+               uart_ie7816_initde,uart_ie7816_adte,uart_ie7816_gtve,
+               uart_ie7816_txte,uart_ie7816_rxte                      : %configRegAssignment ;
+               uart_is7816_wt,uart_is7816_cwt,uart_is7816_bwt,
+               uart_is7816_initd,uart_is7816_adt,uart_is7816_gtv,
+               uart_is7816_txt,uart_is7816_rxt                        : %configRegAssignment ;
+               uart_wp7816_wtx                                        : %configRegAssignment ;
+               uart_wn7816_gtn                                        : %configRegAssignment ;
+               uart_wf7816_gtfd                                       : %configRegAssignment ;
+               uart_et7816_txthreshold,uart_et7816_rxthreshold        : %configRegAssignment ;
+               uart_tl7816_tlen                                       : %configRegAssignment ;
+
+               uart_ap7816a_t0_adti_h                                 : %configRegAssignment ;
+               uart_ap7816b_t0_adti_l                                 : %configRegAssignment ;
+               uart_wp7816a_t0_wi_h                                   : %configRegAssignment ;
+               uart_wp7816a_t1_bwi_h                                  : %configRegAssignment ;
+               uart_wp7816b_t0_wi_l                                   : %configRegAssignment ;
+               uart_wp7816b_t1_bwi_l                                  : %configRegAssignment ;
+               uart_wgp7816_t1_cwi1,uart_wgp7816_t1_bgi               : %configRegAssignment ;
+               uart_wp7816c_t1_cwi2                                   : %configRegAssignment ;
+
                uart_modem_rxrtse,uart_modem_txrtspol,uart_modem_txrtse,
                uart_modem_txctse                                      : %configRegAssignment ;
+
                uart_ir_iren,uart_ir_tnp                               : %configRegAssignment ;
                uart_pfifo_txfe,uart_pfifo_rxfe                        : %configRegAssignment ;
                uart_cfifo_txflush,uart_cfifo_rxflush,uart_cfifo_rxofe,
                uart_cfifo_txofe,uart_cfifo_rxufe                      : %configRegAssignment ;
                uart_sfifo_rxof,uart_sfifo_txof,uart_sfifo_rxuf        : %configRegAssignment ;
                uart_twfifo_txwater                                    : %configRegAssignment ;
-               uart_rwfifo_rxwater                                    : %configRegAssignment " >
+               uart_rwfifo_rxwater                                    : %configRegAssignment ;
+
+               uart_baudrate                                          : setBaudRate(init.baudrate) " >
       <variableTemplate codeGenCondition="enablePeripheralSupport"
       variables="%(var)"
       linePadding="xxx"
@@ -867,8 +947,9 @@ XXXXXXXXXXXXXXXXXXXXXX
       separator=","
       terminator=","
       variables="
-            uart_baud_rate,
-            uart_bdh_lbkdie,uart_bdh_rxedgie,uart_bdh_sbr,
+            uart_baudrate,
+
+            uart_bdh_lbkdie,uart_bdh_rxedgie,
             uart_c1_loops,uart_c1_uartswai,uart_c1_rsrc,
             uart_c1_m,uart_c1_wake,uart_c1_ilt,uart_c1_pe,
             uart_c1_pt,
@@ -884,9 +965,35 @@ XXXXXXXXXXXXXXXXXXXXXX
             uart_c4_maen1,uart_c4_maen2,uart_c4_m10,
             uart_c4_brfa,uart_c4_osr,
             uart_c5_tdmas,uart_c5_rdmas,
+
+            uart_c7816_onack,uart_c7816_anack,uart_c7816_init,
+            uart_c7816_ttype,uart_c7816_iso_7816e,
+            uart_ie7816_wte,uart_ie7816_cwte,uart_ie7816_bwte,
+            uart_ie7816_initde,uart_ie7816_adte,uart_ie7816_gtve,
+            uart_ie7816_txte,uart_ie7816_rxte,
+            uart_is7816_wt,uart_is7816_cwt,uart_is7816_bwt,
+            uart_is7816_initd,uart_is7816_adt,uart_is7816_gtv,
+            uart_is7816_txt,uart_is7816_rxt,
+            uart_wp7816_wtx,
+            uart_wn7816_gtn,
+            uart_wf7816_gtfd,
+            uart_et7816_txthreshold,uart_et7816_rxthreshold,
+            uart_tl7816_tlen,
+
+            uart_ap7816a_t0_adti_h,
+            uart_ap7816b_t0_adti_l,
+            uart_wp7816a_t0_wi_h,
+            uart_wp7816a_t1_bwi_h,
+            uart_wp7816b_t0_wi_l,
+            uart_wp7816b_t1_bwi_l,
+            uart_wgp7816_t1_cwi1,uart_wgp7816_t1_bgi,
+            uart_wp7816c_t1_cwi2,
+
             uart_modem_rxrtse,uart_modem_txrtspol,uart_modem_txrtse,
             uart_modem_txctse,
+
             uart_ir_iren,uart_ir_tnp,
+
             uart_pfifo_txfe,uart_pfifo_rxfe,
             uart_cfifo_txflush,uart_cfifo_rxflush,uart_cfifo_rxofe,
             uart_cfifo_txofe,uart_cfifo_rxufe,
