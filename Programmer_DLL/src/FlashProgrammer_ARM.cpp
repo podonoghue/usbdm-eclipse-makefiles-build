@@ -533,18 +533,30 @@ USBDM_ErrorCode FlashProgrammer_ARM::massEraseTarget(bool resetTarget) {
 
    SetProgrammingMode pmode(bdmInterface);
    USBDM_ErrorCode rc = BDM_RC_OK;
+
    if (resetTarget) {
+      // Also does initialiseTarget()
       rc = resetAndConnectTarget();
-      if (rc != BDM_RC_OK) {
+
+      // Ignore some errors when mass erasing target as it is possible to mass
+      // erase some targets without a complete debug connection
+      if ((rc != BDM_RC_OK) &&
+          (rc != PROGRAMMING_RC_ERROR_SECURED) &&      // Secured device
+          (rc != BDM_RC_SECURED) &&                    // Secured device
+          (rc != BDM_RC_BDM_EN_FAILED) &&              // BDM enable failed (on HCS devices)
+          (rc != BDM_RC_RESET_TIMEOUT_RISE)            // Reset pulsing on Kinetis etc.
+         ) {
+         return rc;
+      }
+   }
+   else {
+      rc = initialiseTarget();
+      if (rc != PROGRAMMING_RC_OK) {
          return rc;
       }
    }
    if (progressTimer != NULL) {
       progressTimer->restart("Mass Erasing Target");
-   }
-   rc = initialiseTarget();
-   if (rc != PROGRAMMING_RC_OK) {
-      return rc;
    }
    // Do Mass erase using TCL script
    rc = runTCLCommand("massEraseTarget");
