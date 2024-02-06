@@ -834,26 +834,26 @@
       </peripheral>
       <peripheral baseName="DMA"      instance="0"        instanceList="DMA0" version="dma0_32ch_ears">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDma" />
-         <irq num="DMA0_DMA16_IRQn" />
-         <irq num="DMA1_DMA17_IRQn" />
-         <irq num="DMA2_DMA18_IRQn" />
-         <irq num="DMA3_DMA19_IRQn" />
-         <irq num="DMA4_DMA20_IRQn" />
-         <irq num="DMA5_DMA21_IRQn" />
-         <irq num="DMA6_DMA22_IRQn" />
-         <irq num="DMA7_DMA23_IRQn" />
-         <irq num="DMA8_DMA24_IRQn" />
-         <irq num="DMA9_DMA25_IRQn" />
-         <irq num="DMA10_DMA26_IRQn" />
-         <irq num="DMA11_DMA27_IRQn" />
-         <irq num="DMA12_DMA28_IRQn" />
-         <irq num="DMA13_DMA29_IRQn" />
-         <irq num="DMA14_DMA30_IRQn" />
-         <irq num="DMA15_DMA31_IRQn" />
-         <irq num="DMA_Error_IRQn" />
+         <irq num="DMA0_CH0_DMA16_IRQn" />
+         <irq num="DMA0_CH1_DMA17_IRQn" />
+         <irq num="DMA0_CH2_DMA18_IRQn" />
+         <irq num="DMA0_CH3_DMA19_IRQn" />
+         <irq num="DMA0_CH4_DMA20_IRQn" />
+         <irq num="DMA0_CH5_DMA21_IRQn" />
+         <irq num="DMA0_CH6_DMA22_IRQn" />
+         <irq num="DMA0_CH7_DMA23_IRQn" />
+         <irq num="DMA0_CH8_DMA24_IRQn" />
+         <irq num="DMA0_CH9_DMA25_IRQn" />
+         <irq num="DMA0_CH10_DMA26_IRQn" />
+         <irq num="DMA0_CH11_DMA27_IRQn" />
+         <irq num="DMA0_CH12_DMA28_IRQn" />
+         <irq num="DMA0_CH13_DMA29_IRQn" />
+         <irq num="DMA0_CH14_DMA30_IRQn" />
+         <irq num="DMA0_CH15_DMA31_IRQn" />
+         <irq num="DMA0_Error_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="DMA0"             key="/DMA0/_instanceList" />
          <param type="LongVariable"           name="_irqCount"                      value="17"               key="/DMA0/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="DMA0_DMA16_IRQn;DMA1_DMA17_IRQn;DMA2_DMA18_IRQn;DMA3_DMA19_IRQn;DMA4_DMA20_IRQn;DMA5_DMA21_IRQn;DMA6_DMA22_IRQn;DMA7_DMA23_IRQn;DMA8_DMA24_IRQn;DMA9_DMA25_IRQn;DMA10_DMA26_IRQn;DMA11_DMA27_IRQn;DMA12_DMA28_IRQn;DMA13_DMA29_IRQn;DMA14_DMA30_IRQn;DMA15_DMA31_IRQn;DMA_Error_IRQn" key="/DMA0/_irqNums" />
+         <param type="StringVariable"         name="_irqNums"                       value="DMA0_CH0_DMA16_IRQn;DMA0_CH1_DMA17_IRQn;DMA0_CH2_DMA18_IRQn;DMA0_CH3_DMA19_IRQn;DMA0_CH4_DMA20_IRQn;DMA0_CH5_DMA21_IRQn;DMA0_CH6_DMA22_IRQn;DMA0_CH7_DMA23_IRQn;DMA0_CH8_DMA24_IRQn;DMA0_CH9_DMA25_IRQn;DMA0_CH10_DMA26_IRQn;DMA0_CH11_DMA27_IRQn;DMA0_CH12_DMA28_IRQn;DMA0_CH13_DMA29_IRQn;DMA0_CH14_DMA30_IRQn;DMA0_CH15_DMA31_IRQn;DMA0_Error_IRQn" key="/DMA0/_irqNums" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/DMA0/_present" />
          <param type="BooleanVariable"        name="dma_attr_dmod_present"          value="true"             key="/DMA0/dma_attr_dmod_present" />
          <param type="BooleanVariable"        name="dma_attr_dsize_present"         value="true"             key="/DMA0/dma_attr_dsize_present" />

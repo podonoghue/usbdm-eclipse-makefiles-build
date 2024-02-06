@@ -190,13 +190,13 @@
       <peripheral baseName="DMA"      instance="0"        instanceList="DMA0" version="dma0_mkl">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDma" />
          <clock clockEnable="SIM->SCGC7 = SIM->SCGC7 | SIM_SCGC7_DMA0_MASK;" clockDisable="SIM->SCGC7 = SIM->SCGC7 &amp; ~SIM_SCGC7_DMA0_MASK;" />
-         <irq num="DMA0_IRQn" />
-         <irq num="DMA1_IRQn" />
-         <irq num="DMA2_IRQn" />
-         <irq num="DMA3_IRQn" />
+         <irq num="DMA0_CH0_IRQn" />
+         <irq num="DMA0_CH1_IRQn" />
+         <irq num="DMA0_CH2_IRQn" />
+         <irq num="DMA0_CH3_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="DMA0"             key="/DMA0/_instanceList" />
          <param type="LongVariable"           name="_irqCount"                      value="4"                key="/DMA0/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="DMA0_IRQn;DMA1_IRQn;DMA2_IRQn;DMA3_IRQn" key="/DMA0/_irqNums" />
+         <param type="StringVariable"         name="_irqNums"                       value="DMA0_CH0_IRQn;DMA0_CH1_IRQn;DMA0_CH2_IRQn;DMA0_CH3_IRQn" key="/DMA0/_irqNums" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/DMA0/_present" />
          <param type="BooleanVariable"        name="dma_dar_addr_present"           value="true"             key="/DMA0/dma_dar_addr_present" />
          <param type="BooleanVariable"        name="dma_dar_present"                value="true"             key="/DMA0/dma_dar_present" />

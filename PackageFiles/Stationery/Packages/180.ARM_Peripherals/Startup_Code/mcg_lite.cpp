@@ -35,7 +35,7 @@ namespace USBDM {
 #define SIM_CLKDIV1_OUTDIV3(x) (0)
 #endif
 
-#if $(/MCG/enableClockChangeNotifications) // /MCG/enableClockChangeNotifications
+#if $(/MCG/enableClockChangeNotifications:false) // /MCG/enableClockChangeNotifications
 ClockChangeCallback *Mcg::clockChangeCallbackQueue = nullptr;
 #endif
 
@@ -54,21 +54,7 @@ McgClockMode Mcg::currentClockMode = McgClockMode_LIRC_2MHz;
 
 // /MCG/staticDefinitions
 $(/MCG/staticDefinitions: // No static declarations found) 
-#if $(/MCG/enablePeripheralSupport) // /MCG/enablePeripheralSupport
-
-#if 0
-/** MCGFFCLK - Fixed frequency clock (input to FLL) */
-volatile uint32_t SystemMcgFFClock;
-
-/** MCGOUTCLK - Primary output from MCG, various sources */
-volatile uint32_t SystemMcgOutClock;
-
-/** MCGFLLCLK - Output of FLL */
-volatile uint32_t SystemMcgFllClock;
-
-/** MCGPLLCLK - Output of PLL */
-volatile uint32_t SystemMcgPllClock;
-#endif
+#if $(/MCG/enablePeripheralSupport:false) // /MCG/enablePeripheralSupport
 
 /**
  *  Change SIM->CLKDIV1 value
@@ -116,8 +102,10 @@ const char *Mcg::getClockModeName(McgClockMode clockMode) {
  */
 ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
 
+#if $(/MCG/enableClockChangeNotifications:false) // /MCG/enableClockChangeNotifications
    // Notify of clock changes (before)
    notifyBeforeClockChange();
+#endif
 
    McgClockMode finalMode = clockInfo.clockMode;
 
@@ -232,8 +220,10 @@ ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
 #endif
 
 
+#if $(/MCG/enableClockChangeNotifications:false) // /MCG/enableClockChangeNotifications
    // Notify of clock changes (after)
    notifyAfterClockChange();
+#endif
 
    return E_NO_ERROR;
 }

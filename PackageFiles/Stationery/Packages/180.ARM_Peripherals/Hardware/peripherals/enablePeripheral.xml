@@ -4,28 +4,6 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-<!--
-    * General substitutions
-    *  $(_NAME)         => e.g FTM2 => FTM2
-    *  $(_name)         => e.g FTM2 => ftm2
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
-    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
-    *  $(_Class)        => e.g FTM2 => Ftm2
-    *  $(_Baseclass)    => e.g FTM0 => Ftm
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A
-
-   Template Rules based on attributes  info|usbdm|class|all)  "info"
-
-   - namespace="info" (default if blank)
-     Placed in Info class in pin_mapping.h
-
-   - namespace="usbdm"
-     Placed before Info class in pin_mapping.h i.e. in USBDM namespace
-
-   - key="keyValue"
-     Substituted anywhere for $(keyValue)
- -->
-
 <!-- GENERAL SETTINGS -->
 
    <constant key="_debugcode" type="Boolean" value="false" />
@@ -297,17 +275,19 @@
          toolTip="Priority level used to configure the NVIC"
          valueFormat="%s"
          disabledValue="Not Installed"
-         derivedFrom="/PCR/nvic_irqLevel" 
+         derivedFrom="/PCR/nvic_irqLevel"
          >
       </choiceOption>
+
       <!--  stringOption key="irqHandlerName" condition="irqLevel&amp;&amp;!irqHandlerName"
          valueFormat="%s"
          hidden="true"
          enabledBy="irqLevel>0"
          description="Name of interrupt handler"
-         toolTip="This musr be the name of a globally accessible static function" 
+         toolTip="This musr be the name of a globally accessible static function"
          value=""
       / -->
+
       <!-- Display here (wherever the original) -->
       <aliasOption key="irqLevel"       locked="false" />
       <!--  aliasOption key="irqHandlerName" locked="false" / -->
@@ -320,7 +300,7 @@
           \t\n
       ]]></variableTemplate>
 
-      <variableTemplate condition="!suppressIrqArray"  codeGenCondition="irqHandlingMethod"
+      <variableTemplate condition="!suppressIrqArray"
          variables="/$(_BASENAME)/irqHandlingMethod,irqLevel"
       ><![CDATA[
          \t//! IRQ numbers for hardware
@@ -338,18 +318,20 @@
          \t\n
       ]]></variableTemplate>
 
-      <choiceOption key="irq_enum" condition="(@_irqCount>1)&amp;&amp;!irq_enum"
-         hidden="true"
-         description="IRQ entry"
-         toolTip="Select amongst interrupts associated with the peripheral"
-         typeName="$(_Class)IrqNum"
-         valueFormat="%s"
-         >
-         <choiceExpansion keys="irq" dim="=_irqCount" value="%(irq)" name="Irq%(irq)" enum="%(irq)" />
-      </choiceOption>
-
       <if condition="(@_irqCount>1)" >
-         <variableTemplate condition="irqHandlingMethod&amp;&amp;!suppressIrqArray" codeGenCondition="irqHandlingMethod"
+
+         <choiceOption key="irq_enum" condition="!irq_enum"
+            hidden="true"
+            description="IRQ entry"
+            toolTip="Select amongst interrupts associated with the peripheral"
+            typeName="$(_Class)IrqNum"
+            valueFormat="%s"
+            >
+            <choiceExpansion keys="irq" values="=_irqNums"
+               value="%(i)" name="Maps to %(irq)" enum='=Prettify(ReplaceAll("%(irq)", "$(_NAME)_([a-z|A-Z|0-9]+)_IRQn", "$1"))' />
+         </choiceOption>
+
+         <variableTemplate condition="irqHandlingMethod&amp;&amp;!suppressIrqArray"
             variables="irq_enum"
          ><![CDATA[
             \t/**
@@ -415,7 +397,7 @@
    <constant key="_scgc_clock" value='"/SIM/"+ToLowerCase("sim_"+@_clockInfo[0]+"_"+@_clockInfo[1])'
              type="String" condition="_clockInfo[]" />
 
-   <template condition="_clockInfo[]" codeGenCondition="enablePeripheralSupport"
+   <template condition="_clockInfo[]"
       immediateVariables="_clockInfo[0],_clockInfo[1]"
    ><![CDATA[
       \t/**
@@ -458,9 +440,26 @@
       \tstatic void disable() {
       \t   $(disable_peripheral: )\n
    ]]></template>
-   <template codeGenCondition="irqHandlingMethod" condition="_irqCount&amp;&amp;!suppressIrqArray" ><![CDATA[
-      \t   NVIC_DisableIRQ(irqNums[0]);\n
-   ]]></template>
+
+   <if condition="_irqCount&amp;&amp;!suppressIrqArray" >
+
+      <for keys="irqName" values="=_irqNums" condition="=@_irqCount>1" >
+         <constant key="prettyIrqNum" value='Prettify(ReplaceAll("%(irqName)", "$(_NAME)_([a-z|A-Z|0-9]+)_IRQn", "$1"))' type="String"/>
+
+         <template codeGenCondition="irqHandlingMethod"
+            immediateVariables="prettyIrqNum" >
+         <![CDATA[
+            \t   disableNvicInterrupts($(_Class)IrqNum_$(prettyIrqNum));\n
+         ]]></template>
+         <deleteVariables variables="prettyIrqNum" />
+      </for>
+
+      <template codeGenCondition="irqHandlingMethod" condition="=@_irqCount==1" >
+      <![CDATA[
+         \t   disableNvicInterrupts();\n
+      ]]></template>
+
+   </if>
    <template codeGenCondition="enablePeripheralSupport" condition="/PCR/mux_present&amp;&amp;_hasPcrTable" ><![CDATA[
       \t   disableAllPins();\n
    ]]></template>

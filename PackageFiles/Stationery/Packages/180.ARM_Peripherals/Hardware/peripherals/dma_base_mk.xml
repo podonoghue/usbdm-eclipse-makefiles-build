@@ -4,18 +4,6 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Direct memory access controller" >
 
-   <!--  Assumed more than 1 DMA channel and odd # of vectors indicates error handler vector present as last -->
-   <choiceOption key="irq_enum" condition="=_irqCount>1"
-      hidden="true"
-      valueFormat="%s"
-      derived="true"
-      typeName="$(_Class)IrqNum"
-      description="$(_Class) Interrupt indices"
-      toolTip="Used to identify peripheral interrupt" >
-      <choiceExpansion value="%(num)"               enum="%(num)" name="DMA channel %(num)" keys="num" dim="=(_irqCount&amp;~0x1)" />
-      <choice          value="=ToString(_irqCount)" enum="Error"  name="DMA Error"          condition="=(_irqCount&amp;~0b1)!=0" />
-   </choiceOption>
-
    <!-- Custom IRQ handlers -->
    <stringOption key="irq_pattern"        locked="true" value="^%b_?(\d+)(_DMA.*)?$;^%b_Error.*$" hidden="true" />
    <stringOption key="irq_ClassHandler"   locked="true" value="%c%i::irqHandler&lt;$1&gt;;%c%i::errorIrqHandler" hidden="true" />
@@ -439,7 +427,8 @@
    ]]>
    </template>
 
-   <template codeGenCondition="irqHandlingMethod" >
+   <variableTemplate codeGenCondition="irqHandlingMethod"
+      variables="irq_enum" >
    <![CDATA[
       \t/** Callback function for Direct memory access controller */
       \tstatic CallbackFunction sCallbacks[irqCount];
@@ -447,19 +436,19 @@
       \t/**
       \t * Set interrupt callback function.
       \t *
-      \t * @param[in]  irqNum          Interrupt to configure
-      \t * @param[in]  $(_basename)Callback Callback function to execute on interrupt
+      %paramDescription0
+      \t * @param  $(_basename)Callback Callback function to execute on interrupt
       \t *                             Use nullptr to remove callback.
       \t */
-      \tstatic void setCallback(DmaChannelNum dmaChannelNum, CallbackFunction $(_basename)Callback) {
+      \tstatic void setCallback(%param0, CallbackFunction $(_basename)Callback) {
       \t   if ($(_basename)Callback == nullptr) {
       \t      $(_basename)Callback = unhandledCallback;
       \t   }
       \t   // Allow either no handler set yet or removing handler
       \t   usbdm_assert(
-      \t         (sCallbacks[dmaChannelNum] == unhandledCallback) || ($(_basename)Callback == unhandledCallback),
+      \t         (sCallbacks[%paramName0] == unhandledCallback) || ($(_basename)Callback == unhandledCallback),
       \t         "Handler already set");
-      \t   sCallbacks[dmaChannelNum] = $(_basename)Callback;
+      \t   sCallbacks[%paramName0] = $(_basename)Callback;
       \t}
       \t
       \t/**
@@ -496,7 +485,7 @@
       \t}
       \t\n
    ]]>
-   </template>
+   </variableTemplate>
 
    <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
    <![CDATA[

@@ -10,9 +10,13 @@
     *  ToLowerCase(string)       => string.toUpperCase()
     *  ToUpperCase(string)       => string.toLowerCase()
     *  Format(format,args...)    => String.format(format, args...)
+    *  ReplaceAll(string,regex,substitution)    => String.format(format, args...)
+    
 -->
 
 <!-- ____ General substitutions ____
+    *  $(_Structname)   => e.g FTM2 => Ftm or FtmQuad etc
+    *  $(_STRUCTNAME)   => e.g FTM2 => FTM or FTMQUAD etc
     *  $(_NAME)         => e.g FTM2 => FTM2
     *  $(_name)         => e.g FTM2 => ftm2
     *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
@@ -20,7 +24,7 @@
     *  $(_Class)        => e.g FTM2 => Ftm2
     *  $(_Baseclass)    => e.g FTM0 => Ftm
     *  $(_instance)     => e.g FTM0 => 0, PTA => A
--->
+ -->
 
 <!-- ____ Template substitutions ________
     *
