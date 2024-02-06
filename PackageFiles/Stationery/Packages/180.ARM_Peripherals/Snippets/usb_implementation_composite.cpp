@@ -117,7 +117,7 @@ const Usb0::Descriptors Usb0::otherDescriptors = {
             /* bMaxPower               */ (uint8_t) USBMilliamps(500)
       },
       /**
-       * Bulk interface, 2 end-points
+       * Bulk interface, 2 endpoints
        */
       { // bulk_interface
             /* bLength                 */ (uint8_t) sizeof(InterfaceDescriptor),
@@ -157,7 +157,7 @@ const Usb0::Descriptors Usb0::otherDescriptors = {
             /* iFunction = ""          */ (uint8_t) s_cdc_interface_index,
       },
       /**
-       * CDC Control/Communication Interface, 1 end-point
+       * CDC Control/Communication Interface, 1 endpoint
        */
       { // cdc_CCI_Interface
             /* bLength                 */ (uint8_t) sizeof(InterfaceDescriptor),
@@ -205,7 +205,7 @@ const Usb0::Descriptors Usb0::otherDescriptors = {
             /* bInterval               */ (uint8_t) USBMilliseconds(255)
       },
       /**
-       * CDC Data Interface, 2 end-points
+       * CDC Data Interface, 2 endpoints
        */
       { // cdc_DCI_Interface
             /* bLength                 */ (uint8_t) sizeof(InterfaceDescriptor),
@@ -239,22 +239,22 @@ const Usb0::Descriptors Usb0::otherDescriptors = {
        */
 };
 
-/** Out end-point for BULK data out */
+/** Out endpoint for BULK data out */
 OutEndpoint <Usb0Info, Usb0::BULK_OUT_ENDPOINT,         BULK_OUT_EP_MAXSIZE>          Usb0::epBulkOut(EndPointType_Bulk);
 
-/** In end-point for BULK data in */
+/** In endpoint for BULK data in */
 InEndpoint  <Usb0Info, Usb0::BULK_IN_ENDPOINT,          BULK_IN_EP_MAXSIZE>           Usb0::epBulkIn(EndPointType_Bulk);
 
-/** In end-point for CDC notifications */
+/** In endpoint for CDC notifications */
 InEndpoint  <Usb0Info, Usb0::CDC_NOTIFICATION_ENDPOINT, CDC_NOTIFICATION_EP_MAXSIZE>  Usb0::epCdcNotification(EndPointType_Bulk);
 
-/** Out end-point for CDC data out */
+/** Out endpoint for CDC data out */
 OutEndpoint <Usb0Info, Usb0::CDC_DATA_OUT_ENDPOINT,     CDC_DATA_OUT_EP_MAXSIZE>      Usb0::epCdcDataOut(EndPointType_Interrupt);
 
-/** In end-point for CDC data in */
+/** In endpoint for CDC data in */
 InEndpoint  <Usb0Info, Usb0::CDC_DATA_IN_ENDPOINT,      CDC_DATA_IN_EP_MAXSIZE>       Usb0::epCdcDataIn(EndPointType_Interrupt);
 /*
- * TODO Add additional end-points here
+ * TODO Add additional endpoints here
  */
 
 /**
@@ -358,7 +358,7 @@ void Usb0::startCdcIn() {
 
 /**
  * Handler for Token Complete USB interrupts for
- * end-points other than EP0
+ * endpoints other than EP0
  *
  * @param usbStat USB Status value from USB hardware
  */
@@ -393,7 +393,7 @@ void Usb0::handleTokenComplete(UsbStat usbStat) {
          epCdcDataIn.handleInToken();
          return;
       /*
-       * TODO Add additional end-point handling here
+       * TODO Add additional endpoint handling here
        */
    }
 }
@@ -404,7 +404,7 @@ void Usb0::handleTokenComplete(UsbStat usbStat) {
  * Call-back handling CDC-OUT transaction complete\n
  * Data received is passed to the cdcInterface
  *
- * @param[in] state Current end-point state (always EPDataOut)
+ * @param[in] state Current endpoint state (always EPDataOut)
  *
  * @return The endpoint state to set after call-back (EPDataOut)
  */
@@ -422,7 +422,7 @@ EndpointState Usb0::cdcOutTransactionCallback(EndpointState state) {
  * Checks for data and schedules transfer as necessary\n
  * Each transfer will have a ZLP as necessary.
  *
- * @param[in] state Current end-point state (always EPDataIn)
+ * @param[in] state Current endpoint state (always EPDataIn)
  *
  * @return The endpoint state to set after call-back (EPIdle/EPDataIn)
  */
@@ -459,7 +459,7 @@ bool Usb0::notify() {
 /**
  * Call-back handling BULK-OUT transaction complete
  *
- * @param[in] state Current end-point state (always EPDataOut)
+ * @param[in] state Current endpoint state (always EPDataOut)
  *
  * @return The endpoint state to set after call-back (e.g. EPIdle/EPDataOut/EPComplete)
  */
@@ -471,7 +471,7 @@ EndpointState Usb0::bulkOutTransactionCallback(EndpointState state) {
 /**
  * Call-back handling BULK-IN transaction complete
  *
- * @param[in] state Current end-point state (always EPDataIn)
+ * @param[in] state Current endpoint state (always EPDataIn)
  *
  * @return The endpoint state to set after call-back (e.g. EPIdle/EPDataIn/EPComplete)
  */
@@ -506,7 +506,7 @@ void Usb0::initialise() {
 //_______ Bulk Transmission ________________________________________________________________
 
 /**
- *  Non-blocking transmission of data over bulk IN end-point
+ *  Non-blocking transmission of data over bulk IN endpoint
  *
  *  @param size         Number of bytes to send
  *  @param buffer       Pointer to bytes to send
@@ -549,7 +549,7 @@ ErrorCode Usb0::pollSendBulkData() {
 }
 
 /**
- *  Blocking transmission of data over bulk IN end-point
+ *  Blocking transmission of data over bulk IN endpoint
  *
  *  @param size            Number of bytes to send
  *  @param buffer          Pointer to bytes to send
@@ -585,7 +585,7 @@ ErrorCode Usb0::sendBulkData(uint16_t size, const uint8_t *buffer, int timeoutMS
 //_______ Bulk Reception ________________________________________________________________
 
 /**
- *  Non-blocking reception of data over bulk OUT end-point
+ *  Non-blocking reception of data over bulk OUT endpoint
  *
  *   @param size           Maximum number of bytes to receive
  *   @param buffer         Pointer to buffer for bytes received
@@ -603,7 +603,7 @@ ErrorCode Usb0::startReceiveBulkData(uint16_t size, uint8_t *buffer) {
 }
 
 /**
- *  Check for completion of reception of data over bulk OUT end-point.
+ *  Check for completion of reception of data over bulk OUT endpoint.
  *  Reception will have been previously configured by startReceiveBulkData().
  *
  *   @param  size          Number of bytes received
@@ -630,7 +630,7 @@ ErrorCode Usb0::pollReceiveBulkData(uint16_t &size) {
 }
 
 /**
- *  Blocking reception of data over bulk OUT end-point
+ *  Blocking reception of data over bulk OUT endpoint
  *
  *  @param size           Maximum number of bytes to receive/Number of bytes received
  *  @param buffer         Pointer to buffer for bytes received

@@ -240,7 +240,7 @@ protected:
    static const char *getTokenName(unsigned token);
 
    /**
-    * Get name of USB end-point state
+    * Get name of USB endpoint state
     *
     * @param[in]  state End-point state
     *
@@ -374,7 +374,6 @@ protected:
 
 protected:
 
-$(/USB/classInfo: // No class Info found)
    /**
     * Enable/disable interrupts
     *
@@ -424,7 +423,7 @@ protected:
    /**
     * Adds an endpoint.
     *
-    * @param[in]  endpoint The end-point to add
+    * @param[in]  endpoint The endpoint to add
     */
    static void addEndpoint(Endpoint *endpoint);
 
@@ -552,9 +551,9 @@ protected:
    }
 
    /**
-    * Initialises EP0 and clears other end-points
+    * Initialises EP0 and clears other endpoints
     *
-    * @param clearToggles Clear Toggles on all end-points
+    * @param clearToggles Clear Toggles on all endpoints
     */
    static void initialiseEndpoints(bool clearToggles);
 
@@ -564,13 +563,13 @@ protected:
    static void handleSetupToken();
 
    /**
-    * Handler for Token Complete USB interrupt for EP0\n
-    * Handles fControlEndpoint [SETUP, IN & OUT]
+    * Handler for Token Complete USB interrupt for all endpoints\n
+    * - SETUP passed to handleSetupToken()
+    * - IN & OUT passed to appropriate endpoint class
     *
-    * @return true indicates token has been processed.\n
-    * false token still needs processing
+    * @param usbStat USB Status value from USB hardware
     */
-   static bool handleTokenComplete(UsbStat usbStat);
+   static void handleTokenComplete(UsbStat usbStat);
 
    /**
     * Handler for USB Bus reset\n
@@ -922,32 +921,31 @@ void UsbBase_T<Info, EP0_SIZE>::handleSetupToken() {
 }
 
 /**
- * Handler for Token Complete USB interrupt for EP0\n
- * Handles fControlEndpoint [SETUP, IN & OUT]
+ * Handler for Token Complete USB interrupt for all endpoints\n
+ * - SETUP passed to handleSetupToken()
+ * - IN & OUT passed to appropriate endpoint class
  *
  * @param usbStat USB Status value from USB hardware
- *
- * @return true   Token has been processed (control endpoint).\n
- * @return false  Token still needs processing (data endpoint).
  */
 template<class Info, int EP0_SIZE>
-bool UsbBase_T<Info, EP0_SIZE>::handleTokenComplete(UsbStat usbStat) {
+void UsbBase_T<Info, EP0_SIZE>::handleTokenComplete(UsbStat usbStat) {
 
    // Endpoint number
    uint8_t endPoint = usbStat.endp;
+   Endpoint &currentEp = *fEndPoints[endPoint];
+
    fEndPoints[endPoint]->flipOddEven(usbStat);
 
-   if (endPoint != fControlEndpoint.fEndpointNumber) {
-      // Indicate wasn't processed
-      return false;
-   }
+//   if (endPoint != fControlEndpoint.fEndpointNumber) {
+//      // Indicate wasn't processed
+//      return false;
+//   }
    // console.WRITE("Tc-", fControlEndpoint.getStateName(), ",");
    // console.WRITE("Stat(", usbStat>>4,Radix_16, usbStat&(1<<3)?",Tx,":",Rx,", usbStat&(1<<2)?"Odd,":"Even,", "),");
 
    // Relevant BDT
    volatile BdtEntry *bdt = &bdts()[usbStat.raw>>2];
 
-   // Control - Accept SETUP, IN or OUT token
 #if 0
    if (bdt->u.result.tok_pid == SETUPToken) {
       console.WRITELN("\n=====");
@@ -960,25 +958,27 @@ bool UsbBase_T<Info, EP0_SIZE>::handleTokenComplete(UsbStat usbStat) {
       WRITE(bdt->u.result.data0_1?", DATA1":", DATA0").
       WRITELN((usbStat&USB_STAT_ODD_MASK)?", Odd":", Even");
 #endif
+
+//   const char *epState = currentEp.getStateName();
+
+   // Accept SETUP, IN or OUT tokens
    switch (bdt->result.tok_pid) {
       case SETUPToken:
-//         console.WRITELN(fControlEndpoint.getStateName(), " Set");
+//         console.WRITELN(endPoint, " : ", epState, " Set");
          handleSetupToken();
          break;
       case INToken:
-         fControlEndpoint.handleInToken();
-//          console.WRITELN(fControlEndpoint.getStateName(), " In");
+         currentEp.handleInToken();
+//          console.WRITELN(endPoint, " : ",  epState, " In");
          break;
       case OUTToken:
-         fControlEndpoint.handleOutToken();
-//          console.WRITELN(fControlEndpoint.getStateName(), " Out");
+         currentEp.handleOutToken();
+//          console.WRITELN(endPoint, " : ",  epState, " Out");
          break;
       default:
-         console.WRITELN("Unexpected token on EP0 = ", getTokenName(bdt->result.tok_pid));
+         console.WRITELN("Unexpected token on EP #", endPoint, "-", getTokenName(bdt->result.tok_pid));
          break;
    }
-   // Indicate processed
-   return true;
 }
 
 // Must have handler installed in USBDM configuration
@@ -997,7 +997,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleUSBReset() {
    setInterruptMask(0x00);
    setErrorInterruptMask(0x00);
 
-   // Disable end-points
+   // Disable endpoints
    for (unsigned i=0; i<(sizeof(fUsb->ENDPOINT)/sizeof(fUsb->ENDPOINT[0])); i++) {
       fUsb->ENDPOINT[i].ENDPT = 0;
    }
@@ -1011,7 +1011,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleUSBReset() {
    // Set initial USB state
    setUSBdefaultState();
 
-   // Initialise control end-point
+   // Initialise control endpoint
    initialiseEndpoints(true);
    UsbImplementation::clearPinPongToggle();
    UsbImplementation::initialiseEndpoints(true);
@@ -1075,7 +1075,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleUSBResume() {
    // Notify user
    handleUserCallback(UserEvent_Resume);
 
-   // Initialise all end-points
+   // Initialise all endpoints
    initialiseEndpoints(false);
    UsbImplementation::clearPinPongToggle();
    UsbImplementation::initialiseEndpoints(false);
@@ -1183,7 +1183,7 @@ void UsbBase_T<Info, EP0_SIZE>::initialise() {
    // Set initial USB state
    setUSBdefaultState();
 
-   // Initialise control end-point
+   // Initialise control endpoint
    initialiseEndpoints(true);
 
    // Enable USB interrupts
@@ -1193,7 +1193,7 @@ void UsbBase_T<Info, EP0_SIZE>::initialise() {
 /**
  * Adds an endpoint.
  *
- * @param[in]  endpoint The end-point to add
+ * @param[in]  endpoint The endpoint to add
  */
 template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::addEndpoint(Endpoint *endpoint) {
@@ -1201,9 +1201,9 @@ void UsbBase_T<Info, EP0_SIZE>::addEndpoint(Endpoint *endpoint) {
 }
 
 /**
- * Initialises EP0 and clears other end-points
+ * Initialises EP0 and clears other endpoints
  *
- * @param clearToggles Clear Toggles on all end-points
+ * @param clearToggles Clear Toggles on all endpoints
  */
 template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::initialiseEndpoints(bool clearToggles) {
@@ -1435,13 +1435,13 @@ void UsbBase_T<Info, EP0_SIZE>::handleGetDescriptor() {
             StringFormatter sf(utf8Buff, sizeof(utf8Buff));
             sf.setPadding(Padding_LeadingZeroes).setWidth(6).write(SERIAL_NO).write(uid, Radix_16).write('\0');
 
-            // Use end-point internal buffer directly - may result in truncation
+            // Use endpoint internal buffer directly - may result in truncation
             dataPtr = fControlEndpoint.getTxBuffer();
             utf8ToStringDescriptor(fControlEndpoint.getTxBuffer(), (uint8_t *)utf8Buff, fControlEndpoint.BUFFER_SIZE);
          }
 #endif
          else {
-            // Use end-point internal buffer directly - may result in truncation
+            // Use endpoint internal buffer directly - may result in truncation
             dataPtr = fControlEndpoint.getTxBuffer();
             utf8ToStringDescriptor(fControlEndpoint.getTxBuffer(), UsbImplementation::stringDescriptors[descriptorIndex], fControlEndpoint.BUFFER_SIZE);
          }
@@ -1474,7 +1474,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleSetConfiguration() {
    }
    setUSBconfiguredState(fEp0SetupBuffer.wValue.lo());
 
-   // Initialise non-control end-points
+   // Initialise non-control endpoints
 //   console.WRITELN("RxOdd", (bool)UsbImplementation::epBulkOut.fRxOdd);
    UsbImplementation::initialiseEndpoints(true);
    fUserCallbackFunction(UserEvent::UserEvent_Configure);
@@ -1540,16 +1540,7 @@ void UsbBase_T<Info, EP0_SIZE>::irqHandler() {
          // Get endpoint status
          UsbStat usbStat = (UsbStat)fUsb->STAT;
 //         console.WRITELN("St ", usbStat.endp, ',', (unsigned)usbStat.tx, ',', (unsigned)usbStat.odd);
-         // Token complete interrupt
-         if (usbStat.endp == fControlEndpoint.fEndpointNumber) {
-            handleTokenComplete(usbStat);
-         }
-         else {
-            // Pass to extension routine
-//            console.WRITE("(", usbStat.endp, usbStat.tx?",T,":",R,", usbStat.odd?"O,":"E,", "),");
-//            console.WRITELN(UsbImplementation::epBulkOut.getStateName());
-            UsbImplementation::handleTokenComplete(usbStat);
-         }
+         handleTokenComplete(usbStat);
       }
       if ((pendingInterruptFlags&USB_ISTAT_RESUME_MASK) != 0) {
          // Resume signaled on Bus

@@ -24,7 +24,7 @@
 
 /*
  * Under Windows 8, or 10 there is no need to install a driver for
- * the bulk end-points if the MS_COMPATIBLE_ID_FEATURE is enabled.
+ * the bulk endpoints if the MS_COMPATIBLE_ID_FEATURE is enabled.
  * winusb.sys driver will be automatically loaded.
  *
  * Under Windows 10 the usbser.sys driver will be loaded automatically
@@ -63,7 +63,7 @@ static constexpr uint16_t  VERSION_ID  = 0x0100;    // Version ID
 //
 static constexpr unsigned  CONTROL_EP_MAXSIZE           = 64; //!< Control in/out
 /*
- *  TODO Define additional end-point sizes
+ *  TODO Define additional endpoint sizes
  */
 static constexpr unsigned  BULK_OUT_EP_MAXSIZE          = 64; //!< Bulk out
 static constexpr unsigned  BULK_IN_EP_MAXSIZE           = 64; //!< Bulk in
@@ -133,7 +133,7 @@ public:
       /** USB Control endpoint number - must be zero */
       CONTROL_ENDPOINT  = 0,
 
-      /* end-points are assumed consecutive */
+      /* endpoints are assumed consecutive */
 
       /** Bulk out endpoint number */
       BULK_OUT_ENDPOINT,
@@ -150,7 +150,7 @@ public:
       /*
        * TODO Add additional Endpoint numbers here
        */
-      /** Total number of end-points */
+      /** Total number of endpoints */
       NUMBER_OF_ENDPOINTS,
    };
 
@@ -172,21 +172,21 @@ public:
    static const uint8_t *const stringDescriptors[];
 
 protected:
-   /* Additional end-points */
+   /* Additional endpoints */
 
-   /** Out end-point for Bulk */
+   /** Out endpoint for Bulk */
    static OutEndpoint <Usb0Info, Usb0::BULK_OUT_ENDPOINT, BULK_OUT_EP_MAXSIZE> epBulkOut;
 
-   /** In end-point for Bulk */
+   /** In endpoint for Bulk */
    static InEndpoint  <Usb0Info, Usb0::BULK_IN_ENDPOINT,  BULK_IN_EP_MAXSIZE>  epBulkIn;
 
-   /** In end-point for CDC notifications */
+   /** In endpoint for CDC notifications */
    static InEndpoint  <Usb0Info, Usb0::CDC_NOTIFICATION_ENDPOINT, CDC_NOTIFICATION_EP_MAXSIZE>  epCdcNotification;
 
-   /** Out end-point for CDC data out */
+   /** Out endpoint for CDC data out */
    static OutEndpoint <Usb0Info, Usb0::CDC_DATA_OUT_ENDPOINT,     CDC_DATA_OUT_EP_MAXSIZE>      epCdcDataOut;
 
-   /** In end-point for CDC data in */
+   /** In endpoint for CDC data in */
    static InEndpoint  <Usb0Info, Usb0::CDC_DATA_IN_ENDPOINT,      CDC_DATA_IN_EP_MAXSIZE>       epCdcDataIn;
 
    /*
@@ -207,7 +207,7 @@ public:
    //_______ Bulk Transmission ________________________________________________________________
 
    /**
-    *  Non-blocking transmission of data over bulk IN end-point
+    *  Non-blocking transmission of data over bulk IN endpoint
     *
     *  @param size         Number of bytes to send
     *  @param buffer       Pointer to bytes to send
@@ -226,7 +226,7 @@ public:
    static ErrorCode pollSendBulkData();
 
    /**
-    *  Blocking transmission of data over bulk IN end-point
+    *  Blocking transmission of data over bulk IN endpoint
     *
     *  @param size            Number of bytes to send
     *  @param buffer          Pointer to bytes to send
@@ -242,7 +242,7 @@ public:
    //_______ Bulk Reception ________________________________________________________________
 
    /**
-    *  Non-blocking reception of data over bulk OUT end-point
+    *  Non-blocking reception of data over bulk OUT endpoint
     *
     *   @param size           Maximum number of bytes to receive
     *   @param buffer         Pointer to buffer for bytes received
@@ -253,7 +253,7 @@ public:
    static ErrorCode startReceiveBulkData(uint16_t size, uint8_t *buffer);
 
    /**
-    *  Check for completion of reception of data over bulk OUT end-point.
+    *  Check for completion of reception of data over bulk OUT endpoint.
     *  Reception will have been previously configured by startReceiveBulkData().
     *
     *   @param  size          Number of bytes received
@@ -265,7 +265,7 @@ public:
    static ErrorCode pollReceiveBulkData(uint16_t &size);
 
    /**
-    *  Blocking reception of data over bulk OUT end-point
+    *  Blocking reception of data over bulk OUT endpoint
     *
     *  @param size           Maximum number of bytes to receive/Number of bytes received
     *  @param buffer         Pointer to buffer for bytes received
@@ -357,7 +357,7 @@ protected:
    }
 
    /**
-    * Initialises all end-points
+    * Initialises all endpoints
     */
    static void initialiseEndpoints(bool clearToggles) {
       epBulkOut.initialise(clearToggles);
@@ -404,7 +404,7 @@ protected:
    /**
     * Call-back handling BULK-OUT transaction complete
     *
-    * @param[in] state Current end-point state (always EPDataOut)
+    * @param[in] state Current endpoint state (always EPDataOut)
     *
     * @return The endpoint state to set after call-back (EPDataOut)
     */
@@ -413,7 +413,7 @@ protected:
    /**
     * Call-back handling BULK-IN transaction complete
     *
-    * @param[in] state Current end-point state (always EPDataIn)
+    * @param[in] state Current endpoint state (always EPDataIn)
     *
     * @return The endpoint state to set after call-back (EPIdle/EPDataIn)
     */
@@ -424,7 +424,7 @@ protected:
     * Checks for data and schedules transfer as necessary\n
     * Each transfer will have a ZLP as necessary.
     *
-    * @param[in] state Current end-point state (always EPDataIn)
+    * @param[in] state Current endpoint state (always EPDataIn)
     *
     * @return The endpoint state to set after call-back (EPIdle/EPDataIn)
     */
@@ -434,7 +434,7 @@ protected:
     * Call-back handling CDC-OUT transaction complete\n
     * Data received is passed to the cdcInterface
     *
-    * @param[in] state Current end-point state (always EPDataOut)
+    * @param[in] state Current endpoint state (always EPDataOut)
     *
     * @return The endpoint state to set after call-back (EPDataOut)
     */
@@ -442,7 +442,7 @@ protected:
 
    /**
     * Handler for Token Complete USB interrupts for
-    * end-points other than EP0
+    * endpoints other than EP0
     *
     * @param usbStat USB Status value from USB hardware
     */

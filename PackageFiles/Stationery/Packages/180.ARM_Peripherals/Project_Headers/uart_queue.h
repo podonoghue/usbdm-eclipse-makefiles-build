@@ -25,7 +25,10 @@ class UartQueue {
    volatile int      fNumberOfElements;
 
 public:
-   /*
+
+   static constexpr int  QueueSize = QUEUE_SIZE;
+
+   /**
     * Create empty Queue
     */
    constexpr UartQueue() : fHead(fBuff), fTail(fBuff), fNumberOfElements(0) {
@@ -40,7 +43,7 @@ public:
       fTail             = fBuff;
       fNumberOfElements = 0;
    }
-   /*
+   /**
     * Check if empty
     *
     * @return true => empty
@@ -48,7 +51,7 @@ public:
    bool isEmpty() {
       return fNumberOfElements == 0;
    }
-   /*
+   /**
     * Check if full
     *
     * @return true => full
@@ -56,7 +59,13 @@ public:
    bool isFull() {
       return fNumberOfElements == QUEUE_SIZE;
    }
-   /*
+   /**
+    * Get space available
+    */
+   unsigned getRemainingCapacity() {
+      return QUEUE_SIZE-fNumberOfElements;
+   }
+   /**
     * Add element to queue
     *
     * @param[in]  element Element to add
@@ -66,7 +75,7 @@ public:
       (void)success;
       usbdm_assert(success, "Queue full");
    }
-   /*
+   /**
     * Add element to queue. Discards on full.
     *
     * @param[in]  element Element to add
@@ -87,7 +96,7 @@ public:
       }
       return hasSpace;
    }
-   /*
+   /**
     * Remove & return element from queue
     *
     * @param[in]  element Element to add
@@ -103,6 +112,7 @@ public:
       }
       return t;
    }
+
 };
 
 } // End namespace USBDM

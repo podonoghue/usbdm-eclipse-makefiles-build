@@ -67,7 +67,8 @@ enum EndpointState : uint8_t {
    EPStatusIn,  //!< Doing an IN transaction as a status handshake
    EPStatusOut, //!< Doing an OUT transaction as a status handshake
    EPStall,     //!< Endpoint is stalled
-   EPComplete,  //!< Used for command protocol - new command available
+   EPComplete,  //!< Used for command protocol - new command available for processing
+   EPBusy,      //!< Busy processing last transfer - send NAK i.e. endpoint not set up
 };
 
 enum EndPointType : uint8_t {
@@ -396,7 +397,7 @@ public:
    }
 
    /**
-    * Return end-point state
+    * Return endpoint state
     *
     * @return Endpoint state
     */
@@ -752,6 +753,7 @@ uint8_t Endpoint_T<Info, ENDPOINT_NUM, EP_MAXSIZE>::fAllocatedDataBuffer[EP_MAXS
 
 /**
  * Class for generic endpoint with 2 buffers (Tx + Rx)
+ * Used for Control endpoints
  *
  * @tparam Info         Class describing associated USB hardware
  * @tparam ENDPOINT_NUM Endpoint number

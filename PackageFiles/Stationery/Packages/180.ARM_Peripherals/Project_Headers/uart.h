@@ -161,79 +161,6 @@ public:
    virtual ~Uart() {
    }
 
-#ifdef UART_C4_BRFA_MASK
-   /**
-    * Set baud factor value for interface.
-    * For UARTS with baud rate fraction adjust (BRFA) support.
-    *
-    * This is calculated from baud rate and UART clock frequency
-    *
-    * @param[in]  baudrate       Interface speed in bits-per-second
-    * @param[in]  clockFrequency Frequency of UART clock
-    */
-   void __attribute__((noinline)) setBaudRate_brfa(uint32_t baudrate, uint32_t clockFrequency) {
-
-      /*
-       * Baudrate = clockFrequency / (OSR x (SBR + BRFD))
-       * Fixed OSR = 16
-       *
-       * (OSR x (SBR + BRFD/32)) = clockFrequency/Baudrate
-       * (SBR + BRFD/32) = clockFrequency/(Baudrate*OSR)
-       * 32*SBR + BRFD = 2*clockFrequency/Baudrate
-       * SBR  = (2*clockFrequency/Baudrate)>>5
-       * BRFD = (2*clockFrequency/Baudrate)&0x1F
-       */
-      // Disable UART before changing registers
-      uint8_t c2Value = uart->C2;
-      uart->C2 = 0;
-
-      // Calculate UART clock setting (5-bit fraction at right, +16 for rounding after /32)
-      int divider = ((2*clockFrequency)/baudrate) + 16;
-
-      // Set Baud rate register
-      uart->BDH = (uart->BDH&~UART_BDH_SBR_MASK) | UART_BDH_SBR((divider>>(8+5)));
-      uart->BDL = UART_BDL_SBR(divider>>5);
-      // Fractional divider to get closer to the baud rate
-      uart->C4 = (uart->C4&~UART_C4_BRFA_MASK) | UART_C4_BRFA(divider);
-
-      // Restore UART settings
-      uart->C2 = c2Value;
-   }
-#endif
-
-   /**
-    * Set baud factor value for interface.
-    * For basic UARTS.
-    *
-    * This is calculated from baud rate and UART clock frequency
-    *
-    * @param[in]  baudrate       Interface speed in bits-per-second
-    * @param[in]  clockFrequency Frequency of UART clock
-    * @param[in]  oversample     Over-sample ratio to use when calculating divider
-    */
-   void __attribute__((noinline)) setBaudRate_basic(uint32_t baudrate, uint32_t clockFrequency, uint32_t oversample) {
-
-      /*
-       * Baudrate = ClockFrequency / (OverSample x Divider)
-       * Divider = ClockFrequency / (OverSample x Baudrate)
-       */
-
-      // Disable UART before changing registers
-      uint8_t c2Value = uart->C2;
-      uart->C2 = 0;
-
-      // Calculate UART divider with rounding
-      uint32_t divider = (clockFrequency<<1)/(oversample * baudrate);
-      divider = (divider>>1)|(divider&0b1);
-
-      // Set Baud rate register
-      uart->BDH = (uart->BDH&~UART_BDH_SBR_MASK) | UART_BDH_SBR((divider>>8));
-      uart->BDL = UART_BDL_SBR(divider);
-
-      // Restore UART settings
-      uart->C2 = c2Value;
-   }
-
    /**
     * Set baud factor value for interface
     *
@@ -241,7 +168,7 @@ public:
     *
     * @param[in]  baudrate  Interface speed in bits-per-second
     */
-   virtual void setBaudRate(unsigned baudrate) = 0;
+   virtual void setBaudRate(UartBaudRate uartBaudRate) = 0;
 
    /**
     * Clear UART error status
@@ -351,13 +278,9 @@ public:
    }
 #endif
 
-protected:
-   /** Callback function for RxTx ISR */
-   static UARTCallbackFunction rxTxCallback;
-   /** Callback function for Error ISR */
-   static UARTCallbackFunction errorCallback;
-   /** Callback function for LON ISR */
-   static UARTCallbackFunction lonCallback;
+   virtual void setBaudRate(UartBaudRate uartBaudRate) override {
+      Info::setBaudRate(uartBaudRate);
+   }
 
 public:
    $(/UART/classInfo: // No class Info found)
@@ -396,288 +319,13 @@ protected:
     * Clear UART error status
     */
    virtual void clearError() override {
-      if (Info::statusNeedsWrite) {
-         uart->S1 = 0xFF;
-      }
-      else {
-         (void)uart->D;
-      }
+      Uart0Info::clearError();
    }
 
 public:
-   /**
-    * Receive/Transmit IRQ handler (MKL)
-    */
-   static void irqHandler() {
-      uint8_t status = Info::uart->S1;
-      rxTxCallback(status);
-   }
-
-   /**
-    * Receive/Transmit IRQ handler (MK)
-    */
-   static void irqRxTxHandler() {
-      uint8_t status = Info::uart->S1;
-      rxTxCallback(status);
-   }
-
-   /**
-    * Error and LON event IRQ handler (MK)
-    */
-   static void irqErrorHandler() {
-      uint8_t status = Info::uart->S1;
-      errorCallback(status);
-   }
-
-   /**
-    * LON IRQ handler (MK)
-    */
-   static void irqLonHandler() {
-      uint8_t status = Info::uart->S1;
-      lonCallback(status);
-   }
-
-   /**
-    * Set Receive/Transmit Callback function
-    *
-    *  @param[in]  callback  Callback function to be executed on Rx or Tx interrupt.\n
-    *                        Use nullptr to remove callback.
-    */
-   static void setRxTxCallback(UARTCallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "UART not configure for interrupts");
-      if (callback == nullptr) {
-         callback = unhandledCallback;
-      }
-      rxTxCallback = callback;
-   }
-
-   /**
-    * Set Error Callback function
-    *
-    *  @param[in]  callback  Callback function to be executed on error interrupt.\n
-    *                        Use nullptr to remove callback.
-    */
-   static void setErrorCallback(UARTCallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "UART not configure for interrupts");
-      if (callback == nullptr) {
-         callback = unhandledCallback;
-      }
-      errorCallback = callback;
-   }
-
-   /**
-    * Set LON Callback function
-    *
-    *  @param[in]  callback  Callback function to be executed on LON interrupt.\n
-    *                        Use nullptr to remove callback.
-    */
-   static void setLonCallback(UARTCallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "UART not configure for interrupts");
-      if (callback == nullptr) {
-         callback = unhandledCallback;
-      }
-      lonCallback = callback;
-   }
-
-   /**
-    * Enable interrupts in NVIC
-    */
-   static void enableNvicInterrupts() {
-      NVIC_EnableIRQ(Info::irqNums[0]);
-      if constexpr (Info::irqCount>1) {
-         NVIC_EnableIRQ(Info::irqNums[1]);
-      }
-      if constexpr (Info::irqCount>2) {
-         NVIC_EnableIRQ(Info::irqNums[2]);
-      }
-   }
-
-   /**
-    * Enable and set priority of interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    */
-   static void enableNvicInterrupts(NvicPriority nvicPriority) {
-      enableNvicInterrupt(Info::irqNums[0], nvicPriority);
-      if constexpr (Info::irqCount>1) {
-          enableNvicInterrupt(Info::irqNums[1], nvicPriority);
-      }
-      if constexpr (Info::irqCount>2) {
-          enableNvicInterrupt(Info::irqNums[2], nvicPriority);
-      }
-   }
-
-   /**
-    * Disable interrupts in NVIC
-    */
-   static void disableNvicInterrupts() {
-      NVIC_DisableIRQ(Info::irqNums[0]);
-      if constexpr (Info::irqCount>1) {
-         NVIC_DisableIRQ(Info::irqNums[1]);
-      }
-      if constexpr (Info::irqCount>2) {
-         NVIC_DisableIRQ(Info::irqNums[2]);
-      }
-   }
 };
 
-template<class Info> UARTCallbackFunction Uart_T<Info>::rxTxCallback  = unhandledCallback;
-template<class Info> UARTCallbackFunction Uart_T<Info>::errorCallback = unhandledCallback;
-template<class Info> UARTCallbackFunction Uart_T<Info>::lonCallback   = unhandledCallback;
-
-#ifdef UART_C4_BRFA_MASK
-/**
- * Virtual class for basic UART
- *
- * - BRFA field (Baud Rate Fine Adjust)
- * - No OSR field (Over Sampling Ratio) i.e. Fixed x16 over-sample
- * - No buffering
- *
- * @tparam Info Info class providing clock frequency etc.
- */
-template<class Info> class Uart_brfa_T : public Uart_T<Info> {
-
-private:
-   Uart_brfa_T(const Uart_brfa_T&) = delete;
-   Uart_brfa_T(Uart_brfa_T&&) = delete;
-
-public:
-   /**
-    * Construct UART interface
-    *
-    * @param[in]  baudrate         Interface speed in bits-per-second
-    */
-   Uart_brfa_T(unsigned baudrate=Info::defaultBaudRate) : Uart_T<Info>() {
-      setBaudRate(baudrate);
-   }
-   /**
-    * Destructor
-    */
-   virtual ~Uart_brfa_T() {
-   }
-   /**
-    * Set baud factor value for interface
-    *
-    * This is calculated from baud rate and UART clock frequency
-    *
-    * @param[in]  baudrate Interface speed in bits-per-second
-    */
-   virtual void setBaudRate(unsigned baudrate) override {
-      Uart::setBaudRate_brfa(baudrate, Info::getInputClockFrequency());
-   }
-};
-#endif
-
-#ifdef UART_C4_OSR_MASK
-/**
- * Virtual class for basic UART
- *
- * - No BRFA field (Baud Rate Fine Adjust)
- * - OSR field (Over Sampling Ratio) i.e. changeable over-sample rate
- * - No buffering
- *
- * @tparam Info Info class providing clock frequency etc.
- */
-template<class Info> class Uart_osr_T : public Uart_T<Info> {
-
-private:
-   Uart_osr_T(const Uart_osr_T&) = delete;
-   Uart_osr_T(Uart_osr_T&&) = delete;
-
-public:
-   using Info::uart;
-
-   /**
-    * Construct UART interface
-    *
-    * @param[in]  baudrate         Interface speed in bits-per-second
-    */
-   Uart_osr_T(unsigned baudrate=Info::defaultBaudRate) : Uart_T<Info>() {
-      setBaudRate(baudrate);
-   }
-   /**
-    * Destructor
-    */
-   virtual ~Uart_osr_T() {
-   }
-   /**
-    * Set baud factor value for interface
-    *
-    * This is calculated from baud rate and UART clock frequency
-    *
-    * @param[in]  baudrate Interface speed in bits-per-second
-    */
-   virtual void setBaudRate(unsigned baudrate) override {
-      static constexpr int OVER_SAMPLE = Info::oversampleRatio;
-
-      // Set over-sample ratio and baud rate
-      uart->C4 = (uart->C4&~UART_C4_OSR_MASK)|(OVER_SAMPLE-1);
-      Uart::setBaudRate_basic(baudrate, Info::getInputClockFrequency(), OVER_SAMPLE);
-   }
-
-   /**
-    * Set baud factor value for interface
-    *
-    * This is calculated from baud rate and LPUART clock frequency
-    *
-    * @param[in]  baudrate    Interface speed in bits-per-second
-    * @param[in]  oversample  Over-sample ratio to use when calculating divider
-    */
-   void setBaudRate(unsigned baudrate, unsigned oversample) {
-
-      // Set over-sample ratio and baud rate
-      uart->C4 = (uart->C4&~UART_C4_OSR_MASK)|UART_C4_OSR(oversample-1);
-      Uart::setBaudRate_basic(baudrate, Info::getInputClockFrequency(), oversample);
-   }
-
-};
-#endif
-
-/**
- * Virtual class for basic UART
- *
- * - No BRFA field (Baud Rate Fine Adjust)
- * - No OSR field (Over Sampling Ratio) i.e. Fixed x16 over-sample
- * - No buffering
- *
- * @tparam Info Info class providing clock frequency etc.
- */
-template<class Info> class Uart_basic_T : public Uart_T<Info> {
-
-private:
-   Uart_basic_T(const Uart_basic_T&) = delete;
-   Uart_basic_T(Uart_basic_T&&) = delete;
-
-public:
-   /**
-    * Construct UART interface
-    *
-    * @param[in]  baudrate         Interface speed in bits-per-second
-    */
-   Uart_basic_T(unsigned baudrate=Info::defaultBaudRate) : Uart_T<Info>() {
-      setBaudRate(baudrate);
-   }
-   /**
-    * Destructor
-    */
-   virtual ~Uart_basic_T() {
-   }
-   /**
-    * Set baud factor value for interface
-    *
-    * This is calculated from baud rate and UART clock frequency
-    *
-    * @param[in]  baudrate Interface speed in bits-per-second
-    */
-   virtual void setBaudRate(unsigned baudrate) override {
-      // Over-sample ratio - fixed in hardware
-      static constexpr int OVER_SAMPLE = 16;
-
-      Uart::setBaudRate_basic(baudrate, Info::getInputClockFrequency(), OVER_SAMPLE);
-   }
-};
-
+#if 0
 /**
  * @brief Abstract template class representing a buffered UART interface with associated hardware
  *
@@ -839,100 +487,6 @@ public:
 
 };
 
-#ifdef UART_C4_BRFA_MASK
-/**
- * Virtual class for buffered UART
- *
- * - BRFA field (Baud Rate Fine Adjust)
- * - No OSR field (Over Sampling Ratio) i.e. Fixed x16 over-sample
- * - Buffered
- *
- * @tparam Info Info class providing clock frequency etc.
- */
-template<class Info, int rxSize=Info::receiveBufferSize, int txSize=Info::transmitBufferSize>
-class UartBuffered_brfa_T : public UartBuffered_T<Info, rxSize, txSize> {
-
-private:
-   UartBuffered_brfa_T(const UartBuffered_brfa_T&) = delete;
-   UartBuffered_brfa_T(UartBuffered_brfa_T&&) = delete;
-
-public:
-   /**
-    * Construct UART interface
-    *
-    * @param[in]  baudrate         Interface speed in bits-per-second
-    */
-   UartBuffered_brfa_T(unsigned baudrate=Info::defaultBaudRate) : UartBuffered_T<Info, rxSize, txSize>() {
-      setBaudRate(baudrate);
-   }
-   /**
-    * Destructor
-    */
-   virtual ~UartBuffered_brfa_T() {
-   }
-   /**
-    * Set baud factor value for interface
-    *
-    * This is calculated from baud rate and LPUART clock frequency
-    *
-    * @param[in]  baudrate Interface speed in bits-per-second
-    */
-   virtual void setBaudRate(unsigned baudrate) override {
-      Uart::setBaudRate_brfa(baudrate, Info::getInputClockFrequency());
-   }
-};
-#endif
-
-#ifdef UART_C4_OSR_MASK
-/**
- * Virtual class for buffered UART
- *
- * - No BRFA field (Baud Rate Fine Adjust)
- * - OSR field (Over Sampling Ratio) i.e. changeable x16 over-sample
- * - Buffered
- *
- * @tparam Info Info class providing clock frequency etc.
- */
-template<class Info, int rxSize=Info::receiveBufferSize, int txSize=Info::transmitBufferSize>
-class UartBuffered_osr_T : public UartBuffered_T<Info, rxSize, txSize> {
-
-private:
-   UartBuffered_osr_T(const UartBuffered_osr_T&) = delete;
-   UartBuffered_osr_T(UartBuffered_osr_T&&) = delete;
-
-   using UartBuffered_T<Info, rxSize, txSize>::uart;
-
-public:
-   /**
-    * Construct UART interface
-    *
-    * @param[in]  baudrate         Interface speed in bits-per-second
-    */
-   UartBuffered_osr_T(unsigned baudrate=Info::defaultBaudRate) : UartBuffered_T<Info, rxSize, txSize>() {
-      setBaudRate(baudrate);
-   }
-   /**
-    * Destructor
-    */
-   virtual ~UartBuffered_osr_T() {
-   }
-   /**
-    * Set baud factor value for interface
-    *
-    * This is calculated from baud rate and LPUART clock frequency
-    *
-    * @param[in]  baudrate Interface speed in bits-per-second
-    */
-   virtual void setBaudRate(unsigned baudrate) override {
-      static constexpr int OVER_SAMPLE = Info::oversampleRatio;
-
-      // Set over-sample ratio
-      uart->C4 = (uart->C4&~UART_C4_OSR_MASK)|(OVER_SAMPLE-1);
-
-      Uart::setBaudRate_basic(baudrate, Info::getInputClockFrequency(), OVER_SAMPLE);
-   }
-};
-#endif
 
 /**
  * Virtual class for buffered UART
@@ -944,11 +498,11 @@ public:
  * @tparam Info Info class providing clock frequency etc.
  */
 template<class Info, int rxSize=Info::receiveBufferSize, int txSize=Info::transmitBufferSize>
-class UartBuffered_basic_T : public UartBuffered_T<Info, rxSize, txSize> {
+class UartBuffered : public UartBuffered_T<Info, rxSize, txSize> {
 
 private:
-   UartBuffered_basic_T(const UartBuffered_basic_T&) = delete;
-   UartBuffered_basic_T(UartBuffered_basic_T&&) = delete;
+   UartBuffered(const UartBuffered&) = delete;
+   UartBuffered(UartBuffered&&) = delete;
 
 public:
    /**
@@ -956,13 +510,13 @@ public:
     *
     * @param[in]  baudrate         Interface speed in bits-per-second
     */
-   UartBuffered_basic_T(unsigned baudrate=Info::defaultBaudRate) : UartBuffered_T<Info, rxSize, txSize>() {
+   UartBuffered(unsigned baudrate=Info::defaultBaudRate) : UartBuffered_T<Info, rxSize, txSize>() {
       setBaudRate(baudrate);
    }
    /**
     * Destructor
     */
-   virtual ~UartBuffered_basic_T() {
+   virtual ~UartBuffered() {
    }
    /**
     * Set baud factor value for interface
@@ -983,6 +537,7 @@ template<class Info, int rxSize, int txSize> UartQueue<char, rxSize> UartBuffere
 template<class Info, int rxSize, int txSize> UartQueue<char, txSize> UartBuffered_T<Info, rxSize, txSize>::txQueue;
 template<class Info, int rxSize, int txSize> volatile uint32_t   UartBuffered_T<Info, rxSize, txSize>::fReadLock  = 0;
 template<class Info, int rxSize, int txSize> volatile uint32_t   UartBuffered_T<Info, rxSize, txSize>::fWriteLock = 0;
+#endif
 
 $(/UART/declarations: // No declarations found)
 /**
