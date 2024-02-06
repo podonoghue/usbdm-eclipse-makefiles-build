@@ -271,9 +271,9 @@
    <for keys=
              " var                                                    : statement            "
       values="
-            crc_gpoly_gpoly                                           : %configRegAssignment ;
             crc_ctrl_tot,crc_ctrl_totr,crc_ctrl_fxor,crc_ctrl_tcrc    : %configRegAssignment|CRC_CTRL_WAS_MASK ;
             crc_data_data                                             : %configRegAssignment ;
+            crc_gpoly_gpoly                                           : %configRegAssignment ;
             crc_ctrl_tot,crc_ctrl_totr,crc_ctrl_fxor,crc_ctrl_tcrc    : %configRegAssignment " >
       <variableTemplate codeGenCondition="enablePeripheralSupport"
       variables="%(var)"
