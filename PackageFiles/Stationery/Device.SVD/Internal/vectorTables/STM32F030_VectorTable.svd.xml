@@ -43,19 +43,19 @@ Devices using this vector table:
       <peripheral>RCC</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA_CH1</name>
+      <name>DMA0_CH1</name>
       <description>DMA channel 1 interrupt</description>
       <value>9</value>
       <peripheral>ADC</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA_CH2_3</name>
+      <name>DMA0_CH2_3</name>
       <description>DMA channel 2 and 3 interrupts</description>
       <value>10</value>
       <peripheral>ADC</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA_CH4_5_6_7</name>
+      <name>DMA0_CH4_5_6_7</name>
       <description>DMA channel 4, 5, 6 and 7
         interrupts</description>
       <value>11</value>

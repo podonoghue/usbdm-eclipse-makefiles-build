@@ -6,32 +6,32 @@ Devices using this vector table:
    <name>MKV10Z7_VectorTable</name>
    <description>MKV10Z7 VectorTable</description>
    <interrupt>
-      <name>DMA0</name>
+      <name>DMA0_CH0</name>
       <description>DMA Controller</description>
       <value>0</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA1</name>
+      <name>DMA0_CH1</name>
       <description>DMA Controller</description>
       <value>1</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA2</name>
+      <name>DMA0_CH2</name>
       <description>DMA Controller</description>
       <value>2</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA3</name>
+      <name>DMA0_CH3</name>
       <description>DMA Controller</description>
       <value>3</value>
       <peripheral>DMA0</peripheral>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA_Error</name>
+      <name>DMA0_Error</name>
       <description>DMA error</description>
       <value>4</value>
       <peripheral>DMA0</peripheral>

@@ -46,22 +46,22 @@ Devices using this vector table:
       <value>72</value>
    </interrupt>
    <interrupt>
-      <name>DMA_CH0</name>
+      <name>DMA0_CH0</name>
       <description>DMA Channel 0 transfer complete</description>
       <value>73</value>
    </interrupt>
    <interrupt>
-      <name>DMA_CH1</name>
+      <name>DMA0_CH1</name>
       <description>DMA Channel 1 transfer complete</description>
       <value>74</value>
    </interrupt>
    <interrupt>
-      <name>DMA_CH2</name>
+      <name>DMA0_CH2</name>
       <description>DMA Channel 2 transfer complete</description>
       <value>75</value>
    </interrupt>
    <interrupt>
-      <name>DMA_CH3</name>
+      <name>DMA0_CH3</name>
       <description>DMA Channel 3 transfer complete</description>
       <value>76</value>
    </interrupt>

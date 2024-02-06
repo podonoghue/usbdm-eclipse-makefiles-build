@@ -6,25 +6,25 @@ Devices using this vector table:
    <name>MKL26Z4_VectorTable</name>
    <description>MKL26Z4 VectorTable</description>
    <interrupt>
-      <name>DMA0</name>
+      <name>DMA0_CH0</name>
       <description>Direct memory access controller</description>
       <value>0</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA1</name>
+      <name>DMA0_CH1</name>
       <description>Direct memory access controller</description>
       <value>1</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA2</name>
+      <name>DMA0_CH2</name>
       <description>Direct memory access controller</description>
       <value>2</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA3</name>
+      <name>DMA0_CH3</name>
       <description>Direct memory access controller</description>
       <value>3</value>
       <peripheral>DMA0</peripheral>
