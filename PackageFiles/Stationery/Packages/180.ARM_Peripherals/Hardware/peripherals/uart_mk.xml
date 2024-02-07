@@ -142,26 +142,7 @@
 
    <choiceOption key="uart_baudrate"
       enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-      valueFormat="%s"
-      typeName="UartBaudRate"
-      baseType="uint32_t"
-      description="UART baud rate"
-      toolTip="Baud rate for UART\n
-               Values available will depend on clock source frequency" >
-      <choice value="110"     name="110"     enum="110"    />
-      <choice value="300"     name="300"     enum="300"    />
-      <choice value="600"     name="600"     enum="600"    />
-      <choice value="1200"    name="1200"    enum="1200"   />
-      <choice value="2400"    name="2400"    enum="2400"   />
-      <choice value="4800"    name="4800"    enum="4800"   />
-      <choice value="9600"    name="9600"    enum="9600"   />
-      <choice value="14400"   name="14400"   enum="14400"  />
-      <choice value="19200"   name="19200"   enum="19200"  />
-      <choice value="28800"   name="28800"   enum="28800"  />
-      <choice value="38400"   name="38400"   enum="38400"  />
-      <choice value="56000"   name="56000"   enum="56000"  />
-      <choice value="57600"   name="57600"   enum="57600"  />
-      <choice value="115200"  name="115200"  enum="115200" isDefault="true" />
+      derivedFrom="/Console/console_baudrate" >
    </choiceOption>
 
    <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
@@ -780,7 +761,6 @@ XXXXXXXXXXXXXXXXXXXXXX
             uart_ma_ma;
             uart_c4_maen1;uart_c4_maen2;uart_c4_m10;
             uart_c4_brfa;uart_c4_osr;
-            uart_c5_tdmas;uart_c5_rdmas;
             uart_c7816_onack;uart_c7816_anack;uart_c7816_init;
             uart_c7816_ttype;uart_c7816_iso_7816e;
             uart_ie7816_wte;uart_ie7816_cwte;uart_ie7816_bwte;
@@ -864,7 +844,7 @@ XXXXXXXXXXXXXXXXXXXXXX
 
    <!-- Don't include IRQ handler in init -->
    <template codeGenCondition="irqHandlingMethod"
-      condition-"false" >
+      condition="false" >
    <![CDATA[
       \t   // Only set call-backs if feature enabled
       \t   setCallback(init.callbackFunction);

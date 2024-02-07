@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- _common_settings.xml -->
+<!-- common_settings.xml -->
 
 <peripheralPage name="CommonSettings" description="Common settings" >
 
@@ -183,7 +183,7 @@
 ]]></template -->
 
 <template namespace="usbdm" condition="(/PCR/lk_present)" ><![CDATA[
-   /* Template:_common_settings.xml */
+   /* Template:common_settings.xml */
 
    \t/**
    \t *  Enables mapping of all allocated pins during startup using mapAllPins()
@@ -203,7 +203,7 @@
 ]]></template>
 
 <template namespace="usbdm" condition="!(/PCR/lk_present)" ><![CDATA[
-   /* Template:_common_settings.xml */
+   /* Template:common_settings.xml */
 
    \t/**
    \t * Enables mapping of all allocated pins during startup using mapAllPins()
@@ -403,9 +403,8 @@
    \t            : :[input] "m" (cpuSR) : "r0");
    \t   }
    \t};
-   /* END Template:_common_settings.xml */\n\n
+   /* END Template:common_settings.xml */\n\n
 ]]></template>
-
 
 <projectActionList id="common_files_always" >
    <copy source="Sources/delay.cpp"                                        target="Sources/delay.cpp"                            overwrite="true"  derived="true" />
