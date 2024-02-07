@@ -129,6 +129,7 @@
    <item key="/OSC0/enablePeripheralSupport"               value="true" />
    <item key="/OSC0/osc_input_freq"                        value="32768" />
    <item key="/PMC/pmc_lvdsc1_lvdack"                      value="false" />
+   <item key="/SIM/configurePeripheralInStartUp"           value="true" />
    <item key="/SIM/enablePeripheralSupport"                value="true" />
    <item key="/SIM/sim_clkdiv1_outdiv1[0]"                 value="0" />
    <item key="/SIM/sim_clkdiv1_outdiv1[1]"                 value="0" />
