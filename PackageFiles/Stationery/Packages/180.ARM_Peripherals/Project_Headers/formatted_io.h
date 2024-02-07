@@ -48,16 +48,9 @@ enum class Radix : uint8_t {
    Radix_Default = Radix_10,  //!< Default radix (10)
 };
 
-// Radix 2 format
 constexpr Radix Radix_2  = Radix::Radix_2;
-
-// Radix 8 format
 constexpr Radix Radix_8  = Radix::Radix_8;
-
-// Radix 10 format
 constexpr Radix Radix_10 = Radix::Radix_10;
-
-// Radix 16 format
 constexpr Radix Radix_16 = Radix::Radix_16;
 
 enum WhiteSpaceType {
@@ -78,19 +71,73 @@ enum EndOfLineType {
 /**
  * Padding for integers
  */
-enum Padding : uint8_t {
+enum class Padding : uint8_t {
    Padding_None ,         //!< No padding
    Padding_LeadingSpaces, //!< Pad with leading spaces
    Padding_LeadingZeroes, //!< Pad with leading zeroes
    Padding_TrailingSpaces,//!< Pad with trailing spaces
 };
 
+static constexpr Padding Padding_None           = Padding::Padding_None;
+static constexpr Padding Padding_LeadingSpaces  = Padding::Padding_LeadingSpaces;
+static constexpr Padding Padding_LeadingZeroes  = Padding::Padding_LeadingZeroes;
+static constexpr Padding Padding_TrailingSpaces = Padding::Padding_TrailingSpaces;
+
+/**
+ * Precision for floats
+ */
+enum class Precision : uint8_t {
+   Precision_1 = 1,
+   Precision_2 = 2,
+   Precision_3 = 3,
+   Precision_4 = 4,
+   Precision_5 = 5,
+};
+
+static constexpr Precision Precision_1 = Precision::Precision_1;
+static constexpr Precision Precision_2 = Precision::Precision_2;
+static constexpr Precision Precision_3 = Precision::Precision_3;
+static constexpr Precision Precision_4 = Precision::Precision_4;
+static constexpr Precision Precision_5 = Precision::Precision_5;
+
 /**
  * Width for integers
  */
-enum Width : uint8_t {
-   Width_auto = 0,//!< Width_auto
+enum class Width : uint8_t {
+   Width_auto = 0, //!< Width_auto
+   Width_1    = 1,
+   Width_2    = 2,
+   Width_3    = 3,
+   Width_4    = 4,
+   Width_5    = 5,
+   Width_6    = 6,
+   Width_7    = 7,
+   Width_8    = 8,
+   Width_9    = 9,
+   Width_10   = 10,
+   Width_11   = 11,
+   Width_12   = 12,
+   Width_13   = 13,
+   Width_14   = 14,
+   Width_15   = 15,
 };
+
+static constexpr Width Width_auto = Width::Width_auto;
+static constexpr Width Width_1    = Width::Width_1;
+static constexpr Width Width_2    = Width::Width_2;
+static constexpr Width Width_3    = Width::Width_3;
+static constexpr Width Width_4    = Width::Width_4;
+static constexpr Width Width_5    = Width::Width_5;
+static constexpr Width Width_6    = Width::Width_6;
+static constexpr Width Width_7    = Width::Width_7;
+static constexpr Width Width_8    = Width::Width_8;
+static constexpr Width Width_9    = Width::Width_9;
+static constexpr Width Width_10   = Width::Width_10;
+static constexpr Width Width_11   = Width::Width_11;
+static constexpr Width Width_12   = Width::Width_12;
+static constexpr Width Width_13   = Width::Width_13;
+static constexpr Width Width_14   = Width::Width_14;
+static constexpr Width Width_15   = Width::Width_15;
 
 enum EchoMode : bool {
    /*
@@ -108,99 +155,168 @@ enum FlushType {
    Flush
 };
 
-struct IoFormat {
+struct IntegerFormat {
+
+public:
    /**
-    * Precision multiplier used for floating point numbers (10^fFloatPrecision)
+    * Copy Constructor
     */
-   unsigned fFloatPrecisionMultiplier;
+   constexpr IntegerFormat(const IntegerFormat &other) = default;
 
-   /** Current radix */
-   Radix fRadix;
-
-   /** Control echo of input characters */
-   EchoMode fEcho;
+   /**
+    * Default Constructor
+    */
+   constexpr IntegerFormat() = default;
 
    /** Padding for integers  */
-   Padding fPadding;
+   Padding fPadding = Padding_None;
+
+   /** Current radix for integers */
+   Radix fRadix = Radix_10;
 
    /** Width used for integers numbers  */
-   uint8_t fWidth;
-
-   /** How to pad the digits on left of floating point number */
-   Padding fFloatPadding;
-
-   /** Precision used for floating point numbers */
-   uint8_t fFloatWidth;
-
-   /** Precision used for floating point numbers */
-   uint8_t fFloatPrecision;
+   Width fWidth = Width_auto;
 
    /**
-    * Constructor.
+    * Constructor for Padding in IntegerFormat
     *
-    * This also determines the default settings
+    * @tparam   Types
+    * @param    rest
+    *
+    * @param padding Padding for integers
     */
-   constexpr IoFormat() :
-      fFloatPrecisionMultiplier(1000),    // 3 decimal places
-      fRadix(Radix_10),                   // Base 10
-      fEcho(EchoMode_On),                 // Echo on
-      fPadding(Padding_None),             // No padding in integers
-      fWidth(0),                          // Minimum width on integers
-      fFloatPadding(Padding_None),        // No padding on floats
-      fFloatWidth(0),                     // Minimum width on floats
-      fFloatPrecision(3) {                // 3 decimal places on floats
+   template <typename... Types>
+   constexpr IntegerFormat(Padding padding, Types... rest) : IntegerFormat(rest...) {
+      fPadding = padding;
+   }
+
+   /**
+    * Constructor for Padding in IntegerFormat
+    *
+    * @tparam   Types
+    * @param    rest
+    *
+    * @param radix Radix for integers
+    */
+   template <typename... Types>
+   constexpr IntegerFormat(Radix radix, Types... rest) : IntegerFormat(rest...) {
+      fRadix = radix;
+   }
+
+   /**
+    * Constructor for width in IntegerFormat
+    *
+    * @tparam   Types
+    * @param    rest
+    *
+    * @param width Width for integers
+    */
+   template <typename... Types>
+   constexpr IntegerFormat(Width width, Types... rest) : IntegerFormat(rest...) {
+      fWidth = width;
+   }
+
+};
+
+struct FloatFormat {
+
+
+public:
+   /**
+    * Copy Constructor
+    */
+   constexpr FloatFormat(const FloatFormat &other) = default;
+
+   /**
+    * Default Constructor
+    */
+   constexpr FloatFormat() = default;
+
+   /** Precision multiplier used for floating point numbers (10^fFloatPrecision) */
+   unsigned fFloatPrecisionMultiplier = 1000;
+
+   /** Float precision */
+   Precision fFloatPrecision = Precision_3;
+
+   /** Padding for floats  */
+   Padding fPadding = Padding_None;
+
+   /** Width used for floats  */
+   Width fWidth = Width_auto;
+
+   /**
+    * Constructor for padding in FloatFormat
+    *
+    * @tparam   Types
+    * @param    rest
+    *
+    * @param padding How to pad on the left of the number
+    */
+   template <typename... Types>
+   constexpr FloatFormat(Padding padding, Types... rest) : FloatFormat(rest...) {
+      fPadding = padding;
+   }
+
+   /**
+    * Constructor for width in FloatFormat
+    *
+    * @tparam   Types
+    * @param    rest
+    *
+    * @param width Number of characters to the left of decimal point (ignored for padding_None)
+    */
+   template <typename... Types>
+   constexpr FloatFormat(Width width, Types... rest) : FloatFormat(rest...) {
+      fWidth = width;
+   }
+
+   static constexpr int calculateMultiplier(Precision precision) {
+      int prec = int(precision);
+      int multiplier = 1;
+      while (prec-->0) {
+         multiplier *= 10;
+      }
+      return multiplier;
+   }
+
+   /**
+    * Constructor for precision in FloatFormat
+    *
+    * @tparam   Types
+    * @param    rest
+    *
+    * @param precision Number of digits to the right of decimal point
+    */
+   template <typename... Types>
+   constexpr FloatFormat(Precision precision, Types... rest) : FloatFormat(rest...) {
+
+      fFloatPrecision           = precision;
+      fFloatPrecisionMultiplier = calculateMultiplier(precision);
    }
 
    /**
     * Set format for floating point numbers
     *
     * @param precision Number of digits to the right of decimal point
-    * @param padding   How to pad on the left of the number (Padding_LeadingSpaces, Padding_None, Padding_LeadingZeroes)
+    * @param padding   How to pad on the left of the number
     * @param width     Number of characters to the left of decimal point (ignored for padding_None)
     *
     * @return Reference to self
     */
-   IoFormat &setFloatFormat(
-         unsigned  precision,
+   FloatFormat &setFloatFormat(
+         Precision precision,
          Padding   padding  = Padding_None,
-         unsigned  width    = 0) {
+         Width     width    = Width_auto) {
 
       usbdm_assert(padding != Padding_TrailingSpaces, "Not supported format");
 
       fFloatPrecision           = precision;
-      fFloatPrecisionMultiplier = 1;
-      while (precision-->0) {
-         fFloatPrecisionMultiplier *= 10;
-      }
-      fFloatPadding = padding;
-      fFloatWidth   = width;
-      return *this;
-   }
-
-   /**
-    * Set format for integers
-    *
-    * @param width      Width of number
-    * @param padding    How to pad on the left of the number (Padding_LeadingSpaces, Padding_None, Padding_LeadingZeroes)
-    * @param radix      Radix for number
-    *
-    * @return Reference to self
-    */
-   IoFormat &setIntegerFormat(
-         unsigned width,
-         Padding padding   = Padding_LeadingSpaces,
-         Radix radix       = Radix_10) {
-
-      fWidth   = width;
+      fFloatPrecisionMultiplier = calculateMultiplier(precision);
       fPadding = padding;
-      fRadix   = radix;
+      fWidth   = width;
       return *this;
    }
 
-   IoFormat &setEcho(EchoMode echo) {
-      fEcho = echo;
-      return *this;
-   }
 };
 
 /**
@@ -232,9 +348,19 @@ protected:
    }
 
    /**
-    * Current settings
+    * Current float format
     */
-   IoFormat fFormat;
+   FloatFormat   fFloatFormat;
+
+   /**
+    * Current integer format
+    */
+   IntegerFormat fIntegerFormat;
+
+   /**
+    * Echo settings
+    */
+   bool fEcho = true;
 
    /**
     * One character look-ahead
@@ -307,22 +433,42 @@ protected:
 
 public:
    /**
-    * Get current settings e.g width, precision etc
+    * Get current integer settings e.g width, precision etc
     *
-    * @param[out] settings Setting object
+    * @param[out] settings Settings object
     */
-   FormattedIO &getFormat(IoFormat &settings) {
-      settings = fFormat;
+   FormattedIO &getFormat(IntegerFormat &settings) {
+      settings = fIntegerFormat;
       return *this;
    }
 
    /**
-    * Set current settings e.g width, precision etc
+    * Set current integer settings e.g width, precision etc
     *
-    * @param[in] settings Setting object
+    * @param[in] settings Settings object
     */
-   FormattedIO &setFormat(IoFormat &settings) {
-      fFormat = settings;
+   FormattedIO &setFormat(const IntegerFormat &settings) {
+      fIntegerFormat = settings;
+      return *this;
+   }
+
+   /**
+    * Get current float settings e.g width, precision etc
+    *
+    * @param[out] settings Settings object
+    */
+   FormattedIO &getFormat(FloatFormat &settings) {
+      settings = fFloatFormat;
+      return *this;
+   }
+
+   /**
+    * Set current float settings e.g width, precision etc
+    *
+    * @param[in] settings Settings object
+    */
+   FormattedIO &setFormat(const FloatFormat &settings) {
+      fFloatFormat = settings;
       return *this;
    }
 
@@ -332,11 +478,25 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO &resetFormat() {
+   FormattedIO &resetFloatFormat() {
       // Default settings
-      static const IoFormat defaultSettings;
+      static constexpr FloatFormat defaultSettings;
 
-      fFormat = defaultSettings;
+      fFloatFormat = defaultSettings;
+      return *this;
+   }
+
+   /**
+    * Reset to default formatting.
+    * Radix = radix_10, width=0, Padding_None
+    *
+    * @return Reference to self
+    */
+   FormattedIO &resetIntegerFormat() {
+      // Default settings
+      static constexpr IntegerFormat defaultSettings;
+
+      fIntegerFormat = defaultSettings;
       return *this;
    }
 
@@ -399,7 +559,7 @@ public:
       if (lookAhead == static_cast<uint8_t>('\r')) {
          lookAhead = '\n';
       }
-      if (fFormat.fEcho) {
+      if (fEcho) {
          _writeChar(lookAhead);
       }
       return lookAhead;
@@ -446,7 +606,7 @@ public:
     * @return Reference to self
     */
    FormattedIO &setPadding(Padding padding) {
-      fFormat.fPadding = padding;
+      fIntegerFormat.fPadding = padding;
       return *this;
    }
 
@@ -457,8 +617,8 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO &setWidth(unsigned width) {
-      fFormat.fWidth = width;
+   FormattedIO &setWidth(Width width) {
+      fIntegerFormat.fWidth = width;
       return *this;
    }
 
@@ -471,19 +631,16 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO &setFloatFormat( unsigned  precision,
-                                Padding   padding  = Padding_None,
-                                unsigned  width    = 0) {
+   FormattedIO &setFloatFormat( Precision  precision,
+                                Padding    padding  = Padding_None,
+                                Width      width    = Width_auto) {
 
       usbdm_assert(padding != Padding_TrailingSpaces, "Not supported format");
 
-      fFormat.fFloatPrecision           = precision;
-      fFormat.fFloatPrecisionMultiplier = 1;
-      while (precision-->0) {
-         fFormat.fFloatPrecisionMultiplier *= 10;
-      }
-      fFormat.fFloatPadding = padding;
-      fFormat.fFloatWidth   = width;
+      fFloatFormat.fFloatPrecision           = precision;
+      fFloatFormat.fFloatPrecisionMultiplier = FloatFormat::calculateMultiplier(precision);
+      fFloatFormat.fPadding = padding;
+      fFloatFormat.fWidth   = width;
       return *this;
    }
 
@@ -743,18 +900,6 @@ protected:
    }
 
    /**
-    * Write a character with newline
-    *
-    * @param[in]  ch - character to send
-    *
-    * @return Reference to self
-    */
-   FormattedIO  &private_writeln(char ch) {
-      private_write(ch);
-      return private_writeln();
-   }
-
-   /**
     * Write a C string
     *
     * @param[in]  str   String to print
@@ -762,27 +907,15 @@ protected:
     *
     * @return Reference to self
     */
-   FormattedIO __attribute__((noinline)) &private_write(const char *str, unsigned width) {
-      while ((*str != '\0') && (width-->0)) {
+   FormattedIO __attribute__((noinline)) &private_write(const char *str, Width width) {
+      int width_ = int(width);
+      while ((*str != '\0') && (width_-->0)) {
          private_write(*str++);
       }
-      while (width-->0) {
+      while (width_-->0) {
          private_write(' ');
       }
       return *this;
-   }
-
-   /**
-    * Write a C string
-    *
-    * @param[in]  str   String to print
-    * @param[in]  width Width of string (either truncated or padded to this width)
-    *
-    * @return Reference to self
-    */
-   FormattedIO __attribute__((noinline)) &private_writeln(const char *str, unsigned width) {
-      private_write(str, width);
-      return private_writeln();
    }
 
    /**
@@ -800,18 +933,6 @@ protected:
    }
 
    /**
-    * Write a C string with new line
-    *
-    * @param[in]  str String to print
-    *
-    * @return Reference to self
-    */
-   FormattedIO __attribute__((noinline)) &private_writeln(const char *str) {
-      private_write(str);
-      return private_writeln();
-   }
-
-   /**
     * Write a boolean value
     *
     * @param[in]  b Boolean to print
@@ -823,15 +944,17 @@ protected:
    }
 
    /**
-    * Write a boolean value with new line
+    * Write an unsigned long integer
     *
-    * @param[in]  b Boolean to print
+    * @param[in]  value Unsigned long to print
+    * @param[in]  width Width to use
     *
     * @return Reference to self
     */
-   FormattedIO __attribute__((noinline)) &private_writeln(bool b) {
-      private_write(b);
-      return private_writeln();
+   FormattedIO __attribute__((noinline)) &private_write(unsigned long value, Width width) {
+      char buff[35];
+      ultoa(buff, value, fIntegerFormat.fRadix, fIntegerFormat.fPadding, int(width), false);
+      return private_write(buff);
    }
 
    /**
@@ -844,7 +967,21 @@ protected:
     */
    FormattedIO __attribute__((noinline)) &private_write(unsigned long value, Radix radix) {
       char buff[35];
-      ultoa(buff, value, radix, fFormat.fPadding, fFormat.fWidth, false);
+      ultoa(buff, value, radix, fIntegerFormat.fPadding, int(fIntegerFormat.fWidth), false);
+      return private_write(buff);
+   }
+
+   /**
+    * Write an unsigned long integer
+    *
+    * @param[in]  value  Unsigned long to print
+    * @param[in]  format How to format number
+    *
+    * @return Reference to self
+    */
+   FormattedIO __attribute__((noinline)) &private_write(unsigned long value, const IntegerFormat &format) {
+      char buff[35];
+      ultoa(buff, value, format.fRadix, format.fPadding, int(format.fWidth), false);
       return private_write(buff);
    }
 
@@ -856,7 +993,21 @@ protected:
     * @return Reference to self
     */
    FormattedIO &private_write(unsigned long value) {
-      return private_write(value, fFormat.fRadix);
+      return private_write(value, fIntegerFormat);
+   }
+
+   /**
+    * Write an unsigned long integer
+    *
+    * @param[in]  value Unsigned long to print
+    * @param[in]  width Width to use
+    *
+    * @return Reference to self
+    */
+   FormattedIO __attribute__((noinline)) &private_write(long value, Width width) {
+      char buff[35];
+      ultoa(buff, static_cast<unsigned long>(value), fIntegerFormat.fRadix, fIntegerFormat.fPadding, int(width), false);
+      return private_write(buff);
    }
 
    /**
@@ -873,7 +1024,21 @@ protected:
       if (isNegative) {
          value = -value;
       }
-      ultoa(buff, static_cast<unsigned long>(value), radix, fFormat.fPadding, fFormat.fWidth, isNegative);
+      ultoa(buff, static_cast<unsigned long>(value), radix, fIntegerFormat.fPadding, (int)fIntegerFormat.fWidth, isNegative);
+      return private_write(buff);
+   }
+
+   /**
+    * Write an unsigned long integer
+    *
+    * @param[in]  value  Unsigned long to print
+    * @param[in]  format How to format number
+    *
+    * @return Reference to self
+    */
+   FormattedIO __attribute__((noinline)) &private_write(long value, const IntegerFormat &format) {
+      char buff[35];
+      ultoa(buff, static_cast<unsigned long>(value), format.fRadix, format.fPadding, int(format.fWidth), false);
       return private_write(buff);
    }
 
@@ -885,102 +1050,19 @@ protected:
     * @return Reference to self
     */
    FormattedIO &private_write(long value) {
-      return private_write(value, fFormat.fRadix);
+      return private_write(value, fIntegerFormat);
    }
 
    /**
-    * Write an unsigned long integer with newline
+    * Write an unsigned integer
     *
-    * @param[in]  value Unsigned long to print
-    * @param[in]  radix Radix for conversion [2..16]
-    *
-    * @return Reference to self
-    */
-   FormattedIO __attribute__((noinline)) &private_writeln(unsigned long value, Radix radix) {
-      private_write(value, radix);
-      return private_writeln();
-   }
-
-   /**
-    * Write an unsigned long integer with newline
-    *
-    * @param[in]  value Unsigned long to print
+    * @param[in]  value Unsigned to print
+    * @param[in]  width Width to use
     *
     * @return Reference to self
     */
-   FormattedIO &private_writeln(unsigned long value) {
-      return private_writeln(value, fFormat.fRadix);
-   }
-
-   /**
-    * Write an pointer value
-    *
-    * @param[in]  value Pointer value to print
-    * @param[in]  radix Radix for conversion [2..16]
-    *
-    * @return Reference to self
-    */
-   FormattedIO __attribute__((noinline)) &private_write(const void *value, Radix radix) {
-      return private_write(reinterpret_cast<unsigned long>(value), radix);
-   }
-
-   /**
-    * Write an pointer value
-    *
-    * @param[in]  value Pointer value to print
-    *
-    * @return Reference to self
-    */
-   FormattedIO &private_write(const void *value) {
-      return private_write(value, Radix_16);
-   }
-
-   /**
-    * Write an pointer value with newline
-    *
-    * @param[in]  value Pointer value to print
-    * @param[in]  radix Radix for conversion [2..16]
-    *
-    * @return Reference to self
-    */
-   FormattedIO __attribute__((noinline)) &private_writeln(const void *value, Radix radix) {
-      private_write(reinterpret_cast<unsigned long>(value), radix);
-      return private_writeln();
-   }
-
-   /**
-    * Write an pointer value with newline
-    *
-    * @param[in]  value Pointer value to print
-    *
-    * @return Reference to self
-    */
-   FormattedIO &private_writeln(const void *value) {
-      return private_writeln(value, Radix_16);
-   }
-
-   /**
-    * Write a long integer with newline
-    *
-    * @param[in]  value Long to print
-    * @param[in]  radix Radix for conversion [2..16]
-    *
-    * @return Reference to self
-    */
-   FormattedIO &private_writeln(long value, Radix radix) {
-      private_write(value, radix);
-      return private_writeln();
-   }
-
-   /**
-    * Write a long integer with newline
-    *
-    * @param[in]  value Long to print
-    *
-    * @return Reference to self
-    */
-   FormattedIO &private_writeln(long value) {
-      return private_writeln(value, fFormat.fRadix);
+   FormattedIO &private_write(unsigned value, Width width) {
+      return private_write(static_cast<unsigned long>(value), width);
    }
 
    /**
@@ -998,35 +1080,36 @@ protected:
    /**
     * Write an unsigned integer
     *
+    * @param[in]  value    Unsigned to print
+    * @param[in]  format   Format for printing
+    *
+    * @return Reference to self
+    */
+   FormattedIO &private_write(unsigned value, const IntegerFormat &format) {
+      return private_write(static_cast<unsigned long>(value), format);
+   }
+
+   /**
+    * Write an unsigned integer
+    *
     * @param[in]  value Unsigned to print
     *
     * @return Reference to self
     */
    FormattedIO &private_write(unsigned value) {
-      return private_write(static_cast<unsigned long>(value), fFormat.fRadix);
+      return private_write(static_cast<unsigned long>(value), fIntegerFormat);
    }
 
    /**
-    * Write an unsigned integer with newline
+    * Write an integer
     *
-    * @param[in]  value Unsigned to print
-    * @param[in]  radix Radix for conversion [2..16]
-    *
-    * @return Reference to self
-    */
-   FormattedIO &private_writeln(unsigned value, Radix radix) {
-      return private_writeln(static_cast<unsigned long>(value), radix);
-   }
-
-   /**
-    * Write an unsigned integer with newline
-    *
-    * @param[in]  value Unsigned to print
+    * @param[in]  value Integer to print
+    * @param[in]  width Width to use
     *
     * @return Reference to self
     */
-   FormattedIO &private_writeln(unsigned value) {
-      return private_writeln(static_cast<unsigned long>(value), fFormat.fRadix);
+   FormattedIO &private_write(int value, Width width) {
+      return private_write(static_cast<long>(value), width);
    }
 
    /**
@@ -1044,66 +1127,73 @@ protected:
    /**
     * Write an integer
     *
+    * @param[in]  value    Integer to print
+    * @param[in]  format   Format for printing
+    *
+    * @return Reference to self
+    */
+   FormattedIO &private_write(int value, const IntegerFormat &format) {
+      return private_write(static_cast<long>(value), format);
+   }
+
+   /**
+    * Write an integer
+    *
     * @param[in]  value Integer to print
     *
     * @return Reference to self
     */
    FormattedIO &private_write(int value) {
-      return private_write(static_cast<long>(value), fFormat.fRadix);
+      return private_write(static_cast<long>(value), fIntegerFormat);
    }
 
    /**
-    * Write an integer with newline
+    * Write an unsigned long integer
     *
-    * @param[in]  value Integer to print
+    * @param[in]  value Unsigned long to print
+    * @param[in]  width Width to use
+    *
+    * @return Reference to self
+    */
+   FormattedIO __attribute__((noinline)) &private_write(const void *value, Width width) {
+      return private_write(reinterpret_cast<unsigned long>(value), width);
+   }
+
+   /**
+    * Write a long integer
+    *
+    * @param[in]  value Long to print
     * @param[in]  radix Radix for conversion [2..16]
     *
     * @return Reference to self
     */
-   FormattedIO  &private_writeln(int value, Radix radix) {
-      return private_writeln(static_cast<long>(value), radix);
+   FormattedIO __attribute__((noinline)) &private_write(const void * value, Radix radix) {
+      return private_write(reinterpret_cast<unsigned long>(value), radix);
    }
 
    /**
-    * Write an integer with newline
+    * Write an unsigned long integer
     *
-    * @param[in]  value Integer to print
+    * @param[in]  value  Unsigned long to print
+    * @param[in]  format How to format number
     *
     * @return Reference to self
     */
-   FormattedIO  &private_writeln(int value) {
-      return private_writeln(static_cast<long>(value), fFormat.fRadix);
+   FormattedIO __attribute__((noinline)) &private_write(const void * value, const IntegerFormat &format) {
+      return private_write(reinterpret_cast<unsigned long>(value), format);
    }
 
-   void convertToEngineeringNotation(double value, bool &isNegative, unsigned &mantissa, int &exponent) {
-      isNegative = value<0;
-      if (isNegative) {
-         value = -value;
-      }
-      exponent = 0;
-      mantissa = 0;
-      if (value == 0) {
-         return;
-      }
-      // Scale [1..999]
-      while (value>=1000) {
-         exponent += 3;
-         value /= 1000;
-      }
-      while (value<1) {
-         exponent -= 3;
-         value *= 1000;
-      }
-      // Round - may push number out of [1..999]
-      // Note: number is also scaled by precision
-      mantissa = round(value*fFormat.fFloatPrecisionMultiplier);
-
-      // Check if nudged out of range
-      if (mantissa>=(1000*fFormat.fFloatPrecisionMultiplier)) {
-         mantissa = round(mantissa/1000.0);
-         exponent += 3;
-      }
+   /**
+    * Write an pointer value
+    *
+    * @param[in]  value Pointer value to print
+    *
+    * @return Reference to self
+    */
+   FormattedIO __attribute__((noinline)) &private_write(const void *value) {
+      return private_write(reinterpret_cast<unsigned long>(value), Radix_16);
    }
+
 #if 0
    /**
     * Write a double
@@ -1129,7 +1219,7 @@ protected:
     *
     * @return Reference to self
     */
-   FormattedIO __attribute__((noinline)) &private_write(double value) {
+   FormattedIO __attribute__((noinline)) &private_write(double value, const FloatFormat &format) {
       char buff[20];
       if (isnan(value)) {
          return private_write("Nan");
@@ -1139,18 +1229,18 @@ protected:
          value = -value;
       }
       int exponent=0;
-      auto x = value*fFormat.fFloatPrecisionMultiplier;
+      auto x = value*format.fFloatPrecisionMultiplier;
       if (x>4294967295) {
          // Change to scientific notation
          // Scale down mantissa within range (otherwise overflows long)
-         while (x>=fFormat.fFloatPrecisionMultiplier*10) {
+         while (x>=format.fFloatPrecisionMultiplier*10) {
             exponent++;
             x /= 10;
          }
       }
       if ((x!=0) && (x<1)) {
          // Change to scientific notation
-         while (x<=(fFormat.fFloatPrecisionMultiplier/10.0)) {
+         while (x<=(format.fFloatPrecisionMultiplier/10.0)) {
             exponent--;
             x *= 10;
          }
@@ -1161,12 +1251,12 @@ protected:
 
       }
 
-      ultoa(buff, scaledValue/fFormat.fFloatPrecisionMultiplier, Radix_10, fFormat.fFloatPadding, fFormat.fFloatWidth, isNegative);
-      if (fFormat.fFloatPrecision>0) {
+      ultoa(buff, scaledValue/format.fFloatPrecisionMultiplier, Radix_10, format.fPadding, int(format.fWidth), isNegative);
+      if (int(format.fFloatPrecision)>0) {
          private_write(buff).private_write('.');
          ultoa(buff,
-               (scaledValue)%fFormat.fFloatPrecisionMultiplier,
-               Radix_10, Padding_LeadingZeroes, fFormat.fFloatPrecision);
+               (scaledValue)%int(format.fFloatPrecisionMultiplier),
+               Radix_10, Padding_LeadingZeroes, int(format.fFloatPrecision));
       }
       private_write(buff);
       if (exponent != 0) {
@@ -1177,15 +1267,25 @@ protected:
 #endif
 
    /**
-    * Write a double with newline
+    * Write a Double
     *
     * @param[in]  value Double to print
     *
     * @return Reference to self
     */
-   FormattedIO __attribute__((noinline)) &private_writeln(double value) {
-      private_write(value);
-      return private_writeln();
+   FormattedIO &private_write(double value) {
+      return private_write(value, fFloatFormat);
+   }
+
+   /**
+    * Write a float
+    *
+    * @param[in]  value Float to print
+    *
+    * @return Reference to self
+    */
+   FormattedIO &private_write(float value, const FloatFormat &format) {
+      return private_write(static_cast<double>(value), format);
    }
 
    /**
@@ -1200,17 +1300,6 @@ protected:
    }
 
    /**
-    * Write a float with newline
-    *
-    * @param[in]  value Float to print
-    *
-    * @return Reference to self
-    */
-   FormattedIO &private_writeln(float value) {
-      return private_writeln(static_cast<double>(value));
-   }
-
-   /**
     * Write a C string
     *
     * @param array
@@ -1221,16 +1310,94 @@ protected:
       return private_write((const char*)array);
    }
 
+   /**************************************************************************/
+
    /**
-    * Write a C string with newline
+    * Write an unsigned long integer with newline
     *
-    * @param array
-    * @return
+    * @param[in]  value Value to print
+    * @param[in]  width Width to use
+    *
+    * @return Reference to self
     */
-   template <size_t N>
-   FormattedIO &private_writeln(const char (&array)[N]) {
-      return private_writeln((const char*)array);
+   template<typename T>
+   FormattedIO __attribute__((noinline)) &private_writeln(T value, Width width) {
+      private_write(value, width);
+      return private_writeln();
    }
+
+   /**
+    * Write an unsigned long integer with newline
+    *
+    * @param[in]  value Value to print
+    * @param[in]  radix Radix for conversion [2..16]
+    *
+    * @return Reference to self
+    */
+   template<typename T>
+   FormattedIO __attribute__((noinline)) &private_writeln(T value, Radix radix) {
+      private_write(value, radix);
+      return private_writeln();
+   }
+
+   /**
+    * Write an unsigned long integer
+    *
+    * @param[in]  value Value to print
+    * @param[in]  format How to format number
+    *
+    * @return Reference to self
+    */
+   template<typename T>
+   FormattedIO __attribute__((noinline)) &private_writeln(T value, const IntegerFormat &format) {
+      private_write(value, format);
+      return private_writeln();
+   }
+
+   /**
+    * Write an unsigned long integer with newline
+    *
+    * @param[in]  value Value to print
+    *
+    * @return Reference to self
+    */
+   template<typename T>
+   FormattedIO &private_writeln(T value) {
+      private_write(value);
+      return private_writeln();
+   }
+
+   void convertToEngineeringNotation(double value, bool &isNegative, unsigned &mantissa, int &exponent) {
+      isNegative = value<0;
+      if (isNegative) {
+         value = -value;
+      }
+      exponent = 0;
+      mantissa = 0;
+      if (value == 0) {
+         return;
+      }
+      // Scale [1..999]
+      while (value>=1000) {
+         exponent += 3;
+         value /= 1000;
+      }
+      while (value<1) {
+         exponent -= 3;
+         value *= 1000;
+      }
+      // Round - may push number out of [1..999]
+      // Note: number is also scaled by precision
+      mantissa = round(value*fFloatFormat.fFloatPrecisionMultiplier);
+
+      // Check if nudged out of range
+      if (mantissa>=(1000*fFloatFormat.fFloatPrecisionMultiplier)) {
+         mantissa = round(mantissa/1000.0);
+         exponent += 3;
+      }
+   }
+
+   /**************************************************************************/
 
 #if (USE_DIMENSION_CHECK)
    /**
@@ -1430,7 +1597,7 @@ public:
     * @return Reference to self
     */
    FormattedIO &operator <<(unsigned long value) {
-      return private_write(value, fFormat.fRadix);
+      return private_write(value, fIntegerFormat.fRadix);
    }
 
    /**
@@ -1441,7 +1608,7 @@ public:
     * @return Reference to self
     */
    FormattedIO &operator <<(long value) {
-      return private_write(value, fFormat.fRadix);
+      return private_write(value, fIntegerFormat.fRadix);
    }
 
    /**
@@ -1452,7 +1619,7 @@ public:
     * @return Reference to self
     */
    FormattedIO &operator <<(unsigned int value) {
-      return private_write(value, fFormat.fRadix);
+      return private_write(value, fIntegerFormat.fRadix);
    }
 
    /**
@@ -1463,7 +1630,7 @@ public:
     * @return Reference to self
     */
    FormattedIO &operator <<(int value) {
-      return private_write(value, fFormat.fRadix);
+      return private_write(value, fIntegerFormat.fRadix);
    }
 
    /**
@@ -1474,7 +1641,7 @@ public:
     * @return Reference to self
     */
    FormattedIO &operator <<(const void *value) {
-      return private_write(reinterpret_cast<unsigned long>(value), fFormat.fRadix);
+      return private_write(reinterpret_cast<unsigned long>(value), fIntegerFormat.fRadix);
    }
 
    /**
@@ -1509,7 +1676,7 @@ public:
     * @note Only applies for operator<< methods
     */
    FormattedIO &operator <<(Radix radix) {
-      fFormat.fRadix = radix;
+      fIntegerFormat.fRadix = radix;
       return *this;
    }
 
@@ -1617,7 +1784,7 @@ public:
     * @return Reference to self
     */
    FormattedIO &setEcho(EchoMode echoMode=EchoMode_On) {
-      fFormat.fEcho = echoMode;
+      fEcho = echoMode;
       return *this;
    }
 
@@ -1679,7 +1846,7 @@ public:
     * @note Skips leading whitespace
     */
    FormattedIO &read(unsigned long &value) {
-      return read(value, fFormat.fRadix);
+      return read(value, fIntegerFormat.fRadix);
    }
 
    /**
@@ -1706,7 +1873,7 @@ public:
     * @note Skips leading whitespace
     */
    FormattedIO &readln(unsigned long &value) {
-      return readln(value,fFormat.fRadix);
+      return readln(value,fIntegerFormat.fRadix);
    }
 
    /**
@@ -1735,7 +1902,7 @@ public:
     * @note Skips leading whitespace
     */
    FormattedIO &read(long &value) {
-      return read(value,fFormat.fRadix);
+      return read(value,fIntegerFormat.fRadix);
    }
 
    /**
@@ -1762,7 +1929,7 @@ public:
     * @note Skips leading whitespace
     */
    FormattedIO &readln(long &value) {
-      return readln(value, fFormat.fRadix);
+      return readln(value, fIntegerFormat.fRadix);
    }
 
    /**
@@ -1791,7 +1958,7 @@ public:
     * @note Skips leading whitespace
     */
    FormattedIO &read(unsigned int &value) {
-      return read(value, fFormat.fRadix);
+      return read(value, fIntegerFormat.fRadix);
    }
 
    /**
@@ -1818,7 +1985,7 @@ public:
     * @note Skips leading whitespace
     */
    FormattedIO &readln(unsigned &value) {
-      return readln(value, fFormat.fRadix);
+      return readln(value, fIntegerFormat.fRadix);
    }
 
    /**
@@ -1847,7 +2014,7 @@ public:
     * @note Skips leading whitespace
     */
    FormattedIO &read(int &value) {
-      return read(value, fFormat.fRadix);
+      return read(value, fIntegerFormat.fRadix);
    }
 
    /**
@@ -1874,7 +2041,7 @@ public:
     * @note Skips leading whitespace
     */
    FormattedIO &readln(int &value) {
-      return readln(value, fFormat.fRadix);
+      return readln(value, fIntegerFormat.fRadix);
    }
 
    /**
@@ -1918,7 +2085,7 @@ public:
     * @note Only applies for operator<< methods
     */
    FormattedIO &operator >>(Radix radix) {
-      fFormat.fRadix = radix;
+      fIntegerFormat.fRadix = radix;
       return *this;
    }
 
@@ -1944,7 +2111,7 @@ public:
     * @note Skips leading whitespace
     */
    FormattedIO &operator >>(unsigned long &value) {
-      return read(value, fFormat.fRadix);
+      return read(value, fIntegerFormat.fRadix);
    }
 
    /**
@@ -1957,7 +2124,7 @@ public:
     * @note Skips leading whitespace
     */
    FormattedIO &operator >>(long &value) {
-      return read(value, fFormat.fRadix);
+      return read(value, fIntegerFormat.fRadix);
    }
 
    /**
@@ -1970,7 +2137,7 @@ public:
     * @note Skips leading whitespace
     */
    FormattedIO &operator >>(unsigned int &value) {
-      return read(value, fFormat.fRadix);
+      return read(value, fIntegerFormat.fRadix);
    }
 
    /**
@@ -1983,7 +2150,7 @@ public:
     * @note Skips leading whitespace
     */
    FormattedIO &operator >>(int &value) {
-      return read(value, fFormat.fRadix);
+      return read(value, fIntegerFormat.fRadix);
    }
 
    /**
@@ -2014,14 +2181,26 @@ public:
    }
 
    /**
-    * Set printing format
+    * Set float printing format
     *
     * @param ioSettings    Setting to apply
     *
     * @return Reference to self
     */
-   FormattedIO &operator<<(const IoFormat &ioSettings) {
-      fFormat = ioSettings;
+   FormattedIO &operator<<(const FloatFormat &floatFormat) {
+      fFloatFormat = floatFormat;
+      return *this;
+   }
+
+   /**
+    * Set integer printing format
+    *
+    * @param ioSettings    Setting to apply
+    *
+    * @return Reference to self
+    */
+   FormattedIO &operator<<(const IntegerFormat &integerFormat) {
+      fIntegerFormat = integerFormat;
       return *this;
    }
 
@@ -2223,7 +2402,7 @@ public:
             visibleIndex &= ~0x1F;
             rowMask = 0x7; break;
       }
-      setPadding(Padding_TrailingSpaces).setWidth(2*sizeof(T));
+      setPadding(Padding_TrailingSpaces).setWidth(Width(2*sizeof(T)));
       private_write("          ");
       for (unsigned index=0; index<=(rowMask*sizeof(T)); index+=sizeof(T)) {
          private_write(index, Radix_16).private_write(" ");
@@ -2234,7 +2413,7 @@ public:
       size += offset;
       for (unsigned index=0; index<size; index++) {
          if (needNewline) {
-            setWidth(8);
+            setWidth(Width_8);
             private_write(visibleIndex+index*sizeof(T), Radix_16).private_write(": ");
          }
          if (index<offset) {
@@ -2245,7 +2424,7 @@ public:
             }
          }
          else {
-            setWidth(2*sizeof(T));
+            setWidth(Width(2*sizeof(T)));
             private_write(data[index-offset], Radix_16).private_write(" ");
          }
          needNewline = (((index+1)&rowMask)==0);
@@ -2253,7 +2432,7 @@ public:
             private_writeln();
          }
       }
-      private_writeln().resetFormat();
+      private_writeln().resetIntegerFormat();
    }
 
    /**
@@ -2284,6 +2463,60 @@ public:
    __attribute__((always_inline))
    FormattedIO &writeln(T arg, Radix radix, Args... args ) {
       private_write(arg, radix);
+      return writeln(args...);
+   }
+
+   /**
+    * Recursive template function to write a value in given radix with following args and newline
+    *
+    * @tparam T      Type of value (inferred)
+    * @tparam Args   Type of remaining args (inferred)
+    * @param  arg    Argument to write
+    * @param  width  Width to use
+    * @param  args   Remaining args to write
+    *
+    * @return Reference to self
+    */
+   template<typename T, typename... Args>
+   __attribute__((always_inline))
+   FormattedIO &writeln(T arg, Width width, Args... args ) {
+      private_write(arg, width);
+      return writeln(args...);
+   }
+
+   /**
+    * Recursive template function to write a value in given radix with following args and newline
+    *
+    * @tparam T      Type of value (inferred)
+    * @tparam Args   Type of remaining args (inferred)
+    * @param  arg    Argument to write
+    * @param  format Format for printing
+    * @param  args   Remaining args to write
+    *
+    * @return Reference to self
+    */
+   template<typename T, typename... Args>
+   __attribute__((always_inline))
+   FormattedIO &writeln(T arg, const IntegerFormat &format, Args... args ) {
+      private_write(arg, format);
+      return writeln(args...);
+   }
+
+   /**
+    * Recursive template function to write a value in given radix with following args and newline
+    *
+    * @tparam T      Type of value (inferred)
+    * @tparam Args   Type of remaining args (inferred)
+    * @param  arg    Argument to write
+    * @param  format Format for printing
+    * @param  args   Remaining args to write
+    *
+    * @return Reference to self
+    */
+   template<typename T, typename... Args>
+   __attribute__((always_inline))
+   FormattedIO &writeln(T arg, const FloatFormat &format, Args... args ) {
+      private_write(arg, format);
       return writeln(args...);
    }
 
@@ -2319,6 +2552,69 @@ public:
    __attribute__((always_inline))
    FormattedIO &write(T arg, Radix radix, Args... args ) {
       private_write(arg, radix);
+      if constexpr(sizeof...(args) > 0) {
+         return write(args...);
+      }
+      return *this;
+   }
+
+   /**
+    * Template function to write a value in given radix with following args
+    *
+    * @tparam T      Type of value (inferred)
+    * @tparam Args   Type of remaining args (inferred)
+    * @param  arg    Argument to write
+    * @param  width  Width to use
+    * @param  args   Remaining args to write
+    *
+    * @return Reference to self
+    */
+   template<typename T, typename... Args>
+   __attribute__((always_inline))
+   FormattedIO &write(T arg, Width width, Args... args ) {
+      private_write(arg, width);
+      if constexpr(sizeof...(args) > 0) {
+         return write(args...);
+      }
+      return *this;
+   }
+
+   /**
+    * Template function to write a value in given radix with following args
+    *
+    * @tparam T      Type of value (inferred)
+    * @tparam Args   Type of remaining args (inferred)
+    * @param  arg    Argument to write
+    * @param  format Format for printing
+    * @param  args   Remaining args to write
+    *
+    * @return Reference to self
+    */
+   template<typename T, typename... Args>
+   __attribute__((always_inline))
+   FormattedIO &write(T arg, const IntegerFormat &format, Args... args ) {
+      private_write(arg, format);
+      if constexpr(sizeof...(args) > 0) {
+         return write(args...);
+      }
+      return *this;
+   }
+
+   /**
+    * Template function to write a value in given radix with following args
+    *
+    * @tparam T      Type of value (inferred)
+    * @tparam Args   Type of remaining args (inferred)
+    * @param  arg    Argument to write
+    * @param  format Format for printing
+    * @param  args   Remaining args to write
+    *
+    * @return Reference to self
+    */
+   template<typename T, typename... Args>
+   __attribute__((always_inline))
+   FormattedIO &write(T arg, const FloatFormat &format, Args... args ) {
+      private_write(arg, format);
       if constexpr(sizeof...(args) > 0) {
          return write(args...);
       }
