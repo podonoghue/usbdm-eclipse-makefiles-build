@@ -79,7 +79,7 @@
 
 <!--   ========== MCM Init class =============================== -->
 
-   <template key="init_description" namespace="all">
+   <template key="init_description" where="all">
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Class)
@@ -109,7 +109,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template where="basicInfo">
    <![CDATA[
       class $(_Class)BasicInfo {
       \t
@@ -118,7 +118,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template where="basicInfo">
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -139,7 +139,7 @@
 
 <!--   Member variables -->
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate where="basicInfo"
       variables="mcm_placr_esfc,mcm_placr_dfcs,mcm_placr_efds,mcm_placr_dfcc,mcm_placr_dfcic,mcm_placr_dfcda,mcm_placr_cfcc"
    ><![CDATA[
       \t   /// Platform Control Register
@@ -184,7 +184,7 @@
             mcm_placr_dfcic;
             mcm_placr_dfcda
             ">
-      <variableTemplate namespace="usbdm"
+      <variableTemplate where="basicInfo"
          variables="%(r)"
          linePadding="xxx">
       <![CDATA[
@@ -212,7 +212,7 @@
       values="
             mcm_placr_cfcc
             ">
-      <variableTemplate namespace="usbdm"
+      <variableTemplate where="basicInfo"
          variables="%(r)"
          linePadding="xxx">
       <![CDATA[
@@ -259,13 +259,13 @@
       \t};\n\n
    ]]></variableTemplate>
 
-   <template namespace="usbdm">
+   <template where="basicInfo">
       <![CDATA[
       \t}; // $(_Class)::BasicInfo::Init\n\n
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template where="basicInfo">
       <![CDATA[
       }; // $(_Class)::BasicInfo\n\n
    ]]>

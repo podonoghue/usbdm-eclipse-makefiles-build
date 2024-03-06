@@ -4,10 +4,10 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Internal clock source" >
 
-   <constant key="irq_parameters"            type="String" value='""'  />
-   <constant key="irq_call"                  type="String" value='""'  />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="irq_parameters"            type="String" value='""'  />
+   <equation key="irq_call"                  type="String" value='""'  />
+   <equation key="generateDefault"           type="Boolean" value="false"         />
+   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml" />
    <title />
 
@@ -48,7 +48,7 @@
       <choice value="true"  name="Enabled"  isDefault="true" />
    </binaryOption>
 
-   <for keys="n" dim="=1,/SIM/numberOfClockSettings" >
+   <for keys="n" dim="=1,(/SIM/numberOfClockSettings-1)" >
       <binaryOption key="enableClockConfiguration[%(n)]"
          enabledBy="enablePeripheralSupport"
          hidden="true"
@@ -842,14 +842,14 @@
       \tstruct ClockInfo {\n\n
    ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="/SIM/sim_clkdiv_outdiv3[]||/SIM/sim_clkdiv_outdiv2[]||/SIM/sim_clkdiv_outdiv1[]"
    ><![CDATA[
       \t   /// SIM CLKDIV1 - System Clock Divider Register 1
       \t   const uint32_t clkdiv1;\n\n ]]>
    </template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="(/SIM/sim_sopt2_pllfllsel[])||(/SIM/sim_sopt2_tpmsrc[])"
    ><![CDATA[
       \t   /// SIM SOPT2 - Clock selectors for various peripherals
@@ -857,26 +857,26 @@
    </template>
 
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="icsClockMode[]"
    ><![CDATA[
       \t   /// Clock Mode
       \t   const IcsClockMode clockMode;\n\n
    ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="ics_c1_rdiv[]||ics_c1_irclken[]||ics_c1_irefsten[]"
    ><![CDATA[
       \t   /// Control Register 1 - RDIV, IRCLKEN, IREFSTEN, (-CLKS, -IREFS)
       \t   const uint8_t c1; \n ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="ics_c2_bdiv[]"
    ><![CDATA[
       \t   /// Control Register 2 - BDIV, (-LP)
       \t   const uint8_t c2;\n ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="ics_c4_lolie0[]||ics_c4_cme[]"
    ><![CDATA[
       \t   /// Control Register 4 - DMX32, DRST_DRS, (-FCTRIM, -SCFTRIM)
@@ -945,15 +945,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" >
-   <![CDATA[
-      class $(_Class)BasicInfo {
-      \t
-      public:\n
-   ]]>
-   </template>
-
-   <template namespace="usbdm" codeGenCondition="irqHandlingMethod" >
+   <template where="basicInfo" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t
       \t/**
@@ -1016,7 +1008,7 @@
 
 <!--   Configure methods -->
 
-   <template namespace="usbdm" >
+   <template where="basicInfo" >
       <![CDATA[
       }; // $(_Class)::BasicInfo\n\n
    ]]>
@@ -1025,13 +1017,13 @@
    <!--
       Global clock frequencies
    -->
-   <template namespace="usbdm" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
       \t/*
       \t * Global clocks
       \t */
       \t\n
    ]]></template>
-   <template namespace="usbdm" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
       \t/*
       \t * Global clock constants
       \t * These are provided when minimal clock generator code is used.
@@ -1046,7 +1038,7 @@
                system_icsoutclk_clock[0]   : SystemIcsOutClock;
                system_icsfllclk_clock[0]   : SystemIcsFllClock
          ">
-      <variableTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport"
+      <variableTemplate where="basicInfo" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport"
                    tooltipPadding="x*xx" ><![CDATA[
          \t/**
          \t *  %description
@@ -1064,7 +1056,7 @@
          \tvolatile uint32_t %(name);
          \t\n
       ]]></variableTemplate>
-      <variableTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="!/ICS/enablePeripheralSupport"
+      <variableTemplate where="basicInfo" variables="%(clock)" codeGenCondition="!/ICS/enablePeripheralSupport"
                    tooltipPadding="x*xx" ><![CDATA[
          \t/**
          \t *  %description

@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2024/01
+ * @date     2024/02
  *
  */
 
@@ -42,26 +42,26 @@ typedef enum {
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
 /* ----------------------   MKV46F16 VectorTable                     ---------------------- */
-  DMA0_IRQn                     =   0,   /**<  16 DMA Controller                                                                   */
-  DMA1_IRQn                     =   1,   /**<  17 DMA Controller                                                                   */
-  DMA2_IRQn                     =   2,   /**<  18 DMA Controller                                                                   */
-  DMA3_IRQn                     =   3,   /**<  19 DMA Controller                                                                   */
-  DMA4_IRQn                     =   4,   /**<  20 DMA Controller                                                                   */
-  DMA5_IRQn                     =   5,   /**<  21 DMA Controller                                                                   */
-  DMA6_IRQn                     =   6,   /**<  22 DMA Controller                                                                   */
-  DMA7_IRQn                     =   7,   /**<  23 DMA Controller                                                                   */
-  DMA8_IRQn                     =   8,   /**<  24 DMA Controller                                                                   */
-  DMA9_IRQn                     =   9,   /**<  25 DMA Controller                                                                   */
-  DMA10_IRQn                    =  10,   /**<  26 DMA Controller                                                                   */
-  DMA11_IRQn                    =  11,   /**<  27 DMA Controller                                                                   */
-  DMA12_IRQn                    =  12,   /**<  28 DMA Controller                                                                   */
-  DMA13_IRQn                    =  13,   /**<  29 DMA Controller                                                                   */
-  DMA14_IRQn                    =  14,   /**<  30 DMA Controller                                                                   */
-  DMA15_IRQn                    =  15,   /**<  31 DMA Controller                                                                   */
-  DMA_Error_IRQn                =  16,   /**<  32 DMA Controller                                                                   */
+  DMA0_Ch0_IRQn                 =   0,   /**<  16 DMA Controller                                                                   */
+  DMA0_Ch1_IRQn                 =   1,   /**<  17 DMA Controller                                                                   */
+  DMA0_Ch2_IRQn                 =   2,   /**<  18 DMA Controller                                                                   */
+  DMA0_Ch3_IRQn                 =   3,   /**<  19 DMA Controller                                                                   */
+  DMA0_Ch4_IRQn                 =   4,   /**<  20 DMA Controller                                                                   */
+  DMA0_Ch5_IRQn                 =   5,   /**<  21 DMA Controller                                                                   */
+  DMA0_Ch6_IRQn                 =   6,   /**<  22 DMA Controller                                                                   */
+  DMA0_Ch7_IRQn                 =   7,   /**<  23 DMA Controller                                                                   */
+  DMA0_Ch8_IRQn                 =   8,   /**<  24 DMA Controller                                                                   */
+  DMA0_Ch9_IRQn                 =   9,   /**<  25 DMA Controller                                                                   */
+  DMA0_Ch10_IRQn                =  10,   /**<  26 DMA Controller                                                                   */
+  DMA0_Ch11_IRQn                =  11,   /**<  27 DMA Controller                                                                   */
+  DMA0_Ch12_IRQn                =  12,   /**<  28 DMA Controller                                                                   */
+  DMA0_Ch13_IRQn                =  13,   /**<  29 DMA Controller                                                                   */
+  DMA0_Ch14_IRQn                =  14,   /**<  30 DMA Controller                                                                   */
+  DMA0_Ch15_IRQn                =  15,   /**<  31 DMA Controller                                                                   */
+  DMA0_Error_IRQn               =  16,   /**<  32 DMA Controller                                                                   */
   MCM_IRQn                      =  17,   /**<  33 Miscellaneous Control Module                                                     */
-  FTF_Command_IRQn              =  18,   /**<  34 Flash Memory Interface                                                           */
-  FTF_ReadCollision_IRQn        =  19,   /**<  35 Flash Memory Interface                                                           */
+  FTFA_Command_IRQn             =  18,   /**<  34 Flash Memory Interface                                                           */
+  FTFA_ReadCollision_IRQn       =  19,   /**<  35 Flash Memory Interface                                                           */
   PMC_IRQn                      =  20,   /**<  36 Power Management Controller                                                      */
   LLWU_IRQn                     =  21,   /**<  37 Low Leakage Wakeup                                                               */
   WDOG_IRQn                     =  22,   /**<  38 External Watchdog Monitor                                                        */
@@ -77,10 +77,10 @@ typedef enum {
   CMP1_IRQn                     =  41,   /**<  57 High-Speed Comparator                                                            */
   FTM0_IRQn                     =  42,   /**<  58 FlexTimer Module                                                                 */
   FTM1_IRQn                     =  43,   /**<  59 FlexTimer Module                                                                 */
-  PIT0_IRQn                     =  48,   /**<  64 Periodic Interrupt Timer                                                         */
-  PIT1_IRQn                     =  49,   /**<  65 Periodic Interrupt Timer                                                         */
-  PIT2_IRQn                     =  50,   /**<  66 Periodic Interrupt Timer                                                         */
-  PIT3_IRQn                     =  51,   /**<  67 Periodic Interrupt Timer                                                         */
+  PIT_Ch0_IRQn                  =  48,   /**<  64 Periodic Interrupt Timer                                                         */
+  PIT_Ch1_IRQn                  =  49,   /**<  65 Periodic Interrupt Timer                                                         */
+  PIT_Ch2_IRQn                  =  50,   /**<  66 Periodic Interrupt Timer                                                         */
+  PIT_Ch3_IRQn                  =  51,   /**<  67 Periodic Interrupt Timer                                                         */
   PDB0_IRQn                     =  52,   /**<  68 Programmable Delay Block                                                         */
   XBARA_IRQn                    =  54,   /**<  70 Crossbar Switch                                                                  */
   PDB1_IRQn                     =  55,   /**<  71 Programmable Delay Block                                                         */
@@ -137,26 +137,26 @@ extern void SVC_Handler(void);                       /**< System Service Call vi
 extern void DebugMon_Handler(void);                  /**< Debug Monitor                                                                    */
 extern void PendSV_Handler(void);                    /**< Pendable request for system service                                              */
 extern void SysTick_Handler(void);                   /**< System Tick Timer                                                                */
-extern void DMA0_IRQHandler(void);                   /**< DMA Controller                                                                   */
-extern void DMA1_IRQHandler(void);                   /**< DMA Controller                                                                   */
-extern void DMA2_IRQHandler(void);                   /**< DMA Controller                                                                   */
-extern void DMA3_IRQHandler(void);                   /**< DMA Controller                                                                   */
-extern void DMA4_IRQHandler(void);                   /**< DMA Controller                                                                   */
-extern void DMA5_IRQHandler(void);                   /**< DMA Controller                                                                   */
-extern void DMA6_IRQHandler(void);                   /**< DMA Controller                                                                   */
-extern void DMA7_IRQHandler(void);                   /**< DMA Controller                                                                   */
-extern void DMA8_IRQHandler(void);                   /**< DMA Controller                                                                   */
-extern void DMA9_IRQHandler(void);                   /**< DMA Controller                                                                   */
-extern void DMA10_IRQHandler(void);                  /**< DMA Controller                                                                   */
-extern void DMA11_IRQHandler(void);                  /**< DMA Controller                                                                   */
-extern void DMA12_IRQHandler(void);                  /**< DMA Controller                                                                   */
-extern void DMA13_IRQHandler(void);                  /**< DMA Controller                                                                   */
-extern void DMA14_IRQHandler(void);                  /**< DMA Controller                                                                   */
-extern void DMA15_IRQHandler(void);                  /**< DMA Controller                                                                   */
-extern void DMA_Error_IRQHandler(void);              /**< DMA Controller                                                                   */
+extern void DMA0_Ch0_IRQHandler(void);               /**< DMA Controller                                                                   */
+extern void DMA0_Ch1_IRQHandler(void);               /**< DMA Controller                                                                   */
+extern void DMA0_Ch2_IRQHandler(void);               /**< DMA Controller                                                                   */
+extern void DMA0_Ch3_IRQHandler(void);               /**< DMA Controller                                                                   */
+extern void DMA0_Ch4_IRQHandler(void);               /**< DMA Controller                                                                   */
+extern void DMA0_Ch5_IRQHandler(void);               /**< DMA Controller                                                                   */
+extern void DMA0_Ch6_IRQHandler(void);               /**< DMA Controller                                                                   */
+extern void DMA0_Ch7_IRQHandler(void);               /**< DMA Controller                                                                   */
+extern void DMA0_Ch8_IRQHandler(void);               /**< DMA Controller                                                                   */
+extern void DMA0_Ch9_IRQHandler(void);               /**< DMA Controller                                                                   */
+extern void DMA0_Ch10_IRQHandler(void);              /**< DMA Controller                                                                   */
+extern void DMA0_Ch11_IRQHandler(void);              /**< DMA Controller                                                                   */
+extern void DMA0_Ch12_IRQHandler(void);              /**< DMA Controller                                                                   */
+extern void DMA0_Ch13_IRQHandler(void);              /**< DMA Controller                                                                   */
+extern void DMA0_Ch14_IRQHandler(void);              /**< DMA Controller                                                                   */
+extern void DMA0_Ch15_IRQHandler(void);              /**< DMA Controller                                                                   */
+extern void DMA0_Error_IRQHandler(void);             /**< DMA Controller                                                                   */
 extern void MCM_IRQHandler(void);                    /**< Miscellaneous Control Module                                                     */
-extern void FTF_Command_IRQHandler(void);            /**< Flash Memory Interface                                                           */
-extern void FTF_ReadCollision_IRQHandler(void);      /**< Flash Memory Interface                                                           */
+extern void FTFA_Command_IRQHandler(void);           /**< Flash Memory Interface                                                           */
+extern void FTFA_ReadCollision_IRQHandler(void);     /**< Flash Memory Interface                                                           */
 extern void PMC_IRQHandler(void);                    /**< Power Management Controller                                                      */
 extern void LLWU_IRQHandler(void);                   /**< Low Leakage Wakeup                                                               */
 extern void WDOG_IRQHandler(void);                   /**< External Watchdog Monitor                                                        */
@@ -172,10 +172,10 @@ extern void CMP0_IRQHandler(void);                   /**< High-Speed Comparator 
 extern void CMP1_IRQHandler(void);                   /**< High-Speed Comparator                                                            */
 extern void FTM0_IRQHandler(void);                   /**< FlexTimer Module                                                                 */
 extern void FTM1_IRQHandler(void);                   /**< FlexTimer Module                                                                 */
-extern void PIT0_IRQHandler(void);                   /**< Periodic Interrupt Timer                                                         */
-extern void PIT1_IRQHandler(void);                   /**< Periodic Interrupt Timer                                                         */
-extern void PIT2_IRQHandler(void);                   /**< Periodic Interrupt Timer                                                         */
-extern void PIT3_IRQHandler(void);                   /**< Periodic Interrupt Timer                                                         */
+extern void PIT_Ch0_IRQHandler(void);                /**< Periodic Interrupt Timer                                                         */
+extern void PIT_Ch1_IRQHandler(void);                /**< Periodic Interrupt Timer                                                         */
+extern void PIT_Ch2_IRQHandler(void);                /**< Periodic Interrupt Timer                                                         */
+extern void PIT_Ch3_IRQHandler(void);                /**< Periodic Interrupt Timer                                                         */
 extern void PDB0_IRQHandler(void);                   /**< Programmable Delay Block                                                         */
 extern void XBARA_IRQHandler(void);                  /**< Crossbar Switch                                                                  */
 extern void PDB1_IRQHandler(void);                   /**< Programmable Delay Block                                                         */
@@ -3107,7 +3107,7 @@ typedef struct DMA_Type {
 #define DMA0_BasePtr                   0x40008000UL //!< Peripheral base address
 #define DMA0                           ((DMA_Type *) DMA0_BasePtr) //!< Freescale base pointer
 #define DMA0_BASE_PTR                  (DMA0) //!< Freescale style base pointer
-#define DMA0_IRQS { DMA0_IRQn, DMA1_IRQn, DMA2_IRQn, DMA3_IRQn, DMA3_IRQn, DMA4_IRQn, DMA5_IRQn, DMA6_IRQn, DMA7_IRQn, DMA8_IRQn, DMA9_IRQn, DMA10_IRQn, DMA11_IRQn, DMA12_IRQn, DMA13_IRQn, DMA14_IRQn, DMA15_IRQn, DMA_Error_IRQn,  }
+#define DMA0_IRQS { DMA0_Ch0_IRQn, DMA0_Ch1_IRQn, DMA0_Ch2_IRQn, DMA0_Ch3_IRQn, DMA0_Ch3_IRQn, DMA0_Ch4_IRQn, DMA0_Ch5_IRQn, DMA0_Ch6_IRQn, DMA0_Ch7_IRQn, DMA0_Ch8_IRQn, DMA0_Ch9_IRQn, DMA0_Ch10_IRQn, DMA0_Ch11_IRQn, DMA0_Ch12_IRQn, DMA0_Ch13_IRQn, DMA0_Ch14_IRQn, DMA0_Ch15_IRQn, DMA0_Error_IRQn,  }
 
 
 /** @} */ /* End group DMA0_Peripheral_access_layer_GROUP */
@@ -3961,7 +3961,7 @@ typedef struct FTFA_Type {
 #define FTFA_BasePtr                   0x40020000UL //!< Peripheral base address
 #define FTFA                           ((FTFA_Type *) FTFA_BasePtr) //!< Freescale base pointer
 #define FTFA_BASE_PTR                  (FTFA) //!< Freescale style base pointer
-#define FTFA_IRQS { FTF_Command_IRQn, FTF_ReadCollision_IRQn,  }
+#define FTFA_IRQS { FTFA_Command_IRQn, FTFA_ReadCollision_IRQn,  }
 
 
 /** @} */ /* End group FTFA_Peripheral_access_layer_GROUP */
@@ -6485,7 +6485,7 @@ typedef struct PIT_Type {
 #define PIT_BasePtr                    0x40037000UL //!< Peripheral base address
 #define PIT                            ((PIT_Type *) PIT_BasePtr) //!< Freescale base pointer
 #define PIT_BASE_PTR                   (PIT) //!< Freescale style base pointer
-#define PIT_IRQS { PIT0_IRQn, PIT1_IRQn, PIT2_IRQn, PIT3_IRQn,  }
+#define PIT_IRQS { PIT_Ch0_IRQn, PIT_Ch1_IRQn, PIT_Ch2_IRQn, PIT_Ch3_IRQn,  }
 
 
 /** @} */ /* End group PIT_Peripheral_access_layer_GROUP */

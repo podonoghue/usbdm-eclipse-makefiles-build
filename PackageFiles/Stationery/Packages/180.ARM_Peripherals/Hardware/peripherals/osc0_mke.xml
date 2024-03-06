@@ -5,8 +5,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Oscillator" >
 
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="generateDefault"           type="Boolean" value="false"         />
+   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -203,7 +203,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" >
+   <template where="basicInfo" >
    <![CDATA[
       class $(_Baseclass)BasicInfo {
       \t
@@ -211,7 +211,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -232,7 +232,7 @@
 
 <!--   Member variables -->
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="osc_cr_oscen,osc_cr_oscsten,osc_cr_oscos,osc_cr_range,osc_cr_hgo"
    ><![CDATA[
       \t   /// Control Register
@@ -248,7 +248,7 @@
             osc_cr_oscMode;
             osc_cr_range
             " >
-      <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -316,7 +316,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" >
+   <template where="basicInfo" >
       <![CDATA[
       \t}; // $(_Baseclass)BasicInfo::Init\n\n
    ]]>
@@ -353,7 +353,7 @@
       \t}\n\n
    ]]></template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
       <![CDATA[
       }; // $(_Baseclass)BasicInfo\n\n
    ]]>

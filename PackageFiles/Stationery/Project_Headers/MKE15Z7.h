@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2024/01
+ * @date     2024/02
  *
  */
 
@@ -38,11 +38,11 @@ typedef enum {
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
 /* ----------------------   MKE15Z7 VectorTable                      ---------------------- */
-  DMA0_04_IRQn                  =   0,   /**<  16 Enhanced direct memory access controller                                         */
-  DMA0_15_IRQn                  =   1,   /**<  17 Enhanced direct memory access controller                                         */
-  DMA0_26_IRQn                  =   2,   /**<  18 Enhanced direct memory access controller                                         */
-  DMA0_37_IRQn                  =   3,   /**<  19 Enhanced direct memory access controller                                         */
-  DMA_Error_IRQn                =   4,   /**<  20 Enhanced direct memory access controller                                         */
+  DMA0_Ch0_04_IRQn              =   0,   /**<  16 Enhanced direct memory access controller                                         */
+  DMA0_Ch0_15_IRQn              =   1,   /**<  17 Enhanced direct memory access controller                                         */
+  DMA0_Ch0_26_IRQn              =   2,   /**<  18 Enhanced direct memory access controller                                         */
+  DMA0_Ch0_37_IRQn              =   3,   /**<  19 Enhanced direct memory access controller                                         */
+  DMA0_Error_IRQn               =   4,   /**<  20 Enhanced direct memory access controller                                         */
   FTFE_IRQn                     =   5,   /**<  21 Flash Memory Interface                                                           */
   LVD_LVW_IRQn                  =   6,   /**<  22 PMC                                                                              */
   PORTAE_IRQn                   =   7,   /**<  23 General Purpose Input/Output                                                     */
@@ -80,11 +80,11 @@ extern void HardFault_Handler(void);                 /**< Hard Fault, all classe
 extern void SVC_Handler(void);                       /**< System Service Call via SVC instruction                                          */
 extern void PendSV_Handler(void);                    /**< Pendable request for system service                                              */
 extern void SysTick_Handler(void);                   /**< System Tick Timer                                                                */
-extern void DMA0_04_IRQHandler(void);                /**< Enhanced direct memory access controller                                         */
-extern void DMA0_15_IRQHandler(void);                /**< Enhanced direct memory access controller                                         */
-extern void DMA0_26_IRQHandler(void);                /**< Enhanced direct memory access controller                                         */
-extern void DMA0_37_IRQHandler(void);                /**< Enhanced direct memory access controller                                         */
-extern void DMA_Error_IRQHandler(void);              /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Ch0_04_IRQHandler(void);            /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Ch0_15_IRQHandler(void);            /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Ch0_26_IRQHandler(void);            /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Ch0_37_IRQHandler(void);            /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Error_IRQHandler(void);             /**< Enhanced direct memory access controller                                         */
 extern void FTFE_IRQHandler(void);                   /**< Flash Memory Interface                                                           */
 extern void LVD_LVW_IRQHandler(void);                /**< PMC                                                                              */
 extern void PORTAE_IRQHandler(void);                 /**< General Purpose Input/Output                                                     */
@@ -1503,7 +1503,7 @@ typedef struct DMA_Type {
 #define DMA0_BasePtr                   0x40008000UL //!< Peripheral base address
 #define DMA0                           ((DMA_Type *) DMA0_BasePtr) //!< Freescale base pointer
 #define DMA0_BASE_PTR                  (DMA0) //!< Freescale style base pointer
-#define DMA0_IRQS { DMA0_04_IRQn, DMA0_15_IRQn, DMA0_26_IRQn, DMA0_37_IRQn, DMA_Error_IRQn,  }
+#define DMA0_IRQS { DMA0_Ch0_04_IRQn, DMA0_Ch0_15_IRQn, DMA0_Ch0_26_IRQn, DMA0_Ch0_37_IRQn, DMA0_Error_IRQn,  }
 
 
 /** @} */ /* End group DMA0_Peripheral_access_layer_GROUP */

@@ -24,43 +24,12 @@
       derived="true"
       />
 
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="irq_parameters"            type="String"  value='""'     />
+   <equation key="irq_dummy_parameters"      type="String"  value='""'     />
+   <equation key="irq_call"                  type="String"  value='""'     />
+   <equation key="generateDefault"           type="Boolean" value="false"         />
+   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
-
-<!--
-    * General substitutions
-    *  $(_NAME)         => e.g FTM2 => FTM2
-    *  $(_name)         => e.g FTM2 => ftm2
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
-    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
-    *  $(_Class)        => e.g FTM2 => Ftm2
-    *  $(_Baseclass)    => e.g FTM0 => Ftm
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A
--->
-
-<!--
-    * Template substitutions
-    *
-    * <li>%paramExpression            Parameters ORed together e.g. adcPretrigger|adcRefSel
-    * <li>%valueExpression            Numeric variable value e.g. 0x3
-    * <li>%symbolicExpression[index]  Symbolic formatted value e.g. AdcCompare_Disabled
-    * <li>%variable[index]            Variable name /ADC0/adc_sc2_acfe
-    * <li>%macro[index](value)        C register macro e.g. ADC_SC2_ACFGT(value)
-    * <li>%description[index]         Description from controlVar e.g. Compare Function Enable
-    * <li>%shortDescription[index]    Short description from controlVar e.g. Compare Function Enable
-    * <li>%tooltip[index]             Tool-tip from controlVar e.g. Each bit disables the GPIO function
-    * <li>%params                     Formatted parameter list for function
-    * <li>%paramDescription[index]    Tool-tip from controlVar formatted as param description @param ...
-    * <li>%paramType[index]           Based on typeName e.g. AdcCompare (or uint32_t)
-    * <li>%paramName[index]           Based on typeName with lower-case first letter adcCompare
-    * <li>%fieldAssignment            Expression of form '%register <= (%register & ~%mask)|%paramExpression
-    * <li>%maskingExpression          Based on variable etc. Similar to (%register&%mask)
-    * <li>%mask[index]                From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
-    * <li>%register[index]            Register associated with variable e.g. adc->APCTL1
-    * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
-    * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
--->
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
@@ -111,10 +80,14 @@
       <choice value="1"  enum="PeripheralAndUsb" name="Available as general and USB clock source" />
    </choiceOption>
 
+   <variable key="usb_clk_recovery_enabled" type="Boolean" condition="usb_clk_recover_irc_en_irc_en"
+      expression='Exists("usb_clk_recover_irc_en_reg_en_present")?
+                  (usb_clk_recover_irc_en_irc_en&gt;1):(usb_clk_recover_irc_en_irc_en&gt;0)' />
+
    <!-- ************* CLK_RECOVER_CTRL ****************** -->
 
    <choiceOption key="usb_clk_recover_ctrl_tracking_mode" condition="usb_clk_recover_ctrl_clock_recover_en_present"
-      enabledBy="usb_clk_recover_irc_en_irc_en&gt;1"
+      enabledBy="usb_clk_recovery_enabled"
       register="clk_recover_ctrl"
       typeName="UsbIrc48mClockTrackingMode"
       valueFormat="USB_CLK_RECOVER_CTRL_CLOCK_RECOVER_EN(%s),USB_CLK_RECOVER_CTRL_RESET_RESUME_ROUGH_EN(%s)"
@@ -130,7 +103,7 @@
    </choiceOption>
 
    <binaryOption key="usb_clk_recover_ctrl_restart_ifrtrim_en" condition="usb_clk_recover_ctrl_restart_ifrtrim_en_present"
-      enabledBy="usb_clk_recover_ctrl_tracking_mode&gt;0"
+      enabledBy="usb_clk_recovery_enabled"
       register="clk_recover_ctrl"
       typeName="UsbIrc48mClockResetTrim"
       description="Restart from IFR trim value"
@@ -182,17 +155,9 @@
       ]]></variableTemplate>
    </for>
 
-   <!--   ========== class $(_Structname)BasicInfo =============================== -->
-
-   <template namespace="baseClass" ><![CDATA[
-      class $(_Structname)BasicInfo {
-
-      public:\n
-   ]]></template>
-
    <!--   ========== USB ClockRecoveryInit class =============================== -->
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass) Clock Recovery
@@ -238,14 +203,14 @@
 
    <!--   Member variables -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="usb_clk_recover_ctrl_tracking_mode,usb_clk_recover_ctrl_restart_ifrtrim_en"
    ><![CDATA[
       \t   /// USB Clock recovery control
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="usb_clk_recover_irc_en_irc_en"
    ><![CDATA[
       \t   /// IRC48M oscillator enable register
@@ -260,7 +225,7 @@
             usb_clk_recover_ctrl_restart_ifrtrim_en;
             usb_clk_recover_irc_en_irc_en
             " >
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -334,16 +299,9 @@
    ]]>
    </template>
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t}; // class $(_Structname)BasicInfo::ClockRecoveryInit
-      \t\n
-   ]]>
-   </template>
-
-   <template namespace="baseClass" >
-   <![CDATA[
-      }; // class $(_Structname)BasicInfo
       \t\n
    ]]>
    </template>
@@ -401,7 +359,6 @@
       <aliasOption key="/SIM/sim_sopt1_usbsstby"   locked="false" optional="true" />
       <aliasOption key="/SIM/sim_sopt1_usbvstby"   locked="false" optional="true" />
    </category>
-   <deleteVariables variables="_scgc_clock" mustExist="false" />
 
    <!--  ____ Signal mapping __________________ -->
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />

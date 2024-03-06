@@ -1,0 +1,983 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- tsi0_mk.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Touch Sensing Input" >
+
+   <equation key="irq_parameters"            type="String"  value='""'        />
+   <equation key="irq_dummy_parameters"      type="String"  value='""'        />
+   <equation key="irq_call"                  type="String"  value='""'        />
+   <equation key="generateDefault"           type="Boolean" value="false"     />
+   <equation key="configureInStartupDefault" type="Boolean" value="false"     />
+   <xi:include href="enablePeripheral.xml"  />
+   <title />
+
+   <!-- ____ Class Declaration ________ -->
+   <constant key="_class_declaration" type="String"
+      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+
+   <!-- ____ GENCS ____ -->
+   <title description="General Control and Status Register" />
+
+   <binaryOption key="tsi_gencs_lpclks" condition="tsi_gencs_lpclks_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiGencsLpclks"
+      baseType="uint32_t"
+      description="Low-Power Mode Clock Source"
+      toolTip="" >
+      <choice name="LPOCLK"      value="0" enum="Lpoclk" />
+      <choice name="VLPOSCCLK"   value="1" enum="Vlposcclk" />
+   </binaryOption >
+
+   <choiceOption key="tsi_gencs_lpscnitv" condition="tsi_gencs_lpscnitv_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiGencsLpscnitv"
+      baseType="uint32_t"
+      description="Low-Power Mode Scan Interval"
+      toolTip="" >
+      <choice name="1 ms interval"    value="0" enum="1MsInterval" />
+      <choice name="5 ms interval"    value="1" enum="5MsInterval" />
+      <choice name="10 ms interval"   value="2" enum="10MsInterval" />
+      <choice name="15 ms interval"   value="3" enum="15MsInterval" />
+      <choice name="20 ms interval"   value="4" enum="20MsInterval" />
+      <choice name="30 ms interval"   value="5" enum="30MsInterval" />
+      <choice name="40 ms interval"   value="6" enum="40MsInterval" />
+      <choice name="50 ms interval"   value="7" enum="50MsInterval" />
+      <choice name="75 ms interval"   value="8" enum="75MsInterval" />
+      <choice name="100 ms interval"  value="9" enum="100MsInterval" />
+      <choice name="125 ms interval" value="10" enum="125MsInterval" />
+      <choice name="150 ms interval" value="11" enum="150MsInterval" />
+      <choice name="200 ms interval" value="12" enum="200MsInterval" />
+      <choice name="300 ms interval" value="13" enum="300MsInterval" />
+      <choice name="400 ms interval" value="14" enum="400MsInterval" />
+      <choice name="500 ms interval" value="15" enum="500MsInterval" />
+   </choiceOption >
+
+   <choiceOption key="tsi_gencs_nscn" condition="tsi_gencs_nscn_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiGencsNscn"
+      baseType="uint32_t"
+      description="Consecutive Scan number"
+      toolTip="Number of Consecutive Scans Per Electrode" >
+      <choice name="(N+1) per electrode"  value="0" enum="N1PerElectrode" />
+   </choiceOption >
+
+   <choiceOption key="tsi_gencs_ps" condition="tsi_gencs_ps_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiGencsPs"
+      baseType="uint32_t"
+      description="Electrode Oscillator Prescaler"
+      toolTip="" >
+      <choice name="Divide by 1"    value="0" enum="DivideBy1" />
+      <choice name="Divide by 2"    value="1" enum="DivideBy2" />
+      <choice name="Divide by 4"    value="2" enum="DivideBy4" />
+      <choice name="Divide by 8"    value="3" enum="DivideBy8" />
+      <choice name="Divide by 16"   value="4" enum="DivideBy16" />
+      <choice name="Divide by 32"   value="5" enum="DivideBy32" />
+      <choice name="Divide by 64"   value="6" enum="DivideBy64" />
+      <choice name="Divide by 128"  value="7" enum="DivideBy128" />
+   </choiceOption >
+
+   <binaryOption key="tsi_gencs_eosf" condition="tsi_gencs_eosf_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiGencsEosf"
+      baseType="uint32_t"
+      description="End of Scan Flag"
+      toolTip="This flag is set when End of Scan is reached.\n
+               Write 1 to clear" >
+      <choice name="Not end of scan"  value="0" enum="NotEndOfScan" />
+      <choice name="End of scan"      value="1" enum="EndOfScan" />
+   </binaryOption >
+
+   <binaryOption key="tsi_gencs_outrgf" condition="tsi_gencs_outrgf_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiGencsOutrgf"
+      baseType="uint32_t"
+      description="Out of Range Flag"
+      toolTip="This flag is set when Out of Range is detected.\n
+               Write 1 to clear" >
+      <choice name="In Range"               value="0" enum="InRange" />
+      <choice name="Out of Range detected"  value="1" enum="OutOfRangeDetected" />
+   </binaryOption >
+
+   <binaryOption key="tsi_gencs_exterf" condition="tsi_gencs_exterf_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiGencsExterf"
+      baseType="uint32_t"
+      description="External Electrode Error"
+      toolTip="Indicates that the external electrode appears shorted" >
+      <choice name="No fault"          value="0" enum="NoFault" />
+      <choice name="Short to VDD/VSS"  value="1" enum="ShortToVddVss" />
+   </binaryOption >
+
+   <binaryOption key="tsi_gencs_ovrf" condition="tsi_gencs_ovrf_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiGencsOvrf"
+      baseType="uint32_t"
+      description="Overrun error Flag"
+      toolTip="This flag is set when a scan trigger occurs while a scan is still in progress.\n
+               Writing 1 to this bit will clear the flag to 0" >
+      <choice name="No overrun"        value="0" enum="NoOverrun" />
+      <choice name="Overrun occurred"  value="1" enum="OverrunOccurred" />
+   </binaryOption >
+
+   <binaryOption key="tsi_gencs_scnip" condition="tsi_gencs_scnip_present"
+      hidden="true"
+      typeName="TsiGencsScnip"
+      baseType="uint32_t"
+      description="Scan In Progress status"
+      toolTip="" >
+      <choice name="No scan active"    value="0" enum="NoScanActive" />
+      <choice name="Scan in progress"  value="1" enum="ScanInProgress" />
+   </binaryOption >
+
+   <binaryOption key="tsi_gencs_swts" condition="tsi_gencs_swts_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiGencsSwts"
+      baseType="uint32_t"
+      description="Software trigger start"
+      toolTip="Setting this bit starts a scan sequence.\n
+               Writing zero to this bit has no effect" >
+      <choice name="Write 1 to Trigger"  value="0" enum="Write1ToTrigger" />
+   </binaryOption >
+
+   <binaryOption key="tsi_gencs_tsien" condition="tsi_gencs_tsien_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiGencsTsien"
+      baseType="uint32_t"
+      description="Module Enable"
+      toolTip="" >
+      <choice name="Disabled"    value="0" enum="Disabled" />
+      <choice name="Enabled"     value="1" enum="Enabled" />
+   </binaryOption >
+
+   <binaryOption key="tsi_gencs_tsiie" condition="tsi_gencs_tsiie_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiGencsTsiie"
+      baseType="uint32_t"
+      description="Interrupt Enable"
+      toolTip="" >
+      <choice name="Interrupt disabled"  value="0" enum="InterruptDisabled" />
+      <choice name="Interrupt enabled"   value="1" enum="InterruptEnabled" />
+   </binaryOption >
+
+   <binaryOption key="tsi_gencs_erie" condition="tsi_gencs_erie_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiGencsErie"
+      baseType="uint32_t"
+      description="Error Interrupt Enable"
+      toolTip="" >
+      <choice name="Interrupt disabled"  value="0" enum="InterruptDisabled" />
+      <choice name="Interrupt enabled"   value="1" enum="InterruptEnabled" />
+   </binaryOption >
+
+   <binaryOption key="tsi_gencs_esor" condition="tsi_gencs_esor_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiGencsEsor"
+      baseType="uint32_t"
+      description="EOS or OOR Interrupt select"
+      toolTip="Selects between End-of-Scan or Out-of-Range Interrupt" >
+      <choice name="Out-of-Range"  value="0" enum="OutOfRange" />
+      <choice name="End-of-Scan"   value="1" enum="EndOfScan" />
+   </binaryOption >
+
+   <binaryOption key="tsi_gencs_stm" condition="tsi_gencs_stm_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiGencsStm"
+      baseType="uint32_t"
+      description="Scan Trigger Mode"
+      toolTip="Selects between software and hardware triggers.\n
+               This bit-field can only be changed if the TSI module is disabled (TSIEN bit = 0)" >
+      <choice name="Software trigger scan"  value="0" enum="SoftwareTriggerScan" />
+      <choice name="Periodical Scan"        value="1" enum="PeriodicalScan" />
+   </binaryOption >
+
+   <binaryOption key="tsi_gencs_stpe" condition="tsi_gencs_stpe_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiGencsStpe"
+      baseType="uint32_t"
+      description="TSI STOP Enable"
+      toolTip="Controls operation while in Low Power Modes (STOP, VLPS, LLS and VLLS{3,2,1})" >
+      <choice name="Disabled in low power"  value="0" enum="DisabledInLowPower" />
+      <choice name="Enabled in low power"   value="1" enum="EnabledInLowPower" />
+   </binaryOption >
+
+   <!-- ____ SCANC ____ -->
+   <title description="SCAN Control Register" />
+
+   <choiceOption key="tsi_scanc_refchrg" condition="tsi_scanc_refchrg_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiScancRefchrg"
+      baseType="uint32_t"
+      description="Ref OSC Charge Current select"
+      toolTip="" >
+      <choice name="2*N uA Charge current"  value="0" enum="2NUaChargeCurrent" />
+   </choiceOption >
+
+   <choiceOption key="tsi_scanc_extchrg" condition="tsi_scanc_extchrg_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiScancExtchrg"
+      baseType="uint32_t"
+      description="External OSC Charge Current Select"
+      toolTip="" >
+      <choice name="2*N uA Charge current"  value="0" enum="2NUaChargeCurrent" />
+   </choiceOption >
+
+   <binaryOption key="tsi_scanc_smod" condition="tsi_scanc_smod_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiScancSmod"
+      baseType="uint32_t"
+      description="Scan Modulus"
+      toolTip="" >
+      <choice name="Continuous Scan"     value="0" enum="ContinuousScan" />
+      <choice name="Scan Period Modulo"  value="0" enum="ScanPeriodModulo" />
+   </binaryOption >
+
+   <choiceOption key="tsi_scanc_amclks" condition="tsi_scanc_amclks_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiScancAmclks"
+      baseType="uint32_t"
+      description="Active Mode Clock Source"
+      toolTip="" >
+      <choice name="LPOSCCLK"    value="0" enum="Lposcclk" />
+      <choice name="MCGIRCLK"    value="1" enum="Mcgirclk" />
+      <choice name="OSCERCLK"    value="2" enum="Oscerclk" />
+      <choice name="Not valid"   value="3" enum="NotValid" />
+   </choiceOption >
+
+   <choiceOption key="tsi_scanc_ampsc" condition="tsi_scanc_ampsc_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiScancAmpsc"
+      baseType="uint32_t"
+      description="Active Mode Prescaler"
+      toolTip="Input Clock Source division factor" >
+      <choice name="Divided by 1"    value="0" enum="DividedBy1" />
+      <choice name="Divided by 2"    value="1" enum="DividedBy2" />
+      <choice name="Divided by 4"    value="2" enum="DividedBy4" />
+      <choice name="Divided by 8"    value="3" enum="DividedBy8" />
+      <choice name="Divided by 16"   value="4" enum="DividedBy16" />
+      <choice name="Divided by 32"   value="5" enum="DividedBy32" />
+      <choice name="Divided by 64"   value="6" enum="DividedBy64" />
+      <choice name="Divided by 128"  value="7" enum="DividedBy128" />
+   </choiceOption >
+
+   <!-- ____ PEN ____ -->
+   <title description="Pin Enable Register" />
+
+   <choiceOption key="tsi_pen_lpsp" condition="tsi_pen_lpsp_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiPenLpsp"
+      baseType="uint32_t"
+      description="Low-Power Scan Pin"
+      toolTip="Selects which input is active in low-power mode" >
+      <choice name="Active pin number"  value="0" enum="ActivePinNumber" />
+   </choiceOption >
+
+   <binaryOption key="tsi_pen_pen15" condition="tsi_pen_pen15_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiPenPen15"
+      baseType="uint32_t"
+      description="Pin 15 enable"
+      toolTip="" >
+      <choice name="Pin disabled"  value="0" enum="PinDisabled" />
+      <choice name="Pin enabled"   value="1" enum="PinEnabled" />
+   </binaryOption >
+
+   <binaryOption key="tsi_pen_pen14" condition="tsi_pen_pen14_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiPenPen14"
+      baseType="uint32_t"
+      description="Pin 14 enable"
+      toolTip="" >
+      <choice name="Pin disabled"  value="0" enum="PinDisabled" />
+      <choice name="Pin enabled"   value="1" enum="PinEnabled" />
+   </binaryOption >
+
+   <binaryOption key="tsi_pen_pen13" condition="tsi_pen_pen13_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiPenPen13"
+      baseType="uint32_t"
+      description="Pin 13 enable"
+      toolTip="" >
+      <choice name="Pin disabled"  value="0" enum="PinDisabled" />
+      <choice name="Pin enabled"   value="1" enum="PinEnabled" />
+   </binaryOption >
+
+   <binaryOption key="tsi_pen_pen12" condition="tsi_pen_pen12_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiPenPen12"
+      baseType="uint32_t"
+      description="Pin 12 enable"
+      toolTip="" >
+      <choice name="Pin disabled"  value="0" enum="PinDisabled" />
+      <choice name="Pin enabled"   value="1" enum="PinEnabled" />
+   </binaryOption >
+
+   <binaryOption key="tsi_pen_pen11" condition="tsi_pen_pen11_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiPenPen11"
+      baseType="uint32_t"
+      description="Pin 11 enable"
+      toolTip="" >
+      <choice name="Pin disabled"  value="0" enum="PinDisabled" />
+      <choice name="Pin enabled"   value="1" enum="PinEnabled" />
+   </binaryOption >
+
+   <binaryOption key="tsi_pen_pen10" condition="tsi_pen_pen10_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiPenPen10"
+      baseType="uint32_t"
+      description="Pin 10 enable"
+      toolTip="" >
+      <choice name="Pin disabled"  value="0" enum="PinDisabled" />
+      <choice name="Pin enabled"   value="1" enum="PinEnabled" />
+   </binaryOption >
+
+   <binaryOption key="tsi_pen_pen9" condition="tsi_pen_pen9_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiPenPen9"
+      baseType="uint32_t"
+      description="Pin 9 enable"
+      toolTip="" >
+      <choice name="Pin disabled"  value="0" enum="PinDisabled" />
+      <choice name="Pin enabled"   value="1" enum="PinEnabled" />
+   </binaryOption >
+
+   <binaryOption key="tsi_pen_pen8" condition="tsi_pen_pen8_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiPenPen8"
+      baseType="uint32_t"
+      description="Pin 8 enable"
+      toolTip="" >
+      <choice name="Pin disabled"  value="0" enum="PinDisabled" />
+      <choice name="Pin enabled"   value="1" enum="PinEnabled" />
+   </binaryOption >
+
+   <binaryOption key="tsi_pen_pen7" condition="tsi_pen_pen7_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiPenPen7"
+      baseType="uint32_t"
+      description="Pin 7 enable"
+      toolTip="" >
+      <choice name="Pin disabled"  value="0" enum="PinDisabled" />
+      <choice name="Pin enabled"   value="1" enum="PinEnabled" />
+   </binaryOption >
+
+   <binaryOption key="tsi_pen_pen6" condition="tsi_pen_pen6_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiPenPen6"
+      baseType="uint32_t"
+      description="Pin 6 enable"
+      toolTip="" >
+      <choice name="Pin disabled"  value="0" enum="PinDisabled" />
+      <choice name="Pin enabled"   value="1" enum="PinEnabled" />
+   </binaryOption >
+
+   <binaryOption key="tsi_pen_pen5" condition="tsi_pen_pen5_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiPenPen5"
+      baseType="uint32_t"
+      description="Pin 5 enable"
+      toolTip="" >
+      <choice name="Pin disabled"  value="0" enum="PinDisabled" />
+      <choice name="Pin enabled"   value="1" enum="PinEnabled" />
+   </binaryOption >
+
+   <binaryOption key="tsi_pen_pen4" condition="tsi_pen_pen4_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiPenPen4"
+      baseType="uint32_t"
+      description="Pin 4 enable"
+      toolTip="" >
+      <choice name="Pin disabled"  value="0" enum="PinDisabled" />
+      <choice name="Pin enabled"   value="1" enum="PinEnabled" />
+   </binaryOption >
+
+   <binaryOption key="tsi_pen_pen3" condition="tsi_pen_pen3_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiPenPen3"
+      baseType="uint32_t"
+      description="Pin 3 enable"
+      toolTip="" >
+      <choice name="Pin disabled"  value="0" enum="PinDisabled" />
+      <choice name="Pin enabled"   value="1" enum="PinEnabled" />
+   </binaryOption >
+
+   <binaryOption key="tsi_pen_pen2" condition="tsi_pen_pen2_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiPenPen2"
+      baseType="uint32_t"
+      description="Pin 2 enable"
+      toolTip="" >
+      <choice name="Pin disabled"  value="0" enum="PinDisabled" />
+      <choice name="Pin enabled"   value="1" enum="PinEnabled" />
+   </binaryOption >
+
+   <binaryOption key="tsi_pen_pen1" condition="tsi_pen_pen1_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiPenPen1"
+      baseType="uint32_t"
+      description="Pin 1 enable"
+      toolTip="" >
+      <choice name="Pin disabled"  value="0" enum="PinDisabled" />
+      <choice name="Pin enabled"   value="1" enum="PinEnabled" />
+   </binaryOption >
+
+   <binaryOption key="tsi_pen_pen0" condition="tsi_pen_pen0_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiPenPen0"
+      baseType="uint32_t"
+      description="Pin 0 enable"
+      toolTip="" >
+      <choice name="Pin disabled"  value="0" enum="PinDisabled" />
+      <choice name="Pin enabled"   value="1" enum="PinEnabled" />
+   </binaryOption >
+
+   <intOption key="tsi_pen_pen" condition="tsi_pen_pen_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiPenPen"
+      baseType="uint16_t"
+      description="Pin enable"
+      toolTip=""
+      value="0"
+      min="0" max="65535"
+   />
+
+   <!-- ____ WUCNTR ____ -->
+   <title description="Wake-Up Channel Counter Register" />
+
+   <intOption key="tsi_wucntr_wucnt" condition="tsi_wucntr_wucnt_present"
+      hidden="true"
+      typeName="uint32_t"
+      description="Touch Sensing Wake-Up Channel 16-bit Counter Value"
+      toolTip=""
+   />
+
+   <!-- ____ CNTR ____ -->
+   <title description="Counter Register %s" />
+
+   <intOption key="tsi_cntr_ctn" condition="tsi_cntr_ctn_present"
+      hidden="true"
+      typeName="uint32_t"
+      description="Touch Sensing Channel %s 16-bit Counter Value"
+      toolTip=""
+   />
+
+   <intOption key="tsi_cntr_ctn1" condition="tsi_cntr_ctn1_present"
+      hidden="true"
+      typeName="uint32_t"
+      description="Touch Sensing Channel %s-1 16-bit Counter Value"
+      toolTip=""
+   />
+
+   <!-- ____ CNTR ____ -->
+   <title description="Counter Register %s" />
+
+   <intOption key="tsi_cntr_cnt" condition="tsi_cntr_cnt_present"
+      hidden="true"
+      typeName="uint32_t"
+      description="Touch Sensing Channel %s 16-bit Counter Value"
+      toolTip=""
+   />
+
+   <!-- ____ THRESHOLD ____ -->
+   <title description="Low Power Channel Threshold Register" />
+
+   <intOption key="tsi_threshold_lthh" condition="tsi_threshold_lthh_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiThresholdLthh"
+      baseType="uint16_t"
+      description="Low Threshold Value"
+      toolTip=""
+      value="0"
+      min="0" max="65535"
+   />
+
+   <intOption key="tsi_threshold_hthh" condition="tsi_threshold_hthh_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiThresholdHthh"
+      baseType="uint16_t"
+      description="High Threshold Value"
+      toolTip=""
+      value="0"
+      min="0" max="65535"
+   />
+
+   <!-- ____ Getters and Setters ____________ -->
+
+   <for keys="field                     : set   : get   : clear : genCode                 : name"
+        values="
+
+         tsi_gencs_lpclks               : true  : true  : false : enableGettersAndSetters : GencsLpclks;
+         tsi_gencs_lpscnitv             : true  : true  : false : enableGettersAndSetters : GencsLpscnitv;
+         tsi_gencs_nscn                 : true  : true  : false : enableGettersAndSetters : GencsNscn;
+         tsi_gencs_ps                   : true  : true  : false : enableGettersAndSetters : GencsPs;
+         tsi_gencs_eosf                 : true  : true  : false : enableGettersAndSetters : GencsEosf;
+         tsi_gencs_outrgf               : true  : true  : false : enableGettersAndSetters : GencsOutrgf;
+         tsi_gencs_exterf               : true  : true  : false : enableGettersAndSetters : GencsExterf;
+         tsi_gencs_ovrf                 : true  : true  : false : enableGettersAndSetters : GencsOvrf;
+         tsi_gencs_scnip                : false : true  : false : enableGettersAndSetters : GencsScnip;
+         tsi_gencs_swts                 : true  : true  : false : enableGettersAndSetters : GencsSwts;
+         tsi_gencs_tsien                : true  : true  : false : enableGettersAndSetters : GencsTsien;
+         tsi_gencs_tsiie                : true  : true  : false : enableGettersAndSetters : GencsTsiie;
+         tsi_gencs_erie                 : true  : true  : false : enableGettersAndSetters : GencsErie;
+         tsi_gencs_esor                 : true  : true  : false : enableGettersAndSetters : GencsEsor;
+         tsi_gencs_stm                  : true  : true  : false : enableGettersAndSetters : GencsStm;
+         tsi_gencs_stpe                 : true  : true  : false : enableGettersAndSetters : GencsStpe;
+
+         tsi_scanc_refchrg              : true  : true  : false : enableGettersAndSetters : ScancRefchrg;
+         tsi_scanc_extchrg              : true  : true  : false : enableGettersAndSetters : ScancExtchrg;
+         tsi_scanc_smod                 : true  : true  : false : enableGettersAndSetters : ScancSmod;
+         tsi_scanc_amclks               : true  : true  : false : enableGettersAndSetters : ScancAmclks;
+         tsi_scanc_ampsc                : true  : true  : false : enableGettersAndSetters : ScancAmpsc;
+
+         tsi_pen_lpsp                   : true  : true  : false : enableGettersAndSetters : PenLpsp;
+         tsi_pen_pen15                  : true  : true  : false : enableGettersAndSetters : PenPen15;
+         tsi_pen_pen14                  : true  : true  : false : enableGettersAndSetters : PenPen14;
+         tsi_pen_pen13                  : true  : true  : false : enableGettersAndSetters : PenPen13;
+         tsi_pen_pen12                  : true  : true  : false : enableGettersAndSetters : PenPen12;
+         tsi_pen_pen11                  : true  : true  : false : enableGettersAndSetters : PenPen11;
+         tsi_pen_pen10                  : true  : true  : false : enableGettersAndSetters : PenPen10;
+         tsi_pen_pen9                   : true  : true  : false : enableGettersAndSetters : PenPen9;
+         tsi_pen_pen8                   : true  : true  : false : enableGettersAndSetters : PenPen8;
+         tsi_pen_pen7                   : true  : true  : false : enableGettersAndSetters : PenPen7;
+         tsi_pen_pen6                   : true  : true  : false : enableGettersAndSetters : PenPen6;
+         tsi_pen_pen5                   : true  : true  : false : enableGettersAndSetters : PenPen5;
+         tsi_pen_pen4                   : true  : true  : false : enableGettersAndSetters : PenPen4;
+         tsi_pen_pen3                   : true  : true  : false : enableGettersAndSetters : PenPen3;
+         tsi_pen_pen2                   : true  : true  : false : enableGettersAndSetters : PenPen2;
+         tsi_pen_pen1                   : true  : true  : false : enableGettersAndSetters : PenPen1;
+         tsi_pen_pen0                   : true  : true  : false : enableGettersAndSetters : PenPen0;
+         tsi_pen_pen                    : true  : true  : false : enableGettersAndSetters : PenPen;
+
+         tsi_wucntr_wucnt               : false : true  : false : enableGettersAndSetters : WucntrWucnt;
+
+         tsi_threshold_lthh             : true  : true  : false : enableGettersAndSetters : ThresholdLthh;
+         tsi_threshold_hthh             : true  : true  : false : enableGettersAndSetters : ThresholdHthh" >
+      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t * (%(field))
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(%params) {
+         \t   %fieldAssignment;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Get %description
+         \t * (%(field))
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %returnType get%(name)() {
+         \t   return %fieldExtract;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Clear %description
+         \t * (%(field))
+         \t *
+         \t */
+         \tstatic void clear%(name)() {
+         \t   %register = %register|%mask;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <for keys="field                     : set   : get   : clear : genCode                 : context                 : name"
+        values="
+
+         tsi_cntr_ctn                   : false : true  : false : enableGettersAndSetters : CNTR[index]          : CntrCtn;
+         tsi_cntr_ctn1                  : false : true  : false : enableGettersAndSetters : CNTR[index]          : CntrCtn1
+;
+         tsi_cntr_cnt                   : false : true  : false : enableGettersAndSetters : CNTR[index]          : CntrCnt" >
+      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t * (%(field))
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(int index, %params) {
+         \t   $(_basename)->%(context) = ($(_basename)->%(context) & ~%mask)|%paramExpression;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Get %description
+         \t * (%(field))
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %paramType get%(name)(int index) {
+         \t   return %paramType($(_basename)->%(context)&%mask);
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Clear %description
+         \t * (%(field))
+         \t *
+         \tstatic void clear%(name)(int index) {
+         \t   $(_basename)->%(context) = $(_basename)->%(context)|%mask;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <!-- ____ Interrupt handling _____________ -->
+
+   <template codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t/**
+      \t * $(_Class) interrupt handler
+      \t * Passes control to call-back function
+      \t */
+      \tstatic void irqHandler() {
+      \t
+      \t   // Execute call-back
+      \t   sCallback($(irq_call));
+      \t}
+      \t\n
+   ]]>
+   </template>
+   <!-- ________ TSI Init class ____________________________ -->
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_Baseclass)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t * Parameters available may vary with device - see $(_Class)::DefaultInitValue for relevant example.
+      \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * ///
+      \t * /// $(_NAME) call-back
+      \t * ///
+      \t * /// @param status  Status reflecting active inputs
+      \t * ///
+      \t * void $(_name)Callback(ErrorCode ec) {
+      \t *    ....
+      \t * }
+      \t *
+      \t * static const $(_Class)::Init $(_name)Init {
+      \t *
+      \t *   // Setup values
+XXXXXXXXXXXXXXXXXXXXXX
+      \t *
+      \t *   $(_name)Callback,                 // Call-back to execute on event - call-back function name
+      \t *   NvicPriority_Low,                 // Priority for interrupt - Low
+      \t *
+      \t *   // Optional base value to start with (must be last parameter)
+      \t *   $(_Class)::DefaultInitValue   // Used as base value modified by above
+      \t * };
+      \t *
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure($(_name)Init)
+      \t * @endcode
+      \t */
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____ Init class Member variables ________ -->
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="irqHandlingMethod"
+   ><![CDATA[
+      \t   /// %description
+      \t   %params = nullptr;\n\n
+   ]]></variableTemplate>
+
+   <for keys=" type        : variables                                            : init    "
+       values="%baseType   : tsi_gencs_lpclks,tsi_gencs_lpscnitv,tsi_gencs_nscn,
+                             tsi_gencs_ps,tsi_gencs_eosf,tsi_gencs_outrgf,
+                             tsi_gencs_exterf,tsi_gencs_ovrf,tsi_gencs_swts,
+                             tsi_gencs_tsien,tsi_gencs_tsiie,tsi_gencs_erie,
+                             tsi_gencs_esor,tsi_gencs_stm,tsi_gencs_stpe          :   0      ;
+               %baseType   : tsi_scanc_refchrg,tsi_scanc_extchrg,tsi_scanc_smod,
+                             tsi_scanc_amclks,tsi_scanc_ampsc                     :   0      ;
+               %baseType   : tsi_pen_lpsp,tsi_pen_pen15,tsi_pen_pen14,
+                             tsi_pen_pen13,tsi_pen_pen12,tsi_pen_pen11,
+                             tsi_pen_pen10,tsi_pen_pen9,tsi_pen_pen8,tsi_pen_pen7,
+                             tsi_pen_pen6,tsi_pen_pen5,tsi_pen_pen4,tsi_pen_pen3,
+                             tsi_pen_pen2,tsi_pen_pen1,tsi_pen_pen0,tsi_pen_pen   :   0      ;
+               %baseType   : tsi_threshold_lthh,tsi_threshold_hthh                :   0      " >
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(variables)"
+         linePadding="xxx"
+      ><![CDATA[
+         %multilineDescription
+         \t   %(type) %registerName = %(init);\n\n
+      ]]></variableTemplate>
+   </for>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="/PCR/nvic_irqLevel,irqLevel"
+   ><![CDATA[
+      \t   /// %description
+      \t   %paramType %registerName0 = %defaultValue;
+      \t\n
+   ]]></variableTemplate>
+
+   <!-- ____ Init class Constructors ____________ -->
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      this->%paramName0 = %paramExpression;
+      \t   }\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="/PCR/nvic_irqLevel"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName = %paramExpression;
+      \t   }\n\n
+   ]]></variableTemplate>
+
+   <for keys="r"
+      values="
+            tsi_gencs_lpclks;tsi_gencs_lpscnitv;tsi_gencs_nscn;
+            tsi_gencs_ps;tsi_gencs_eosf;tsi_gencs_outrgf;
+            tsi_gencs_exterf;tsi_gencs_ovrf;tsi_gencs_swts;
+            tsi_gencs_tsien;tsi_gencs_tsiie;tsi_gencs_erie;
+            tsi_gencs_esor;tsi_gencs_stm;tsi_gencs_stpe;
+            tsi_scanc_refchrg;tsi_scanc_extchrg;tsi_scanc_smod;
+            tsi_scanc_amclks;tsi_scanc_ampsc;
+            tsi_pen_lpsp;tsi_pen_pen15;tsi_pen_pen14;
+            tsi_pen_pen13;tsi_pen_pen12;tsi_pen_pen11;
+            tsi_pen_pen10;tsi_pen_pen9;tsi_pen_pen8;tsi_pen_pen7;
+            tsi_pen_pen6;tsi_pen_pen5;tsi_pen_pen4;tsi_pen_pen3;
+            tsi_pen_pen2;tsi_pen_pen1;tsi_pen_pen0;tsi_pen_pen;
+            tsi_threshold_lthh;tsi_threshold_hthh" >
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(r)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    * (%(r))
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %constructorFieldAssignment;
+         \t   }
+         \t\n
+      ]]>
+      </variableTemplate>
+   </for>
+
+   <!-- ____ Init class Configure method ____ -->
+
+   <template codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(DefaultInitValue);
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const Init &init) {
+      \t
+      \t   // Enable peripheral clock
+      \t   enable();
+      \t\n
+   ]]></template>
+   <template codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t   // Configure call-backs
+      \t   setCallback(init.callbackFunction);
+      \t   enableNvicInterrupts(init.irqlevel);
+      \t\n
+   ]]></template>
+   <for keys=
+             " var                                                    : statement            "
+      values=" tsi_gencs_lpclks,tsi_gencs_lpscnitv,tsi_gencs_nscn,
+               tsi_gencs_ps,tsi_gencs_eosf,tsi_gencs_outrgf,
+               tsi_gencs_exterf,tsi_gencs_ovrf,tsi_gencs_swts,
+               tsi_gencs_tsien,tsi_gencs_tsiie,tsi_gencs_erie,
+               tsi_gencs_esor,tsi_gencs_stm,tsi_gencs_stpe            : %configRegAssignment ;
+               tsi_scanc_refchrg,tsi_scanc_extchrg,tsi_scanc_smod,
+               tsi_scanc_amclks,tsi_scanc_ampsc                       : %configRegAssignment ;
+               tsi_pen_lpsp,tsi_pen_pen15,tsi_pen_pen14,
+               tsi_pen_pen13,tsi_pen_pen12,tsi_pen_pen11,
+               tsi_pen_pen10,tsi_pen_pen9,tsi_pen_pen8,tsi_pen_pen7,
+               tsi_pen_pen6,tsi_pen_pen5,tsi_pen_pen4,tsi_pen_pen3,
+               tsi_pen_pen2,tsi_pen_pen1,tsi_pen_pen0,tsi_pen_pen     : %configRegAssignment ;
+               tsi_threshold_lthh,tsi_threshold_hthh                  : %configRegAssignment " >
+      <variableTemplate codeGenCondition="enablePeripheralSupport"
+      variables="%(var)"
+      linePadding="xxx"
+      ><![CDATA[
+         \t
+         %multilineDescription
+         \t   %(statement);\n
+      ]]></variableTemplate>
+   </for>
+   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____  Default Initialisation value ____ -->
+
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
+      separator=","
+      terminator=","
+      variables="
+            tsi_gencs_lpclks,tsi_gencs_lpscnitv,tsi_gencs_nscn,
+            tsi_gencs_ps,tsi_gencs_eosf,tsi_gencs_outrgf,
+            tsi_gencs_exterf,tsi_gencs_ovrf,tsi_gencs_swts,
+            tsi_gencs_tsien,tsi_gencs_tsiie,tsi_gencs_erie,
+            tsi_gencs_esor,tsi_gencs_stm,tsi_gencs_stpe,
+            tsi_scanc_refchrg,tsi_scanc_extchrg,tsi_scanc_smod,
+            tsi_scanc_amclks,tsi_scanc_ampsc,
+            tsi_pen_lpsp,tsi_pen_pen15,tsi_pen_pen14,
+            tsi_pen_pen13,tsi_pen_pen12,tsi_pen_pen11,
+            tsi_pen_pen10,tsi_pen_pen9,tsi_pen_pen8,tsi_pen_pen7,
+            tsi_pen_pen6,tsi_pen_pen5,tsi_pen_pen4,tsi_pen_pen3,
+            tsi_pen_pen2,tsi_pen_pen1,tsi_pen_pen0,tsi_pen_pen,
+            tsi_threshold_lthh,tsi_threshold_hthh" >
+   <![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};
+      \t\n
+   ]]></variableTemplate>
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t}; // class $(_Structname)BasicInfo::Init
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____ Common __________________ -->
+
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Class representing $(_NAME)
+      \t */
+      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};
+      \t//typedef $(_Baseclass)Base_T<$(_Class)Info> $(_Class);
+      \t\n
+   ]]>
+   </template>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
+   </validate>
+
+   <projectActionList id="tsi_files" >
+      <copy source="Project_Headers/tsi-MK.h"  target="Project_Headers/tsi.h"  overwrite="true"  derived="true" />
+   </projectActionList>
+
+   <!-- ____ Startup __________________ -->
+
+   <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
+      <![CDATA[#include "$(_basename).h"\n
+   ]]></template>
+
+   <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
+   <![CDATA[
+      \t/*  Initialise $(_Class) */
+      \tUSBDM::$(_Class)::defaultConfigure();\n
+   ]]></template>
+
+   <!-- ____ SIM configuration __________________ -->
+
+   <category name="Advanced" description="SIM configuration"
+      toolTip="These settings only have effect if the SIM configuration is enabled" >
+      <title description="$(_BASENAME) Shared" />
+      <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+      <title description="$(_NAME) Specific" />
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+      <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+   </category>
+
+   <!--  ____ Signal mapping __________________ -->
+   <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
+
+</peripheralPage>

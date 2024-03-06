@@ -1425,7 +1425,7 @@ This bit controls the clock gate to the I2C2 module</description>
                <addressOffset>0x1030</addressOffset>
                <fields>
                   <field>
-                     <name>RNGA</name>
+                     <name>RNGA_AIPS1</name>
                      <description>RNGA Clock Gate Control</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -1442,11 +1442,11 @@ This bit controls the clock gate to the I2C2 module</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="RNGA" > <name>SPI2</name> <description>SPI2 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
-                  <field derivedFrom="RNGA" > <name>SDHC</name> <description>SDHC Clock Gate Control</description> <bitOffset>17</bitOffset> </field>
-                  <field derivedFrom="RNGA" > <name>FTM2</name> <description>FTM2 Clock Gate Control</description> <bitOffset>24</bitOffset> </field>
-                  <field derivedFrom="RNGA" > <name>FTM3</name> <description>FTM3 Clock Gate Control</description> <bitOffset>25</bitOffset> </field>
-                  <field derivedFrom="RNGA" > <name>ADC1</name> <description>ADC1 Clock Gate Control</description> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="RNGA_AIPS1" > <name>SPI2</name> <description>SPI2 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="RNGA_AIPS1" > <name>SDHC</name> <description>SDHC Clock Gate Control</description> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="RNGA_AIPS1" > <name>FTM2_AIPS1</name> <description>FTM2 Clock Gate Control</description> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="RNGA_AIPS1" > <name>FTM3</name> <description>FTM3 Clock Gate Control</description> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="RNGA_AIPS1" > <name>ADC1</name> <description>ADC1 Clock Gate Control</description> <bitOffset>27</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1555,7 +1555,7 @@ This bit controls the clock gate to the I2C2 module</description>
                   <field derivedFrom="FTF" > <name>FTM2</name> <description>FTM2 Clock Gate Control</description> <bitOffset>26</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>ADC0</name> <description>ADC0 Clock Gate Control</description> <bitOffset>27</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>RTC</name> <description>RTC Clock Gate Control</description> <bitOffset>29</bitOffset> </field>
-                  <field derivedFrom="FTF" > <name>DAC0</name> <description>DAC0 Clock Gate Control</description> <bitOffset>31</bitOffset> </field>
+                  <field derivedFrom="FTF" > <name>DAC0_AIPS0</name> <description>DAC0 Clock Gate Control</description> <bitOffset>31</bitOffset> </field>
                </fields>
             </register>
             <register>

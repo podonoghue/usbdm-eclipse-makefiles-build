@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2024/01
+ * @date     2024/02
  *
  */
 
@@ -38,7 +38,7 @@ typedef enum {
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
 /* ----------------------   MKL02Z4 VectorTable                      ---------------------- */
-  FTF_Command_IRQn              =   5,   /**<  21 Flash Memory Interface                                                           */
+  FTFA_Command_IRQn             =   5,   /**<  21 Flash Memory Interface                                                           */
   PMC_IRQn                      =   6,   /**<  22 Power Management Controller                                                      */
   I2C0_IRQn                     =   8,   /**<  24 Inter-Integrated Circuit                                                         */
   I2C1_IRQn                     =   9,   /**<  25 Inter-Integrated Circuit                                                         */
@@ -62,7 +62,7 @@ extern void HardFault_Handler(void);                 /**< Hard Fault, all classe
 extern void SVC_Handler(void);                       /**< System Service Call via SVC instruction                                          */
 extern void PendSV_Handler(void);                    /**< Pendable request for system service                                              */
 extern void SysTick_Handler(void);                   /**< System Tick Timer                                                                */
-extern void FTF_Command_IRQHandler(void);            /**< Flash Memory Interface                                                           */
+extern void FTFA_Command_IRQHandler(void);           /**< Flash Memory Interface                                                           */
 extern void PMC_IRQHandler(void);                    /**< Power Management Controller                                                      */
 extern void I2C0_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
 extern void I2C1_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
@@ -752,7 +752,7 @@ typedef struct FTFA_Type {
 #define FTFA_BasePtr                   0x40020000UL //!< Peripheral base address
 #define FTFA                           ((FTFA_Type *) FTFA_BasePtr) //!< Freescale base pointer
 #define FTFA_BASE_PTR                  (FTFA) //!< Freescale style base pointer
-#define FTFA_IRQS { FTF_Command_IRQn,  }
+#define FTFA_IRQS { FTFA_Command_IRQn,  }
 
 
 /** @} */ /* End group FTFA_Peripheral_access_layer_GROUP */

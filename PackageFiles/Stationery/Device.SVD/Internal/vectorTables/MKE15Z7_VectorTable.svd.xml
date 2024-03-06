@@ -6,25 +6,25 @@ Devices using this vector table:
    <name>MKE15Z7_VectorTable</name>
    <description>MKE15Z7 VectorTable</description>
    <interrupt>
-      <name>DMA0_CH0_04</name>
+      <name>DMA0_Ch0_04</name>
       <description>Enhanced direct memory access controller</description>
       <value>0</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_CH0_15</name>
+      <name>DMA0_Ch0_15</name>
       <description>Enhanced direct memory access controller</description>
       <value>1</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_CH0_26</name>
+      <name>DMA0_Ch0_26</name>
       <description>Enhanced direct memory access controller</description>
       <value>2</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_CH0_37</name>
+      <name>DMA0_Ch0_37</name>
       <description>Enhanced direct memory access controller</description>
       <value>3</value>
       <peripheral>DMA0</peripheral>

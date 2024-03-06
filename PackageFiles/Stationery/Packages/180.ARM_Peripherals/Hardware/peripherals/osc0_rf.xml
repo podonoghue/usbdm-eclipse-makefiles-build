@@ -47,8 +47,7 @@
       units="Hz"
       description="Frequency of RF oscillator"
       toolTip="Frequency of RF oscillator"
-      value="32000000"
-      defaultValue="0" />
+      value="32000000" />
 
    <choiceOption key="oscillatorRange"
       derived="true"

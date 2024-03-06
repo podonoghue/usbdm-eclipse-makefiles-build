@@ -69,9 +69,6 @@ enum TsiNoiseFilter {
 };
 #endif
 
-$(/TSI/InputMapping:   // No user defined TSI inputs found)
-$(/TSI0/InputMapping:   // No user defined TSI0 inputs found)
-
 /**
  * Type definition for TSI interrupt call back
  *
@@ -82,7 +79,7 @@ typedef void (*TSICallbackFunction)(uint8_t status);
 class TsiBase {
 public:
    /** Class to static check channel pin mapping is valid */
-   template<class Info, TsiChannel channel> class CheckSignal {
+   template<class Info, TsiInput channel> class CheckSignal {
       static_assert((channel<Info::numSignals),
             "Non-existent TSI channel - Check Configure.usbdm for available channels");
       static_assert((channel>=Info::numSignals)||(Info::info[channel].gpioBit != PinIndex::UNMAPPED_PCR),
@@ -135,7 +132,7 @@ public:
     * @param tsiDeltaVoltage        Determine the oscillators' voltage limits (not applicable in noise modes)
     */
    static void configure(
-         TsiLowPower             tsiLowPower           = TsiLowPower_Disabled,
+         TsiStopMode             tsiStopMode           = TsiStopMode_Disabled,
          TsiConsecutiveScan      tsiConsecutiveScan    = TsiConsecutiveScan_8Times,
          TsiElectrodePrescaler   tsiElectrodePrescaler = TsiElectrodePrescaler_DivBy8,
          TsiReferenceCurrent     tsiReferenceCharge    = TsiReferenceCurrent_8uA,
@@ -145,7 +142,7 @@ public:
       enable();
       tsi->GENCS =
             TSI_GENCS_TSIEN(1)|TsiMode_Capacitive|
-            tsiLowPower|tsiConsecutiveScan|
+            tsiStopMode|tsiConsecutiveScan|
             tsiReferenceCharge|tsiExternalCharge|
             tsiDeltaVoltage|tsiElectrodePrescaler|TsiCurrentSource_NotSwapped;
    }
@@ -241,11 +238,11 @@ public:
     *
     * @param channel Channel number
     */
-   static void startScan(TsiChannel channel) {
+   static void startScan(TsiInput tsiInput) {
       // Clear flags
       Info::tsi->GENCS = Info::tsi->GENCS | TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EOSF_MASK;
       // Start scan
-      Info::tsi->DATA = TSI_DATA_SWTS_MASK|TSI_DATA_TSICH(channel);
+      Info::tsi->DATA = TSI_DATA_SWTS_MASK|TSI_DATA_TSICH(tsiInput);
    }
 
    /**
@@ -253,13 +250,13 @@ public:
     *
     * @param channel Channel number
     */
-   static void startDmaScan(TsiChannel channel) {
+   static void startDmaScan(TsiInput tsiInput) {
       // Clear flags
       Info::tsi->GENCS = Info::tsi->GENCS | TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EOSF_MASK;
       // Select event of end of scan
       Info::tsi->GENCS = Info::tsi->GENCS | TSI_GENCS_ESOR(1)|TSI_GENCS_TSIIEN(1);
       // Start scan
-      Info::tsi->DATA = TSI_DATA_SWTS_MASK|TSI_DATA_DMAEN_MASK|TSI_DATA_TSICH(channel);
+      Info::tsi->DATA = TSI_DATA_SWTS_MASK|TSI_DATA_DMAEN_MASK|TSI_DATA_TSICH(tsiInput);
    }
 
    /**
@@ -269,11 +266,11 @@ public:
     *
     * @return Error code indicating if scan was successful
     */
-   static void startScanAndWait(TsiChannel channel) {
+   static void startScanAndWait(TsiInput tsiInput) {
       // Clear flags
       Info::tsi->GENCS = Info::tsi->GENCS | TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EOSF_MASK;
       // Start scan
-      Info::tsi->DATA = TSI_DATA_SWTS_MASK|TSI_DATA_TSICH(channel);
+      Info::tsi->DATA = TSI_DATA_SWTS_MASK|TSI_DATA_TSICH(tsiInput);
 
       // Wait for complete flag or err
       while ((Info::tsi->GENCS&(TSI_GENCS_EOSF_MASK)) == 0) {
@@ -296,7 +293,7 @@ public:
     * @tparam channel   Channel connected to the button
     * @tparam threshold Threshold for the button to be considered pressed
     */
-   template<TsiChannel channel, int threshold=Info::defaultThreshold>
+   template<TsiInput channel, int threshold=Info::defaultThreshold>
    class Pin {
 
       TsiBase::CheckSignal<Info, channel> check;
@@ -350,7 +347,7 @@ public:
     * @tparam channel2  Second channel connected to slider
     * @tparam threshold Threshold for the contact to be considered
     */
-   template<TsiChannel channel1, TsiChannel channel2, int threshold=Info::defaultThreshold>
+   template<TsiInput channel1, TsiInput channel2, int threshold=Info::defaultThreshold>
    class TsiSlider_T {
 
    public:

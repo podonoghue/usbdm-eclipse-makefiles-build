@@ -4,54 +4,16 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Serial Peripheral Interface" >
 
-   <constant key="irq_common"                type="Boolean" value="true"          />
-   <constant key="irq_parameters"            type="String"  value="&quot;ErrorCode errorcode&quot;"  />
-   <constant key="irq_dummy_parameters"      type="String"  value="&quot;ErrorCode&quot;"  />
-   <constant key="irq_call"                  type="String"  value="&quot;E_NO_ERROR&quot;"  />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="suppressIrqHandler"        value="" />
+   <equation key="irq_parameters"            value="ErrorCode errorcode"  />
+   <equation key="irq_dummy_parameters"      value="ErrorCode"            />
+   <equation key="irq_call"                  value="E_NO_ERROR"           />
+   <equation key="generateDefault"           value="false"         />
+   <equation key="configureInStartupDefault" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
 
-<!--
-    * General substitutions
-    *  $(_NAME)         => e.g FTM2 => FTM2
-    *  $(_name)         => e.g FTM2 => ftm2
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
-    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
-    *  $(_Class)        => e.g FTM2 => Ftm2
-    *  $(_Baseclass)    => e.g FTM0 => Ftm
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A
--->
-
-<!--
-    * Template substitutions
-    *
-    * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
-    * %variable[index]                Variable name /ADC0/adc_sc2_acfe
-    * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
-    * %description[index]             Description from controlVar e.g. Compare Function Enable
-    * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
-    * %tooltip[index]                 Tool-tip from controlVar e.g. Each bit disables the GPIO function
-    * %paramDescription[index]        Tool-tip from controlVar formatted as param description @param ...
-    * %params                         Formatted parameter list for function
-    * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
-    * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
-    * %paramType[index]               As for %paramType
-    * %paramName[index]               As for %paramName
-    * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
-    * %fieldAssignment;         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
-    * %variable[index]                Variable name from condition
-    * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
-    * %register[index]                Register associated with variable e.g. adc->APCTL1
-    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
--->
-
    <!-- ************* Class Declaration ****************** -->
-   <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
+   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Baseclass)BasicInfo"' />
 
    <template><![CDATA[
       \t//! Pin number in Info table for SCK if mapped to a pin
@@ -183,18 +145,26 @@
       <choice value="true"  name="Supported" />
    </binaryOption>
 
-   <bitmaskOption key="spi_mcr_pcsis" condition="spi_mcr_pcsis_present"
-      bitmask="0x3F"
-      bitList="Pcs0,Pcs1,Pcs2,Pcs3,Pcs4,Pcs5"
+   <choiceOption key="spi_mcr_pcsis_enum" condition="spi_mcr_pcsis_present"
+      hidden="true"
+      derived="true"
+      valueFormat="SPI_MCR_PCSIS(%s)"
       typeName="SpiPcsActiveLow"
+      baseType="uint32_t"
       description="Polarity for PCS signals"
       toolTip="Mask to select the polarity of Peripheral Chip Select Lines (PCSx)\n
-               Selected PCS signals will be active-low i.e. PCS will go low when accessing the peripheral"
+               Selected PCS signals will be active-low i.e. PCS will go low when accessing the peripheral" >
+      <choiceExpansion name="PCS%(c) is active-low" value="1U&lt;&lt;%(c)" enum="Pcs%(c)" keys="c" dim="6" />
+      <choice          name="All PCSx active-high" value="0"  enum="None" />
+      <choice          name="All PCSx active-low"  value="-1" enum="All" />
+   </choiceOption>
+
+   <bitmaskOption key="spi_mcr_pcsis" condition="spi_mcr_pcsis_present"
+      derivedFrom="spi_mcr_pcsis_enum"
+      bitmask="0x0"
+      bitList='@SignalList("^SPI\d_(PCS\d)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
       value="0"
-      bitDescription="%n is active-low"
-      enumText="
-      \t   %(typeName)_None = SPI_MCR_PCSIS(0),    ///&lt; All PCSx active-high\n
-      \t   %(typeName)_All  = SPI_MCR_PCSIS(-1),   ///&lt; All PCSx active-low"
+      bitDescription='@"PCS%i is active-low"'
    />
 
    <binaryOption key="spi_mcr_pcsse" condition="spi_mcr_pcsse_present||/SPI1/spi_mcr_pcsse_present||/SPI2/spi_mcr_pcsse_present"
@@ -402,18 +372,25 @@
       <choice value="1" name="Asserted between transactions" enum="Continuous" />
    </binaryOption>
 
-   <bitmaskOption key="spi_pushr_pcs" condition="spi_pushr_pcs_present"
+   <choiceOption key="spi_pushr_pcs_enum"
+      hidden="true"
+      derived="true"
       valueFormat="SPI_PUSHR_PCS(%s)"
+      typeName="SpiPeripheralSelect"
+      baseType="uint32_t"
       description="Peripheral Chip Select"
       toolTip="Mask to select which Peripheral Chip Select Line (PCS) to assert during transaction\n
-               Note: more than one PCS may be asserted (allows use of an external decoder)"
-      bitmask="0x3F"
-      bitList="Pcs0,Pcs1,Pcs2,Pcs3,Pcs4,Pcs5"
-      typeName="SpiPeripheralSelect"
+               Note: more than one PCS may be asserted (allows use of an external decoder)" >
+      <choiceExpansion name="Assert PCS%(c) during transaction" value="1U&lt;&lt;%(c)" enum="Pcs%(c)" keys="c" dim="6" />
+      <choice          name="PCSx not asserted" value="0"  enum="None" />
+   </choiceOption>
+
+   <bitmaskOption key="spi_pushr_pcs" condition="spi_pushr_pcs_present"
+      derivedFrom="spi_pushr_pcs_enum"
+      bitmask="0x0"
+      bitList='@SignalList("^SPI\d_(PCS\d)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
       value="0"
-      bitDescription="Assert %n during transaction"
-      enumText="
-      \t   SpiPeripheralSelect_None = SPI_PUSHR_PCS(0),    ///&lt; PCSx not asserted"
+      bitDescription='@"Assert PCS%i during transaction"'
    />
 
    <!--binaryOption key="spi_pushr_eoq"
@@ -438,25 +415,9 @@
 <if condition="!/SPI/SpiBasicInfo_generated" >
    <constant key="/SPI/SpiBasicInfo_generated" type="Boolean" value="true" />
 
-<!--   ========== BasicInfo class - start =============================== -->
-
-   <template namespace="usbdm" ><![CDATA[
-      class SpiBasicInfo {
-      \t
-      public:
-      \t/**
-      \t * Type definition for $(_Class) interrupt call back.
-      \t *
-      \t * @param status Interrupt status value from SPI->SR
-      \t */
-      \ttypedef void (*CallbackFunction)(uint32_t status);
-      \t\n
-   ]]></template>
-
-
 <!--   ========== SPI SerialInit class =============================== -->
 
-   <template namespace="usbdm" ><![CDATA[
+   <template where="basicInfo" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of a CTAR in $(_Class)
       \t *
@@ -503,7 +464,7 @@
 
 <!--   Member variables -->
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate where="basicInfo"
       variables="
          spi_ctar_sel"
    ><![CDATA[
@@ -511,7 +472,7 @@
       \t   SpiCtarSelect ctarNum = SpiCtarSelect_0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate where="basicInfo"
       variables="
          spi_ctar_mode[],
          spi_ctar_fmsz[],
@@ -521,7 +482,7 @@
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate where="basicInfo"
       variables="
          speed[]"
    ><![CDATA[
@@ -535,7 +496,7 @@
          spi_ctar_mode[];
          spi_ctar_fmsz[];
          spi_ctar_lsbfe[]" >
-      <variableTemplate namespace="usbdm" variables="%(r)"
+      <variableTemplate where="basicInfo" variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
          \t   /**
@@ -555,7 +516,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate namespace="usbdm" variables="speed[]"
+   <variableTemplate where="basicInfo" variables="speed[]"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -574,7 +535,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" variables="spi_ctar_sel"
+   <variableTemplate where="basicInfo" variables="spi_ctar_sel"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -595,13 +556,13 @@
 
 <!--   ========== SerialInit class - end =============================== -->
 
-   <template namespace="usbdm" ><![CDATA[
-      \t};\n
+   <template where="basicInfo" ><![CDATA[
+      \t}; // class SerialInit\n
    ]]></template>
 
 <!--   ========== SPI Init class =============================== -->
 
-   <template namespace="usbdm" ><![CDATA[
+   <template where="basicInfo" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of shared settings for $(_Class)
       \t *
@@ -654,13 +615,13 @@
 
 <!--   Member variables -->
 
-   <variableTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate where="basicInfo"
       variables="
          spi_mcr_mtfe,
          spi_mcr_pcsse,
@@ -673,7 +634,7 @@
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate where="basicInfo"
       variables="
          spi_ctar_sel,
          spi_pushr_pcs,
@@ -687,7 +648,7 @@
 
 <!--  Constructors -->
 
-   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -712,7 +673,7 @@
          spi_mcr_frz;
          spi_mcr_rooe;
          spi_mcr_cont_scke" >
-      <variableTemplate namespace="usbdm" variables="%(r)"
+      <variableTemplate where="basicInfo" variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
          \t   /**
@@ -732,7 +693,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate namespace="usbdm" variables="spi_mcr_pcsis"
+   <variableTemplate where="basicInfo" variables="spi_mcr_pcsis"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -760,7 +721,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <!-- variableTemplate namespace="usbdm" variables="spi_pushr_pcs"
+   <!-- variableTemplate where="basicInfo" variables="spi_pushr_pcs"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -788,7 +749,7 @@
       \t\n
    ]]></variableTemplate -->
 
-   <variableTemplate namespace="usbdm" variables="spi_pushr_pcs"
+   <variableTemplate where="basicInfo" variables="spi_pushr_pcs"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -816,7 +777,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" variables="spi_ctar_sel"
+   <variableTemplate where="basicInfo" variables="spi_ctar_sel"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -836,7 +797,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" variables="PeripheralSelectMode"
+   <variableTemplate where="basicInfo" variables="PeripheralSelectMode"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -858,13 +819,13 @@
 
 <!--   ========== Config class - end =============================== -->
 
-   <template namespace="usbdm" ><![CDATA[
-      \t};\n
+   <template where="basicInfo" ><![CDATA[
+      \t}; // class Config\n
    ]]></template>
 
 <!--   ========== Config class - start =============================== -->
 
-   <template namespace="usbdm" ><![CDATA[
+   <template where="basicInfo" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of $(_Class)
       \t *
@@ -988,7 +949,7 @@
 
 <!--   Config Member variables -->
 
-   <template namespace="usbdm"
+   <template where="basicInfo"
     ><![CDATA[
       \t   ///  Used to construct CTARx values
       \t   SerialInit ctars[2];
@@ -1000,7 +961,7 @@
 
 <!--    Config Constructors -->
 
-   <template namespace="usbdm"
+   <template where="basicInfo"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -1025,7 +986,7 @@
       \t\n
    ]]></template>
 
-   <template namespace="usbdm"
+   <template where="basicInfo"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -1092,18 +1053,12 @@
 
 <!--   ========== Init class - end =============================== -->
 
-   <template namespace="usbdm" ><![CDATA[
-      \t};\n
-   ]]></template>
-
-<!--   ========== SPI BasicInfo class - end =============================== -->
-
-   <template namespace="usbdm" ><![CDATA[
-      };\n\n
+   <template where="basicInfo" ><![CDATA[
+      \t}; // class Init
+      \t\n
    ]]></template>
 
 </if>
-<!--   ========== SPI BasicInfo class - end =============================== -->
 
 <!--    Default Initialisation values -->
 
@@ -1113,10 +1068,8 @@
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr SpiBasicInfo::SerialInit DefaultSerialInitValue[] = {\n
-      ]]></template>
-
+   ]]></template>
    <for keys="c" dim="=spi_ctar_dim" >
-
       <variableTemplate
          separator=","
          terminator=","
@@ -1131,9 +1084,7 @@
          \t   SpiCtarSelect_%(c),
          %initExpression\n\t},\n
       ]]></variableTemplate>
-
    </for>
-
    <template><![CDATA[
       \t};
       \t\n
@@ -1145,14 +1096,12 @@
       variables="
          spi_mcr_mtfe,
          spi_mcr_pcsse,
-         spi_mcr_pcsis,
          spi_mcr_doze,
          spi_mcr_frz,
          spi_mcr_rooe,
          spi_mcr_cont_scke,
          spi_ctar_sel,
-         PeripheralSelectMode,
-         spi_pushr_pcs
+         PeripheralSelectMode
          "
    ><![CDATA[
       \t/**
@@ -1160,8 +1109,23 @@
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr SpiBasicInfo::Config DefaultConfigValue = {%initExpression
-      \t};\n\n
+      \t\n
    ]]></variableTemplate>
+   <for keys="pcs" dim="6" >
+      <template codeGenCondition="(spi_mcr_pcsis&amp;(1&lt;&lt;%(pcs)))!=0"><![CDATA[
+         \t   SpiPcsActiveLow_Pcs%(pcs),     // (spi_mcr_pcsis.b%(pcs)) PCS%(pcs) is active-low\n
+      ]]></template>
+   </for>
+   <for keys="pcs" dim="6" >
+      <template codeGenCondition="(spi_pushr_pcs&amp;(1&lt;&lt;%(pcs)))!=0"><![CDATA[
+         \t   SpiPeripheralSelect_Pcs%(pcs), // (spi_pushr_pcs.b%(pcs)) PCS%(pcs) is asserted during transfer\n
+      ]]></template>
+   </for>
+   <template>
+   <![CDATA[
+      \t};\n\n
+   ]]>
+   </template>
 
    <template><![CDATA[
       \t/**
@@ -1321,7 +1285,6 @@
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
       </for>
    </category>
-   <deleteVariables variables="_scgc_clock"  mustExist="false" />
 
    <!-- ************* Signal mapping ****************** -->
    <signals enabledBy="enablePeripheralSupport" />

@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.0
- * @date     2024/01
+ * @date     2024/02
  *
  */
 
@@ -45,9 +45,9 @@ interrupt                                       */
   EXTI0_1_IRQn                  =   5,   /**<  21 EXTI Line[1:0] interrupts                                                        */
   EXTI2_3_IRQn                  =   6,   /**<  22 EXTI Line[3:2] interrupts                                                        */
   EXTI4_15_IRQn                 =   7,   /**<  23 EXTI Line15 and EXTI4 interrupts                                                 */
-  DMA_CH1_IRQn                  =   9,   /**<  25 DMA channel 1 interrupt                                                          */
-  DMA_CH2_3_IRQn                =  10,   /**<  26 DMA channel 2 and 3 interrupts                                                   */
-  DMA_CH4_5_6_7_IRQn            =  11,   /**<  27 DMA channel 4, 5, 6 and 7
+  DMA0_Ch1_IRQn                 =   9,   /**<  25 DMA channel 1 interrupt                                                          */
+  DMA0_Ch2_3_IRQn               =  10,   /**<  26 DMA channel 2 and 3 interrupts                                                   */
+  DMA0_Ch4_5_6_7_IRQn           =  11,   /**<  27 DMA channel 4, 5, 6 and 7
 interrupts                                             */
   ADC_COMP_IRQn                 =  12,   /**<  28 ADC and comparator interrupts                                                    */
   TIM1_BRK_UP_TRG_COM_IRQn      =  13,   /**<  29 TIM1 break, update, trigger and commutation
@@ -84,9 +84,9 @@ extern void RCC_CRS_IRQHandler(void);                /**< RCC and CRS global int
 extern void EXTI0_1_IRQHandler(void);                /**< EXTI Line[1:0] interrupts                                                        */
 extern void EXTI2_3_IRQHandler(void);                /**< EXTI Line[3:2] interrupts                                                        */
 extern void EXTI4_15_IRQHandler(void);               /**< EXTI Line15 and EXTI4 interrupts                                                 */
-extern void DMA_CH1_IRQHandler(void);                /**< DMA channel 1 interrupt                                                          */
-extern void DMA_CH2_3_IRQHandler(void);              /**< DMA channel 2 and 3 interrupts                                                   */
-extern void DMA_CH4_5_6_7_IRQHandler(void);          /**< DMA channel 4, 5, 6 and 7
+extern void DMA0_Ch1_IRQHandler(void);               /**< DMA channel 1 interrupt                                                          */
+extern void DMA0_Ch2_3_IRQHandler(void);             /**< DMA channel 2 and 3 interrupts                                                   */
+extern void DMA0_Ch4_5_6_7_IRQHandler(void);         /**< DMA channel 4, 5, 6 and 7
 interrupts                                             */
 extern void ADC_COMP_IRQHandler(void);               /**< ADC and comparator interrupts                                                    */
 extern void TIM1_BRK_UP_TRG_COM_IRQHandler(void);    /**< TIM1 break, update, trigger and commutation
@@ -436,7 +436,7 @@ typedef struct ADC_Type {
 #define ADC_BasePtr                    0x40012400UL //!< Peripheral base address
 #define ADC                            ((ADC_Type *) ADC_BasePtr) //!< Freescale base pointer
 #define ADC_BASE_PTR                   (ADC) //!< Freescale style base pointer
-#define ADC_IRQS { DMA_CH1_IRQn, DMA_CH2_3_IRQn, DMA_CH4_5_6_7_IRQn,  }
+#define ADC_IRQS { DMA0_Ch1_IRQn, DMA0_Ch2_3_IRQn, DMA0_Ch4_5_6_7_IRQn,  }
 
 
 /** @} */ /* End group ADC_Peripheral_access_layer_GROUP */

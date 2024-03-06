@@ -46,7 +46,7 @@ Devices using this peripheral:
       MK82F25615
 -->
       <peripheral>
-         <?sourceFile "DAC0_16DAT_FIFO16_0x400CC000" ?>
+         <?sourceFile "DAC0_16DAT_FIFO16_AIPS1" ?>
          <name>DAC0</name>
          <description>12-Bit Digital-to-Analog Converter</description>
          <groupName>DAC</groupName>

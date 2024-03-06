@@ -4,11 +4,11 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="High Speed USB PHY">
 
-   <constant key="irq_parameters"            type="String"  value='""'  />
-   <constant key="irq_dummy_parameters"      type="String"  value='""'  />
-   <constant key="irq_call"                  type="String"  value='""'  />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="irq_parameters"            type="String"  value='""'  />
+   <equation key="irq_dummy_parameters"      type="String"  value='""'  />
+   <equation key="irq_call"                  type="String"  value='""'  />
+   <equation key="generateDefault"           type="Boolean" value="false"         />
+   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 

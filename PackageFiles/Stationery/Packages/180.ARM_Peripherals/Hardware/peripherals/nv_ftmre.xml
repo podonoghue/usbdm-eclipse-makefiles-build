@@ -28,7 +28,7 @@
 
 <!--   ========== NV Init class =============================== -->
 
-   <template key="init_description" namespace="all">
+   <template key="init_description" where="all">
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Class)
@@ -51,7 +51,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template where="basicInfo">
    <![CDATA[
       class $(_Class)BasicInfo {
       \t
@@ -60,7 +60,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template where="basicInfo">
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -126,13 +126,13 @@
       \t};\n\n
    ]]></variableTemplate>
 
-   <template namespace="usbdm">
+   <template where="basicInfo">
       <![CDATA[
       \t}; // $(_Class)::BasicInfo::Init\n\n
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template where="basicInfo">
       <![CDATA[
       }; // $(_Class)::BasicInfo\n\n
    ]]>

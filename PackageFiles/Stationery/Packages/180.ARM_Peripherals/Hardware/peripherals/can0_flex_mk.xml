@@ -4,7 +4,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flex Controller Area Network module" >
 
-   <choiceOption key="irq_enum" condition="=_irqCount>1"
+<!--
+   <choiceOption key="irq_enum" condition="=_hardwareIrqCount>1"
       valueFormat="%s"
       hidden="true"
       derived="true"
@@ -18,12 +19,13 @@
       <choice value="4"  enum="RxWarning"     name="FlexCAN - Receive Warning" />
       <choice value="5"  enum="WakeUp"        name="FlexCAN - Wakeup" />
    </choiceOption>
+ -->
 
-   <constant key="irq_parameters"            type="String"  value='""'  />
-   <constant key="irq_dummy_parameters"      type="String"  value='""'  />
-   <constant key="irq_call"                  type="String"  value='""'  />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="irq_parameters"            type="String"  value='""'  />
+   <equation key="irq_dummy_parameters"      type="String"  value='""'  />
+   <equation key="irq_call"                  type="String"  value='""'  />
+   <equation key="generateDefault"           type="Boolean" value="false"         />
+   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -122,6 +124,7 @@
        \tstatic constexpr unsigned NumberOfFifoMessageFilters    =  $(EnableFifo)?$(NumberOfFifoMessageFilters):0;\n\n
    ]]></template>
 
+<!--
    <irqOption key="miscellaneousIrqHandlingMethod"
       enabledBy="irqHandlingMethod"
       description="Miscellaneous Interrupt handlers"
@@ -153,6 +156,7 @@
                Handles: Message buffer events (FIFO and Mailboxes)"
       pattern="^%b%i_MessageBuffer.*$"
       classHandler="%c%i::messageBufferIrqHandler" />
+ -->
 
    <signals/>
 
@@ -261,96 +265,9 @@
       \t\n
    ]]></template>
 
-   <!--   ========== class $(_Structname)BasicInfo =============================== -->
-
-   <template namespace="baseClass" ><![CDATA[
-      class $(_Structname)BasicInfo {
-
-      public:\n
-   ]]></template>
-
-   <!--   ========== Interrupt handling =============================== -->
-
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
-   <![CDATA[
-      \t/**
-      \t * Type for Secured Digital Host Controller call back function.
-      \t */
-      \ttypedef void (*CallbackFunction)();
-      \t
-      \t/**
-      \t * Callback to catch unhandled interrupt
-      \t */
-      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
-      \t   setAndCheckErrorCode(E_NO_HANDLER);
-      \t}
-      \t\n
-   ]]>
-   </template>
-
-   <template codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t/** Callback function for Secured Digital Host Controller */
-      \tstatic CallbackFunction callbackFunction;
-      \t
-      \t/**
-      \t * Secured Digital Host Controller interrupt handler
-      \t * Passes control to call-back function
-      \t */
-      \tstatic void irqHandler() {
-      \t
-      \t   // Execute call-back
-      \t   callbackFunction($(irq_call));
-      \t}
-      \t
-      \t/**
-      \t * Set Secured Digital Host Controller callback function.
-      \t *
-      \t * @param      $(_basename)Callback Callback function to execute on interrupt
-      \t *                             Use nullptr to remove callback.
-      \t */
-      \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
-      \t   if ($(_basename)Callback == nullptr) {
-      \t      $(_basename)Callback = (CallbackFunction)unhandledCallback;
-      \t   }
-      \t   // Allow either no handler set yet or removing handler
-      \t   usbdm_assert(
-      \t         ((void*)callbackFunction == (void*)unhandledCallback) ||
-      \t         ((void*)$(_basename)Callback == (void*)unhandledCallback),
-      \t         "Handler already set");
-      \t   callbackFunction = $(_basename)Callback;
-      \t}
-      \t
-      \t\n
-   ]]>
-   </template>
-
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t/**
-      \t * Callback function for Secured Digital Host Controller
-      \t */
-      \t$(_Class)Info::CallbackFunction $(_Class)Info::callbackFunction = (CallbackFunction)$(_Class)Info::unhandledCallback;
-      \t
-      \t\n
-   ]]>
-   </template>
-
-
 <!--   Default Initialisation value -->
 
-
 <!--   Configure methods -->
-
-
-
-
-   <template where="basicInfo" >
-   <![CDATA[
-      }; // class $(_Structname)BasicInfo
-      \t\n
-   ]]>
-   </template>
 
    <!-- ************* Common ****************** -->
 

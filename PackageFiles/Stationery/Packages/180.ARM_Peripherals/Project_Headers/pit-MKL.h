@@ -22,9 +22,9 @@
 #include "system.h"
 #include "pin_mapping.h"
 
-namespace USBDM {
+#if $(/PIT/enablePeripheralSupport) // /PIT/enablePeripheralSupport
 
-enum DmaChannelNum : unsigned;
+namespace USBDM {
 
 /**
  * @addtogroup PIT_Group PIT, Programmable Interrupt Timer
@@ -78,25 +78,22 @@ private:
    static uint32_t allocatedChannels;
 
 protected:
-   using CallbackFunction = typename Info::CallbackFunction;
 
    /** Default TCTRL value for timer channel */
    static constexpr uint32_t PIT_TCTRL_DEFAULT_VALUE = (PIT_TCTRL_TEN_MASK);
 
    /** Callback functions for ISRs */
    static CallbackFunction sCallbacks[Info::NumChannels];
+   
    /** Bitmask used to indicate a channel call-back is one-shot */
    static uint8_t clearOnEvent;
-
-   /** Callback to catch unhandled interrupt */
-   static void unhandledCallback() {
-      setAndCheckErrorCode(E_NO_HANDLER);
-   }
-
+   
+$(/PIT/protectedMethods: // /PIT/protectedMethods not found)
 public:
    /// Defaulted constructor
    constexpr PitBase_T() = default;
 
+$(/PIT/publicMethods: // /PIT/publicMethods not found)
    /**
     * Allocate PIT channel.
     *
@@ -114,6 +111,7 @@ public:
       return (PitChannelNum) channelNum;
    }
 
+#if $(/DMA/enablePeripheralSupport:false) // (/DMA/enablePeripheralSupport) not found
    /**
     * Allocate PIT channel associated with DMA channel.
     * This is a channel that may be used to throttle the associated DMA channel.
@@ -135,6 +133,7 @@ public:
       allocatedChannels &= ~channelMask;
       return (PitChannelNum) dmaChannelNum;
    }
+#endif
 
    /**
     * Free PIT channel.
@@ -161,14 +160,11 @@ public:
     * @param[in]  pitChannelNum Channel being modified
     * @param[in]  enable  True => enable, False => disable
     */
-   static void enableInterrupts(PitChannelNum pitChannelNum, bool enable=true) {
-      if (enable) {
-         pit->CHANNEL[pitChannelNum].TCTRL = pit->CHANNEL[pitChannelNum].TCTRL | PIT_TCTRL_TIE_MASK;
-      }
-      else {
-         pit->CHANNEL[pitChannelNum].TCTRL = pit->CHANNEL[pitChannelNum].TCTRL & ~PIT_TCTRL_TIE_MASK;
-      }
+   static void setChannelAction(PitChannelNum pitChannelNum, PitChannelAction pitChannelAction) {
+      pit->CHANNEL[pitChannelNum].TCTRL = pit->CHANNEL[pitChannelNum].TCTRL | pitChannelAction;
    }
+
+#if $(/PIT/irqHandlingMethod:false) // /PIT/irqHandlingMethod not found
 
    /**
     * PIT interrupt handler -  Calls PIT callback
@@ -217,8 +213,8 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)(), T &object>
-   static CallbackFunction wrapCallback() {
-      static CallbackFunction fn = []() {
+   static typename Info::CallbackFunction wrapCallback() {
+      static typename Info::CallbackFunction fn = []() {
          (object.*callback)();
       };
       return fn;
@@ -240,7 +236,8 @@ public:
    }
 
    /**
-    * Set class member as callback function
+    * Wrapper to allow the use of a class member as a callback function
+    * @note There is a considerable space and time overhead to using this method
     *
     * @tparam T         Type of the object containing the callback member function
     * @tparam callback  Member function pointer
@@ -263,14 +260,21 @@ public:
     * // Instance of class containing callback member function
     * AClass aClass;
     * ...
-    * // Set member function as callback
-    * Pit::setCallback<AClass, &AClass::callback, aClass>(PitChannelNum_0);
+    * // Wrap member function
+    * auto fn = Pit::wrapCallback<AClass, &AClass::callback>(aClass);
+    * // Use as callback
+    * Pit::Channel<0>::oneShot(fn, 1.5*USBDM::seconds);
     * @endcode
     */
-   template<class T, void(T::*callback)(), T &object>
-   static void setCallback(PitChannelNum pitChannelNum) {
-      PitBase_T<Info>::setCallback(pitChannelNum, wrapCallback<T, callback, object>());
+   template<class T, void(T::*callback)()>
+   static typename Info::CallbackFunction wrapCallback(T &object) {
+      static T &obj = object;
+      static typename Info::CallbackFunction fn = []() {
+         (obj.*callback)();
+      };
+      return fn;
    }
+#endif
 
 protected:
    /** Pointer to hardware */
@@ -393,7 +397,7 @@ public:
     *
     *  @param[in]  pitChannelNum     Channel to configure
     *  @param[in]  tickInterval      Interval in timer ticks (usually bus clock period)
-    *  @param[in]  pitChannelIrq     Whether to enable interrupts
+    *  @param[in]  pitChannelAction  Action to take on timer event
     *
     *  @note The timer channel is disabled before configuring so that period changes have
     *        immediate effect.
@@ -401,22 +405,23 @@ public:
    static void configureChannel(
          PitChannelNum     pitChannelNum,
          Ticks             tickInterval,
-         PitChannelIrq     pitChannelIrq=PitChannelIrq_Disabled) {
+         PitChannelAction  pitChannelAction=PitChannelAction_None) {
 
       usbdm_assert((unsigned)tickInterval>0, "Interval too short");
 
       pit->CHANNEL[pitChannelNum].TCTRL = 0;
       pit->CHANNEL[pitChannelNum].LDVAL = (unsigned)tickInterval-1;
       pit->CHANNEL[pitChannelNum].TFLG  = PIT_TFLG_TIF_MASK;
-      pit->CHANNEL[pitChannelNum].TCTRL = pitChannelIrq|PIT_TCTRL_TEN(1);
+      pit->CHANNEL[pitChannelNum].TCTRL = pitChannelAction|PIT_TCTRL_TEN(1);
    }
 
+#if $(/PIT/secondsSupport:false) // /PIT/secondsSupport
    /**
     *  Configure the PIT channel in seconds
     *
     *  @param[in]  pitChannelNum     Channel to configure
     *  @param[in]  intervalInSeconds Interval in seconds
-    *  @param[in]  pitChannelIrq      Whether to enable interrupts
+    *  @param[in]  pitChannelAction  Action to take on timer event
     *
     *  @note The timer channel is disabled before configuring so that period changes have
     *        immediate effect.
@@ -424,17 +429,18 @@ public:
    static void configureChannel(
          PitChannelNum     pitChannelNum,
          Seconds           intervalInSeconds,
-         PitChannelIrq     pitChannelIrq=PitChannelIrq_Disabled) {
+         PitChannelAction  pitChannelAction=PitChannelAction_None) {
 
-      configureChannel(pitChannelNum, convertSecondsToTicks(intervalInSeconds), pitChannelIrq);
+      configureChannel(pitChannelNum, convertSecondsToTicks(intervalInSeconds), pitChannelAction);
    }
+#endif
 
    /**
     *  Configure the PIT channel in milliseconds
     *
     *  @param[in]  pitChannelNum    Channel to configure
     *  @param[in]  milliseconds     Interval in seconds
-    *  @param[in]  pitChannelIrq    Whether to enable interrupts
+    *  @param[in]  pitChannelAction Action to take on timer event
     *
     *  @note The timer channel is disabled before configuring so that period changes have
     *        immediate effect.
@@ -442,9 +448,9 @@ public:
    static void configureChannelInMilliseconds(
          PitChannelNum     pitChannelNum,
          unsigned          milliseconds,
-         PitChannelIrq     pitChannelIrq=PitChannelIrq_Disabled) {
+         PitChannelAction  pitChannelAction=PitChannelAction_None) {
 
-      configureChannel(pitChannelNum, convertMillisecondsToTicks(milliseconds), pitChannelIrq);
+      configureChannel(pitChannelNum, convertMillisecondsToTicks(milliseconds), pitChannelAction);
    }
 
    /**
@@ -452,7 +458,7 @@ public:
     *
     *  @param[in]  pitChannelNum    Channel to configure
     *  @param[in]  microseconds     Interval in microseconds
-    *  @param[in]  pitChannelIrq    Whether to enable interrupts
+    *  @param[in]  pitChannelAction Action to take on timer event
     *
     *  @note The timer channel is disabled before configuring so that period changes have
     *        immediate effect.
@@ -460,11 +466,12 @@ public:
    static void configureChannelInMicroseconds(
          PitChannelNum     pitChannelNum,
          unsigned          microseconds,
-         PitChannelIrq     pitChannelIrq=PitChannelIrq_Disabled) {
+         PitChannelAction     pitChannelAction=PitChannelAction_None) {
 
-      configureChannel(pitChannelNum, convertMicrosecondsToTicks(microseconds), pitChannelIrq);
+      configureChannel(pitChannelNum, convertMicrosecondsToTicks(microseconds), pitChannelAction);
    }
 
+#if $(/PIT/secondsSupport:false) // /PIT/secondsSupport
    /**
     * Convert time in ticks to time in seconds
     *
@@ -475,6 +482,29 @@ public:
    static Seconds convertTicksToSeconds(Ticks ticks) {
       return Seconds(((float)(unsigned)ticks)/Info::getClockFrequency());
    }
+
+   /**
+    * Converts time in seconds to time in ticks
+    *
+    * @param[in] seconds Time interval in seconds
+    *
+    * @return Time interval in ticks
+    *
+    * @note Will set error code if calculated value is unsuitable
+    */
+   static Ticks convertSecondsToTicks(Seconds seconds) {
+      float intervalInTicks = rintf((float)seconds*Info::getClockFrequency());
+      usbdm_assert(intervalInTicks <= 0xFFFFFFFFUL, "Interval is too long");
+      usbdm_assert(intervalInTicks > 0, "Interval is too short");
+      if (intervalInTicks > 0xFFFFFFFFUL) {
+         setErrorCode(E_TOO_LARGE);
+      }
+      if (intervalInTicks <= 0) {
+         setErrorCode(E_TOO_SMALL);
+      }
+      return Ticks(intervalInTicks);
+   }
+#endif // /PIT/secondsSupport
 
    /**
     * Convert time in ticks to time in microseconds
@@ -499,29 +529,7 @@ public:
    }
 
    /**
-    * Converts time in seconds to time in ticks
-    *
-    * @param[in] seconds Time interval in seconds
-    *
-    * @return Time interval in ticks
-    *
-    * @note Will set error code if calculated value is unsuitable
-    */
-   static Ticks convertSecondsToTicks(Seconds seconds) {
-      float intervalInTicks = rintf((float)seconds*Info::getClockFrequency());
-      usbdm_assert(intervalInTicks <= 0xFFFFFFFFUL, "Interval is too long");
-      usbdm_assert(intervalInTicks > 0, "Interval is too short");
-      if (intervalInTicks > 0xFFFFFFFFUL) {
-         setErrorCode(E_TOO_LARGE);
-      }
-      if (intervalInTicks <= 0) {
-         setErrorCode(E_TOO_SMALL);
-      }
-      return Ticks(intervalInTicks);
-   }
-
-   /**
-    * Converts time in seconds to time in ticks
+    * Converts time in milliseconds to time in ticks
     *
     * @param[in] milliseconds Time interval in milliseconds
     *
@@ -543,7 +551,7 @@ public:
    }
 
    /**
-    * Converts time in seconds to time in ticks
+    * Converts time in microseconds to time in ticks
     *
     * @param[in] microseconds Time interval in microseconds
     *
@@ -565,7 +573,7 @@ public:
    }
 
    /**
-    * Set period in seconds
+    * Set period in Ticks
     *
     * @param[in]  pitChannelNum Channel being modified
     * @param[in]  ticks         Interval in ticks
@@ -603,6 +611,7 @@ public:
       setPeriod(pitChannelNum, convertMillisecondsToTicks(milliseconds));
    }
 
+#if $(/PIT/secondsSupport:false) // /PIT/secondsSupport
    /**
     * Set period in seconds
     *
@@ -615,6 +624,7 @@ public:
    static void setPeriod(PitChannelNum pitChannelNum, Seconds interval) {
       setPeriod(pitChannelNum, Ticks((float)interval*Info::getClockFrequency()));
    }
+#endif
 
    /**
     *  Use a PIT channel to implement a busy-wait delay
@@ -632,6 +642,7 @@ public:
       disableChannel(pitChannelNum);
    }
 
+#if $(/PIT/secondsSupport:false) // /PIT/secondsSupport
    /**
     *  Use a PIT channel to implement a busy-wait delay
     *
@@ -647,7 +658,10 @@ public:
       }
       disableChannel(pitChannelNum);
    }
+#endif
 
+#if $(/PIT/irqHandlingMethod:false) // /PIT/irqHandlingMethod
+#if $(/PIT/secondsSupport:false) // /PIT/secondsSupport
    /**
     * Set one-shot timer callback.
     *
@@ -707,7 +721,12 @@ public:
       setCallback(pitChannelNum, callback);
       configureChannel(pitChannelNum, tickInterval, PitChannelIrq_Enabled);
    }
+#endif // /PIT/irqHandlingMethod
 
+   /**
+    * Class representing a PIT channel.
+    * This version may be instantiated and passed as a reference
+    */
    class PitChannel {
 
    public:
@@ -932,6 +951,8 @@ public:
 
    /**
     * Class representing a PIT channel
+    * This version is a template and may not be instantiated.
+    * It is a type only with static member methodes.
     *
     * @tparam channel Timer channel number
     */
@@ -1184,14 +1205,16 @@ public:
    };
    
 $(/PIT/InitMethod: // /PIT/InitMethod Not found)
-};
+}; // class PitBase_T
 
 /** Bit-mask of allocated channels */
 template<class Info> uint32_t PitBase_T<Info>::allocatedChannels = -1;
 
 $(/PIT/CallBackDefinition: // /PIT/CallBackDefinition Not found)
-template<class Info>
-uint8_t PitBase_T<Info>::clearOnEvent = 0;
+/** Bitmask used to indicate a channel call-back is one-shot */
+template<class Info> uint8_t PitBase_T<Info>::clearOnEvent = 0;
+
+$(/PIT/staticDefinitions:  // No static definitions found)
 
 $(/PIT/declarations:  // No declarations found)
 /**
@@ -1199,5 +1222,7 @@ $(/PIT/declarations:  // No declarations found)
  */
 
 } // End namespace USBDM
+
+#endif // /PIT/enablePeripheralSupport
 
 #endif /* INCLUDE_USBDM_PIT_H_ */

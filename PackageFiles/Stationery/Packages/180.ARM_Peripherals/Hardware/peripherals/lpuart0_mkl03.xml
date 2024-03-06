@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE fragment SYSTEM "_menu.dtd" >
-<!-- lpuart0_0x400c4000.xml -->
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- lpuart0_mkl03.xml -->
 
-<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="lpuart_def.xml"/>
-</fragment>
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="$(_BASENAME)">
+
+   <constant key="status_is_w1c" type="Boolean" value="true" />
+
+   <xi:include href="lpuart_def.xml"/>
+
+</peripheralPage>

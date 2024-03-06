@@ -4,7 +4,7 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Port Clock Control" >
 
-<template namespace="usbdm"><![CDATA[
+<template where="basicInfo"><![CDATA[
    \t/**
    \t * Clock sources using first dividers\n\n
    \t * - SOSCDIV1_CLK = System oscillator clock divided by SCG_SOSCDIV.SOSCDIV1

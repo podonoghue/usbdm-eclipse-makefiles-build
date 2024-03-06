@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- lpuart_def.xml -->
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!-- uart_def.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="$(_BASENAME)">
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
    <!-- Enable for this peripheral -->
    <binaryOption key="usedAsConsole"
@@ -26,18 +26,17 @@
       <choice value="true"  name="Generate code for $(_NAME)"/>
    </binaryOption>
 
-   <constant key="irq_pattern"               type="String"  value='"^$(_BASENAME)%i_?((RxTx|Error|Lon)|.*)?$"'  />
-   <constant key="irq_ClassHandler"          type="String"  value='"%c%i::$2_irqHandler"'                        />
-   <constant key="irq_parameters"            type="String"  value='""'     />
-   <constant key="irq_dummy_parameters"      type="String"  value='""'     />
-   <constant key="irq_call"                  type="String"  value='""'     />
-   <constant key="generateDefault"           type="Boolean" value="false"  />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"  />
+   <equation key="irq_pattern"               value="^$(_NAME)_(.+)$;^$(_NAME)_$"  />
+   <equation key="irq_ClassHandler"          value="$(_Class)::irqHandler&lt;$(_Class)IrqNum_$1&gt;;$(_Class)::irqHandler" />
+   <equation key="irq_parameters"            value=""     />
+   <equation key="irq_dummy_parameters"      value=""     />
+   <equation key="irq_call"                  value=""     />
+   <equation key="generateDefault"           value="false"  />
+   <equation key="configureInStartupDefault" value="false"  />
    <xi:include href="enablePeripheral.xml"  />
 
    <!-- ____ Class Declaration ________ -->
-   <constant key="_class_declaration" type="String"
-      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
    <binaryOption key="uart_c2_tcie" condition="uart_c2_tcie_present"
       enabledBy="irqHandlingMethod"
@@ -249,70 +248,10 @@
 
    <!-- ____ Setters and Getters ____________ -->
 
-
-   <!-- ____ class $(_Structname)BasicInfo ____________ -->
-
-   <template where="basicInfo" ><![CDATA[
-      class $(_Structname)BasicInfo {
-      \t
-      public:\n
-   ]]></template>
-
    <!-- ____ Interrupt handling _____________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo&amp;&amp;false"
-      variables="/$(_STRUCTNAME)/generateSharedIrqInfo"
-   ><![CDATA[
-       \t//! Common class based callback code has been generated for this class of peripheral
-       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
-       \t\n
-   ]]></variableTemplate>
-
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
-   <![CDATA[
-      \t/**
-      \t * Type definition for $(_Baseclass) interrupt call back.
-      \t */
-      \ttypedef void (*CallbackFunction)($(irq_dummy_parameters));
-      \t
-      \t/**
-      \t * Callback to catch unhandled interrupt
-      \t */
-      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
-      \t   setAndCheckErrorCode(E_NO_HANDLER);
-      \t}
-      \t\n
-   ]]>
-   </template>
-
-   <variableTemplate codeGenCondition="irqHandlingMethod"
-      variables="irq_enum" >
-   <![CDATA[
-      \t/** Callback functions for $(_Baseclass) */
-      \tstatic CallbackFunction sCallbacks[irqCount];
-      \t
-      \t/**
-      \t * Set interrupt callback function.
-      \t *
-      %paramDescription0
-      \t * @param $(_basename)Callback Callback function to execute on interrupt
-      \t *                     Use nullptr to remove callback.
-      \t */
-      \tstatic void setCallback(%param0, CallbackFunction $(_basename)Callback) {
-      \t   if ($(_basename)Callback == nullptr) {
-      \t      $(_basename)Callback = unhandledCallback;
-      \t   }
-      \t   // Allow either no handler set yet or removing handler
-      \t   usbdm_assert(
-      \t         (sCallbacks[%paramName0] == unhandledCallback) || ($(_basename)Callback == unhandledCallback),
-      \t         "Handler already set");
-      \t   sCallbacks[%paramName0] = $(_basename)Callback;
-      \t}
-      \t\n
-   ]]>
-   </variableTemplate>
-
-   <for keys="irqName" values="=_irqNums" >
+   <!--
+   <for keys="irqName" values="=_hardwareIrqNums" >
 
       <constant key="prettyIrqName" value='Prettify(ReplaceAll("%(irqName)", "$(_NAME)_([a-z|A-Z|0-9]+)_IRQn", "$1"))' type="String"/>
 
@@ -336,27 +275,9 @@
       </variableTemplate>
       <deleteVariables variables="prettyIrqName" />
    </for>
-
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t/**
-      \t * Callback table of programmatically set handlers for $(_Class)
-      \t */
-      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallbacks[] = {\n
-   ]]></template>
-   <for keys="ch" dim="=_irqCount" >
-      <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
-         \t   $(_Class)Info::unhandledCallback,\n
-      ]]></template>
-   </for>
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
-      \t};\n\n
-   ]]></template>
+    -->
 
    <template condition="false" ><![CDATA[
-      \t//! Indicates whether the $(_BASENAME) needs a write to clear status errors
-      \tstatic constexpr bool statusNeedsWrite = true;
-      \t
       \t//! Default Baud rate used if not explicitly given
       \tstatic constexpr UartBaudRate defaultBaudRate = UartBaudRate($(uart_baudrate));
       \t
@@ -368,14 +289,39 @@
       \t\n
    ]]></template>
 
-   <template><![CDATA[
+   <template condition="@status_is_w1c" ><![CDATA[
       \t/**
-      \t * Clear UART error status
-      \t * This also discards the current received data value
+      \t * Clear UART status \n
+      \t * This includes:
+      \t * - Idle detect flag
+      \t * - Overrun flag
+      \t * - Noise flag
+      \t * - Framing error flag
+      \t * - Parity error flag
       \t */
       \tstatic void clearError() {
-      \t      (void)uart->S1;
-      \t      (void)uart->D;
+      \t
+      \t   // Flags are w1c
+      \t   uart->S1 = uart->S1 | (UART_S1_IDLE_MASK|UART_S1_OR_MASK|UART_S1_NF_MASK|UART_S1_FE_MASK|UART_S1_PF_MASK);
+      \t}
+      \t\n
+   ]]></template>
+
+   <template condition="!@status_is_w1c" ><![CDATA[
+      \t/**
+      \t * Clear UART status \n
+      \t * This includes:
+      \t * - Idle detect flag
+      \t * - Overrun flag
+      \t * - Noise flag
+      \t * - Framing error flag
+      \t * - Parity error flag
+      \t */
+      \tstatic void clearError() {
+      \t
+      \t   // Flags are cleared by reading status and then data
+      \t   (void)uart->S1;
+      \t   (void)uart->D;
       \t}
       \t\n
    ]]></template>
@@ -387,7 +333,7 @@
       \t * @return Input clock frequency as a uint32_t in Hz
       \t */
       \tstatic inline uint32_t getInputClockFrequency() {
-      \t   return SimInfo::getUart$(_instance)Clock();
+      \t   return SimInfo::get$(_Class)Clock();
       \t}\n\n
    ]]></template>
 
@@ -399,6 +345,8 @@
       \t * Set baud rate
       \t * (for UART with fixed /16 prescaler)
       \t *
+      \t * @param uart             Hardware instance
+      \t * @param clockFrequency   Clock frequency of UART
       %paramDescription
       \t */
       \tstatic void setBaudRate(volatile $(_STRUCTNAME)_Type *const $(_basename), uint32_t clockFrequency, %params) {
@@ -434,10 +382,10 @@
    <![CDATA[
       \t/**
       \t * Set baud rate
-      \t * (for UART with variable prescaler)
+      \t * (for $(_BASENAME) with variable prescaler)
       \t *
-      \t * @param uart             UART hardware instance pointer
-      \t * @param clockFrequency   UART clock frequency
+      \t * @param $(_basename)     Hardware instance pointer
+      \t * @param clockFrequency   Clock frequency
       %paramDescription
       \t */
       \tstatic void setBaudRate(
@@ -518,7 +466,7 @@
       \t */
       \tstatic void setBaudRate(%params) {
       \t
-      \t   $(_Structname)BasicInfo::setBaudRate(uart, getInputClockFrequency(), %paramName);
+      \t   $(_Structname)BasicInfo::setBaudRate($(_basename), getInputClockFrequency(), %paramName);
       \t}
       \t\n
    ]]>
@@ -846,7 +794,7 @@ XXXXXXXXXXXXXXXXXXXXXX
    <template codeGenCondition="irqHandlingMethod"
       condition="false" >
    <![CDATA[
-      \t   // Only set call-backs if feature enabled
+      \t   // Set call-backs
       \t   setCallback(init.callbackFunction);
       \t   enableNvicInterrupts(init.irqlevel);
       \t\n
@@ -999,13 +947,6 @@ XXXXXXXXXXXXXXXXXXXXXX
    ]]>
    </template>
 
-   <template where="basicInfo" >
-   <![CDATA[
-      }; // class $(_Structname)BasicInfo
-      \t\n
-   ]]>
-   </template>
-
    <!-- ____ Common __________________ -->
 
    <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
@@ -1068,4 +1009,4 @@ XXXXXXXXXXXXXXXXXXXXXX
    <!--  ____ Signal mapping __________________ -->
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 
-</peripheralPage>
+</fragment>

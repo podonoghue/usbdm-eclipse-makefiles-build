@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- dac0_16dat_fifo16_0x400cc000.xml -->
+<!-- dac0_16dat_fifo16_aips1.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Digital to Analogue Converter">
 

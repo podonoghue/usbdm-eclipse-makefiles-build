@@ -4,8 +4,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Port control" >
 
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="generateDefault"           type="Boolean" value="false"         />
+   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml" />
    <title />
 
@@ -238,7 +238,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
+   <template where="basicInfo" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       class $(_Class)BasicInfo {
       \t
@@ -246,7 +246,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
+   <template where="basicInfo" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -267,7 +267,7 @@
 
 <!--   Member variables -->
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="port_ioflt_fltdiv3,port_ioflt_fltdiv2,port_ioflt_fltdiv1,port_ioflt_fltnmi,port_ioflt_fltkbi1,port_ioflt_fltkbi0,port_ioflt_fltrst,port_ioflt_fltpwt,port_ioflt_fltftm0,port_ioflt_fltiic,port_ioflt_fltc,port_ioflt_fltb,port_ioflt_flta"
    ><![CDATA[
       \t   /// Port Filter Register
@@ -312,7 +312,7 @@
       \t\n
    ]]></template>
 
-   <template discardRepeats="true" key="/$(_BASENAME)/InitMethod" namespace="all"
+   <template discardRepeats="true" key="/$(_BASENAME)/InitMethod" where="all"
              codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t   // Initialise remaining registers
       \t   port->IOFLT    = init.ioflt;
@@ -338,7 +338,7 @@
             port_ioflt_fltb;
             port_ioflt_flta
             " >
-      <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -425,13 +425,13 @@
       \t};\n\n
    ]]></variableTemplate>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
+   <template where="basicInfo" codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
       \t}; // $(_Class)BasicInfo::Init\n\n
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
+   <template where="basicInfo" codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
       }; // $(_Class)BasicInfo\n\n
    ]]>

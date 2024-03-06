@@ -171,7 +171,7 @@
 
 <!--   ========== SCB Init class =============================== -->
 
-   <template key="init_description" namespace="all">
+   <template key="init_description" where="all">
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Class)
@@ -215,7 +215,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template where="basicInfo">
    <![CDATA[
       class $(_Class)BasicInfo {
       \t
@@ -224,7 +224,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template where="basicInfo">
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -245,56 +245,56 @@
 
 <!--   Member variables -->
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate where="basicInfo"
       variables="scb_icsr_nmipendset,scb_icsr_pendsvset,scb_icsr_pendsvclr,scb_icsr_pendstset,scb_icsr_pendstclr"
    ><![CDATA[
       \t   /// Interrupt Control and State Register
       \t   uint32_t icsr = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate where="basicInfo"
       variables="scb_vtor_tbloff"
    ><![CDATA[
       \t   /// Vector Table Offset Register
       \t   uint32_t vtor = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate where="basicInfo"
       variables="scb_aircr_vectkey,scb_aircr_sysresetreq,scb_aircr_vectclractive"
    ><![CDATA[
       \t   /// Application Interrupt and Reset Control Register
       \t   uint32_t aircr = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate where="basicInfo"
       variables="scb_scr_sevonpend,scb_scr_sleepdeep,scb_scr_sleeponexit"
    ><![CDATA[
       \t   /// System Control Register
       \t   uint32_t scr = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate where="basicInfo"
       variables="scb_shpr2_pri_11"
    ><![CDATA[
       \t   /// System Handler Priority Register 2
       \t   uint32_t shpr2 = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate where="basicInfo"
       variables="scb_shpr3_pri_15,scb_shpr3_pri_14"
    ><![CDATA[
       \t   /// System Handler Priority Register 3
       \t   uint32_t shpr3 = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate where="basicInfo"
       variables="scb_shcsr_svcallpended"
    ><![CDATA[
       \t   /// System Handler Control and State Register
       \t   uint32_t shcsr = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate where="basicInfo"
       variables="scb_dfsr_external,scb_dfsr_vcatch,scb_dfsr_dwttrap,scb_dfsr_bkpt,scb_dfsr_halted"
    ><![CDATA[
       \t   /// Debug Fault Status Register
@@ -355,7 +355,7 @@
             scb_dfsr_bkpt;
             scb_dfsr_halted
             ">
-      <variableTemplate namespace="usbdm"
+      <variableTemplate where="basicInfo"
          variables="%(r)"
          linePadding="xxx">
       <![CDATA[
@@ -388,7 +388,7 @@
             scb_shpr3_pri_15;
             scb_shpr3_pri_14
             ">
-      <variableTemplate namespace="usbdm"
+      <variableTemplate where="basicInfo"
          variables="%(r)"
          linePadding="xxx">
       <![CDATA[
@@ -444,13 +444,13 @@
       \t};\n\n
    ]]></variableTemplate>
 
-   <template namespace="usbdm">
+   <template where="basicInfo">
       <![CDATA[
       \t}; // $(_Class)::BasicInfo::Init\n\n
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template where="basicInfo">
       <![CDATA[
       }; // $(_Class)::BasicInfo\n\n
    ]]>

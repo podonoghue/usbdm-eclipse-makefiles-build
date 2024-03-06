@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V0.0
- * @date     2024/01
+ * @date     2024/02
  *
  */
 
@@ -63,10 +63,10 @@ typedef enum {
   EPORT6_IRQn                   =  70,   /**<  70 Edge port flag 6                                                                 */
   EPORT7_IRQn                   =  71,   /**<  71 Edge port flag 7                                                                 */
   SCM_IRQn                      =  72,   /**<  72 Software watchdog timeout                                                        */
-  DMA_CH0_IRQn                  =  73,   /**<  73 DMA Channel 0 transfer complete                                                  */
-  DMA_CH1_IRQn                  =  74,   /**<  74 DMA Channel 1 transfer complete                                                  */
-  DMA_CH2_IRQn                  =  75,   /**<  75 DMA Channel 2 transfer complete                                                  */
-  DMA_CH3_IRQn                  =  76,   /**<  76 DMA Channel 3 transfer complete                                                  */
+  DMA0_Ch0_IRQn                 =  73,   /**<  73 DMA Channel 0 transfer complete                                                  */
+  DMA0_Ch1_IRQn                 =  74,   /**<  74 DMA Channel 1 transfer complete                                                  */
+  DMA0_Ch2_IRQn                 =  75,   /**<  75 DMA Channel 2 transfer complete                                                  */
+  DMA0_Ch3_IRQn                 =  76,   /**<  76 DMA Channel 3 transfer complete                                                  */
   UART0_IRQn                    =  77,   /**<  77 UART 0 interrupt                                                                 */
   UART1_IRQn                    =  78,   /**<  78 UART 1 interrupt                                                                 */
   UART2_IRQn                    =  79,   /**<  79 UART 2 interrupt                                                                 */
@@ -103,8 +103,8 @@ typedef enum {
   ADC_ADCINT_IRQn               = 115,   /**< 115 ADC Interrupt                                                                    */
   PWM_IRQn                      = 116,   /**< 116 PWM interrupt                                                                    */
   RNGA_IRQn                     = 117,   /**< 117 RNGA interrupt                                                                   */
-  PIT0_IRQn                     = 119,   /**< 119 PIT 0 interrupt                                                                  */
-  PIT1_IRQn                     = 120,   /**< 120 PIT 1 interrupt                                                                  */
+  PIT_Ch0_IRQn                  = 119,   /**< 119 PIT 0 interrupt                                                                  */
+  PIT_Ch1_IRQn                  = 120,   /**< 120 PIT 1 interrupt                                                                  */
   CFM_CBEIF_IRQn                = 122,   /**< 122 CFM SGFM buffer empty                                                            */
   CFM_CCIF_IRQn                 = 123,   /**< 123 CFM SGFM command complete                                                        */
   CFM_PVIF_IRQn                 = 124,   /**< 124 CFM Protection violation                                                         */
@@ -147,10 +147,10 @@ extern void EPORT5_IRQHandler(void);                 /**< Edge port flag 5      
 extern void EPORT6_IRQHandler(void);                 /**< Edge port flag 6                                                                 */
 extern void EPORT7_IRQHandler(void);                 /**< Edge port flag 7                                                                 */
 extern void SCM_IRQHandler(void);                    /**< Software watchdog timeout                                                        */
-extern void DMA_CH0_IRQHandler(void);                /**< DMA Channel 0 transfer complete                                                  */
-extern void DMA_CH1_IRQHandler(void);                /**< DMA Channel 1 transfer complete                                                  */
-extern void DMA_CH2_IRQHandler(void);                /**< DMA Channel 2 transfer complete                                                  */
-extern void DMA_CH3_IRQHandler(void);                /**< DMA Channel 3 transfer complete                                                  */
+extern void DMA0_Ch0_IRQHandler(void);               /**< DMA Channel 0 transfer complete                                                  */
+extern void DMA0_Ch1_IRQHandler(void);               /**< DMA Channel 1 transfer complete                                                  */
+extern void DMA0_Ch2_IRQHandler(void);               /**< DMA Channel 2 transfer complete                                                  */
+extern void DMA0_Ch3_IRQHandler(void);               /**< DMA Channel 3 transfer complete                                                  */
 extern void UART0_IRQHandler(void);                  /**< UART 0 interrupt                                                                 */
 extern void UART1_IRQHandler(void);                  /**< UART 1 interrupt                                                                 */
 extern void UART2_IRQHandler(void);                  /**< UART 2 interrupt                                                                 */
@@ -187,8 +187,8 @@ extern void ADC_ADCB_IRQHandler(void);               /**< ADCB conversion comple
 extern void ADC_ADCINT_IRQHandler(void);             /**< ADC Interrupt                                                                    */
 extern void PWM_IRQHandler(void);                    /**< PWM interrupt                                                                    */
 extern void RNGA_IRQHandler(void);                   /**< RNGA interrupt                                                                   */
-extern void PIT0_IRQHandler(void);                   /**< PIT 0 interrupt                                                                  */
-extern void PIT1_IRQHandler(void);                   /**< PIT 1 interrupt                                                                  */
+extern void PIT_Ch0_IRQHandler(void);                /**< PIT 0 interrupt                                                                  */
+extern void PIT_Ch1_IRQHandler(void);                /**< PIT 1 interrupt                                                                  */
 extern void CFM_CBEIF_IRQHandler(void);              /**< CFM SGFM buffer empty                                                            */
 extern void CFM_CCIF_IRQHandler(void);               /**< CFM SGFM command complete                                                        */
 extern void CFM_PVIF_IRQHandler(void);               /**< CFM Protection violation                                                         */

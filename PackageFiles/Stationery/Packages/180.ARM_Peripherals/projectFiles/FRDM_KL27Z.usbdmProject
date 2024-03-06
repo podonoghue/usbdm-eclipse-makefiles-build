@@ -8,6 +8,8 @@
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KL27Z" />
    <item key="$$DeviceInfo_SubFamily"                      value="MKL27Z644" />
    <item key="$$Hardware_Source_Filename"                  value="MKL27Z644.usbdmHardware" />
+   <item key="$peripheral$GPIOA_polarity"                  value="8192" />
+   <item key="$peripheral$GPIOB_polarity"                  value="786432" />
    <item key="$pin$PTA12_pcrSetting_1"                     value="100" />
    <item key="$pin$PTA13_pcrSetting_1"                     value="100" />
    <item key="$pin$PTA13_pcrSetting_3"                     value="300" />

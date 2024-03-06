@@ -294,42 +294,6 @@ void Usb0::epCdcSendNotification() {
    epCdcNotification.startTxTransfer(EPDataIn, sizeof(cdcNotification)+2);
 }
 
-/**
- * Handler for Token Complete USB interrupts for
- * end-points other than EP0
- *
- * @param usbStat USB Status value from USB hardware
- */
-void Usb0::handleTokenComplete(UsbStat usbStat) {
-
-   // Endpoint number
-   uint8_t endPoint = usbStat.endp;
-
-   fEndPoints[endPoint]->flipOddEven(usbStat);
-   switch (endPoint) {
-      case CDC_NOTIFICATION_ENDPOINT: // Accept IN token
-         // CDC Notification has been ACKed
-//         console.WRITELN("CDC_NOTIFICATION_ENDPOINT");
-         setActive();
-         epCdcNotification.handleInToken();
-         return;
-      case CDC_DATA_OUT_ENDPOINT: // Accept OUT token
-//         console.WRITELN("CDC_DATA_OUT_ENDPOINT");
-         setActive();
-         epCdcDataOut.handleOutToken();
-         return;
-      case CDC_DATA_IN_ENDPOINT:  // Accept IN token
-//         console.WRITELN("CDC_DATA_IN_ENDPOINT");
-         // Data has been ACKed
-         setActive();
-         epCdcDataIn.handleInToken();
-         return;
-      /*
-       * TODO Add additional end-point handling here
-       */
-   }
-}
-
 //_______ CDC Call-backs ________________________________________________________________
 
 /**
@@ -350,18 +314,6 @@ EndpointState Usb0::cdcOutTransactionCallback(EndpointState state) {
 }
 
 /**
- * Call-back handling CDC-IN transaction complete\n
- *
- * @param[in] state Current end-point state (always EPDataIn)
- *
- * @return The endpoint state to set after call-back (EPIdle/EPDataIn/EPComplete)
- */
-EndpointState Usb0::cdcInTransactionCallback(EndpointState state) {
-   (void)state;
-   return EPIdle;
-}
-
-/**
  * Initialise the USB0 interface
  *
  *  @note Assumes clock set up for USB operation (48MHz)
@@ -372,7 +324,7 @@ void Usb0::initialise() {
    inQueue.clear();
    outQueue.clear();
 
-   UsbLed::setOutput(PinDriveStrength_High, PinDriveMode_PushPull, PinSlewRate_Slow);
+   UsbLed::setOutput(PinDriveStrength_High, PinSlewRate_Slow);
 
    // Add extra handling of CDC requests directed to EP0
    setUnhandledSetupCallback(handleUserEp0SetupRequests);

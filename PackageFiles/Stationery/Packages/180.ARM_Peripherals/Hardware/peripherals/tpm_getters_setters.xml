@@ -18,7 +18,7 @@
 
          tpm_mod_mod                    : true  : true  : false : enableGettersAndSetters : CounterMaximumValue;
 
-         tpm_status_status              : true  : true  : false : enableGettersAndSetters : Status;
+         tpm_status_status              : true  : true  : false : enableGettersAndSetters : Status
          " >
       <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
       ><![CDATA[

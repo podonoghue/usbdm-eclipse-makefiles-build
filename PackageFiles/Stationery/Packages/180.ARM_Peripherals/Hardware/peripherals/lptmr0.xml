@@ -4,70 +4,36 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Power Timer" >
 
-   <constant key="irq_pattern"               type="String"  value="&quot;^.*%b%i.*$&quot;"       />
-   <constant key="irq_ClassHandler"          type="String"  value="&quot;%c%i::irqHandler&quot;" />
-   <constant key="irq_parameters"            type="String"  value='""'     />
-   <constant key="irq_dummy_parameters"      type="String"  value='""'     />
-   <constant key="irq_call"                  type="String"  value='""'     />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="irq_pattern"                value='="^.*%b%i.*$"'       />
+   <equation key="irq_ClassHandler"           value='="%c%i::irqHandler"' />
+   <equation key="irq_parameters"             value=""        />
+   <equation key="irq_dummy_parameters"       value=""        />
+   <equation key="irq_call"                   value=""        />
+   <equation key="generateDefault"            value="false"     />
+   <equation key="configureInStartupDefault"  value="false"     />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
-<!--
-    * General substitutions
-    *  $(_NAME)         => e.g FTM2 => FTM2
-    *  $(_name)         => e.g FTM2 => ftm2
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
-    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
-    *  $(_Class)        => e.g FTM2 => Ftm2
-    *  $(_Baseclass)    => e.g FTM0 => Ftm
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A
--->
+   <!-- ____ Class Declaration ________ -->
+   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
-<!--
-    * Template substitutions
-    *
-    * <li>%paramExpression            Parameters ORed together e.g. adcPretrigger|adcRefSel
-    * <li>%valueExpression            Numeric variable value e.g. 0x3
-    * <li>%symbolicExpression[index]  Symbolic formatted value e.g. AdcCompare_Disabled
-    * <li>%variable[index]            Variable name /ADC0/adc_sc2_acfe
-    * <li>%macro[index](value)        C register macro e.g. ADC_SC2_ACFGT(value)
-    * <li>%description[index]         Description from controlVar e.g. Compare Function Enable
-    * <li>%shortDescription[index]    Short description from controlVar e.g. Compare Function Enable
-    * <li>%tooltip[index]             Tool-tip from controlVar e.g. Each bit disables the GPIO function
-    * <li>%params                     Formatted parameter list for function
-    * <li>%paramDescription[index]    Tool-tip from controlVar formatted as param description @param ...
-    * <li>%paramType[index]           Based on typeName e.g. AdcCompare (or uint32_t)
-    * <li>%paramName[index]           Based on typeName with lower-case first letter adcCompare
-    * <li>%fieldAssignment            Expression of form '%register <= (%register & ~%mask)|%paramExpression
-    * <li>%maskingExpression          Based on variable etc. Similar to (%register&%mask)
-    * <li>%mask[index]                From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
-    * <li>%register[index]            Register associated with variable e.g. adc->APCTL1
-    * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
-    * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
--->
+   <!-- ____ CSR ____ -->
 
-   <!-- ************* Class Declaration ****************** -->
-   <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Structname)BasicInfo&quot;" />
-
-   <!-- ************* CSR ****************** -->
-
-   <!-- binaryOption key="lptmr_csr_ten" condition="lptmr_csr_ten_present"
-      enabledBy="enablePeripheralSupport"
+   <binaryOption key="lptmr_csr_ten" condition="lptmr_csr_ten_present"
+      hidden="true"
+      derived="true"
       typeName="LptmrCsrTen"
-      toolTip=""
-      description="Timer Enable" >
+      description="Timer Enable"
+      toolTip="Enables timer" >
       <choice name="Disabled"    value="0" enum="Disabled"/>
       <choice name="Enabled"     value="1" enum="Enabled"/>
-   </binaryOption -->
+   </binaryOption >
 
    <binaryOption key="lptmr_csr_tie" condition="lptmr_csr_tie_present"
       enabledBy="irqHandlingMethod"
       typeName="LptmrEventAction"
       toolTip="Enables LPTMR interrupts"
-      description="Timer interrupt enable" >
+      description="Timer action on event" >
       <choice value="0" name="None"       enum="None" />
       <choice value="1" name="Interrupt"  enum="Interrupt"  />
    </binaryOption>
@@ -94,7 +60,7 @@
    <binaryOption key="lptmr_csr_tcf" condition="lptmr_csr_tcf_present"
       hidden="true"
       enabledBy="enablePeripheralSupport"
-      typeName="LptmrCsrTcf"
+      typeName="LptmrCompareFlag"
       toolTip=""
       description="Timer Compare Flag" >
       <choice name="No event"    value="0" enum="NoEvent"/>
@@ -108,17 +74,17 @@
       value="100" min="1"
    />
 
-   <!-- ************* CMR ****************** -->
+   <!-- _________ CMR ______________ -->
 
    <intOption key="lptmr_cmr_compare" condition="lptmr_cmr_compare_present"
       enabledBy="enablePeripheralSupport"
       description="Timer Compare Register"
-      valueFormat="%s"
       units="ticks"
+      baseType="uint16_t"
       toolTip="Comparison value\n
-      The timer comparison flag is set when the counter reaches this value and increments. \n
-      The hardware trigger will assert until the next time the counter increments. \n
-      This value determines the period in TimeInterval mode or the event time in Pulse Counting mode"
+               The timer comparison flag is set when the counter reaches this value and increments. \n
+               The hardware trigger will assert until the next time the counter increments. \n
+               This value determines the period in TimeInterval mode or the event time in Pulse Counting mode"
       value="65535" min="1" max="65535" />
 
    <choiceOption key="lptmr_psr_pcs" condition="lptmr_psr_pcs_present"
@@ -139,11 +105,11 @@
       derived="true"
       locked="true" />
 
-   <!-- ************* Time Interval Mode ****************** -->
+   <!-- _________ Time Interval Mode ______________ -->
 
    <title description="Time Interval Mode" />
 
-   <!-- ************* PSR ****************** -->
+   <!-- _________ PSR ______________ -->
 
    <choiceOption key="lptmr_psr_prescaler" condition="lptmr_psr_prescale_present"
       enabledBy="enablePeripheralSupport&amp;&amp;!lptmr_csr_tms"
@@ -208,7 +174,7 @@
       derived="true"
       min="0" units="Hz"/>
 
-   <!-- ************* Pulse Counting Mode ****************** -->
+   <!-- _________ Pulse Counting Mode ______________ -->
 
    <title description="Pulse Counting Mode" />
 
@@ -264,49 +230,39 @@
       <choice value="1" name="Active-low source,  falling-edge increments lptmr_cnr" enum="Falling" />
    </binaryOption >
 
-<!-- Graphic here -->
 
-   <!-- ************* CNR ****************** -->
+   <!-- ____ CNR ____ -->
 
    <intOption key="lptmr_cnr_counter" condition="lptmr_cnr_counter_present"
       hidden="true"
       derived="true"
-      typeName="uint32_t"
+      baseType="uint16_t"
       description="Counter Value"
-      toolTip=""
+      toolTip="Current counter value"
    />
 
-<!-- Setters and getters -->
-
-   <variableTemplate variables="lptmr_csr_tcf" codeGenCondition="enableGettersAndSetters"
-   ><![CDATA[
-      \t/**
-      \t * Set %description
-      \t *
-      %paramDescription
-      \t */
-      \tstatic void clearTimerCompleteFlag() {
-      \t   %register = $register|%mask;
-      \t}
-      \t\n
-   ]]></variableTemplate>
+   <!-- ____ Getters and Setters ________ -->
 
    <for keys="field        : set   : get   : clear : genCode                 : name"
-     values="
-      lptmr_csr_tcf        : false : true  : true  : enableGettersAndSetters : CompareFlag;
-      lptmr_csr_tie        : true  : true  : false : enableGettersAndSetters : EventAction;
-      lptmr_csr_tps        : true  : true  : false : enableGettersAndSetters : PinSelect;
-      lptmr_csr_tpp        : true  : true  : false : enableGettersAndSetters : PinPolarity;
-      lptmr_csr_tfc        : true  : true  : false : enableGettersAndSetters : CompareAction;
-      lptmr_csr_tms        : true  : true  : false : enableGettersAndSetters : Mode;
-      lptmr_csr_ten        : true  : true  : false : enableGettersAndSetters : Enable;
-      lptmr_psr_pcs        : true  : true  : false : enableGettersAndSetters : Prescaler;
-      lptmr_cmr_compare    : true  : true  : false : enableGettersAndSetters : EventTime;
-      lptmr_cnr_counter    : true  : true  : false : enableGettersAndSetters : Counter" >
+        values="
+         lptmr_csr_tcf        : false : true  : true  : enableGettersAndSetters : CompareFlag;
+         lptmr_csr_tie        : true  : true  : false : enableGettersAndSetters : EventAction;
+         lptmr_csr_tps        : true  : true  : false : enableGettersAndSetters : PinSelect;
+         lptmr_csr_tpp        : true  : true  : false : enableGettersAndSetters : PinPolarity;
+         lptmr_csr_tfc        : true  : true  : false : enableGettersAndSetters : CompareAction;
+         lptmr_csr_tms        : true  : true  : false : enableGettersAndSetters : Mode;
+         lptmr_csr_ten        : true  : true  : false : enableGettersAndSetters : Enable;
+
+         lptmr_psr_pcs        : true  : true  : false : enableGettersAndSetters : Prescaler;
+
+         lptmr_cmr_compare    : true  : true  : false : enableGettersAndSetters : EventTime;
+
+         lptmr_cnr_counter    : true  : true  : false : enableGettersAndSetters : Counter" >
       <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
       ><![CDATA[
          \t/**
          \t * Set %description
+         \t * (%(field))
          \t *
          %paramDescription
          \t */
@@ -319,11 +275,12 @@
       ><![CDATA[
          \t/**
          \t * Get %description
+         \t * (%(field))
          \t *
          \t * @return %tooltip
          \t */
-         \tstatic %paramType get%(name)() {
-         \t   return %paramType(%register&%mask);
+         \tstatic %returnType get%(name)() {
+         \t   return %fieldExtract;
          \t}
          \t\n
       ]]></variableTemplate>
@@ -331,7 +288,8 @@
       ><![CDATA[
          \t/**
          \t * Clear %description
-         \t *
+         \t * (%(field))
+         \t */
          \tstatic void clear%(name)() {
          \t   %register = %register|%mask;
          \t}
@@ -510,7 +468,7 @@
       \t}\n\n
    ]]></clockCodeTemplate>
 
-<!--  ========== LPTMR Init function - time counting mode ============================ -->
+<!--  ______ LPTMR Init function - time counting mode ________ -->
 
    <variableTemplate key="/LPTMR/StaticMethods" codeGenCondition="enablePeripheralSupport"
       nonDefaultParams="3"
@@ -546,7 +504,7 @@
       \t}\n\n
    ]]></variableTemplate>
 
-   <variableTemplate key="/LPTMR/StaticMethods" namespace="all"
+   <variableTemplate key="/LPTMR/StaticMethods" where="all"
       nonDefaultParams="3"
       discardRepeats="true"
       variables="
@@ -589,9 +547,9 @@
       \t}\n\n
    ]]></variableTemplate>
 
-<!--  ========== LPTMR Init function - pulse counting mode ============================ -->
+<!--  ______ LPTMR Init function - pulse counting mode ________ -->
 
-   <variableTemplate key="/LPTMR/StaticMethods" namespace="all"
+   <variableTemplate key="/LPTMR/StaticMethods" where="all"
       nonDefaultParams="2"
       discardRepeats="true"
       variables="
@@ -628,7 +586,7 @@
       \t}\n\n
    ]]></variableTemplate>
 
-<!--   ========== Interrupt handler wrapper ============================ -->
+<!--   ______ Interrupt handler wrapper ________ -->
 
    <template key="/LPTMR/declarations"  ><![CDATA[
       \t/**
@@ -650,38 +608,10 @@
       \ttypedef void (*%paramType)();\n\n
    ]]></variableTemplate>
 
-   <!--   ========== class $(_Structname)BasicInfo =============================== -->
-
-   <template namespace="baseClass" ><![CDATA[
-      class $(_Structname)BasicInfo {
-
-      public:\n
-   ]]></template>
-
-   <!--   ========== Interrupt handling =============================== -->
-
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
-   <![CDATA[
-      \t/**
-      \t * Type definition for $(_Class) interrupt call back.
-      \t */
-      \ttypedef void (*CallbackFunction)();
-      \t
-      \t/**
-      \t * Callback to catch unhandled interrupt
-      \t */
-      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
-      \t   setAndCheckErrorCode(E_NO_HANDLER);
-      \t}
-      \t\n
-   ]]>
-   </template>
+   <!--   ______ Interrupt handling ___________ -->
 
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
-      \t/** Callback function for Low Power Timer */
-      \tstatic CallbackFunction callbackFunction;
-      \t
       \t/**
       \t * Low Power Timer interrupt handler
       \t * Passes control to call-back function
@@ -689,50 +619,27 @@
       \tstatic void irqLPTMR1Handler() {
       \t
       \t   // Execute call-back
-      \t   callbackFunction($(irq_call));
+      \t   sCallback($(irq_call));
       \t}
-      \t
-      \t/**
-      \t * Set Low Power Timer callback function.
-      \t *
-      \t * @param      $(_basename)Callback Callback function to execute on interrupt
-      \t *                             Use nullptr to remove callback.
-      \t */
-      \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
-      \t   if ($(_basename)Callback == nullptr) {
-      \t      $(_basename)Callback = (CallbackFunction)unhandledCallback;
-      \t   }
-      \t   // Allow either no handler set yet or removing handler
-      \t   usbdm_assert(
-      \t         ((void*)callbackFunction == (void*)unhandledCallback) ||
-      \t         ((void*)$(_basename)Callback == (void*)unhandledCallback),
-      \t         "Handler already set");
-      \t   callbackFunction = $(_basename)Callback;
-      \t}
-      \t
       \t\n
    ]]>
    </template>
 
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t/**
-      \t * Callback function for Low Power Timer
-      \t */
-      \t$(_Class)Info::CallbackFunction $(_Class)Info::callbackFunction = (CallbackFunction)$(_Class)Info::unhandledCallback;
-      \t
-      \t\n
-   ]]>
-   </template>
+   <!--   ______ LPTMR Init class ___________ -->
 
-   <!--   ========== LPTMR Init class =============================== -->
-
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of LPTMR
       \t */
       \tclass Init {
+      \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   Init(Types...) = delete;
       \t
       \tpublic:
       \t   /**
@@ -754,9 +661,9 @@
       \tpublic:
    ]]></template >
 
-   <!--   Member variables -->
+   <!-- ____ Init class Member variables ________ -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="irqHandlingMethod" >
    <![CDATA[
       \t
@@ -764,35 +671,35 @@
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="lptmr_cmrPeriod"
     ><![CDATA[
       \t   /// %description
       \t   %returnType %registerName = 0_s;\n\n
    ]]></variableTemplate >
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="lptmr_cmr_compare"
    ><![CDATA[
       \t   /// Compare Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="lptmr_psr_prescaler,lptmr_psr_pcs"
     ><![CDATA[
       \t   /// Prescale Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate >
 
-   <variableTemplate namespace="baseClass" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName = %paramType_Normal;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables=
          "lptmr_csr_tie,
           lptmr_csr_tfc"
@@ -801,13 +708,13 @@
       \t   uint8_t %registerName;\n\n
    ]]></variableTemplate >
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t}; // class $(_Structname)BasicInfo::Init\n\n
    ]]></template >
 
-<!--   ========== LPTMR TimeIntervalModeInit class =============================== -->
+<!--   ______ LPTMR TimeIntervalModeInit class ___________ -->
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of LPTMR in Time Interval Mode
       \t *
@@ -831,6 +738,13 @@
       \t */
       \tclass TimeIntervalModeInit : public Init {
       \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   TimeIntervalModeInit(Types...) = delete;
+      \t
       \tpublic:
       \t   /**
       \t    * Copy Constructor
@@ -845,13 +759,12 @@
       \t\n
    ]]></template >
 
-<!--  Constructors -->
+   <!-- ____ TimeIntervalModeInit class Constructors ________ -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="irqHandlingMethod"
       linePadding="xxx"
-    ><![CDATA[
-      #if $(irqHandlingMethod)
+   ><![CDATA[
       \t   /**
       \t    * Constructor for %description
       \t    *
@@ -864,13 +777,13 @@
       \t   constexpr TimeIntervalModeInit(%params, Types... rest) : TimeIntervalModeInit(rest...) {
       \t
       \t      this->%paramName0 = %paramExpression;
-      \t   }
-      #endif\n\n
+      \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel"
-      linePadding="xxx" ><![CDATA[
+      linePadding="xxx"
+   ><![CDATA[
       \t   /**
       \t    * Constructor for %description
       \t    *
@@ -886,17 +799,19 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <for keys="v"
+   <for keys="r"
       values="
          lptmr_csr_tie;
          lptmr_csr_tfc;
          lptmr_psr_prescaler;
          lptmr_psr_pcs" >
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables="%(v)"
-         linePadding="xxx" ><![CDATA[
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(r)"
+         linePadding="xxx" >
+      <![CDATA[
          \t   /**
          \t    * Constructor for %description
+         \t    * (%(r))
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -906,20 +821,23 @@
          \t   template <typename... Types>
          \t   constexpr TimeIntervalModeInit(%params, Types... rest) : TimeIntervalModeInit(rest...) {
          \t
-         \t      %registerName = (%registerName & ~%mask) | %paramExpression;
-         \t   }\n\n
-      ]]></variableTemplate>
+         \t      %constructorFieldAssignment;
+         \t   }
+         \t\n
+      ]]>
+      </variableTemplate>
    </for>
 
-   <for keys="v"
+   <for keys="r"
       values="
          lptmr_cmr_compare;
          lptmr_cmrPeriod" >
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables="%(v)"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(r)"
          linePadding="xxx" ><![CDATA[
          \t   /**
          \t    * Constructor for %description
+         \t    * (%(r))
          \t    *
          %paramDescription
          \t    */
@@ -930,13 +848,13 @@
       ]]></variableTemplate>
    </for>
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t}; // class $(_Structname)BasicInfo::TimeIntervalModeInit\n\n
    ]]></template>
 
-<!--   ========== LPTMR PulseCountingModeInit class =============================== -->
+<!--   ______ LPTMR PulseCountingModeInit class ___________ -->
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of LPTMR in Pulse Counting Mode
       \t *
@@ -962,6 +880,13 @@
       \t */
       \tclass PulseCountingModeInit : public Init {
       \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   PulseCountingModeInit(Types...) = delete;
+      \t
       \tpublic:
       \t   /**
       \t    * Copy Constructor
@@ -978,7 +903,7 @@
 
 <!-- Constructors -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -999,7 +924,7 @@
       #endif\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx" ><![CDATA[
       \t   /**
@@ -1024,8 +949,8 @@
          lptmr_csr_tpp;
          lptmr_csr_tfc;
          lptmr_psr_pcs;
-         lptmr_psr_glitchFilter;" >
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         lptmr_psr_glitchFilter" >
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(v)"
          linePadding="xxx" ><![CDATA[
          \t   /**
@@ -1047,7 +972,7 @@
    <for keys="v"
       values="
          lptmr_cmr_compare" >
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(v)"
          linePadding="xxx" ><![CDATA[
          \t   /**
@@ -1062,7 +987,7 @@
       ]]></variableTemplate>
    </for>
 
-<!--   ========== Default Values =============================== -->
+<!--   ______ Default Values ___________ -->
 
    <template  codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
@@ -1116,7 +1041,7 @@
       \t}; \n\n
    ]]></template>
 
-   <!-- ************* Common ****************** -->
+   <!-- _________ Common ______________ -->
 
    <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t/**
@@ -1188,21 +1113,14 @@
       \t\n
    ]]></template>
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t}; // class $(_Structname)BasicInfo::Init
       \t\n
    ]]>
    </template>
 
-   <template namespace="baseClass" >
-   <![CDATA[
-      }; // class $(_Structname)BasicInfo
-      \t\n
-   ]]>
-   </template>
-
-   <!-- ************* Common ****************** -->
+   <!-- ____ Common ______________ -->
 
    <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
@@ -1225,7 +1143,7 @@
       <copy source="Snippets/timer-inline-handler-example.cpp" target="Snippets/timer-inline-handler-example.cpp"    overwrite="true" derived="true" />
    </projectActionList>
 
-   <!-- ************* Startup ****************** -->
+   <!-- ____ Startup ______________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
@@ -1237,15 +1155,22 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <!-- ************* SIM configuration ****************** -->
-   <category name="Advanced" description="SIM configuration">
+   <!-- ____ SIM configuration ______________ -->
+
+   <category name="Advanced" description="SIM configuration"
+      toolTip="These settings only have effect if the SIM configuration is enabled" >
+      <title description="$(_BASENAME) Shared" />
+      <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+      <title description="$(_NAME) Specific" />
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
       <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
       </for>
    </category>
-   <deleteVariables variables="_scgc_clock"  mustExist="false" />
 
+   <!--  ____ Signal mapping ______________ -->
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 
 </peripheralPage>

@@ -52,14 +52,14 @@ void printMessageBuffer(volatile CanMessageBuffer8 * messageBuffer) {
 void canErrorCallback() {
    uint32_t status        = Can::getErrorStatus();
    Can::clearErrorStatus(status);
-   console.setWidth(32);
+   console.setWidth(Width(32));
    console.setPadding(Padding_LeadingZeroes);
    console.writeln("                               10987654321098765432109876543210");
    console.writeln("                                         O BSTR10ACFSTRITFFRBE");
    console.writeln("                                         V OYxxEECRRTxxDxLLxOR");
    console.writeln("                                         R FNWWRRKCMFEEL TT FR");
    console.writeln(  "canErrorCallback(), status = 0b", status, Radix_2);
-   console.resetFormat();
+   console.resetIntegerFormat();
 }
 
 void canWakeupCallback() {

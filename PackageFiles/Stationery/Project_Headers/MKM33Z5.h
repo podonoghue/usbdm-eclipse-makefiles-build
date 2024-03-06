@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2024/01
+ * @date     2024/02
  *
  */
 
@@ -38,10 +38,10 @@ typedef enum {
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
 /* ----------------------   MKM33Z5 VectorTable                      ---------------------- */
-  DMA0_IRQn                     =   0,   /**<  16 DMA Controller                                                                   */
-  DMA1_IRQn                     =   1,   /**<  17 DMA Controller                                                                   */
-  DMA2_IRQn                     =   2,   /**<  18 DMA Controller                                                                   */
-  DMA3_IRQn                     =   3,   /**<  19 DMA Controller                                                                   */
+  DMA0_Ch0_IRQn                 =   0,   /**<  16 DMA Controller                                                                   */
+  DMA0_Ch1_IRQn                 =   1,   /**<  17 DMA Controller                                                                   */
+  DMA0_Ch2_IRQn                 =   2,   /**<  18 DMA Controller                                                                   */
+  DMA0_Ch3_IRQn                 =   3,   /**<  19 DMA Controller                                                                   */
   SPI0_IRQn                     =   4,   /**<  20 Serial Peripheral Interface                                                      */
   SPI1_IRQn                     =   5,   /**<  21 Serial Peripheral Interface                                                      */
   PMC_IRQn                      =   6,   /**<  22 Power Management Controller                                                      */
@@ -51,7 +51,7 @@ typedef enum {
   TMR3_IRQn                     =  10,   /**<  26 Quad Timer                                                                       */
   PIT0_PIT1_IRQn                =  11,   /**<  27 Periodic Interrupt Timer                                                         */
   LLWU_IRQn                     =  12,   /**<  28 Low Leakage Wakeup                                                               */
-  FTF_Command_IRQn              =  13,   /**<  29 Flash Memory Interface                                                           */
+  FTFA_Command_IRQn             =  13,   /**<  29 Flash Memory Interface                                                           */
   CMP0_CMP1_IRQn                =  14,   /**<  30 High-Speed Comparator                                                            */
   LCD_IRQn                      =  15,   /**<  31 Segment Liquid Crystal Display                                                   */
   ADC_IRQn                      =  16,   /**<  32 Analogue to Digital Converter                                                    */
@@ -79,10 +79,10 @@ extern void HardFault_Handler(void);                 /**< Hard Fault, all classe
 extern void SVC_Handler(void);                       /**< System Service Call via SVC instruction                                          */
 extern void PendSV_Handler(void);                    /**< Pendable request for system service                                              */
 extern void SysTick_Handler(void);                   /**< System Tick Timer                                                                */
-extern void DMA0_IRQHandler(void);                   /**< DMA Controller                                                                   */
-extern void DMA1_IRQHandler(void);                   /**< DMA Controller                                                                   */
-extern void DMA2_IRQHandler(void);                   /**< DMA Controller                                                                   */
-extern void DMA3_IRQHandler(void);                   /**< DMA Controller                                                                   */
+extern void DMA0_Ch0_IRQHandler(void);               /**< DMA Controller                                                                   */
+extern void DMA0_Ch1_IRQHandler(void);               /**< DMA Controller                                                                   */
+extern void DMA0_Ch2_IRQHandler(void);               /**< DMA Controller                                                                   */
+extern void DMA0_Ch3_IRQHandler(void);               /**< DMA Controller                                                                   */
 extern void SPI0_IRQHandler(void);                   /**< Serial Peripheral Interface                                                      */
 extern void SPI1_IRQHandler(void);                   /**< Serial Peripheral Interface                                                      */
 extern void PMC_IRQHandler(void);                    /**< Power Management Controller                                                      */
@@ -92,7 +92,7 @@ extern void TMR2_IRQHandler(void);                   /**< Quad Timer            
 extern void TMR3_IRQHandler(void);                   /**< Quad Timer                                                                       */
 extern void PIT0_PIT1_IRQHandler(void);              /**< Periodic Interrupt Timer                                                         */
 extern void LLWU_IRQHandler(void);                   /**< Low Leakage Wakeup                                                               */
-extern void FTF_Command_IRQHandler(void);            /**< Flash Memory Interface                                                           */
+extern void FTFA_Command_IRQHandler(void);           /**< Flash Memory Interface                                                           */
 extern void CMP0_CMP1_IRQHandler(void);              /**< High-Speed Comparator                                                            */
 extern void LCD_IRQHandler(void);                    /**< Segment Liquid Crystal Display                                                   */
 extern void ADC_IRQHandler(void);                    /**< Analogue to Digital Converter                                                    */
@@ -1330,7 +1330,7 @@ typedef struct DMA_Type {
 #define DMA0_BasePtr                   0x40008000UL //!< Peripheral base address
 #define DMA0                           ((DMA_Type *) DMA0_BasePtr) //!< Freescale base pointer
 #define DMA0_BASE_PTR                  (DMA0) //!< Freescale style base pointer
-#define DMA0_IRQS { DMA0_IRQn, DMA1_IRQn, DMA2_IRQn, DMA3_IRQn,  }
+#define DMA0_IRQS { DMA0_Ch0_IRQn, DMA0_Ch1_IRQn, DMA0_Ch2_IRQn, DMA0_Ch3_IRQn,  }
 
 
 /** @} */ /* End group DMA0_Peripheral_access_layer_GROUP */
@@ -1916,7 +1916,7 @@ typedef struct FTFA_Type {
 #define FTFA_BasePtr                   0x40020000UL //!< Peripheral base address
 #define FTFA                           ((FTFA_Type *) FTFA_BasePtr) //!< Freescale base pointer
 #define FTFA_BASE_PTR                  (FTFA) //!< Freescale style base pointer
-#define FTFA_IRQS { FTF_Command_IRQn,  }
+#define FTFA_IRQS { FTFA_Command_IRQn,  }
 
 
 /** @} */ /* End group FTFA_Peripheral_access_layer_GROUP */

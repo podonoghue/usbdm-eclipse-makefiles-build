@@ -2288,7 +2288,12 @@ public:
     * @param io Where to write report to
     */
    static void reportLuts(FormattedIO &io) {
-      io.setWidth(4).setPadding(Padding_LeadingZeroes);
+
+      static constexpr IntegerFormat format {
+         Width_4,
+         Padding_LeadingZeroes,
+      };
+      io.setFormat(format);
 
       static constexpr unsigned TOTAL_LUTS = sizeof(qspi->LUT)/sizeof(qspi->LUT[0]);
       static constexpr unsigned SEQ_COUNT = TOTAL_LUTS/8;
@@ -2309,7 +2314,7 @@ public:
          io.writeln("}");
       }
       io.flushOutput();
-      io.resetFormat();
+      io.resetIntegerFormat();
    }
 
    /**

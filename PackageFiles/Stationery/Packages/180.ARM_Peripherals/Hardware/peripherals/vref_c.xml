@@ -4,47 +4,13 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Voltage Reference" >
 
-   <constant key="irq_parameters"            type="String"  value='""'  />
-   <constant key="irq_dummy_parameters"      type="String"  value='""'  />
-   <constant key="irq_call"                  type="String"  value='""'  />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="irq_parameters"            value=""  />
+   <equation key="irq_dummy_parameters"      value=""  />
+   <equation key="irq_call"                  value=""  />
+   <equation key="generateDefault"           value="false"         />
+   <equation key="configureInStartupDefault" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
-
-<!--
-    * General substitutions
-    *  $(_NAME)         => e.g FTM2 => FTM2
-    *  $(_name)         => e.g FTM2 => ftm2
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
-    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
-    *  $(_Class)        => e.g FTM2 => Ftm2
-    *  $(_Baseclass)    => e.g FTM0 => Ftm
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A
--->
-
-<!--
-    * Template substitutions
-    *
-    * <li>%paramExpression            Parameters ORed together e.g. adcPretrigger|adcRefSel
-    * <li>%valueExpression            Numeric variable value e.g. 0x3
-    * <li>%symbolicExpression[index]  Symbolic formatted value e.g. AdcCompare_Disabled
-    * <li>%variable[index]            Variable name /ADC0/adc_sc2_acfe
-    * <li>%macro[index](value)        C register macro e.g. ADC_SC2_ACFGT(value)
-    * <li>%description[index]         Description from controlVar e.g. Compare Function Enable
-    * <li>%shortDescription[index]    Short description from controlVar e.g. Compare Function Enable
-    * <li>%tooltip[index]             Tool-tip from controlVar e.g. Each bit disables the GPIO function
-    * <li>%params                     Formatted parameter list for function
-    * <li>%paramDescription[index]    Tool-tip from controlVar formatted as param description @param ...
-    * <li>%paramType[index]           Based on typeName e.g. AdcCompare (or uint32_t)
-    * <li>%paramName[index]           Based on typeName with lower-case first letter adcCompare
-    * <li>%fieldAssignment            Expression of form '%register <= (%register & ~%mask)|%paramExpression
-    * <li>%maskingExpression          Based on variable etc. Similar to (%register&%mask)
-    * <li>%mask[index]                From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
-    * <li>%register[index]            Register associated with variable e.g. adc->APCTL1
-    * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
-    * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
--->
 
    <constant key="disable_peripheral"  value = "&quot;vref->SC = 0;&quot;" type="String"  />
 
@@ -136,6 +102,13 @@
 
 <!-- Setters and getters -->
 
+   <template where="usbdm">
+   <![CDATA[
+      \t extern void waitUS(uint32_t usToWait);
+      \t\n
+   ]]>
+   </template>
+   
    <for keys="field           : get   : set   : clear : genCode                 : name"
         values="
          vref_trm_chopen      : true  : true  : false : enableGettersAndSetters : Chop;
@@ -181,19 +154,9 @@
       ]]></variableTemplate>
    </for>
 
-   <!--   ========== class $(_Structname)BasicInfo =============================== -->
+  <!--   ========== VREF Init class =============================== -->
 
-   <template namespace="baseClass" ><![CDATA[
-      class $(_Structname)BasicInfo {
-
-      public:\n
-   ]]></template>
-
-   <!--   ========== Interrupt handling =============================== -->
-
-   <!--   ========== VREF Init class =============================== -->
-
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -239,14 +202,14 @@
 
    <!--   Member variables -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="vref_trm_chopen,vref_trm_trim"
    ><![CDATA[
       \t   /// Trim Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="vref_sc_vrefen,vref_sc_regen,vref_sc_icompen,vref_sc_mode_lv"
    ><![CDATA[
       \t   /// Status and Control Register
@@ -264,7 +227,7 @@
             vref_sc_icompen;
             vref_sc_mode_lv
             " >
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -285,6 +248,12 @@
       ]]>
       </variableTemplate>
    </for>
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t}; // class $(_Class)BasicInfo:Init
+      \t\n
+   ]]></template>
 
 <!--   Default Initialisation value -->
 
@@ -311,7 +280,7 @@
 
 <!--   Configure methods -->
 
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t/**
       \t * Configure with default settings.
@@ -320,7 +289,7 @@
       \tstatic inline void defaultConfigure() {
       \t
       \t   // Update settings
-      \t   configure(Info::DefaultInitValue);
+      \t   configure(DefaultInitValue);
       \t}
       \t
       \t/**
@@ -328,16 +297,16 @@
       \t *
       \t * @param init Class containing initialisation values
       \t */
-      \tstatic void configure(const typename Info::Init &init) {
+      \tstatic void configure(const Init &init) {
       \t
       \t   // Enable peripheral
-      \t   Info::enable();
+      \t   enable();
       \t
       \t   uint8_t trm = init.trm;
       \t\n
    ]]></template>
    <if condition="vref_sc_regen&amp;&amp;vref_trm_chopen" >
-      <variableTemplate key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate codeGenCondition="enablePeripheralSupport"
          variables="vref_sc_regen, vref_trm_chopen"
          linePadding="xxx"
       ><![CDATA[
@@ -347,7 +316,7 @@
          \t   }\n
       ]]></variableTemplate>
    </if>
-   <variableTemplate key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
       variables="vref_sc_regen" >
    <![CDATA[
       \t   vref->TRM = trm;
@@ -364,20 +333,6 @@
       \t\n
    ]]>
    </variableTemplate>
-
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
-   <![CDATA[
-      \t}; // class $(_Structname)BasicInfo::Init
-      \t\n
-   ]]>
-   </template>
-
-   <template namespace="baseClass" >
-   <![CDATA[
-      }; // class $(_Structname)BasicInfo
-      \t\n
-   ]]>
-   </template>
 
    <!-- ************* Common ****************** -->
 
@@ -415,7 +370,6 @@
    <category name="Advanced" description="SIM configuration" >
       <aliasOption key="=_scgc_clock"              locked="false" condition="_scgc_clock" />
    </category>
-   <deleteVariables variables="_scgc_clock"  mustExist="false" />
 
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 

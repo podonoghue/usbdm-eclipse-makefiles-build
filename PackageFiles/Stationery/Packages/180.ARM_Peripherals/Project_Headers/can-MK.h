@@ -1177,27 +1177,6 @@ protected:
    /** Bit-mask used to allocate mailbox slots */
    static uint32_t       allocatedMailboxes;
 
-public:
-   /** CAN interrupt handler */
-   static void irqHandler() {
-      Can_T::sCallbacks[MISCELLANEOUS_HANDLER_INDEX]();
-   }
-
-   /** CAN interrupt handler */
-   static void errorIrqHandler() {
-      Can_T::sCallbacks[ERROR_HANDLER_INDEX]();
-   }
-
-   /** CAN interrupt handler */
-   static void wakeupIrqHandler() {
-      Can_T::sCallbacks[WAKEUP_HANDLER_INDEX]();
-   }
-
-   /** CAN message buffer interrupt handler */
-   static void messageBufferIrqHandler() {
-      Can_T::sCallbacks[MAILBOX_HANDLER_INDEX]();
-   }
-
 protected:
    /**
     * Set callbacks for ISR

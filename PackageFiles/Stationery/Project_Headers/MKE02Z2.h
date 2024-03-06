@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2024/01
+ * @date     2024/02
  *
  */
 
@@ -54,8 +54,8 @@ typedef enum {
   FTM2_IRQn                     =  19,   /**<  35 FlexTimer Module                                                                 */
   RTC_Alarm_IRQn                =  20,   /**<  36 Real Time Clock                                                                  */
   ACMP1_IRQn                    =  21,   /**<  37 Analogue comparator                                                              */
-  PIT0_IRQn                     =  22,   /**<  38 Periodic Interrupt Timer                                                         */
-  PIT1_IRQn                     =  23,   /**<  39 Periodic Interrupt Timer                                                         */
+  PIT_Ch0_IRQn                  =  22,   /**<  38 Periodic Interrupt Timer                                                         */
+  PIT_Ch1_IRQn                  =  23,   /**<  39 Periodic Interrupt Timer                                                         */
   KBI0_IRQn                     =  24,   /**<  40 Keyboard Interrupt                                                               */
   KBI1_IRQn                     =  25,   /**<  41 Keyboard Interrupt                                                               */
   ICS_IRQn                      =  27,   /**<  43 Clock Management                                                                 */
@@ -86,8 +86,8 @@ extern void FTM1_IRQHandler(void);                   /**< FlexTimer Module      
 extern void FTM2_IRQHandler(void);                   /**< FlexTimer Module                                                                 */
 extern void RTC_Alarm_IRQHandler(void);              /**< Real Time Clock                                                                  */
 extern void ACMP1_IRQHandler(void);                  /**< Analogue comparator                                                              */
-extern void PIT0_IRQHandler(void);                   /**< Periodic Interrupt Timer                                                         */
-extern void PIT1_IRQHandler(void);                   /**< Periodic Interrupt Timer                                                         */
+extern void PIT_Ch0_IRQHandler(void);                /**< Periodic Interrupt Timer                                                         */
+extern void PIT_Ch1_IRQHandler(void);                /**< Periodic Interrupt Timer                                                         */
 extern void KBI0_IRQHandler(void);                   /**< Keyboard Interrupt                                                               */
 extern void KBI1_IRQHandler(void);                   /**< Keyboard Interrupt                                                               */
 extern void ICS_IRQHandler(void);                    /**< Clock Management                                                                 */
@@ -2701,7 +2701,7 @@ typedef struct PIT_Type {
 #define PIT_BasePtr                    0x40037000UL //!< Peripheral base address
 #define PIT                            ((PIT_Type *) PIT_BasePtr) //!< Freescale base pointer
 #define PIT_BASE_PTR                   (PIT) //!< Freescale style base pointer
-#define PIT_IRQS { PIT0_IRQn, PIT1_IRQn,  }
+#define PIT_IRQS { PIT_Ch0_IRQn, PIT_Ch1_IRQn,  }
 
 
 /** @} */ /* End group PIT_Peripheral_access_layer_GROUP */

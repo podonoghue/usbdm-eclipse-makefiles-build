@@ -269,7 +269,6 @@ protected:
 
       epCdcDataIn.initialise(clearToggle);
       addEndpoint(&epCdcDataIn);
-      epCdcDataIn.setCallback(cdcInTransactionCallback);
 
       // Start CDC status transmission
       epCdcSendNotification();
@@ -287,15 +286,6 @@ protected:
     * @return  E_NO_ERROR on success
     */
    static ErrorCode sofCallback(uint16_t frameNumber);
-
-   /**
-    * Call-back handling CDC-IN transaction complete
-    *
-    * @param[in] state Current end-point state (always EPDataOut)
-    *
-    * @return The endpoint state to set after call-back (EPIdle)
-    */
-   static EndpointState cdcInTransactionCallback(EndpointState state);
 
    /**
     * Call-back handling CDC-OUT transaction complete

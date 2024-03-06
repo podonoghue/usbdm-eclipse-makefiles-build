@@ -109,13 +109,13 @@ Devices using this vector table:
       <peripheral>ACMP1</peripheral>
    </interrupt>
    <interrupt>
-      <name>PIT0</name>
+      <name>PIT_Ch0</name>
       <description>Periodic Interrupt Timer</description>
       <value>22</value>
       <peripheral>PIT</peripheral>
    </interrupt>
    <interrupt>
-      <name>PIT1</name>
+      <name>PIT_Ch1</name>
       <description>Periodic Interrupt Timer</description>
       <value>23</value>
       <peripheral>PIT</peripheral>

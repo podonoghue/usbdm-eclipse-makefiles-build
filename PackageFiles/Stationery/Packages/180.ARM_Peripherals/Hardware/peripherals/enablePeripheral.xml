@@ -2,19 +2,21 @@
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
 <!-- mapPinsOption.xml -->
 
-<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
 <!-- GENERAL SETTINGS -->
 
-   <constant key="_debugcode" type="Boolean" value="false" />
-
+   <equation key="_debugcode" value="false" />
+   
    <title description="General Settings" toolTip="" />
+
+   <!-- _________ Peripheral support _________________  -->
 
    <!--
       Generates:
-         enablePeripheralSupport
-         /$(_STRUCTNAME)/generateSharedInfo    = OR of enablePeripheralSupport's' using _STRUCTNAME
-         /$(_BASENAME)/enablePeripheralSupport = OR of all enablePeripheralSupport's'
+         enablePeripheralSupport               = enable support for this instance
+         /$(_STRUCTNAME)/generateSharedInfo    = OR of enablePeripheralSupport for instances using same _STRUCTNAME
+         /$(_BASENAME)/enablePeripheralSupport = OR of enablePeripheralSupport for all instances
    -->
 
    <!-- Enable for this peripheral -->
@@ -22,13 +24,13 @@
       hidden="true"
       description="Enable peripheral support"
       toolTip="Even if disabled, some code may still be generated but will \n
-               be removed by linker if not used">
+               be removed by linker if not used" >
       <choice value="false" name="Minimal code for $(_NAME)"  />
       <choice value="true"  name="Generate code for $(_NAME)" isDefault="=generateDefault" />
    </binaryOption>
 
    <!-- If not already generated -->
-   <if condition="!/$(_STRUCTNAME)/generateSharedInfo">
+   <if condition="!/$(_STRUCTNAME)/generateSharedInfo" >
 
       <!-- Construct equation to check if any instance sharing the same struct is enabled -->
       <equation key="_enable" value='="false"' />
@@ -47,15 +49,14 @@
          description="=_enable"
          hidden="true"
          locked="true"
-         derived="true">
+         derived="true" >
          <choice value="false" name="Minimal shared code for structName=$(_STRUCTNAME)"  />
          <choice value="true"  name="All shared code for structName=$(_STRUCTNAME)"      />
       </binaryOption>
-      <deleteVariables variables="_enable" />
    </if>
 
    <!-- If not already generated -->
-   <if condition="!/$(_BASENAME)/enablePeripheralSupport">
+   <if condition="!/$(_BASENAME)/enablePeripheralSupport" >
 
       <!-- Construct equation to check if any instance sharing the same struct is enabled -->
       <equation key="_enable" value='="false"' />
@@ -73,25 +74,23 @@
          description="=_enable"
          hidden="true"
          locked="true"
-         derived="true">
+         derived="true" >
          <choice value="false" name="Minimal shared code for basename=$(_BASENAME)"  />
          <choice value="true"  name="All shared code for basename=$(_BASENAME)"      />
       </binaryOption>
-      <deleteVariables variables="_enable" />
    </if>
 
    <aliasOption key="enablePeripheralSupport" locked="false" />
    <aliasOption name="/$(_BASENAME)/enablePeripheralSupport" key="/$(_BASENAME)/enablePeripheralSupport" optional="true"  condition="=_debugcode" />
    <aliasOption name="/$(_STRUCTNAME)/generateSharedInfo"    key="/$(_STRUCTNAME)/generateSharedInfo"    optional="true"  condition="=_debugcode" />
 
-   <!-- =======================================================================================================================  -->
-
+   <!-- _______ Getters and Setters __________  -->
 
    <!-- Enable for generation of getters and setters -->
    <binaryOption key="enableGettersAndSetters" condition="!enableGettersAndSetters"
       enabledBy="enablePeripheralSupport"
       description="Enable Getters and Setters"
-      toolTip="Even if disabled, some code may still be generated">
+      toolTip="Even if disabled, some code may still be generated" >
       <choice value="false" name="Minimal Get and Set methods"        isDefault="true" />
       <choice value="true"  name="All Get and Set methods"  />
    </binaryOption>
@@ -108,13 +107,13 @@
 
    <!-- Pin mapping and enables -->
 
-   <if condition="/PCR/mux_present&amp;&amp;_hasPcrTable">
+   <if condition="/PCR/mux_present&amp;&amp;_hasPcrTable" >
 
       <binaryOption key="mapPinsOnEnable"
          enabledBy="enablePeripheralSupport"
          description="Map pins when configured"
          toolTip="Map all allocated pins on a peripheral when the\n
-                  peripheral is enabled by configure() method etc">
+                  peripheral is enabled by configure() method etc" >
          <choice value="false" name="Don't map pins"  />
          <choice value="true"  name="Map pins when configured"  isDefault="true"/>
       </binaryOption>
@@ -154,12 +153,10 @@
       ]]></template>
    </if>
 
-<!-- ================== INTERRUPTS ==================== -->
+<!-- ___________ INTERRUPTS ____________________ -->
 
    <!-- Only create if device has interrupts -->
-   <if condition="_irqCount" >
-
-      <title description="Interrupts" />
+   <if condition="_hardwareIrqCount" >
 
       <!--
       Patterns for pattern and classHandler
@@ -172,92 +169,87 @@
 
       <!--
          Generates:
-            irqHandlingMethod
-            /$(_STRUCTNAME)/generateSharedIrqInfo = OR of irqHandlingMethod' using _STRUCTNAME
-            /$(_BASENAME)/irqHandlingMethod       = OR of all irqHandlingMethod'
+            irqHandlingMethod                     = Interrupts enabled for this instance
+            /$(_STRUCTNAME)/generateSharedIrqInfo = OR of irqHandlingMethod using same _STRUCTNAME
+            /$(_BASENAME)/irqHandlingMethod       = OR of all irqHandlingMethod
       -->
 
+      <title description="Interrupts" />
+
+      <equation key="_userIrqCount" value="=_hardwareIrqCount" condition="!_userIrqCount" />
+      
       <!-- If not explicitly controlled, IRQ options are always enabled -->
       <constant key="irqEnable"        type="Boolean" value="true"  condition="!irqEnable"/>
 
       <!-- Default IRQ vector patterns if none specified -->
-      <constant key="irq_pattern"      type="String"  value='"^$(_NAME)$"'            condition="!irq_pattern" />
-      <constant key="irq_ClassHandler" type="String"  value='"$(_Class)::irqHandler"' condition="!irq_ClassHandler" />
+      <equation key="irq_pattern"       value="^$(_NAME)_(.+)$;^$(_NAME)$"                                            condition="!irq_pattern" />
+      <equation key="irq_ClassHandler"  value="$(_Class)::irqHandler&lt;$(_Class)IrqNum_$1&gt;;$(_Class)::irqHandler" condition="!irq_ClassHandler" />
 
-      <!-- Create only if needed -->
-      <if condition="!irqHandlingMethod">
+      <!-- Interrupt control for this peripheral -->
+      <irqOption key="irqHandlingMethod" condition="!irqHandlingMethod"
+         hidden="true"
+         valueFormat="%s"
+         enabledBy="enablePeripheralSupport&amp;&amp;irqEnable"
+         typeName="CallbackFunction"
+         description="Peripheral interrupt handling"
+         toolTip="If enabled, the handler may be set using the setCallback() function or\n
+                  by overriding the interrupt handler method in the peripheral class\n
+                  If not enabled, then interrupt handlers may be installed by naming them \n
+                  (see weak names used in vector table)."
+         pattern="=irq_pattern"
+         classHandler="=irq_ClassHandler" />
 
-         <!-- Interrupt control for this peripheral -->
-         <irqOption key="irqHandlingMethod"
+      <if condition="!/$(_STRUCTNAME)/generateSharedIrqInfo" >
+
+         <!-- Construct equation to check if interrupts are enabled on any instance sharing the same struct -->
+         <equation key="_enable" value='="false"' />
+         <for keys="instance" values="=_instanceList" >
+            <if condition="/%(instance)/_hardwareIrqCount" >
+               <equation
+                  key="_enable"
+                  condition='="$(_STRUCTNAME)"==/%(instance)/structName'
+                  value='=_enable+"||/%(instance)/irqHandlingMethod"'
+               />
+            </if>
+         </for>
+         <!-- printVar key="_enable"/ -->
+
+         <!-- Enable for shared code needed by all instances of peripheral using same _STRUCTNAME -->
+         <binaryOption key="/$(_STRUCTNAME)/generateSharedIrqInfo" name="/$(_STRUCTNAME)/generateSharedIrqInfo"
+            ref="=_enable"
+            description="=_enable"
             hidden="true"
-            valueFormat="%s"
-            enabledBy="enablePeripheralSupport&amp;&amp;irqEnable"
-            typeName="CallbackFunction"
-            description="Peripheral interrupt handling"
-            toolTip="If enabled, the handler may be set using the setCallback() function or\n
-                     by overriding the interrupt handler method in the peripheral class\n
-                     If not enabled, then interrupt handlers may be installed by naming them \n
-                     (see weak names used in vector table)."
-            pattern="=irq_pattern"
-            classHandler="=irq_ClassHandler" />
+            locked="true"
+            derived="true" >
+            <choice value="false" name="No shared interrupt code for $(_STRUCTNAME)"  />
+            <choice value="true"  name="Shared interrupt code for $(_STRUCTNAME)"      />
+         </binaryOption>
+      </if>
 
-         <!-- If not already generated -->
-         <if condition="!/$(_STRUCTNAME)/generateSharedIrqInfo">
+      <if condition="!/$(_BASENAME)/irqHandlingMethod" >
 
-            <!-- Construct equation to check if interrupts are enabled on any instance sharing the same struct -->
-            <equation key="_enable" value='="false"' />
-            <for keys="instance" values="=_instanceList" >
-               <if condition="/%(instance)/_irqCount" >
-                  <equation
-                     key="_enable"
-                     condition='="$(_STRUCTNAME)"==/%(instance)/structName'
-                     value='=_enable+"||/%(instance)/irqHandlingMethod"'
-                  />
-               </if>
-            </for>
-            <!-- printVar key="_enable"/ -->
+         <!-- Construct equation to check if interrupts are enabled on any instance -->
+         <equation key="_enable" value='="false"' />
+         <for keys="instance" values="=_instanceList" >
+            <if condition="/%(instance)/_hardwareIrqCount" >
+               <equation
+                  key="_enable"
+                  value='=_enable+"||/%(instance)/irqHandlingMethod"'
+               />
+            </if>
+         </for>
+         <!-- stringOption key="yyy" value="=_enable"/ -->
 
-            <!-- Enable for shared code needed by all instances of peripheral -->
-            <binaryOption key="/$(_STRUCTNAME)/generateSharedIrqInfo" name="/$(_STRUCTNAME)/generateSharedIrqInfo"
-               ref="=_enable"
-               description="=_enable"
-               hidden="true"
-               locked="true"
-               derived="true">
-               <choice value="false" name="No shared interrupt code for $(_STRUCTNAME)"  />
-               <choice value="true"  name="Shared interrupt code for $(_STRUCTNAME)"      />
-            </binaryOption>
-            <deleteVariables variables="_enable" />
-         </if>
-
-         <!-- If not already generated -->
-         <if condition="!/$(_BASENAME)/irqHandlingMethod">
-
-            <!-- Construct equation to check if interrupts are enabled on any instance -->
-            <equation key="_enable" value='="false"' />
-            <for keys="instance" values="=_instanceList" >
-               <if condition="/%(instance)/_irqCount" >
-                  <equation
-                     key="_enable"
-                     value='=_enable+"||/%(instance)/irqHandlingMethod"'
-                  />
-               </if>
-            </for>
-            <!-- stringOption key="yyy" value="=_enable"/ -->
-
-            <!-- Enable for shared code needed by all instances of peripheral -->
-            <binaryOption key="/$(_BASENAME)/irqHandlingMethod"  name="/$(_BASENAME)/irqHandlingMethod"
-               ref="=_enable"
-               description="=_enable"
-               hidden="true"
-               locked="true"
-               derived="true">
-               <choice value="false" name="No shared interrupt code for $(_BASENAME)"  />
-               <choice value="true"  name="Shared interrupt code for $(_BASENAME)"      />
-            </binaryOption>
-            <deleteVariables variables="_enable" />
-         </if>
-
+         <!-- Enable for shared code needed by all instances of peripheral -->
+         <binaryOption key="/$(_BASENAME)/irqHandlingMethod"  name="/$(_BASENAME)/irqHandlingMethod"
+            ref="=_enable"
+            description="=_enable"
+            hidden="true"
+            locked="true"
+            derived="true" >
+            <choice value="false" name="No shared interrupt code for $(_BASENAME)"  />
+            <choice value="true"  name="Shared interrupt code for $(_BASENAME)"      />
+         </binaryOption>
       </if>
 
       <!-- Display here -->
@@ -265,7 +257,10 @@
 
       <aliasOption key="/$(_STRUCTNAME)/generateSharedIrqInfo" optional="true"  condition="=_debugcode" />
       <aliasOption key="/$(_BASENAME)/irqHandlingMethod"       optional="true"  condition="=_debugcode"/>
-
+   </if>
+   
+   <if condition="_hardwareIrqCount&amp;&amp;!suppressIrqArray" >
+   
       <!-- Create only if needed -->
       <choiceOption key="irqLevel" condition="!irqLevel"
          hidden="true"
@@ -284,7 +279,7 @@
          hidden="true"
          enabledBy="irqLevel>0"
          description="Name of interrupt handler"
-         toolTip="This musr be the name of a globally accessible static function"
+         toolTip="This must be the name of a globally accessible static function"
          value=""
       / -->
 
@@ -300,8 +295,34 @@
           \t\n
       ]]></variableTemplate>
 
-      <variableTemplate condition="!suppressIrqArray"
-         variables="/$(_BASENAME)/irqHandlingMethod,irqLevel"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" condition="!suppressIrqArray"
+         variables="irqHandlingMethod"
+      ><![CDATA[
+          \t//! Common class based callback code has been generated for this class of peripheral
+          \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
+          \t\n
+      ]]></variableTemplate>
+
+      <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"  condition="!suppressIrqArray"
+         immediateVariables="irq_parameters,irq_dummy_parameters" >
+      <![CDATA[
+         \t/**
+         \t * Type definition for $(_Baseclass) interrupt call back.
+         \t */
+         \ttypedef void (*CallbackFunction)($(irq_parameters));
+         \t
+         \t/**
+         \t * Callback to catch unhandled interrupt
+         \t */
+         \tstatic void unhandledCallback($(irq_dummy_parameters)) {
+         \t   setAndCheckErrorCode(E_NO_HANDLER);
+         \t}
+         \t\n
+      ]]>
+      </template>
+
+      <variableTemplate
+         variables="/$(_BASENAME)/irqHandlingMethod,irqLevel" condition="!suppressIrqArray"
       ><![CDATA[
          \t//! IRQ numbers for hardware
          \tstatic constexpr IRQn_Type irqNums[]  = $(_NAME)_IRQS;
@@ -311,112 +332,242 @@
          \t\n
       ]]></variableTemplate>
 
-      <variableTemplate variables="irqLevel"   codeGenCondition="irqHandlingMethod"
+      <variableTemplate variables="irqLevel" codeGenCondition="irqHandlingMethod"
       ><![CDATA[
          \t//! Default IRQ level
          \tstatic constexpr NvicPriority irqLevel =  %symbolicExpression;
          \t\n
       ]]></variableTemplate>
 
-      <if condition="(@_irqCount>1)" >
+      <!-- enum for IRQ indices into irqNums[]  -->
+      <choiceOption key="irq_enum" condition="!irq_enum&amp;&amp;(@_userIrqCount>1)"
+         hidden="true"
+         description="IRQ entry"
+         toolTip="Select amongst interrupts associated with the peripheral"
+         typeName="$(_Class)IrqNum"
+         valueFormat="%s"
+         >
+         <choiceExpansion keys="irq" values="=_hardwareIrqNums"
+            value="%(i)" name="Maps to %(irq)" enum='=Prettify(ReplaceAll("%(irq)", "$(_NAME)_([a-z|A-Z|0-9_]+)_IRQn", "$1"))' />
+      </choiceOption>
 
-         <choiceOption key="irq_enum" condition="!irq_enum"
-            hidden="true"
-            description="IRQ entry"
-            toolTip="Select amongst interrupts associated with the peripheral"
-            typeName="$(_Class)IrqNum"
-            valueFormat="%s"
-            >
-            <choiceExpansion keys="irq" values="=_irqNums"
-               value="%(i)" name="Maps to %(irq)" enum='=Prettify(ReplaceAll("%(irq)", "$(_NAME)_([a-z|A-Z|0-9]+)_IRQn", "$1"))' />
-         </choiceOption>
+      <!-- IRQ enable/disable when single hardware IRQ is available  -->
+      <template condition="=(_hardwareIrqCount==1)" ><![CDATA[
+         \t/**
+         \t * Enable interrupts in NVIC
+         \t */
+         \tstatic void enableNvicInterrupts() {
+         \t   NVIC_EnableIRQ(irqNums[0]);
+         \t}
+         \t
+         \t/**
+         \t * Enable and set priority of interrupts in NVIC
+         \t * Any pending NVIC interrupts are first cleared.
+         \t *
+         \t * @param[in]  nvicPriority  Interrupt priority
+         \t */
+         \tstatic void enableNvicInterrupts(NvicPriority nvicPriority) {
+         \t   enableNvicInterrupt(irqNums[0], nvicPriority);
+         \t}
+         \t
+         \t/**
+         \t * Disable interrupts in NVIC
+         \t */
+         \tstatic void disableNvicInterrupts() {
+         \t   NVIC_DisableIRQ(irqNums[0]);
+         \t}
+         \t\n
+      ]]></template>
 
-         <variableTemplate condition="irqHandlingMethod&amp;&amp;!suppressIrqArray"
-            variables="irq_enum"
-         ><![CDATA[
-            \t/**
-            \t * Enable interrupts in NVIC
-            %paramDescription
-            \t */
-            \tstatic void enableNvicInterrupts(%params) {
-            \t   NVIC_EnableIRQ(irqNums[%paramName0]);
-            \t}
-            \t
-            \t/**
-            \t * Enable and set priority of interrupts in NVIC
-            \t * Any pending NVIC interrupts are first cleared.
-            \t *
-            \t * @param[in]  nvicPriority  Interrupt priority
-            %paramDescription
-            \t */
-            \tstatic void enableNvicInterrupts(%params, NvicPriority nvicPriority) {
-            \t   enableNvicInterrupt(irqNums[%paramName0], nvicPriority);
-            \t}
-            \t
-            \t/**
-            \t * Disable interrupts in NVIC
-            %paramDescription
-            \t */
-            \tstatic void disableNvicInterrupts(%params) {
-            \t   NVIC_DisableIRQ(irqNums[%paramName0]);
-            \t}
-            \t\n
-         ]]></variableTemplate>
-      <else />
-         <template condition="irqHandlingMethod&amp;&amp;!suppressIrqArray" codeGenCondition="irqHandlingMethod" ><![CDATA[
-            \t/**
-            \t * Enable interrupts in NVIC
-            \t */
-            \tstatic void enableNvicInterrupts() {
-            \t   NVIC_EnableIRQ(irqNums[0]);
-            \t}
-            \t
-            \t/**
-            \t * Enable and set priority of interrupts in NVIC
-            \t * Any pending NVIC interrupts are first cleared.
-            \t *
-            \t * @param[in]  nvicPriority  Interrupt priority
-            \t */
-            \tstatic void enableNvicInterrupts(NvicPriority nvicPriority) {
-            \t   enableNvicInterrupt(irqNums[0], nvicPriority);
-            \t}
-            \t
-            \t/**
-            \t * Disable interrupts in NVIC
-            \t */
-            \tstatic void disableNvicInterrupts() {
-            \t   NVIC_DisableIRQ(irqNums[0]);
-            \t}
-            \t\n
+      <!-- IRQ enable/disable when multiple hardware IRQs available  -->
+      <variableTemplate condition="=(_hardwareIrqCount>1)"
+         variables="irq_enum"
+      ><![CDATA[
+         \t/**
+         \t * Enable interrupts in NVIC
+         %paramDescription
+         \t */
+         \tstatic void enableNvicInterrupts(%params) {
+         \t   NVIC_EnableIRQ(irqNums[%paramName0]);
+         \t}
+         \t
+         \t/**
+         \t * Enable and set priority of interrupts in NVIC
+         \t * Any pending NVIC interrupts are first cleared.
+         \t *
+         \t * @param[in]  nvicPriority  Interrupt priority
+         %paramDescription
+         \t */
+         \tstatic void enableNvicInterrupts(%params, NvicPriority nvicPriority) {
+         \t   enableNvicInterrupt(irqNums[%paramName0], nvicPriority);
+         \t}
+         \t
+         \t/**
+         \t * Disable interrupts in NVIC
+         %paramDescription
+         \t */
+         \tstatic void disableNvicInterrupts(%params) {
+         \t   NVIC_DisableIRQ(irqNums[%paramName0]);
+         \t}
+         \t\n
+      ]]></variableTemplate>
+
+      <!-- ____ Single user/hardware handler _____________ -->
+
+      <!--  Interrupt handler -->
+      <template codeGenCondition="irqHandlingMethod" condition="!irq_enum&amp;&amp;!suppressIrqHandler" >
+      <![CDATA[
+         \t/**
+         \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
+         \t */
+         \tstatic void irqHandler() {
+         \t
+         \t   // Execute call-back
+         \t   sCallback($(irq_call));
+         \t}
+         \t\n
+      ]]>
+      </template>
+
+      <!--  Set callback -->
+      <template codeGenCondition="irqHandlingMethod" condition="!irq_enum" >
+      <![CDATA[
+         \t/** Callback function for $(_Class) */
+         \tstatic CallbackFunction sCallback;
+         \t
+         \t/**
+         \t * Set interrupt callback function.
+         \t *
+         \t * @param  $(_basename)Callback Callback function to execute on interrupt
+         \t *                             Use nullptr to remove callback.
+         \t */
+         \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
+         \t   if ($(_basename)Callback == nullptr) {
+         \t      $(_basename)Callback = unhandledCallback;
+         \t   }
+         \t   // Allow either no handler set yet or removing handler
+         \t   usbdm_assert(
+         \t         (sCallback == unhandledCallback) || ($(_basename)Callback == unhandledCallback),
+         \t         "Handler already set");
+         \t   sCallback = $(_basename)Callback;
+         \t}
+         \t\n
+      ]]>
+      </template>
+
+      <!--  Callback function -->
+      <template where="static" codeGenCondition="irqHandlingMethod" condition="!irq_enum" >
+      <![CDATA[
+         \t/**
+         \t * Callback for programmatically set handler for $(_Class)
+         \t */
+         \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback =
+         \t      $(_Class)Info::unhandledCallback; // $(_hardwareIrqNums)
+         \t\n
+      ]]></template>
+
+      <!-- ____ Multiple user/hardware handlers _____________ -->
+
+      <!--  Interrupt handler -->
+      <variableTemplate codeGenCondition="irqHandlingMethod" variables="irq_enum" condition="!suppressIrqHandler" >
+      <![CDATA[
+         \t/**
+         \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
+         \t *
+         \t * @tparam %paramName0 %tooltip
+         \t */
+         \ttemplate<%params>
+         \tstatic void irqHandler() {
+         \t
+         \t   // Execute call-back
+         \t   sCallbacks[%paramName0]($(irq_call));
+         \t}
+         \t\n
+      ]]>
+      </variableTemplate>
+
+      <!--  Set callback -->
+      <variableTemplate codeGenCondition="irqHandlingMethod" variables="irq_enum" 
+         immediateVariables="_userIrqCount" >
+      <![CDATA[
+         \t/** Callback function for $(_Class) */
+         \tstatic CallbackFunction sCallbacks[$(_userIrqCount)];
+         \t
+         \t/**
+         \t * Set interrupt callback function.
+         \t *
+         %paramDescription0
+         \t * @param  $(_basename)Callback Callback function to execute on interrupt
+         \t *                             Use nullptr to remove callback.
+         \t */
+         \tstatic void setCallback(%param0, CallbackFunction $(_basename)Callback) {
+         \t   if ($(_basename)Callback == nullptr) {
+         \t      $(_basename)Callback = unhandledCallback;
+         \t   }
+         \t   // Allow either no handler set yet or removing handler
+         \t   usbdm_assert(
+         \t         (sCallbacks[%paramName0] == unhandledCallback) || ($(_basename)Callback == unhandledCallback),
+         \t         "Handler already set");
+         \t   sCallbacks[%paramName0] = $(_basename)Callback;
+         \t}
+         \t\n
+      ]]>
+      </variableTemplate>
+
+      <!--  Callback functions -->
+      <template where="static" codeGenCondition="irqHandlingMethod" condition="irq_enum" >
+      <![CDATA[
+         \t/**
+         \t * Callback table of programmatically set handlers for $(_Class)
+         \t */
+         \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallbacks[] = {\n
+      ]]></template>
+      <for keys="irqName" values="=_hardwareIrqNums" >
+         <template where="static" codeGenCondition="irqHandlingMethod" condition="irq_enum" ><![CDATA[
+            \t   $(_Class)Info::unhandledCallback,  // %(irqName) \n
          ]]></template>
-      </if>
-   </if> <!-- condition="_irqCount" -->
+      </for>
+      <template where="static" codeGenCondition="irqHandlingMethod" condition="irq_enum" ><![CDATA[
+         \t};\n\n
+      ]]></template>
+      
+   </if> <!-- condition="_hardwareIrqCount&amp;&amp;!suppressHardwareIrq" -->
 
-   <constant key="_clockInfo"  value="=/$(_BASENAME)/_clockMask"   type="String"  condition="/$(_BASENAME)/_clockMask"           />
-   <constant key="_clockInfo"  value="=_clockMask"                 type="String"  condition="_clockMask&amp;&amp;!_clockInfo[]"  />
-   <constant key="_scgc_clock" value='"/SIM/"+ToLowerCase("sim_"+@_clockInfo[0]+"_"+@_clockInfo[1])'
-             type="String" condition="_clockInfo[]" />
+<!-- ___________ Peripheral clock ____________________ -->
 
-   <template condition="_clockInfo[]"
-      immediateVariables="_clockInfo[0],_clockInfo[1]"
+   <!-- Try both e.g. /CMP/_clockMask and /CMP1/_clockMask - prefer latter -->
+   <equation key="clock_data"  value="=/$(_BASENAME)/_clockInfo" condition="/$(_BASENAME)/_clockInfo" />
+   <equation key="clock_data"  value="=_clockInfo"               condition="_clockInfo" />
+   
+   <!-- SIM clock control register e.g. SCGC3 -->
+   <equation key="clock_reg"   value='=ReplaceAll(clock_data, "^(.+?),(.+?)$", "$1")' condition="clock_data" />
+
+   <!-- SIM clock control register mask (partial) e.g. CMP3 -->
+   <equation key="clock_mask"  value='=ReplaceAll(clock_data, "^(.+?),(.+?)$", "$2")' condition="clock_data" />
+   
+   <!-- SIM clock control in GUI -->
+   <equation key="_scgc_clock" value='="/SIM/"+ToLowerCase("sim_"+clock_reg+"_"+clock_mask)' condition="clock_data" />
+
+   <template condition="clock_data"
+      immediateVariables="clock_reg,clock_mask"
    ><![CDATA[
       \t/**
       \t *  Enable clock to $(_Class)
       \t */
       \tstatic void enableClock() {
-      \t   SIM->$(_clockInfo[0]) = SIM->$(_clockInfo[0]) | SIM_$(_clockInfo[0])_$(_clockInfo[1])_MASK;
+      \t   SIM->$(clock_reg) = SIM->$(clock_reg) | SIM_$(clock_reg)_$(clock_mask)_MASK;
       \t}
       \t
       \t/**
       \t *  Disable clock to $(_Class)
       \t */
       \tstatic void disableClock() {
-      \t   SIM->$(_clockInfo[0]) = SIM->$(_clockInfo[0]) & ~SIM_$(_clockInfo[0])_$(_clockInfo[1])_MASK;
+      \t   SIM->$(clock_reg) = SIM->$(clock_reg) & ~SIM_$(clock_reg)_$(clock_mask)_MASK;
       \t}
       \t\n
    ]]></template>
 
-   <!-- ************* SIM configuration ****************** -->
+   <!-- _____________ enable/disable __________________ -->
 
    <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
@@ -425,7 +576,7 @@
       \t */
       \tstatic void enable() {\n
    ]]></template>
-   <template codeGenCondition="enablePeripheralSupport" condition="_clockInfo[]" ><![CDATA[
+   <template codeGenCondition="enablePeripheralSupport" condition="clock_data" ><![CDATA[
       \t   enableClock();\n
    ]]></template>
    <template codeGenCondition="enablePeripheralSupport" condition="/PCR/mux_present&amp;&amp;_hasPcrTable" ><![CDATA[
@@ -435,43 +586,41 @@
       \t}
       \t
       \t/**
-      \t * Disables the clock to $(_Class) and all mapped pins
+      \t * Disables $(_Class)
       \t */
       \tstatic void disable() {
       \t   $(disable_peripheral: )\n
    ]]></template>
+   <if condition="_hardwareIrqCount&amp;&amp;!suppressIrqArray" >
 
-   <if condition="_irqCount&amp;&amp;!suppressIrqArray" >
-
-      <for keys="irqName" values="=_irqNums" condition="=@_irqCount>1" >
-         <constant key="prettyIrqNum" value='Prettify(ReplaceAll("%(irqName)", "$(_NAME)_([a-z|A-Z|0-9]+)_IRQn", "$1"))' type="String"/>
+      <for keys="irqName" values="=_hardwareIrqNums" condition="!suppressHardwareIrq&amp;&amp;(@_hardwareIrqCount>1)" >
+         <equation key="prettyIrqNum" value='=Prettify(ReplaceAll("%(irqName)", "$(_NAME)_([a-z|A-Z|0-9_]+)_IRQn", "$1"))' />
+         <!--
+         <printVar key="prettyIrqNum" />
+          -->
 
          <template codeGenCondition="irqHandlingMethod"
             immediateVariables="prettyIrqNum" >
          <![CDATA[
             \t   disableNvicInterrupts($(_Class)IrqNum_$(prettyIrqNum));\n
          ]]></template>
-         <deleteVariables variables="prettyIrqNum" />
       </for>
 
-      <template codeGenCondition="irqHandlingMethod" condition="=@_irqCount==1" >
+      <template codeGenCondition="irqHandlingMethod" condition="!suppressHardwareIrq&amp;&amp;(@_hardwareIrqCount==1)" >
       <![CDATA[
          \t   disableNvicInterrupts();\n
       ]]></template>
-
    </if>
    <template codeGenCondition="enablePeripheralSupport" condition="/PCR/mux_present&amp;&amp;_hasPcrTable" ><![CDATA[
       \t   disableAllPins();\n
    ]]></template>
-   <template codeGenCondition="enablePeripheralSupport" condition="_clockInfo[]" ><![CDATA[
+   <template codeGenCondition="enablePeripheralSupport" condition="clock_data" ><![CDATA[
       \t   disableClock();\n
    ]]></template>
    <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t}
       \t\n
    ]]></template>
-
-   <deleteVariables variables="_clockInfo[0],_clockInfo[1]" mustExist="false" />
 
    <!-- template key="/$(_BASENAME)/publicMethods" condition="/$(_BASENAME)/irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true" >
    <![CDATA[
@@ -577,13 +726,14 @@
 
    <constant key="class_present" type="Boolean"  value = "true"   />
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport&amp;&amp;/HARDWARE/generateDebugDefinitions" ><![CDATA[
+   <template where="definitions" codeGenCondition="enablePeripheralSupport&amp;&amp;/HARDWARE/generateDebugDefinitions" ><![CDATA[
       \t//! Indicates $(_NAME) is available
       \t#define USBDM_$(_NAME)_AVAILABLE
       \t\n
    ]]></template>
 
-   <!-- ************* Base pin mapping ****************** -->
+   <!-- _____________ Base pin mapping __________________ -->
+
    <binaryOption key="$(_name)_pin_map" condition="pinMap"
       description="$(_NAME) Pin mapping"
       toolTip="Pin mapping used when $(_NAME) enabled"

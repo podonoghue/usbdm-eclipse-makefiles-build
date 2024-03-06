@@ -128,11 +128,11 @@ void _HardFault_Handler(
       volatile ExceptionFrame *exceptionFrame __attribute__((__unused__)),
       uint32_t execReturn                     __attribute__((__unused__)) ) {
 
-#if USE_CONSOLE
+#if defined(DEBUG_BUILD) && USE_CONSOLE
    using namespace USBDM;
 
    console.setPadding(Padding_LeadingZeroes);
-   console.setWidth(8);
+   console.setWidth(Width_8);
    console.writeln("\n[Hardfault]\n - Stack frame:\n");
    console.writeln("R0  = 0x", exceptionFrame->r0,  Radix_16);
    console.writeln("R1  = 0x", exceptionFrame->r1,  Radix_16);

@@ -17,8 +17,11 @@ read -d '' TOx <<EOF
       \</for\> 
 EOF
 
-FROM='\"&quot;&quot;\"'
-TO=\'\"\"\'
+FROM='equation key="_class_declaration"'
+TO='constant key="_class_declaration"'
+
+#FROM='\"&quot;&quot;\"'
+#TO=\'\"\"\'
 
 echo from "${FROM}"
 echo to "${TO}"

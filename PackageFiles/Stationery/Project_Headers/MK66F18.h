@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2024/01
+ * @date     2024/02
  *
  */
 
@@ -42,26 +42,26 @@ typedef enum {
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
 /* ----------------------   MK65F18 VectorTable                      ---------------------- */
-  DMA0_DMA16_IRQn               =   0,   /**<  16 Direct memory access controller                                                  */
-  DMA1_DMA17_IRQn               =   1,   /**<  17 Direct memory access controller                                                  */
-  DMA2_DMA18_IRQn               =   2,   /**<  18 Direct memory access controller                                                  */
-  DMA3_DMA19_IRQn               =   3,   /**<  19 Direct memory access controller                                                  */
-  DMA4_DMA20_IRQn               =   4,   /**<  20 Direct memory access controller                                                  */
-  DMA5_DMA21_IRQn               =   5,   /**<  21 Direct memory access controller                                                  */
-  DMA6_DMA22_IRQn               =   6,   /**<  22 Direct memory access controller                                                  */
-  DMA7_DMA23_IRQn               =   7,   /**<  23 Direct memory access controller                                                  */
-  DMA8_DMA24_IRQn               =   8,   /**<  24 Direct memory access controller                                                  */
-  DMA9_DMA25_IRQn               =   9,   /**<  25 Direct memory access controller                                                  */
-  DMA10_DMA26_IRQn              =  10,   /**<  26 Direct memory access controller                                                  */
-  DMA11_DMA27_IRQn              =  11,   /**<  27 Direct memory access controller                                                  */
-  DMA12_DMA28_IRQn              =  12,   /**<  28 Direct memory access controller                                                  */
-  DMA13_DMA29_IRQn              =  13,   /**<  29 Direct memory access controller                                                  */
-  DMA14_DMA30_IRQn              =  14,   /**<  30 Direct memory access controller                                                  */
-  DMA15_DMA31_IRQn              =  15,   /**<  31 Direct memory access controller                                                  */
-  DMA_Error_IRQn                =  16,   /**<  32 DMA error interrupt all channels                                                 */
+  DMA0_Ch0_DMA16_IRQn           =   0,   /**<  16 Direct memory access controller                                                  */
+  DMA0_Ch1_DMA17_IRQn           =   1,   /**<  17 Direct memory access controller                                                  */
+  DMA0_Ch2_DMA18_IRQn           =   2,   /**<  18 Direct memory access controller                                                  */
+  DMA0_Ch3_DMA19_IRQn           =   3,   /**<  19 Direct memory access controller                                                  */
+  DMA0_Ch4_DMA20_IRQn           =   4,   /**<  20 Direct memory access controller                                                  */
+  DMA0_Ch5_DMA21_IRQn           =   5,   /**<  21 Direct memory access controller                                                  */
+  DMA0_Ch6_DMA22_IRQn           =   6,   /**<  22 Direct memory access controller                                                  */
+  DMA0_Ch7_DMA23_IRQn           =   7,   /**<  23 Direct memory access controller                                                  */
+  DMA0_Ch8_DMA24_IRQn           =   8,   /**<  24 Direct memory access controller                                                  */
+  DMA0_Ch9_DMA25_IRQn           =   9,   /**<  25 Direct memory access controller                                                  */
+  DMA0_Ch10_DMA26_IRQn          =  10,   /**<  26 Direct memory access controller                                                  */
+  DMA0_Ch11_DMA27_IRQn          =  11,   /**<  27 Direct memory access controller                                                  */
+  DMA0_Ch12_DMA28_IRQn          =  12,   /**<  28 Direct memory access controller                                                  */
+  DMA0_Ch13_DMA29_IRQn          =  13,   /**<  29 Direct memory access controller                                                  */
+  DMA0_Ch14_DMA30_IRQn          =  14,   /**<  30 Direct memory access controller                                                  */
+  DMA0_Ch15_DMA31_IRQn          =  15,   /**<  31 Direct memory access controller                                                  */
+  DMA0_Error_IRQn               =  16,   /**<  32 DMA error interrupt all channels                                                 */
   MCM_IRQn                      =  17,   /**<  33 Miscellaneous Control Module                                                     */
-  FTF_Command_IRQn              =  18,   /**<  34 Flash Memory Interface                                                           */
-  FTF_ReadCollision_IRQn        =  19,   /**<  35 Flash Memory Interface                                                           */
+  FTFE_Command_IRQn             =  18,   /**<  34 Flash Memory Interface                                                           */
+  FTFE_ReadCollision_IRQn       =  19,   /**<  35 Flash Memory Interface                                                           */
   PMC_IRQn                      =  20,   /**<  36 Power Management Controller                                                      */
   LLWU_IRQn                     =  21,   /**<  37 Low Leakage Wakeup                                                               */
   WDOG_IRQn                     =  22,   /**<  38 External Watchdog Monitor                                                        */
@@ -90,10 +90,10 @@ typedef enum {
   CMT_IRQn                      =  45,   /**<  61 Carrier Modulator Transmitter                                                    */
   RTC_Alarm_IRQn                =  46,   /**<  62 Real Time Clock                                                                  */
   RTC_Seconds_IRQn              =  47,   /**<  63 Real Time Clock                                                                  */
-  PIT0_IRQn                     =  48,   /**<  64 Periodic Interrupt Timer                                                         */
-  PIT1_IRQn                     =  49,   /**<  65 Periodic Interrupt Timer                                                         */
-  PIT2_IRQn                     =  50,   /**<  66 Periodic Interrupt Timer                                                         */
-  PIT3_IRQn                     =  51,   /**<  67 Periodic Interrupt Timer                                                         */
+  PIT_Ch0_IRQn                  =  48,   /**<  64 Periodic Interrupt Timer                                                         */
+  PIT_Ch1_IRQn                  =  49,   /**<  65 Periodic Interrupt Timer                                                         */
+  PIT_Ch2_IRQn                  =  50,   /**<  66 Periodic Interrupt Timer                                                         */
+  PIT_Ch3_IRQn                  =  51,   /**<  67 Periodic Interrupt Timer                                                         */
   PDB0_IRQn                     =  52,   /**<  68 Programmable Delay Block                                                         */
   USB0_IRQn                     =  53,   /**<  69 Universal Serial Bus                                                             */
   USBDCD0_IRQn                  =  54,   /**<  70 USB Device Charger Detection                                                     */
@@ -153,26 +153,26 @@ extern void SVC_Handler(void);                       /**< System Service Call vi
 extern void DebugMon_Handler(void);                  /**< Debug Monitor                                                                    */
 extern void PendSV_Handler(void);                    /**< Pendable request for system service                                              */
 extern void SysTick_Handler(void);                   /**< System Tick Timer                                                                */
-extern void DMA0_DMA16_IRQHandler(void);             /**< Direct memory access controller                                                  */
-extern void DMA1_DMA17_IRQHandler(void);             /**< Direct memory access controller                                                  */
-extern void DMA2_DMA18_IRQHandler(void);             /**< Direct memory access controller                                                  */
-extern void DMA3_DMA19_IRQHandler(void);             /**< Direct memory access controller                                                  */
-extern void DMA4_DMA20_IRQHandler(void);             /**< Direct memory access controller                                                  */
-extern void DMA5_DMA21_IRQHandler(void);             /**< Direct memory access controller                                                  */
-extern void DMA6_DMA22_IRQHandler(void);             /**< Direct memory access controller                                                  */
-extern void DMA7_DMA23_IRQHandler(void);             /**< Direct memory access controller                                                  */
-extern void DMA8_DMA24_IRQHandler(void);             /**< Direct memory access controller                                                  */
-extern void DMA9_DMA25_IRQHandler(void);             /**< Direct memory access controller                                                  */
-extern void DMA10_DMA26_IRQHandler(void);            /**< Direct memory access controller                                                  */
-extern void DMA11_DMA27_IRQHandler(void);            /**< Direct memory access controller                                                  */
-extern void DMA12_DMA28_IRQHandler(void);            /**< Direct memory access controller                                                  */
-extern void DMA13_DMA29_IRQHandler(void);            /**< Direct memory access controller                                                  */
-extern void DMA14_DMA30_IRQHandler(void);            /**< Direct memory access controller                                                  */
-extern void DMA15_DMA31_IRQHandler(void);            /**< Direct memory access controller                                                  */
-extern void DMA_Error_IRQHandler(void);              /**< DMA error interrupt all channels                                                 */
+extern void DMA0_Ch0_DMA16_IRQHandler(void);         /**< Direct memory access controller                                                  */
+extern void DMA0_Ch1_DMA17_IRQHandler(void);         /**< Direct memory access controller                                                  */
+extern void DMA0_Ch2_DMA18_IRQHandler(void);         /**< Direct memory access controller                                                  */
+extern void DMA0_Ch3_DMA19_IRQHandler(void);         /**< Direct memory access controller                                                  */
+extern void DMA0_Ch4_DMA20_IRQHandler(void);         /**< Direct memory access controller                                                  */
+extern void DMA0_Ch5_DMA21_IRQHandler(void);         /**< Direct memory access controller                                                  */
+extern void DMA0_Ch6_DMA22_IRQHandler(void);         /**< Direct memory access controller                                                  */
+extern void DMA0_Ch7_DMA23_IRQHandler(void);         /**< Direct memory access controller                                                  */
+extern void DMA0_Ch8_DMA24_IRQHandler(void);         /**< Direct memory access controller                                                  */
+extern void DMA0_Ch9_DMA25_IRQHandler(void);         /**< Direct memory access controller                                                  */
+extern void DMA0_Ch10_DMA26_IRQHandler(void);        /**< Direct memory access controller                                                  */
+extern void DMA0_Ch11_DMA27_IRQHandler(void);        /**< Direct memory access controller                                                  */
+extern void DMA0_Ch12_DMA28_IRQHandler(void);        /**< Direct memory access controller                                                  */
+extern void DMA0_Ch13_DMA29_IRQHandler(void);        /**< Direct memory access controller                                                  */
+extern void DMA0_Ch14_DMA30_IRQHandler(void);        /**< Direct memory access controller                                                  */
+extern void DMA0_Ch15_DMA31_IRQHandler(void);        /**< Direct memory access controller                                                  */
+extern void DMA0_Error_IRQHandler(void);             /**< DMA error interrupt all channels                                                 */
 extern void MCM_IRQHandler(void);                    /**< Miscellaneous Control Module                                                     */
-extern void FTF_Command_IRQHandler(void);            /**< Flash Memory Interface                                                           */
-extern void FTF_ReadCollision_IRQHandler(void);      /**< Flash Memory Interface                                                           */
+extern void FTFE_Command_IRQHandler(void);           /**< Flash Memory Interface                                                           */
+extern void FTFE_ReadCollision_IRQHandler(void);     /**< Flash Memory Interface                                                           */
 extern void PMC_IRQHandler(void);                    /**< Power Management Controller                                                      */
 extern void LLWU_IRQHandler(void);                   /**< Low Leakage Wakeup                                                               */
 extern void WDOG_IRQHandler(void);                   /**< External Watchdog Monitor                                                        */
@@ -201,10 +201,10 @@ extern void FTM2_IRQHandler(void);                   /**< FlexTimer Module      
 extern void CMT_IRQHandler(void);                    /**< Carrier Modulator Transmitter                                                    */
 extern void RTC_Alarm_IRQHandler(void);              /**< Real Time Clock                                                                  */
 extern void RTC_Seconds_IRQHandler(void);            /**< Real Time Clock                                                                  */
-extern void PIT0_IRQHandler(void);                   /**< Periodic Interrupt Timer                                                         */
-extern void PIT1_IRQHandler(void);                   /**< Periodic Interrupt Timer                                                         */
-extern void PIT2_IRQHandler(void);                   /**< Periodic Interrupt Timer                                                         */
-extern void PIT3_IRQHandler(void);                   /**< Periodic Interrupt Timer                                                         */
+extern void PIT_Ch0_IRQHandler(void);                /**< Periodic Interrupt Timer                                                         */
+extern void PIT_Ch1_IRQHandler(void);                /**< Periodic Interrupt Timer                                                         */
+extern void PIT_Ch2_IRQHandler(void);                /**< Periodic Interrupt Timer                                                         */
+extern void PIT_Ch3_IRQHandler(void);                /**< Periodic Interrupt Timer                                                         */
 extern void PDB0_IRQHandler(void);                   /**< Programmable Delay Block                                                         */
 extern void USB0_IRQHandler(void);                   /**< Universal Serial Bus                                                             */
 extern void USBDCD0_IRQHandler(void);                /**< USB Device Charger Detection                                                     */
@@ -2273,7 +2273,7 @@ typedef struct CRC_Type {
 /** @{ */
 
 /* ================================================================================ */
-/* ================           DAC0 (file:DAC0_16DAT_FIFO16_0x400CC000)       ================ */
+/* ================           DAC0 (file:DAC0_16DAT_FIFO16_AIPS1)       ================ */
 /* ================================================================================ */
 
 /**
@@ -3490,7 +3490,7 @@ typedef struct DMA_Type {
 #define DMA0_BasePtr                   0x40008000UL //!< Peripheral base address
 #define DMA0                           ((DMA_Type *) DMA0_BasePtr) //!< Freescale base pointer
 #define DMA0_BASE_PTR                  (DMA0) //!< Freescale style base pointer
-#define DMA0_IRQS { DMA0_DMA16_IRQn, DMA1_DMA17_IRQn, DMA2_DMA18_IRQn, DMA3_DMA19_IRQn, DMA4_DMA20_IRQn, DMA5_DMA21_IRQn, DMA6_DMA22_IRQn, DMA7_DMA23_IRQn, DMA8_DMA24_IRQn, DMA9_DMA25_IRQn, DMA10_DMA26_IRQn, DMA11_DMA27_IRQn, DMA12_DMA28_IRQn, DMA13_DMA29_IRQn, DMA14_DMA30_IRQn, DMA15_DMA31_IRQn, DMA_Error_IRQn,  }
+#define DMA0_IRQS { DMA0_Ch0_DMA16_IRQn, DMA0_Ch1_DMA17_IRQn, DMA0_Ch2_DMA18_IRQn, DMA0_Ch3_DMA19_IRQn, DMA0_Ch4_DMA20_IRQn, DMA0_Ch5_DMA21_IRQn, DMA0_Ch6_DMA22_IRQn, DMA0_Ch7_DMA23_IRQn, DMA0_Ch8_DMA24_IRQn, DMA0_Ch9_DMA25_IRQn, DMA0_Ch10_DMA26_IRQn, DMA0_Ch11_DMA27_IRQn, DMA0_Ch12_DMA28_IRQn, DMA0_Ch13_DMA29_IRQn, DMA0_Ch14_DMA30_IRQn, DMA0_Ch15_DMA31_IRQn, DMA0_Error_IRQn,  }
 
 
 /** @} */ /* End group DMA0_Peripheral_access_layer_GROUP */
@@ -6702,7 +6702,7 @@ typedef struct FTFE_Type {
 #define FTFE_BasePtr                   0x40020000UL //!< Peripheral base address
 #define FTFE                           ((FTFE_Type *) FTFE_BasePtr) //!< Freescale base pointer
 #define FTFE_BASE_PTR                  (FTFE) //!< Freescale style base pointer
-#define FTFE_IRQS { FTF_Command_IRQn, FTF_ReadCollision_IRQn,  }
+#define FTFE_IRQS { FTFE_Command_IRQn, FTFE_ReadCollision_IRQn,  }
 
 
 /** @} */ /* End group FTFE_Peripheral_access_layer_GROUP */
@@ -10598,7 +10598,7 @@ typedef struct PIT_Type {
 #define PIT_BasePtr                    0x40037000UL //!< Peripheral base address
 #define PIT                            ((PIT_Type *) PIT_BasePtr) //!< Freescale base pointer
 #define PIT_BASE_PTR                   (PIT) //!< Freescale style base pointer
-#define PIT_IRQS { PIT0_IRQn, PIT1_IRQn, PIT2_IRQn, PIT3_IRQn,  }
+#define PIT_IRQS { PIT_Ch0_IRQn, PIT_Ch1_IRQn, PIT_Ch2_IRQn, PIT_Ch3_IRQn,  }
 
 
 /** @} */ /* End group PIT_Peripheral_access_layer_GROUP */

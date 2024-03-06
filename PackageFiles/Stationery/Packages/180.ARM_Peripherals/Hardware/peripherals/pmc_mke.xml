@@ -4,11 +4,11 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Power Management Controller" >
 
-   <constant key="irq_parameters"            type="String"  value="&quot;PmcInterruptReason reason&quot;"  />
-   <constant key="irq_dummy_parameters"      type="String"  value="&quot;PmcInterruptReason&quot;"  />
-   <constant key="irq_call"                  type="String"  value="&quot;PmcInterruptReason_LowVoltageWarning&quot;"  />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="irq_parameters"            type="String"  value="&quot;PmcInterruptReason reason&quot;"  />
+   <equation key="irq_dummy_parameters"      type="String"  value="&quot;PmcInterruptReason&quot;"  />
+   <equation key="irq_call"                  type="String"  value="&quot;PmcInterruptReason_LowVoltageWarning&quot;"  />
+   <equation key="generateDefault"           type="Boolean" value="false"         />
+   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -218,7 +218,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" >
+   <template where="basicInfo" >
    <![CDATA[
       \t/**
       \t * Indicates reason for execution of call-back
@@ -231,7 +231,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" >
+   <template where="basicInfo" >
    <![CDATA[
       class $(_Baseclass)BasicInfo {
       \t
@@ -239,7 +239,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="irqHandlingMethod" >
+   <template where="basicInfo" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t/**
       \t * Type definition for $(_Class) interrupt call back.
@@ -295,7 +295,7 @@
    ]]>
    </template>
 
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <template where="static" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t
       \t/** Callback for programmatically set handler */
@@ -304,7 +304,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -325,27 +325,27 @@
 
 <!--   Member variables -->
 
-   <variableTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="pmc_spmsc1_lvwack,pmc_spmsc1_lvwie,pmc_spmsc1_lvdre,pmc_spmsc1_lvdse,pmc_spmsc1_lvde,pmc_spmsc1_bgbe"
    ><![CDATA[
       \t   /// System Power Management Status and Control 1 Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="pmc_spmsc2_lvdv,pmc_spmsc2_lvwv"
    ><![CDATA[
       \t   /// System Power Management Status and Control 2 Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="irqHandlingMethod"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -398,7 +398,7 @@
 
 <!--   Constructors -->
 
-   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -416,7 +416,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -445,7 +445,7 @@
             pmc_spmsc2_lvdv;
             pmc_spmsc2_lvwv
             " >
-      <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -491,13 +491,13 @@
       \t};\n\n
    ]]></variableTemplate>
 
-   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
       <![CDATA[
       \t}; // $(_Baseclass)BasicInfo::Init\n\n
    ]]>
    </template>
 
-   <template namespace="usbdm" >
+   <template where="basicInfo" >
       <![CDATA[
       }; // $(_Baseclass)BasicInfo\n\n
    ]]>

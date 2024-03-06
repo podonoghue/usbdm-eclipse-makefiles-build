@@ -78,10 +78,11 @@ int main() {
             buffer[count] = '\0';
             console.write((const char*)buffer);
 
-            Usb0::sendCdcData((const uint8_t*)"Received\n", 9);
+            Usb0::sendCdcData(buffer, count);
+//            Usb0::sendCdcData((const uint8_t*)"Received\n", 9);
             while (Usb0::sendNow() == E_BUSY) {
             }
-            console.writeln("Flushed");
+//            console.writeln("Flushed");
          }
       }
    }

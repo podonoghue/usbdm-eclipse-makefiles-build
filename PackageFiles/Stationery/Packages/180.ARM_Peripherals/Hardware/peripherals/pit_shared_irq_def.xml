@@ -142,7 +142,7 @@
       \t */
    ]]></template>
 
-   <template namespace="usbdm" ><![CDATA[
+   <template where="basicInfo" ><![CDATA[
       class $(_Class)BasicInfo {
       \t
       public:
@@ -152,7 +152,7 @@
       \ttypedef void (*CallbackFunction)();\n\n
    ]]></template>
 
-   <template namespace="usbdm"><![CDATA[
+   <template where="basicInfo"><![CDATA[
       $(init_description)
       \tclass Init {
       \t
@@ -171,41 +171,41 @@
 
 <!-- Member variables -->
 
-   <variableTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate where="basicInfo"
       variables="pit_ldval_tsv[]"
    ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName = 0_ticks;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate where="basicInfo"
       variables="pit_period[]"
    ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName = 0_s;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate where="basicInfo"
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName = %paramType_Normal;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate where="basicInfo"
       variables="pit_tctrl_ten[],pit_tctrl_chn[],pit_tctrl_tie[]"
    ><![CDATA[
       \t   /// Timer Control Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate where="basicInfo"
       variables="pit_channelNumber"
    ><![CDATA[
       \t   /// %description
@@ -251,7 +251,7 @@
 
 <!--  Constructors -->
 
-   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -272,7 +272,7 @@
 
 
    <for keys="r" values="pit_channelNumber;pit_ldval_tsv[];pit_period[];/PCR/nvic_irqLevel">
-      <variableTemplate namespace="usbdm"
+      <variableTemplate where="basicInfo"
          variables="%(r)"
          linePadding="xxx"
        ><![CDATA[
@@ -293,7 +293,7 @@
    </for>
 
    <for keys="r" values="pit_tctrl_ten[];pit_tctrl_chn[1];pit_tctrl_tie[]">
-      <variableTemplate namespace="usbdm"
+      <variableTemplate where="basicInfo"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -313,11 +313,11 @@
       ]]></variableTemplate>
    </for>
 
-   <template namespace="usbdm" ><![CDATA[
+   <template where="basicInfo" ><![CDATA[
       \t};\n\n
    ]]></template>
 
-   <template namespace="usbdm" ><![CDATA[
+   <template where="basicInfo" ><![CDATA[
       };\n\n
    ]]></template>
 

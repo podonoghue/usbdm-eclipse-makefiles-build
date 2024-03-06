@@ -17,7 +17,7 @@
       - namespace=info (default if blank)
         Placed in Info class in pin_mapping.h
 
-      - namespace="usbdm"
+      - where="basicInfo"
         Placed before Info class in pin_mapping.h
 
       - key="keyValue"

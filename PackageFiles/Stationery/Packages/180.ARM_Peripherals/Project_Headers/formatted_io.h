@@ -53,20 +53,38 @@ constexpr Radix Radix_8  = Radix::Radix_8;
 constexpr Radix Radix_10 = Radix::Radix_10;
 constexpr Radix Radix_16 = Radix::Radix_16;
 
-enum WhiteSpaceType {
+enum class ResetIntegerFormatType {
+   /**
+    * With operator<< Discard input white-space characters
+    */
+   ResetIntegerFormat
+};
+static constexpr ResetIntegerFormatType ResetIntegerFormat           = ResetIntegerFormatType::ResetIntegerFormat;
+
+enum class ResetFloatFormatType {
+   /**
+    * With operator<< Discard input white-space characters
+    */
+   ResetFloatFormat
+};
+static constexpr ResetFloatFormatType ResetFloatFormat           = ResetFloatFormatType::ResetFloatFormat;
+
+enum class WhiteSpaceType {
    /**
     * With operator<< Discard input white-space characters
     */
    WhiteSpace
 };
+static constexpr WhiteSpaceType WhiteSpace           = WhiteSpaceType::WhiteSpace;
 
-enum EndOfLineType {
+enum class EndOfLineType {
    /**
     * With operator<< Discard input until end-of-line \n
     * With operator>> Write end-of-line
     */
    EndOfLine
 };
+static constexpr EndOfLineType EndOfLine           = EndOfLineType::EndOfLine;
 
 /**
  * Padding for integers
@@ -139,21 +157,24 @@ static constexpr Width Width_13   = Width::Width_13;
 static constexpr Width Width_14   = Width::Width_14;
 static constexpr Width Width_15   = Width::Width_15;
 
-enum EchoMode : bool {
+enum class EchoMode : bool {
    /*
     * For use with operator<< and operator>>
     */
    EchoMode_Off = false, //!< Turn echo off
    EchoMode_On  = true,  //!< Turn echo on
 };
+constexpr EchoMode EchoMode_Off = EchoMode::EchoMode_Off;
+constexpr EchoMode EchoMode_On  = EchoMode::EchoMode_On;
 
-enum FlushType {
+enum class FlushType {
    /**
     * With operator<< Discard queued input \n
     * With operator>> Wait until queued data is transmitted.
     */
    Flush
 };
+constexpr FlushType Flush = FlushType::Flush;
 
 struct IntegerFormat {
 
@@ -360,12 +381,17 @@ protected:
    /**
     * Echo settings
     */
-   bool fEcho = true;
+   EchoMode fEcho = EchoMode_On;
 
    /**
-    * One character look-ahead
+    * One character look-ahead (-1 indicates invalid)
     */
    int16_t lookAhead = -1;
+
+   /**
+    * Radix used for input
+    */
+   Radix inputRadix = Radix_10;
 
    /**
     * Indicate in error state
@@ -559,7 +585,7 @@ public:
       if (lookAhead == static_cast<uint8_t>('\r')) {
          lookAhead = '\n';
       }
-      if (fEcho) {
+      if (bool(fEcho)) {
          _writeChar(lookAhead);
       }
       return lookAhead;
@@ -1038,7 +1064,7 @@ protected:
     */
    FormattedIO __attribute__((noinline)) &private_write(long value, const IntegerFormat &format) {
       char buff[35];
-      ultoa(buff, static_cast<unsigned long>(value), format.fRadix, format.fPadding, int(format.fWidth), false);
+      ltoa(buff, static_cast<unsigned long>(value), format.fRadix, format.fPadding, int(format.fWidth));
       return private_write(buff);
    }
 
@@ -1215,7 +1241,8 @@ protected:
    /**
     * Write a double - Limited to 3 decimal places
     *
-    * @param[in]  value Double to print
+    * @param[in]  value    Double to print
+    * @param[in]  format   Format for printing
     *
     * @return Reference to self
     */
@@ -1247,9 +1274,6 @@ protected:
       }
       auto y = round(x);
       unsigned long scaledValue = static_cast<unsigned long>(y);
-      if (exponent != 0) {
-
-      }
 
       ultoa(buff, scaledValue/format.fFloatPrecisionMultiplier, Radix_10, format.fPadding, int(format.fWidth), isNegative);
       if (int(format.fFloatPrecision)>0) {
@@ -1280,7 +1304,8 @@ protected:
    /**
     * Write a float
     *
-    * @param[in]  value Float to print
+    * @param[in]  value    Float to print
+    * @param[in]  format   Format for printing
     *
     * @return Reference to self
     */
@@ -1557,127 +1582,79 @@ protected:
 
 public:
    /**
-    * Write a character
-    *
-    * @param[in]  ch Character to print
-    *
-    * @return Reference to self
-     */
-   FormattedIO &operator <<(char ch) {
-      return private_write(ch);
-   }
-
-   /**
-    * Write a boolean value
-    *
-    * @param[in]  b Boolean to print
-    *
-    * @return Reference to self
-     */
-   FormattedIO &operator <<(bool b) {
-      return private_write(b);
-   }
-
-   /**
-    * Write a C string
-    *
-    * @param[in]  str String to print
-    *
-    * @return Reference to self
-    */
-   FormattedIO &operator <<(const char *str) {
-      return private_write(str);
-   }
-
-   /**
-    * Write an unsigned long integer
-    *
-    * @param[in]  value Unsigned long to print
-    *
-    * @return Reference to self
-    */
-   FormattedIO &operator <<(unsigned long value) {
-      return private_write(value, fIntegerFormat.fRadix);
-   }
-
-   /**
-    * Write a long integer
-    *
-    * @param[in]  value Long to print
-    *
-    * @return Reference to self
-    */
-   FormattedIO &operator <<(long value) {
-      return private_write(value, fIntegerFormat.fRadix);
-   }
-
-   /**
-    * Write an unsigned integer
-    *
-    * @param[in]  value Unsigned to print
-    *
-    * @return Reference to self
-    */
-   FormattedIO &operator <<(unsigned int value) {
-      return private_write(value, fIntegerFormat.fRadix);
-   }
-
-   /**
-    * Write an integer
-    *
-    * @param[in]  value Integer to print
-    *
-    * @return Reference to self
-    */
-   FormattedIO &operator <<(int value) {
-      return private_write(value, fIntegerFormat.fRadix);
-   }
-
-   /**
-    * Write a pointer value
-    *
-    * @param[in]  value Pointer value to print
-    *
-    * @return Reference to self
-    */
-   FormattedIO &operator <<(const void *value) {
-      return private_write(reinterpret_cast<unsigned long>(value), fIntegerFormat.fRadix);
-   }
-
-   /**
-    * Write a float
-    *
-    * @param[in]  value Float to print
-    *
-    * @return Reference to self
-    */
-   FormattedIO &operator <<(float value) {
-      return private_write(static_cast<double>(value));
-   }
-
-   /**
-    * Write a double
-    *
-    * @param[in]  value Double to print
-    *
-    * @return Reference to self
-    */
-   FormattedIO &operator <<(double value) {
-      return private_write(value);
-   }
-
-   /**
-    * Sets the conversion radix for integer types
+    * Sets the radix for integer types
     *
     * @param[in] radix Radix to set
     *
     * @return Reference to self
-    *
-    * @note Only applies for operator<< methods
     */
    FormattedIO &operator <<(Radix radix) {
       fIntegerFormat.fRadix = radix;
       return *this;
+   }
+
+   /**
+    * Sets the width for integer types
+    *
+    * @param[in] width Width to set
+    *
+    * @return Reference to self
+    */
+   FormattedIO &operator <<(Width width) {
+      fIntegerFormat.fWidth = width;
+      return *this;
+   }
+
+   /**
+    * Set padding for integer types
+    *
+    * @param[in] padding Padding to set
+    *
+    * @return Reference to self
+    */
+   FormattedIO &operator<<(Padding padding) {
+      setPadding(padding);
+      return *this;
+   }
+
+   /**
+    * Sets the integer format
+    *
+    * @param[in] format Integer format to set
+    *
+    * @return Reference to self
+    */
+   FormattedIO &operator <<(const IntegerFormat &format) {
+      return setFormat(format);
+   }
+
+   /**
+    * Sets the radix for integer types
+    *
+    * @param[in] format Float format to set
+    *
+    * @return Reference to self
+    */
+   FormattedIO &operator <<(const FloatFormat &format) {
+      return setFormat(format);
+   }
+
+   /**
+    * Resets the float format to default
+    *
+    * @return Reference to self
+    */
+   FormattedIO &operator <<(ResetFloatFormatType) {
+      return resetFloatFormat();
+   }
+
+   /**
+    * Resets the integer format to default
+    *
+    * @return Reference to self
+    */
+   FormattedIO &operator <<(ResetIntegerFormatType) {
+      return resetFloatFormat();
    }
 
    /**
@@ -1692,18 +1669,11 @@ public:
    /**
     * Enable/Disable echoing of input characters
     *
-    * @return Reference to self
-    */
-   FormattedIO &operator <<(EchoMode echoMode) {
-      return setEcho(echoMode);
-   }
-
-   /**
-    * Enable/Disable echoing of input characters
+    * @param[in] echoMode Echo mode to set
     *
     * @return Reference to self
     */
-   FormattedIO &operator >>(EchoMode echoMode) {
+   FormattedIO &operator <<(EchoMode echoMode) {
       return setEcho(echoMode);
    }
 
@@ -1715,6 +1685,18 @@ public:
    FormattedIO &operator <<(FlushType) {
       flushOutput();
       return *this;
+   }
+
+   /**
+    * Write an object
+    *
+    * @param[in]  ch Character to print
+    *
+    * @return Reference to self
+     */
+   template <typename T>
+   FormattedIO &operator <<(const T &ch) {
+      return private_write(ch);
    }
 
    /**
@@ -1788,6 +1770,10 @@ public:
       return *this;
    }
 
+   //************************************************************************************
+   //************************************************************************************
+   //************************************************************************************
+
    /**
     * Receives an unsigned long
     *
@@ -1846,7 +1832,7 @@ public:
     * @note Skips leading whitespace
     */
    FormattedIO &read(unsigned long &value) {
-      return read(value, fIntegerFormat.fRadix);
+      return read(value, inputRadix);
    }
 
    /**
@@ -1873,7 +1859,7 @@ public:
     * @note Skips leading whitespace
     */
    FormattedIO &readln(unsigned long &value) {
-      return readln(value,fIntegerFormat.fRadix);
+      return readln(value,inputRadix);
    }
 
    /**
@@ -1902,7 +1888,7 @@ public:
     * @note Skips leading whitespace
     */
    FormattedIO &read(long &value) {
-      return read(value,fIntegerFormat.fRadix);
+      return read(value,inputRadix);
    }
 
    /**
@@ -1929,7 +1915,7 @@ public:
     * @note Skips leading whitespace
     */
    FormattedIO &readln(long &value) {
-      return readln(value, fIntegerFormat.fRadix);
+      return readln(value, inputRadix);
    }
 
    /**
@@ -1958,7 +1944,7 @@ public:
     * @note Skips leading whitespace
     */
    FormattedIO &read(unsigned int &value) {
-      return read(value, fIntegerFormat.fRadix);
+      return read(value, inputRadix);
    }
 
    /**
@@ -1985,7 +1971,7 @@ public:
     * @note Skips leading whitespace
     */
    FormattedIO &readln(unsigned &value) {
-      return readln(value, fIntegerFormat.fRadix);
+      return readln(value, inputRadix);
    }
 
    /**
@@ -2014,7 +2000,7 @@ public:
     * @note Skips leading whitespace
     */
    FormattedIO &read(int &value) {
-      return read(value, fIntegerFormat.fRadix);
+      return read(value, inputRadix);
    }
 
    /**
@@ -2041,7 +2027,28 @@ public:
     * @note Skips leading whitespace
     */
    FormattedIO &readln(int &value) {
-      return readln(value, fIntegerFormat.fRadix);
+      return readln(value, inputRadix);
+   }
+
+   /**
+    * Enable/Disable echoing of input characters
+    *
+    * @return Reference to self
+    */
+   FormattedIO &operator >>(EchoMode echoMode) {
+      return setEcho(echoMode);
+   }
+
+   /**
+    * Sets the input conversion radix for integer types
+    *
+    * @param[in]  radix Radix to set
+    *
+    * @return Reference to self
+    */
+   FormattedIO &operator >>(Radix radix) {
+      inputRadix = radix;
+      return *this;
    }
 
    /**
@@ -2071,161 +2078,20 @@ public:
     * @return Reference to self
     */
    FormattedIO &operator >>(FlushType) {
-      flushInput();
-      return *this;
+      return flushInput();
    }
 
-   /**
-    * Sets the conversion radix for integer types
-    *
-    * @param[in]  radix Radix to set
-    *
-    * @return Reference to self
-    *
-    * @note Only applies for operator<< methods
-    */
-   FormattedIO &operator >>(Radix radix) {
-      fIntegerFormat.fRadix = radix;
-      return *this;
-   }
 
    /**
-    * Receives a single character
+    * Receives an object
     *
-    * @param[out] ch Where to place character read
+    * @param obj Object to read
     *
     * @return Reference to self
     */
-   FormattedIO &operator >>(char &ch) {
-      ch = readChar();
-      return *this;
-   }
-
-   /**
-    * Receives an unsigned long
-    *
-    * @param[out] value Where to place value read
-    *
-    * @return Reference to self
-    *
-    * @note Skips leading whitespace
-    */
-   FormattedIO &operator >>(unsigned long &value) {
-      return read(value, fIntegerFormat.fRadix);
-   }
-
-   /**
-    * Receives a long
-    *
-    * @param[out] value Where to place value read
-    *
-    * @return Reference to self
-    *
-    * @note Skips leading whitespace
-    */
-   FormattedIO &operator >>(long &value) {
-      return read(value, fIntegerFormat.fRadix);
-   }
-
-   /**
-    * Receives an unsigned long
-    *
-    * @param[out] value Where to place value read
-    *
-    * @return Reference to self
-    *
-    * @note Skips leading whitespace
-    */
-   FormattedIO &operator >>(unsigned int &value) {
-      return read(value, fIntegerFormat.fRadix);
-   }
-
-   /**
-    * Receives an integer
-    *
-    * @param[out] value Where to place value read
-    *
-    * @return Reference to self
-    *
-    * @note Skips leading whitespace
-    */
-   FormattedIO &operator >>(int &value) {
-      return read(value, fIntegerFormat.fRadix);
-   }
-
-   /**
-    * Get conversion radix for given base
-    *
-    * @param[in]  radix Base to convert to radix [2..16]
-    *
-    * @return Radix corresponding to base
-    */
-   static constexpr Radix radix(unsigned radix) {
-      return static_cast<Radix>(radix);
-   }
-
-   /**
-    * Create field width object
-    *
-    * @code
-    * Uart0 myUart;
-    * myUart<<Uart0::width(10)<<123;
-    * @endcode
-    *
-    * @param[in]  width Integer to convert to width
-    *
-    * @return Width corresponding to width
-    */
-   static constexpr Width width(int width) {
-      return static_cast<Width>(width);
-   }
-
-   /**
-    * Set float printing format
-    *
-    * @param ioSettings    Setting to apply
-    *
-    * @return Reference to self
-    */
-   FormattedIO &operator<<(const FloatFormat &floatFormat) {
-      fFloatFormat = floatFormat;
-      return *this;
-   }
-
-   /**
-    * Set integer printing format
-    *
-    * @param ioSettings    Setting to apply
-    *
-    * @return Reference to self
-    */
-   FormattedIO &operator<<(const IntegerFormat &integerFormat) {
-      fIntegerFormat = integerFormat;
-      return *this;
-   }
-
-   /**
-    * Set width for integers
-    *
-    * @param[in] width
-    *
-    * @return Reference to self
-    */
-   FormattedIO &operator<<(Width width) {
-      setWidth(width);
-      return *this;
-   }
-
-   /**
-    * Set padding for integers
-    *
-    * @param[in] padding
-    *
-    * @return Reference to self
-    */
-   FormattedIO &operator<<(Padding padding) {
-      setPadding(padding);
-      return *this;
+   template<typename T>
+   FormattedIO &operator >>(T &obj) {
+      return read(obj);
    }
 
    /**

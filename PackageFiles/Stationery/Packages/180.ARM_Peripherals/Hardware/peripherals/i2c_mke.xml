@@ -4,12 +4,11 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Inter-Integrated Circuit" >
 
-   <constant key="irq_common"                type="Boolean" value="true"          />
-   <constant key="irq_parameters"            type="String"  value="&quot;ErrorCode errorCode&quot;"  />
-   <constant key="irq_dummy_parameters"      type="String"  value="&quot;ErrorCode&quot;"  />
-   <constant key="irq_call"                  type="String"  value="&quot;errorCode&quot;"  />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="irq_parameters"            type="String"  value="&quot;ErrorCode errorCode&quot;"  />
+   <equation key="irq_dummy_parameters"      type="String"  value="&quot;ErrorCode&quot;"  />
+   <equation key="irq_call"                  type="String"  value="&quot;errorCode&quot;"  />
+   <equation key="generateDefault"           type="Boolean" value="false"         />
+   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
 
 <!--
@@ -706,19 +705,9 @@ In other cases, if the master reads data from the slave, then it is required to 
       ]]></variableTemplate>
    </for>
 
-   <!--   ========== class $(_Structname)BasicInfo =============================== -->
-
-   <template namespace="baseClass" >
-   <![CDATA[
-      class $(_Structname)BasicInfo {
-      \t
-      public:\n
-   ]]>
-   </template>
-
    <!--   ========== Interrupt handling =============================== -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
       variables="irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
@@ -726,7 +715,7 @@ In other cases, if the master reads data from the slave, then it is required to 
        \t\n
    ]]></variableTemplate>
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
    <![CDATA[
       \t/**
       \t * Type definition for $(_Baseclass) interrupt call back.
@@ -802,7 +791,7 @@ In other cases, if the master reads data from the slave, then it is required to 
 
    <!--   ========== I2C Init class =============================== -->
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_BASENAME)
@@ -876,90 +865,90 @@ In other cases, if the master reads data from the slave, then it is required to 
 
 <!--   Member variables -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_BASENAME)/baudSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_BASENAME)/baudSupport"
       variables="i2c_speed"
    ><![CDATA[
       \t   ///  %description
       \t   unsigned %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="i2c_a1_ad"
    ><![CDATA[
       \t   /// Address Register 1
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="i2c_f_mult,i2c_f_icr"
    ><![CDATA[
       \t   /// Frequency Divider register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="i2c_c1_iicie,i2c_c1_mst,i2c_c1_wuen,i2c_c1_dmaen"
    ><![CDATA[
       \t   /// Control Register 1
       \t   uint8_t %registerName = I2cBusRole_Controller;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="i2c_d_data"
    ><![CDATA[
       \t   /// Data I/O register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="i2c_c2_gcaen,i2c_c2_adext,i2c_c2_sbrc,i2c_c2_rmen,i2c_c2_ad,i2c_c2_hdrs"
    ><![CDATA[
       \t   /// Control Register 2
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="i2c_flt_shen,i2c_flt_ssie,i2c_flt_flt,i2c_flt_stopie"
    ><![CDATA[
       \t   /// Programmable Input Glitch Filter register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="i2c_ra_rad"
    ><![CDATA[
       \t   /// Range Address register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_BASENAME)/smbOptionsAvailable"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_BASENAME)/smbOptionsAvailable"
       variables="i2c_smb_fack,i2c_smb_alerten,i2c_smb_siicaen,i2c_smb_tcksel,i2c_smb_shtf2ie"
    ><![CDATA[
       \t   /// SMBus Control and Status register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_BASENAME)/smbOptionsAvailable"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_BASENAME)/smbOptionsAvailable"
       variables="i2c_a2_sad"
    ><![CDATA[
       \t   /// Address Register 2
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_BASENAME)/smbOptionsAvailable"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_BASENAME)/smbOptionsAvailable"
       variables="i2c_slt_value"
    ><![CDATA[
       \t   /// SCL Low Timeout Register
       \t   uint16_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="irqHandlingMethod"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -1039,7 +1028,7 @@ In other cases, if the master reads data from the slave, then it is required to 
 
    <!--   Constructors -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -1058,7 +1047,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -1077,7 +1066,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
       variables="i2c_c2_adext,i2c_slaveaddress,i2c_c2_ad,i2c_a1_ad"
       linePadding="xxx"
       params=",address">
@@ -1101,7 +1090,7 @@ In other cases, if the master reads data from the slave, then it is required to 
    ]]>
    </variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
       variables="i2c_c2_rmen,i2c_rangeaddress,i2c_ra_rad"
       linePadding="xxx"
       nonDefaultParams="2"
@@ -1126,7 +1115,7 @@ In other cases, if the master reads data from the slave, then it is required to 
    ]]>
    </variableTemplate>
 
-   <variableTemplate namespace="baseClass"
+   <variableTemplate where="basicInfo"
       codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo&amp;&amp;/$(_BASENAME)/smbOptionsAvailable"
       variables="i2c_smb_siicaen,i2c_a2_sad"
       params=",address"
@@ -1153,7 +1142,7 @@ In other cases, if the master reads data from the slave, then it is required to 
    ]]>
    </variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
       variables="i2c_f_mult,i2c_f_icr"
       linePadding="xxx"
       nonDefaultParams="2"
@@ -1177,7 +1166,7 @@ In other cases, if the master reads data from the slave, then it is required to 
    ]]>
    </variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/baudSupport" discardRepeats="true"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_BASENAME)/baudSupport" discardRepeats="true"
       variables="i2c_f_mult, i2c_speed"
       linePadding="xxx"
    >
@@ -1214,7 +1203,7 @@ In other cases, if the master reads data from the slave, then it is required to 
             i2c_flt_ssie;
             i2c_flt_flt
             " >
-      <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -1243,7 +1232,7 @@ In other cases, if the master reads data from the slave, then it is required to 
             i2c_smb_tcksel;
             i2c_smb_shtf2ie
             " >
-      <variableTemplate namespace="baseClass"
+      <variableTemplate where="basicInfo"
          codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo&amp;&amp;/$(_BASENAME)/smbOptionsAvailable"
          variables="%(r)"
          linePadding="xxx" >
@@ -1270,7 +1259,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       values="
             i2c_slt_value
             " >
-      <variableTemplate namespace="baseClass"
+      <variableTemplate where="basicInfo"
          codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo&amp;&amp;/$(_BASENAME)/smbOptionsAvailable"
          variables="%(r)"
          linePadding="xxx" >
@@ -1358,16 +1347,10 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t\n
    ]]></template>
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
       <![CDATA[
       \t}; // class $(_Structname)BasicInfo::Init
       \t\n
-   ]]>
-   </template>
-
-   <template namespace="baseClass" >
-      <![CDATA[
-      }; // class $(_Structname)BasicInfo\n\n
    ]]>
    </template>
 

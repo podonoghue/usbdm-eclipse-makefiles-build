@@ -57,7 +57,7 @@ triggered and the trace buffer&apos;s recording state is changed.\n
 
 <!--   ========== DWT Init class =============================== -->
 
-   <template key="init_description" namespace="all">
+   <template key="init_description" where="all">
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Class)
@@ -83,7 +83,7 @@ triggered and the trace buffer&apos;s recording state is changed.\n
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template where="basicInfo">
    <![CDATA[
       class $(_Class)BasicInfo {
       \t
@@ -92,7 +92,7 @@ triggered and the trace buffer&apos;s recording state is changed.\n
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template where="basicInfo">
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -113,7 +113,7 @@ triggered and the trace buffer&apos;s recording state is changed.\n
 
 <!--   Member variables -->
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate where="basicInfo"
       variables="dwt_tbctrl_numcomp,dwt_tbctrl_acomp1,dwt_tbctrl_acomp0"
    ><![CDATA[
       \t   /// Trace Buffer Control Register
@@ -154,7 +154,7 @@ triggered and the trace buffer&apos;s recording state is changed.\n
             dwt_tbctrl_acomp1;
             dwt_tbctrl_acomp0
             ">
-      <variableTemplate namespace="usbdm"
+      <variableTemplate where="basicInfo"
          variables="%(r)"
          linePadding="xxx">
       <![CDATA[
@@ -182,7 +182,7 @@ triggered and the trace buffer&apos;s recording state is changed.\n
       values="
             dwt_tbctrl_numcomp
             ">
-      <variableTemplate namespace="usbdm"
+      <variableTemplate where="basicInfo"
          variables="%(r)"
          linePadding="xxx">
       <![CDATA[
@@ -225,13 +225,13 @@ triggered and the trace buffer&apos;s recording state is changed.\n
       \t};\n\n
    ]]></variableTemplate>
 
-   <template namespace="usbdm">
+   <template where="basicInfo">
       <![CDATA[
       \t}; // $(_Class)::BasicInfo::Init\n\n
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template where="basicInfo">
       <![CDATA[
       }; // $(_Class)::BasicInfo\n\n
    ]]>

@@ -46,22 +46,22 @@ Devices using this vector table:
       <value>72</value>
    </interrupt>
    <interrupt>
-      <name>DMA0_CH0</name>
+      <name>DMA0_Ch0</name>
       <description>DMA Channel 0 transfer complete</description>
       <value>73</value>
    </interrupt>
    <interrupt>
-      <name>DMA0_CH1</name>
+      <name>DMA0_Ch1</name>
       <description>DMA Channel 1 transfer complete</description>
       <value>74</value>
    </interrupt>
    <interrupt>
-      <name>DMA0_CH2</name>
+      <name>DMA0_Ch2</name>
       <description>DMA Channel 2 transfer complete</description>
       <value>75</value>
    </interrupt>
    <interrupt>
-      <name>DMA0_CH3</name>
+      <name>DMA0_Ch3</name>
       <description>DMA Channel 3 transfer complete</description>
       <value>76</value>
    </interrupt>
@@ -246,12 +246,12 @@ Devices using this vector table:
       <value>117</value>
    </interrupt>
    <interrupt>
-      <name>PIT0</name>
+      <name>PIT_Ch0</name>
       <description>PIT 0 interrupt</description>
       <value>119</value>
    </interrupt>
    <interrupt>
-      <name>PIT1</name>
+      <name>PIT_Ch1</name>
       <description>PIT 1 interrupt</description>
       <value>120</value>
    </interrupt>

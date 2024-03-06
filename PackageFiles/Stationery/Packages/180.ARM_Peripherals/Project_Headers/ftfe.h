@@ -167,12 +167,6 @@ protected:
 
 public:
 
-   static void Command_irqHandler() {
-   }
-
-   static void ReadCollision_irqHandler() {
-   }
-
    /**
     * Hardware instance pointer
     *
@@ -249,33 +243,6 @@ public:
             isFlashAvailable() &&
             waitForFlashReady();
    }
-
-#if $(/FTFE/_irqCount:0)>1 // /FTFE/_irqCount>1
-   /**
-    * Enable interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
-    */
-   static void enableNvicCollisionInterrupts() {
-      NVIC_EnableIRQ(FTF_ReadCollision_IRQn);
-   }
-
-   /**
-    * Enable and set priority of interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    */
-   static void enableNvicCollisionInterrupts(NvicPriority nvicPriority) {
-      enableNvicInterrupt(FTF_ReadCollision_IRQn, nvicPriority);
-   }
-
-   /**
-    * Disable interrupts in NVIC
-    */
-   static void disableNvicCollisionInterrupts() {
-      NVIC_DisableIRQ(FTF_ReadCollision_IRQn);
-   }
-#endif
 
 private:
    /**

@@ -1,12 +1,12 @@
 <!--
-Devices using this vector table: 
+Devices using this vector table:
    MKL03Z4
 -->
 <interrupts>
    <name>MKL03Z4_VectorTable</name>
    <description>MKL03Z4 VectorTable</description>
    <interrupt>
-      <name>FTF_Command</name>
+      <name>FTFA</name>
       <description>Flash Memory Interface</description>
       <value>5</value>
       <peripheral>FTFA</peripheral>

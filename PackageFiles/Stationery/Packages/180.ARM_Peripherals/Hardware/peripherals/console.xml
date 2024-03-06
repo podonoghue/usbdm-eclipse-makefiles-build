@@ -30,8 +30,7 @@
       <choice name="Lpuart 5" value="USBDM::Lpuart5"  condition="/LPUART5/_present" />
    </choiceOption>
 
-   <choiceOption key="console_baudrate"
-      namespace="info"
+   <choiceOption key="console_baudrate" namespace="info"
       enabledBy="consoleEnable"
       valueFormat="%s"
       typeName="UartBaudRate"

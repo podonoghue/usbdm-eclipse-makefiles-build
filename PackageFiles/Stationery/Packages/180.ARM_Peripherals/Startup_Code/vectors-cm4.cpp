@@ -79,7 +79,7 @@ typedef struct {
  */
 __attribute__((__naked__, __weak__, __interrupt__))
 void HardFault_Handler(void) {
-#if defined(DEBUG_BUILD)
+#if defined(DEBUG_BUILD) && $(/HARDWARE/extendedHardFaultInformation:false)
    /*
     * Determines the active stack pointer and loads it into r0
     * This is used as the 1st argument to _HardFault_Handler(volatile ExceptionFrame *exceptionFrame)
@@ -102,6 +102,8 @@ void HardFault_Handler(void) {
 }
 #pragma GCC diagnostic pop
 
+extern "C" {
+#if defined(DEBUG_BUILD) && $(/HARDWARE/extendedHardFaultInformation:false)
 /******************************************************************************/
 /* Hard fault handler in C with stack frame location as input parameter
  *
@@ -115,7 +117,6 @@ void HardFault_Handler(void) {
  *   - Accessed unaligned memory - unlikely I guess
  *
  */
-extern "C" {
 __attribute__((__naked__))
 void _HardFault_Handler(
       volatile ExceptionFrame *exceptionFrame __attribute__((__unused__)),
@@ -125,7 +126,7 @@ void _HardFault_Handler(
    using namespace USBDM;
 
    console.setPadding(Padding_LeadingZeroes);
-   console.setWidth(8);
+   console.setWidth(Width_8);
    console.writeln("\n[Hardfault]\n - Stack frame:\n");
    console.writeln("R0  = 0x", exceptionFrame->r0,  Radix_16);
    console.writeln("R1  = 0x", exceptionFrame->r1,  Radix_16);
@@ -152,6 +153,7 @@ void _HardFault_Handler(
       __asm__("bkpt");
    }
 }
+#endif
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wattributes"

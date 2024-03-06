@@ -4,11 +4,11 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="True Random Number Generator">
 
-   <constant key="irq_parameters"            type="String"  value='""'  />
-   <constant key="irq_dummy_parameters"      type="String"  value='""'  />
-   <constant key="irq_call"                  type="String"  value='""'  />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="irq_parameters"            type="String"  value='""'  />
+   <equation key="irq_dummy_parameters"      type="String"  value='""'  />
+   <equation key="irq_call"                  type="String"  value='""'  />
+   <equation key="generateDefault"           type="Boolean" value="false"         />
+   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -149,8 +149,6 @@
       <choice name="Stopped"  value="0" enum="Stopped" />
       <choice name="Generate" value="1" enum="Generate" />
    </binaryOption >
-
-   <category description="Advanced" >
 
    <choiceOption key="trng_mctl_samp_mode" condition="trng_mctl_samp_mode_present"
       enabledBy="enablePeripheralSupport"
@@ -1259,18 +1257,9 @@
       \t\n
    ]]></variableTemplate>
 
-   <!--   ========== class $(_Structname)BasicInfo =============================== -->
-
-   <template namespace="baseClass" ><![CDATA[
-      class $(_Structname)BasicInfo {
-
-      public:\n
-   ]]></template>
-
-
    <!--   ========== Interrupt handling =============================== -->
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
    <![CDATA[
       \t/**
       \t * Type for Random Number Generator Accelerator call back function.
@@ -1324,7 +1313,7 @@
    ]]>
    </template>
 
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <template where="static" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t/**
       \t * Callback function for Random Number Generator Accelerator
@@ -1337,7 +1326,7 @@
 
    <!--   ========== TRNG Init class =============================== -->
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -1393,20 +1382,20 @@ XXXXXXXXXXXXXXXXXXXXXX
 
    <!--   Member variables -->
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
    <![CDATA[
       \t   /// Random Number Generator Accelerator
       \t   CallbackFunction callbackFunction = nullptr;\n\n
    ]]></template>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="trng_mctl_prgm,trng_mctl_err,trng_mctl_for_sclk,trng_mctl_rst_def,trng_mctl_trng_acc,trng_mctl_unused,trng_mctl_osc_div,trng_mctl_samp_mode"
    ><![CDATA[
       \t   /// Miscellaneous Control Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="trng_scmisc_rty_ct,trng_scmisc_lrun_max"
    ><![CDATA[
       \t   /// Statistical Check Miscellaneous Register
@@ -1414,126 +1403,126 @@ XXXXXXXXXXXXXXXXXXXXXX
    ]]></variableTemplate>
 
 <!--
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="trng_pkrrng_pkr_rng"
    ><![CDATA[
       \t   /// Poker Range Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="trng_pkrmax_pkr_max"
    ><![CDATA[
       \t   /// Poker Maximum Limit Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="trng_sdctl_ent_dly,trng_sdctl_samp_size"
    ><![CDATA[
       \t   /// Seed Control Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="trng_sblim_sb_lim"
    ><![CDATA[
       \t   /// Sparse Bit Limit Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="trng_frqmin_frq_min"
    ><![CDATA[
       \t   /// Frequency Count Minimum Limit Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="trng_frqmax_frq_max"
    ><![CDATA[
       \t   /// Frequency Count Maximum Limit Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="trng_scml_mono_rng,trng_scml_mono_max"
    ><![CDATA[
       \t   /// Statistical Check Monobit Limit Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="trng_scr1l_run1_rng,trng_scr1l_run1_max"
    ><![CDATA[
       \t   /// Statistical Check Run Length 1 Limit Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="trng_scr2l_run2_rng,trng_scr2l_run2_max"
    ><![CDATA[
       \t   /// Statistical Check Run Length 2 Limit Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="trng_scr3l_run3_rng,trng_scr3l_run3_max"
    ><![CDATA[
       \t   /// Statistical Check Run Length 3 Limit Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="trng_scr4l_run4_rng,trng_scr4l_run4_max"
    ><![CDATA[
       \t   /// Statistical Check Run Length 4 Limit Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="trng_scr5l_run5_rng,trng_scr5l_run5_max"
    ><![CDATA[
       \t   /// Statistical Check Run Length 5 Limit Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="trng_scr6pl_run6p_rng,trng_scr6pl_run6p_max"
    ><![CDATA[
       \t   /// Statistical Check Run Length 6+ Limit Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="trng_sec_cfg_sk_val,trng_sec_cfg_no_prgm,trng_sec_cfg_sh0"
    ><![CDATA[
       \t   /// Security Configuration Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="trng_int_ctrl_unused,trng_int_ctrl_frq_ct_fail,trng_int_ctrl_ent_val,trng_int_ctrl_hw_err"
    ><![CDATA[
       \t   /// Interrupt Control Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="trng_int_mask_frq_ct_fail,trng_int_mask_ent_val,trng_int_mask_hw_err"
    ><![CDATA[
       \t   /// Mask Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="trng_int_status_frq_ct_fail"
    ><![CDATA[
       \t   /// Interrupt Status Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -1544,7 +1533,7 @@ XXXXXXXXXXXXXXXXXXXXXX
 
    <!-- Init Constructors -->
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -1562,7 +1551,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t   }\n\n
    ]]></template>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -1596,7 +1585,7 @@ XXXXXXXXXXXXXXXXXXXXXX
             trng_int_mask_hw_err;
             trng_int_status_frq_ct_fail
             " >
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -1652,7 +1641,7 @@ XXXXXXXXXXXXXXXXXXXXXX
             trng_scr6pl_run6p_max;
             trng_int_ctrl_unused
             " >
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -1817,16 +1806,9 @@ XXXXXXXXXXXXXXXXXXXXXX
    ]]>
    </template>
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t}; // class $(_Structname)BasicInfo::Init
-      \t\n
-   ]]>
-   </template>
-
-   <template namespace="baseClass" >
-   <![CDATA[
-      }; // class $(_Structname)BasicInfo
       \t\n
    ]]>
    </template>

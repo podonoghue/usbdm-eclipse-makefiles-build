@@ -6,25 +6,25 @@ Devices using this vector table:
    <name>MKV31F12810_VectorTable</name>
    <description>MKV31F12810 VectorTable</description>
    <interrupt>
-      <name>DMA0_CH0</name>
+      <name>DMA0_Ch0</name>
       <description>DMA Controller</description>
       <value>0</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_CH1</name>
+      <name>DMA0_Ch1</name>
       <description>DMA Controller</description>
       <value>1</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_CH2</name>
+      <name>DMA0_Ch2</name>
       <description>DMA Controller</description>
       <value>2</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_CH3</name>
+      <name>DMA0_Ch3</name>
       <description>DMA Controller</description>
       <value>3</value>
       <peripheral>DMA0</peripheral>
@@ -43,13 +43,13 @@ Devices using this vector table:
       <peripheral>MCM</peripheral>
    </interrupt>
    <interrupt>
-      <name>FTF_Command</name>
+      <name>FTFA_Command</name>
       <description>Flash Memory Interface</description>
       <value>18</value>
       <peripheral>FTFA</peripheral>
    </interrupt>
    <interrupt>
-      <name>FTF_ReadCollision</name>
+      <name>FTFA_ReadCollision</name>
       <description>Flash Memory Interface</description>
       <value>19</value>
       <peripheral>FTFA</peripheral>
@@ -175,25 +175,25 @@ Devices using this vector table:
       <peripheral>FTM2</peripheral>
    </interrupt>
    <interrupt>
-      <name>PIT0</name>
+      <name>PIT_Ch0</name>
       <description>Periodic Interrupt Timer</description>
       <value>48</value>
       <peripheral>PIT</peripheral>
    </interrupt>
    <interrupt>
-      <name>PIT1</name>
+      <name>PIT_Ch1</name>
       <description>Periodic Interrupt Timer</description>
       <value>49</value>
       <peripheral>PIT</peripheral>
    </interrupt>
    <interrupt>
-      <name>PIT2</name>
+      <name>PIT_Ch2</name>
       <description>Periodic Interrupt Timer</description>
       <value>50</value>
       <peripheral>PIT</peripheral>
    </interrupt>
    <interrupt>
-      <name>PIT3</name>
+      <name>PIT_Ch3</name>
       <description>Periodic Interrupt Timer</description>
       <value>51</value>
       <peripheral>PIT</peripheral>

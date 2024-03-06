@@ -66,6 +66,8 @@ protected:
    }
 
 public:
+   using Info::configure;
+
    /**
     * Hardware instance pointer
     *

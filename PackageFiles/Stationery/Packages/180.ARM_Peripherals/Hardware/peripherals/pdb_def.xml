@@ -4,11 +4,11 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <constant key="irq_parameters"           type="String"  value='""'  />
-   <constant key="irq_dummy_parameters"     type="String"  value='""'  />
-   <constant key="irq_call"                 type="String"  value='""'  />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="irq_parameters"            value=""  />
+   <equation key="irq_dummy_parameters"      value=""  />
+   <equation key="irq_call"                  value=""  />
+   <equation key="generateDefault"           value="false"         />
+   <equation key="configureInStartupDefault" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
 
    <!-- Constants -->
@@ -18,40 +18,6 @@
       value="&quot;
              irqHandler   : Callback        : Event
              &quot;" />
-
-<!--
-    * General substitutions
-    *  $(_NAME)         => e.g FTM2 => FTM2
-    *  $(_name)         => e.g FTM2 => ftm2
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
-    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
-    *  $(_Class)        => e.g FTM2 => Ftm2
-    *  $(_Baseclass)    => e.g FTM0 => Ftm
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A
--->
-
-<!--
-    * Template substitutions
-    *
-    * <li>%paramExpression            Parameters ORed together e.g. adcPretrigger|adcRefSel
-    * <li>%valueExpression            Numeric variable value e.g. 0x3
-    * <li>%symbolicExpression[index]  Symbolic formatted value e.g. AdcCompare_Disabled
-    * <li>%variable[index]            Variable name /ADC0/adc_sc2_acfe
-    * <li>%macro[index](value)        C register macro e.g. ADC_SC2_ACFGT(value)
-    * <li>%description[index]         Description from controlVar e.g. Compare Function Enable
-    * <li>%shortDescription[index]    Short description from controlVar e.g. Compare Function Enable
-    * <li>%tooltip[index]             Tool-tip from controlVar e.g. Each bit disables the GPIO function
-    * <li>%params                     Formatted parameter list for function
-    * <li>%paramDescription[index]    Tool-tip from controlVar formatted as param description @param ...
-    * <li>%paramType[index]           Based on typeName e.g. AdcCompare (or uint32_t)
-    * <li>%paramName[index]           Based on typeName with lower-case first letter adcCompare
-    * <li>%fieldAssignment            Expression of form '%register <= (%register & ~%mask)|%paramExpression
-    * <li>%maskingExpression          Based on variable etc. Similar to (%register&%mask)
-    * <li>%mask[index]                From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
-    * <li>%register[index]            Register associated with variable e.g. adc->APCTL1
-    * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
-    * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
--->
 
    <!-- Constants -->
    <constant key="NumChannels"            type="Long" value="0" description="Number of channels"            condition="!pdb_ch_dim"     /> <!-- PDB Channels    -->
@@ -65,8 +31,7 @@
    <constant key="NumPulseOutputs"        type="Long" value="pdb_pondly_dim" description="Number of Pulse outputs"      condition="pdb_pondly_dim" /> <!-- to CMP windows  -->
 
    <!-- ************* Class Declaration ****************** -->
-   <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Class)BasicInfo&quot;" />
+   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
 <!--  ============== Masks and Flags ============== -->
 
@@ -516,88 +481,9 @@
       ]]></variableTemplate>
    </for>
 
-   <!--   ========== class $(_Class)BasicInfo =============================== -->
-
-   <template namespace="usbdm" ><![CDATA[
-      class $(_Class)BasicInfo {
-
-      public:\n
-   ]]></template>
-
-   <!--   ========== Interrupt handling =============================== -->
-
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
-      variables="irqHandlingMethod"
-   ><![CDATA[
-       \t//! Common class based callback code has been generated for this class of peripheral
-       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
-       \t\n
-   ]]></variableTemplate>
-
-   <template namespace="usbdm" codeGenCondition="irqHandlingMethod" ><![CDATA[
-      \t/**
-      \t * Type definition for $(_Baseclass) interrupt call back.
-      \t */
-      \ttypedef void (*CallbackFunction)($(irq_parameters));
-      \t
-      \t/**
-      \t * Callback to catch unhandled interrupt
-      \t */
-      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
-      \t   setAndCheckErrorCode(E_NO_HANDLER);
-      \t}
-      \t\n
-   ]]></template>
-
-   <for keys="irqHandler   : Callback        : Description"
-      values="=IrqInformation"
-   >
-      <template codeGenCondition="irqHandlingMethod" ><![CDATA[
-         \t/** Callback functions for %(Description) ISR */
-         \tstatic CallbackFunction s%(Callback);
-         \t
-         \t/**
-         \t * Set %(Description) callback function.
-         \t *
-         \t * @param[in]  $(_basename)Callback Callback function to execute on interrupt
-         \t *                             Use nullptr to remove callback.
-         \t */
-         \tstatic void set%(Callback)(CallbackFunction $(_basename)%(Callback)) {
-         \t   if ($(_basename)%(Callback) == nullptr) {
-         \t      $(_basename)%(Callback) = unhandledCallback;
-         \t   }
-         \t   // Allow either no handler set yet or removing handler
-         \t   usbdm_assert(
-         \t         (s%(Callback) == unhandledCallback) || ($(_basename)%(Callback) == unhandledCallback),
-         \t         "Handler already set");
-         \t   s%(Callback) = $(_basename)%(Callback);
-         \t}
-         \t
-         \t/**
-         \t * $(_BASENAME) %(Description) callback handler
-         \t */
-         \tstatic void %(irqHandler)() {
-         \t
-         \t   // Execute call-back
-         \t   sCallback($(irq_call));
-         \t}
-         \t\n
-      ]]></template>
-
-      <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
-         \t
-         \t/**
-         \t * Callback for programmatically set %(Description) callback for $(_Class)
-         \t */
-         \t$(_Class)Info::CallbackFunction $(_Class)Info::s%(Callback)  = $(_Class)Info::unhandledCallback;
-         \t\n
-      ]]></template>
-
-   </for>
-
    <!--   ========== PDB Init class =============================== -->
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Class used to do main initialisation of a $(_Class)
       \t *
@@ -693,7 +579,7 @@
       \t\n
    ]]></template>
 
-   <template namespace="usbdm" codeGenCondition="!secondsSupport&amp;&amp;enablePeripheralSupport" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="!secondsSupport&amp;&amp;enablePeripheralSupport" ><![CDATA[
       \t   // Shadow larger definition to save space when not using float
       \t   struct Seconds_Ticks {
       \t
@@ -706,25 +592,25 @@
       \t\n
    ]]></template>
 
-   <template namespace="usbdm" codeGenCondition="secondsSupport&amp;&amp;enablePeripheralSupport" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="secondsSupport&amp;&amp;enablePeripheralSupport" ><![CDATA[
       \t   using Seconds_Ticks = USBDM::Seconds_Ticks;
       \t\n
    ]]></template>
 
-   <template namespace="usbdm" codeGenCondition="!secondsSupport&amp;&amp;enablePeripheralSupport
+   <template where="basicInfo" codeGenCondition="!secondsSupport&amp;&amp;enablePeripheralSupport
                &amp;&amp;/HARDWARE/useTypeSystemForTimers" ><![CDATA[
       \t      constexpr void fromTicks(Ticks ticks) { value = ticks.getValue(); }\n
    ]]></template>
-   <template namespace="usbdm" codeGenCondition="!secondsSupport&amp;&amp; enablePeripheralSupport
+   <template where="basicInfo" codeGenCondition="!secondsSupport&amp;&amp; enablePeripheralSupport
                &amp;&amp;!/HARDWARE/useTypeSystemForTimers" ><![CDATA[
       \t      constexpr void fromTicks(Ticks ticks) { value = ticks; }\n
    ]]></template>
-   <template namespace="usbdm" codeGenCondition="!secondsSupport&amp;&amp;enablePeripheralSupport" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="!secondsSupport&amp;&amp;enablePeripheralSupport" ><![CDATA[
       \t   };
       \t\n
    ]]></template>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t   /**
       \t    * Copy Constructor
       \t    */
@@ -742,56 +628,56 @@
    <for keys="irqHandler   : Callback        : Description"
       values="=IrqInformation"
    >
-      <template namespace="usbdm" codeGenCondition="irqHandlingMethod"
+      <template where="basicInfo" codeGenCondition="irqHandlingMethod"
        ><![CDATA[
          \t   /// %(Description) callback
          \t   CallbackFunction %(irqHandler) = nullptr;\n\n
       ]]></template>
    </for>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   /// %description
       \t   %paramType %registerName = %paramType_Normal;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="pdb_poen_en0"
    ><![CDATA[
       \t   /// Pulse-Out Enable register
       \t   uint8_t poen = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="pdb_po0_dly1"
    ><![CDATA[
       \t   /// Pulse-Out[Y] Delay 1 - rising edge
       \t   Seconds_Ticks dly1[$(NumPulseOutputs)];\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="pdb_po0_dly2"
    ><![CDATA[
       \t   /// Pulse-Out[Y] Delay 1 - falling edge
       \t   Seconds_Ticks dly2[$(NumPulseOutputs)];\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="pdb_intc0_triggerMode"
    ><![CDATA[
       \t   /// DAC Interval Trigger[X] Control Register
       \t   uint8_t intc[$(NumDacIntervalTriggers)] = {0};\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="pdb_int0"
    ><![CDATA[
       \t   /// DAC Interval[X] Interval Register
       \t   Seconds_Ticks interval[$(NumDacIntervalTriggers)];\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="pdb_sc_divider, pdb_sc_trgsel, pdb_sc_action, pdb_sc_pdbeie, pdb_sc_cont, pdb_sc_ldmod"
       linePadding="xxx"
    ><![CDATA[
@@ -800,7 +686,7 @@
    ]]></variableTemplate>
 
    <for keys="r" values="pdb_mod;pdb_idly" >
-      <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -809,7 +695,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="pdb_ch0_c1_pt0"
       linePadding="xxx"
    ><![CDATA[
@@ -818,7 +704,7 @@
       \t   uint32_t c1[$(NumChannels)] = {0};\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="pdb_ch0_dly0"
       linePadding="xxx"
    ><![CDATA[
@@ -833,7 +719,7 @@
          pdb_sc_trgsel;
          pdb_sc_cont;
          pdb_sc_ldmod" >
-      <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx"
        ><![CDATA[
@@ -854,7 +740,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -874,7 +760,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="pdb_sc_action, pdb_idly"
       nonDefaultParams="2"
       linePadding="xxx"
@@ -896,7 +782,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"  codeGenCondition="secondsSupport&amp;&amp;enablePeripheralSupport"
+   <variableTemplate where="basicInfo"  codeGenCondition="secondsSupport&amp;&amp;enablePeripheralSupport"
       variables="pdb_sc_action, pdb_idly_delay"
       nonDefaultParams="2"
       linePadding="xxx"
@@ -918,7 +804,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"  codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo"  codeGenCondition="irqHandlingMethod"
       variables="pdb_sc_action, pdb_idly, irqHandlingMethod"
       nonDefaultParams="3"
       defaultParamValue=",,nullptr"
@@ -942,7 +828,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"  codeGenCondition="secondsSupport &amp;&amp; irqHandlingMethod"
+   <variableTemplate where="basicInfo"  codeGenCondition="secondsSupport &amp;&amp; irqHandlingMethod"
       variables="pdb_sc_action, pdb_idly_delay, irqHandlingMethod"
       nonDefaultParams="3"
       defaultParamValue=",,nullptr"
@@ -966,7 +852,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="pdb_sc_pdbeie"
       linePadding="xxx"
     ><![CDATA[
@@ -986,7 +872,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"  codeGenCondition="irqHandlingMethod&amp;&amp;(_irqCount>1)"
+   <variableTemplate where="basicInfo"  codeGenCondition="irqHandlingMethod&amp;&amp;(_hardwareIrqCount>1)"
       variables="pdb_sc_pdbeie, irqHandlingMethod"
       nonDefaultParams="2"
       linePadding="xxx"
@@ -1009,7 +895,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="pdb_sc_divider, pdb_mod"
       nonDefaultParams="2"
       linePadding="xxx"
@@ -1031,7 +917,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate where="basicInfo"
       codeGenCondition="secondsSupport&amp;&amp;enablePeripheralSupport"
       variables="pdb_sc_autoDivider, pdb_mod_period"
       nonDefaultParams="2"
@@ -1056,7 +942,7 @@
 
    <!--  Pre-triggers -->
    <for keys="m" dim="=NumPreTriggers" >
-      <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
          variables="pdb_channel, pdb_ch0_c1_pt%(m), pdb_ch0_dly%(m)"
          nonDefaultParams="3"
          linePadding="xxx"
@@ -1076,7 +962,7 @@
          \t      dly[%paramName0][%(m)].fromTicks(%paramName2);
          \t   }\n\n
       ]]></variableTemplate>
-      <variableTemplate namespace="usbdm"
+      <variableTemplate where="basicInfo"
          codeGenCondition="secondsSupport&amp;&amp;enablePeripheralSupport"
          variables="pdb_channel, pdb_ch0_c1_pt%(m), pdb_ch0_dly%(m)_delay"
          nonDefaultParams="3"
@@ -1098,7 +984,7 @@
          \t      dly[%paramName0][%(m)].fromSeconds(%paramName2);
          \t   }\n\n
       ]]></variableTemplate>
-      <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
          variables="pdb_channel, pdb_ch0_c1_pt%(m)"
          nonDefaultParams="3"
          linePadding="xxx"
@@ -1123,7 +1009,7 @@
 
    <!--   DAC triggers -->
    <for keys="x" dim="=NumDacIntervalTriggers" >
-      <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
          variables="pdb_intc%(x)_triggerMode, pdb_int%(x)"
          nonDefaultParams="2"
          linePadding="xxx"
@@ -1144,7 +1030,7 @@
          \t      interval[%(x)].fromTicks(%paramName1);
          \t   }\n\n
       ]]></variableTemplate>
-      <variableTemplate namespace="usbdm"
+      <variableTemplate where="basicInfo"
          codeGenCondition="secondsSupport&amp;&amp;enablePeripheralSupport"
          variables="pdb_intc%(x)_triggerMode, pdb_int%(x)_delay"
          nonDefaultParams="2"
@@ -1166,7 +1052,7 @@
          \t      interval[%(x)].fromSeconds(%paramName1);
          \t   }\n\n
       ]]></variableTemplate>
-      <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
          variables="pdb_intc%(x)_triggerMode"
          nonDefaultParams="2"
          linePadding="xxx"
@@ -1191,7 +1077,7 @@
 
    <!--  Pulse outputs -->
    <for keys="y" dim="=NumPulseOutputs" >
-      <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
          variables="pdb_poen_en%(y), pdb_po%(y)_dly1, pdb_po%(y)_dly2"
          nonDefaultParams="3"
          params=", rising, falling"
@@ -1216,7 +1102,7 @@
          \t      dly2[%(y)].fromTicks(%paramName2);
          \t   }\n\n
       ]]></variableTemplate>
-      <variableTemplate namespace="usbdm"
+      <variableTemplate where="basicInfo"
          codeGenCondition="secondsSupport&amp;&amp;enablePeripheralSupport"
          variables="pdb_poen_en%(y), pdb_po%(y)_dly1_delay, pdb_po%(y)_dly2_delay"
          nonDefaultParams="3"
@@ -1244,7 +1130,7 @@
       ]]></variableTemplate>
    </for>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t}; // class $(_Class)BasicInfo::Init\n\n
    ]]></template>
 
@@ -1441,12 +1327,6 @@
       \tpublic:\n\n
    ]]></template>
 
-<!-- End of class $(_Class)BasicInfo -->
-
-   <template namespace="usbdm" ><![CDATA[
-      }; // class $(_Class)BasicInfo\n\n
-   ]]></template>
-
 <!--  ============== Templates ============== -->
 
    <template><![CDATA[
@@ -1515,7 +1395,6 @@
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
       </for>
    </category>
-   <deleteVariables variables="_scgc_clock"  mustExist="false" />
 
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 </fragment>

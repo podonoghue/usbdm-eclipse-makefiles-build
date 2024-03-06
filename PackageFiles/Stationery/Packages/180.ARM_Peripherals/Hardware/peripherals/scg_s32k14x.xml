@@ -78,7 +78,8 @@
       </choiceOption>
    </category>
 
-   <indexedCategory name="ClockConfig[]"  dim="3"
+   <for keys="n" dim="=/SIM/numberOfClockSettings">
+      <categoryOption key="ClockConfig[%(n)]"
          description="Clock configuration" 
          toolTip="Clock configurations for different run modes"
          value="ClockConfig_[]" >
@@ -465,7 +466,8 @@
             derived="true"
             locked="true" />
       </category>
-   </indexedCategory>
+   </categoryOption>
+   </for>
    
    <category name="SCG Parameters" description="" toolTip="Parameters limiting SCG operation">
       <intOption key="pll_mult_min"              locked="true" value="16" />
@@ -597,7 +599,7 @@
       \t}\n\n
    ]]></template>
 
-   <template namespace="usbdm"><![CDATA[
+   <template where="basicInfo"><![CDATA[
       \t/**
       \t * FIRC Regulator enable
       \t */

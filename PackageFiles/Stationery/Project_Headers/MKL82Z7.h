@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2024/01
+ * @date     2024/02
  *
  */
 
@@ -38,11 +38,11 @@ typedef enum {
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
 /* ----------------------   MKL82Z7 VectorTable                      ---------------------- */
-  DMA0_DMA4_IRQn                =   0,   /**<  16 Enhanced direct memory access controller                                         */
-  DMA1_DMA5_IRQn                =   1,   /**<  17 Enhanced direct memory access controller                                         */
-  DMA2_DMA6_IRQn                =   2,   /**<  18 Enhanced direct memory access controller                                         */
-  DMA3_DMA7_IRQn                =   3,   /**<  19 Enhanced direct memory access controller                                         */
-  DMA_Error_IRQn                =   4,   /**<  20 Enhanced direct memory access controller                                         */
+  DMA0_Ch0_DMA4_IRQn            =   0,   /**<  16 Enhanced direct memory access controller                                         */
+  DMA0_Ch1_DMA5_IRQn            =   1,   /**<  17 Enhanced direct memory access controller                                         */
+  DMA0_Ch2_DMA6_IRQn            =   2,   /**<  18 Enhanced direct memory access controller                                         */
+  DMA0_Ch3_DMA7_IRQn            =   3,   /**<  19 Enhanced direct memory access controller                                         */
+  DMA0_Error_IRQn               =   4,   /**<  20 Enhanced direct memory access controller                                         */
   FLEXIO_IRQn                   =   5,   /**<  21 The FLEXIO Memory Map/Register Definition can be found here                      */
   TPM0_IRQn                     =   6,   /**<  22 Timer/PWM Module                                                                 */
   TPM1_IRQn                     =   7,   /**<  23 Timer/PWM Module                                                                 */
@@ -76,17 +76,17 @@ typedef enum {
   I2C1_IRQn                     =  39,   /**<  55 Inter-Integrated Circuit                                                         */
   TSI0_IRQn                     =  40,   /**<  56 Interrupt Multiplexer                                                            */
   PMC_IRQn                      =  41,   /**<  57 Interrupt Multiplexer                                                            */
-  FTF_IRQn                      =  42,   /**<  58 Flash Memory Interface                                                           */
+  FTFA_IRQn                     =  42,   /**<  58 Flash Memory Interface                                                           */
   MCG_IRQn                      =  43,   /**<  59 Interrupt Multiplexer                                                            */
   WDOG_EWM_IRQn                 =  44,   /**<  60 External Watchdog Monitor                                                        */
   DAC0_IRQn                     =  45,   /**<  61 12-Bit Digital-to-Analog Converter                                               */
   TRNG0_IRQn                    =  46,   /**<  62 Random Number Generator Accelerator                                              */
   CMP0_IRQn                     =  48,   /**<  64 High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux */
   RTC_Alarm_IRQn                =  50,   /**<  66 Interrupt Multiplexer                                                            */
-  DMA4_IRQn                     =  56,   /**<  72 Interrupt Multiplexer                                                            */
-  DMA5_IRQn                     =  57,   /**<  73 Interrupt Multiplexer                                                            */
-  DMA6_IRQn                     =  58,   /**<  74 Interrupt Multiplexer                                                            */
-  DMA7_IRQn                     =  59,   /**<  75 Interrupt Multiplexer                                                            */
+  DMA0_Ch4_IRQn                 =  56,   /**<  72 Interrupt Multiplexer                                                            */
+  DMA0_Ch5_IRQn                 =  57,   /**<  73 Interrupt Multiplexer                                                            */
+  DMA0_Ch6_IRQn                 =  58,   /**<  74 Interrupt Multiplexer                                                            */
+  DMA0_Ch7_IRQn                 =  59,   /**<  75 Interrupt Multiplexer                                                            */
 } IRQn_Type;
 
 
@@ -97,11 +97,11 @@ extern void HardFault_Handler(void);                 /**< Hard Fault, all classe
 extern void SVC_Handler(void);                       /**< System Service Call via SVC instruction                                          */
 extern void PendSV_Handler(void);                    /**< Pendable request for system service                                              */
 extern void SysTick_Handler(void);                   /**< System Tick Timer                                                                */
-extern void DMA0_DMA4_IRQHandler(void);              /**< Enhanced direct memory access controller                                         */
-extern void DMA1_DMA5_IRQHandler(void);              /**< Enhanced direct memory access controller                                         */
-extern void DMA2_DMA6_IRQHandler(void);              /**< Enhanced direct memory access controller                                         */
-extern void DMA3_DMA7_IRQHandler(void);              /**< Enhanced direct memory access controller                                         */
-extern void DMA_Error_IRQHandler(void);              /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Ch0_DMA4_IRQHandler(void);          /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Ch1_DMA5_IRQHandler(void);          /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Ch2_DMA6_IRQHandler(void);          /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Ch3_DMA7_IRQHandler(void);          /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Error_IRQHandler(void);             /**< Enhanced direct memory access controller                                         */
 extern void FLEXIO_IRQHandler(void);                 /**< The FLEXIO Memory Map/Register Definition can be found here                      */
 extern void TPM0_IRQHandler(void);                   /**< Timer/PWM Module                                                                 */
 extern void TPM1_IRQHandler(void);                   /**< Timer/PWM Module                                                                 */
@@ -135,17 +135,17 @@ extern void EMVSIM1_IRQHandler(void);                /**< EMVSIM                
 extern void I2C1_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
 extern void TSI0_IRQHandler(void);                   /**< Interrupt Multiplexer                                                            */
 extern void PMC_IRQHandler(void);                    /**< Interrupt Multiplexer                                                            */
-extern void FTF_IRQHandler(void);                    /**< Flash Memory Interface                                                           */
+extern void FTFA_IRQHandler(void);                   /**< Flash Memory Interface                                                           */
 extern void MCG_IRQHandler(void);                    /**< Interrupt Multiplexer                                                            */
 extern void WDOG_EWM_IRQHandler(void);               /**< External Watchdog Monitor                                                        */
 extern void DAC0_IRQHandler(void);                   /**< 12-Bit Digital-to-Analog Converter                                               */
 extern void TRNG0_IRQHandler(void);                  /**< Random Number Generator Accelerator                                              */
 extern void CMP0_IRQHandler(void);                   /**< High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux */
 extern void RTC_Alarm_IRQHandler(void);              /**< Interrupt Multiplexer                                                            */
-extern void DMA4_IRQHandler(void);                   /**< Interrupt Multiplexer                                                            */
-extern void DMA5_IRQHandler(void);                   /**< Interrupt Multiplexer                                                            */
-extern void DMA6_IRQHandler(void);                   /**< Interrupt Multiplexer                                                            */
-extern void DMA7_IRQHandler(void);                   /**< Interrupt Multiplexer                                                            */
+extern void DMA0_Ch4_IRQHandler(void);               /**< Interrupt Multiplexer                                                            */
+extern void DMA0_Ch5_IRQHandler(void);               /**< Interrupt Multiplexer                                                            */
+extern void DMA0_Ch6_IRQHandler(void);               /**< Interrupt Multiplexer                                                            */
+extern void DMA0_Ch7_IRQHandler(void);               /**< Interrupt Multiplexer                                                            */
 
 
 /** @} */ /* End group Interrupt_vector_numbers_GROUP */
@@ -1745,7 +1745,7 @@ typedef struct DMA_Type {
 #define DMA0_BasePtr                   0x40008000UL //!< Peripheral base address
 #define DMA0                           ((DMA_Type *) DMA0_BasePtr) //!< Freescale base pointer
 #define DMA0_BASE_PTR                  (DMA0) //!< Freescale style base pointer
-#define DMA0_IRQS { DMA0_DMA4_IRQn, DMA1_DMA5_IRQn, DMA2_DMA6_IRQn, DMA3_DMA7_IRQn, DMA_Error_IRQn, DMA4_IRQn, DMA5_IRQn, DMA6_IRQn, DMA7_IRQn,  }
+#define DMA0_IRQS { DMA0_Ch0_DMA4_IRQn, DMA0_Ch1_DMA5_IRQn, DMA0_Ch2_DMA6_IRQn, DMA0_Ch3_DMA7_IRQn, DMA0_Error_IRQn, DMA0_Ch4_IRQn, DMA0_Ch5_IRQn, DMA0_Ch6_IRQn, DMA0_Ch7_IRQn,  }
 
 
 /** @} */ /* End group DMA0_Peripheral_access_layer_GROUP */
@@ -2995,7 +2995,7 @@ typedef struct FTFA_Type {
 #define FTFA_BasePtr                   0x40020000UL //!< Peripheral base address
 #define FTFA                           ((FTFA_Type *) FTFA_BasePtr) //!< Freescale base pointer
 #define FTFA_BASE_PTR                  (FTFA) //!< Freescale style base pointer
-#define FTFA_IRQS { FTF_IRQn,  }
+#define FTFA_IRQS { FTFA_IRQn,  }
 
 
 /** @} */ /* End group FTFA_Peripheral_access_layer_GROUP */

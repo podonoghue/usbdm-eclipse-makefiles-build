@@ -4,47 +4,14 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <constant key="irq_parameters"            type="String"  value="&quot;const CmpStatus &amp;status&quot;"  />
-   <constant key="irq_dummy_parameters"      type="String"  value="&quot;const CmpStatus &amp;&quot;"  />
-   <constant key="irq_call"                  type="String"  value="&quot;cmpStatus&quot;"  />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="suppressIrqHandler"         value="" />
+   <equation key="irq_parameters"             value="const CmpStatus &amp;status"  />
+   <equation key="irq_dummy_parameters"       value="const CmpStatus &amp;"  />
+   <equation key="irq_call"                   value="cmpStatus"      />
+   <equation key="generateDefault"            value="false"          />
+   <equation key="configureInStartupDefault"  value="false"          />
    <xi:include href="enablePeripheral.xml"  />
    <title />
-
-<!--
-    * General substitutions
-    *  $(_NAME)         => e.g FTM2 => FTM2
-    *  $(_name)         => e.g FTM2 => ftm2
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
-    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
-    *  $(_Class)        => e.g FTM2 => Ftm2
-    *  $(_Baseclass)    => e.g FTM0 => Ftm
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A
--->
-
-<!--
-    * Template substitutions
-    *
-    * <li>%paramExpression            Parameters ORed together e.g. adcPretrigger|adcRefSel
-    * <li>%valueExpression            Numeric variable value e.g. 0x3
-    * <li>%symbolicExpression[index]  Symbolic formatted value e.g. AdcCompare_Disabled
-    * <li>%variable[index]            Variable name /ADC0/adc_sc2_acfe
-    * <li>%macro[index](value)        C register macro e.g. ADC_SC2_ACFGT(value)
-    * <li>%description[index]         Description from controlVar e.g. Compare Function Enable
-    * <li>%shortDescription[index]    Short description from controlVar e.g. Compare Function Enable
-    * <li>%tooltip[index]             Tool-tip from controlVar e.g. Each bit disables the GPIO function
-    * <li>%params                     Formatted parameter list for function
-    * <li>%paramDescription[index]    Tool-tip from controlVar formatted as param description @param ...
-    * <li>%paramType[index]           Based on typeName e.g. AdcCompare (or uint32_t)
-    * <li>%paramName[index]           Based on typeName with lower-case first letter adcCompare
-    * <li>%fieldAssignment            Expression of form '%register <= (%register & ~%mask)|%paramExpression
-    * <li>%maskingExpression          Based on variable etc. Similar to (%register&%mask)
-    * <li>%mask[index]                From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
-    * <li>%register[index]            Register associated with variable e.g. adc->APCTL1
-    * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
-    * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
--->
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
@@ -159,9 +126,39 @@
       <choice value="1,0" name="Filtered"             enum="Filtered" />
    </choiceOption>
 
-   <aliasOption key="cmp_muxcr_psel$(_instance)" locked="false"/>
+   <choiceOption key="cmp_muxcr_plus"
+      hidden="true"
+      valueFormat="CMP_MUXCR_PSEL(%s)"
+      typeName="CmpInputPlus"
+      description="Plus Input Mux Control"
+      toolTip="Determines which input is selected for the plus input of the comparator" >
+      <choiceExpansion value="%(i)" name='CMP_IN%(i) as positive input' enum="%(i)" keys="i" dim="8" />
+   </choiceOption>
 
-   <aliasOption key="cmp_muxcr_msel$(_instance)" locked="false"/>
+   <choiceOption key="cmp_muxcr_minus"
+      hidden="true"
+      valueFormat="CMP_MUXCR_MSEL(%s)"
+      typeName="CmpInputMinus"
+      description="Minus Input Mux Control"
+      toolTip="Determines which input is selected for the minus input of the comparator" >
+      <choiceExpansion value="%(i)" name='CMP_IN%(i) as negative input' enum="%(i)" keys="i" dim="8" />
+   </choiceOption>
+
+   <choiceOption key="cmp_muxcr_psel"
+      valueFormat="CMP_MUXCR_PSEL(%s)"
+      typeName="CmpInputPlus"
+      description="Plus Input Mux Control"
+      toolTip="Determines which input is selected for the plus input of the comparator" >
+      <choiceExpansion value="%(i)" name='@SignalDescriptionFromIndex(%(i),"^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")' enum="%(i)" keys="i" dim="8" />
+   </choiceOption>
+
+   <choiceOption key="cmp_muxcr_msel"
+      valueFormat="CMP_MUXCR_MSEL(%s)"
+      typeName="CmpInputMinus"
+      description="Minus Input Mux Control"
+      toolTip="Determines which input is selected for the minus input of the comparator" >
+      <choiceExpansion value="%(i)" name='@SignalDescriptionFromIndex(%(i),"^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")' enum="%(i)" keys="i" dim="8" />
+   </choiceOption>
 
    <!-- DAC Configuration -->
    <title description="Internal DAC Configuration" />
@@ -453,7 +450,7 @@
    <variableTemplate
       variables="/GPIOA/port_pcr_dse,/GPIOA/port_pcr_ode,/GPIOA/port_pcr_sre"
       defaultParamValue="OutputPin::defaultPcrValue"
-      key="/$(_BASENAME)/set_output" namespace="all"
+      key="/$(_BASENAME)/set_output" where="all"
       discardRepeats="true" ><![CDATA[
       \t/**
       \t * @brief
@@ -499,7 +496,7 @@
       \t}\n
    ]]></variableTemplate>
 
-   <template namespace="usbdm" discardRepeats="true" >
+   <template where="definitions" discardRepeats="true" >
    <![CDATA[
       \t/**
       \t * Comparator event identification
@@ -517,63 +514,10 @@
    ]]>
    </template>
 
-   <!--   ========== class $(_Structname)BasicInfo =============================== -->
-
-   <template namespace="baseClass" ><![CDATA[
-      class $(_Structname)BasicInfo {
-
-      public:\n
-   ]]></template>
-
    <!--   ========== Interrupt handling =============================== -->
-
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="irqHandlingMethod"
-   ><![CDATA[
-       \t//! Common class based callback code has been generated for this class of peripheral
-       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
-       \t\n
-   ]]></variableTemplate>
-
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
-   <![CDATA[
-      \t/**
-      \t * Type definition for $(_Baseclass) interrupt call back.
-      \t */
-      \ttypedef void (*CallbackFunction)($(irq_parameters));
-      \t
-      \t/**
-      \t * Callback to catch unhandled interrupt
-      \t */
-      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
-      \t   setAndCheckErrorCode(E_NO_HANDLER);
-      \t}
-      \t\n
-   ]]>
-   </template>
 
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
-      \t/** Callback function for ISR */
-      \tstatic CallbackFunction sCallback;
-      \t
-      \t/**
-      \t * Set interrupt callback function.
-      \t *
-      \t * @param[in]  $(_basename)Callback Callback function to execute on interrupt
-      \t *                             Use nullptr to remove callback.
-      \t */
-      \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
-      \t   if ($(_basename)Callback == nullptr) {
-      \t      $(_basename)Callback = unhandledCallback;
-      \t   }
-      \t   // Allow either no handler set yet or removing handler
-      \t   usbdm_assert(
-      \t         (sCallback == unhandledCallback) || ($(_basename)Callback == unhandledCallback),
-      \t         "Handler already set");
-      \t   sCallback = $(_basename)Callback;
-      \t}
-      \t
       \t/**
       \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
       \t */
@@ -599,20 +543,9 @@
    ]]>
    </template>
 
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t
-      \t/**
-      \t * Callback for programmatically set handler for $(_Class)
-      \t */
-      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Structname)BasicInfo::unhandledCallback;
-      \t\n
-   ]]>
-   </template>
-
    <!--   ========== CMP Init class =============================== -->
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -692,49 +625,49 @@
 
    <!--   Member variables -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="irqHandlingMethod"
    ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="cmp_daccr_dacen,cmp_daccr_vrsel,cmp_daccr_vosel"
    ><![CDATA[
       \t   /// DAC Control Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="cmp_cr0_filter, cmp_cr0_hystctr">
    <![CDATA[
       \t   ///  CMP Control Register 0
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="cmp_cr1_en,cmp_cr1_mode,cmp_cr1_trigm,cmp_cr1_pmode,cmp_cr1_inv,cmp_cr1_output">
    <![CDATA[
       \t   ///  CMP Control Register 1
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="cmp_scr_dmaen,cmp_scr_interrupt">
    <![CDATA[
       \t   ///  CMP Status and Control Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="cmp_fpr_filt_per">
    <![CDATA[
       \t   ///  CMP Filter Period Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="secondsSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="secondsSupport"
       variables="cmp_fpr_filt_period">
    <![CDATA[
       \t   ///  CMP Filter Period Register
@@ -742,14 +675,14 @@
    ]]>
    </variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="cmp_muxcr_psel$(_instance), cmp_muxcr_msel$(_instance)">
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="cmp_muxcr_psel, cmp_muxcr_msel">
    <![CDATA[
       \t   ///  CMP MUX Control Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -759,7 +692,7 @@
 
    <!--   Constructors -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="cmp_scr_interrupt, irqHandlingMethod"
       nonDefaultParams="2"
       defaultParamValue=",,nullptr"
@@ -781,7 +714,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -811,10 +744,10 @@
             cmp_cr0_hystctr;
             cmp_scr_dmaen;
             cmp_scr_interrupt;
-            cmp_muxcr_psel$(_instance);
-            cmp_muxcr_msel$(_instance)
+            cmp_muxcr_psel;
+            cmp_muxcr_msel
             " >
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -836,7 +769,7 @@
       </variableTemplate>
    </for>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="cmp_cr0_filter,cmp_fpr_filt_per"
       nonDefaultParams="2"
       linePadding="xxx">
@@ -859,7 +792,7 @@
    ]]>
    </variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="secondsSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="secondsSupport"
       variables="cmp_cr0_filter,cmp_fpr_filt_period"
       nonDefaultParams="2"
       linePadding="xxx">
@@ -882,7 +815,7 @@
    ]]>
    </variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="cmp_daccr_dacen,cmp_daccr_vrsel,cmp_daccr_vosel"
       nonDefaultParams="3"
       linePadding="xxx">
@@ -916,14 +849,15 @@
          cmp_scr_dmaen,cmp_scr_interrupt,
          cmp_cr0_filter, cmp_fpr_filt_per,
          cmp_daccr_dacen, cmp_daccr_vrsel, cmp_daccr_vosel,
-         cmp_muxcr_psel$(_instance), cmp_muxcr_msel$(_instance)"
+         cmp_muxcr_psel, cmp_muxcr_msel"
    ><![CDATA[
       \t/**
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression
-      \t};\n\n
+      \t};
+      \t\n
    ]]>
    </variableTemplate>
 
@@ -940,7 +874,7 @@
    ]]></template>
 
    <variableTemplate
-      variables="cmp_muxcr_psel$(_instance),cmp_muxcr_msel$(_instance)"
+      variables="cmp_muxcr_psel,cmp_muxcr_msel"
       nonDefaultParams="2"
    ><![CDATA[
       \t/**
@@ -964,7 +898,7 @@
       \t   using Pcr = PcrTable_T<Cmp$(_instance)Info,cmpInput>;
       \t
       \tpublic:
-      \t   static constexpr CmpInputPlus  plusPin  = (CmpInputPlus)CMP_MUXCR_PSEL(cmpInput);
+      \t   static constexpr CmpInputPlus  plusPin  = CmpInputPlus(CMP_MUXCR_PSEL(cmpInput));
       \t   static constexpr CmpInputMinus minusPin = cmpInput;
       \t
       \t   constexpr operator CmpInputPlus()  const { return plusPin;  }
@@ -1066,7 +1000,7 @@
          cmp_cr1_en,
          cmp_fpr_filt_per,
          cmp_daccr_dacen,
-         cmp_muxcr_psel$(_instance),
+         cmp_muxcr_psel,
          cmp_cr0_filter,
          cmp_scr_dmaen" >
    <![CDATA[
@@ -1080,16 +1014,9 @@
    ]]>
    </variableTemplate>
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t}; // class $(_Structname)BasicInfo::Init
-      \t\n
-   ]]>
-   </template>
-
-   <template namespace="baseClass" >
-   <![CDATA[
-      }; // class $(_Structname)BasicInfo
       \t\n
    ]]>
    </template>
@@ -1135,7 +1062,6 @@
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
       </for>
    </category>
-   <deleteVariables variables="_scgc_clock"  mustExist="false" />
 
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 

@@ -4,19 +4,19 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <constant key="irq_parameters"            type="String"  value='"uint32_t result, int channel"'  />
-   <constant key="irq_dummy_parameters"      type="String"  value='"uint32_t, int"'  />
-   <constant key="irq_call"                  type="String"  value='"adc->R[0], adc->SC1[0]&amp;ADC_SC1_ADCH_MASK"'  />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="suppressIrqHandler"        value="" />
+   <equation key="irq_parameters"            value='uint32_t result, int channel'  />
+   <equation key="irq_dummy_parameters"      value='uint32_t, int'                 />
+   <equation key="irq_call"                  value='adc->R[0], adc->SC1[0]&amp;ADC_SC1_ADCH_MASK'  />
+   <equation key="generateDefault"           value="false"  />
+   <equation key="configureInStartupDefault" value="false"  />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
    <constant key="disable_peripheral" value='"adc->SC1[0] = ADC_SC1_ADCH(-1);"'  type="String" />
 
    <!-- ____ Class Declaration ________ -->
-   <constant key="_class_declaration" type="String"
-      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
    <!-- SC1 -->
    <if condition="!adc_sc1_diff_present">
@@ -276,6 +276,36 @@
       <choice value="1" enum="Enabled"  name="Continuous conversions after 1st trigger" />
    </binaryOption>
 
+   <binaryOption key="adc_sc3_cal"
+      hidden="true"
+      derived="true"
+      description="Start Calibration"
+      typeName="AdcCalibrate"
+      toolTip="Begins the calibration sequence when set.\n
+               This field stays set while the calibration is in progress and is cleared when \n
+               the calibration sequence is completed.\n
+               CALF must be checked to determine the result of the calibration sequence.\n
+               Once started, the calibration routine cannot be interrupted by writes to the ADC\n
+               registers or the results will be invalid and CALF will set.\n
+               Setting CAL will abort any current conversion." >
+      <choice value="0" enum="NoAction" name="No Action" />
+      <choice value="1" enum="Start"    name="Starts calibration or indicates calibration in progress" />
+   </binaryOption>
+
+   <binaryOption key="adc_sc3_calf"
+      hidden="true"
+      derived="true"
+      description="Calibration Failed Flag"
+      typeName="AdcCalibrateResult"
+      toolTip="Displays the result of the calibration sequence.\n
+               The calibration sequence will fail if SC2[ADTRG] = 1,\n
+               any ADC register is written, or any stop mode is entered\n
+               before the calibration sequence completes.\n
+               Writing 1 to CALF clears it." >
+      <choice value="0" enum="Completed" name="Calibration successfully completed" />
+      <choice value="1" enum="Failed"    name="Calibration failed" />
+   </binaryOption>
+
    <choiceOption key="adc_sc2_compare" description="Compare function"
       enabledBy="enablePeripheralSupport"
       typeName="AdcCompare"
@@ -304,6 +334,23 @@
          This value will be used for CV1 or CV2 as needed"
       derived="true" />
 
+   <intOption key="adc_r_d"
+      hidden="true"
+      derived="true" 
+      description="ADC Result"
+      toolTip="Result from ADC conversion as unsigned value" 
+      baseType="uint16_t"
+      />
+
+   <intOption key="adc_r_ud"
+      valueFormat="ADC_R_D(%s)"
+      hidden="true"
+      derived="true" 
+      description="ADC Result"
+      toolTip="Result from ADC conversion as signed value" 
+      baseType="int16_t"
+      />
+
    <binaryOption key="adc_sc2_adtrg" description="Conversion Trigger Select"
       enabledBy="enablePeripheralSupport"
       typeName="AdcTrigger"
@@ -312,50 +359,76 @@
       <choice value="1" enum="Hardware" name="Hardware trigger (ADHWT source)" />
    </binaryOption>
 
+   <binaryOption key="adc_sc2_adact" description="Conversion Active"
+      hidden="true"
+      derived="true"
+      typeName="AdcActiveFlag"
+      toolTip="Indicates that a conversion or hardware averaging is in progress.\n
+               Set when a conversion is initiated and cleared when a conversion is completed or aborted" >
+      <choice value="0" enum="Idle" name="Conversion not in progress." isDefault="true" />
+      <choice value="1" enum="Busy" name="Conversion in progress." />
+   </binaryOption>
 
 <!-- Setters and getters -->
 
-   <for keys="field           : get   : set   : genCode                 : name"
+   <for keys="field           : set   : get   : clear : genCode                 : name"
         values="
-         adc_cfg1_adlpc       : true  : true  : enableGettersAndSetters : LowPower;
-         adc_cfg1_adiv        : true  : true  : enableGettersAndSetters : ClockDivider;
-         adc_cfg1_mode        : true  : true  : enableGettersAndSetters : Resolution;
-         adc_cfg1_adiclk      : true  : true  : enableGettersAndSetters : ClockSelect;
-         adc_cfg2_muxsel      : true  : true  : enableGettersAndSetters : Muxsel;
-         adc_cfg2_adacken     : true  : true  : enableGettersAndSetters : AsyncClockEnable;
-         adc_cfg2_adhsc       : true  : true  : enableGettersAndSetters : HighSpeed;
-         adc_sc2_adact        : true  : false : enableGettersAndSetters : ConversionActive;
-         adc_sc2_adtrg        : true  : true  : enableGettersAndSetters : Trigger;
-         adc_sc2_acfe         : true  : true  : enableGettersAndSetters : CompareFunction;
-         adc_sc2_acfgt        : true  : true  : enableGettersAndSetters : CompareFunctionGT;
-         adc_sc2_acren        : true  : true  : enableGettersAndSetters : CompareFunctionRange;
-         adc_sc2_dmaen        : true  : true  : enableGettersAndSetters : Dma;
-         adc_sc2_refsel       : true  : true  : enableGettersAndSetters : Reference;
-         adc_sc3_cal          : true  : true  : enableGettersAndSetters : Calibrate;
-         adc_sc3_calf         : true  : false : enableGettersAndSetters : CalibrateFlag;
-         adc_sc3_adco         : true  : true  : enableGettersAndSetters : Continuous;
-         adc_sc3_avg          : true  : true  : enableGettersAndSetters : Average;
-         adc_ofs_ofs          : true  : true  : enableGettersAndSetters : Offset;
-         adc_pg_pg            : true  : true  : enableGettersAndSetters : PlusGain;
-         adc_mg_mg            : true  : true  : enableGettersAndSetters : MinusGain" >
+         adc_cfg1_adlpc       : true  : true  : false : enableGettersAndSetters : LowPower;
+         adc_cfg1_adiv        : true  : true  : false : enableGettersAndSetters : ClockDivider;
+         adc_cfg1_mode        : true  : true  : false : enableGettersAndSetters : Resolution;
+         adc_cfg1_adiclk      : true  : true  : false : enableGettersAndSetters : ClockSelect;
+         adc_cfg2_muxsel      : true  : true  : false : enableGettersAndSetters : Muxsel;
+         adc_cfg2_adacken     : true  : true  : false : enableGettersAndSetters : AsyncClockEnable;
+         adc_cfg2_adhsc       : true  : true  : false : enableGettersAndSetters : HighSpeed;
+         adc_sc2_adact        : false : true  : false : enableGettersAndSetters : ConversionActive;
+         adc_sc2_adtrg        : true  : true  : false : enableGettersAndSetters : Trigger;
+         adc_sc2_acfe         : true  : true  : false : enableGettersAndSetters : CompareFunction;
+         adc_sc2_acfgt        : true  : true  : false : enableGettersAndSetters : CompareFunctionGT;
+         adc_sc2_acren        : true  : true  : false : enableGettersAndSetters : CompareFunctionRange;
+         adc_sc2_dmaen        : true  : true  : false : enableGettersAndSetters : Dma;
+         adc_sc2_refsel       : true  : true  : false : enableGettersAndSetters : Reference;
+         adc_sc3_cal          : true  : true  : false : enableGettersAndSetters : StartCalibrate;
+         adc_sc3_calf         : false : true  : true  : enableGettersAndSetters : CalibrateFlag;
+         adc_sc3_adco         : true  : true  : false : enableGettersAndSetters : Continuous;
+         adc_sc3_avg          : true  : true  : false : enableGettersAndSetters : Average;
+         adc_ofs_ofs          : true  : true  : false : enableGettersAndSetters : Offset;
+         adc_pg_pg            : true  : true  : false : enableGettersAndSetters : PlusGain;
+         adc_mg_mg            : true  : true  : false : enableGettersAndSetters : MinusGain" >
+
       <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
       ><![CDATA[
          \t/**
          \t * Set %description
+         \t * (%(field))
          \t *
          %paramDescription
          \t */
          \tstatic void set%(name)(%params) {
          \t   %fieldAssignment;
          \t}
-         \t
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
          \t/**
          \t * Get %description
+         \t * (%(field))
          \t *
          \t * @return %tooltip
          \t */
-         \tstatic %paramType get%(name)() {
-         \t   return %paramType(%register&%mask);
+         \tstatic %returnType get%(name)() {
+         \t   return %fieldExtract;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Clear %description
+         \t * (%(field))
+         \t */
+         \tstatic void clear%(name)() {
+         \t   %register = %register|%mask;
          \t}
          \t\n
       ]]></variableTemplate>
@@ -385,21 +458,24 @@
       \t\n
    ]]></variableTemplate>
 
-   <for keys="field           : get   : set   : genCode                 : name"
+   <for keys="field           : set   : get   : clear : genCode                 : context                 : name"
         values="
-         adc_sc1_coco         : true  : false : enableGettersAndSetters : CompleteFlag;
-         adc_sc1_aien         : true  : true  : enableGettersAndSetters : Interrupt;
-         adc_sc1_channel      : true  : true  : enableGettersAndSetters : Channel" >
+         adc_sc1_coco         : false : true  : false : enableGettersAndSetters : SC1[%paramName0] : CompleteFlag;
+         adc_sc1_aien         : true  : true  : false : enableGettersAndSetters : SC1[%paramName0] : Interrupt;
+         adc_sc1_channel      : true  : true  : false : enableGettersAndSetters : SC1[%paramName0] : Channel;
+         adc_r_ud             : false : true  : false : enableGettersAndSetters : R[%paramName0]   : SignedResult;
+         adc_r_d              : false : true  : false : enableGettersAndSetters : R[%paramName0]   : UnsignedResult" >
       <variableTemplate variables="adc_pretrigger,%(field)" condition="%(set)" codeGenCondition="%(genCode)"
          nonDefaultParams="2"
       ><![CDATA[
          \t/**
          \t * Set %description1
+         \t * (%(field))
          \t *
          %paramDescription
          \t */
          \tstatic void set%(name)(%params) {
-         \t   %register1[%paramName0] = (%register1[%paramName0]&~%mask1)|%paramName1; // %(field)
+         \t   $(_basename)->%(context) = ($(_basename)->%(context) & ~%mask1)|%paramName1;
          \t}
          \t\n
       ]]></variableTemplate>
@@ -407,27 +483,33 @@
       ><![CDATA[
          \t/**
          \t * Get %description1
+         \t * (%(field))
          \t *
          %paramDescription0
          \t *
          \t * @return %tooltip1
          \t */
-         \tstatic %paramType1 get%(name)(%paramType0 %paramName0) {
-         \t   return (%paramType1)(%register1[%paramName0]&%mask1); // %(field)
+         \tstatic %returnType1 get%(name)(%paramType0 %paramName0) {
+         \t   return %paramType1($(_basename)->%(context)&%mask1);
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="adc_pretrigger,%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Clear %description1
+         \t * (%(field))
+         \t *
+         %paramDescription0
+         \t */
+         \tstatic void clear%(name)(int index) {
+         \t   $(_basename)->%(context) = $(_basename)->%(context)|%mask1;
          \t}
          \t\n
       ]]></variableTemplate>
    </for>
 
-   <!--   ========== class $(_Structname)BasicInfo =============================== -->
-
-   <template namespace="baseClass" ><![CDATA[
-      class $(_Structname)BasicInfo {
-
-      public:\n
-   ]]></template>
-
-   <clockCodeTemplate namespace="baseClass"
+   <clockCodeTemplate where="basicInfo"
       variable="adc_cfg1_adiclk"
       returnFormat="%s"
    ><![CDATA[
@@ -447,7 +529,7 @@
       \t}\n\n
    ]]></clockCodeTemplate>
 
-   <template namespace="baseClass" ><![CDATA[
+   <template where="basicInfo" ><![CDATA[
       \t/**
       \t * Calculate ADC clock divider (ADC_CFG1_ADIV) and confirm clock source (ADC_CFG1_ADICLK)
       \t *
@@ -510,7 +592,7 @@
    ]]></template>
 
    <if condition="adc_cfg1_mode" >
-      <template namespace="baseClass" ><![CDATA[
+      <template where="basicInfo" ><![CDATA[
          \t/**
          \t * Get ADC maximum conversion value for an single-ended range
          \t *
@@ -524,10 +606,10 @@
          \t      case AdcResolution_10bit_se: return (1<<10)-1;
          \t      case AdcResolution_12bit_se: return (1<<12)-1;\n
       ]]></template>
-      <template namespace="baseClass" condition="adc_cfg1_mode_16bit_present" ><![CDATA[
+      <template where="basicInfo" condition="adc_cfg1_mode_16bit_present" ><![CDATA[
          \t      case AdcResolution_16bit_se: return (1<<16)-1;\n
       ]]></template>
-      <template namespace="baseClass" ><![CDATA[
+      <template where="basicInfo" ><![CDATA[
          \t      default:                     return 0;
          \t   }
          \t}\n\n
@@ -535,7 +617,7 @@
    </if>
 
    <if condition="adc_cfg1_mode&amp;&amp;adc_cfg1_mode_diff_present">
-      <template namespace="baseClass" ><![CDATA[
+      <template where="basicInfo" ><![CDATA[
       \t/**
       \t * Get ADC maximum conversion value for an differential range
       \t *
@@ -549,17 +631,17 @@
       \t      case AdcResolution_11bit_diff:  return (1<<10)-1;
       \t      case AdcResolution_13bit_diff:  return (1<<12)-1;\n
       ]]></template>
-      <template  namespace="baseClass" condition="adc_cfg1_mode_16bit_present" ><![CDATA[
+      <template  where="basicInfo" condition="adc_cfg1_mode_16bit_present" ><![CDATA[
       \t      case AdcResolution_16bit_diff:  return (1<<15)-1;\n
       ]]></template>
-      <template namespace="baseClass" ><![CDATA[
+      <template where="basicInfo" ><![CDATA[
       \t      default:                        return 0;
       \t   }
       \t}\n
       ]]></template>
    </if>
 
-   <template namespace="baseClass" ><![CDATA[
+   <template where="basicInfo" ><![CDATA[
    \t/**
    \t * ADC calibrate.
    \t * Calibrates the ADC before first use.
@@ -623,59 +705,15 @@
 #endif
    \t
    \t   return E_NO_ERROR;
-   \t   }
+   \t}
+   \t\n
    ]]>
    </template>
 
    <!--   ========== Interrupt handling =============================== -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="irqHandlingMethod"
-   ><![CDATA[
-       \t//! Common class based callback code has been generated for this class of peripheral
-       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
-       \t\n
-   ]]></variableTemplate>
-
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
-   <![CDATA[
-      \t/**
-      \t * Type definition for $(_Baseclass) interrupt call back.
-      \t */
-      \ttypedef void (*CallbackFunction)($(irq_parameters));
-      \t
-      \t/**
-      \t * Callback to catch unhandled interrupt
-      \t */
-      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
-      \t   setAndCheckErrorCode(E_NO_HANDLER);
-      \t}
-      \t\n
-   ]]>
-   </template>
-
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
-      \t/** Callback function for ISR */
-      \tstatic CallbackFunction sCallback;
-      \t
-      \t/**
-      \t * Set interrupt callback function.
-      \t *
-      \t * @param[in]  $(_basename)Callback Callback function to execute on interrupt
-      \t *                             Use nullptr to remove callback.
-      \t */
-      \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
-      \t   if ($(_basename)Callback == nullptr) {
-      \t      $(_basename)Callback = unhandledCallback;
-      \t   }
-      \t   // Allow either no handler set yet or removing handler
-      \t   usbdm_assert(
-      \t         (sCallback == unhandledCallback) || ($(_basename)Callback == unhandledCallback),
-      \t         "Handler already set");
-      \t   sCallback = $(_basename)Callback;
-      \t}
-      \t
       \t/**
       \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
       \t */
@@ -697,20 +735,9 @@
    ]]>
    </template>
 
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t
-      \t/**
-      \t * Callback for programmatically set handler for $(_Class)
-      \t */
-      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Structname)BasicInfo::unhandledCallback;
-      \t\n
-   ]]>
-   </template>
-
    <!--   ========== ADC Init class =============================== -->
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -788,7 +815,7 @@
 
    <!--   Member variables -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
@@ -796,21 +823,21 @@
    ]]></variableTemplate>
 
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" condition="adc_sc2_adtrg"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" condition="adc_sc2_adtrg"
       variables="adc_sc1_channel,adc_sc1_aien" ><![CDATA[
       \t   ///  Hardware trigger values: %description0 and %description1 values
       \t   uint8_t %registerName[$(_STRUCTNAME)_SC1_COUNT] = {\n
    ]]></variableTemplate>
    <for keys="i" dim="=adc_sc1_dim">
-      <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" condition="adc_sc2_adtrg" ><![CDATA[
+      <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" condition="adc_sc2_adtrg" ><![CDATA[
          \t      AdcChannelNum_Disabled,\n
       ]]></template>
    </for>
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" condition="adc_sc2_adtrg" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" condition="adc_sc2_adtrg" ><![CDATA[
       \t   };\n\n
    ]]></template>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="
          adc_cv1"
    ><![CDATA[
@@ -818,7 +845,7 @@
       \t   uint16_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="
          adc_cv2"
    ><![CDATA[
@@ -826,7 +853,7 @@
       \t   uint16_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="
          adc_cfg1_adiclk,
          adc_cfg1_mode,
@@ -836,7 +863,7 @@
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="
          adc_cfg2_adhsc,
          adc_cfg2_adacken,
@@ -849,7 +876,7 @@
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="
          adc_sc2_dmaen,
          adc_sc2_adtrg"
@@ -858,7 +885,7 @@
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="
          adc_sc3_avg,
          adc_sc3_adco"
@@ -867,7 +894,7 @@
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -877,7 +904,7 @@
 
    <!--   Constructors -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -896,7 +923,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -915,7 +942,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" condition="adc_sc2_adtrg"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" condition="adc_sc2_adtrg"
       variables="adc_pretrigger,adc_sc1_channel,adc_sc1_aien"
       linePadding="xxx"
       nonDefaultParams="3" >
@@ -949,7 +976,7 @@
          adc_sc2_adtrg;
          adc_sc3_avg;
          adc_sc3_adco">
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -971,7 +998,7 @@
       </variableTemplate>
    </for>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="adc_sample"
       linePadding="xxx" >
    <![CDATA[
@@ -993,7 +1020,7 @@
    ]]>
    </variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="adc_sc2_compare,adc_cv1,adc_cv2"
       linePadding="xxx"
       nonDefaultParams="3" >
@@ -1194,16 +1221,9 @@
    \t}\t\n
    ]]></template>
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t}; // class $(_Structname)BasicInfo::Init
-      \t\n
-   ]]>
-   </template>
-
-   <template namespace="baseClass" >
-   <![CDATA[
-      }; // class $(_Structname)BasicInfo
       \t\n
    ]]>
    </template>

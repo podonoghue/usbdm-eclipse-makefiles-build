@@ -5,7 +5,7 @@
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="General Purpose Input/Output">
 
 
-   <template namespace="usbdm"><![CDATA[
+   <template where="basicInfo"><![CDATA[
       /* gpio_def.xml */
 
       #if defined(PCC_PCC_PORT$(_instance)_CGC_MASK)

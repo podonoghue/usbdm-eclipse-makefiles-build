@@ -4,61 +4,169 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="General Purpose Input/Output">
 
-   <!-- IRQ vector patterns if none specified -->
-   <constant key="irq_pattern"      type="String"  value="&quot;^PORT$(_instance)$&quot;"        />
-   <constant key="irq_ClassHandler" type="String"  value="&quot;Port$(_instance)::irqHandler&quot;" />
+   <!-- ____ Common ____________ -->
+   <equation key="irqName"       value='=ReplaceAll(/GPIO$(_instance)/_hardwareIrqNums,"^(.*?)_.*$","$1")' />
+   <equation key="prettyIrqName" value='=ReplaceAll(irqName,"^PORT(.*)$","Port$1")' />
+   
+   <!-- IRQ vector patterns for PORT! - This assumes a single vector with expected pattern -->
+   <constant key="irq_pattern"      type="String"  value='irqName' />
+   <constant key="irq_ClassHandler" type="String"  value='"PcrBase::irqHandler&lt;PortIrqNum_"+prettyIrqName+"&gt;"' />
 
-   <constant key="suppressInstance"          type="Boolean"  value="true"         />
-   <constant key="suppressIrqArray"          type="Boolean" value="true"                />
-   <constant key="irq_parameters"            type="String"  value='""'        />
-   <constant key="irq_dummy_parameters"      type="String"  value='""'        />
-   <constant key="irq_call"                  type="String"  value='""'        />
-   <constant key="generateDefault"           type="Boolean" value="true"          />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <constant key="suppressInstance"          />
+   <constant key="suppressIrqArray"          />
+   <equation key="irq_parameters"             value='""'           />
+   <equation key="irq_dummy_parameters"       value='""'           />
+   <equation key="irq_call"                   value='""'           />
+   <equation key="generateDefault"           value="true"         />
+   <equation key="configureInStartupDefault" value="false"        />
    <xi:include href="enablePeripheral.xml"  />
    <title />
+   
+   <template><![CDATA[
+       \t//! Class based callback handler has been installed in vector table for this instance
+       \tstatic constexpr bool irqHandlerInstalled = $(irqHandlingMethod:false);
+       \t\n
+   ]]></template>
+   
+   <!-- ____ Interrupts ____________ -->
+   <if condition="!/Port" >
 
-<!--
-    * General substitutions
-    *  $(_NAME)         => e.g FTM2 => FTM2
-    *  $(_name)         => e.g FTM2 => ftm2
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
-    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
-    *  $(_Class)        => e.g FTM2 => Ftm2
-    *  $(_Baseclass)    => e.g FTM0 => Ftm
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A
--->
-
-<!--
-    * Template substitutions
-    *
-    * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
-    * %variable[index]                Variable name /ADC0/adc_sc2_acfe
-    * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
-    * %description[index]             Description from controlVar e.g. Compare Function Enable
-    * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
-    * %tooltip[index]                 Tool-tip from controlVar e.g. Each bit disables the GPIO function
-    * %paramDescription[index]        Tool-tip from controlVar formatted as param description @param ...
-    * %params                         Formatted parameter list for function
-    * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
-    * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
-    * %paramType[index]               As for %paramType
-    * %paramName[index]               As for %paramName
-    * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicExpression             Symbolic variable value e.g. AdcCompare_Disabled
-    * %fieldAssignment;               Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %maskingExpression              Based on variable etc. Similar to (%register&%mask)
-    * %variable[index]                Variable name from condition
-    * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
-    * %register[index]                Register associated with variable e.g. adc->APCTL1
-    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
--->
-
-   <!-- ************* Class Declaration ****************** -->
-   <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Structname)BasicInfo&quot;" />
-
+      <constant key="/Port" type="Boolean" />
+   
+      <equation key="portVectors" value='=IrqVectors("^(PORT.*?)\|.*$","$1")' />
+      
+      <!--  Callback table + numbers -->
+      <template where="static" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
+      <![CDATA[
+         \t/**
+         \t * Callback table of programmatically set handlers for Ports
+         \t */
+         \tPinCallbackFunction PcrBase::sCallbacks[] = {\n
+      ]]></template>
+      
+      <template key="/PORT/Declarations" >
+      <![CDATA[
+         \t/**
+         \t * Interrupt indices for PORTs
+         \t *
+         \t * These are used to index into the jump table for PORT interrupts
+         \t */
+         \tenum PortIrqNum : int8_t {\n
+      ]]>
+      </template>
+      
+      <equation key="portVectors" value='=IrqVectors("^(PORT.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$1|$5")' />
+      <for keys="vector" values="=portVectors" >
+      
+         <equation key="name"        value='=ReplaceAll("%(vector)","^PORT(.*?)\|(.*?)$","PortIrqNum_Port$1")'/>
+         <equation key="irqName"     value='=ReplaceAll("%(vector)","^(PORT.*?)\|(.*?)$","$1_IRQn")'/>
+         <equation key="peripherals" value='=ReplaceAll("%(vector)","^(.*?)\|(PORT.*?)$","$2")'/>
+         
+         <equation key="cond" value=""/>
+         <for keys="gpios" values="=peripherals" delimiter="," >
+            <equation key="cond" value='=cond+"||"' condition='=cond!=""'/>
+            <equation key="cond" value='=cond+"/"+ReplaceAll("%(gpios)","^PORT(.*)$","GPIO$1")+"/irqHandlingMethod"' />
+         </for>
+         
+         <template key="/PORT/Declarations" codeGenCondition="=cond"
+            immediateVariables="name,peripherals,cond"
+         ><![CDATA[
+            \t   $(name), // Used by $(peripherals)\n
+         ]]></template>
+         
+         <template where="static" codeGenCondition="=cond"
+            immediateVariables="name,peripherals,cond,irqName"
+         ><![CDATA[
+            \t   PcrBase::unhandledCallback,  // $(irqName), used by $(peripherals)\n
+         ]]></template>
+      </for>
+      
+      <template where="static" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
+      <![CDATA[
+         \t};\n\n
+      ]]></template>
+      
+      <template key="/PORT/Declarations" >
+      <![CDATA[
+         \t};
+         \t\n
+      ]]>
+      </template>
+      
+      <template key="/PORT/AccessFunctions" >
+      <![CDATA[
+         \t/**
+         \t * Get Port Interrupt indices from portIndex
+         \t *
+         \t * @param portIndex Port index e.g. PortB. Used to determine return value
+         \t *
+         \t * @return IRQ number
+         \t */
+         \tstatic constexpr PortIrqNum getIrqIndex(PortIndex portIndex) {
+         \t\n
+      ]]></template>
+      <for keys=   "Name" values= "  A;B;C;D;E;F;G;H;I" >
+      
+         <equation key="prettyIrqName" condition="/GPIO%(Name)/_present"
+            value='=ReplaceAll(/GPIO%(Name)/_hardwareIrqNums,"^PORT(.*?)_.*$","Port$1")' />
+      
+         <template key="/PORT/AccessFunctions"
+            condition="/GPIO%(Name)/_present&amp;&amp;/GPIO%(Name)/_hardwareIrqCount"
+            codeGenCondition="/GPIO%(Name)/irqHandlingMethod"
+            immediateVariables="prettyIrqName"
+         ><![CDATA[
+            \t   if (portIndex == PortIndex::Port%(Name)) {
+            \t      return PortIrqNum_$(prettyIrqName);
+            \t   }\n
+         ]]></template>
+      </for>
+      <template key="/PORT/AccessFunctions" >
+      <![CDATA[
+         \t   // Interrupts not support by port or they are disabled
+         \t   (void)portIndex;
+         \t   return PortIrqNum(-1);
+         \t}
+         \t\n
+      ]]></template>
+      
+      <template key="/PORT/AccessFunctions" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
+      <![CDATA[
+      \t/** Callback functions for ISRs */
+      \tstatic PinCallbackFunction sCallbacks[];
+      \t
+      \t/**
+      \t * Set callback for Pin interrupts
+      \t *
+      \t * @param callback The function to call on Pin interrupt.
+      \t *                 Use nullptr to set default handler
+      \t *
+      \t * @note There is a single callback function for all pins on a port.
+      \t *       It is necessary to identify the originating pin in the callback
+      \t */
+      \tstatic void setPinCallback(PortIrqNum portIrqNum, PinCallbackFunction pinCallback) {
+      \t
+      \t   if (pinCallback == nullptr) {
+      \t      pinCallback = PcrBase::unhandledCallback;
+      \t   }
+      \t   // Allow either no handler set yet or removing handler
+      \t   usbdm_assert(
+      \t         (sCallbacks[portIrqNum] == PcrBase::unhandledCallback) || (pinCallback == PcrBase::unhandledCallback),
+      \t         "Handler already set");
+      \t   sCallbacks[portIrqNum] = pinCallback;
+      \t}
+      \t
+      \ttemplate<PortIrqNum portIrqNum>
+      \tstatic void irqHandler() {
+      \t
+      \t   sCallbacks[portIrqNum]();
+      \t}
+      \t\n
+      ]]>
+      </template>
+   </if>
+   
+   <!-- ____ PCR patterns ____________ -->
+   
    <if condition="!/SYSTEM/$pcrPattern">
       <!--
           *  %i => pin.getPortInstance());     => port instance e.g."A"
@@ -86,7 +194,8 @@
       <constant key="/SYSTEM/$gpioFieldPattern" type="String"  value="&quot;USBDM::Gpio%iField&lt;%l,%r,%p&gt;&quot;" />
    </if>
 
-   <template key="/PORT/PinIndex" discardRepeats="true" >
+   <!-- ____ PinIndex ____________ -->
+   <template key="/PORT/Declarations" discardRepeats="true" >
    <![CDATA[
       /**
        * Port pin index
@@ -112,20 +221,21 @@
                    I   : 256" >
 
       <for keys="i" dim="32">
-         <template key="/PORT/PinIndex" discardRepeats="true" condition="/GPIO%(Name)/_present"
+         <template key="/PORT/Declarations" discardRepeats="true" condition="/GPIO%(Name)/_present"
          ><![CDATA[
             \tPT%(Name)%(i) = %(pinIndex)+%(i),\n
          ]]></template>
       </for>
    </for>
-   <template key="/PORT/PinIndex" discardRepeats="true" >
+   <template key="/PORT/Declarations" discardRepeats="true" >
       <![CDATA[
          \tMAX_PIN_INDEX, // Last available pin (exclusive)
          };
          \t\n
    ]]></template>
 
-   <template key="/PORT/PinIndex" discardRepeats="true" >
+   <!-- ____ PortIndex ____________ -->
+   <template key="/PORT/Declarations" discardRepeats="true" >
    <![CDATA[
       /**
        * Port index
@@ -145,18 +255,19 @@
                    H   :  7;
                    I   :  8" >
 
-      <template key="/PORT/PinIndex" discardRepeats="true" condition="/GPIO%(Name)/_present"
+      <template key="/PORT/Declarations" discardRepeats="true" condition="/GPIO%(Name)/_present"
       ><![CDATA[
          \tPort%(Name) = %(portIndex),\n
       ]]></template>
    </for>
-   <template key="/PORT/PinIndex" discardRepeats="true" >
+   <template key="/PORT/Declarations" discardRepeats="true" >
       <![CDATA[
          };
          \t\n
    ]]></template>
 
-   <template key="/PORT/PinIndex" discardRepeats="true" >
+   <!-- ____ Mapping ____________ -->
+   <template key="/PORT/Declarations" discardRepeats="true" >
    <![CDATA[
       \t/**
       \t * Map PinIndex to PortIndex e.g. PinIndex::PTA3 => PortIndex::PortA
@@ -182,6 +293,8 @@
       \t\n
    ]]></template>
 
+   <!-- ____ GpioPcrValue() ____________ -->
+   
    <template key="/GPIO/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t/**
@@ -219,6 +332,8 @@
       \t\n
    ]]></template>
 
+   <!-- ____ getGpioAddress() ____________ -->
+   
    <template key="/GPIO/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t/**
@@ -251,6 +366,8 @@
       \t\n
    ]]></template>
 
+   <!-- ____ getPortAddress() ____________ -->
+   
    <template key="/PORT/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t/**
@@ -281,6 +398,8 @@
       \t\n
    ]]></template>
 
+   <!-- ____ getClockMask() ____________ -->
+   
    <template key="/PORT/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t/**
@@ -314,6 +433,8 @@
       \t\n
    ]]></template>
 
+   <!-- ____ getIrqNum() ____________ -->
+   
    <template key="/PORT/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t/**
@@ -328,30 +449,24 @@
    ]]></template>
    <for keys=   "Name" values= "  A;B;C;D;E;F;G;H;I" >
       <template key="/PORT/AccessFunctions"  discardRepeats="true"
-         condition="/GPIO%(Name)/_present&amp;&amp;/GPIO%(Name)/_irqCount"
+         condition="/GPIO%(Name)/_present&amp;&amp;/GPIO%(Name)/_hardwareIrqCount"
       ><![CDATA[
-         \t   if (portIndex <= PortIndex::Port%(Name)) {
-         \t      constexpr IRQn_Type PortIrqs[] = PORT%(Name)_IRQS;
-         \t      return PortIrqs[0];
+         \t   if (portIndex == PortIndex::Port%(Name)) {
+         \t      return $(/GPIO%(Name)/_hardwareIrqNums);
          \t   }\n
-      ]]></template>
-      <template key="/PORT/AccessFunctions"  discardRepeats="true"
-         condition="/GPIO%(Name)/_present&amp;&amp;!/GPIO%(Name)/_irqCount"
-      ><![CDATA[
-         \t   if (portIndex <= PortIndex::Port%(Name)) {
-         \t         static_assert("Port does not support interrupts");
-         \t      }\n
       ]]></template>
    </for>
    <template key="/PORT/AccessFunctions" discardRepeats="true" >
    <![CDATA[
-      \t   // INVALID_PCR, UNMAPPED_PCR, FIXED_NO_PCR
-      \t   static_assert("Illegal Port");
-      \t   return IRQn_Type(0);
+      \t   // Interrupts not support by port
+      \t   (void)portIndex;
+      \t   return IRQn_Type(-1);
       \t}
       \t\n
    ]]></template>
 
+   <!-- ____ isHandlerInstalled() ____________ -->
+   
    <template key="/PORT/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t/**
@@ -381,97 +496,7 @@
       \t\n
    ]]></template>
 
-   <!--   ========== class $(_Structname)BasicInfo =============================== -->
-
-   <template where="basicInfo" ><![CDATA[
-      class $(_Structname)BasicInfo {
-
-      public:\n
-   ]]></template>
-
-   <!--   ========== Interrupt handling =============================== -->
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="irqHandlingMethod"
-   ><![CDATA[
-       \t//! Common class based callback code has been generated for this class of peripheral
-       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
-       \t\n
-   ]]></variableTemplate>
-
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
-   <![CDATA[
-      \t/**
-      \t * Type for Universal Asynchronous Receiver/Transmitter call back function.
-      \t */
-      \ttypedef void (*CallbackFunction)($(irq_parameters));
-      \t
-      \t/**
-      \t * Callback to catch unhandled interrupt
-      \t */
-      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
-      \t   setAndCheckErrorCode(E_NO_HANDLER);
-      \t}
-      \t\n
-   ]]>
-   </template>
-
-   <template codeGenCondition="irqHandlingMethod" condition="irqHandlingMethod" >
-   <![CDATA[
-      \t/** Callback function for Universal Asynchronous Receiver/Transmitter */
-      \tstatic CallbackFunction sCallback;
-      \t
-      \t/**
-      \t * Universal Asynchronous Receiver/Transmitter interrupt handler
-      \t * Passes control to call-back function
-      \t */
-      \tstatic void irqHandler() {
-      \t
-      \t   // Execute call-back
-      \t   sCallback($(irq_call));
-      \t}
-      \t
-      \t/**
-      \t * Set Universal Asynchronous Receiver/Transmitter callback function.
-      \t *
-      \t * @param      $(_basename)Callback Callback function to execute on interrupt
-      \t *                             Use nullptr to remove callback.
-      \t */
-      \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
-      \t   if ($(_basename)Callback == nullptr) {
-      \t      $(_basename)Callback = (CallbackFunction)unhandledCallback;
-      \t   }
-      \t   // Allow either no handler set yet or removing handler
-      \t   usbdm_assert(
-      \t         ((void*)sCallback == (void*)unhandledCallback) ||
-      \t         ((void*)$(_basename)Callback == (void*)unhandledCallback),
-      \t         "Handler already set");
-      \t   sCallback = $(_basename)Callback;
-      \t}
-      \t
-      \t\n
-   ]]>
-   </template>
-
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" condition="irqHandlingMethod" >
-   <![CDATA[
-      \t/**
-      \t * Callback function for Universal Asynchronous Receiver/Transmitter
-      \t */
-      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = (CallbackFunction)$(_Class)Info::unhandledCallback;
-      \t
-      \t\n
-   ]]>
-   </template>
-
-   <template where="basicInfo" >
-   <![CDATA[
-      }; // class $(_Structname)BasicInfo
-      \t\n
-   ]]>
-   </template>
-
-   <template namespace="usbdm" condition="false" ><![CDATA[
+   <template where="basicInfo" condition="false" ><![CDATA[
       /* gpio_def.xml */
 
       #if defined(PCC_PCC_PORT$(_instance)_CGC_MASK)
@@ -493,6 +518,8 @@
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
    </validate>
 
+   <!-- ____ gpio_files ____________ -->
+   
    <projectActionList id = "gpio_files" >
       <copy source="Snippets/digital-rotary-encoder-example.cpp" target="Snippets/digital-rotary-encoder-example.cpp" overwrite="true" derived="true" />
       <copy source="Snippets/digital-interrupt-example.cpp"      target="Snippets/digital-interrupt-example.cpp"      overwrite="true" derived="true" />

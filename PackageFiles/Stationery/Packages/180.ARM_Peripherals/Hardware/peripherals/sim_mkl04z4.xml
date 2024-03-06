@@ -6,8 +6,8 @@
 
 <!-- ==================== Constants ==================== -->
 
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="generateDefault"           type="Boolean" value="false"         />
+   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -33,10 +33,10 @@
    <constant key="TPM_max"        value=" 48MHz,     4MHz"   type="Long" />
 
    <!-- LLWU wakeup devices -->
-   <constant key="llwu_device_list"
+   <constant key="/LLWU/llwu_device_list"
       description="LLWU Wakeup sources"
       type="String"
-      value="&quot;LPTMR0;CMP0;;;TSI0;RTC_Alarm;;RTC_Seconds&quot;" />
+      value='"LPTMR0;CMP0;;;TSI0;RtcAlarm;;RtcSeconds"' />
 
    <!-- Clock divider -->
    <constant key="clock_divider_type" type="Long" value="2" />
@@ -75,40 +75,6 @@
       <choice value="63" name="Always Enabled 63"  enum="AlwaysEnabled63"  />
    </choiceOption>
 
-<!--
-    * General substitutions
-    *  $(_NAME)         => e.g FTM2 => FTM2
-    *  $(_name)         => e.g FTM2 => ftm2
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
-    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
-    *  $(_Class)        => e.g FTM2 => Ftm2
-    *  $(_Baseclass)    => e.g FTM0 => Ftm
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A
--->
-
-<!--
-    * Template substitutions
-    *
-    * <li>%paramExpression            Parameters ORed together e.g. adcPretrigger|adcRefSel
-    * <li>%valueExpression            Numeric variable value e.g. 0x3
-    * <li>%symbolicExpression[index]  Symbolic formatted value e.g. AdcCompare_Disabled
-    * <li>%variable[index]            Variable name /ADC0/adc_sc2_acfe
-    * <li>%macro[index](value)        C register macro e.g. ADC_SC2_ACFGT(value)
-    * <li>%description[index]         Description from controlVar e.g. Compare Function Enable
-    * <li>%shortDescription[index]    Short description from controlVar e.g. Compare Function Enable
-    * <li>%tooltip[index]             Tool-tip from controlVar e.g. Each bit disables the GPIO function
-    * <li>%params                     Formatted parameter list for function
-    * <li>%paramDescription[index]    Tool-tip from controlVar formatted as param description @param ...
-    * <li>%paramType[index]           Based on typeName e.g. AdcCompare (or uint32_t)
-    * <li>%paramName[index]           Based on typeName with lower-case first letter adcCompare
-    * <li>%fieldAssignment            Expression of form '%register <= (%register & ~%mask)|%paramExpression
-    * <li>%maskingExpression          Based on variable etc. Similar to (%register&%mask)
-    * <li>%mask[index]                From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
-    * <li>%register[index]            Register associated with variable e.g. adc->APCTL1
-    * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
-    * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
--->
-
    <!-- Indicate RTC arrangement: OSC0/RTC(OSC1) share XTAL/EXTAL pins -->
    <binaryOption key="RtcForcing"
       locked="true"
@@ -122,43 +88,11 @@
 
    <xi:include href="simCommon.xml"/>
 
-   <!-- ************* Class Declaration ****************** -->
+   <!-- _____________ Class Declaration __________________ -->
    <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
+      value='"$(_Class)Info : public $(_Baseclass)BasicInfo"' />
 
-   <!-- ************* COPC ****************** -->
-
-   <category name="COPC" description="COP Control Register" >
-
-      <choiceOption key="sim_copc_copt"
-         description="COP Watchdog Timeout"
-         typeName="SimCopDuration"
-         valueFormat="SIM_COPC_COPCLKS(%s),SIM_COPC_COPT(%s)"
-         toolTip="Selects the Computer Operating Properly Timeout\n
-                  This is a write-once field" >
-         <choice value="0,0" enum="Disabled"          name="Disabled" />
-         <choice value="0,1" enum="32_ms"             name="Timeout after 2^5 LPO (1kHz) cycles"  />
-         <choice value="0,2" enum="256_ms"            name="Timeout after 2^8 LPO (1kHz) cycles"  />
-         <choice value="0,3" enum="1024_ms"           name="Timeout after 2^10 LPO (1kHz) cycles" />
-         <choice value="1,1" enum="8192_BusCycles"    name="Timeout after 2^13 bus clock cycles"  />
-         <choice value="1,2" enum="65536_BusCycles"   name="Timeout after 2^16 bus clock cycles"  />
-         <choice value="1,3" enum="262144_BusCycles"  name="Timeout after 2^18 bus clock cycles"  />
-      </choiceOption>
-
-      <binaryOption key="sim_copc_copw"
-         enabledBy="sim_copc_copt&gt;3"
-         typeName="SimCopMode"
-         description="COP Windowed Mode"
-         toolTip="Windowed mode is only supported when COP is using bus clock\n
-                  The COP window is opened three quarters through the timeout period\n
-                  This is a write-once field" >
-         <choice value="0"  enum="Normal"     name="Normal Mode" isDefault="true" />
-         <choice value="1"  enum="WindowMode" name="Windowed Mode" />
-      </binaryOption>
-
-   </category>
-
-   <!-- ************* SOPT1 ****************** -->
+   <!-- _____________ SOPT1 __________________ -->
 
    <category name="SOPT1" description="RTC clocks" >
 
@@ -182,7 +116,7 @@
       </choiceOption>
    </category>
 
-   <!-- ************* SOPT2 ****************** -->
+   <!-- _____________ SOPT2 __________________ -->
 
    <category name="SOPT2" description="Clock Gating" >
 
@@ -211,23 +145,18 @@
       <aliasOption key="/MCG/system_mcgirclk_clock[]"    optional="true" />
    </category>
 
-   <!-- ************* SOPT4 ****************** -->
+   <!-- _____________ SOPT4 __________________ -->
 
    <category name="SOPT4" description="TPM signals" >
 
       <for keys="n" values="0;1" >
          <intOption key="TpmClkin%(n)"
+            addToVar="TpmExternalItems"
             description="TPM External clock input #%(n)"
             toolTip="This input is available as a TPM external clock source"
             value="0"
             units="Hz"
          />
-         <for keys="p" dim="4" >
-            <if condition="sim_sopt4_tpm%(p)clksel_present" >
-               <equation key="Tpm%(p)ExternalItems" value="" condition="!Tpm%(p)ExternalItems" />
-               <equation key="Tpm%(p)ExternalItems" value="=Tpm%(p)ExternalItems+&quot;TpmClkin%(n);&quot;"/>
-            </if>
-         </for>
          <variableTemplate variables="TpmClkin%(n)"
             initExpressionOnSameLine="true"
          ><![CDATA[
@@ -307,7 +236,7 @@
    <printVar key="Tpm2ExternalItems"/>
    -->
 
-   <!-- ************* SOPT5 ****************** -->
+   <!-- _____________ SOPT5 __________________ -->
 
    <category name="SOPT5" description="UART signals" >
 
@@ -349,7 +278,7 @@
       </for>
    </category>
 
-   <!-- ************* SOPT7 ****************** -->
+   <!-- _____________ SOPT7 __________________ -->
 
    <category name="SOPT7" description="ADC signals" >
       <for keys="adc" values="0;1" >
@@ -390,7 +319,7 @@
       </for>
    </category>
 
-   <!-- ************* FCFG1 ****************** -->
+   <!-- _____________ FCFG1 __________________ -->
 
    <category name="Flash" description="Flash control" >
       <binaryOption key="sim_fcfg1_flashdoze" condition="sim_fcfg1_flashdoze_present"
@@ -417,6 +346,49 @@
       </binaryOption >
    </category>
 
+   <!-- _____________ COPC __________________ -->
+
+   <category name="COPC" description="Computer Operating Properly" >
+
+      <choiceOption key="sim_copc_copt"
+         target="cop_timeout_period_fixed"
+         valueFormat="SIM_COPC_COPCLKS(%s),SIM_COPC_COPT(%s)"
+         typeName="SimCopDuration"
+         baseType="uint32_t"
+         description="COP Watchdog Timeout"
+         toolTip="Selects the Computer Operating Properly Timeout\n
+                  This is a write-once field" >
+         <choice value="0,0" enum="Disabled"          name="Disabled"                             ref="0" />
+         <choice value="0,1" enum="32_ms"             name="Timeout after 2^5 LPO (1kHz) cycles"  ref="32.0/(/PMC/system_low_power_clock)"      />
+         <choice value="0,2" enum="256_ms"            name="Timeout after 2^8 LPO (1kHz) cycles"  ref="256.0/(/PMC/system_low_power_clock)"     />
+         <choice value="0,3" enum="1024_ms"           name="Timeout after 2^10 LPO (1kHz) cycles" ref="1024.0/(/PMC/system_low_power_clock)"    />
+         <choice value="1,1" enum="8192_BusCycles"    name="Timeout after 2^13 bus clock cycles"  ref="0"    />
+         <choice value="1,2" enum="65536_BusCycles"   name="Timeout after 2^16 bus clock cycles"  ref="0"   />
+         <choice value="1,3" enum="262144_BusCycles"  name="Timeout after 2^18 bus clock cycles"  ref="0"  />
+      </choiceOption>
+
+      <floatOption key="cop_timeout_period_fixed"
+         hiddenBy="sim_copc_copt!=(1,2,3)"
+         locked="true"
+         derived="true"
+         description="Period of COP timer"
+         toolTip="Computer Operating Properly Timeout"
+         units="s"
+      />
+
+      <binaryOption key="sim_copc_copw"
+         enabledBy="sim_copc_copt&gt;3"
+         typeName="SimCopMode"
+         description="COP Windowed Mode"
+         toolTip="Windowed mode is only supported when COP is using bus clock\n
+                  The COP window is opened three quarters through the timeout period\n
+                  This is a write-once field" >
+         <choice value="0"  enum="Normal"     name="Normal Mode" isDefault="true" />
+         <choice value="1"  enum="WindowMode" name="Windowed Mode" />
+      </binaryOption>
+
+   </category>
+
    <for keys="n" dim="=numberOfClockSettings" >
       <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" locked="true" >
 
@@ -425,7 +397,6 @@
 
          <category name="Peripheral Clocks" description="Peripheral Clock Selection" >
             <choiceOption key="sim_sopt2_clkoutsel[%(n)]" condition="sim_sopt2_clkoutsel_present"
-               enabledBy="enablePeripheralSupport"
                target="clockOut[%(n)]"
                typeName="SimClkoutSel"
                description="CLKOUT pin clock"
@@ -443,21 +414,11 @@
             </choiceOption>
 
             <intOption key="clockOut[%(n)]" condition="sim_sopt2_clkoutsel_present"
-               enabledBy="enablePeripheralSupport"
                derived="true"
                locked="true"
                units="Hz"
                description="Clock out"
                toolTip="Clock available on CLKOUT pin" />
-
-            <!-- choiceOption key="sim_sopt2_pllfllsel_Fixed[%(n)]"
-               target="system_peripheral_clock[%(n)]"
-               description="Peripheral Clock"
-               toolTip="Clock for various peripherals (LPUART, TPM etc.)\n
-                        If there is a peripheral clock divider then this is the\n
-                        Frequency of the undivided peripheral clock" >
-               <choice value="0"  name="MCGFLLCLK clock"   ref="/MCG/system_mcgfllclk_clock[%(n)]"     enum="McgFllClk"  code="SystemMcgFllClock"   isDefault="true" />
-            </choiceOption -->
 
             <intOption key="system_peripheral_clock[%(n)]"
                enabledBy="(%(n)==0)||/MCG/enableClockConfiguration[%(n)]"
@@ -469,7 +430,7 @@
                toolTip="Frequency of Peripheral Clock available to various peripherals"  />
 
             <choiceOption key="sim_sopt2_usbsrc[%(n)]" condition="sim_sopt2_usbsrc_present"
-               enabledBy="enablePeripheralSupport"
+               addToVar="Usb0ExternalItems"
                target="system_usbfs_clock[%(n)]"
                typeName="SimUsbFullSpeedClockSource"
                description="USB Clock"
@@ -481,7 +442,7 @@
             <aliasOption key="system_usb_clkin_clock" locked="false" optional="true" />
 
             <intOption key="system_usbfs_clock[%(n)]"  condition="sim_sopt2_usbsrc_present"
-               enabledBy="enablePeripheralSupport"
+               addToVar="Usb0ExternalItems"
                errorPropagate="error"
                derived="true"
                locked="true"
@@ -498,8 +459,7 @@
                               tpm%(p)    : Tpm%(p)    : TPM%(p)    : TPM    " >
 
                   <choiceOption key="sim_sopt2_%(name)src[%(n)]" condition="sim_sopt2_%(name)src_present"
-                     addToVar="/SIM/%(Name)ExternalItems"
-                     enabledBy="enablePeripheralSupport"
+                     addToVar="%(Name)ExternalItems"
                      typeName="Sim%(Name)ClockSource"
                      target="system_%(name)_clock[%(n)]"
                      description="%(NAME) Clock"
@@ -511,7 +471,7 @@
                   </choiceOption>
 
                   <intOption key="system_%(name)_clock[%(n)]" condition="sim_sopt2_%(name)src_present"
-                     addToVar="/SIM/%(Name)ExternalItems"
+                     addToVar="%(Name)ExternalItems"
                      max="%(bNAME)_max[/SMC/smc_pmctrl_runm[%(n)]]"
                      derived="true"
                      locked="true"
@@ -522,6 +482,31 @@
                </for>
             </for>
          </category>
+
+         <choiceOption key="sim_copc_copt_shadow[%(n)]"
+            hidden="true"
+            derived="true"
+            ref="sim_copc_copt"
+            target="cop_timeout_period[%(n)]"
+            description="COP Watchdog Timeout"
+            toolTip="Selects the Computer Operating Properly Timeout\n
+                     This is a write-once field" >
+            <choice value="0,0" name="Disabled"                             ref="0" />
+            <choice value="0,1" name="Timeout after 2^5 LPO (1kHz) cycles"  ref="32.0/(/PMC/system_low_power_clock)"      />
+            <choice value="0,2" name="Timeout after 2^8 LPO (1kHz) cycles"  ref="256.0/(/PMC/system_low_power_clock)"     />
+            <choice value="0,3" name="Timeout after 2^10 LPO (1kHz) cycles" ref="1024.0/(/PMC/system_low_power_clock)"    />
+            <choice value="1,1" name="Timeout after 2^13 bus clock cycles"  ref="8192.0/(/SIM/system_bus_clock[%(n)])"    />
+            <choice value="1,2" name="Timeout after 2^16 bus clock cycles"  ref="65536.0/(/SIM/system_bus_clock[%(n)])"   />
+            <choice value="1,3" name="Timeout after 2^18 bus clock cycles"  ref="262144.0/(/SIM/system_bus_clock[%(n)])"  />
+         </choiceOption>
+
+         <floatOption key="cop_timeout_period[%(n)]"
+            locked="true"
+            derived="true"
+            description="Period of COP timer"
+            toolTip="Computer Operating Properly Timeout"
+            units="s"
+         />
 
          <aliasOption key="/MCG/system_mcgoutclk_clock[%(n)]" />
 
@@ -548,7 +533,7 @@
             value="24_MHz"
             disabledValue="0" />
 
-   <!-- ************* CLKDIV1 ****************** -->
+   <!-- _____________ CLKDIV1 __________________ -->
 
          <category name="CLKDIV1" description="System Clock Dividers" >
             <choiceOption key="sim_clkdiv1_outdiv1[%(n)]"  condition="sim_clkdiv1_outdiv1_present"
@@ -588,58 +573,7 @@
       </aliasCategoryOption>
    </for>
 
-<!-- Graphic here -->
-
    <xi:include href="sim_commonTemplates.xml" />
-
-   <!-- ************* Clock Variables ****************** -->
-
-   <template namespace="usbdm" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
-      \t/*
-      \t * Global clocks
-      \t */
-      \t\n
-   ]]></template>
-   <template namespace="usbdm" codeGenCondition="!/MCG/enablePeripheralSupport" ><![CDATA[
-      \t/*
-      \t * Global clocks constants
-      \t * These are provided when minimal clock generator code is used.
-      \t * They assume no clock changes are made after startup.
-      \t * Values provided are from USBDM configuration.
-      \t */
-      \t\n
-   ]]></template>
-
-   <for keys=" clock                  : name "
-      values=" system_core_clock[0]   : SystemCoreClock;
-               system_bus_clock[0]    : SystemBusClock;
-               system_timer_clock[0]  : SystemTimerClock
-         " >
-      <variableTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
-         \t/**
-         \t *  %description
-         \t *  %tooltip
-         \t */
-         \textern "C" uint32_t %(name);
-         \t\n
-      ]]></variableTemplate>
-      <variableTemplate key="/SYSTEM/Clocks" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
-         \t/**
-         \t *  %description
-         \t *  %tooltip
-         \t */
-         \tuint32_t %(name);
-         \t\n
-      ]]></variableTemplate>
-      <variableTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="!/MCG/enablePeripheralSupport" ><![CDATA[
-         \t/**
-         \t *  %description
-         \t *  %tooltip
-         \t */
-         \tconstexpr uint32_t %(name) = %valueExpression;
-         \t\n
-      ]]></variableTemplate>
-   </for>
 
    <template codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
       \t/**
@@ -660,7 +594,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <!-- ************* Common ****************** -->
+   <!-- _____________ Common __________________ -->
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL" dim="=numberOfClockSettings" >
@@ -671,7 +605,7 @@
       <param type="long" value="1MHz"   />     <!-- VLPR Bus          -->
    </validate>
 
-   <!-- ************* Startup ****************** -->
+   <!-- _____________ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n

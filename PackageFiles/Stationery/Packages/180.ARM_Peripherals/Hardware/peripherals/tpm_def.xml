@@ -4,10 +4,20 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <constant key="irq_parameters"            type="String"  value='"uint8_t"'  />
-   <constant key="irq_call"                  type="String"  value='"0"'  />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <!-- ____ Class Declaration ________ -->
+   <constant key="_basicInfo_declaration" type="String"
+      value='"class $(_Structname)BasicInfo : public $(_Baseclass)CommonInfo {\n
+      \n
+      public:\n"' />
+
+   <constant key="_class_declaration" type="String"
+      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+
+   <equation key="irq_parameters"            value=""  />
+   <equation key="irq_dummy_parameters"      value=""  />
+   <equation key="irq_call"                  value=""  />
+   <equation key="generateDefault"           value="false"         />
+   <equation key="configureInStartupDefault" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
 
    <!-- ____ Constants ____________ -->
@@ -19,12 +29,8 @@
       \tstatic constexpr unsigned NumChannels = $(_channelCount);
 
       \t//! Number of channel event vectors implemented
-      \tstatic constexpr unsigned NumChannelVectors = $(_irqCount);\n\n
+      \tstatic constexpr unsigned NumChannelVectors = $(_hardwareIrqCount);\n\n
    ]]></template>
-
-   <!-- ____ Class Declaration ________ -->
-   <constant key="_class_declaration" type="String"
-      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
    <!-- ____ Hidden ________ -->
 
@@ -104,6 +110,7 @@
    <!-- ____ Main Counter ________ -->
    <title description="Main Counter" />
 
+   <!-- MCG clock -->
    <choiceOption key="tpmClockConfig" condition="/MCG/_present"
       description="Clock configuration"
       target="system_tpm_clock"
@@ -274,6 +281,7 @@
    <for keys="ch" dim="=_channelCount" >
 
       <choiceOption key="tpm_cnsc_mode_independent[%(ch)]"
+         signal="$(_NAME)_CH%(ch)"
          enabledBy="enablePeripheralSupport&amp;&amp;!channelPairing[%(ch)&amp;0b1110]"
          valueFormat="TPM_CnSC_MS(%s),TPM_CnSC_ELS(%s)"
          baseType="uint16_t"
@@ -945,9 +953,9 @@
          description="Channel Polarity"
          toolTip="Bitmask defining the polarity of channels inputs/outputs"
          value="0"
-         bitmask="=(1&lt;&lt;_channelCount)-1"
+         bitDescription="@SignalList(8)"
          bitList="Ch%iActiveLow"
-         bitDescription="Channel %i is active-low" />
+         bitmask="=(1&lt;&lt;_channelCount)-1" />
 
       <!-- ____ CONF ______________ -->
 
@@ -1203,8 +1211,6 @@
       \t      tpm->POL= (tpm->POL&(tpmPolarity>>8))|tpmPolarity;
       \t}\n\n
    ]]></variableTemplate>
-
-   <xi:include href="tpm_getters_setters.xml"/>
 
 <!--  ___ Static/Non-Static Methods ______________
 
@@ -2059,42 +2065,6 @@
 <!-- ___ CommonInfo class ______________ -->
 
    <template where="commonInfo" condition="!/$(_basename)_common_info_done" ><![CDATA[
-      class $(_Baseclass)CommonInfo {
-      \t
-      public:
-      \t\n
-   ]]></template>
-
-   <template where="commonInfo" condition="!/$(_basename)_common_info_done" ><![CDATA[
-      \t/**
-      \t * Type definition for overflow and fault call-back.
-      \t */
-      \ttypedef void (*CallbackFunction)();
-      \t
-      \t/**
-      \t * Callback to catch unhandled overflow and fault call-back.
-      \t */
-      \tstatic void unhandledCallback() {
-      \t   setAndCheckErrorCode(E_NO_HANDLER);
-      \t}
-      \t
-      \t/**
-      \t * Type definition for channel event call-back
-      \t *
-      \t * @param mask Mask identifying channel
-      \t */
-      \ttypedef void (*ChannelCallbackFunction)($(irq_parameters));
-      \t
-      \t/**
-      \t * Callback to catch unhandled channel event call-back
-      \t *
-      \t * @param mask Mask identifying channel
-      \t */
-      \tstatic void unhandledChannelCallback(uint8_t mask) {
-      \t   (void)mask;
-      \t   setAndCheckErrorCode(E_NO_HANDLER);
-      \t}
-      \t
       \t/**
       \t * Calculate TPM timing parameters to achieve a given period
       \t *
@@ -2145,151 +2115,7 @@
       \t\n
    ]]></template>
 
-   <template where="commonInfo" condition="!/$(_basename)_common_info_done" ><![CDATA[
-      }; // $(_Baseclass)CommonInfo
-      \t\n
-   ]]></template>
-
    <constant key="/$(_basename)_common_info_done" condition="!/$(_basename)_common_info_done" />
-
-<!-- ___ BasicInfo class ______________ -->
-
-   <template where="basicInfo" ><![CDATA[
-      class $(_Structname)BasicInfo : public $(_Baseclass)CommonInfo {
-      \t
-      public:
-      \t\n
-   ]]></template>
-
-   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
-      variables="irqHandlingMethod"
-   ><![CDATA[
-       \t//! Common class based callback code has been generated for this class of peripheral
-       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
-       \t\n
-   ]]></variableTemplate>
-
-   <template codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t/** Callback function for Channel Fault and timer overflow */
-      \tstatic CallbackFunction sCallback;
-      \t
-      \t/**
-      \t * Overflow IRQ handler (if individually available)
-      \t */
-      \tstatic void overflowIrqHandler() {
-      \t   // Clear TOI flag
-      \t   tpm->SC = tpm->SC & ~TPM_SC_TOF_MASK;
-      \t   sCallback();
-      \t}
-      \t\n
-   ]]></template>
-
-   <template codeGenCondition="irqHandlingMethod" condition="tpm_fms_faultf_present" >
-   <![CDATA[
-      \t/**
-      \t * Fault IRQ handler (if individually available)
-      \t */
-      \tstatic void faultIrqHandler() {
-      \t   tpm->FMS = tpm->FMS & ~TPM_FMS_FAULTF_MASK;
-      \t   sCallback();
-      \t}
-      \t\n
-   ]]></template>
-
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t/** Callback function for Channel Fault and timer overflow */
-      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Class)Info::unhandledCallback;
-      \t\n
-   ]]>
-   </template>
-
-   <template codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t
-      \t/**
-      \t * Callback table for programmatically set channel call-backs
-      \t */
-      \tstatic ChannelCallbackFunction channelCallbacks[irqCount];
-      \t
-      \t/**
-      \t * Common IRQ handler
-      \t */
-      \tstatic void irqHandler() {
-      \t\n
-   ]]></template>
-   <template codeGenCondition="irqHandlingMethod" condition="tpm_fms_faultf_present" >
-   <![CDATA[
-      \t   if ((tpm->MODE&TPM_MODE_FAULTIE_MASK) && (tpm->FMS&TPM_FMS_FAULTF_MASK)) {
-      \t      tpm->FMS = tpm->FMS & ~TPM_FMS_FAULTF_MASK;
-      \t      sCallback();
-      \t      return;
-      \t   }\n
-   ]]></template>
-   <template codeGenCondition="irqHandlingMethod" condition="!tpm_status_ch0f_present" >
-   <![CDATA[
-      \t   if ((tpm->SC&(TPM_SC_TOF_MASK|TPM_SC_TOIE_MASK)) == (TPM_SC_TOF_MASK|TPM_SC_TOIE_MASK)) {
-      \t      // Clear TOI flag
-      \t      tpm->SC = tpm->SC & ~TPM_SC_TOF_MASK;
-      \t      sCallback();
-      \t      return;
-      \t   }
-      \t   // Call shared handler (0 param indicates polling required as no shared status register)
-      \t   channelCallbacks[0](0);
-      \t
-      \t   // Get status from channels
-      \t   //uint32_t status = 0;
-      \t   //uint32_t mask   = 0b01;
-      \t   //for (unsigned channel=0; channel<NumChannels; channel++) {
-      \t   //   if ((tpm->CONTROLS[channel].CnSC&TPM_CnSC_CHF_MASK)!=0) {
-      \t   //      status |= mask;
-      \t   //      // Clear channel flag (w0c register if read first)
-      \t   //      tpm->CONTROLS[channel].CnSC = tpm->CONTROLS[channel].CnSC & ~TPM_CnSC_CHF_MASK;
-      \t   //   }
-      \t   //   mask <<= 1;
-      \t   //}
-      \t   //if (status) {
-      \t   //   // Call shared handler
-      \t   //   channelCallbacks[0](0);
-      \t   //}
-      \t}
-      \t\n
-   ]]></template>
-   <template codeGenCondition="irqHandlingMethod" condition="tpm_status_ch0f_present" >
-   <![CDATA[
-      \t   if ((tpm->SC&(TPM_SC_TOF_MASK|TPM_SC_TOIE_MASK)) == (TPM_SC_TOF_MASK|TPM_SC_TOIE_MASK)) {
-      \t      // Clear TOI flag
-      \t      tpm->SC = tpm->SC & ~TPM_SC_TOF_MASK;
-      \t      sCallback();
-      \t      return;
-      \t   }
-      \t   // Get status for channels
-      \t   uint32_t status = tpm->STATUS;
-      \t   if (status) {
-      \t      // Call shared handler
-      \t      channelCallbacks[0](status);
-      \t      // Clear flags for channel events being handled (w0c register if read first)
-      \t      tpm->STATUS = ~status;
-      \t   }
-      \t}
-      \t\n
-   ]]></template>
-
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
-      \t/**
-      \t * Callback table for programmatically set handlers for $(_Class)
-      \t */
-      \t$(_Class)Info::ChannelCallbackFunction $(_Class)Info::channelCallbacks[] = {\n\n
-   ]]></template>
-   <for keys="ch" dim="=_irqCount" >
-      <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
-         \t   $(_Class)Info::unhandledChannelCallback,\n
-      ]]></template>
-   </for>
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
-      \t};\n\n
-   ]]></template>
 
 <!--  ___ Init class ______________ -->
 
@@ -2381,13 +2207,6 @@
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
-      variables="irqHandlingMethod"
-    ><![CDATA[
-      \t   // Shared channel interrupt call-back
-      \t   ChannelCallbackFunction channelCallbackFunction = nullptr;\n\n
-   ]]></variableTemplate>
-
    <for keys=" type        : variables                                         : init    "
        values="%baseType   : tpm_pol_pol                                       : 0       ;
                %baseType   : tpm_mod_mod                                       : 0       ;
@@ -2416,25 +2235,6 @@
    ]]></variableTemplate >
 
 <!-- ____ Init class Constructors ____________ -->
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
-      variables="irqHandlingMethod"
-      linePadding="xxx"
-    ><![CDATA[
-      \t   /**
-      \t    * Constructor for shared channel interrupt call-back
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      \t    * @param %paramExpression Shared channel interrupt call-back to set
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(ChannelCallbackFunction %paramExpression, Types... rest) : Init(rest...) {
-      \t
-      \t      this->channelCallbackFunction = %paramExpression;
-      \t   }\n\n
-   ]]></variableTemplate>
 
    <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="irqHandlingMethod"
@@ -3297,12 +3097,9 @@
 
 <!--  ___ End of class  $(_Structname)BasicInfo ______________ -->
 
-   <template where="basicInfo" ><![CDATA[
-      }; // class  $(_Structname)BasicInfo\n\n
-   ]]></template>
-
 <!-- ___ Set interrupt handlers ___________ -->
 
+<!--
    <template  codeGenCondition="irqHandlingMethod" ><![CDATA[
       \t/**
       \t * Set overflow and fault interrupt call-back
@@ -3345,8 +3142,7 @@
       \t}
       \t\n
    ]]></template>
-
-   <template  codeGenCondition="irqHandlingMethod&amp;&amp;(_irqCount==1)" ><![CDATA[
+   <template  codeGenCondition="irqHandlingMethod&amp;&amp;(_hardwareIrqCount==1)" ><![CDATA[
       \t/**
       \t * Set channel call-back function
       \t * Configured for shared channel call-backs i.e. all channels use same call-back
@@ -3394,7 +3190,7 @@
       \t\n
    ]]></template>
 
-   <template  codeGenCondition="irqHandlingMethod&amp;&amp;(_irqCount>1)" ><![CDATA[
+   <template  codeGenCondition="irqHandlingMethod&amp;&amp;(_hardwareIrqCount>1)" ><![CDATA[
       \t/**
       \t * Set channel call-back function
       \t * Configured for individual channel call-backs
@@ -3428,6 +3224,24 @@
       \t */
       \t static void setCallbacks(const Init &init) {
       \t
+      \t   setCallback(init.callbackFunction);
+      \t   enableNvicInterrupt(irqNums[0], init.irqlevel);
+      \t}
+      \t\n
+   ]]></template>
+-->
+   <template  codeGenCondition="irqHandlingMethod&amp;&amp;(_hardwareIrqCount==1)" ><![CDATA[
+      \t/**
+      \t * Set callbacks and IRQ priority from Init structure
+      \t *
+      \t * @param init Class containing initialisation values
+      \t *
+      \t * @note Channel callback is shared by all channels of the timer.
+      \t *       It is necessary to identify the originating channel in the callback
+      \t */
+      \tstatic void setCallbacks(const Init &init) {
+      \t
+      \t   disableNvicInterrupts();
       \t   setCallback(init.callbackFunction);
       \t   enableNvicInterrupt(irqNums[0], init.irqlevel);
       \t}
@@ -3490,6 +3304,10 @@
       \t\n
    ]]></template>
 
+   <!-- ____ Getters and Setters __________________ -->
+   <xi:include href="tpm_getters_setters.xml"/>
+
+
    <!-- ____ Common __________________ -->
 
    <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
@@ -3544,9 +3362,6 @@
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
       </for>
    </category>
-   <deleteVariables
-      variables="_scgc_clock,/SIM/$(_Class)ExternalItems"
-      mustExist="false" />
 
    <!--  ____ Signal mapping __________________ -->
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />

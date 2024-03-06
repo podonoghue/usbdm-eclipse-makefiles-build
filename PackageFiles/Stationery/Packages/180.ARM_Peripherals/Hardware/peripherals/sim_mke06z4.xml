@@ -6,8 +6,8 @@
 
 <!-- ____________________ Constants ____________________ -->
 
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="generateDefault"           type="Boolean" value="false"         />
+   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -1179,7 +1179,7 @@
 
 <!--   ________== SIM Init class ____________________________=== -->
 
-   <template namespace="usbdm" >
+   <template where="basicInfo" >
    <![CDATA[
       class $(_Class)BasicInfo {
       \t
@@ -1188,7 +1188,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
+   <template where="basicInfo" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Class)
@@ -1292,7 +1292,7 @@
 
 <!--   Member variables -->
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="sim_sopt0_delay,sim_sopt0_adhwt,sim_sopt0_clkoe,sim_sopt0_busref,sim_sopt0_txdme,sim_sopt0_rxdce,sim_sopt0_acic,sim_sopt0_rtcc,sim_sopt0_rxdfe,sim_sopt0_actrg,sim_sopt0_swde,sim_sopt0_rstpe,sim_sopt0_nmie"
       linePadding="xxx"
    ><![CDATA[
@@ -1300,7 +1300,7 @@
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="sim_sopt1_uartpwts,sim_sopt1_acpwts,sim_sopt1_i2c0oinv,sim_sopt1_i2c04wen"
       linePadding="xxx"
    ><![CDATA[
@@ -1308,7 +1308,7 @@
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="sim_pinsel0_pwtclkps,sim_pinsel0_ftm2clkps,sim_pinsel0_ftm1clkps,sim_pinsel0_ftm0clkps,sim_pinsel0_ftm1ps1,sim_pinsel0_ftm1ps0,sim_pinsel0_ftm0ps1,sim_pinsel0_ftm0ps0,sim_pinsel0_uart0ps,sim_pinsel0_spi0ps,sim_pinsel0_i2c0ps,sim_pinsel0_rtcps,sim_pinsel0_irqps"
       linePadding="xxx"
    ><![CDATA[
@@ -1316,7 +1316,7 @@
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="sim_pinsel1_mscanps,sim_pinsel1_pwtin1ps,sim_pinsel1_pwtin0ps,sim_pinsel1_uart2ps,sim_pinsel1_uart1ps,sim_pinsel1_spi1ps,sim_pinsel1_i2c1ps,sim_pinsel1_ftm2ps5,sim_pinsel1_ftm2ps4,sim_pinsel1_ftm2ps3,sim_pinsel1_ftm2ps2,sim_pinsel1_ftm2ps1,sim_pinsel1_ftm2ps0"
       linePadding="xxx"
    ><![CDATA[
@@ -1324,7 +1324,7 @@
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="sim_scgc_acmp1,sim_scgc_acmp0,sim_scgc_adc,sim_scgc_irq,sim_scgc_kbi1,sim_scgc_kbi0,sim_scgc_uart2,sim_scgc_uart1,sim_scgc_uart0,sim_scgc_spi1,sim_scgc_spi0,sim_scgc_i2c1,sim_scgc_i2c0,sim_scgc_mscan,sim_scgc_swd,sim_scgc_flash,sim_scgc_crc,sim_scgc_ftm2,sim_scgc_ftm1,sim_scgc_ftm0,sim_scgc_pwt,sim_scgc_pit,sim_scgc_rtc"
       linePadding="xxx"
    ><![CDATA[
@@ -1403,7 +1403,7 @@
             sim_scgc_rtc;
             sim_sopt0_delay
             " >
-      <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -1532,13 +1532,13 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
+   <template where="basicInfo" codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
       \t}; // class $(_Class)::BasicInfo::Init\n\n
    ]]>
    </template>
 
-   <template namespace="usbdm" >
+   <template where="basicInfo" >
       <![CDATA[
       }; // class $(_Class)::BasicInfo\n\n
    ]]>
@@ -1546,13 +1546,13 @@
 
    <!-- _____________ Clock Variables __________________ -->
 
-   <template namespace="usbdm" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
       \t/*
       \t * Global clocks
       \t */
       \t\n
    ]]></template>
-   <template namespace="usbdm" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
       \t/*
       \t * Global clocks constants
       \t * These are provided when minimal clock generator code is used.
@@ -1567,7 +1567,7 @@
                system_bus_clock[0]    : SystemBusClock;
                system_timer_clock[0]  : SystemTimerClock
          ">
-      <variableTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
+      <variableTemplate where="basicInfo" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
          \t/**
          \t *  %description
          \t *  %tooltip
@@ -1583,7 +1583,7 @@
          \tuint32_t %(name);
          \t\n
       ]]></variableTemplate>
-      <variableTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
+      <variableTemplate where="basicInfo" variables="%(clock)" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
          \t/**
          \t *  %description
          \t *  %tooltip

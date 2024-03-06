@@ -51,6 +51,9 @@ $(/MCG/clocks)
 /** Current clock mode (FEI out of reset) */
 McgClockMode Mcg::currentClockMode = McgClockMode_FEI;
 
+// /MCG/staticDefinitions
+$(/MCG/staticDefinitions: // /MCG/staticDefinitions not found) 
+
 #if $(/MCG/enablePeripheralSupport:false) // /MCG/enablePeripheralSupport
 #if USBDM_ERRATA_E2448
 /**
@@ -73,15 +76,15 @@ static void setSysDividers(uint32_t simClkDiv1) {
    for (int t=0;t<10;t++) {
       __asm__ volatile("nop");
    }
-#endif
+#endif // defined(FMC_PFAPR_M2PFD_MASK)
    // Change CLKDIV1
    SIM->CLKDIV1 = simClkDiv1;
 #if defined(FMC_PFAPR_M2PFD_MASK)
    // Restore original PFAPR
    FMC->PFAPR   = temp;
-#endif
+#endif // defined(FMC_PFAPR_M2PFD_MASK)
 }
-#else
+#else // !USBDM_ERRATA_E2448
 /**
  *  Change SIM->CLKDIV1 value
  *
@@ -91,12 +94,7 @@ static void setSysDividers(uint32_t simClkDiv1) {
    // Change CLKDIV1
    SIM->CLKDIV1 = simClkDiv1;
 }
-#endif
-#endif
-
-$(/MCG/staticDefinitions: // /MCG/staticDefinitions not found) 
-
-#if $(/MCG/enablePeripheralSupport:false) // /MCG/enablePeripheralSupport
+#endif // USBDM_ERRATA_E2448
 
 constexpr McgClockMode clockTransitionTable[][8] = {
    /* from to => FEI                FEE,               FBI,               BLPI,              FBE,              BLPE,               PBE,               PEE */
@@ -488,7 +486,7 @@ void Mcg::SystemCoreClockUpdate(void) {
 #endif // /MCG/enablePeripheralSupport
  
 /**
- * Initialise MCG to default settings.
+ * Initialise MCG as part of startup sequence
  */
 void Mcg::startupConfigure() {
 

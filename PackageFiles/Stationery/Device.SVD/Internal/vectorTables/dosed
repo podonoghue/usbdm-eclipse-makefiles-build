@@ -17,8 +17,11 @@ read -d '' TOx <<EOF
       \</for\> 
 EOF
 
-FROM='<name>DMA_'
-TO='<name>DMA0_'
+#FROM='<name>PIT\([0-9]\)'
+#TO='<name>PIT_CH\1'
+
+FROM='PIT_CH'
+TO='PIT_Ch'
 
 echo from "${FROM}"
 echo to "${TO}"

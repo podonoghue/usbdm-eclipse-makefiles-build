@@ -14,54 +14,9 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
+#if $(/I2C/enablePeripheralSupport) // /I2C/enablePeripheralSupport
+
 namespace USBDM {
-
-#if $(/I2C/enablePeripheralSupport: // /I2C/enablePeripheralSupport)
-// I2C baud rate divisor table
-const uint16_t I2c::I2C_DIVISORS[] = {
-      20,   22,   24,   26,    28,   30,   34,   40,   28,   32,
-      36,   40,   44,   48,    56,   68,   48,   56,   64,   72,
-      80,   88,   104,  128,   80,   96,  112,  128,  144,  160,
-      192,  240,  160,  192,  224,  256,  288,  320,  384,  480,
-      320,  384,  448,  512,  576,  640,  768,  960,  640,  768,
-      896, 1024, 1152, 1280, 1536, 1920, 1280, 1536, 1792, 2048,
-      2304,2560, 3072, 3840,
-};
-
-/**
- * Calculate value for baud rate register of I2C
- *
- * This is calculated from processor bus frequency and given bps
- *
- * @param[in]  clockFrequency Frequency of I2C input clock
- * @param[in]  speed          Interface speed in bits-per-second
- *
- * @return I2C_F value representing speed
- */
-uint8_t I2c::calculateBPSValue(uint32_t clockFrequency, uint32_t speed) {
-   uint32_t best_mul   = 2;
-   uint32_t best_icr   = sizeofArray(I2C_DIVISORS)-1;
-   uint32_t best_error = (uint32_t)-1u;
-
-   uint32_t multClock = clockFrequency;
-   for (uint8_t mul=0; mul<=2; mul++) {
-      for(uint8_t icr=0; icr<sizeofArray(I2C_DIVISORS); icr++) {
-         uint32_t calculatedSpeed = multClock/I2C_DIVISORS[icr];
-         if (calculatedSpeed>speed) {
-            // Not suitable - try next
-            continue;
-         }
-         uint32_t error = speed-calculatedSpeed;
-         if ((error<best_error) || (error==0)) {
-            best_error=error;
-            best_icr=icr;
-            best_mul=mul;
-         }
-      }
-      multClock = multClock>>1;
-   }
-   return I2C_F_MULT(best_mul)|I2C_F_ICR(best_icr);
-}
 
 /**
  * Start Rx/Tx sequence by sending address byte
@@ -372,5 +327,6 @@ void I2C0_1_IRQHandler() {
 }
 #endif
 
-#endif  // /I2C/enablePeripheralSupport)
 } // End namespace USBDM
+
+#endif  // /I2C/enablePeripheralSupport)

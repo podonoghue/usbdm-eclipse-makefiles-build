@@ -21,6 +21,31 @@ int main() {
    unsigned       unsignedInteger;
    unsigned long  unsignedLong;
 
+   console.writeln("sizeof(int)  = ", sizeof(int));
+   console.writeln("sizeof(long) = ", sizeof(long));
+
+//   for(;;) {
+//      console.writeln("===================");
+//      console.write("Enter a long integer        : ").readln(longInteger);
+//      console.writeln(longInteger);
+//      console.write("Enter an unsigned integer   : ").readln(unsignedInteger);
+//      console.writeln(unsignedInteger);
+//      console.write("Enter an unsigned long      : ").readln(unsignedLong);
+//      console.writeln(unsignedLong);
+//      console<<"Enter a long integer        : ">>longInteger>>EndOfLine;
+//      console.writeln(longInteger);
+//      console<<"Enter a unsigned integer    : ">>unsignedInteger>>EndOfLine;
+//      console.writeln(unsignedInteger);
+//      console<<"Enter a unsigned long       : ">>unsignedLong>>EndOfLine;
+//      console.writeln(unsignedLong);
+//      console<<"Enter a long integer [16]   : ">>Radix_16>>longInteger>>EndOfLine;
+//      console.writeln("0x", longInteger, Radix_16);
+//      console<<"Enter a unsigned integer [8]: ">>Radix_8>>unsignedInteger>>EndOfLine;
+//      console.writeln("0", unsignedInteger, Radix_8);
+//      console<<"Enter a unsigned long [2]   : ">>Radix_2>>unsignedLong>>EndOfLine;
+//      console.writeln("0b", unsignedLong, Radix_2);
+//   }
+
    // Writing stuff to console
    console.writeln("\nStarting");
 
@@ -140,7 +165,7 @@ int main() {
    console<<3.0067<<EndOfLine;
 
    // Console read/write
-   if (console.write("Number: ").readln(integer).isError()) {
+   if (console.write("Enter number: ").readln(integer).isError()) {
       console.writeln("Opps");
    }
    else {
@@ -155,7 +180,7 @@ int main() {
    console.writeln("False  = ", false);
    console.writeln("peek() = ", console.peek());
 
-   console.writeln("x         = ", 'x');
+   console.writeln("'x'       = ", 'x');
    console.writeln("0UL       = ", 0UL);
    console.writeln("ULONG_MAX = ", ULONG_MAX);
    console.writeln("LONG_MIN  = ", LONG_MIN);
@@ -251,15 +276,16 @@ int main() {
    console<<"ULONG_MAX,Radix_16 = "<<Radix_16<<ULONG_MAX<<EndOfLine;
    console<<"UINT_MAX,Radix_2   = "<<Radix_2<<UINT_MAX<<EndOfLine;
    console<<"3,Radix_2          = "<<Radix_2<<Padding_LeadingZeroes<<3<<EndOfLine;
-   console<<"3,Radix_2,w=10,p=0 = "<<console.width(10)<<Radix_2<<Padding_LeadingZeroes<<3<<EndOfLine;
-   console.resetFormat();
+   console<<"3,Radix_2,w=10,p=0 = "<<Width_10<<Radix_2<<Padding_LeadingZeroes<<3<<EndOfLine;
+   console.resetFloatFormat();
+   console.resetIntegerFormat();
    console<<"UINT_MAX,Radix_8   = "<<Radix_8<<UINT_MAX<<EndOfLine;
    console<<"UINT_MAX,Radix_10  = "<<Radix_10<<UINT_MAX<<EndOfLine;
    console<<"UINT_MAX,Radix_16  = "<<Radix_16<<UINT_MAX<<EndOfLine;
-   console<<"UINT_MAX,radix(16) = "<<console.radix(16)<<UINT_MAX<<EndOfLine;
-   console<<"UINT_MAX,radix(10) = "<<console.radix(10)<<UINT_MAX<<EndOfLine;
-   console<<"UINT_MAX,radix(8)  = "<<console.radix(8)<<UINT_MAX<<EndOfLine;
-   console<<"UINT_MAX,radix(2)  = "<<console.radix(2)<<UINT_MAX<<EndOfLine;
+   console<<"UINT_MAX,Radix(16) = "<<Radix(16)<<UINT_MAX<<EndOfLine;
+   console<<"UINT_MAX,Radix(10) = "<<Radix(10)<<UINT_MAX<<EndOfLine;
+   console<<"UINT_MAX,Radix(8)  = "<<Radix(8)<<UINT_MAX<<EndOfLine;
+   console<<"UINT_MAX,Radix(2)  = "<<Radix(2)<<UINT_MAX<<EndOfLine;
    console<<Radix_10;
 
    //  Basic integer formatting to strings
@@ -269,10 +295,10 @@ int main() {
    console.writeln("ltoa(-100, buff, Radix_16, Padding_LeadingSpaces, 12)  = ", buff);
 
    // Test input
-   console.write("Value (in radix 2): ").readln(integer,Radix_2);
+   console.write("Enter value (in radix 2): ").readln(integer,Radix_2);
    console.writeln(integer, Radix_10, ", 0x", (unsigned long)integer, Radix_16, ", 0b", (unsigned long)integer, Radix_2);
 
-   console<<"Value (in radix 16): ">>Radix_16>>integer>>EndOfLine;
+   console<<"Enter value (in radix 16): ">>Radix_16>>integer>>EndOfLine;
    console<<Radix_10<<integer<<", 0x"<<Radix_16<<(unsigned long)integer<<", 0b"<<Radix_2<<(unsigned long)integer<<EndOfLine;
 
    // Read and echo an input line
@@ -281,30 +307,30 @@ int main() {
 
    // Read and write numbers
    console<<Radix_10;
-   console<<"value :">>integer>>EndOfLine;
+   console<<"Enter value :">>integer>>EndOfLine;
    console<<integer<<EndOfLine;
-   console<<"value :">>longInteger>>EndOfLine;
+   console<<"Enter value :">>longInteger>>EndOfLine;
    console<<longInteger<<EndOfLine;
-   console<<"value :">>unsignedInteger>>EndOfLine;
+   console<<"Enter value :">>unsignedInteger>>EndOfLine;
    console<<unsignedInteger<<EndOfLine;
-   console<<"value :">>unsignedLong>>EndOfLine;
+   console<<"Enter value :">>unsignedLong>>EndOfLine;
    console<<unsignedLong<<EndOfLine;
 
-   console.write("Two hex integers : ").read(integer,Radix_16).readln(longInteger,Radix_16);
+   console.write("Enter two hex integers     : ").read(integer,Radix_16).readln(longInteger,Radix_16);
    console.writeln(integer, Radix_16, ", ", longInteger, Radix_16);
-   console.write("An integer   : ").readln(longInteger);
+   console.write("Enter a long integer       : ").readln(longInteger);
    console.writeln(longInteger);
-   console.write("An integer   : ").readln(unsignedInteger);
+   console.write("Enter an unsigned integer  : ").readln(unsignedInteger);
    console.writeln(unsignedInteger);
-   console.write("An integer   : ").readln(unsignedLong);
+   console.write("Enter an unsigned long     : ").readln(unsignedLong);
    console.writeln(unsignedLong);
 
    // Writing formatted data to character buffer
    StringFormatter sf(buff,sizeof(buff));
    sf.write("This is being written to a string ", 1, ",", 2, ",", 3.0, " - done");
-   console.writeln(sf.toString());
+   console.writeln("Result = '", sf.toString(), "'");
 
-   console.writeln("Type any character - ignored").readChar();
+   console.writeln("Type any character (discarded) to finish").readChar();
 
    console.writeln("\nFinished");
 
@@ -312,11 +338,11 @@ int main() {
    //   console.setRxTxCallback(nullptr);
 
 //   Above functions may be applied directly to any Uart as well.
-   Uart0 uart;
+   Lpuart0 uart;
    uart<<"Hello World\n";
 
    for(;;) {
-      __asm__("nop");
+      __asm__("bkpt");
    }
    return 0;
 }

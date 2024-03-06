@@ -153,10 +153,6 @@ private:
    TpmBase_T(const TpmBase_T&) = delete;
    TpmBase_T(TpmBase_T&&) = delete;
 
-#if $(/TPM/irqHandlingMethod:false) // /TPM/irqHandlingMethod
-   typedef typename Info::ChannelCallbackFunction ChannelCallbackFunction;
-#endif
-
 public:
    // Make visible
    using Info::configure;
@@ -199,89 +195,6 @@ protected:
    virtual float getInputClockFrequencyVirtual(TpmClockSource tpmClockSource) const override {
       return Info::getInputClockFrequency(tpmClockSource);
    }
-
-public:
-
-#if $(/TPM/irqHandlingMethod) // /TPM/irqHandlingMethod
-   /**
-    * Wrapper to allow the use of a class member as a callback function
-    * @note Only usable with static objects.
-    *
-    * @tparam T         Type of the object containing the callback member function
-    * @tparam callback  Member function pointer
-    * @tparam object    Object containing the member function
-    *
-    * @return  Pointer to a function suitable for the use as a callback
-    *
-    * @code
-    * class AClass {
-    * public:
-    *    int y;
-    *
-    *    // Member function used as callback
-    *    // This function must match ChannelCallbackFunction
-    *    void callback(uint8_t status) {
-    *       ...;
-    *    }
-    * };
-    * ...
-    * // Instance of class containing callback member function
-    * static AClass aClass;
-    * ...
-    * // Wrap member function
-    * auto fn = Tpm0::wrapCallback<AClass, &AClass::callback, aClass>();
-    * // Use as callback
-    * Tpm0::setCallback(fn);
-    * @endcode
-    */
-   template<class T, void(T::*callback)(uint8_t), T &object>
-   static ChannelCallbackFunction wrapCallback() {
-      static ChannelCallbackFunction fn = [](uint8_t status) {
-         (object.*callback)(status);
-      };
-      return fn;
-   }
-
-   /**
-    * Wrapper to allow the use of a class member as a callback function
-    * @note There is a considerable space and time overhead to using this method
-    *
-    * @tparam T         Type of the object containing the callback member function
-    * @tparam callback  Member function pointer
-    * @tparam object    Object containing the member function
-    *
-    * @return  Pointer to a function suitable for the use as a callback
-    *
-    * @code
-    * class AClass {
-    * public:
-    *    int y;
-    *
-    *    // Member function used as callback
-    *    // This function must match ChannelCallbackFunction
-    *    void callback(uint8_t status) {
-    *       ...;
-    *    }
-    * };
-    * ...
-    * // Instance of class containing callback member function
-    * AClass aClass;
-    * ...
-    * // Wrap member function
-    * auto fn = Tpm0::wrapCallback<AClass, &AClass::callback>(aClass);
-    * // Use as callback
-    * Tpm0::setCallback(fn);
-    * @endcode
-    */
-   template<class T, void(T::*callback)(uint8_t)>
-   static ChannelCallbackFunction wrapCallback(T &object) {
-      static T &obj = object;
-      static ChannelCallbackFunction fn = [](uint8_t status) {
-         (obj.*callback)(status);
-      };
-      return fn;
-   }
-#endif // /TPM/irqHandlingMethod
 
 public:
 

@@ -11,11 +11,11 @@
 
    <constant key="enableGettersAndSetters" type="Boolean" value="false" />
 
-   <constant key="irq_parameters"            type="String"  value='""'  />
-   <constant key="irq_dummy_parameters"      type="String"  value='""'  />
-   <constant key="irq_call"                  type="String"  value='""'  />
-   <constant key="generateDefault"           type="Boolean" value="true"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="true"         />
+   <equation key="irq_parameters"            type="String"  value='""'  />
+   <equation key="irq_dummy_parameters"      type="String"  value='""'  />
+   <equation key="irq_call"                  type="String"  value='""'  />
+   <equation key="generateDefault"           type="Boolean" value="true"         />
+   <equation key="configureInStartupDefault" type="Boolean" value="true"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -319,14 +319,6 @@
 
 <!-- Setters and getters -->
 
-   <!--   ========== class $(_Structname)BasicInfo =============================== -->
-
-   <template namespace="baseClass" ><![CDATA[
-      class $(_Structname)BasicInfo {
-
-      public:\n
-   ]]></template>
-
    <variableTemplate key="/$(_BASENAME)/publicMethods" codeGenCondition="fullCodeSupport"
       variables="
          wdog_cs1_en,
@@ -365,7 +357,7 @@
 
    <!--   ========== Interrupt handling =============================== -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
@@ -373,7 +365,7 @@
        \t\n
    ]]></variableTemplate>
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
    <![CDATA[
       \t/**
       \t * Type definition for $(_Baseclass) interrupt call back.
@@ -429,7 +421,7 @@
    ]]>
    </template>
 
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <template where="static" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t
       \t/**
@@ -442,7 +434,7 @@
 
    <!--   ========== WDOG Init class =============================== -->
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -514,42 +506,42 @@
 
 <!--   Member variables -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="fullCodeSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="fullCodeSupport"
       variables="wdog_timeout"
    ><![CDATA[
       \t   ///  %description or seconds
       \t   Seconds_Ticks %registerName;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="fullCodeSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="fullCodeSupport"
       variables="wdog_window"
    ><![CDATA[
       \t   ///  %description or seconds
       \t   Seconds_Ticks %registerName;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="fullCodeSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="fullCodeSupport"
       variables="wdog_cs1_en,wdog_cs1_int,wdog_cs1_update,wdog_cs1_tst,wdog_cs1_dbg,wdog_cs1_wait,wdog_cs1_stop"
    ><![CDATA[
       \t   /// Control and Status Register 1
       \t   uint16_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="fullCodeSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="fullCodeSupport"
       variables="wdog_cs2_win,wdog_cs2_flg,wdog_cs2_pres,wdog_cs2_clk"
    ><![CDATA[
       \t   /// Control and Status Register 2
       \t   uint16_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass"
+   <variableTemplate where="basicInfo"
       variables="wdog_cs2_pres"
       codeGenCondition="secondsSupport"
    ><![CDATA[
@@ -558,7 +550,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -568,7 +560,7 @@
 
    <!--   Constructors -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -587,7 +579,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -619,7 +611,7 @@
             wdog_cs2_flg;
             wdog_cs2_clk
             " >
-      <variableTemplate namespace="baseClass" codeGenCondition="fullCodeSupport"
+      <variableTemplate where="basicInfo" codeGenCondition="fullCodeSupport"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -641,7 +633,7 @@
       </variableTemplate>
    </for>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="fullCodeSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="fullCodeSupport"
       variables="wdog_cs2_pres,wdog_timeout,wdog_window"
       linePadding="xxx"
       nonDefaultParams="2"
@@ -667,7 +659,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="secondsSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="secondsSupport"
       variables="wdog_timeoutPeriod,wdog_windowPeriod,wdog_cs2_pres"
       linePadding="xxx"
       params="timeout,window"
@@ -816,16 +808,9 @@
       \t}\n\n
    ]]></template>
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t}; // class $(_Structname)BasicInfo::Init
-      \t\n
-   ]]>
-   </template>
-
-   <template namespace="baseClass" >
-   <![CDATA[
-      }; // class $(_Structname)BasicInfo
       \t\n
    ]]>
    </template>

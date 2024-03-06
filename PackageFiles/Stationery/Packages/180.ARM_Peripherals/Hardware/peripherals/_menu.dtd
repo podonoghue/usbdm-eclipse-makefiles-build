@@ -13,11 +13,11 @@
 <!ENTITY % dialogue_items    "timeOption|intOption|floatOption|stringOption|binaryOption|choiceOption|bitmaskOption" >
 
 <!-- Simple items that don't recurse -->
-<!ENTITY % simple_items     "xi:include|printVar|
+<!ENTITY % simple_items     "xi:include|printVar|print|
                               deleteVariables|projectActionList|
                               title|constant|signals|variable|
                               rtcTimeOption|timeOption|intOption|floatOption|stringOption|binaryOption|choiceOption|bitmaskOption|irqOption|pinListOption|aliasOption|pinMapOption|
-                              clockSelectionOption|validate|equation|
+                              clockSelectionOption|validate|equation|signal|
                               %template_items;" >
                   
 <!ENTITY % general_items    "dynamicSignalMapping|dialogue|graphic|category|categoryOption|aliasCategoryOption|if|for|%simple_items;" >
@@ -62,15 +62,28 @@
    <!ATTLIST for keys                 CDATA        #REQUIRED>
    <!-- Values for each key separated by ':'', each iteration separated by ';' -->
    <!ATTLIST for values               CDATA        #IMPLIED>
-   <!-- Delimiter to use to separate keys / iteration values??? -->
+   <!-- Delimiter to use to separate keys / iteration values -->
    <!ATTLIST for delimiter            CDATA        #IMPLIED>
-   <!-- For simple iterated list. Either N or A,B -->
+   <!-- For simple iterated list (A) => [0...(A-1)] or (A,B) => [A...B] -->
    <!ATTLIST for dim                  CDATA        #IMPLIED>
+   <!-- Removes trailing seni-colon from value list if present -->
+   <!ATTLIST for stripSemicolon       (true)       #IMPLIED>
+   <!-- Name of symbol to use for iteration - available as $(<name>) -->
+   <!ATTLIST for iterationVar         CDATA       #IMPLIED>
 
 <!ELEMENT printVar EMPTY >
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST printVar condition     CDATA        #IMPLIED>
    <!--  Key identifying variable to print -->
    <!ATTLIST printVar  key                CDATA        #REQUIRED>
+   <!-- Whether to split the variable value on delimiter -->
    <!ATTLIST printVar  split              CDATA        #IMPLIED>
+
+<!ELEMENT print EMPTY >
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST print condition     CDATA        #IMPLIED>
+   <!--  Text to print -->
+   <!ATTLIST print  text               CDATA        #REQUIRED>
 
 <!ELEMENT break EMPTY >
    <!-- Condition evaluated during parsing that enables processing of this option -->
@@ -501,6 +514,8 @@
    <!ATTLIST stringOption enabledBy        CDATA        #IMPLIED>
    <!-- Log changes to associated variable -->
    <!ATTLIST stringOption logging          (true)       #IMPLIED>
+   <!-- Equation that controls the value of the variable -->
+   <!ATTLIST stringOption ref           CDATA        #IMPLIED> 
   
 <!ELEMENT numericListOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
@@ -654,6 +669,7 @@
    <!-- 
    Where to place generated code<br>
       info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
+      definitions - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
       usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
       all   - Explicitly available anywhere controlled by key substitution<br>
       forceInfo - forces Info namespace and clears key and discardRepeats
@@ -723,6 +739,8 @@
    <!ATTLIST choice enabledBy                 CDATA        #IMPLIED>
    <!-- Pin-map fragment associated with this choice -->
    <!ATTLIST choice pinMap                    CDATA        #IMPLIED>
+   <!-- Name of signal associated with this choice -->
+   <!ATTLIST choice signal                    CDATA        #IMPLIED>
 
 <!ELEMENT choiceExpansion EMPTY >
 
@@ -743,6 +761,8 @@
    <!ATTLIST choiceExpansion dim                  CDATA        #IMPLIED>
    <!--  Delimiter to separate multiple keys/values (default ';') -->
    <!ATTLIST choiceExpansion delimiter            CDATA        #IMPLIED>
+   <!-- Name of signal associated with this choiceExpansion -->
+   <!ATTLIST choiceExpansion signal               CDATA        #IMPLIED>
    
 <!ELEMENT binaryOption (choice?, choice?) >
    <!-- Visible name of option - also used for key if not provided -->
@@ -920,7 +940,7 @@
    <!-- List of pin mappings if option disabled#Expression to enable pin map -->
    <!ATTLIST pinMapOption disabledPinMap      CDATA        #IMPLIED>
    
-<!-- ____ constant ____ -->
+<!-- This is an 'variable' with a fixed value generated from an immediately evaluated expression -->
 <!ELEMENT constant EMPTY >
    <!-- Used as visible name in GUI (model) -->
    <!ATTLIST constant name         CDATA                          #IMPLIED>
@@ -947,7 +967,7 @@
 <!-- ____ template ____ -->
 <!ELEMENT template (#PCDATA)* >
    <!-- Where to place generated code -->
-   <!ATTLIST template where                     (all|usbdm|info|basicInfo|commonInfo) #IMPLIED >
+   <!ATTLIST template where                     (all|usbdm|definitions|commonInfo|basicInfo|info|static) #IMPLIED >
    <!-- 
    Where to place generated code<br>
       info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
@@ -975,7 +995,7 @@
 <!-- ____ variableTemplate ____ -->
 <!ELEMENT variableTemplate (#PCDATA)* >
    <!-- Where to place generated code -->
-   <!ATTLIST variableTemplate where                     (all|usbdm|info|basicInfo|commonInfo) #IMPLIED >
+   <!ATTLIST variableTemplate where                     (all|usbdm|definitions|commonInfo|basicInfo|info|static) #IMPLIED >
    <!-- 
    Where to place generated code<br>
       info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
@@ -1023,7 +1043,7 @@
 <!-- ____ clockCodeTemplate ____ -->
 <!ELEMENT clockCodeTemplate (#PCDATA)* >
    <!-- Where to place generated code -->
-   <!ATTLIST clockCodeTemplate where                     (all|usbdm|info|basicInfo|commonInfo)  #IMPLIED >
+   <!ATTLIST clockCodeTemplate where                     (all|usbdm|definitions|commonInfo|basicInfo|info|static)  #IMPLIED >
    <!-- 
    Where to place generated code<br>
       info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
@@ -1067,6 +1087,14 @@
 <!ELEMENT param EMPTY >
    <!ATTLIST param type       (long|string) #REQUIRED>
    <!ATTLIST param value      CDATA         #REQUIRED>
+   
+<!ELEMENT signal EMPTY >
+   <!-- Name of signal to create -->
+   <!ATTLIST signal name        CDATA     #REQUIRED>
+   <!-- Name of pin to add to signal mapping - may be created -->
+   <!ATTLIST signal pin         CDATA     #IMPLIED>
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST signal condition   CDATA     #IMPLIED>
 
 <!ELEMENT signals EMPTY >
    <!-- Visible name of signal -->

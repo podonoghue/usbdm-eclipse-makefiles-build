@@ -127,7 +127,7 @@
       value="8" min="0" max="15"
    />
 
-      <template namespace="usbdm"><![CDATA[
+      <template where="basicInfo"><![CDATA[
       #ifndef USBDM_CAN1_IS_DEFINED
          \t/**
          \t * FlexCAN Clock sources

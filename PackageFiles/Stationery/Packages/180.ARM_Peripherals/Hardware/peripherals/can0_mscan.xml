@@ -4,11 +4,11 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Scalable Controller Area Network" >
 
-   <constant key="irq_parameters"            type="String"  value='""'  />
-   <constant key="irq_dummy_parameters"      type="String"  value='""'  />
-   <constant key="irq_call"                  type="String"  value='""'  />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="irq_parameters"            type="String"  value='""'  />
+   <equation key="irq_dummy_parameters"      type="String"  value='""'  />
+   <equation key="irq_call"                  type="String"  value='""'  />
+   <equation key="generateDefault"           type="Boolean" value="false"         />
+   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -51,7 +51,7 @@
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Class)BasicInfo&quot;" />
+      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
    <!-- ************* CANCTL0 ****************** -->
 
@@ -631,7 +631,7 @@ flag is set"
    ]]>
    </template>
 
-   <template namespace="usbdm" >
+   <template where="basicInfo" >
    <![CDATA[
       class $(_Class)BasicInfo {
       \t
@@ -639,7 +639,7 @@ flag is set"
    ]]>
    </template>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
       variables="/$(_BASENAME)/irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
@@ -647,7 +647,7 @@ flag is set"
        \t\n
    ]]></variableTemplate>
 
-   <template namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
+   <template where="basicInfo" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
    <![CDATA[
       \t/**
       \t * Type definition for $(_Class) interrupt call back.
@@ -699,7 +699,7 @@ flag is set"
    ]]>
    </template>
 
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <template where="static" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t/** Callback for programmatically set handler */
       \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Class)Info::unhandledCallback;
@@ -707,7 +707,7 @@ flag is set"
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -728,97 +728,97 @@ flag is set"
 
 <!--   Member variables -->
 
-   <variableTemplate namespace="usbdm" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate where="basicInfo" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="can_canctl0_rxfrm,can_canctl0_cswai,can_canctl0_time,can_canctl0_wupe,can_canctl0_slprq,can_canctl0_initrq"
    ><![CDATA[
       \t   /// Control Register 0
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="can_canctl1_cane,can_canctl1_clksrc,can_canctl1_loopb,can_canctl1_listen,can_canctl1_borm,can_canctl1_wupm"
    ><![CDATA[
       \t   /// Control Register 1
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="can_canbtr0_sjw,can_canbtr0_brp"
    ><![CDATA[
       \t   /// Bus Timing Register 0
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="can_canbtr1_samp,can_canbtr1_tseg2,can_canbtr1_tseg1"
    ><![CDATA[
       \t   /// Bus Timing Register 1
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="can_canrflg_wupif,can_canrflg_cscif,can_canrflg_ovrif,can_canrflg_rxf"
    ><![CDATA[
       \t   /// Receiver Flag Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="can_canrier_wupie,can_canrier_cscie,can_canrier_rstate,can_canrier_tstate,can_canrier_ovrie,can_canrier_rxfie"
    ><![CDATA[
       \t   /// Receiver Interrupt Enable Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="can_cantflg_txe"
    ><![CDATA[
       \t   /// Transmitter Flag Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="can_cantier_txeie"
    ><![CDATA[
       \t   /// Transmitter Interrupt Enable Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="can_cantarq_abtrq"
    ><![CDATA[
       \t   /// Transmitter Message Abort Request Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="can_canidac_idam"
    ><![CDATA[
       \t   /// Identifier Acceptance Control Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="can_canmisc_bohold"
    ><![CDATA[
       \t   /// Miscellaneous Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="can_rdlr_rdlc"
    ><![CDATA[
       \t   /// Receive Data Length Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -900,7 +900,7 @@ flag is set"
 
 <!--   Constructors -->
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -918,7 +918,7 @@ flag is set"
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -969,7 +969,7 @@ flag is set"
             can_canmisc_bohold;
             can_rdlr_rdlc
             " >
-      <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -997,7 +997,7 @@ flag is set"
             can_canbtr1_tseg2;
             can_canbtr1_tseg1
             " >
-      <variableTemplate namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -1069,13 +1069,13 @@ flag is set"
       \t};\n\n
    ]]></variableTemplate>
 
-   <template namespace="usbdm" >
+   <template where="basicInfo" >
       <![CDATA[
       \t}; // $(_Class)BasicInfo::Init\n\n
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
       <![CDATA[
       }; // $(_Class)BasicInfo\n\n
    ]]>

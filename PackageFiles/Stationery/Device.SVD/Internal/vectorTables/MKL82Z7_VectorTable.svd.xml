@@ -6,25 +6,25 @@ Devices using this vector table:
    <name>MKL82Z7_VectorTable</name>
    <description>MKL82Z7 VectorTable</description>
    <interrupt>
-      <name>DMA0_CH0_DMA4</name>
+      <name>DMA0_Ch0_DMA4</name>
       <description>Enhanced direct memory access controller</description>
       <value>0</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_CH1_DMA5</name>
+      <name>DMA0_Ch1_DMA5</name>
       <description>Enhanced direct memory access controller</description>
       <value>1</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_CH2_DMA6</name>
+      <name>DMA0_Ch2_DMA6</name>
       <description>Enhanced direct memory access controller</description>
       <value>2</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_CH3_DMA7</name>
+      <name>DMA0_Ch3_DMA7</name>
       <description>Enhanced direct memory access controller</description>
       <value>3</value>
       <peripheral>DMA0</peripheral>
@@ -234,7 +234,7 @@ Devices using this vector table:
       <peripheral>PMC</peripheral>
    </interrupt>
    <interrupt>
-      <name>FTF</name>
+      <name>FTFA</name>
       <description>Flash Memory Interface</description>
       <value>42</value>
       <peripheral>FTFA</peripheral>
@@ -277,25 +277,25 @@ Devices using this vector table:
       <peripheral>RTC</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_CH4</name>
+      <name>DMA0_Ch4</name>
       <description>Interrupt Multiplexer</description>
       <value>56</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_CH5</name>
+      <name>DMA0_Ch5</name>
       <description>Interrupt Multiplexer</description>
       <value>57</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_CH6</name>
+      <name>DMA0_Ch6</name>
       <description>Interrupt Multiplexer</description>
       <value>58</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_CH7</name>
+      <name>DMA0_Ch7</name>
       <description>Interrupt Multiplexer</description>
       <value>59</value>
       <peripheral>DMA0</peripheral>

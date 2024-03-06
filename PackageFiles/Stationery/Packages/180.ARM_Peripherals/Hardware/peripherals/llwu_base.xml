@@ -4,50 +4,13 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <constant key="irq_parameters"            type="String"  value='""'  />
-   <constant key="irq_dummy_parameters"      type="String"  value='""'  />
-   <constant key="irq_call"                  type="String"  value='""'  />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="irq_parameters"            value=""  />
+   <equation key="irq_dummy_parameters"      value=""  />
+   <equation key="irq_call"                  value=""  />
+   <equation key="generateDefault"           value="false"         />
+   <equation key="configureInStartupDefault" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title description="------------------------------------------" />
-
-<!--
-    * General substitutions
-    *  $(_NAME)         => e.g FTM2 => FTM2
-    *  $(_name)         => e.g FTM2 => ftm2
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
-    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
-    *  $(_Class)        => e.g FTM2 => Ftm2
-    *  $(_Baseclass)    => e.g FTM0 => Ftm
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A
--->
-
-<!--
-    * Template substitutions
-    *
-    * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
-    * %variable[index]                Variable name /ADC0/adc_sc2_acfe
-    * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
-    * %description[index]             Description from controlVar e.g. Compare Function Enable
-    * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
-    * %tooltip[index]                 Tool-tip from controlVar e.g. Each bit disables the GPIO function
-    * %paramDescription[index]        Tool-tip from controlVar formatted as param description @param ...
-    * %params                         Formatted parameter list for function
-    * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
-    * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
-    * %paramType[index]               As for %paramType
-    * %paramName[index]               As for %paramName
-    * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicExpression             Symbolic variable value e.g. AdcCompare_Disabled
-    * %fieldAssignment;               Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %maskingExpression              Based on variable etc. Similar to (%register&%mask)
-    * %variable[index]                Variable name from condition
-    * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
-    * %register[index]                Register associated with variable e.g. adc->APCTL1
-    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
--->
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
@@ -55,28 +18,31 @@
 
    <!-- ******************************** ME ******************************** -->
 
+   <equation key="index" value="=0" />
+   <for keys="p" values="=/LLWU/llwu_device_list" condition="llwu_device_list" >
+      <signal name='="LLWU_M"+ToString(index)' pin="%(p)" condition='"%(p)"!=""' />
+      <equation key="index" value="=index+1"/>
+   </for>
+
    <choiceOption key="llwu_me_peripherals" condition="llwu_me_wume0_present"
       enabledBy="enablePeripheralSupport"
       hidden="true"
-      typeName="LlwuPeripheral"
-      description="LLWU peripheral wake-up source"
+      derived="true"
       valueFormat="%s"
+      typeName="LlwuPeripheral"
+      baseType="uint8_t"
+      description="LLWU peripheral wake-up source"
       toolTip="Peripheral used as wake-up source"
       enumText="$(/LLWU/InputModuleMapping:// No wake-up peripherals found)"
       >
       <choice name="No wake-up peripheral" value="0"          enum="None" />
-      <choice name="Wake-up peripheral 0"  value="1&lt;&lt;0" enum="0" />
-      <choice name="Wake-up peripheral 1"  value="1&lt;&lt;1" enum="1" />
-      <choice name="Wake-up peripheral 2"  value="1&lt;&lt;2" enum="2" />
-      <choice name="Wake-up peripheral 3"  value="1&lt;&lt;3" enum="3" />
-      <choice name="Wake-up peripheral 4"  value="1&lt;&lt;4" enum="4" />
-      <choice name="Wake-up peripheral 5"  value="1&lt;&lt;5" enum="5" />
-      <choice name="Wake-up peripheral 6"  value="1&lt;&lt;6" enum="6" />
-      <choice name="Wake-up peripheral 7"  value="1&lt;&lt;7" enum="7" />
+      <choiceExpansion name="Wake-up by %(p)" value="1U&lt;&lt;%(i)" enum='=Prettify("%(p)")' signal="LLWU_M%(i)"
+                       keys="p" values="=llwu_device_list" delimiter=";" condition='="%(p)"!=""'/>
    </choiceOption>
 
    <binaryOption key="llwu_me_wume" condition="llwu_me_wume0_present"
       hidden="true"
+      derived="true"
       typeName="LlwuPeripheralWakeup"
       valueFormat="%s"
       description="LLWU peripheral wake-up control"
@@ -86,18 +52,21 @@
    </binaryOption>
 
    <category name="Peripheral sources" description="Wakeups from peripherals">
-      <for keys="n" dim="8">
-         <binaryOption key="llwu_me_wume%(n)" condition="llwu_me_wume%(n)_present"
+
+      <equation key="index" value="=0" />
+      <for keys="p" values="=/LLWU/llwu_device_list" condition="llwu_device_list" >
+         <binaryOption key='="llwu_me_wume"+ToString(index)' condition='="%(p)"!=""'
+            derivedFrom="llwu_me_wume"
             enabledBy="enablePeripheralSupport"
             typeName="LlwuPeripheral"
-            valueFormat="%s"
-            description="LLWU peripheral wake-up control"
-            toolTip="Whether this peripheral can wake-up the processor">
-            <choice name="Wake-up disabled" value="false" enum="None" isDefault="true" />
-            <choice name="Wake-up enabled"  value="true"  enum="%(n)" />
+            description="Wake-up by %(p)"
+            signal='="LLWU_M"+ToString(index)' >
+            <choice name="Wake-up disabled" value="false"            enum="None"              isDefault="true" />
+            <choice name="Wake-up enabled"  value="=ToString(index)" enum='=Prettify("%(p)")' />
          </binaryOption>
-
+         <equation key="index" value="=index+1"/>
       </for>
+
    </category>
 
    <variableTemplate key="llwu_base_methods" codeGenCondition="enablePeripheralSupport"
@@ -160,8 +129,8 @@
       toolTip="This bit must be set to allow the device to be reset while in a low-leakage power mode.\n
          On devices where Reset is not a dedicated pin, the RESET pin must also be enabled\n
          in the explicit port mux control" >
-      <choice name="RESET pin not enabled as a LLWU mode exit source" enum="Disabled" value="0" />
-      <choice name="RESET pin enabled as a LLWU mode exit source"     enum="Enabled"  value="1" isDefault="true" />
+      <choice name="RESET not enabled as LLWU exit source" enum="Disabled" value="0" />
+      <choice name="RESET enabled as LLWU exit source"     enum="Enabled"  value="1" isDefault="true" />
    </binaryOption>
 
    <binaryOption key="llwu_rst_rstfilt" condition="llwu_rst_rstfilt_present"
@@ -184,7 +153,9 @@
       \t}\n
    ]]></variableTemplate>
 
-   <choiceOption key="llwu_pe"  hidden="true" condition="llwu_pe1_wupe0_present"
+   <choiceOption key="llwu_pe"  condition="llwu_pe1_wupe0_present"
+      hidden="true"
+      derived="true"
       enabledBy="enablePeripheralSupport"
       typeName="LlwuPinMode"
       description="Wake-up pin control"
@@ -201,18 +172,14 @@
 
       <!-- ******************************** PEx ******************************** -->
 
-      <for keys  ="r:p"
-           values=
-           "1:0;1:1;1:2;1:3;2:4;2:5;2:6;2:7;3:8;3:9;3:10;3:11;4:12;4:13;4:14;4:15;5:16;
-            5:17;5:18;5:19;6:20;6:21;6:22;6:23;7:24;7:25;7:26;7:27;8:28;8:29;8:30;8:31"
-           >
-         <choiceOption key="llwu_pe%(r)_wupe%(p)" condition="llwu_pe%(r)_wupe%(p)_present"
+      <for keys="pin" dim="32" >
+         <choiceOption key='="llwu_pe"+ToString((%(pin)/4)+1)+"_wupe"+ToString(%(pin))' condition='=SignalExists("LLWU_P%(pin)")'
             enabledBy="enablePeripheralSupport"
             typeName="LlwuPinMode"
-            description="Unused input %(p)"
-            valueFormat="(LLWU_PE%(r)_WUPE%(p)_MASK&amp;(%s))"
+            description='="Wake-up by "+OnlyMappablePinOfSignal("LLWU_P%(pin)")+" [LLWU_P%(pin)]"'
+            valueFormat='="(LLWU_PE"+ToString(1+(%(pin)/4))+"_WUPE"+ToString(%(pin))+"_MASK&amp;(%s))"'
             toolTip="Enables and configures the edge detection for the wake-up pin"
-            signal="LLWU_P%(p)" >
+            signal="LLWU_P%(pin)" >
             <choice name="Wake-up pin disabled"        value="LlwuPinMode_Disabled"    enum="Disabled"     isDefault="true" />
             <choice name="Wake-up on pin rising edge"  value="LlwuPinMode_RisingEdge"  enum="RisingEdge"    />
             <choice name="Wake-up on pin falling edge" value="LlwuPinMode_FallingEdge" enum="FallingEdge"   />
@@ -221,70 +188,73 @@
       </for>
 
    <!-- ******************************** FILTx ******************************** -->
-      <choiceOption key="llwu_filt_filte"  hidden="true" condition="llwu_filt1_filte_present"
+
+      <choiceOption key="pin_filter_numbers" condition="llwu_filt1_filte_present"
+         hidden="true"
+         derived="true"
+         valueFormat="%s"
+         description="Pin filter numbers"
+         toolTip="These are used as an index into the FILT table so \n
+                  do NOT correspond to filter names e.g. FILT1 = FILT[0] etc"
+         typeName="LlwuFilterNum"
+         baseType="uint8_t"
+         >
+         <choiceExpansion
+            name="Wake-up pin filter %(i)" value="=ToString(%(i)-1)" enum="%(i)"
+            condition='=Exists("llwu_filt%(i)_filte_present")'
+            keys="i" dim="1,8" />
+      </choiceOption>
+
+      <choiceOption key="pin_numbers"
+         valueFormat="%s"
+         hidden="true"
+         derived="true"
+         typeName="LlwuPin"
+         baseType="uint8_t"
+         description="Filter Pin Select"
+         toolTip="Selects 1 of the pins to be muxed into the filter"
+         enumText="
+         $(/LLWU/InputPinMapping:// No user pin mappings found)"
+      >
+         <choiceExpansion name='@SignalDescription("LLWU_P%(i)","^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
+                          value="%(i)"
+                          enum='=Prettify(OnlyMappablePinOfSignal("LLWU_P%(i)"))'
+                          signal="LLWU_P%(i)"
+                          condition='=SignalExists("LLWU_P%(i)")'
+                          keys="i" dim="32" />
+      </choiceOption>
+      
+      <title description="Filtered pins" />
+      <choiceOption key="llwu_filt_filte"  condition="llwu_filt1_filte_present"
+         hidden="true"
+         derived="true"
          enabledBy="enablePeripheralSupport"
          typeName="LlwuFilterPinMode"
-         description="Wake-up On External Pin with Digital Filter"
-         toolTip="Controls the digital filter options for the external pin detect">
+         description="Pin Filter Mode"
+         toolTip="Controls the digital filter options for the filtered external pin detect ">
          <choice name="Wake-up disabled"                  enum="Disabled"     value="0" isDefault="true" />
          <choice name="Wake-up on filtered rising edge"   enum="RisingEdge"   value="1" />
          <choice name="Wake-up on filtered falling edge"  enum="FallingEdge"  value="2" />
          <choice name="Wake-up on either filtered edge"   enum="EitherEdge"   value="3" />
       </choiceOption>
 
-      <for keys="n" values="1;2;3;4">
-         <choiceOption key="llwu_filt%(n)_filte"   condition="llwu_filt%(n)_filte_present" enabledBy="enablePeripheralSupport" derivedFrom="llwu_filt_filte"   />
-         <choiceOption key="llwu_filt%(n)_filtsel" condition="llwu_filt%(n)_filte_present" enabledBy="llwu_filt%(n)_filte != 0"
-            description="Filter %(n) Pin Select"
-            toolTip="Selects 1 of the external signals to be muxed into the filter" >
-            <choice name="" value="" enum="dummy" />
+      <for keys="n" dim="1,4" >
+         <choiceOption key="llwu_filt%(n)_filte"   condition="llwu_filt%(n)_filte_present"
+            enabledBy="enablePeripheralSupport"
+            description="Pin Filter %(n) Mode"
+            derivedFrom="llwu_filt_filte"   />
+
+         <choiceOption key="llwu_filt%(n)_filtsel" condition="llwu_filt%(n)_filtsel_present"
+            enabledBy="llwu_filt%(n)_filte != 0"
+            derivedFrom="pin_numbers"
+            description="Pin Filter %(n) Pin Select">
          </choiceOption>
       </for>
    </category>
 
-   <template condition="llwu_filt1_filte_present" namespace="usbdm" codeGenCondition="enablePeripheralSupport"
-   ><![CDATA[
-      \t/**
-      \t * Pin filter numbers
-      \t *
-      \t * @note These are used as an index into the FILT table so numbers do NOT correspond to filter names FILT[0] <=> FILT1 etc
-      \t */
-      \tenum LlwuFilterNum {\n
-   ]]></template>
-   <for keys="m:n" values="0:1;1:2;2:3;3:4">
-      <variableTemplate variables="llwu_filt%(n)_filte"   namespace="usbdm" codeGenCondition="enablePeripheralSupport"
-      ><![CDATA[
-         \t   LlwuFilterNum_%(n) = %(m),  //!<  Wake-up pin LLWU_P%(n)\n
-      ]]></variableTemplate>
-   </for>
-   <template condition="llwu_filt1_filte_present"  namespace="usbdm" codeGenCondition="enablePeripheralSupport"
-   ><![CDATA[
-      \t};\n\n
-   ]]></template>
-
-   <template condition="llwu_pe1_wupe0_present" namespace="usbdm" codeGenCondition="enablePeripheralSupport"
-   ><![CDATA[
-      \tenum LlwuPin : uint32_t {\n
-   ]]></template>
-   <for keys  ="r:p"
-        values=
-        "1:0;1:1;1:2;1:3;2:4;2:5;2:6;2:7;3:8;3:9;3:10;3:11;4:12;4:13;4:14;4:15;5:16;
-         5:17;5:18;5:19;6:20;6:21;6:22;6:23;7:24;7:25;7:26;7:27;8:28;8:29;8:30;8:31"
-        >
-      <variableTemplate variables="llwu_pe%(r)_wupe%(p)" namespace="usbdm" codeGenCondition="enablePeripheralSupport"
-      ><![CDATA[
-         \t   LlwuPin_%(p) = %(p),  //!<  Wake-up pin LLWU_P%(p)\n
-      ]]></variableTemplate>
-   </for>
-   <template condition="llwu_pe1_wupe0_present"  namespace="usbdm" codeGenCondition="enablePeripheralSupport"
-   ><![CDATA[
-      $(/LLWU/InputPinMapping:// No user pin mappings found)
-      \t};\n\n
-   ]]></template>
-
 <!--   ========== LLWU Init class =============================== -->
 
-   <template key="init_description" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Class)
@@ -329,84 +299,7 @@
       \t * $(_Class)::configure($(_name)Init)
       \t * @endcode
       \t */
-   ]]>
-   </template>
-
-   <template namespace="usbdm" >
-   <![CDATA[
-      class $(_Class)BasicInfo {
       \t
-      public:\n
-   ]]>
-   </template>
-
-   <template namespace="usbdm" codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t/**
-      \t * Type definition for $(_Class) interrupt call back.
-      \t */
-      \ttypedef void (*CallbackFunction)($(irq_parameters));
-      \t\n
-   ]]>
-   </template>
-
-   <template codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t/** Callback function for ISR */
-      \tstatic CallbackFunction sCallback;
-      \t
-      \t/**
-      \t * Callback to catch unhandled interrupt
-      \t */
-      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
-      \t   setAndCheckErrorCode(E_NO_HANDLER);
-      \t}
-      \t\n
-   ]]>
-   </template>
-
-   <template codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t/**
-      \t * Set interrupt callback function.
-      \t *
-      \t * @param[in]  llwuCallback Callback function to execute on interrupt
-      \t */
-      \tstatic void setCallback(CallbackFunction llwuCallback) {
-      \t   if (llwuCallback == nullptr) {
-      \t      llwuCallback = unhandledCallback;
-      \t   }
-      \t   usbdm_assert(
-      \t         (sCallback == unhandledCallback) || (sCallback == llwuCallback),
-      \t         "Handler already set");
-      \t   sCallback = llwuCallback;
-      \t}
-      \t
-      \t/**
-      \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
-      \t */
-      \tstatic void irqHandler() {
-      \t
-      \t   // Execute call-back
-      \t   sCallback($(irq_call));
-      \t   return;
-      \t}
-      \t\n
-   ]]>
-   </template>
-
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t
-      \t/** Callback for programmatically set handler */
-      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Class)Info::unhandledCallback;
-      \t\n
-   ]]>
-   </template>
-
-   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
-   <![CDATA[
-      $(init_description)
       \tclass Init {
       \t
       \tpublic:
@@ -425,14 +318,14 @@
 
 <!--   Member variables -->
 
-   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="irqHandlingMethod"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -440,16 +333,17 @@
       \t\n
    ]]></variableTemplate>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
+   <template where="basicInfo" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t   /// Array to assist with mapping Pin to register bit-mask
       \t   static constexpr uint8_t masks[] =
       \t      {LLWU_PE1_WUPE0_MASK, LLWU_PE1_WUPE1_MASK, LLWU_PE1_WUPE2_MASK, LLWU_PE1_WUPE3_MASK, };
       \t\n
    ]]></template>
-   <for keys="n:b" values="8:28;7:24;6:20;5:16;4:12;3:8;2:4;1:0;" >
-      <if condition="llwu_pe%(n)_wupe%(b)">
-         <template namespace="usbdm" codeGenCondition="enablePeripheralSupport"><![CDATA[
+
+   <for keys="n" values="8;7;6;5;4;3;2;1" >
+      <if condition='="llwu_pe%(n)_wupe"+ToString((%(n)-1)*4)+"_present"' >
+         <template where="basicInfo" codeGenCondition="enablePeripheralSupport" ><![CDATA[
             \t
             \t   /// Pin sources enable
             \t   uint8_t pe[%(n)]   = {0};\n
@@ -460,7 +354,7 @@
 
    <for keys="n" values="4;3;2;1" >
       <if condition="llwu_filt%(n)_filte">
-         <template namespace="usbdm" codeGenCondition="enablePeripheralSupport"><![CDATA[
+         <template where="basicInfo" codeGenCondition="enablePeripheralSupport"><![CDATA[
             \t
             \t   /// Filter configurations
             \t   uint8_t filt[%(n)] = {0};\n
@@ -469,7 +363,7 @@
       </if>
    </for>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="llwu_me_peripherals"
    ><![CDATA[
       \t
@@ -477,7 +371,7 @@
       \t   uint8_t %registerName      = 0;\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="llwu_rst_llrste"
    ><![CDATA[
       \t
@@ -487,7 +381,7 @@
 
 <!--   Constructors -->
 
-   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -505,7 +399,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -523,7 +417,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="llwu_me_peripherals"
    ><![CDATA[
       \t   /**
@@ -541,7 +435,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <template namespace="usbdm" condition="llwu_filt1_filte" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   <template where="basicInfo" condition="llwu_filt1_filte" codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t   /**
       \t    * Constructor for filtered pin source
       \t    *
@@ -565,7 +459,7 @@
       \t\n
    ]]></template>
 
-   <template namespace="usbdm" condition="llwu_pe1_wupe0" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t   /**
       \t    * Constructor for unfiltered pin source
       \t    *
@@ -578,15 +472,15 @@
       \t   template <typename... Types>
       \t   constexpr Init(LlwuPin llwuPin, LlwuPinMode llwuPinMode, Types... rest) : Init(rest...) {
       \t
+      \t      const uint8_t  mask  = masks[llwuPin&3];
       \t      const int      index = llwuPin>>2;
-      \t      const uint8_t  value = llwuPinMode & masks[llwuPin&3];
       \t
-      \t      pe[index] |= value;
+      \t      pe[index] = (pe[index]&~mask) | (llwuPinMode & mask);
       \t   }
       \t\n
    ]]></template>
 
-   <template namespace="usbdm" condition="llwu_rst_llrste" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   <template where="basicInfo" condition="llwu_rst_llrste" codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t   /**
       \t    * Constructor for Reset as wake-up source
       \t    *
@@ -606,13 +500,13 @@
 
 <!--   Default Initialisation value -->
 
-   <template key="DefaultInitValue" codeGenCondition="enablePeripheralSupport"
+   <template codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
       \t// LLWU default init value
       \tstatic constexpr LlwuInfo::Init DefaultInitValue {\n
    ]]></template>
    <for keys="n" dim="8" >
-      <variableTemplate key="DefaultInitValue" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;(llwu_me_wume%(n))"
          variables="llwu_me_wume%(n)"
          terminator=","
          separator=","
@@ -621,23 +515,27 @@
       ]]></variableTemplate>
    </for>
 
-   <for keys  ="r:p"
-        values=
-        "1:0;1:1;1:2;1:3;2:4;2:5;2:6;2:7;3:8;3:9;3:10;3:11;4:12;4:13;4:14;4:15;5:16;
-         5:17;5:18;5:19;6:20;6:21;6:22;6:23;7:24;7:25;7:26;7:27;8:28;8:29;8:30;8:31"
-        >
-      <variableTemplate key="DefaultInitValue" codeGenCondition="enablePeripheralSupport"
-         variables="llwu_pe%(r)_wupe%(p)"
+   <for keys="p" dim="32" >
+      <equation key="pin" value='="LlwuPin_"+Prettify(OnlyMappablePinOfSignal("LLWU_P%(p)"))' condition='=SignalExists("LLWU_P%(p)")' />
+      <equation key="var" value='="llwu_pe"+Prettify(ToString(1+(%(p)/4))+"_wupe%(p)")' />
+      <equation key="genCode" value='="enablePeripheralSupport&amp;&amp;("+var+"&gt;0)"' />
+      <!--
+      <printVar key="pin"/>
+      <printVar key="var"/>
+      <printVar key="genCode"/>
+       -->
+      <variableTemplate codeGenCondition="=genCode" condition='=SignalExists("LLWU_P%(p)")'
+         immediateVariables="pin"
+         variables='=var'
          terminator=","
          separator=","
          initExpressionOnSameLine="true"
       ><![CDATA[
-          \t   LlwuPin_%(p), %initExpression, \n
+          \t   $(pin), %initExpression, \n
       ]]></variableTemplate>
    </for>
-
    <for keys="n" values="1;2;3;4">
-      <variableTemplate key="DefaultInitValue" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;(llwu_filt%(n)_filte>0)"
          variables="llwu_filt%(n)_filtsel, llwu_filt%(n)_filte"
          terminator=","
          separator=","
@@ -647,7 +545,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate key="DefaultInitValue" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
       variables="llwu_rst_llrste, llwu_rst_rstfilt"
       terminator=","
       separator=","
@@ -655,14 +553,14 @@
       \t   %symbolicExpression0, %symbolicExpression1,  \n
    ]]></variableTemplate>
 
-   <template key="DefaultInitValue" codeGenCondition="enablePeripheralSupport"
+   <template codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
       \t};\n\n
    ]]></template>
 
 <!--   Configure methods -->
 
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t
       \t/**
       \t * Configure with default settings.
@@ -676,7 +574,7 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t
       \t/**
@@ -686,70 +584,68 @@
       \t *
       \t * @param init Class containing initialisation values
       \t */
-      \tstatic void configure(const typename Info::Init &init) {
+      \tstatic void configure(const Init &init) {
       \t
       \t   // Enable peripheral clock
       \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <template codeGenCondition="enablePeripheralSupport"
       condition="irqHandlingMethod" >
    <![CDATA[
-      \t   if constexpr (Info::irqHandlerInstalled) {
-      \t      Info::setCallback(init.callbackFunction);
-      \t      Info::enableNvicInterrupts(init.irqlevel);
-      \t   }
+      \t   setCallback(init.callbackFunction);
+      \t   enableNvicInterrupts(init.irqlevel);
       \t\n
    ]]></template>
-   <for keys="n:b" values="1:0;2:8;3:16;4:24" >
-      <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         condition="llwu_pf%(n)_wuf%(b)_present" >
+   <for keys="r" dim="1,4" >
+      <template codeGenCondition="enablePeripheralSupport"
+         condition='="llwu_pf%(r)_present"' >
       <![CDATA[
-         \t      // Clear pin flags
-         \t      llwu->PF%(n) = 0xFF;\n
+         \t   // Clear pin flags
+         \t   llwu->PF%(r) = 0xFF;\n
       ]]></template>
    </for>
-   <for keys="i:n:b" values="0:1:0;1:2:4;2:3:8;3:4:12;4:5:16;5:6:20;6:7:24;7:8:28;" >
-      <variableTemplate key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables="llwu_pe%(n)_wupe%(b)" >
+   <for keys="r" dim="8" >
+      <equation key="reg" value='="llwu->PE"+ToString(%(r)+1)' />
+      <template codeGenCondition="enablePeripheralSupport"
+         condition='="llwu_pe"+ToString(%(r)+1)+"_present"'
+         immediateVariables="reg" >
       <![CDATA[
-         \t      // Configure pin source
-         \t      %register  = init.pe[%(i)];\n
-      ]]></variableTemplate>
+         \t   // Configure pin sources
+         \t   $(reg)  = init.pe[%(r)];\n
+      ]]></template>
    </for>
-   <for keys="i:n" values="0:1;1:2;2:3;3:4" >
-      <variableTemplate key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables="llwu_filt%(n)_filte" >
+
+   <for keys="r" dim="8" >
+      <equation key="reg" value='="llwu->FILT"+ToString(%(r)+1)' />
+      <template codeGenCondition="enablePeripheralSupport"
+         condition='="llwu_filt"+ToString(%(r)+1)+"_filte_present"'
+         immediateVariables="reg" >
       <![CDATA[
-         \t      // Configure and clear filtered pin source
-         \t      %register = init.filt[%(i)];\n
-      ]]></variableTemplate>
+         \t   // Configure and clear filtered pin source
+         \t   $(reg) = init.filt[%(r)];\n
+      ]]></template>
    </for>
-   <variableTemplate key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
       variables="llwu_me_peripherals" >
    <![CDATA[
-      \t      // Configure peripheral sources
-      \t      %register    = init.%registerName;\n
+      \t   // Configure peripheral sources
+      \t   %register    = init.%registerName;\n
    ]]></variableTemplate>
-   <variableTemplate key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
       variables="llwu_rst_llrste" >
    <![CDATA[
-      \t      // Configure filtered reset pin source
-      \t      %register   = init.%registerName;\n
+      \t   // Configure filtered reset pin source
+      \t   %register   = init.%registerName;\n
    ]]></variableTemplate>
-   <template  key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template  codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t};\n\n
    ]]></template >
 
-   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
       <![CDATA[
       \t}; // $(_Class)BasicInfo::Init\n\n
-   ]]>
-   </template>
-
-   <template namespace="usbdm" >
-      <![CDATA[
-      }; // $(_Class)BasicInfo\n\n
    ]]>
    </template>
 

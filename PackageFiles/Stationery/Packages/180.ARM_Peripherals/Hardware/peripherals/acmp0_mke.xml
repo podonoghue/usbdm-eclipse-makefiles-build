@@ -4,11 +4,11 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Analogue comparator" >
 
-   <constant key="irq_parameters"            type="String"  value='""'        />
-   <constant key="irq_dummy_parameters"      type="String"  value='""'        />
-   <constant key="irq_call"                  type="String"  value='""'        />
-   <constant key="generateDefault"           type="Boolean" value="false"     />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"     />
+   <equation key="irq_parameters"            type="String"  value='""'        />
+   <equation key="irq_dummy_parameters"      type="String"  value='""'        />
+   <equation key="irq_call"                  type="String"  value='""'        />
+   <equation key="generateDefault"           type="Boolean" value="false"     />
+   <equation key="configureInStartupDefault" type="Boolean" value="false"     />
    <xi:include href="enablePeripheral.xml"  />
 
 <!-- ____ General substitutions ____
@@ -320,46 +320,10 @@
       ]]></variableTemplate>
    </for>
 
-   <!-- ____ class $(_Structname)BasicInfo ____________ -->
-
-   <template where="basicInfo" ><![CDATA[
-      class $(_Structname)BasicInfo {
-      \t
-      public:\n
-   ]]></template>
-
    <!-- ____ Interrupt handling _____________ -->
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="/$(_STRUCTNAME)/generateSharedIrqInfo"
-   ><![CDATA[
-       \t//! Common class based callback code has been generated for this class of peripheral
-       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
-       \t\n
-   ]]></variableTemplate>
-
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
-   <![CDATA[
-      \t/**
-      \t * Type for Analogue comparator call back function.
-      \t */
-      \ttypedef void (*CallbackFunction)($(irq_parameters));
-      \t
-      \t/**
-      \t * Callback to catch unhandled interrupt
-      \t */
-      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
-      \t   setAndCheckErrorCode(E_NO_HANDLER);
-      \t}
-      \t\n
-   ]]>
-   </template>
 
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
-      \t/** Callback function for Analogue comparator */
-      \tstatic CallbackFunction sCallback;
-      \t
       \t/**
       \t * Analogue comparator interrupt handler
       \t * Passes control to call-back function
@@ -369,37 +333,6 @@
       \t   // Execute call-back
       \t   sCallback($(irq_call));
       \t}
-      \t
-      \t/**
-      \t * Set Analogue comparator callback function.
-      \t *
-      \t * @param $(_basename)Callback Callback function to execute on interrupt
-      \t *                        Use nullptr to remove callback.
-      \t */
-      \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
-      \t   if ($(_basename)Callback == nullptr) {
-      \t      $(_basename)Callback = (CallbackFunction)unhandledCallback;
-      \t   }
-      \t   // Allow either no handler set yet or removing handler
-      \t   usbdm_assert(
-      \t         ((void*)sCallback == (void*)unhandledCallback) ||
-      \t         ((void*)$(_basename)Callback == (void*)unhandledCallback),
-      \t         "Handler already set");
-      \t   sCallback = $(_basename)Callback;
-      \t}
-      \t
-      \t\n
-   ]]>
-   </template>
-
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t
-      \t/**
-      \t * Callback function for Analogue comparator
-      \t */
-      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = (CallbackFunction)$(_Class)Info::unhandledCallback;
-      \t
       \t\n
    ]]>
    </template>
@@ -673,13 +606,6 @@
    <template where="basicInfo" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t}; // class $(_Structname)BasicInfo::Init
-      \t\n
-   ]]>
-   </template>
-
-   <template where="basicInfo" >
-   <![CDATA[
-      }; // class $(_Structname)BasicInfo
       \t\n
    ]]>
    </template>

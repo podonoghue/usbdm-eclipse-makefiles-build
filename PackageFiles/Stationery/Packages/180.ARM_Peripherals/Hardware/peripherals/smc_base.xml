@@ -4,47 +4,13 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <constant key="irq_parameters"            type="String"  value='""'  />
-   <constant key="irq_dummy_parameters"      type="String"  value='""'  />
-   <constant key="irq_call"                  type="String"  value='""'  />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="irq_parameters"            type="String"  value='""'  />
+   <equation key="irq_dummy_parameters"      type="String"  value='""'  />
+   <equation key="irq_call"                  type="String"  value='""'  />
+   <equation key="generateDefault"           type="Boolean" value="false"         />
+   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
-
-<!--
-    * General substitutions
-    *  $(_NAME)         => e.g FTM2 => FTM2
-    *  $(_name)         => e.g FTM2 => ftm2
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
-    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
-    *  $(_Class)        => e.g FTM2 => Ftm2
-    *  $(_Baseclass)    => e.g FTM0 => Ftm
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A
--->
-
-<!--
-    * Template substitutions
-    *
-    * <li>%paramExpression            Parameters ORed together e.g. adcPretrigger|adcRefSel
-    * <li>%valueExpression            Numeric variable value e.g. 0x3
-    * <li>%symbolicExpression[index]  Symbolic formatted value e.g. AdcCompare_Disabled
-    * <li>%variable[index]            Variable name /ADC0/adc_sc2_acfe
-    * <li>%macro[index](value)        C register macro e.g. ADC_SC2_ACFGT(value)
-    * <li>%description[index]         Description from controlVar e.g. Compare Function Enable
-    * <li>%shortDescription[index]    Short description from controlVar e.g. Compare Function Enable
-    * <li>%tooltip[index]             Tool-tip from controlVar e.g. Each bit disables the GPIO function
-    * <li>%params                     Formatted parameter list for function
-    * <li>%paramDescription[index]    Tool-tip from controlVar formatted as param description @param ...
-    * <li>%paramType[index]           Based on typeName e.g. AdcCompare (or uint32_t)
-    * <li>%paramName[index]           Based on typeName with lower-case first letter adcCompare
-    * <li>%fieldAssignment            Expression of form '%register <= (%register & ~%mask)|%paramExpression
-    * <li>%maskingExpression          Based on variable etc. Similar to (%register&%mask)
-    * <li>%mask[index]                From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
-    * <li>%register[index]            Register associated with variable e.g. adc->APCTL1
-    * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
-    * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
--->
 
    <!-- ************* PMPROT ****************** -->
 
@@ -403,8 +369,8 @@
 
          smc_stopctrl_pstopo  : true  : true  : false : enableGettersAndSetters : PartialStopOption;
          smc_stopctrl_porpo   : true  : true  : false : enableGettersAndSetters : PowerOptionPOR;
-         smc_stopctrl_llsm    : true  : true  : false : enableGettersAndSetters : Mode ControlLLS;
-         smc_stopctrl_vllsm   : true  : true  : false : enableGettersAndSetters : Mode ControlVLLS;
+         smc_stopctrl_llsm    : true  : true  : false : enableGettersAndSetters : ModeControlLLS;
+         smc_stopctrl_vllsm   : true  : true  : false : enableGettersAndSetters : ModeControlVLLS;
 
          smc_pmstat_pmstat    : true  : false : false : true                    : Status" >
       <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
@@ -448,7 +414,7 @@
     <!-- ************** General ************** -->
 
    <if condition="smc_pmprot_ahsrun" >
-      <template key="enterRunMode" namespace="all"
+      <template key="enterRunMode" where="all"
          codeGenCondition="/MCG/enablePeripheralSupport&amp;&amp;/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
          \t/**
          \t * Enter Run Mode.
@@ -542,7 +508,7 @@
          \t}\n\n
       ]]></template>
    <else />
-      <template key="enterRunMode" namespace="all"
+      <template key="enterRunMode" where="all"
          codeGenCondition="/MCG/enablePeripheralSupport&amp;&amp;/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
          \t/**
          \t * Enter Run Mode.
@@ -686,7 +652,7 @@
       \t}\n\n
    ]]></template>
 
-   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
    \tconsteval uint32_t make16(uint8_t pmctrl, uint8_t stopctrl=0, uint8_t bias=0) {
    \t   return pmctrl+(stopctrl<<8)+(bias<<16);
    \t}
@@ -696,38 +662,38 @@
    \t   SmcPowerMode_RUN           = make16(SmcRunMode_Normal),                                                            /* (VLPR,HSRUN)->RUN 3,12   Run        SMC_PMCTRL_RUNM(0)                                     */ ///<  Run mode
    \t   SmcPowerMode_VLPR          = make16(SmcRunMode_VeryLowPower),                                                      /* RUN->VLPR         3      Run        SMC_PMCTRL_RUNM(2)                                     */ ///<  Very low power run mode     \n
    ]]></template>
-   <variableTemplate namespace="usbdm" variables="smc_pmprot_ahsrun" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <variableTemplate where="usbdm" variables="smc_pmprot_ahsrun" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
    \t   SmcPowerMode_HSRUN         = make16(SmcRunMode_HighSpeed),                                                         /* RUN->HSRUN        12     Run        SMC_PMCTRL_RUNM(3)                                     */ ///<  High-speed run mode         \n
    ]]></variableTemplate>
-   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
    \t
    \t   SmcPowerMode_WAIT          = make16(SmcRunMode_Normal,0,1),                                                        /* RUN->WAIT         1      Sleep      wfi+SMC_PMCTRL_RUNM(0)                                 */ ///<  Wait mode
    \t   SmcPowerMode_VLPW          = make16(SmcRunMode_VeryLowPower,0,1),                                                  /* VLPR->VLPW        4      Sleep      wfi+SMC_PMCTRL_RUNM(2)                                 */ ///<  Very low power wait mode
    \t
    \t   SmcPowerMode_NormalSTOP    = make16(SmcRunMode_Normal|SmcStopMode_NormalStop,0,2),                                 /* RUN->STOP         2a     Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(0) RUN<->STOP           */ ///<  Stop mode                   \n
    ]]></template>
-   <template namespace="usbdm" condition="smc_stopctrl_pstopo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="usbdm" condition="smc_stopctrl_pstopo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
    \t   SmcPowerMode_PartialSTOP1  = make16(SmcRunMode_Normal|SmcStopMode_NormalStop,SmcPartialStopMode_Partial1),         /* RUN->STOP         2b     Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(0) RUN<->STOP           */ ///<  Stop mode
    \t   SmcPowerMode_PartialSTOP2  = make16(SmcRunMode_Normal|SmcStopMode_NormalStop,SmcPartialStopMode_Partial2),         /* RUN->STOP         2c     Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(0) RUN<->STOP           */ ///<  Stop mode                   \n
    ]]></template>
-   <template namespace="usbdm" condition="smc_pmprot_avlp_present" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="usbdm" condition="smc_pmprot_avlp_present" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
    \t
    \t   SmcPowerMode_VLPS          = make16(SmcRunMode_Normal|SmcStopMode_VeryLowPowerStop),                               /* (RUN,VLPR)->VLPS  7,6    Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(2)                      */ ///<  Very low power stop mode
    \t   /*                               or if SmcRunMode_VeryLowPower,                                                       VLPR->VLPS        6      Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(0/2)                    */ ///<  Very low power stop mode    \n
    ]]></template>
-   <template namespace="usbdm" condition="smc_stopctrl_llsm_present" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="usbdm" condition="smc_stopctrl_llsm_present" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
    \t
    \t   SmcPowerMode_LLS2          = make16(SmcRunMode_Normal|SmcStopMode_LowLeakageStop,SmcLowLeakageStopMode_LLS2),      /* (RUN,VLPR)->LLS   10,11a Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(3)+SMC_STOPCTRL_LLSM(2) */ ///<  Low leakage stop mode 2
    \t   SmcPowerMode_LLS3          = make16(SmcRunMode_Normal|SmcStopMode_LowLeakageStop,SmcLowLeakageStopMode_LLS3),      /* (RUN,VLPR)->LLS   10,11b Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(3)+SMC_STOPCTRL_LLSM(3) */ ///<  Low leakage stop mode 3     \n
    ]]></template>
-   <template namespace="usbdm" condition="smc_stopctrl_vllsm_present" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="usbdm" condition="smc_stopctrl_vllsm_present" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
    \t
    \t   SmcPowerMode_VLLS0         = make16(SmcRunMode_Normal|SmcStopMode_VeryLowLeakageStop,SmcLowLeakageStopMode_VLLS0), /* (RUN,VLPR)->VLLS0 8,9a   Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(4)+SMC_STOPCTRL_LLSM(0) */ ///<  Very low leakage stop mode 0
    \t   SmcPowerMode_VLLS1         = make16(SmcRunMode_Normal|SmcStopMode_VeryLowLeakageStop,SmcLowLeakageStopMode_VLLS1), /* (RUN,VLPR)->VLLS1 8,9b   Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(4)+SMC_STOPCTRL_LLSM(1) */ ///<  Very low leakage stop mode 1
    \t   SmcPowerMode_VLLS2         = make16(SmcRunMode_Normal|SmcStopMode_VeryLowLeakageStop,SmcLowLeakageStopMode_VLLS2), /* (RUN,VLPR)->VLLS2 8,9c   Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(4)+SMC_STOPCTRL_LLSM(2) */ ///<  Very low leakage stop mode 2
    \t   SmcPowerMode_VLLS3         = make16(SmcRunMode_Normal|SmcStopMode_VeryLowLeakageStop,SmcLowLeakageStopMode_VLLS3), /* (RUN,VLPR)->VLLS3 8,9d   Deep Sleep wfi+sleepDeep+SMC_PMCTRL_STOPM(4)+SMC_STOPCTRL_LLSM(3) */ ///<  Very low leakage stop mode 3 \n
    ]]></template>
-   <template namespace="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="usbdm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
    \t};\n\n
    ]]></template>
 
@@ -906,7 +872,7 @@
 
 <!--   Default Initialisation value -->
 
-   <variableTemplate key="/$(_BASENAME)/DefaultInitValue" namespace="all" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate key="/$(_BASENAME)/DefaultInitValue" where="all" codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
       variables="

@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2024/01
+ * @date     2024/02
  *
  */
 
@@ -42,23 +42,23 @@ typedef enum {
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
 /* ----------------------   MKE18F16 VectorTable                     ---------------------- */
-  DMA0_IRQn                     =   0,   /**<  16 Enhanced direct memory access controller                                         */
-  DMA1_IRQn                     =   1,   /**<  17 Enhanced direct memory access controller                                         */
-  DMA2_IRQn                     =   2,   /**<  18 Enhanced direct memory access controller                                         */
-  DMA3_IRQn                     =   3,   /**<  19 Enhanced direct memory access controller                                         */
-  DMA4_IRQn                     =   4,   /**<  20 Enhanced direct memory access controller                                         */
-  DMA5_IRQn                     =   5,   /**<  21 Enhanced direct memory access controller                                         */
-  DMA6_IRQn                     =   6,   /**<  22 Enhanced direct memory access controller                                         */
-  DMA7_IRQn                     =   7,   /**<  23 Enhanced direct memory access controller                                         */
-  DMA8_IRQn                     =   8,   /**<  24 Enhanced direct memory access controller                                         */
-  DMA9_IRQn                     =   9,   /**<  25 Enhanced direct memory access controller                                         */
-  DMA10_IRQn                    =  10,   /**<  26 Enhanced direct memory access controller                                         */
-  DMA11_IRQn                    =  11,   /**<  27 Enhanced direct memory access controller                                         */
-  DMA12_IRQn                    =  12,   /**<  28 Enhanced direct memory access controller                                         */
-  DMA13_IRQn                    =  13,   /**<  29 Enhanced direct memory access controller                                         */
-  DMA14_IRQn                    =  14,   /**<  30 Enhanced direct memory access controller                                         */
-  DMA15_IRQn                    =  15,   /**<  31 Enhanced direct memory access controller                                         */
-  DMA_Error_IRQn                =  16,   /**<  32 Enhanced direct memory access controller                                         */
+  DMA0_Ch0_IRQn                 =   0,   /**<  16 Enhanced direct memory access controller                                         */
+  DMA0_Ch1_IRQn                 =   1,   /**<  17 Enhanced direct memory access controller                                         */
+  DMA0_Ch2_IRQn                 =   2,   /**<  18 Enhanced direct memory access controller                                         */
+  DMA0_Ch3_IRQn                 =   3,   /**<  19 Enhanced direct memory access controller                                         */
+  DMA0_Ch4_IRQn                 =   4,   /**<  20 Enhanced direct memory access controller                                         */
+  DMA0_Ch5_IRQn                 =   5,   /**<  21 Enhanced direct memory access controller                                         */
+  DMA0_Ch6_IRQn                 =   6,   /**<  22 Enhanced direct memory access controller                                         */
+  DMA0_Ch7_IRQn                 =   7,   /**<  23 Enhanced direct memory access controller                                         */
+  DMA0_Ch8_IRQn                 =   8,   /**<  24 Enhanced direct memory access controller                                         */
+  DMA0_Ch9_IRQn                 =   9,   /**<  25 Enhanced direct memory access controller                                         */
+  DMA0_Ch10_IRQn                =  10,   /**<  26 Enhanced direct memory access controller                                         */
+  DMA0_Ch11_IRQn                =  11,   /**<  27 Enhanced direct memory access controller                                         */
+  DMA0_Ch12_IRQn                =  12,   /**<  28 Enhanced direct memory access controller                                         */
+  DMA0_Ch13_IRQn                =  13,   /**<  29 Enhanced direct memory access controller                                         */
+  DMA0_Ch14_IRQn                =  14,   /**<  30 Enhanced direct memory access controller                                         */
+  DMA0_Ch15_IRQn                =  15,   /**<  31 Enhanced direct memory access controller                                         */
+  DMA0_Error_IRQn               =  16,   /**<  32 Enhanced direct memory access controller                                         */
   MCM_IRQn                      =  17,   /**<  33 Core Platform Miscellaneous Control Module                                       */
   FTFE_IRQn                     =  18,   /**<  34 Flash Memory Interface                                                           */
   Read_Collision_IRQn           =  19,   /**<  35 Flash Memory Interface                                                           */
@@ -123,23 +123,23 @@ extern void SVC_Handler(void);                       /**< System Service Call vi
 extern void DebugMon_Handler(void);                  /**< Debug Monitor                                                                    */
 extern void PendSV_Handler(void);                    /**< Pendable request for system service                                              */
 extern void SysTick_Handler(void);                   /**< System Tick Timer                                                                */
-extern void DMA0_IRQHandler(void);                   /**< Enhanced direct memory access controller                                         */
-extern void DMA1_IRQHandler(void);                   /**< Enhanced direct memory access controller                                         */
-extern void DMA2_IRQHandler(void);                   /**< Enhanced direct memory access controller                                         */
-extern void DMA3_IRQHandler(void);                   /**< Enhanced direct memory access controller                                         */
-extern void DMA4_IRQHandler(void);                   /**< Enhanced direct memory access controller                                         */
-extern void DMA5_IRQHandler(void);                   /**< Enhanced direct memory access controller                                         */
-extern void DMA6_IRQHandler(void);                   /**< Enhanced direct memory access controller                                         */
-extern void DMA7_IRQHandler(void);                   /**< Enhanced direct memory access controller                                         */
-extern void DMA8_IRQHandler(void);                   /**< Enhanced direct memory access controller                                         */
-extern void DMA9_IRQHandler(void);                   /**< Enhanced direct memory access controller                                         */
-extern void DMA10_IRQHandler(void);                  /**< Enhanced direct memory access controller                                         */
-extern void DMA11_IRQHandler(void);                  /**< Enhanced direct memory access controller                                         */
-extern void DMA12_IRQHandler(void);                  /**< Enhanced direct memory access controller                                         */
-extern void DMA13_IRQHandler(void);                  /**< Enhanced direct memory access controller                                         */
-extern void DMA14_IRQHandler(void);                  /**< Enhanced direct memory access controller                                         */
-extern void DMA15_IRQHandler(void);                  /**< Enhanced direct memory access controller                                         */
-extern void DMA_Error_IRQHandler(void);              /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Ch0_IRQHandler(void);               /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Ch1_IRQHandler(void);               /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Ch2_IRQHandler(void);               /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Ch3_IRQHandler(void);               /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Ch4_IRQHandler(void);               /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Ch5_IRQHandler(void);               /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Ch6_IRQHandler(void);               /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Ch7_IRQHandler(void);               /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Ch8_IRQHandler(void);               /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Ch9_IRQHandler(void);               /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Ch10_IRQHandler(void);              /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Ch11_IRQHandler(void);              /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Ch12_IRQHandler(void);              /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Ch13_IRQHandler(void);              /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Ch14_IRQHandler(void);              /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Ch15_IRQHandler(void);              /**< Enhanced direct memory access controller                                         */
+extern void DMA0_Error_IRQHandler(void);             /**< Enhanced direct memory access controller                                         */
 extern void MCM_IRQHandler(void);                    /**< Core Platform Miscellaneous Control Module                                       */
 extern void FTFE_IRQHandler(void);                   /**< Flash Memory Interface                                                           */
 extern void Read_Collision_IRQHandler(void);         /**< Flash Memory Interface                                                           */
@@ -2982,7 +2982,7 @@ typedef struct DMA_Type {
 #define DMA0_BasePtr                   0x40008000UL //!< Peripheral base address
 #define DMA0                           ((DMA_Type *) DMA0_BasePtr) //!< Freescale base pointer
 #define DMA0_BASE_PTR                  (DMA0) //!< Freescale style base pointer
-#define DMA0_IRQS { DMA0_IRQn, DMA1_IRQn, DMA2_IRQn, DMA3_IRQn, DMA4_IRQn, DMA5_IRQn, DMA6_IRQn, DMA7_IRQn, DMA8_IRQn, DMA9_IRQn, DMA10_IRQn, DMA11_IRQn, DMA12_IRQn, DMA13_IRQn, DMA14_IRQn, DMA15_IRQn, DMA_Error_IRQn,  }
+#define DMA0_IRQS { DMA0_Ch0_IRQn, DMA0_Ch1_IRQn, DMA0_Ch2_IRQn, DMA0_Ch3_IRQn, DMA0_Ch4_IRQn, DMA0_Ch5_IRQn, DMA0_Ch6_IRQn, DMA0_Ch7_IRQn, DMA0_Ch8_IRQn, DMA0_Ch9_IRQn, DMA0_Ch10_IRQn, DMA0_Ch11_IRQn, DMA0_Ch12_IRQn, DMA0_Ch13_IRQn, DMA0_Ch14_IRQn, DMA0_Ch15_IRQn, DMA0_Error_IRQn,  }
 
 
 /** @} */ /* End group DMA0_Peripheral_access_layer_GROUP */

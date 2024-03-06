@@ -69,9 +69,6 @@ $(/I2C/protected:// /I2C/protected not found)
    uint8_t                     addressedDevice;     //!< Address of device being communicated with
    ErrorCode                   errorCode;           //!< Error code from last transaction
 
-   /** I2C baud rate divisor table */
-   static const uint16_t I2C_DIVISORS[4*16];
-
    /**
     * Construct I2C interface
     *
@@ -88,18 +85,6 @@ $(/I2C/protected:// /I2C/protected not found)
     * Destructor
     */
    ~I2c() {}
-
-   /**
-    * Calculate value for baud rate register of I2C
-    *
-    * This is calculated from processor bus frequency and given bps
-    *
-    * @param[in]  clockFrequency Frequency of I2C input clock
-    * @param[in]  speed          Interface speed in bits-per-second
-    *
-    * @return I2C_F value representing speed
-    */
-   static uint8_t calculateBPSValue(uint32_t clockFrequency, uint32_t speed);
 
    /**
     * Start Rx/Tx sequence by sending address byte
@@ -507,7 +492,19 @@ public:
    virtual osStatus endTransaction() override {
       return mutex().release();
    }
-#endif 
+#endif
+
+   /**
+    * Class-based interrupt handler
+    * Polls device
+    */
+    void _irqHandler() {
+      poll();
+      if (state == I2C_State::i2c_idle) {
+        // Execute call-back
+        Info::sCallback(errorCode);
+      }
+   }
 
 public:
    $(/I2C/classInfo: // No class Info found)
@@ -526,7 +523,7 @@ public:
 
       thisPtr = this;
 
-      configure(init);
+      Info::configure(init);
 
       busHangReset();
    }
@@ -535,6 +532,14 @@ public:
     * Destructor
     */
    virtual ~I2cBase_T() {}
+
+   /**
+    * IRQ handler
+    */
+   static void irqHandler() {
+      thisPtr->_irqHandler();
+   }
+
 
 $(/I2C/static:// /I2C/static not found)
 $(/I2C/InitMethod: // /I2C/InitMethod not found)

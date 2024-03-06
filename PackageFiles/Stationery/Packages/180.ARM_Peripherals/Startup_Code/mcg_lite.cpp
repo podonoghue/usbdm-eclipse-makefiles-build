@@ -53,7 +53,8 @@ McgClockMode Mcg::currentClockMode = McgClockMode_LIRC_2MHz;
 
 
 // /MCG/staticDefinitions
-$(/MCG/staticDefinitions: // No static declarations found) 
+$(/MCG/staticDefinitions: // /MCG/staticDefinitions not found) 
+
 #if $(/MCG/enablePeripheralSupport:false) // /MCG/enablePeripheralSupport
 
 /**
@@ -98,7 +99,8 @@ const char *Mcg::getClockModeName(McgClockMode clockMode) {
  *
  * @param[in]  clockInfo Clock mode to transition to
  *
- * @return E_NO_ERROR on success
+ * @return E_NO_ERROR          on success
+ * @return E_CLOCK_INIT_FAILED on failure
  */
 ErrorCode Mcg::clockTransition(const ClockInfo &clockInfo) {
 
@@ -243,8 +245,8 @@ void Mcg::SystemCoreClockUpdate(void) {
 //   ::SystemBusClock  = SystemBusClock;
 //   ::SystemCoreClock = SystemCoreClock;
 }
-#endif
-
+#endif // /MCG/enablePeripheralSupport
+ 
 /**
  * Initialise MCG as part of startup sequence
  */

@@ -4,11 +4,11 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <constant key="irq_parameters"            type="String"  value='""'  />
-   <constant key="irq_dummy_parameters"      type="String"  value='""'  />
-   <constant key="irq_call"                  type="String"  value='""'  />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="irq_parameters"            type="String"  value='""'  />
+   <equation key="irq_dummy_parameters"      type="String"  value='""'  />
+   <equation key="irq_call"                  type="String"  value='""'  />
+   <equation key="generateDefault"           type="Boolean" value="false"         />
+   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -356,7 +356,7 @@
          \t}; // FlashBank%(n)Init\n\n
       ]]></template>
 
-      <variableTemplate key="/FMC/DefaultFlashInitValue" namespace="all"
+      <variableTemplate key="/FMC/DefaultFlashInitValue" where="all"
          variables="fmc_pfb%(n)cr_flash_speculation;fmc_pfb%(n)cr_flash_cache,fmc_pfb%(n)cr_b%(n)sebe"
          terminator=","
          separator=","

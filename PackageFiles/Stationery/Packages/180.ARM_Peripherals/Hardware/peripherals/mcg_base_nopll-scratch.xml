@@ -481,14 +481,14 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
       \tstruct ClockInfo {\n\n
    ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="/SIM/sim_clkdiv_outdiv3[]||/SIM/sim_clkdiv_outdiv2[]||/SIM/sim_clkdiv_outdiv1[]"
    ><![CDATA[
       \t   /// SIM CLKDIV1 - System Clock Divider Register 1
       \t   const uint32_t clkdiv1;\n\n ]]>
    </template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="(/SIM/sim_sopt2_pllfllsel[])||(/SIM/sim_sopt2_tpmsrc[])"
    ><![CDATA[
       \t   /// SIM SOPT2 - Clock selectors for various peripherals
@@ -496,26 +496,26 @@ Dependent on device and clock Trim. [Nominally 37.5 kHz]"
    </template>
 
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="icsClockMode[]"
    ><![CDATA[
       \t   /// Clock Mode
       \t   const McgClockMode clockMode;\n\n
    ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="ics_c1_rdiv[]||ics_c1_irclken[]||ics_c1_irefsten[]"
    ><![CDATA[
       \t   /// Control Register 1 - RDIV, IRCLKEN, IREFSTEN, (-CLKS, -IREFS)
       \t   const uint8_t c1; \n ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="ics_c2_bdiv[]"
    ><![CDATA[
       \t   /// Control Register 2 - BDIV, (-LP)
       \t   const uint8_t c2;\n ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="ics_c4_lolie0[]||ics_c4_cme[]"
    ><![CDATA[
       \t   /// Control Register 4 - DMX32, DRST_DRS, (-FCTRIM, -SCFTRIM)

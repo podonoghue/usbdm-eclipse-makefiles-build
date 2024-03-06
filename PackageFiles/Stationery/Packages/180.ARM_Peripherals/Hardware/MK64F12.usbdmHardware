@@ -22,8 +22,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForAdc" />
          <irq num="ADC0_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="ADC0;ADC1"        key="/ADC0/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/ADC0/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="ADC0_IRQn"        key="/ADC0/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/ADC0/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="ADC0_IRQn"        key="/ADC0/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/ADC0/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/ADC0/_present" />
          <param type="BooleanVariable"        name="adc_cfg1_adiclk_present"        value="true"             key="/ADC0/adc_cfg1_adiclk_present" />
@@ -103,8 +103,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForAdc" />
          <irq num="ADC1_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="ADC0;ADC1"        key="/ADC1/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/ADC1/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="ADC1_IRQn"        key="/ADC1/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/ADC1/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="ADC1_IRQn"        key="/ADC1/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/ADC1/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/ADC1/_present" />
          <param type="BooleanVariable"        name="adc_cfg1_adiclk_present"        value="true"             key="/ADC1/adc_cfg1_adiclk_present" />
@@ -189,8 +189,8 @@
          <irq num="CAN0_RxWarning_IRQn" />
          <irq num="CAN0_WakeUp_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="CAN0"             key="/CAN0/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="6"                key="/CAN0/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="CAN0_MessageBuffer_IRQn;CAN0_BusOff_IRQn;CAN0_Error_IRQn;CAN0_TxWarning_IRQn;CAN0_RxWarning_IRQn;CAN0_WakeUp_IRQn" key="/CAN0/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="6"                key="/CAN0/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="CAN0_MessageBuffer_IRQn;CAN0_BusOff_IRQn;CAN0_Error_IRQn;CAN0_TxWarning_IRQn;CAN0_RxWarning_IRQn;CAN0_WakeUp_IRQn" key="/CAN0/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/CAN0/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/CAN0/_present" />
          <param type="BooleanVariable"        name="can_crcr_mbcrc_present"         value="true"             key="/CAN0/can_crcr_mbcrc_present" />
@@ -357,8 +357,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
          <irq num="CMP0_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="CMP0;CMP1;CMP2"   key="/CMP0/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/CMP0/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="CMP0_IRQn"        key="/CMP0/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/CMP0/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="CMP0_IRQn"        key="/CMP0/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/CMP0/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/CMP0/_present" />
          <param type="BooleanVariable"        name="cmp_cr0_filter_cnt_present"     value="true"             key="/CMP0/cmp_cr0_filter_cnt_present" />
@@ -395,8 +395,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
          <irq num="CMP1_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="CMP0;CMP1;CMP2"   key="/CMP1/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/CMP1/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="CMP1_IRQn"        key="/CMP1/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/CMP1/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="CMP1_IRQn"        key="/CMP1/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/CMP1/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/CMP1/_present" />
          <param type="BooleanVariable"        name="cmp_cr0_filter_cnt_present"     value="true"             key="/CMP1/cmp_cr0_filter_cnt_present" />
@@ -433,8 +433,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
          <irq num="CMP2_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="CMP0;CMP1;CMP2"   key="/CMP2/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/CMP2/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="CMP2_IRQn"        key="/CMP2/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/CMP2/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="CMP2_IRQn"        key="/CMP2/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/CMP2/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/CMP2/_present" />
          <param type="BooleanVariable"        name="cmp_cr0_filter_cnt_present"     value="true"             key="/CMP2/cmp_cr0_filter_cnt_present" />
@@ -471,8 +471,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmt" />
          <irq num="CMT_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="CMT"              key="/CMT/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/CMT/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="CMT_IRQn"         key="/CMT/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/CMT/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="CMT_IRQn"         key="/CMT/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/CMT/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/CMT/_present" />
          <param type="BooleanVariable"        name="cmt_cgh1_ph_present"            value="true"             key="/CMT/cmt_cgh1_ph_present" />
@@ -512,13 +512,13 @@
       <peripheral baseName="CONTROL"  instance=""         instanceList="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForControl" />
          <param type="StringVariable"         name="_instanceList"                  value=""                 key="/CONTROL/_instanceList" />
-         <param type="StringVariable"         name="_irqNums"                       value=""                 key="/CONTROL/_irqNums" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value=""                 key="/CONTROL/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/CONTROL/_hasPcrTable" />
       </peripheral>
       <peripheral baseName="CRC"      instance="0"        instanceList="CRC0" version="crc0_0x40032000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCrc" />
          <param type="StringVariable"         name="_instanceList"                  value="CRC0"             key="/CRC0/_instanceList" />
-         <param type="StringVariable"         name="_irqNums"                       value=""                 key="/CRC0/_irqNums" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value=""                 key="/CRC0/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/CRC0/_present" />
          <param type="BooleanVariable"        name="crc_ctrl_fxor_present"          value="true"             key="/CRC0/crc_ctrl_fxor_present" />
          <param type="BooleanVariable"        name="crc_ctrl_present"               value="true"             key="/CRC0/crc_ctrl_present" />
@@ -541,14 +541,14 @@
       <peripheral baseName="Console"  instance=""         instanceList="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForConsole" />
          <param type="StringVariable"         name="_instanceList"                  value=""                 key="/Console/_instanceList" />
-         <param type="StringVariable"         name="_irqNums"                       value=""                 key="/Console/_irqNums" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value=""                 key="/Console/_hardwareIrqNums" />
       </peripheral>
-      <peripheral baseName="DAC"      instance="0"        instanceList="DAC0;DAC1" version="dac0_16dat_fifo16_0x400cc000">
+      <peripheral baseName="DAC"      instance="0"        instanceList="DAC0;DAC1" version="dac0_16dat_fifo16_aips1">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDac" />
          <irq num="DAC0_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="DAC0;DAC1"        key="/DAC0/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/DAC0/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="DAC0_IRQn"        key="/DAC0/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/DAC0/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="DAC0_IRQn"        key="/DAC0/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/DAC0/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/DAC0/_present" />
          <param type="BooleanVariable"        name="dac_c0_dacbbien_present"        value="true"             key="/DAC0/dac_c0_dacbbien_present" />
@@ -582,12 +582,12 @@
          <param type="BooleanVariable"        name="dac_sr_present"                 value="true"             key="/DAC0/dac_sr_present" />
          <param type="StringVariable"         name="structName"                     value="DAC"              key="/DAC0/structName" />
       </peripheral>
-      <peripheral baseName="DAC"      instance="1"        instanceList="DAC0;DAC1" version="dac0_16dat_fifo16_0x400cc000">
+      <peripheral baseName="DAC"      instance="1"        instanceList="DAC0;DAC1" version="dac0_16dat_fifo16_aips1">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDac" />
          <irq num="DAC1_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="DAC0;DAC1"        key="/DAC1/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/DAC1/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="DAC1_IRQn"        key="/DAC1/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/DAC1/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="DAC1_IRQn"        key="/DAC1/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/DAC1/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/DAC1/_present" />
          <param type="BooleanVariable"        name="dac_c0_dacbbien_present"        value="true"             key="/DAC1/dac_c0_dacbbien_present" />
@@ -623,26 +623,26 @@
       </peripheral>
       <peripheral baseName="DMA"      instance="0"        instanceList="DMA0" version="dma0_16ch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDma" />
-         <irq num="DMA0_CH0_IRQn" />
-         <irq num="DMA0_CH1_IRQn" />
-         <irq num="DMA0_CH2_IRQn" />
-         <irq num="DMA0_CH3_IRQn" />
-         <irq num="DMA0_CH4_IRQn" />
-         <irq num="DMA0_CH5_IRQn" />
-         <irq num="DMA0_CH6_IRQn" />
-         <irq num="DMA0_CH7_IRQn" />
-         <irq num="DMA0_CH8_IRQn" />
-         <irq num="DMA0_CH9_IRQn" />
-         <irq num="DMA0_CH10_IRQn" />
-         <irq num="DMA0_CH11_IRQn" />
-         <irq num="DMA0_CH12_IRQn" />
-         <irq num="DMA0_CH13_IRQn" />
-         <irq num="DMA0_CH14_IRQn" />
-         <irq num="DMA0_CH15_IRQn" />
+         <irq num="DMA0_Ch0_IRQn" />
+         <irq num="DMA0_Ch1_IRQn" />
+         <irq num="DMA0_Ch2_IRQn" />
+         <irq num="DMA0_Ch3_IRQn" />
+         <irq num="DMA0_Ch4_IRQn" />
+         <irq num="DMA0_Ch5_IRQn" />
+         <irq num="DMA0_Ch6_IRQn" />
+         <irq num="DMA0_Ch7_IRQn" />
+         <irq num="DMA0_Ch8_IRQn" />
+         <irq num="DMA0_Ch9_IRQn" />
+         <irq num="DMA0_Ch10_IRQn" />
+         <irq num="DMA0_Ch11_IRQn" />
+         <irq num="DMA0_Ch12_IRQn" />
+         <irq num="DMA0_Ch13_IRQn" />
+         <irq num="DMA0_Ch14_IRQn" />
+         <irq num="DMA0_Ch15_IRQn" />
          <irq num="DMA0_Error_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="DMA0"             key="/DMA0/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="17"               key="/DMA0/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="DMA0_CH0_IRQn;DMA0_CH1_IRQn;DMA0_CH2_IRQn;DMA0_CH3_IRQn;DMA0_CH4_IRQn;DMA0_CH5_IRQn;DMA0_CH6_IRQn;DMA0_CH7_IRQn;DMA0_CH8_IRQn;DMA0_CH9_IRQn;DMA0_CH10_IRQn;DMA0_CH11_IRQn;DMA0_CH12_IRQn;DMA0_CH13_IRQn;DMA0_CH14_IRQn;DMA0_CH15_IRQn;DMA0_Error_IRQn" key="/DMA0/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="17"               key="/DMA0/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="DMA0_Ch0_IRQn;DMA0_Ch1_IRQn;DMA0_Ch2_IRQn;DMA0_Ch3_IRQn;DMA0_Ch4_IRQn;DMA0_Ch5_IRQn;DMA0_Ch6_IRQn;DMA0_Ch7_IRQn;DMA0_Ch8_IRQn;DMA0_Ch9_IRQn;DMA0_Ch10_IRQn;DMA0_Ch11_IRQn;DMA0_Ch12_IRQn;DMA0_Ch13_IRQn;DMA0_Ch14_IRQn;DMA0_Ch15_IRQn;DMA0_Error_IRQn" key="/DMA0/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/DMA0/_present" />
          <param type="BooleanVariable"        name="dma_attr_dmod_present"          value="true"             key="/DMA0/dma_attr_dmod_present" />
          <param type="BooleanVariable"        name="dma_attr_dsize_present"         value="true"             key="/DMA0/dma_attr_dsize_present" />
@@ -849,7 +849,7 @@
       <peripheral baseName="DMAMUX"   instance="0"        instanceList="DMAMUX0" version="dmamux0_16ch_trig_mk64f12">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
          <param type="StringVariable"         name="_instanceList"                  value="DMAMUX0"          key="/DMAMUX0/_instanceList" />
-         <param type="StringVariable"         name="_irqNums"                       value=""                 key="/DMAMUX0/_irqNums" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value=""                 key="/DMAMUX0/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/DMAMUX0/_present" />
          <param type="LongVariable"           name="dmamux_chcfg_dim"               value="16"               key="/DMAMUX0/dmamux_chcfg_dim" />
          <param type="BooleanVariable"        name="dmamux_chcfg_enbl_present"      value="true"             key="/DMAMUX0/dmamux_chcfg_enbl_present" />
@@ -928,8 +928,8 @@
          <irq num="ENET_Receive_IRQn" />
          <irq num="ENET_Error_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="ENET"             key="/ENET/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="4"                key="/ENET/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="ENET_1588Timeout_IRQn;ENET_Transmit_IRQn;ENET_Receive_IRQn;ENET_Error_IRQn" key="/ENET/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="4"                key="/ENET/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="ENET_1588Timeout_IRQn;ENET_Transmit_IRQn;ENET_Receive_IRQn;ENET_Error_IRQn" key="/ENET/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/ENET/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/ENET/_present" />
          <param type="BooleanVariable"        name="enet_atcor_cor_present"         value="true"             key="/ENET/enet_atcor_cor_present" />
@@ -1234,8 +1234,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForEwm" />
          <irq num="WDOG_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="EWM"              key="/EWM/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/EWM/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="WDOG_IRQn"        key="/EWM/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/EWM/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="WDOG_IRQn"        key="/EWM/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/EWM/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/EWM/_present" />
          <param type="BooleanVariable"        name="ewm_cmph_compareh_present"      value="true"             key="/EWM/ewm_cmph_compareh_present" />
@@ -1254,7 +1254,7 @@
       <peripheral baseName="FLEXBUS"  instance=""         instanceList="FLEXBUS" version="flexbus">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexBus" />
          <param type="StringVariable"         name="_instanceList"                  value="FLEXBUS"          key="/FLEXBUS/_instanceList" />
-         <param type="StringVariable"         name="_irqNums"                       value=""                 key="/FLEXBUS/_irqNums" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value=""                 key="/FLEXBUS/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/FLEXBUS/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/FLEXBUS/_present" />
          <param type="LongVariable"           name="flexbus_cs_dim"                 value="6"                key="/FLEXBUS/flexbus_cs_dim" />
@@ -1289,7 +1289,7 @@
       <peripheral baseName="FMC"      instance=""         instanceList="FMC"  version="fmc_mk24f12">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFmc" />
          <param type="StringVariable"         name="_instanceList"                  value="FMC"              key="/FMC/_instanceList" />
-         <param type="StringVariable"         name="_irqNums"                       value=""                 key="/FMC/_irqNums" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value=""                 key="/FMC/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/FMC/_present" />
          <param type="LongVariable"           name="fmc_dataw_dim"                  value="4"                key="/FMC/fmc_dataw_dim" />
          <param type="BooleanVariable"        name="fmc_pfapr_m0ap_present"         value="true"             key="/FMC/fmc_pfapr_m0ap_present" />
@@ -1362,11 +1362,11 @@
       </peripheral>
       <peripheral baseName="FTFE"     instance=""         instanceList="FTFE" version="ftfe_128k_flexrom">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
-         <irq num="FTF_Command_IRQn" />
-         <irq num="FTF_ReadCollision_IRQn" />
+         <irq num="FTFE_Command_IRQn" />
+         <irq num="FTFE_ReadCollision_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="FTFE"             key="/FTFE/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="2"                key="/FTFE/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="FTF_Command_IRQn;FTF_ReadCollision_IRQn" key="/FTFE/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="2"                key="/FTFE/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="FTFE_Command_IRQn;FTFE_ReadCollision_IRQn" key="/FTFE/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/FTFE/_present" />
          <param type="BooleanVariable"        name="ftfe_fccob_ccob_present"        value="true"             key="/FTFE/ftfe_fccob_ccob_present" />
          <param type="LongVariable"           name="ftfe_fccob_dim"                 value="12"               key="/FTFE/ftfe_fccob_dim" />
@@ -1406,15 +1406,15 @@
       <peripheral baseName="FTM"      instance=""         instanceList="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />
          <param type="StringVariable"         name="_instanceList"                  value="FTM0;FTM1;FTM2;FTM3" key="/FTM/_instanceList" />
-         <param type="StringVariable"         name="_irqNums"                       value=""                 key="/FTM/_irqNums" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value=""                 key="/FTM/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/FTM/_hasPcrTable" />
       </peripheral>
       <peripheral baseName="FTM"      instance="0"        instanceList="FTM0;FTM1;FTM2;FTM3" version="ftm0_8ch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <irq num="FTM0_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="FTM0;FTM1;FTM2;FTM3" key="/FTM0/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/FTM0/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="FTM0_IRQn"        key="/FTM0/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/FTM0/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="FTM0_IRQn"        key="/FTM0/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/FTM0/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/FTM0/_present" />
          <param type="BooleanVariable"        name="ftm_cnsc_chf_present"           value="true"             key="/FTM0/ftm_cnsc_chf_present" />
@@ -1637,8 +1637,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <irq num="FTM1_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="FTM0;FTM1;FTM2;FTM3" key="/FTM1/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/FTM1/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="FTM1_IRQn"        key="/FTM1/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/FTM1/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="FTM1_IRQn"        key="/FTM1/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/FTM1/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/FTM1/_present" />
          <param type="BooleanVariable"        name="ftm_cnsc_chf_present"           value="true"             key="/FTM1/ftm_cnsc_chf_present" />
@@ -1798,8 +1798,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <irq num="FTM2_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="FTM0;FTM1;FTM2;FTM3" key="/FTM2/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/FTM2/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="FTM2_IRQn"        key="/FTM2/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/FTM2/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="FTM2_IRQn"        key="/FTM2/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/FTM2/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/FTM2/_present" />
          <param type="BooleanVariable"        name="ftm_cnsc_chf_present"           value="true"             key="/FTM2/ftm_cnsc_chf_present" />
@@ -1959,8 +1959,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <irq num="FTM3_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="FTM0;FTM1;FTM2;FTM3" key="/FTM3/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/FTM3/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="FTM3_IRQn"        key="/FTM3/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/FTM3/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="FTM3_IRQn"        key="/FTM3/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/FTM3/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/FTM3/_present" />
          <param type="BooleanVariable"        name="ftm_cnsc_chf_present"           value="true"             key="/FTM3/ftm_cnsc_chf_present" />
@@ -2183,8 +2183,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <irq num="PORTA_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="GPIOA;GPIOB;GPIOC;GPIOD;GPIOE" key="/GPIOA/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/GPIOA/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="PORTA_IRQn"       key="/GPIOA/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/GPIOA/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="PORTA_IRQn"       key="/GPIOA/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/GPIOA/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/GPIOA/_present" />
          <param type="BooleanVariable"        name="gpio_gpchr_gpwd_present"        value="true"             key="/GPIOA/gpio_gpchr_gpwd_present" />
@@ -2257,8 +2257,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <irq num="PORTB_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="GPIOA;GPIOB;GPIOC;GPIOD;GPIOE" key="/GPIOB/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/GPIOB/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="PORTB_IRQn"       key="/GPIOB/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/GPIOB/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="PORTB_IRQn"       key="/GPIOB/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/GPIOB/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/GPIOB/_present" />
          <param type="BooleanVariable"        name="gpio_gpchr_gpwd_present"        value="true"             key="/GPIOB/gpio_gpchr_gpwd_present" />
@@ -2319,8 +2319,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <irq num="PORTC_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="GPIOA;GPIOB;GPIOC;GPIOD;GPIOE" key="/GPIOC/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/GPIOC/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="PORTC_IRQn"       key="/GPIOC/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/GPIOC/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="PORTC_IRQn"       key="/GPIOC/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/GPIOC/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/GPIOC/_present" />
          <param type="BooleanVariable"        name="gpio_gpchr_gpwd_present"        value="true"             key="/GPIOC/gpio_gpchr_gpwd_present" />
@@ -2381,8 +2381,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <irq num="PORTD_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="GPIOA;GPIOB;GPIOC;GPIOD;GPIOE" key="/GPIOD/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/GPIOD/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="PORTD_IRQn"       key="/GPIOD/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/GPIOD/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="PORTD_IRQn"       key="/GPIOD/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/GPIOD/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/GPIOD/_present" />
          <param type="BooleanVariable"        name="dfer_register_present"          value="true"             key="/GPIOD/dfer_register_present" />
@@ -2482,8 +2482,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <irq num="PORTE_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="GPIOA;GPIOB;GPIOC;GPIOD;GPIOE" key="/GPIOE/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/GPIOE/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="PORTE_IRQn"       key="/GPIOE/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/GPIOE/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="PORTE_IRQn"       key="/GPIOE/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/GPIOE/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/GPIOE/_present" />
          <param type="BooleanVariable"        name="gpio_gpchr_gpwd_present"        value="true"             key="/GPIOE/gpio_gpchr_gpwd_present" />
@@ -2544,8 +2544,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
          <irq num="I2C0_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="I2C0;I2C1;I2C2"   key="/I2C0/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/I2C0/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="I2C0_IRQn"        key="/I2C0/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/I2C0/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="I2C0_IRQn"        key="/I2C0/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/I2C0/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/I2C0/_present" />
          <param type="BooleanVariable"        name="i2c_a1_ad_present"              value="true"             key="/I2C0/i2c_a1_ad_present" />
@@ -2609,8 +2609,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
          <irq num="I2C1_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="I2C0;I2C1;I2C2"   key="/I2C1/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/I2C1/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="I2C1_IRQn"        key="/I2C1/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/I2C1/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="I2C1_IRQn"        key="/I2C1/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/I2C1/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/I2C1/_present" />
          <param type="BooleanVariable"        name="i2c_a1_ad_present"              value="true"             key="/I2C1/i2c_a1_ad_present" />
@@ -2674,8 +2674,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
          <irq num="I2C2_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="I2C0;I2C1;I2C2"   key="/I2C2/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/I2C2/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="I2C2_IRQn"        key="/I2C2/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/I2C2/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="I2C2_IRQn"        key="/I2C2/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/I2C2/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/I2C2/_present" />
          <param type="BooleanVariable"        name="i2c_a1_ad_present"              value="true"             key="/I2C2/i2c_a1_ad_present" />
@@ -2740,8 +2740,8 @@
          <irq num="I2S0_Tx_IRQn" />
          <irq num="I2S0_Rx_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="I2S0"             key="/I2S0/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="2"                key="/I2S0/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="I2S0_Tx_IRQn;I2S0_Rx_IRQn" key="/I2S0/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="2"                key="/I2S0/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="I2S0_Tx_IRQn;I2S0_Rx_IRQn" key="/I2S0/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/I2S0/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/I2S0/_present" />
          <param type="BooleanVariable"        name="i2s_mcr_duf_present"            value="true"             key="/I2S0/i2s_mcr_duf_present" />
@@ -2861,8 +2861,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="LLWU"             key="/LLWU/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/LLWU/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="LLWU_IRQn"        key="/LLWU/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/LLWU/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="LLWU_IRQn"        key="/LLWU/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/LLWU/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/LLWU/_present" />
          <param type="BooleanVariable"        name="llwu_filt1_filte_present"       value="true"             key="/LLWU/llwu_filt1_filte_present" />
@@ -2929,8 +2929,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
          <irq num="LPTMR0_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="LPTMR0"           key="/LPTMR0/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/LPTMR0/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="LPTMR0_IRQn"      key="/LPTMR0/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/LPTMR0/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="LPTMR0_IRQn"      key="/LPTMR0/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/LPTMR0/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/LPTMR0/_present" />
          <param type="BooleanVariable"        name="lptmr_cmr_compare_present"      value="true"             key="/LPTMR0/lptmr_cmr_compare_present" />
@@ -2955,8 +2955,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
          <irq num="MCG_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="MCG"              key="/MCG/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/MCG/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="MCG_IRQn"         key="/MCG/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/MCG/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="MCG_IRQn"         key="/MCG/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/MCG/_present" />
          <param type="BooleanVariable"        name="mcg_atcvh_atcvh_present"        value="true"             key="/MCG/mcg_atcvh_atcvh_present" />
          <param type="BooleanVariable"        name="mcg_atcvh_present"              value="true"             key="/MCG/mcg_atcvh_present" />
@@ -3020,8 +3020,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcm" />
          <irq num="MCM_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="MCM"              key="/MCM/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/MCM/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="MCM_IRQn"         key="/MCM/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/MCM/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="MCM_IRQn"         key="/MCM/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/MCM/_present" />
          <param type="BooleanVariable"        name="mcm_cr_present"                 value="true"             key="/MCM/mcm_cr_present" />
          <param type="BooleanVariable"        name="mcm_cr_sramlap_present"         value="true"             key="/MCM/mcm_cr_sramlap_present" />
@@ -3065,12 +3065,12 @@
       <peripheral baseName="MPU"      instance=""         instanceList=""     version="mpu_mk21f12_r12">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
          <param type="StringVariable"         name="_instanceList"                  value=""                 key="/MPU/_instanceList" />
-         <param type="StringVariable"         name="_irqNums"                       value=""                 key="/MPU/_irqNums" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value=""                 key="/MPU/_hardwareIrqNums" />
       </peripheral>
       <peripheral baseName="OSC"      instance="0"        instanceList="OSC0" version="osc0_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />
          <param type="StringVariable"         name="_instanceList"                  value="OSC0"             key="/OSC0/_instanceList" />
-         <param type="StringVariable"         name="_irqNums"                       value=""                 key="/OSC0/_irqNums" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value=""                 key="/OSC0/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/OSC0/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/OSC0/_present" />
          <param type="BooleanVariable"        name="osc_cr_erclken_present"         value="true"             key="/OSC0/osc_cr_erclken_present" />
@@ -3087,8 +3087,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPdb" />
          <irq num="PDB0_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="PDB0"             key="/PDB0/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/PDB0/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="PDB0_IRQn"        key="/PDB0/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/PDB0/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="PDB0_IRQn"        key="/PDB0/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/PDB0/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/PDB0/_present" />
          <param type="BooleanVariable"        name="pdb_c1_bb_present"              value="true"             key="/PDB0/pdb_c1_bb_present" />
@@ -3137,13 +3137,13 @@
       </peripheral>
       <peripheral baseName="PIT"      instance=""         instanceList="PIT"  version="pit_4ch_chain">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPit" />
-         <irq num="PIT0_IRQn" />
-         <irq num="PIT1_IRQn" />
-         <irq num="PIT2_IRQn" />
-         <irq num="PIT3_IRQn" />
+         <irq num="PIT_Ch0_IRQn" />
+         <irq num="PIT_Ch1_IRQn" />
+         <irq num="PIT_Ch2_IRQn" />
+         <irq num="PIT_Ch3_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="PIT"              key="/PIT/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="4"                key="/PIT/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="PIT0_IRQn;PIT1_IRQn;PIT2_IRQn;PIT3_IRQn" key="/PIT/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="4"                key="/PIT/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="PIT_Ch0_IRQn;PIT_Ch1_IRQn;PIT_Ch2_IRQn;PIT_Ch3_IRQn" key="/PIT/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/PIT/_present" />
          <param type="LongVariable"           name="pit_channel_dim"                value="4"                key="/PIT/pit_channel_dim" />
          <param type="BooleanVariable"        name="pit_cval_present"               value="true"             key="/PIT/pit_cval_present" />
@@ -3165,8 +3165,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPmc" />
          <irq num="PMC_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="PMC"              key="/PMC/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/PMC/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="PMC_IRQn"         key="/PMC/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/PMC/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="PMC_IRQn"         key="/PMC/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/PMC/_present" />
          <param type="BooleanVariable"        name="pmc_lvdsc1_lvdack_present"      value="true"             key="/PMC/pmc_lvdsc1_lvdack_present" />
          <param type="BooleanVariable"        name="pmc_lvdsc1_lvdf_present"        value="true"             key="/PMC/pmc_lvdsc1_lvdf_present" />
@@ -3189,15 +3189,15 @@
       <peripheral baseName="POWER"    instance=""         instanceList="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPower" />
          <param type="StringVariable"         name="_instanceList"                  value=""                 key="/POWER/_instanceList" />
-         <param type="StringVariable"         name="_irqNums"                       value=""                 key="/POWER/_irqNums" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value=""                 key="/POWER/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/POWER/_hasPcrTable" />
       </peripheral>
       <peripheral baseName="RNGA"     instance=""         instanceList="RNGA" version="rnga_0x40029000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRnga" />
          <irq num="RNGA_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="RNGA"             key="/RNGA/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/RNGA/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="RNGA_IRQn"        key="/RNGA/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/RNGA/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="RNGA_IRQn"        key="/RNGA/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/RNGA/_present" />
          <param type="BooleanVariable"        name="rnga_cr_clri_present"           value="true"             key="/RNGA/rnga_cr_clri_present" />
          <param type="BooleanVariable"        name="rnga_cr_go_present"             value="true"             key="/RNGA/rnga_cr_go_present" />
@@ -3224,8 +3224,8 @@
          <irq num="RTC_Alarm_IRQn" />
          <irq num="RTC_Seconds_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="RTC"              key="/RTC/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="2"                key="/RTC/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="RTC_Alarm_IRQn;RTC_Seconds_IRQn" key="/RTC/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="2"                key="/RTC/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="RTC_Alarm_IRQn;RTC_Seconds_IRQn" key="/RTC/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/RTC/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/RTC/_present" />
          <param type="BooleanVariable"        name="rtc_cr_clko_present"            value="true"             key="/RTC/rtc_cr_clko_present" />
@@ -3292,8 +3292,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSdhc" />
          <irq num="SDHC0_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="SDHC0"            key="/SDHC0/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/SDHC0/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="SDHC0_IRQn"       key="/SDHC0/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/SDHC0/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="SDHC0_IRQn"       key="/SDHC0/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/SDHC0/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/SDHC0/_present" />
          <param type="BooleanVariable"        name="sdhc_ac12err_ac12ce_present"    value="true"             key="/SDHC0/sdhc_ac12err_ac12ce_present" />
@@ -3479,41 +3479,44 @@
       <peripheral baseName="SIM"      instance=""         instanceList="SIM"  version="sim_mk64f12">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
          <param type="StringVariable"         name="_instanceList"                  value="SIM"              key="/SIM/_instanceList" />
-         <param type="StringVariable"         name="_irqNums"                       value=""                 key="/SIM/_irqNums" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC6&quot;,&quot;ADC0&quot;" key="/ADC0/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC3&quot;,&quot;ADC1&quot;" key="/ADC1/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC6&quot;,&quot;CAN0&quot;" key="/CAN0/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC4&quot;,&quot;CMP0&quot;" key="/CMP0/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC4&quot;,&quot;CMT&quot;" key="/CMT/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC6&quot;,&quot;CRC&quot;" key="/CRC/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC2&quot;,&quot;DAC0&quot;" key="/DAC0/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC2&quot;,&quot;DAC1&quot;" key="/DAC1/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC7&quot;,&quot;DMA0&quot;" key="/DMA0/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC6&quot;,&quot;DMAMUX0&quot;" key="/DMAMUX0/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC2&quot;,&quot;ENET&quot;" key="/ENET/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC4&quot;,&quot;EWM&quot;" key="/EWM/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC7&quot;,&quot;FLEXBUS&quot;" key="/FLEXBUS/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC6&quot;,&quot;FTF&quot;" key="/FTF/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC6&quot;,&quot;FTM0&quot;" key="/FTM0/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC6&quot;,&quot;FTM1&quot;" key="/FTM1/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC3&quot;,&quot;FTM2&quot;" key="/FTM2/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC3&quot;,&quot;FTM3&quot;" key="/FTM3/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC4&quot;,&quot;I2C0&quot;" key="/I2C0/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC4&quot;,&quot;I2C1&quot;" key="/I2C1/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC1&quot;,&quot;I2C2&quot;" key="/I2C2/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC6&quot;,&quot;I2S0&quot;" key="/I2S0/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC5&quot;,&quot;LPTMR0&quot;" key="/LPTMR0/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC7&quot;,&quot;MPU&quot;" key="/MPU/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC6&quot;,&quot;PDB&quot;" key="/PDB/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC6&quot;,&quot;PIT&quot;" key="/PIT/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC5&quot;,&quot;PORTA&quot;" key="/PORTA/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC5&quot;,&quot;PORTB&quot;" key="/PORTB/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC5&quot;,&quot;PORTC&quot;" key="/PORTC/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC5&quot;,&quot;PORTD&quot;" key="/PORTD/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC5&quot;,&quot;PORTE&quot;" key="/PORTE/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC3&quot;,&quot;RNGA&quot;" key="/RNGA/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC6&quot;,&quot;RTC&quot;" key="/RTC/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC3&quot;,&quot;SDHC&quot;" key="/SDHC/_clockMask" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value=""                 key="/SIM/_hardwareIrqNums" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC6,ADC0"       key="/ADC0/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC3,ADC1"       key="/ADC1/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC6,CAN0"       key="/CAN0/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC4,CMP0"       key="/CMP0/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC4,CMT"        key="/CMT/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC6,CRC"        key="/CRC/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC2,DAC0"       key="/DAC0/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC6,DAC0_AIPS0" key="/DAC0_AIPS0/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC2,DAC1"       key="/DAC1/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC7,DMA0"       key="/DMA0/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC6,DMAMUX0"    key="/DMAMUX0/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC2,ENET"       key="/ENET/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC4,EWM"        key="/EWM/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC7,FLEXBUS"    key="/FLEXBUS/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC6,FTF"        key="/FTF/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC6,FTM0"       key="/FTM0/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC6,FTM1"       key="/FTM1/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC6,FTM2"       key="/FTM2/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC3,FTM2_AIPS1" key="/FTM2_AIPS1/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC3,FTM3"       key="/FTM3/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC4,I2C0"       key="/I2C0/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC4,I2C1"       key="/I2C1/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC1,I2C2"       key="/I2C2/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC6,I2S0"       key="/I2S0/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC5,LPTMR0"     key="/LPTMR0/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC7,MPU"        key="/MPU/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC6,PDB"        key="/PDB/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC6,PIT"        key="/PIT/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC5,PORTA"      key="/PORTA/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC5,PORTB"      key="/PORTB/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC5,PORTC"      key="/PORTC/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC5,PORTD"      key="/PORTD/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC5,PORTE"      key="/PORTE/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC6,RNGA"       key="/RNGA/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC3,RNGA_AIPS1" key="/RNGA_AIPS1/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC6,RTC"        key="/RTC/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC3,SDHC"       key="/SDHC/_clockInfo" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/SIM/_present" />
          <param type="StringVariable"         name="busFreq"                        value="60MHz"            key="/SIM/busFreq" />
          <param type="StringVariable"         name="coreFreq"                       value="120MHz"           key="/SIM/coreFreq" />
@@ -3547,10 +3550,10 @@
          <param type="BooleanVariable"        name="sim_scgc2_enet_present"         value="true"             key="/SIM/sim_scgc2_enet_present" />
          <param type="BooleanVariable"        name="sim_scgc2_present"              value="true"             key="/SIM/sim_scgc2_present" />
          <param type="BooleanVariable"        name="sim_scgc3_adc1_present"         value="true"             key="/SIM/sim_scgc3_adc1_present" />
-         <param type="BooleanVariable"        name="sim_scgc3_ftm2_present"         value="true"             key="/SIM/sim_scgc3_ftm2_present" />
+         <param type="BooleanVariable"        name="sim_scgc3_ftm2_aips1_present"   value="true"             key="/SIM/sim_scgc3_ftm2_aips1_present" />
          <param type="BooleanVariable"        name="sim_scgc3_ftm3_present"         value="true"             key="/SIM/sim_scgc3_ftm3_present" />
          <param type="BooleanVariable"        name="sim_scgc3_present"              value="true"             key="/SIM/sim_scgc3_present" />
-         <param type="BooleanVariable"        name="sim_scgc3_rnga_present"         value="true"             key="/SIM/sim_scgc3_rnga_present" />
+         <param type="BooleanVariable"        name="sim_scgc3_rnga_aips1_present"   value="true"             key="/SIM/sim_scgc3_rnga_aips1_present" />
          <param type="BooleanVariable"        name="sim_scgc3_sdhc_present"         value="true"             key="/SIM/sim_scgc3_sdhc_present" />
          <param type="BooleanVariable"        name="sim_scgc3_spi2_present"         value="true"             key="/SIM/sim_scgc3_spi2_present" />
          <param type="BooleanVariable"        name="sim_scgc4_cmp0_present"         value="true"             key="/SIM/sim_scgc4_cmp0_present" />
@@ -3575,7 +3578,7 @@
          <param type="BooleanVariable"        name="sim_scgc6_adc0_present"         value="true"             key="/SIM/sim_scgc6_adc0_present" />
          <param type="BooleanVariable"        name="sim_scgc6_can0_present"         value="true"             key="/SIM/sim_scgc6_can0_present" />
          <param type="BooleanVariable"        name="sim_scgc6_crc_present"          value="true"             key="/SIM/sim_scgc6_crc_present" />
-         <param type="BooleanVariable"        name="sim_scgc6_dac0_present"         value="true"             key="/SIM/sim_scgc6_dac0_present" />
+         <param type="BooleanVariable"        name="sim_scgc6_dac0_aips0_present"   value="true"             key="/SIM/sim_scgc6_dac0_aips0_present" />
          <param type="BooleanVariable"        name="sim_scgc6_dmamux0_present"      value="true"             key="/SIM/sim_scgc6_dmamux0_present" />
          <param type="BooleanVariable"        name="sim_scgc6_ftf_present"          value="true"             key="/SIM/sim_scgc6_ftf_present" />
          <param type="BooleanVariable"        name="sim_scgc6_ftm0_present"         value="true"             key="/SIM/sim_scgc6_ftm0_present" />
@@ -3661,23 +3664,23 @@
          <param type="BooleanVariable"        name="sim_uidml_present"              value="true"             key="/SIM/sim_uidml_present" />
          <param type="BooleanVariable"        name="sim_uidml_uid_present"          value="true"             key="/SIM/sim_uidml_uid_present" />
          <param type="StringVariable"         name="structName"                     value="SIM"              key="/SIM/structName" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC6&quot;,&quot;SPI0&quot;" key="/SPI0/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC6&quot;,&quot;SPI1&quot;" key="/SPI1/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC3&quot;,&quot;SPI2&quot;" key="/SPI2/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC4&quot;,&quot;UART0&quot;" key="/UART0/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC4&quot;,&quot;UART1&quot;" key="/UART1/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC4&quot;,&quot;UART2&quot;" key="/UART2/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC4&quot;,&quot;UART3&quot;" key="/UART3/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC1&quot;,&quot;UART4&quot;" key="/UART4/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC1&quot;,&quot;UART5&quot;" key="/UART5/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC4&quot;,&quot;USB0&quot;" key="/USB0/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC6&quot;,&quot;USBDCD&quot;" key="/USBDCD/_clockMask" />
-         <param type="StringVariable"         name="_clockMask"                     value="&quot;SCGC4&quot;,&quot;VREF&quot;" key="/VREF/_clockMask" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC6,SPI0"       key="/SPI0/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC6,SPI1"       key="/SPI1/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC3,SPI2"       key="/SPI2/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC4,UART0"      key="/UART0/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC4,UART1"      key="/UART1/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC4,UART2"      key="/UART2/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC4,UART3"      key="/UART3/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC1,UART4"      key="/UART4/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC1,UART5"      key="/UART5/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC4,USB0"       key="/USB0/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC6,USBDCD"     key="/USBDCD/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC4,VREF"       key="/VREF/_clockInfo" />
       </peripheral>
       <peripheral baseName="SMC"      instance=""         instanceList="SMC"  version="smc_mk10d5">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSmc" />
          <param type="StringVariable"         name="_instanceList"                  value="SMC"              key="/SMC/_instanceList" />
-         <param type="StringVariable"         name="_irqNums"                       value=""                 key="/SMC/_irqNums" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value=""                 key="/SMC/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/SMC/_present" />
          <param type="BooleanVariable"        name="smc_pmctrl_lpwui_present"       value="true"             key="/SMC/smc_pmctrl_lpwui_present" />
          <param type="BooleanVariable"        name="smc_pmctrl_present"             value="true"             key="/SMC/smc_pmctrl_present" />
@@ -3699,8 +3702,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
          <irq num="SPI0_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="SPI0;SPI1;SPI2"   key="/SPI0/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/SPI0/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="SPI0_IRQn"        key="/SPI0/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/SPI0/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="SPI0_IRQn"        key="/SPI0/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/SPI0/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/SPI0/_present" />
          <param type="BooleanVariable"        name="spi_ctar_asc_present"           value="true"             key="/SPI0/spi_ctar_asc_present" />
@@ -3793,8 +3796,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
          <irq num="SPI1_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="SPI0;SPI1;SPI2"   key="/SPI1/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/SPI1/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="SPI1_IRQn"        key="/SPI1/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/SPI1/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="SPI1_IRQn"        key="/SPI1/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/SPI1/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/SPI1/_present" />
          <param type="BooleanVariable"        name="spi_ctar_asc_present"           value="true"             key="/SPI1/spi_ctar_asc_present" />
@@ -3888,8 +3891,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
          <irq num="SPI2_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="SPI0;SPI1;SPI2"   key="/SPI2/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/SPI2/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="SPI2_IRQn"        key="/SPI2/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/SPI2/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="SPI2_IRQn"        key="/SPI2/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/SPI2/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/SPI2/_present" />
          <param type="BooleanVariable"        name="spi_ctar_asc_present"           value="true"             key="/SPI2/spi_ctar_asc_present" />
@@ -3985,8 +3988,8 @@
          <irq num="UART0_RxTx_IRQn" />
          <irq num="UART0_Error_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="UART0;UART1;UART2;UART3;UART4;UART5" key="/UART0/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="3"                key="/UART0/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="UART0_Lon_IRQn;UART0_RxTx_IRQn;UART0_Error_IRQn" key="/UART0/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="3"                key="/UART0/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="UART0_Lon_IRQn;UART0_RxTx_IRQn;UART0_Error_IRQn" key="/UART0/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/UART0/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/UART0/_present" />
          <param type="StringVariable"         name="structName"                     value="UART"             key="/UART0/structName" />
@@ -4136,8 +4139,8 @@
          <irq num="UART1_RxTx_IRQn" />
          <irq num="UART1_Error_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="UART0;UART1;UART2;UART3;UART4;UART5" key="/UART1/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="2"                key="/UART1/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="UART1_RxTx_IRQn;UART1_Error_IRQn" key="/UART1/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="2"                key="/UART1/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="UART1_RxTx_IRQn;UART1_Error_IRQn" key="/UART1/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/UART1/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/UART1/_present" />
          <param type="StringVariable"         name="structName"                     value="UART1"            key="/UART1/structName" />
@@ -4251,8 +4254,8 @@
          <irq num="UART2_RxTx_IRQn" />
          <irq num="UART2_Error_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="UART0;UART1;UART2;UART3;UART4;UART5" key="/UART2/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="2"                key="/UART2/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="UART2_RxTx_IRQn;UART2_Error_IRQn" key="/UART2/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="2"                key="/UART2/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="UART2_RxTx_IRQn;UART2_Error_IRQn" key="/UART2/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/UART2/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/UART2/_present" />
          <param type="StringVariable"         name="structName"                     value="UART1"            key="/UART2/structName" />
@@ -4366,8 +4369,8 @@
          <irq num="UART3_RxTx_IRQn" />
          <irq num="UART3_Error_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="UART0;UART1;UART2;UART3;UART4;UART5" key="/UART3/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="2"                key="/UART3/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="UART3_RxTx_IRQn;UART3_Error_IRQn" key="/UART3/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="2"                key="/UART3/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="UART3_RxTx_IRQn;UART3_Error_IRQn" key="/UART3/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/UART3/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/UART3/_present" />
          <param type="StringVariable"         name="structName"                     value="UART1"            key="/UART3/structName" />
@@ -4481,8 +4484,8 @@
          <irq num="UART4_RxTx_IRQn" />
          <irq num="UART4_Error_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="UART0;UART1;UART2;UART3;UART4;UART5" key="/UART4/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="2"                key="/UART4/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="UART4_RxTx_IRQn;UART4_Error_IRQn" key="/UART4/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="2"                key="/UART4/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="UART4_RxTx_IRQn;UART4_Error_IRQn" key="/UART4/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/UART4/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/UART4/_present" />
          <param type="StringVariable"         name="structName"                     value="UART1"            key="/UART4/structName" />
@@ -4596,8 +4599,8 @@
          <irq num="UART5_RxTx_IRQn" />
          <irq num="UART5_Error_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="UART0;UART1;UART2;UART3;UART4;UART5" key="/UART5/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="2"                key="/UART5/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="UART5_RxTx_IRQn;UART5_Error_IRQn" key="/UART5/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="2"                key="/UART5/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="UART5_RxTx_IRQn;UART5_Error_IRQn" key="/UART5/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/UART5/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/UART5/_present" />
          <param type="StringVariable"         name="structName"                     value="UART1"            key="/UART5/structName" />
@@ -4710,8 +4713,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsb" />
          <irq num="USB0_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="USB0"             key="/USB0/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/USB0/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="USB0_IRQn"        key="/USB0/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/USB0/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="USB0_IRQn"        key="/USB0/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/USB0/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/USB0/_present" />
          <param type="StringVariable"         name="structName"                     value="USB"              key="/USB0/structName" />
@@ -4855,8 +4858,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsbdcd" />
          <irq num="USBDCD0_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="USBDCD0"          key="/USBDCD0/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/USBDCD0/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="USBDCD0_IRQn"     key="/USBDCD0/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/USBDCD0/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="USBDCD0_IRQn"     key="/USBDCD0/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/USBDCD0/_present" />
          <param type="StringVariable"         name="structName"                     value="USBDCD"           key="/USBDCD0/structName" />
          <param type="BooleanVariable"        name="usbdcd_clock_clock_speed_present" value="true"             key="/USBDCD0/usbdcd_clock_clock_speed_present" />
@@ -4891,7 +4894,7 @@
       <peripheral baseName="VREF"     instance=""         instanceList="VREF" version="vref_c">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForVref" />
          <param type="StringVariable"         name="_instanceList"                  value="VREF"             key="/VREF/_instanceList" />
-         <param type="StringVariable"         name="_irqNums"                       value=""                 key="/VREF/_irqNums" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value=""                 key="/VREF/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/VREF/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/VREF/_present" />
          <param type="StringVariable"         name="structName"                     value="VREF"             key="/VREF/structName" />
@@ -4909,8 +4912,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForWdog" />
          <irq num="WDOG_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="WDOG"             key="/WDOG/_instanceList" />
-         <param type="LongVariable"           name="_irqCount"                      value="1"                key="/WDOG/_irqCount" />
-         <param type="StringVariable"         name="_irqNums"                       value="WDOG_IRQn"        key="/WDOG/_irqNums" />
+         <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/WDOG/_hardwareIrqCount" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="WDOG_IRQn"        key="/WDOG/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/WDOG/_present" />
          <param type="StringVariable"         name="structName"                     value="WDOG"             key="/WDOG/structName" />
          <param type="BooleanVariable"        name="wdog_presc_prescval_present"    value="true"             key="/WDOG/wdog_presc_prescval_present" />
@@ -5027,22 +5030,6 @@
       </pin>
       <pin name="EXTAL32"      isFixed="true">
          <mux sel="fixed"         signal="EXTAL32" />
-         <reset sel="fixed" />
-      </pin>
-      <pin name="PIT_CH0"      isFixed="true">
-         <mux sel="fixed"         signal="PIT_CH0" />
-         <reset sel="fixed" />
-      </pin>
-      <pin name="PIT_CH1"      isFixed="true">
-         <mux sel="fixed"         signal="PIT_CH1" />
-         <reset sel="fixed" />
-      </pin>
-      <pin name="PIT_CH2"      isFixed="true">
-         <mux sel="fixed"         signal="PIT_CH2" />
-         <reset sel="fixed" />
-      </pin>
-      <pin name="PIT_CH3"      isFixed="true">
-         <mux sel="fixed"         signal="PIT_CH3" />
          <reset sel="fixed" />
       </pin>
       <pin name="RESET_b"      isFixed="true">
@@ -6061,10 +6048,6 @@
          <placement pin="DAC0_OUT"      location="K5" />
          <placement pin="DAC1_OUT"      location="K4" />
          <placement pin="EXTAL32"       location="L5" />
-         <placement pin="PIT_CH0"       location="Internal" />
-         <placement pin="PIT_CH1"       location="Internal" />
-         <placement pin="PIT_CH2"       location="Internal" />
-         <placement pin="PIT_CH3"       location="Internal" />
          <placement pin="PTA0"          location="J6" />
          <placement pin="PTA1"          location="H8" />
          <placement pin="PTA10"         location="J9" />
@@ -6188,10 +6171,6 @@
          <placement pin="DAC0_OUT"      location="L3" />
          <placement pin="DAC1_OUT"      location="L4" />
          <placement pin="EXTAL32"       location="M6" />
-         <placement pin="PIT_CH0"       location="Internal" />
-         <placement pin="PIT_CH1"       location="Internal" />
-         <placement pin="PIT_CH2"       location="Internal" />
-         <placement pin="PIT_CH3"       location="Internal" />
          <placement pin="PTA0"          location="J5" />
          <placement pin="PTA1"          location="J6" />
          <placement pin="PTA10"         location="M9" />
@@ -6334,10 +6313,6 @@
          <placement pin="CMP_DAC"       location="Internal" />
          <placement pin="DAC0_OUT"      location="A11" />
          <placement pin="EXTAL32"       location="EXTAL_32" />
-         <placement pin="PIT_CH0"       location="Internal" />
-         <placement pin="PIT_CH1"       location="Internal" />
-         <placement pin="PIT_CH2"       location="Internal" />
-         <placement pin="PIT_CH3"       location="Internal" />
          <placement pin="PTA0"          location="D8" />
          <placement pin="PTA1"          location="D3" />
          <placement pin="PTA12"         location="RMII0_RXD_1" />
@@ -6441,10 +6416,6 @@
          <placement pin="CMP_DAC"       location="Internal" />
          <placement pin="DAC0_OUT"      location="p27" />
          <placement pin="EXTAL32"       location="p29" />
-         <placement pin="PIT_CH0"       location="Internal" />
-         <placement pin="PIT_CH1"       location="Internal" />
-         <placement pin="PIT_CH2"       location="Internal" />
-         <placement pin="PIT_CH3"       location="Internal" />
          <placement pin="PTA0"          location="p34" />
          <placement pin="PTA1"          location="p35" />
          <placement pin="PTA12"         location="p42" />
@@ -6553,10 +6524,6 @@
          <placement pin="DAC0_OUT"      location="p38" />
          <placement pin="DAC1_OUT"      location="p39" />
          <placement pin="EXTAL32"       location="p41" />
-         <placement pin="PIT_CH0"       location="Internal" />
-         <placement pin="PIT_CH1"       location="Internal" />
-         <placement pin="PIT_CH2"       location="Internal" />
-         <placement pin="PIT_CH3"       location="Internal" />
          <placement pin="PTA0"          location="p50" />
          <placement pin="PTA1"          location="p51" />
          <placement pin="PTA10"         location="p62" />

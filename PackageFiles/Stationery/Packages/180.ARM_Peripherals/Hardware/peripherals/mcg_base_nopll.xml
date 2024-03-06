@@ -4,12 +4,11 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <constant key="irq_common"                type="Boolean" value="true"          />
-   <constant key="irq_parameters"            type="String"  value='""'  />
-   <constant key="irq_dummy_parameters"      type="String"  value='""'  />
-   <constant key="irq_call"                  type="String"  value='""'  />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="irq_parameters"            type="String"  value='""'  />
+   <equation key="irq_dummy_parameters"      type="String"  value='""'  />
+   <equation key="irq_call"                  type="String"  value='""'  />
+   <equation key="generateDefault"           type="Boolean" value="false"         />
+   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml" />
    <title />
 
@@ -25,6 +24,10 @@
    <constant key="RUN"     value="0" type="Long" />
    <constant key="VLPR"    value="1" type="Long" />
    <constant key="HSRUN"   value="2" type="Long" />
+
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
    <clockSelectionOption key="currentClockConfig"
       derived="true"
@@ -54,7 +57,7 @@
       <choice value="true"  name="Enabled"  isDefault="true" />
    </binaryOption>
 
-   <for keys="n" dim="=1,/SIM/numberOfClockSettings" >
+   <for keys="n" dim="=1,(/SIM/numberOfClockSettings-1)" >
       <binaryOption key="enableClockConfiguration[%(n)]"
          enabledBy="enablePeripheralSupport"
          hidden="true"
@@ -311,7 +314,7 @@
                <equation key="y" value="=y+80" />
             </graphicBox>
 
-            <graphicBox    id="SIM" x="310" y="70" params="290,0, x310, y1240, x-600, y-900, x" >
+            <graphicBox    id="SIM" x="310" y="70" params="290,0, x310, y1640, x-600, y-1260, x" >
 
                <!-- MGCIRCLK -->
                <graphicItem id="MCGIRCLK"                  var="system_mcgirclk_clock[%(n)]"        type="node"        params="600, 55"                                        />
@@ -529,7 +532,7 @@
                   <graphicItem id="TPMSRC"                    var="/SIM/sim_sopt2_tpmsrc[%(n)]"        type="mux"         params="500, 30, 4"                                    />
                   <graphicItem id=""                          var=""                                   type="connector"   params="TPMSRC,0, TPM_CLK,0"                      />
                   <graphicItem id="TPM_CLK"                   var="/SIM/system_tpm_clock[%(n)]"        type="node"        params="600, 30"                                       />
-                  <equation key="y" value="=y+120" />
+                  <equation key="y" value="=y+140" />
                </graphicGroup>
 
                <!-- LPUARTSRC -->
@@ -591,6 +594,40 @@
                   <graphicItem id=""                          var="/SIM/system_usbfs_clock[%(n)]"      type="connector"   params="USBSRC,0, USBFS_CLK,0"                          />
                   <graphicItem id="USBFS_CLK"                 var="/SIM/system_usbfs_clock[%(n)]"      type="node"        params="600, 10"                                      />
                   <equation key="y" value="=y+100" />
+               </graphicGroup>
+
+               <!-- COP -->
+               <graphicGroup x="0" y="y" condition="/SIM/sim_copc_copt" >
+                  <graphicItem id="LPO_OSC.COP"               var="/PMC/system_low_power_clock"        type="reference"   params="250,  10, 150"            />
+                  <graphicItem id="BUS_CLK.COP"               var="/SIM/system_bus_clock[%(n)]"        type="reference"   params="250,  70, 150, 40"        />
+                  <graphicItem id="COP_WINDOW,NONAME"         var="/SIM/sim_copc_copw"                 type="annotation"  params="185,  70, 100, 18"                              />
+
+                  <graphicItem id=""                          var=""                                   type="connector"   params="LPO_OSC.COP,0, /2^5,0"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="LPO_OSC.COP,0, /2^8,0"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="LPO_OSC.COP,0, /2^10,0"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="BUS_CLK.COP,0, /2^13,0"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="BUS_CLK.COP,0, /2^16,0"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="BUS_CLK.COP,0, /2^18,0"  />
+
+                  <graphicItem id="/2^5"                      var=""                                   type="label"       params="430, -10, 50, small"       />
+                  <graphicItem id="/2^8"                      var=""                                   type="label"       params="430,  10, 50, small"       />
+                  <graphicItem id="/2^10"                     var=""                                   type="label"       params="430,  30, 50, small"       />
+                  <graphicItem id="/2^13"                     var=""                                   type="label"       params="430,  50, 50, small"       />
+                  <graphicItem id="/2^16"                     var=""                                   type="label"       params="430,  70, 50, small"       />
+                  <graphicItem id="/2^18"                     var=""                                   type="label"       params="430,  90, 50, small"       />
+
+                  <graphicItem id=""                          var=""                                   type="connector"   params="/2^5,0,  COPSRC,1"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="/2^8,0,  COPSRC,2"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="/2^10,0, COPSRC,3"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="/2^13,0, COPSRC,4"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="/2^16,0, COPSRC,5"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="/2^18,0, COPSRC,6"  />
+
+                  <graphicItem id="COPSRC"                    var="/SIM/sim_copc_copt"                 type="mux"         params="500, 30, 8"               />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="COPSRC,0, COP_PERIOD,0"   />
+                  <graphicItem id="COP_PERIOD"                var="/SIM/cop_timeout_period[%(n)]"      type="node"        params="600, 30"                  />
+
+                  <equation key="y" value="=y+120" />
                </graphicGroup>
 
                <!-- SDHCSRC -->
@@ -791,18 +828,27 @@
                <choice value="7" enum="DivBy128" ref="(system_fast_irc_clock[%(n)])/128" name="/128" />
             </choiceOption>
 
-            <intOption key="firc_divided_clock[%(n)]" units="Hz" locked="true" derived="true" />
+            <intOption key="firc_divided_clock[%(n)]"
+               description="FIRC divided clock frequency"
+               toolTip="Fast IRC after division by FCRDIV"
+               units="Hz"
+               locked="true"
+               derived="true" />
 
             <binaryOption key="mcg_c2_ircs[%(n)]"
                typeName="McgIrClkSrc"
                target="system_mcgirclk_ungated[%(n)]"
-               description="Internal Reference Clock [MCGIRCLK]"
+               description="Internal Reference Clock [MCGIRCLK] Source"
                toolTip="Clock Source for MCGIRCLK" >
                <choice value="0" ref="system_slow_irc_clock[%(n)]" enum="Slow" name="Slow internal reference clock" code="system_slow_irc_clock"           />
                <choice value="1" ref="firc_divided_clock[%(n)]"    enum="Fast" name="Fast internal reference clock" code="getFastInternalReferenceClock()" isDefault="true" />
             </binaryOption>
 
-            <intOption key="system_mcgirclk_ungated[%(n)]" units="Hz" locked="true" derived="true" />
+            <intOption key="system_mcgirclk_ungated[%(n)]"
+               description="MGCIRCLK (internal) frequency"
+               units="Hz"
+               locked="true"
+               derived="true" />
 
             <binaryOption key="mcg_c1_irclken[%(n)]"
                typeName="McgIrClkEn"
@@ -860,7 +906,7 @@
          <category name="FLL" description="FLL Settings" >
 
             <binaryOption key="fll_enabled[%(n)]"
-               ref="(mcgClockMode[%(n)]!=@BLPI)&amp;&amp;(mcgClockMode[%(n)]!=@BLPE)"
+               ref="(mcgClockMode[%(n)]!=BLPI)&amp;&amp;(mcgClockMode[%(n)]!=BLPE)"
                derived="true"
                locked="true"
                description="FLL State"
@@ -957,7 +1003,7 @@
                disabledValue="0" />
 
             <binaryOption key="mcg_c1_irefs[%(n)]"
-               ref="(mcgClockMode[%(n)]==@FEI)||(mcgClockMode[%(n)]==@FBI)||(mcgClockMode[%(n)]==@BLPI)"
+               ref="(mcgClockMode[%(n)]==FEI)||(mcgClockMode[%(n)]==FBI)||(mcgClockMode[%(n)]==BLPI)"
                typeName="McgIref"
                target="irefs_clock[%(n)]"
                derived="true"
@@ -971,14 +1017,14 @@
             </binaryOption>
 
             <intOption key="irefs_clock[%(n)]"
-               enabledBy="((%(n)==0)||enableClockConfiguration[%(n)])&amp;&amp;(mcgClockMode[%(n)]!=@BLPI)##Unavailable in BLPI"
+               enabledBy="((%(n)==0)||enableClockConfiguration[%(n)])&amp;&amp;(mcgClockMode[%(n)]!=BLPI)##Unavailable in BLPI"
                derived="true"
                hidden="true" />
 
             <intOption key="system_mcgffclk_clock[%(n)]"
                ref="irefs_clock[%(n)]"
                enabledBy="((%(n)==0)||enableClockConfiguration[%(n)]) &amp;&amp;
-                          ((irefs_clock[%(n)]&lt;=(system_mcgoutclk_clock[%(n)]/8))&amp;&amp;(mcgClockMode[%(n)]!=@BLPI))##Disabled in BLPI and limited to f &lt;= (MCGOUTCLK/8))"
+                          ((irefs_clock[%(n)]&lt;=(system_mcgoutclk_clock[%(n)]/8))&amp;&amp;(mcgClockMode[%(n)]!=BLPI))##Disabled in BLPI and limited to f &lt;= (MCGOUTCLK/8))"
                units="Hz"
                derived="true"
                locked="true"
@@ -1144,68 +1190,6 @@
       </categoryOption>
    </for>
 
-<!-- Interrupt code -->
-
-   <template codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
-   <![CDATA[
-      \t/**
-      \t * Type definition for $(_Baseclass) interrupt call back.
-      \t */
-      \ttypedef void (*CallbackFunction)($(irq_parameters));
-      \t
-      \t/**
-      \t * Callback to catch unhandled interrupt
-      \t */
-      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
-      \t   setAndCheckErrorCode(E_NO_HANDLER);
-      \t}
-      \t\n
-   ]]>
-   </template>
-
-   <template codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t/** Callback function for ISR */
-      \tstatic CallbackFunction sCallback;
-      \t
-      \t/**
-      \t * Set interrupt callback function.
-      \t *
-      \t * @param[in]  acmpCallback Callback function to execute on interrupt
-      \t */
-      \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
-      \t   if ($(_basename)Callback == nullptr) {
-      \t      $(_basename)Callback = unhandledCallback;
-      \t   }
-      \t   // Allow either no handler set yet or removing handler
-      \t   usbdm_assert(
-      \t         (sCallback == unhandledCallback) || ($(_basename)Callback == unhandledCallback),
-      \t         "Handler already set");
-      \t   sCallback = $(_basename)Callback;
-      \t}
-      \t
-      \t/**
-      \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
-      \t */
-      \tstatic void irqHandler() {
-      \t
-      \t   // Execute call-back
-      \t   sCallback($(irq_call));
-      \t}
-      \t\n
-   ]]>
-   </template>
-
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t/** Callback for programmatically set handler */
-      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Class)Info::unhandledCallback;
-      \t\n
-   ]]>
-   </template>
-
-<!--   ========== Methods =============================== -->
-
    <clockCodeTemplate variable="mcg_c7_oscsel[]"
       returnFormat="%s"
    ><![CDATA[
@@ -1253,6 +1237,15 @@
       returnFormat="%s"
    ><![CDATA[
       \t/**
+      \t * Set %description
+      \t *
+      \t * @param %paramName %tooltip
+      \t */
+      \tstatic void setInternalReferenceClock(%paramType %paramName) {
+      \t   %fieldAssignment;
+      \t}
+      \t
+      \t/**
       \t * Get %description
       \t *
       \t * @return Clock frequency in Hz
@@ -1266,9 +1259,18 @@
       \t}\n\n
       ]]></clockCodeTemplate>
 
-   <clockCodeTemplate variable="mcg_c2_ircs[], mcg_c1_irclken[]"
+   <clockCodeTemplate variable="mcg_c1_irclken[]"
       returnFormat="%s"
    ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %paramName %tooltip
+      \t */
+      \tstatic void enableMcgIrClock(%paramType %paramName) {
+      \t   %fieldAssignment;
+      \t}
+      \t
       \t/**
       \t * Get %description
       \t *
@@ -1276,10 +1278,7 @@
       \t */
       \tstatic uint32_t getMcgIrClock() {
       \t
-      \t   if ((%register1&%mask1)==0) {
-      \t      return 0;
-      \t   }
-      \t   switch(%register0&%mask0) {
+      \t   switch(%maskingExpression) {
       \t      default: return 0;
       %body
       \t   }
@@ -1289,15 +1288,14 @@
    <for
       keys   = "var              : name        "
       values = "
-                mcg_c2_oscMode          : ExternalReference;
+                mcg_c2_oscMode   : ExternalReference;
                 mcg_c1_irclken[] : McgIrClkEn;
                 mcg_c2_ircs[]    : McgIrClkSrc;
                 mcg_sc_fcrdiv[]  : FastIrcDivider;
                 mcg_c6_cme0[]    : OSC0ClockMonitor;
                 mcg_c2_locre0[]  : OSC0ActionOnLossOfClock;
                 mcg_c8_cme1[]    : RTCClockMonitor;
-                mcg_c8_locre1[]  : RTCActionOnLossOfClock;
-      "
+                mcg_c8_locre1[]  : RTCActionOnLossOfClock "
       >
       <variableTemplate variables="%(var)" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
       ><![CDATA[
@@ -1374,7 +1372,7 @@
       ><![CDATA[\t   /// SIM CLKDIV3 System Clock Divider Register 3 %initExpression\n\n ]]></variableTemplate>
 
       <template key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]" ><![CDATA[
-         \t   Sim::DefaultSopt2Values[$(ClockConfig[%(n)])].sopt2,\n\n
+         \t   Sim::DefaultClockSouceInitValues[$(ClockConfig[%(n)])].sopt2,\n\n
       ]]></template>
 
       <variableTemplate key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
@@ -1473,21 +1471,21 @@
       \tstruct ClockInfo {\n\n
    ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="/SIM/sim_clkdiv1_outdiv4[]||/SIM/sim_clkdiv1_outdiv3[]||/SIM/sim_clkdiv1_outdiv2[]||/SIM/sim_clkdiv1_outdiv1[]"
    ><![CDATA[
       \t   /// SIM CLKDIV1 - System Clock Divider Register 1
       \t   const uint32_t clkdiv1;\n\n ]]>
    </template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="/SIM/sim_clkdiv3_pllfll[]"
    ><![CDATA[
       \t   /// SIM CLKDIV3 - PLLFLL clock divider divisor & fraction
       \t   const uint32_t clkdiv3;\n\n ]]>
    </template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="(/SIM/sim_sopt2_pllfllsel[])||(/SIM/sim_sopt2_tpmsrc[])"
    ><![CDATA[
       \t   /// SIM SOPT2 - Clock selectors for various peripherals
@@ -1495,74 +1493,74 @@
    </template>
 
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="mcgClockMode[]"
    ><![CDATA[
       \t   /// Clock Mode
       \t   const McgClockMode clockMode;\n\n
    ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="/SMC/smc_pmctrl_runm[]"
    ><![CDATA[
       \t   /// Run Mode
       \t   const SmcRunMode runMode; \n\n ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="mcg_c1_frdiv[]||mcg_c1_irclken[]||mcg_c1_irefsten[]"
    ><![CDATA[
       \t   /// Control Register 1 - FRDIV, IRCLKEN, IREFSTEN, (-CLKS, -IREFS)
       \t   const uint8_t c1; \n ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="mcg_c2_locre0[]||mcg_c2_range0[]||mcg_c2_oscMode||mcg_c2_ircs[]"
    ><![CDATA[
       \t   /// Control Register 2 - LOCRE0, RANGE0, HGO0, EREFS0, IRCS, (-LP, -FCTRIM)
       \t   const uint8_t c2;\n ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="mcg_c4_dmx32[]||mcg_c4_drst_drs[]"
    ><![CDATA[
       \t   /// Control Register 4 - DMX32, DRST_DRS, (-FCTRIM, -SCFTRIM)
       \t   const uint8_t c4;\n ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="mcg_c5_pllclken0[]||mcg_c5_pllsten0[]||mcg_c5_prdiv0[]"
    ><![CDATA[
       \t   /// Control Register 5 - PLLCLKEN0, PLLSTEN0, PRDIV0
       \t   const uint8_t c5;\n ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="mcg_c6_lolie0[]||mcg_c6_cme0[]||mcg_c6_vdiv0[]"
    ><![CDATA[
       \t   /// Control Register 6 - LOLIE0, CME0, VDIV0, (-PLLS)
       \t   const uint8_t c6;\n ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="mcg_sc_fcrdiv[]"
    ><![CDATA[
       \t   /// Status and Control Register - FCRDIV
       \t   const uint8_t sc;\n ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="mcg_c7_oscsel[]"
    ><![CDATA[
       \t   /// Control Register 7 - OSCSEL
       \t   const uint8_t c7;\n ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="mcg_c8_locre1[]||mcg_c8_cme1[]||mcg_c8_lolre[]"
    ><![CDATA[
       \t   /// Control Register 8 - LOCRE1, CME1, LOLRE
       \t   const uint8_t c8;\n ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="mcg_c9_pll_cme[]||mcg_c9_pll_locre[]"
    ><![CDATA[
       \t   /// Control Register 9 - PLL_CME
       \t   const uint8_t c9;\n ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="mcg_c11_pllcs[]"
    ><![CDATA[
       \t   /// Control Register 11 - PLLCS
@@ -1574,13 +1572,13 @@
 
 <!--   ========== Global Clocks =============================== -->
 
-   <template namespace="usbdm" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
       \t/*
       \t * Global clocks
       \t */
       \t\n
    ]]></template>
-   <template namespace="usbdm" codeGenCondition="!/MCG/enablePeripheralSupport" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="!/MCG/enablePeripheralSupport" ><![CDATA[
       \t/*
       \t * Global clock constants
       \t * These are provided when minimal clock generator code is used.
@@ -1595,7 +1593,7 @@
                system_mcgoutclk_clock[0]   : SystemMcgOutClock;
                system_mcgfllclk_clock[0]   : SystemMcgFllClock
          " >
-      <variableTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport"
+      <variableTemplate where="usbdm" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport"
                    tooltipPadding="x*xx" ><![CDATA[
          \t/**
          \t *  %description
@@ -1613,7 +1611,7 @@
          \tvolatile uint32_t %(name);
          \t\n
       ]]></variableTemplate>
-      <variableTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="!/MCG/enablePeripheralSupport"
+      <variableTemplate where="basicInfo" variables="%(clock)" codeGenCondition="!/MCG/enablePeripheralSupport"
                    tooltipPadding="x*xx" ><![CDATA[
          \t/**
          \t *  %description

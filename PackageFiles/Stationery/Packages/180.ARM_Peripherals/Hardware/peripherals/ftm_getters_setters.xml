@@ -30,7 +30,7 @@
          ftm_outmask_chom               : true  : true  : false : enableGettersAndSetters : OutmaskChom;
          ftm_exttrig_chtrig             : true  : true  : false : enableGettersAndSetters : ExttrigChtrig;
          ftm_pol_pol                    : true  : true  : false : enableGettersAndSetters : PolPol;
-         ftm_fltpol_fltpol              : true  : true  : false : enableGettersAndSetters : FltpolFltpol;
+         ftm_fltpol_fltpol              : true  : true  : false : enableGettersAndSetters : FltpolFltpol
          " >
       <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
       ><![CDATA[

@@ -48,7 +48,7 @@ namespace USBDM {
 #pragma GCC push_options
 #pragma GCC optimize ("Os")
 
-$(/PORT/PinIndex: // #error /PORT/PinIndex not found)
+$(/PORT/Declarations: // #error /PORT/Declarations not found)
 // Pin number for port pin within individual port e.g. GPIOB[31..0]
 typedef uint8_t  PinNum;
 
@@ -666,7 +666,7 @@ public:
  *
  * @param[in] status 32-bit value from ISFR (each bit indicates a pin interrupt source)
  */
-typedef void (*PinCallbackFunction)(uint32_t status);
+typedef void (*PinCallbackFunction)();
 
 /**
  * Provides common unhandledCallback for all PORTs
@@ -790,15 +790,17 @@ public:
 
 private:
    /**
-    * This class is not intended to be instantiated
+    * Restrict
     */
-   PcrBase() = delete;
    PcrBase(const PcrBase&) = delete;
    PcrBase(PcrBase&&) = delete;
 
+protected:
+   PcrBase() = default;
+
 public:
    /** Callback to catch unhandled interrupt */
-   static void unhandledCallback(uint32_t) {
+   static void unhandledCallback() {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
    
@@ -855,7 +857,7 @@ $(/PORT/AccessFunctions: #error /PORT/AccessFunctions not found)
  * @tparam portIndex PortIndex used to determine associated port
  */
 template<PortIndex portIndex>
-class PcrBase_T {
+class PcrBase_T : public PcrBase {
 
 private:
    /**
@@ -877,38 +879,22 @@ public:
    static constexpr HardwarePtr<PORT_Type> port = PcrBase::getPortAddress(portIndex);
 #endif
 
-   /// Hardware IRQ number
+   /// Hardware IRQ number (Negative if interrupts are not supported by PORT)
    static constexpr IRQn_Type irqNum = PcrBase::getIrqNum(portIndex);
+
+   /// Hardware IRQ index (Negative if interrupts are not supported by PORT or disabled)
+   static constexpr PortIrqNum portIrqNum = PcrBase::getIrqIndex(portIndex);
 
    /// Indicates if USBDM port pin interrupt handler has been installed in vector table
    static constexpr bool HANDLER_INSTALLED = PcrBase::isHandlerInstalled(mapPortToPin(portIndex));
 
 public:
-
-   /** Callback functions for ISRs */
-   static PinCallbackFunction fCallback;
-
-   /**
-    * Interrupt handler\n
-    *  - Clears interrupt flag
-    *  - Calls callback
-    */
-   static void irqHandler() {
-      // Capture interrupt flags
-      uint32_t status = port->ISFR;
-
-      // Clear flags
-      port->ISFR = status;
-
-      // Pass to call-back
-      fCallback(status);
-   }
-
+#if $(/GPIO/irqHandlingMethod:false)   // /GPIO/irqHandlingMethod   
    /**
     * Set callback for Pin interrupts
     *
-    * @param[in] callback The function to call on Pin interrupt. \n
-    *                     nullptr to indicate none
+    * @param[in] pinCallback The function to call on Pin interrupt. \n
+    *                        nullptr to indicate none
     *
     * @return E_NO_ERROR            No error
     * @return E_HANDLER_ALREADY_SET Handler already set
@@ -916,28 +902,17 @@ public:
     * @note There is a single callback function for all pins on the related port.
     *       It is necessary to identify the originating pin in the callback
     */
-   static ErrorCode setPinCallback(PinCallbackFunction callback) {
-
-      // Always OK to remove shared handler
-      if (callback == nullptr) {
-         fCallback = PcrBase::unhandledCallback;
-         return E_NO_ERROR;
-      }
-#ifdef DEBUG_BUILD
-      // Callback is shared across all port pins. Check if different callback already assigned
-      if ((fCallback != PcrBase::unhandledCallback) && (fCallback != callback)) {
-         return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
-      }
-#endif
-      fCallback = callback;
-      return E_NO_ERROR;
+   static void setPinCallback(PinCallbackFunction pinCallback) {
+      static_assert(portIrqNum>=0, "Port doesn't support interrupts or they are disabled");
+      PcrBase::setPinCallback(portIrqNum, pinCallback);
    }
+#endif // /GPIO/irqHandlingMethod   
 
    /**
     * Enable Pin interrupts in NVIC.
     */
    static void enableNvicPinInterrupts() {
-      static_assert(irqNum>=0, "Pin does not support interrupts");
+      static_assert(irqNum>=0, "Port doesn't support interrupts");
       NVIC_EnableIRQ(irqNum);
    }
 
@@ -948,7 +923,7 @@ public:
     * @param[in]  nvicPriority  Interrupt priority
     */
    static void enableNvicPinInterrupts(NvicPriority nvicPriority) {
-      static_assert(irqNum>=0, "Pin does not support interrupts");
+      static_assert(irqNum>=0, "Port doesn't support interrupts");
       enableNvicInterrupt(irqNum, nvicPriority);
    }
 
@@ -956,7 +931,7 @@ public:
     * Disable Pin interrupts in NVIC.
     */
    static void disableNvicPinInterrupts() {
-      static_assert(irqNum>=0, "Pin does not support interrupts");
+      static_assert(irqNum>=0, "Port doesn't support interrupts");
       NVIC_DisableIRQ(irqNum);
    }
    /**
@@ -1038,9 +1013,6 @@ public:
       return fn;
    }
 };
-
-template<PortIndex portIndex>
-PinCallbackFunction USBDM::PcrBase_T<portIndex>::fCallback = PcrBase::unhandledCallback;
 
 
 /**

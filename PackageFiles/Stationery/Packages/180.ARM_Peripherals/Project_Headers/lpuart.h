@@ -178,7 +178,7 @@ public:
     *
     * This is calculated from baud rate and LPUART clock frequency
     *
-    * @param[in]  baudrate  Interface speed in bits-per-second
+    * @param uartBaudRate Baud rate to set
     */
    virtual void setBaudRate(UartBaudRate uartBaudRate) = 0;
 
@@ -318,6 +318,11 @@ public:
    }
 #endif
 
+   /**
+    * Set LPUART Baud rate
+    *
+    * @param uartBaudRate Baud rate to set
+    */
    virtual void setBaudRate(UartBaudRate uartBaudRate) override {
       Info::setBaudRate(uartBaudRate);
    }

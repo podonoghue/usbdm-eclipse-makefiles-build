@@ -28,13 +28,13 @@ Devices using this peripheral:
       <choice value="true"  name="Generate code for $(_NAME)"/>
    </binaryOption>
 
-   <constant key="irq_pattern"               type="String"  value='"^$(_BASENAME)%i_?((RxTx|Error|Lon)|.*)?$"'  />
-   <constant key="irq_ClassHandler"          type="String"  value='"%c%i::irq$2Handler"'                        />
-   <constant key="irq_parameters"            type="String"  value='""'     />
-   <constant key="irq_dummy_parameters"      type="String"  value='""'     />
-   <constant key="irq_call"                  type="String"  value='""'     />
-   <constant key="generateDefault"           type="Boolean" value="false"  />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"  />
+   <constant key="irq_pattern"               value="^$(_BASENAME)%i_?((RxTx|Error|Lon)|.*)?$"  />
+   <constant key="irq_ClassHandler"          value="%c%i::irq$2Handler"                        />
+   <equation key="irq_parameters"            value=""     />
+   <equation key="irq_dummy_parameters"      value=""     />
+   <equation key="irq_call"                  value=""     />
+   <equation key="generateDefault"           value="false"  />
+   <equation key="configureInStartupDefault" value="false"  />
    <xi:include href="enablePeripheral.xml"  />
    <title />
    <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src[]"              optional="true" locked="false" />

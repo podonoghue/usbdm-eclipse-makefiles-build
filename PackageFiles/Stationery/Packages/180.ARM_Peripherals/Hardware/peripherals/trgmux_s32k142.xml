@@ -14,7 +14,7 @@
    
    <xi:include href="mapPinsOption.xml"/>
    
-   <template namespace="usbdm"><![CDATA[
+   <template where="basicInfo"><![CDATA[
    /**
     *  Trigger input selection
     */

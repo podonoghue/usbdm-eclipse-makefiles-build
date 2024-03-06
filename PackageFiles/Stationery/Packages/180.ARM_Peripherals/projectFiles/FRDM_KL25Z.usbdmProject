@@ -8,6 +8,8 @@
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KL25Z" />
    <item key="$$DeviceInfo_SubFamily"                      value="MKL25Z4" />
    <item key="$$Hardware_Source_Filename"                  value="MKL25Z4.usbdmHardware" />
+   <item key="$peripheral$GPIOB_polarity"                  value="786432" />
+   <item key="$peripheral$GPIOD_polarity"                  value="2" />
    <item key="$pin$PTA12_pcrSetting_1"                     value="100" />
    <item key="$pin$PTA13_pcrSetting_1"                     value="100" />
    <item key="$pin$PTA16_pcrSetting_1"                     value="100" />

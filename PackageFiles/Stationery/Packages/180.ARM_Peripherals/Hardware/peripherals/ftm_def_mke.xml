@@ -4,10 +4,11 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <constant key="irq_parameters"            type="String"  value='"uint8_t"'  />
-   <constant key="irq_call"                  type="String"  value='"0"'  />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="irq_parameters"            value="uint8_t value"  />
+   <equation key="irq_dummy_parameters"      value="uint8_t"        />
+   <equation key="irq_call"                  value="0"              />
+   <equation key="generateDefault"           value="false"         />
+   <equation key="configureInStartupDefault" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
 
    <!-- ____ Constants ____________ -->
@@ -19,7 +20,7 @@
       \tstatic constexpr unsigned NumChannels = $(_channelCount);
 
       \t//! Number of channel event vectors implemented
-      \tstatic constexpr unsigned NumChannelVectors = $(_irqCount);\n\n
+      \tstatic constexpr unsigned NumChannelVectors = $(_hardwareIrqCount);\n\n
    ]]></template>
 
    <!-- ____ Class Declaration ________ -->
@@ -1246,7 +1247,6 @@
          bitList="=triggerChannels"
          bitDescription="Trigger on CNV = %n"
          />
-      <deleteVariables variables="triggerChannels" />
    </categoryOption>
 
    <!-- ************* DEADTIME ****************** -->
@@ -2510,15 +2510,6 @@
 
    <constant key="/$(_basename)_common_info_done" condition="!/$(_basename)_common_info_done" />
 
-<!-- ___ BasicInfo class ______________ -->
-
-   <template where="basicInfo" ><![CDATA[
-      class $(_Structname)BasicInfo : public $(_Baseclass)CommonInfo {
-      \t
-      public:
-      \t\n
-   ]]></template>
-
    <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="irqHandlingMethod"
    ><![CDATA[
@@ -2555,7 +2546,7 @@
       \t\n
    ]]></template>
 
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
+   <template where="static" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t/** Callback function for Channel Fault and timer overflow */
       \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Class)Info::unhandledCallback;
@@ -2634,18 +2625,18 @@
       \t\n
    ]]></template>
 
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
+   <template where="static" codeGenCondition="irqHandlingMethod" ><![CDATA[
       \t/**
       \t * Callback table for programmatically set handlers for $(_Class)
       \t */
       \t$(_Class)Info::ChannelCallbackFunction $(_Class)Info::channelCallbacks[] = {\n\n
    ]]></template>
-   <for keys="ch" dim="=_irqCount" >
-      <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
+   <for keys="ch" dim="=_hardwareIrqCount" >
+      <template where="static" codeGenCondition="irqHandlingMethod" ><![CDATA[
          \t   $(_Class)Info::unhandledChannelCallback,\n
       ]]></template>
    </for>
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
+   <template where="static" codeGenCondition="irqHandlingMethod" ><![CDATA[
       \t};\n\n
    ]]></template>
 
@@ -3644,10 +3635,6 @@
 
 <!--  ___ End of class  $(_Structname)BasicInfo ______________ -->
 
-   <template where="basicInfo" ><![CDATA[
-      }; // class  $(_Structname)BasicInfo\n\n
-   ]]></template>
-
 <!-- ___ Set interrupt handlers ___________ -->
 
    <template  codeGenCondition="irqHandlingMethod" ><![CDATA[
@@ -3693,7 +3680,7 @@
       \t\n
    ]]></template>
 
-   <template  codeGenCondition="irqHandlingMethod&amp;&amp;(_irqCount==1)" ><![CDATA[
+   <template  codeGenCondition="irqHandlingMethod&amp;&amp;(_hardwareIrqCount==1)" ><![CDATA[
       \t/**
       \t * Set channel call-back function
       \t * Configured for shared channel call-backs i.e. all channels use same call-back
@@ -3741,7 +3728,7 @@
       \t\n
    ]]></template>
 
-   <template  codeGenCondition="irqHandlingMethod&amp;&amp;(_irqCount>1)" ><![CDATA[
+   <template  codeGenCondition="irqHandlingMethod&amp;&amp;(_hardwareIrqCount>1)" ><![CDATA[
       \t/**
       \t * Set channel call-back function
       \t * Configured for individual channel call-backs
@@ -3906,7 +3893,6 @@
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
       </for>
    </category>
-   <deleteVariables variables="_scgc_clock" mustExist="false" />
 
    <!--  ____ Signal mapping __________________ -->
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />

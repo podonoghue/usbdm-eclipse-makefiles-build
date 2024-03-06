@@ -4,8 +4,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Port control" >
 
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="generateDefault"           type="Boolean" value="false"         />
+   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml" />
    <title />
 
@@ -343,7 +343,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
+   <template where="basicInfo" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       class $(_Class)BasicInfo {
       \t
@@ -351,7 +351,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
+   <template where="basicInfo" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -372,14 +372,14 @@
 
 <!--   Member variables -->
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="port_ioflt0_fltdiv3,port_ioflt0_fltdiv2,port_ioflt0_fltdiv1,port_ioflt0_fltnmi,port_ioflt0_fltkbi1,port_ioflt0_fltkbi0,port_ioflt0_fltrst,port_ioflt0_flth,port_ioflt0_fltg,port_ioflt0_fltf,port_ioflt0_flte,port_ioflt0_fltd,port_ioflt0_fltc,port_ioflt0_fltb,port_ioflt0_flta"
    ><![CDATA[
       \t   /// Port Filter Register 0
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="port_ioflt1_flti2c1,port_ioflt1_flti2c0,port_ioflt1_fltpwt,port_ioflt1_fltftm1,port_ioflt1_fltftm0,port_ioflt1_fltirq,port_ioflt1_flti"
    ><![CDATA[
       \t   /// Port Filter Register 1
@@ -426,7 +426,7 @@
       \t\n
    ]]></template>
 
-   <template discardRepeats="true" key="/$(_BASENAME)/InitMethod" namespace="all"
+   <template discardRepeats="true" key="/$(_BASENAME)/InitMethod" where="all"
              codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t   // Initialise remaining registers
       \t   port->IOFLT0    = init.ioflt0;
@@ -462,7 +462,7 @@
             port_ioflt1_fltirq;
             port_ioflt1_flti
             " >
-      <variableTemplate namespace="usbdm" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -561,13 +561,13 @@
       \t};\n\n
    ]]></variableTemplate>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
+   <template where="basicInfo" codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
       \t}; // $(_Class)BasicInfo::Init\n\n
    ]]>
    </template>
 
-   <template namespace="usbdm" codeGenCondition="enablePeripheralSupport" >
+   <template where="basicInfo" codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
       }; // $(_Class)BasicInfo\n\n
    ]]>

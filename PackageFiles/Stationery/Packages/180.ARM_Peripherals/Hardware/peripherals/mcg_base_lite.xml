@@ -4,12 +4,11 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator">
 
-   <constant key="irq_common"               type="Boolean" value="true"          />
-   <constant key="irq_parameters"           type="String"  value='""'  />
-   <constant key="irq_dummy_parameters"     type="String"  value='""'  />
-   <constant key="irq_call"                 type="String"  value='""'  />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="irq_parameters"           type="String"  value='""'  />
+   <equation key="irq_dummy_parameters"     type="String"  value='""'  />
+   <equation key="irq_call"                 type="String"  value='""'  />
+   <equation key="generateDefault"           type="Boolean" value="false"         />
+   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
 
    <title />
@@ -68,7 +67,7 @@
       <choice value="true"  name="Enabled"  isDefault="true" />
    </binaryOption>
 
-   <for keys="n" dim="=1,/SIM/numberOfClockSettings" >
+   <for keys="n" dim="=1,(/SIM/numberOfClockSettings-1)" >
       <binaryOption key="enableClockConfiguration[%(n)]"
          enabledBy="enablePeripheralSupport"
          hidden="true"
@@ -117,7 +116,7 @@
       ref="mcg_c2_oscMode>=2"
       derived="true"
       description="External Reference Select"
-      toolTip="Determines whether an external clock or crystal is used">
+      toolTip="Determines whether an external clock or crystal is used" >
       <choice value="0" name="External clock"   enum="ExternalClk"  />
       <choice value="1" name="Oscillator"       enum="Oscillator"  isDefault="true" />
    </choiceOption>
@@ -194,7 +193,7 @@
                <graphicItem id="CLKS"                      var="mcg_c1_clks[%(n)]"                  type="mux"         params="480, 200, 3"                                    />
                <graphicItem id=""                          var=""                                   type="connector"   params="CLKS,0,   MCGOUTCLK,0"                   />
                <graphicItem id="MCGOUTCLK"                 var="system_mcgoutclk_clock[%(n)]"       type="node"        params="570,  200"                            />
-               <graphicItem id="MCGERCLK_IN_IN0,NONAME,NOVALUE"      var="mcg_erc_clock[%(n)]"              type="node"        params="430, 360, is,on"                                />
+               <graphicItem id="MCGERCLK_IN_IN0,NONAME,NOVALUE"   var="mcg_erc_clock[%(n)]"         type="node"        params="430, 360, is,on"                                />
 
                <!-- MCG OSCSEL Inputs -->
                <graphicItem id="OSCCLK_C_OSCSEL0"          var=""                                   type="connector"   params="OSCCLK,0,   MCGERCLK_IN_IN0,0, x"               condition="!mcg_c7_oscsel_present"  />
@@ -208,7 +207,7 @@
 
                <graphicItem id="SCP,NONAME"                var="/OSC0/osc_cr_scp"                   type="annotation"  params="10,  60,  100, 16, Cap=%v"                     />
                <graphicItem id="RTC_SCP,NONAME"            var="/RTC/rtc_cr_scp"                    type="annotation"  params="10,  75,  100, 16, Cap=%v"                     condition="/SIM/RtcForcing"               />
-               <graphicItem id="MODE,NONAME"               var="mcg_c2_oscMode"                            type="annotation"  params="10,  145, 180, 16"                              />
+               <graphicItem id="MODE,NONAME"               var="mcg_c2_oscMode"                     type="annotation"  params="10,  145, 180, 16"                              />
                <graphicItem id="RANGE,NONAME"              var="/OSC0/oscillatorRange"              type="annotation"  params="10,  165, 180, 16"                              />
                <graphicItem id="EREFSTEN,NONAME"           var="/OSC0/osc_cr_erefsten"              type="annotation"  params="10,  185, 140, 20"                              />
 
@@ -543,6 +542,49 @@
                   <equation key="y" value="=y+100" />
                </graphicGroup>
 
+               <!-- COP -->
+               <equation key="y" value="=y+20" />
+               <graphicGroup x="0" y="y" condition="/SIM/sim_copc_copt" >
+                  <graphicItem id="LPO_OSC.COP"               var="/PMC/system_low_power_clock"        type="reference"   params="150,  10, 150"            />
+                  <graphicItem id="MCGIRCLK.COP"              var="/MCG/system_mcgirclk_clock[%(n)]"   type="reference"   params="150,  30, 150"            />
+                  <graphicItem id="OSC.COP"                   var="/OSC0/oscer_clock"                  type="reference"   params="150,  50, 150"            />
+                  <graphicItem id="BUS_CLK.COP"               var="/SIM/system_bus_clock[%(n)]"        type="reference"   params="150,  70, 150"            />
+                  <!--  graphicItem id="COP_WINDOW,NONAME"         var="/SIM/sim_copc_copw"                 type="annotation"  params="185,  70, 100, 18"        / -->
+
+                  <graphicItem id=""                          var=""                                   type="connector"   params="LPO_OSC.COP,0,  COPC_CLKSEL,0, (x-20),y,x"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="MCGIRCLK.COP,0, COPC_CLKSEL,1, (x-20),y,x"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="OSC.COP,0,      COPC_CLKSEL,2"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="BUS_CLK.COP,0,  COPC_CLKSEL,3"  />
+                  <graphicItem id="COPC_CLKSEL"               var="/SIM/sim_copc_copclksel"            type="mux"         params="270,  40, 4"        />
+
+                  <graphicItem id=""                          var=""                                   type="connector"   params="COPC_CLKSEL,0, /2^5,0,  (x-30),d,y,x"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="COPC_CLKSEL,0, /2^8,0,  (x-30),y,x"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="COPC_CLKSEL,0, /2^10,0, (x-30),y,x"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="COPC_CLKSEL,0, /2^13,0, (x-30),y,x"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="COPC_CLKSEL,0, /2^16,0, (x-30),y,x"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="COPC_CLKSEL,0, /2^18,0, (x-30),y,x"  />
+
+                  <graphicItem id="/2^5"                      var=""                                   type="label"       params="430, -10, 50, small"       />
+                  <graphicItem id="/2^8"                      var=""                                   type="label"       params="430,  10, 50, small"       />
+                  <graphicItem id="/2^10"                     var=""                                   type="label"       params="430,  30, 50, small"       />
+                  <graphicItem id="/2^13"                     var=""                                   type="label"       params="430,  50, 50, small"       />
+                  <graphicItem id="/2^16"                     var=""                                   type="label"       params="430,  70, 50, small"       />
+                  <graphicItem id="/2^18"                     var=""                                   type="label"       params="430,  90, 50, small"       />
+
+                  <graphicItem id=""                          var=""                                   type="connector"   params="/2^5,0,  COPSRC,1"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="/2^8,0,  COPSRC,2"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="/2^10,0, COPSRC,3"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="/2^13,0, COPSRC,4"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="/2^16,0, COPSRC,5"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="/2^18,0, COPSRC,6"  />
+
+                  <graphicItem id="COPSRC"                    var="/SIM/sim_copc_copt"                 type="mux"         params="500, 30, 8"               />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="COPSRC,0, COP_PERIOD,0"   />
+                  <graphicItem id="COP_PERIOD"                var="/SIM/cop_timeout_period[%(n)]"      type="node"        params="600, 30"                  />
+
+                  <equation key="y" value="=y+120" />
+               </graphicGroup>
+
                <!-- SDHCSRC -->
                <graphicGroup x="0" y="y" condition="/SIM/sim_sopt2_sdhcsrc_present" >
                   <graphicItem id="CORE_CLK.8"                var="/SIM/system_core_clock[%(n)]"       type="reference"   params="370,-20, 180"                       />
@@ -840,58 +882,6 @@
       </categoryOption>
    </for>
 
-<!--   ========== Global Clocks =============================== -->
-
-   <template namespace="usbdm" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
-      \t/*
-      \t * Global clocks
-      \t */
-      \t\n
-   ]]></template>
-   <template namespace="usbdm" codeGenCondition="!/MCG/enablePeripheralSupport" ><![CDATA[
-      \t/*
-      \t * Global clock constants
-      \t * These are provided when minimal clock generator code is used.
-      \t * They assume no clock changes are made after startup.
-      \t * Values provided are from USBDM configuration.
-      \t */
-      \t\n
-   ]]></template>
-
-   <for keys=" clock                       : name "
-      values=" system_mcgffclk_clock[0]    : SystemMcgFFClock;
-               system_mcgoutclk_clock[0]   : SystemMcgOutClock;
-               system_mcgfllclk_clock[0]   : SystemMcgFllClock
-         ">
-      <variableTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport"
-                   tooltipPadding="x*xx" ><![CDATA[
-         \t/**
-         \t *  %description
-         \t *  %tooltip
-         \t */
-         \textern volatile uint32_t %(name);
-         \t\n
-      ]]></variableTemplate>
-      <variableTemplate key="/$(_BASENAME)/clocks" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport"
-                   tooltipPadding="x*xx" ><![CDATA[
-         \t/**
-         \t *  %description
-         \t *  %tooltip
-         \t */
-         \tvolatile uint32_t %(name);
-         \t\n
-      ]]></variableTemplate>
-      <variableTemplate namespace="usbdm" variables="%(clock)" codeGenCondition="!/MCG/enablePeripheralSupport"
-                   tooltipPadding="x*xx" ><![CDATA[
-         \t/**
-         \t *  %description
-         \t *  %tooltip
-         \t */
-         \tconstexpr uint32_t %(name) = %valueExpression;
-         \t\n
-      ]]></variableTemplate>
-   </for>
-
    <template><![CDATA[
       \t//! Frequency of Slow Internal Reference Clock [~2MHz]
       \tstatic constexpr uint32_t system_slow_lirc_clock = $(system_slow_irc_clock_base)UL;
@@ -1029,7 +1019,7 @@
       ><![CDATA[\t   /// SIM CLKDIV3 System Clock Divider Register 3 %initExpression\n\n ]]></variableTemplate>
 
       <template key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]" ><![CDATA[
-         \t   Sim::DefaultSopt2Values[$(ClockConfig[%(n)])].sopt2,\n\n
+         \t   Sim::DefaultClockSouceInitValues[$(ClockConfig[%(n)])].sopt2,\n\n
       ]]></template>
 
       <variableTemplate key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
@@ -1075,6 +1065,58 @@
       <template key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]" ><![CDATA[
          \t},\n
       ]]></template>
+   </for>
+
+<!--   ========== Global Clocks =============================== -->
+
+   <template where="basicInfo" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
+      \t/*
+      \t * Global clocks
+      \t */
+      \t\n
+   ]]></template>
+   <template where="basicInfo" codeGenCondition="!/MCG/enablePeripheralSupport" ><![CDATA[
+      \t/*
+      \t * Global clock constants
+      \t * These are provided when minimal clock generator code is used.
+      \t * They assume no clock changes are made after startup.
+      \t * Values provided are from USBDM configuration.
+      \t */
+      \t\n
+   ]]></template>
+
+   <for keys=" clock                       : name "
+      values=" system_mcgffclk_clock[0]    : SystemMcgFFClock;
+               system_mcgoutclk_clock[0]   : SystemMcgOutClock;
+               system_mcgfllclk_clock[0]   : SystemMcgFllClock
+         " >
+      <variableTemplate where="usbdm" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport"
+                   tooltipPadding="x*xx" ><![CDATA[
+         \t/**
+         \t *  %description
+         \t *  %tooltip
+         \t */
+         \textern volatile uint32_t %(name);
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate key="/$(_BASENAME)/clocks" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport"
+                   tooltipPadding="x*xx" ><![CDATA[
+         \t/**
+         \t *  %description
+         \t *  %tooltip
+         \t */
+         \tvolatile uint32_t %(name);
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate where="basicInfo" variables="%(clock)" codeGenCondition="!/MCG/enablePeripheralSupport"
+                   tooltipPadding="x*xx" ><![CDATA[
+         \t/**
+         \t *  %description
+         \t *  %tooltip
+         \t */
+         \tconstexpr uint32_t %(name) = %valueExpression;
+         \t\n
+      ]]></variableTemplate>
    </for>
 
    <!-- ************* Common ****************** -->

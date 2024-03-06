@@ -4,53 +4,18 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <constant key="irq_parameters"            type="String"  value="&quot;uint8_t status&quot;"  />
-   <constant key="irq_dummy_parameters"      type="String"  value="&quot;uint8_t&quot;"  />
-   <constant key="irq_call"                  type="String"  value="&quot;getAndClearStatus()&quot;"  />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="irq_parameters"             value="uint8_t status"  />
+   <equation key="irq_dummy_parameters"       value="uint8_t"  />
+   <equation key="irq_call"                   value="getAndClearStatus()"  />
+   <equation key="generateDefault"            value="false"         />
+   <equation key="configureInStartupDefault"  value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
-<!--
-    * General substitutions
-    *  $(_NAME)         => e.g FTM2 => FTM2
-    *  $(_name)         => e.g FTM2 => ftm2
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
-    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
-    *  $(_Class)        => e.g FTM2 => Ftm2
-    *  $(_Baseclass)    => e.g FTM0 => Ftm
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A
--->
-
-<!--
-    * Template substitutions
-    *
-    * <li>%paramExpression            Parameters ORed together e.g. adcPretrigger|adcRefSel
-    * <li>%valueExpression            Numeric variable value e.g. 0x3
-    * <li>%symbolicExpression[index]  Symbolic formatted value e.g. AdcCompare_Disabled
-    * <li>%variable[index]            Variable name /ADC0/adc_sc2_acfe
-    * <li>%macro[index](value)        C register macro e.g. ADC_SC2_ACFGT(value)
-    * <li>%description[index]         Description from controlVar e.g. Compare Function Enable
-    * <li>%shortDescription[index]    Short description from controlVar e.g. Compare Function Enable
-    * <li>%tooltip[index]             Tool-tip from controlVar e.g. Each bit disables the GPIO function
-    * <li>%params                     Formatted parameter list for function
-    * <li>%paramDescription[index]    Tool-tip from controlVar formatted as param description @param ...
-    * <li>%paramType[index]           Based on typeName e.g. AdcCompare (or uint32_t)
-    * <li>%paramName[index]           Based on typeName with lower-case first letter adcCompare
-    * <li>%fieldAssignment            Expression of form '%register <= (%register & ~%mask)|%paramExpression
-    * <li>%maskingExpression          Based on variable etc. Similar to (%register&%mask)
-    * <li>%mask[index]                From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
-    * <li>%register[index]            Register associated with variable e.g. adc->APCTL1
-    * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
-    * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
--->
-
    <!-- ************* Class Declaration ****************** -->
-   <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Structname)BasicInfo&quot;" />
+   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
-   <constant key="disable_peripheral" value = "&quot;dac->C0 = DAC_C0_DACEN(0);&quot;" type="String" />
+   <constant key="disable_peripheral" value = '"dac->C0 = DAC_C0_DACEN(0);"' type="String" />
 
    <template><![CDATA[
       \t//! Pin number in Info table for DAC output if mapped to a pin
@@ -62,6 +27,7 @@
    <binaryOption key="dac_c0_dacen" condition="dac_c0_dacen_present"
       enabledBy="enablePeripheralSupport"
       typeName="DacMode"
+      baseType="uint8_t"
       toolTip="Enable for DAC"
       description="Enable" >
       <choice name="DAC is disabled"  value="0" enum="Disabled"/>
@@ -71,6 +37,7 @@
    <binaryOption key="dac_c0_dacrfs" condition="dac_c0_dacrfs_present"
       enabledBy="dac_c0_dacen"
       typeName="DacReferenceSelect"
+      baseType="uint8_t"
       toolTip="Selects the DAC reference voltage. \n
                The output range is [0..Vselected]"
       description="DAC Reference Select" >
@@ -81,6 +48,7 @@
    <binaryOption key="dac_c0_dactrgsel" condition="dac_c0_dactrgsel_present"
       enabledBy="dac_c0_dacen"
       typeName="DacTriggerSelect"
+      baseType="uint8_t"
       toolTip="Selects the DAC Trigger"
       description="DAC Trigger Select" >
       <choice value="0" name="Hardware trigger" enum="Hardware" />
@@ -90,6 +58,7 @@
    <binaryOption key="dac_c0_lpen" condition="dac_c0_lpen_present"
       enabledBy="dac_c0_dacen"
       typeName="DacPower"
+      baseType="uint8_t"      
       toolTip="Controls power consumption of DAC"
       description="DAC Low Power Control" >
       <choice value="0" name="High-Power mode" enum="High" isDefault="true" />
@@ -99,6 +68,7 @@
    <binaryOption key="dac_c0_dacbwien" condition="dac_c0_dacbwien_present"
       enabledBy="dac_c0_dacen"
       typeName="DacWatermarkAction"
+      baseType="uint8_t" 
       toolTip="Control whether an interrupt is generated when SR.DACBFWMF is set i.e.\n
                when the DAC buffer read pointer has reached the watermark level."
       description="Buffer Watermark Action" >
@@ -110,6 +80,7 @@
       locked="true"
       enabledBy="enablePeripheralSupport"
       typeName="DacTrigger"
+      baseType="uint8_t" 
       description="Software Trigger" >
       <choice name="Trigger is not valid"  value="0" enum="TriggerIsNotValid"/>
       <choice name="Trigger is valid"      value="1" enum="TriggerIsValid"/>
@@ -118,6 +89,7 @@
    <binaryOption key="dac_c0_dacbtien" condition="dac_c0_dacbtien_present"
       enabledBy="dac_c0_dacen"
       typeName="DacReadPtrTopAction"
+      baseType="uint8_t" 
       toolTip="Control whether an interrupt is generated when SR.DACBFRPTF is set i.e.\n
                when the DAC buffer read pointer is zero."
       description="Read Pointer Top Action" >
@@ -128,6 +100,7 @@
    <binaryOption key="dac_c0_dacbbien" condition="dac_c0_dacbbien_present"
       enabledBy="dac_c0_dacen"
       typeName="DacReadPtrBottomAction"
+      baseType="uint8_t" 
       toolTip="Control whether an interrupt is generated when SR.DACBFRPBF is set i.e. \n
                when the DAC buffer read pointer is equal to buffer upper limit (C2.DACBFUP)"
       description="Read Pointer Bottom Action" >
@@ -140,6 +113,7 @@
    <binaryOption key="dac_c1_dmaen" condition="dac_c1_dmaen_present"
       enabledBy="dac_c0_dacen"
       typeName="DacDma"
+      baseType="uint8_t" 
       toolTip="When DMA is enabled, DMA requests are generated instead of interrupt requests. \n
                The DMA Done signal clears the DMA request. \n
                The status register flags are still set and are cleared automatically when the DMA completes."
@@ -152,6 +126,7 @@
       enabledBy="dac_c0_dacen"
       valueFormat="DAC_C1_DACBFEN(%s),DAC_C1_DACBFMD(%s)"
       typeName="DacBufferMode"
+      baseType="uint8_t" 
       toolTip="Modes:\n
                Disabled: The first word of the buffer is used to control the DAC output level.\n
                Normal:   Pointer moves [0..max] and wraps \n
@@ -171,6 +146,7 @@
    <choiceOption key="dac_c1_dacbfwm" condition="dac_c1_dacbfwm_present"
       enabledBy="dac_c0_dacen"
       typeName="DacWaterMark"
+      baseType="uint8_t" 
       description="Buffer Watermark Select"
       toolTip="Controls when SR[DACBFWMF] is set.\n
                Normal Mode: \n
@@ -194,6 +170,7 @@
       locked="true"
       enabledBy="enablePeripheralSupport"
       typeName="DacC2Dacbfrp"
+      baseType="uint8_t" 
       toolTip="In normal mode it keeps the current value of the buffer read pointer.\n
                In FIFO mode it is the FIFO read pointer. \n
                It is writable in FIFO mode. User can configure it to same address to reset FIFO as empty."
@@ -204,6 +181,7 @@
    <choiceOption key="dac_c2_dacbfup" condition="dac_c2_dacbfup_present"
       enabledBy="dac_c0_dacen"
       typeName="DacBufferUpperLimit"
+      baseType="uint8_t" 
       toolTip="Normal mode\n
                - Selects the upper limit of the DAC buffer. The buffer read pointer cannot exceed it\n
                FIFO mode\n
@@ -222,6 +200,7 @@
       description="DAC Buffer Watermark Flag"
       hidden="true"
       typeName="DacWatermarkFlag"
+      baseType="uint8_t" 
       toolTip="This bit is set if the remaining FIFO data is less than the watermark setting.\n
                It is cleared automatically by writing data into FIFO by DMA or CPU. \n
                Write to this bit is ignored in FIFO mode." >
@@ -233,6 +212,7 @@
       description="DAC Buffer Read Pointer Top Position Flag"
       hidden="true"
       typeName="DacReadPtrTopFlag"
+      baseType="uint8_t" 
       toolTip="In FIFO mode, it is FIFO nearly empty flag. \n
                It is set when only one data remains in FIFO. \n
                Any DAC trigger does not increase the Read Pointer if this bit is set to \n
@@ -318,63 +298,10 @@
       ]]></variableTemplate>
    </for>
 
-   <!--   ========== class $(_Structname)BasicInfo =============================== -->
-
-   <template namespace="baseClass" ><![CDATA[
-      class $(_Structname)BasicInfo {
-
-      public:\n
-   ]]></template>
-
    <!--   ========== Interrupt handling =============================== -->
-
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="irqHandlingMethod"
-   ><![CDATA[
-       \t//! Common class based callback code has been generated for this class of peripheral
-       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
-       \t\n
-   ]]></variableTemplate>
-
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
-   <![CDATA[
-      \t/**
-      \t * Type definition for $(_Baseclass) interrupt call back.
-      \t */
-      \ttypedef void (*CallbackFunction)($(irq_parameters));
-      \t
-      \t/**
-      \t * Callback to catch unhandled interrupt
-      \t */
-      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
-      \t   setAndCheckErrorCode(E_NO_HANDLER);
-      \t}
-      \t\n
-   ]]>
-   </template>
 
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
-      \t/** Callback function for ISR */
-      \tstatic CallbackFunction sCallback;
-      \t
-      \t/**
-      \t * Set interrupt callback function.
-      \t *
-      \t * @param[in]  $(_basename)Callback Callback function to execute on interrupt
-      \t *                             Use nullptr to remove callback.
-      \t */
-      \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
-      \t   if ($(_basename)Callback == nullptr) {
-      \t      $(_basename)Callback = unhandledCallback;
-      \t   }
-      \t   // Allow either no handler set yet or removing handler
-      \t   usbdm_assert(
-      \t         (sCallback == unhandledCallback) || ($(_basename)Callback == unhandledCallback),
-      \t         "Handler already set");
-      \t   sCallback = $(_basename)Callback;
-      \t}
-      \t
       \t/**
       \t * Get and clear DAC status
       \t *
@@ -390,33 +317,13 @@
       \t   // return original status
       \t   return status;
       \t}
-      \t
-      \t/**
-      \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
-      \t */
-      \tstatic void irqHandler() {
-      \t
-      \t   // Execute call-back
-      \t   sCallback($(irq_call));
-      \t}
-      \t\n
-   ]]>
-   </template>
-
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t
-      \t/**
-      \t * Callback for programmatically set handler for $(_Class)
-      \t */
-      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Structname)BasicInfo::unhandledCallback;
       \t\n
    ]]>
    </template>
 
    <!--   ========== DAC Init class =============================== -->
 
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -483,14 +390,14 @@
 
    <!--   Member variables -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -498,30 +405,25 @@
       \t\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="dac_c0_dacen,dac_c0_dacrfs,dac_c0_dactrgsel,dac_c0_dacswtrg,dac_c0_lpen,dac_c0_dacbwien,dac_c0_dacbtien,dac_c0_dacbbien"
-   ><![CDATA[
-      \t   /// Control Register 0
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="dac_c1_dmaen,dac_c1_dacbfwm,dac_c1_dacbfmd,dac_c1_dacbfen"
-   ><![CDATA[
-      \t   /// Control Register 1
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="dac_c2_dacbfrp,dac_c2_dacbfup"
-   ><![CDATA[
-      \t   /// Control Register 2
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
+   <for keys=" type        : variables                                         : init    "
+       values="%baseType   : dac_c0_dacen,dac_c0_dacrfs,dac_c0_dactrgsel,
+                             dac_c0_dacswtrg,dac_c0_lpen,dac_c0_dacbwien,
+                             dac_c0_dacbtien,dac_c0_dacbbien                   : 0       ;
+               %baseType   : dac_c1_dmaen,dac_c1_dacbfwm,dac_c1_dacbfmd,
+                             dac_c1_dacbfen                                    : 0       ;
+               %baseType   : dac_c2_dacbfrp,dac_c2_dacbfup                     : 0       ">
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(variables)"
+         linePadding="xxx"
+      ><![CDATA[
+         %multilineDescription
+         \t   %(type) %registerName = %(init);\n\n
+      ]]></variableTemplate>
+   </for>
 
    <!--   Constructors -->
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -540,7 +442,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -574,7 +476,7 @@
             dac_c2_dacbfrp;
             dac_c2_dacbfup
             " >
-      <variableTemplate namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -627,7 +529,7 @@
 
 <!--   Configure methods -->
 
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t/**
       \t * Configure with default settings.
@@ -636,7 +538,7 @@
       \tstatic inline void defaultConfigure() {
       \t
       \t   // Update settings
-      \t   configure(Info::DefaultInitValue);
+      \t   configure(DefaultInitValue);
       \t}
       \t
       \t/**
@@ -644,41 +546,44 @@
       \t *
       \t * @param init Class containing initialisation values
       \t */
-      \tstatic void configure(const typename Info::Init &init) {
+      \tstatic void configure(const Init &init) {
       \t
       \t   // Enable peripheral clock
-      \t   Info::enableClock();
+      \t   enableClock();
       \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
-             condition="/$(_STRUCTNAME)/generateSharedIrqInfo" >   <![CDATA[
-      \t   if constexpr (Info::irqHandlerInstalled) {
-      \t      // Only set call-backs if feature enabled
-      \t      Info::setCallback(init.callbackFunction);
-      \t      Info::enableNvicInterrupts(init.irqlevel);
-      \t   }
+   <template codeGenCondition="irqHandlingMethod" >   <![CDATA[
+      \t   // Set call-backs
+      \t   setCallback(init.callbackFunction);
+      \t   enableNvicInterrupts(init.irqlevel);
       \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
-   <![CDATA[
-      \t   dac->C0    = init.c0;
-      \t   dac->C1    = init.c1;
-      \t   dac->C2    = init.c2;
-      \t}
+   <for keys=
+             "  var                                               : statement"
+       values=' dac_c0_dacen,dac_c0_dacrfs,dac_c0_dactrgsel,
+                dac_c0_dacswtrg,dac_c0_lpen,dac_c0_dacbwien,
+                dac_c0_dacbtien,dac_c0_dacbbien                   : "%register = init.%registerName;" ;
+                dac_c1_dmaen,dac_c1_dacbfwm,dac_c1_dacbfmd,
+                dac_c1_dacbfen                                    : "%register = init.%registerName;" ;
+                dac_c2_dacbfrp,dac_c2_dacbfup                     : "%register = init.%registerName;" ' >
+      <variableTemplate codeGenCondition="enablePeripheralSupport"
+         variables="%(var)"
+         linePadding="xxx"
+      ><![CDATA[
+         %multilineDescription
+         \t   %(statement)
+         \t\n
+      ]]></variableTemplate>
+   </for>
+   <template codeGenCondition="enablePeripheralSupport" >   <![CDATA[
+      \t};
       \t\n
-   ]]>
-   </template>
-
-   <template namespace="baseClass" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   ]]></template>
+   
+   
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t}; // class $(_Structname)BasicInfo::Init
-      \t\n
-   ]]>
-   </template>
-
-   <template namespace="baseClass" >
-   <![CDATA[
-      }; // class $(_Structname)BasicInfo
       \t\n
    ]]>
    </template>
@@ -735,7 +640,6 @@
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
       </for>
    </category>
-   <deleteVariables variables="_scgc_clock"  mustExist="false" />
 
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 

@@ -173,7 +173,7 @@
 </category>
 
 
-<!-- template namespace="usbdm" condition="/MCG/_present" ><![CDATA[
+<!-- template where="usbdm" condition="/MCG/_present" ><![CDATA[
    \t/** Clock for CORE (CPU) and SYSTEM (NVIC, RAM ...) */
    \textern "C" uint32_t SystemCoreClock;
    \t
@@ -182,7 +182,7 @@
    \t\n
 ]]></template -->
 
-<template namespace="usbdm" condition="(/PCR/lk_present)" ><![CDATA[
+<template where="usbdm" condition="(/PCR/lk_present)" ><![CDATA[
    /* Template:common_settings.xml */
 
    \t/**
@@ -202,7 +202,7 @@
    \t\n
 ]]></template>
 
-<template namespace="usbdm" condition="!(/PCR/lk_present)" ><![CDATA[
+<template where="usbdm" condition="!(/PCR/lk_present)" ><![CDATA[
    /* Template:common_settings.xml */
 
    \t/**
@@ -227,7 +227,7 @@
 ]]></template>
 
 <!-- Template is added to pin_mapping.h -->
-<template namespace="usbdm"><![CDATA[
+<template where="usbdm"><![CDATA[
    // Use when in-lining makes the release build smaller
    #ifdef DEBUG_BUILD
    #define INLINE_RELEASE __attribute__((noinline))
@@ -296,7 +296,7 @@
 ]]></template>
 
 <!-- Template is added to pin_mapping.h -->
-<template namespace="usbdm"><![CDATA[
+<template where="usbdm"><![CDATA[
    \t/**
    \t * Determine the number of elements in an array
    \t *

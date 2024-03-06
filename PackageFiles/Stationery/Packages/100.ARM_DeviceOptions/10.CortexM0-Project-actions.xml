@@ -2,13 +2,13 @@
 <!DOCTYPE root SYSTEM "../package.dtd">
 
 <root version="1.0" >
-<!-- 
-Cortex-M0 
+<!--
+Cortex-M0
    MKE
-   MKL 
+   MKL
    MKM
    LPC
- -->    
+ -->
 
    <!-- Base CortexM0 files -->
    <projectActionList id="Cortex-m0-exe-files" >
@@ -21,14 +21,14 @@ Cortex-M0
             <variableRef idRef="outputType" condition="matches" value=".*\.newProjectType\.exe$" />
          </and>
       </applyWhen>
-      
+
       <!--  Common Cortex-M0/+ files -->
 
       <createFolder target="Sources"                                        />
       <createFolder target="Startup_Code"                                   />
       <createFolder target="Project_Headers"                 type="include" />
       <createFolder target="Project_Settings/Linker_Files"                  />
-   
+
       <copy source="Startup_Code/newlib_stubs.c"                              target="Startup_Code/newlib_stubs.c"  derived="true" />
       <copy source="Startup_Code/vectors-cm0.c"                               target="Startup_Code/vectors.c" />
 
@@ -44,7 +44,7 @@ Cortex-M0
       <copy source="Project_Headers/cmsis_gcc.h"                              target="Project_Headers/cmsis_gcc.h"     derived="true" />
       <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h"   derived="true" />
       <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h"  derived="true" />
-      <copy source="Project_Headers/utilities-mke.h"                          target="Project_Headers/utilities.h"     derived="true" />
+      <copy source="Project_Headers/utilities-mkl.h"                          target="Project_Headers/utilities.h"     derived="true" />
 
       <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(externalHeaderFilename)" overwrite="true" />
 
@@ -113,7 +113,7 @@ Cortex-M0
          <copy source="Startup_Code/system-kinetis.c"                         target="Startup_Code/system.c" />
          <copy source="Startup_Code/security-mke.c"                           target="Startup_Code/security.c" />
       </projectActionList>
-   
+
       <!-- Base MKL files -->
       <projectActionList id="Kinetis-MKL-files" >
          <applyWhen>
@@ -123,7 +123,7 @@ Cortex-M0
          <copy source="Startup_Code/system-kinetis.c"                         target="Startup_Code/system.c" />
          <copy source="Startup_Code/security-mkl.c"                           target="Startup_Code/security.c" />
       </projectActionList>
-   
+
       <!-- Base MKM files -->
       <projectActionList id="Kinetis-MKM-files" >
          <applyWhen>
@@ -163,7 +163,7 @@ Cortex-M0
          <copy source="Startup_Code/system-lpc.c"                             target="Startup_Code/system.c" />
          <copy source="Startup_Code/security-lpc.c"                           target="Startup_Code/security.c" />
       </projectActionList>
-   
+
    </projectActionList>
 
 </root>

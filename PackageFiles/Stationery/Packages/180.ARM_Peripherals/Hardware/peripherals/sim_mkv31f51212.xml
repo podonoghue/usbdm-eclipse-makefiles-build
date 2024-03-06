@@ -122,7 +122,7 @@ Devices using this peripheral:
 
       <aliasOption key="/SIM/system_peripheral_clock[]" />
 
-      <template namespace="usbdm"><![CDATA[
+      <template where="basicInfo"><![CDATA[
          \t/**
          \t * Peripheral Clock sources
          \t */
@@ -186,7 +186,7 @@ Devices using this peripheral:
          toolTip="Frequency of clock to LPUART"
          value="0" />
 
-      <template namespace="usbdm"><![CDATA[
+      <template where="basicInfo"><![CDATA[
          \t/**
          \t * LPUART Clock sources
          \t */
@@ -573,7 +573,7 @@ Devices using this peripheral:
          <choice value="15" name="Reserved" />
       </choiceOption>
 
-      <template namespace="usbdm"><![CDATA[
+      <template where="basicInfo"><![CDATA[
          \t/**
          \t * Select the ADC0 Trigger source in STOP and VLPS modes, or when ADC0 Alternative Trigger is active.
          \t */
@@ -660,7 +660,7 @@ Devices using this peripheral:
          <choice value="15" name="Reserved" />
       </choiceOption>
 
-      <template namespace="usbdm"><![CDATA[
+      <template where="basicInfo"><![CDATA[
          \t/**
          \t * Select the ADC1 Trigger source in STOP and VLPS modes, or when ADC1 Alternative Trigger is active.
          \t */
@@ -847,7 +847,8 @@ Devices using this peripheral:
 
    <xi:include href="simCommon.xml"/>
 
-   <indexedCategory name="ClockConfig[]" dim="=/SIM/numberOfClockSettings"
+   <for keys="n" dim="=/SIM/numberOfClockSettings">
+      <categoryOption key="ClockConfig[%(n)]"
         description="Clock configurations"
         toolTip="Clock configurations for different run modes" >
 
@@ -933,7 +934,8 @@ Devices using this peripheral:
                      MCGOUTCLK clock is source. Default /4"
             value="4" offset="-1" min="1" max="16" />
       </category>
-   </indexedCategory>
+   </categoryOption>
+   </for>
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate" dim="=/SIM/numberOfClockSettings">

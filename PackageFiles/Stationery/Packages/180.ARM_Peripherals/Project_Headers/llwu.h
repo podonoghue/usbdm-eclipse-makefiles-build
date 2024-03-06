@@ -29,11 +29,6 @@ namespace USBDM {
  */
 
 /**
- * Type definition for LLWU interrupt call back
- */
-typedef void (*LlwuCallbackFunction)();
-
-/**
  * Template class providing interface to Low Leakage Wake-up Unit
  *
  * @tparam info      Information class for LLWU
@@ -69,21 +64,7 @@ protected:
       static constexpr void check() {}
    };
 
-   /** Callback function for ISR */
-   static LlwuCallbackFunction sCallback;
-
-   /** Callback to catch unhandled interrupt */
-   static void unhandledCallback() {
-      setAndCheckErrorCode(E_NO_HANDLER);
-   }
-
 public:
-   /**
-    * IRQ handler
-    */
-   static void irqHandler(void) {
-      sCallback();
-   }
 
    /**
     * Wrapper to allow the use of a class member as a callback function
@@ -117,8 +98,8 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)(), T &object>
-   static LlwuCallbackFunction wrapCallback() {
-      static LlwuCallbackFunction fn = []() {
+   static typename Info::CallbackFunction wrapCallback() {
+      static typename Info::CallbackFunction fn = []() {
          (object.*callback)();
       };
       return fn;
@@ -156,36 +137,18 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)()>
-   static LlwuCallbackFunction wrapCallback(T &object) {
+   static typename Info::CallbackFunction wrapCallback(T &object) {
       static T &obj = object;
-      static LlwuCallbackFunction fn = []() {
+      static typename Info::CallbackFunction fn = []() {
          (obj.*callback)();
       };
       return fn;
-   }
-
-   /**
-    * Set Callback function
-    *
-    *   @param[in]  callback Callback function to be executed on interrupt\n
-    *                        Use nullptr to remove callback.
-    */
-   static void setCallback(LlwuCallbackFunction callback) {
-      static_assert(Info::irqHandlerInstalled, "LLWU not configured for interrupts");
-      if (callback == nullptr) {
-         callback = unhandledCallback;
-      }
-      sCallback = callback;
    }
 
 public:
    /** Pointer to hardware */
    static constexpr HardwarePtr<LLWU_Type> llwu = Info::baseAddress;
 
-$(/LLWU/classInfo: // /LLWU/classInfo not found)
-$(/LLWU/staticFunctions: // /LLWU/staticFunctions not found)
-$(/LLWU/DefaultInitValue: // /LLWU/DefaultInitValue not found)
-$(/LLWU/InitMethod: // /LLWU/InitMethod not found)
    /*
     * ***************************************************
     * Wake-up pins
@@ -357,11 +320,13 @@ $(/LLWU/InitMethod: // /LLWU/InitMethod not found)
       static constexpr LlwuPin  pin = llwuPin;
 
       /**
-       * Constructor
+       * Configure pin as wake-up source
        *
-       * @param llwuPinMode LLWU pin wake-up mode
+       * @param[in] llwuPinMode   Mode for pin as wake-up input
        */
-      constexpr Pin(LlwuPinMode llwuPinMode=LlwuPinMode_EitherEdge) {}
+      static void configurePinSource(LlwuPinMode llwuPinMode=LlwuPinMode_EitherEdge) {
+         LlwuBase_T::configurePinSource(llwuPin, llwuPinMode);
+      }
 
       /**
        * Set callback for Pin interrupts
@@ -384,8 +349,6 @@ $(/LLWU/InitMethod: // /LLWU/InitMethod not found)
 $(/LLWU/llwu_base_methods:// /LLWU/llwu_base_methods not found)
 
 };
-
-template<class Info> LlwuCallbackFunction LlwuBase_T<Info>::sCallback = LlwuBase_T<Info>::unhandledCallback;
 
 $(/LLWU/declarations: // No declarations found)
 /**

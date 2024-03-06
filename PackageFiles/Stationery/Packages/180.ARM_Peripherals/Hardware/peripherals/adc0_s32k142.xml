@@ -111,7 +111,7 @@
 
    <xi:include href="irqOption.xml"/>
       
-   <template namespace="usbdm"><![CDATA[
+   <template where="basicInfo"><![CDATA[
    #ifndef USBDM_ADC_CLOCK_SOURCES_DEFINED
    #define USBDM_ADC_CLOCK_SOURCES_DEFINED
       \t/**

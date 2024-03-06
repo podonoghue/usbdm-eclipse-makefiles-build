@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE fragment SYSTEM "_menu.dtd" >
-<!-- uart1_mk10d5.xml -->
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- uart1_mk24f12.xml -->
 
-<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="uart_mk.xml"/>
-</fragment>
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="$(_BASENAME)">
+
+   <constant key="status_is_w1c" type="Boolean" value="false" />
+
+   <xi:include href="uart_def.xml"/>
+
+</peripheralPage>

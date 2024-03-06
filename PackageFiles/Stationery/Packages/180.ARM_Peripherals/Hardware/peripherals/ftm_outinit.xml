@@ -46,9 +46,12 @@
       toolTip="Bitmask defining the value that is forced\n
                into the channel output when initialisation occurs."
       value="0"
-      bitmask="=(1&lt;&lt;_channelCount)-1"
-      bitList="Ch%i"
-      bitDescription="Channel %n initial value" />
+      bitDescription="@SignalList(8)"
+      bitList="Ch%iInitialValue"
+      
+      
+      
+      bitmask="=(1&lt;&lt;_channelCount)-1" />
 
 <!--  ___ OutputInitialise class ______________ -->
 

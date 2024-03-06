@@ -4,47 +4,13 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Carrier Modulator Transmitter" >
 
-   <constant key="irq_parameters"            type="String"  value='""'  />
-   <constant key="irq_dummy_parameters"      type="String"  value='""'  />
-   <constant key="irq_call"                  type="String"  value='""'  />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="irq_parameters"             value=""  />
+   <equation key="irq_dummy_parameters"       value=""  />
+   <equation key="irq_call"                   value=""  />
+   <equation key="generateDefault"            value="false"         />
+   <equation key="configureInStartupDefault"  value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
-
-<!--
-    * General substitutions
-    *  $(_NAME)         => e.g FTM2 => FTM2
-    *  $(_name)         => e.g FTM2 => ftm2
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
-    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
-    *  $(_Class)        => e.g FTM2 => Ftm2
-    *  $(_Baseclass)    => e.g FTM0 => Ftm
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A
--->
-
-<!--
-    * Template substitutions
-    *
-    * <li>%paramExpression            Parameters ORed together e.g. adcPretrigger|adcRefSel
-    * <li>%valueExpression            Numeric variable value e.g. 0x3
-    * <li>%symbolicExpression[index]  Symbolic formatted value e.g. AdcCompare_Disabled
-    * <li>%variable[index]            Variable name /ADC0/adc_sc2_acfe
-    * <li>%macro[index](value)        C register macro e.g. ADC_SC2_ACFGT(value)
-    * <li>%description[index]         Description from controlVar e.g. Compare Function Enable
-    * <li>%shortDescription[index]    Short description from controlVar e.g. Compare Function Enable
-    * <li>%tooltip[index]             Tool-tip from controlVar e.g. Each bit disables the GPIO function
-    * <li>%params                     Formatted parameter list for function
-    * <li>%paramDescription[index]    Tool-tip from controlVar formatted as param description @param ...
-    * <li>%paramType[index]           Based on typeName e.g. AdcCompare (or uint32_t)
-    * <li>%paramName[index]           Based on typeName with lower-case first letter adcCompare
-    * <li>%fieldAssignment            Expression of form '%register <= (%register & ~%mask)|%paramExpression
-    * <li>%maskingExpression          Based on variable etc. Similar to (%register&%mask)
-    * <li>%mask[index]                From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
-    * <li>%register[index]            Register associated with variable e.g. adc->APCTL1
-    * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
-    * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
--->
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
@@ -559,86 +525,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" discardRepeats="true" >
-   <![CDATA[
-      class $(_Baseclass)BasicInfo {
-      \t
-      public:\n
-   ]]>
-   </template>
-
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="/$(_BASENAME)/irqHandlingMethod"
-   ><![CDATA[
-       \t//! Common class based callback code has been generated for this class of peripheral
-       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
-       \t\n
-   ]]></variableTemplate>
-
-   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
-   <![CDATA[
-      \t/**
-      \t * Type definition for $(_Baseclass) interrupt call back.
-      \t */
-      \ttypedef void (*CallbackFunction)($(irq_parameters));
-      \t
-      \t/**
-      \t * Callback to catch unhandled interrupt
-      \t */
-      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
-      \t   setAndCheckErrorCode(E_NO_HANDLER);
-      \t}
-      \t\n
-   ]]>
-   </template>
-
-   <!-- template key="/$(_BASENAME)/protected" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" -->
-   <template codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
-   <![CDATA[
-      \t/** Callback function for ISR */
-      \tstatic CallbackFunction sCallback;
-      \t
-      \t/**
-      \t * Set interrupt callback function.
-      \t *
-      \t * @param[in]  $(_basename)Callback Callback function to execute on interrupt
-      \t *                             Use nullptr to remove callback.
-      \t */
-      \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
-      \t   if ($(_basename)Callback == nullptr) {
-      \t      $(_basename)Callback = unhandledCallback;
-      \t   }
-      \t   // Allow either no handler set yet or removing handler
-      \t   usbdm_assert(
-      \t         (sCallback == unhandledCallback) || ($(_basename)Callback == unhandledCallback),
-      \t         "Handler already set");
-      \t   sCallback = $(_basename)Callback;
-      \t}
-      \t
-      \t/**
-      \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
-      \t */
-      \tstatic void irqHandler() {
-      \t
-      \t   // Execute call-back
-      \t   sCallback($(irq_call));
-      \t}
-      \t\n
-   ]]>
-   </template>
-
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t
-      \t/**
-      \t * Callback for programmatically set handler for $(_Class)
-      \t */
-      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Class)Info::unhandledCallback;
-      \t\n
-   ]]>
-   </template>
-
-   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       $(/$(_BASENAME)/init_description)
       \tclass Init {
@@ -659,84 +546,84 @@
 
 <!-- ____ Init class Member variables ________ -->
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="cmt_cgh1_ph"
    ><![CDATA[
       \t   /// Carrier Generator High Data Register 1
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="cmt_cgl1_pl"
    ><![CDATA[
       \t   /// Carrier Generator Low Data Register 1
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="cmt_cgh2_sh"
    ><![CDATA[
       \t   /// Carrier Generator High Data Register 2
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="cmt_cgl2_sl"
    ><![CDATA[
       \t   /// Carrier Generator Low Data Register 2
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="cmt_oc_output"
    ><![CDATA[
       \t   /// Output Control Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="cmt_msc_cmtdiv,cmt_msc_mode"
    ><![CDATA[
       \t   /// Modulator Status and Control Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="cmt_mark"
    ><![CDATA[
       \t   /// Modulator Data Register Mark
       \t   uint16_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="cmt_space"
    ><![CDATA[
       \t   /// Modulator Data Register Space
       \t   uint16_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="cmt_pps_ppsdiv"
    ><![CDATA[
       \t   /// Primary Prescaler Register
       \t   %paramType %registerName = CmtClockPrescaler_Auto;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="cmt_dma_irq"
    ><![CDATA[
       \t   /// %description
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -746,7 +633,7 @@
 
    <!-- ____ Init class Constructors ____________ -->
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -765,7 +652,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -791,7 +678,7 @@
             cmt_msc_cmtdiv;
             cmt_msc_mode
             " >
-      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -813,7 +700,7 @@
       </variableTemplate>
    </for>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="cmt_dma_irq"
       linePadding="xxx" >
    <![CDATA[
@@ -846,7 +733,7 @@
             cmt_cgl2_sl;
             cmt_pps_ppsdiv
             " >
-      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -948,20 +835,14 @@
       \t\n
    ]]></variableTemplate>
 
-   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
       <![CDATA[
       \t}; // class $(_Baseclass)BasicInfo::Init
       \t\n
    ]]>
    </template>
 
-   <template namespace="usbdm" discardRepeats="true" >
-      <![CDATA[
-      }; // class $(_Baseclass)BasicInfo\n\n
-   ]]>
-   </template>
-
-    <!-- ************* SIM controls ****************** -->
+   <!-- ************* SIM controls ****************** -->
 
    <category name="Advanced" description="Pin mapping and clock enables" >
     <!-- None -->
@@ -1009,7 +890,6 @@
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
       </for>
    </category>
-   <deleteVariables variables="_scgc_clock"  mustExist="false" />
 
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 

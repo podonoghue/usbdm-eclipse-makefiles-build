@@ -31,7 +31,7 @@ Symbols
       
    </category>
 
-   <variableTemplate namespace="usbdm" variables="KKKKK" 
+   <variableTemplate where="basicInfo" variables="KKKKK" 
    ><![CDATA[    
       \t/**
       \t * %description

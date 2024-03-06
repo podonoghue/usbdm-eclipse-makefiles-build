@@ -4,67 +4,35 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <constant key="irq_parameters"            type="String"  value='"uint8_t status"'  />
-   <constant key="irq_dummy_parameters"      type="String"  value='"uint8_t"'  />
-   <constant key="irq_call"                  type="String"  value='"status"'  />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="suppressIrqHandler"         value="" />
+   <equation key="irq_parameters"             value="uint8_t status" />
+   <equation key="irq_dummy_parameters"       value="uint8_t"        />
+   <equation key="irq_call"                   value="status"         />
+   <equation key="generateDefault"            value="false"   />
+   <equation key="configureInStartupDefault"  value="false"   />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
-<!-- ____ General substitutions ____
-    *  $(_NAME)         => e.g FTM2 => FTM2
-    *  $(_name)         => e.g FTM2 => ftm2
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
-    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
-    *  $(_Class)        => e.g FTM2 => Ftm2
-    *  $(_Baseclass)    => e.g FTM0 => Ftm
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A
--->
-
-<!-- ____ Template substitutions ________
-    *
-    * <li>%paramExpression            Parameters ORed together e.g. adcPretrigger|adcRefSel
-    * <li>%valueExpression            Numeric variable value e.g. 0x3
-    * <li>%symbolicExpression[index]  Symbolic formatted value e.g. AdcCompare_Disabled
-    * <li>%variable[index]            Variable name /ADC0/adc_sc2_acfe
-    * <li>%macro[index](value)        C register macro e.g. ADC_SC2_ACFGT(value)
-    * <li>%description[index]         Description from controlVar e.g. Compare Function Enable
-    * <li>%shortDescription[index]    Short description from controlVar e.g. Compare Function Enable
-    * <li>%tooltip[index]             Tool-tip from controlVar e.g. Each bit disables the GPIO function
-    * <li>%params                     Formatted parameter list for function
-    * <li>%paramDescription[index]    Tool-tip from controlVar formatted as param description @param ...
-    * <li>%paramType[index]           Based on typeName e.g. AdcCompare (or uint32_t)
-    * <li>%paramName[index]           Based on typeName with lower-case first letter adcCompare
-    * <li>%fieldAssignment            Expression of form '%register <= (%register & ~%mask)|%paramExpression
-    * <li>%maskingExpression          Based on variable etc. Similar to (%register&%mask)
-    * <li>%variable[index]            Variable name
-    * <li>%mask[index]                From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
-    * <li>%register[index]            Register associated with variable e.g. adc->APCTL1
-    * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
-    * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
--->
-
    <!-- ____ Class Declaration ________ -->
-   <constant key="_class_declaration" type="String"
-      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
-   <template ><![CDATA[
+   <template><![CDATA[
       \t//! Base value for PCR (excluding MUX value)
       \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
    ]]></template>
 
    <!-- ____ GENCS ____ -->
 
-   <binaryOption key="tsi_gencs_tsien" condition="tsi_gencs_tsien_present"
+   <binaryOption key="tsi_data_swts" condition="tsi_data_swts_present"
       hidden="true"
       derived="true"
-      typeName="TsiEnable"
+      typeName="TsiSoftwareTrigger"
       baseType="uint32_t"
-      description="Module Enable" >
-      <choice name="Module disabled"  value="0" enum="ModuleDisabled" />
-      <choice name="Module enabled"   value="1" enum="ModuleEnabled"  isDefault="true" />
-   </binaryOption >
+      description="Software Trigger"
+      toolTip="Used to start a scan when software trigger mode is selected" >
+      <choice name="NoAction"    value="0" enum="NoAction"  />
+      <choice name="Start scan"  value="1" enum="StartScan"/>
+   </binaryOption>
 
    <binaryOption key="tsi_gencs_outrgf" condition="tsi_gencs_outrgf_present"
       hidden="true"
@@ -77,9 +45,10 @@
                This flag is set only when TSI is configured in non-noise detection mode.\n
                It can be read once the CPU wakes. \n
                Write 1 , when this flag is set, to clear it." >
-      <choice name="Not Out-of-range"  value="0" enum="NotOutOfRange"/>
-      <choice name="Out-of-range"      value="1" enum="OutOfRange"/>
+      <choice name="In Range"               value="0" enum="InRange"/>
+      <choice name="Out of Range detected"  value="1" enum="OutOfRangeDetected"/>
    </binaryOption >
+
    <binaryOption key="tsi_gencs_cursw" condition="tsi_gencs_cursw_present"
       enabledBy="enablePeripheralSupport"
       typeName="TsiCurrentSource"
@@ -90,44 +59,47 @@
       <choice name="Swapped"     value="1" enum="Swapped"  />
    </binaryOption >
 
-   <binaryOption key="tsi_gencs_stm" condition="tsi_gencs_stm_present"
+   <choiceOption key="tsi_gencs_scanmode" condition="tsi_gencs_tsien_present&amp;&amp;tsi_gencs_stm_present"
       enabledBy="enablePeripheralSupport"
-      typeName="TsiScanTrigger"
+      valueFormat="TSI_GENCS_TSIEN(%s),TSI_GENCS_STM(%s)"
+      typeName="TsiScanMode"
       baseType="uint32_t"
-      description="Scan Trigger Mode"
-      toolTip="Selects between software and hardware triggers" >
-      <choice name="Software trigger"  value="0" enum="SoftwareTrigger"/>
-      <choice name="Hardware trigger"  value="1" enum="HardwareTrigger"/>
-   </binaryOption >
+      description="Select scan mode"
+      toolTip="Enables and selects between software triggered or automatic hardware scanning"
+   >
+      <choice value="0,0" name="Disabled"                                  enum="Disabled"  />
+      <choice value="1,0" name="Software triggered single scan"            enum="Triggered" />
+      <choice value="1,1" name="Hardware scanning (repeated periodically)" enum="Periodic"  />
+   </choiceOption>
 
    <binaryOption key="tsi_gencs_stpe" condition="tsi_gencs_stpe_present"
       enabledBy="enablePeripheralSupport"
-      typeName="TsiLowPower"
+      typeName="TsiStopMode"
       baseType="uint32_t"
       description="TSI STOP Enable"
       toolTip="Controls operation while in Low Power Modes (STOP, VLPS, LLS and VLLS{3,2,1})" >
-      <choice name="Disabled in low power"  value="0" enum="Disabled"/>
-      <choice name="Enabled in low power"   value="1" enum="Enabled"/>
+      <choice name="Disabled in low power"  value="0" enum="Disabled" />
+      <choice name="Enabled in low power"   value="1" enum="Enabled"  />
    </binaryOption >
 
-   <choiceOption key="tsi_gencs_action" condition="tsi_gencs_tsiien_present&amp;&amp;tsi_gencs_esor_present&amp;&amp;!tsi_gencs_eosdmeo_present"
+   <choiceOption key="tsi_gencs_intsource" condition="tsi_gencs_tsiien_present&amp;&amp;tsi_gencs_esor_present&amp;&amp;!tsi_gencs_eosdmeo_present"
       enabledBy="irqHandlingMethod"
       valueFormat="TSI_GENCS_TSIIEN(%s),TSI_GENCS_ESOR(%s)"
-      typeName="TsiAction"
+      typeName="TsiEventSource"
       baseType="uint32_t"
       description="Touch Sensing Input Event Enable"
       toolTip="Enables events from Out-of-Range and End-of-Scan conditions" >
-      <choice name="Interrupt/DMA disabled"                value="0,0" enum="Disabled"/>
-      <choice name="Interrupt/DMA enabled on Out of Range" value="1,0" enum="IrqOrDmaOnOutOfRange"/>
-      <choice name="Interrupt/DMA enabled on End of Scan"  value="1,1" enum="IrqOrDmaOnEndOfScan"/>
+      <choice value="0,0" name="Disabled"       enum="Disabled"   />
+      <choice value="1,0" name="Out Of Range"   enum="OutOfRange" />
+      <choice value="1,1" name="End Of Scan"    enum="EndOfScan"  />
    </choiceOption>
 
-   <choiceOption key="tsi_gencs_action" condition="tsi_gencs_tsiien_present&amp;&amp;tsi_gencs_esor_present&amp;&amp;tsi_gencs_eosdmeo_present"
+   <choiceOption key="tsi_gencs_intsource" condition="tsi_gencs_tsiien_present&amp;&amp;tsi_gencs_esor_present&amp;&amp;tsi_gencs_eosdmeo_present"
       enabledBy="irqHandlingMethod"
       valueFormat="TSI_GENCS_TSIIEN(%s),TSI_GENCS_EOSDMEO(%s),TSI_GENCS_ESOR(%s)"
-      typeName="TsiAction"
+      typeName="TsiEventSource"
       baseType="uint32_t"
-      description="Touch Sensing Input Event Enable" 
+      description="Touch Sensing Input Event Enable"
       toolTip="Enables events from Out-of-Range and End-of-Scan conditions\n
                It may also be used to direct OOR events to generate interrupts rather than DMA requests.\n
                DMAEN may still be used to direct EOS to interrupt or DMA requests." >
@@ -138,7 +110,7 @@
    </choiceOption>
 
    <binaryOption key="tsi_data_dmaen" condition="tsi_data_dmaen_present"
-      enabledBy="tsi_gencs_action>0"
+      enabledBy="tsi_gencs_intsource>0"
       typeName="TsiEventAction"
       baseType="uint32_t"
       description="Interrupt/DMA Selection"
@@ -155,7 +127,7 @@
       baseType="uint32_t"
       description="Consecutive Scan number"
       toolTip="Number of Consecutive Scans Per Electrode" >
-      <choice          name="Scan Electrode 1 time"     enum="1Time"      value="0"   />
+      <choice          name="Scan Electrode 1 time"     enum="1Time"     value="0"   />
       <choiceExpansion name="Scan Electrode %(n) times" enum="%(n)Times" value="=ToString(%(n)-1)" keys="n" dim="2,32" />
    </choiceOption>
 
@@ -164,14 +136,14 @@
       typeName="TsiElectrodePrescaler"
       baseType="uint32_t"
       description="Prescaler for Electrode Oscillator Frequency" >
-      <choice name="Divided by 1"    value="0" enum="DivBy1"  />
-      <choice name="Divided by 2"    value="1" enum="DivBy2"  />
-      <choice name="Divided by 4"    value="2" enum="DivBy4"  />
-      <choice name="Divided by 8"    value="3" enum="DivBy8" isDefault="true"/>
-      <choice name="Divided by 16"   value="4" enum="DivBy16" />
-      <choice name="Divided by 32"   value="5" enum="DivBy32" />
-      <choice name="Divided by 64"   value="6" enum="DivBy64" />
-      <choice name="Divided by 128"  value="7" enum="DivBy128"/>
+      <choice name="Divide by 1"    value="0" enum="DivBy1" />
+      <choice name="Divide by 2"    value="1" enum="DivBy2" />
+      <choice name="Divide by 4"    value="2" enum="DivBy4" />
+      <choice name="Divide by 8"    value="3" enum="DivBy8" isDefault="true"/>
+      <choice name="Divide by 16"   value="4" enum="DivBy16" />
+      <choice name="Divide by 32"   value="5" enum="DivBy32" />
+      <choice name="Divide by 64"   value="6" enum="DivBy64" />
+      <choice name="Divide by 128"  value="7" enum="DivBy128"/>
    </choiceOption >
 
    <choiceOption key="tsi_gencs_extchrg" condition="tsi_gencs_extchrg_present"
@@ -231,18 +203,17 @@
       description="End of Scan Flag"
       toolTip="This flag is set when all active electrodes are finished scanning\n
                after a scan trigger.\n
-               Write 1 , when this flag is set, to clear it."
-      >
+               Write 1 , when this flag is set, to clear it." >
       <choice name="Scan not complete"  value="0" enum="ScanNotComplete"/>
       <choice name="Scan complete"      value="1" enum="ScanComplete"/>
    </binaryOption >
-   
+
    <binaryOption key="tsi_gencs_scnip" condition="tsi_gencs_scnip_present"
       hidden="true"
       derived="true"
-      typeName="TsiStatus"
+      typeName="TsiScanInProgess"
       baseType="uint32_t"
-      description="Scan In Progress Status"
+      description="Scan In Progress status"
       toolTip="This read-only bit indicates if scan is in progress.\n
                This bit will get asserted after the analogue bias circuit is\n
                stable after a trigger and it changes automatically by the TSI." >
@@ -334,31 +305,24 @@
       toolTip="Threshold to use as default when creating single inputs (buttons)"
       min="0" max="65535" value="4000" />
 
-   <choiceOption key="tsi_data_tsich" condition="tsi_data_tsich_present"
-      hidden="true"
-      derived="true"
-      typeName="TsiChannel"
+   <choiceOption key="tsi_data_tsich"
+      enabledBy="enablePeripheralSupport"
+      typeName="TsiInput"
       baseType="uint32_t"
-      description="Tsi Channel"
-      toolTip="These bits specify channel to be measured.\n
+      description="TSI input channel"
+      toolTip="This specifies the input channel to be measured.\n
                In hardware trigger mode (TSI_GENCS[STM] = 1), the scan will not start\n
                until the hardware trigger occurs.\n
                In software trigger mode (TSI_GENCS[STM] = 0), the scan starts immediately\n
                when TSI_DATA[SWTS] bit is written by 1.">
-      <choiceExpansion name="Channel Number %(ch)" value="%(ch)" enum="%(ch)" keys="ch" dim="16" />
-   </choiceOption >
-
-   <constant key="/TSI/tsiEnumType" type="String" value='"TsiChannel"'/>
-
-   <binaryOption key="tsi_data_swts" condition="tsi_data_swts_present"
-      hidden="true"
-      typeName="TsiSoftwareTrigger"
-      baseType="uint32_t"
-      description="Software Trigger Start"
-      toolTip="Used to start a scan when sowftare trigger mode is selected (STM=0)" >
-      <choice name="No effect"   value="0" enum="NoEffect"/>
-      <choice name="Start scan"  value="1" enum="StartScan"/>
-   </binaryOption >
+      <choiceExpansion value='=ToString(IndexOfSignal("%(info)"))'
+                       name='@SignalDescription("%(info)","^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
+                       enum='=Prettify(OnlyMappablePinOfSignal("%(info)"))'
+                       signal="%(info)"
+                       keys="info" 
+                       values='=SignalList("^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$1")' 
+                       delimiter="," />
+   </choiceOption>
 
    <intOption key="tsi_data_tsicnt" condition="tsi_data_tsicnt_present"
       hidden="true"
@@ -372,8 +336,9 @@
 
    <for keys="field                 : set   : get   : clear : genCode                 : name"
      values="
+         tsi_gencs_scanmode         : true  : true  : false : enableGettersAndSetters : ScanMode;
          tsi_gencs_outrgf           : false : true  : true  : enableGettersAndSetters : OutOfRangeFlag;
-         tsi_gencs_action           : true  : true  : false : enableGettersAndSetters : Action;
+         tsi_gencs_intsource        : true  : true  : false : enableGettersAndSetters : Action;
          tsi_gencs_mode             : true  : true  : false : enableGettersAndSetters : Mode;
          tsi_gencs_refchrg          : true  : true  : false : enableGettersAndSetters : ReferenceChargeCurrent;
          tsi_gencs_dvolt            : true  : true  : false : enableGettersAndSetters : OscVolts;
@@ -389,7 +354,7 @@
 
          tsi_data_tsich             : true  : true  : false : enableGettersAndSetters : ScanChannel;
          tsi_data_dmaen             : true  : true  : false : enableGettersAndSetters : DmaEnable;
-         tsi_data_swts              : true  : false : false : enableGettersAndSetters : SoftwareReset;
+         tsi_data_swts              : true  : false : false : enableGettersAndSetters : StartScan;
          tsi_data_tsicnt            : false : true  : false : enableGettersAndSetters : ConversionCounter;
 
          tsi_tshd_thresh            : true  : true  : false : enableGettersAndSetters : HighThreshold;
@@ -403,6 +368,7 @@
       ><![CDATA[
          \t/**
          \t * Set %description
+         \t * (%(field))
          \t *
          %paramDescription
          \t */
@@ -415,10 +381,11 @@
       ><![CDATA[
          \t/**
          \t * Get %description
+         \t * (%(field))
          \t *
          \t * @return %tooltip
          \t */
-         \tstatic %paramType get%(name)() {
+         \tstatic %returnType get%(name)() {
          \t   return %fieldExtract;
          \t}
          \t\n
@@ -427,6 +394,7 @@
       ><![CDATA[
          \t/**
          \t * Clear %description
+         \t * (%(field))
          \t *
          \t */
          \tstatic void clear%(name)() {
@@ -436,94 +404,28 @@
       ]]></variableTemplate>
    </for>
 
-   <!-- ____ class $(_Structname)BasicInfo ____________ -->
-
-   <template where="basicInfo" ><![CDATA[
-      class $(_Structname)BasicInfo {
-      \t
-      public:\n
-   ]]></template>
-
    <!-- ____ Interrupt handling _____________ -->
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="/$(_BASENAME)/irqHandlingMethod"
-   ><![CDATA[
-       \t//! Common class based callback code has been generated for this class of peripheral
-       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
-       \t\n
-   ]]></variableTemplate>
-
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
-   <![CDATA[
-      \t/**
-      \t * Type for Touch sense input call back function.
-      \t */
-      \ttypedef void (*CallbackFunction)($(irq_parameters));
-      \t
-      \t/**
-      \t * Callback to catch unhandled interrupt
-      \t */
-      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
-      \t   setAndCheckErrorCode(E_NO_HANDLER);
-      \t}
-      \t\n
-   ]]>
-   </template>
 
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
-      \t/** Callback function for Touch sense input */
-      \tstatic CallbackFunction sCallback;
-      \t
       \t/**
-      \t * Touch sense input interrupt handler
+      \t * $(_Class) interrupt handler
       \t * Passes control to call-back function
       \t */
       \tstatic void irqHandler() {
       \t
+      \t   // Capture status
       \t   uint8_t status = tsi->GENCS&(TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EOSF_MASK);
       \t   tsi->GENCS = tsi->GENCS | status;
       \t
       \t   // Execute call-back
-      \t   sCallback($(irq_call));
+      \t   sCallback(status);
       \t}
-      \t
-      \t/**
-      \t * Set Touch sense input callback function.
-      \t *
-      \t * @param $(_basename)Callback Callback function to execute on interrupt
-      \t *                        Use nullptr to remove callback.
-      \t */
-      \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
-      \t   if ($(_basename)Callback == nullptr) {
-      \t      $(_basename)Callback = (CallbackFunction)unhandledCallback;
-      \t   }
-      \t   // Allow either no handler set yet or removing handler
-      \t   usbdm_assert(
-      \t         ((void*)sCallback == (void*)unhandledCallback) ||
-      \t         ((void*)$(_basename)Callback == (void*)unhandledCallback),
-      \t         "Handler already set");
-      \t   sCallback = $(_basename)Callback;
-      \t}
-      \t
       \t\n
    ]]>
    </template>
 
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t
-      \t/**
-      \t * Callback function for Touch sense input
-      \t */
-      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = (CallbackFunction)$(_Class)Info::unhandledCallback;
-      \t
-      \t\n
-   ]]>
-   </template>
-
-   <!-- ________ TSI Init class ____________________________ -->
+   <!--   __________ TSI Init class _______________________________ -->
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
@@ -550,15 +452,14 @@
       \t * static const $(_Class)::Init $(_name)Init {
       \t *
       \t *   // Setup values
-      \t *   TsiAction_Disabled ,              // (tsi_gencs_action)  Touch Sensing Input Interrupt Enable - Interrupt/DMA disabled
+      \t *   TsiAction_Disabled ,              // (tsi_gencs_intsource)  Touch Sensing Input Interrupt Enable - Interrupt/DMA disabled
       \t *   TsiMode_Capacitive ,              // (tsi_gencs_mode)    TSI analogue modes setup and status bits - Capacitive sensing
       \t *   TsiReferenceCurrent_500nA ,       // (tsi_gencs_refchrg) Reference Oscillator Charge Current select - 500 nA
       \t *   TsiDeltaVoltage_High ,            // (tsi_gencs_dvolt)   Oscillator voltage rails - dV = 1.026 V; Vp = 1.328 V; Vm = 0.302 V
       \t *   TsiExternalCharge_500na ,         // (tsi_gencs_extchrg) External Oscillator Charge Current select - 500 nA
       \t *   TsiElectrodePrescaler_DivBy8 ,    // (tsi_gencs_ps)      Prescaler for Electrode Oscillator Frequency - Divided by 8
       \t *   TsiConsecutiveScan_1Time ,        // (tsi_gencs_nscn)    Consecutive Scan number - Scan Electrode 1 time
-      \t *   TsiLowPower_Disabled ,            // (tsi_gencs_stpe)    TSI STOP Enable - Disabled in low power
-      \t *   TsiScanTrigger_SoftwareTrigger ,  // (tsi_gencs_stm)     Scan Trigger Mode - Software trigger
+      \t *   TsiStopMode_Disabled ,            // (tsi_gencs_stpe)    TSI STOP Enable - Disabled in low power
       \t *   TsiCurrentSource_NotSwapped ,     // (tsi_gencs_cursw)   Electrode/Reference OSC swap - Not swapped
       \t *   TsiChannel_0 ,                    // (tsi_data_tsich)    Tsi Channel - Channel Number 0
       \t *   TsiEventAction_InterruptRequest , // (tsi_data_dmaen)    DMA Transfer Enabled - Interrupt request
@@ -602,7 +503,7 @@
    ]]></variableTemplate>
 
    <for keys=" type        : variables                                            : init    "
-       values="%baseType   : tsi_gencs_action,tsi_gencs_mode,
+       values="%baseType   : tsi_gencs_scanmode,tsi_gencs_intsource,tsi_gencs_mode,
                              tsi_gencs_refchrg,tsi_gencs_dvolt,tsi_gencs_extchrg,
                              tsi_gencs_ps,tsi_gencs_nscn,tsi_gencs_stpe,
                              tsi_gencs_stm,tsi_gencs_cursw,
@@ -671,7 +572,8 @@
 
    <for keys="r"
       values="
-            tsi_gencs_action;tsi_gencs_mode;
+            tsi_gencs_scanmode;
+            tsi_gencs_intsource;tsi_gencs_mode;
             tsi_gencs_refchrg;tsi_gencs_dvolt;tsi_gencs_extchrg;
             tsi_gencs_ps;tsi_gencs_nscn;tsi_gencs_stpe;
             tsi_gencs_stm;tsi_gencs_cursw;
@@ -722,7 +624,7 @@
       \t */
       \tstatic void configure(const Init &init) {
       \t
-      \t   // Enable peripheral clock
+      \t   // Enable peripheral
       \t   enable();
       \t\n
    ]]></template>
@@ -735,13 +637,13 @@
    ]]></template>
    <for keys=
              " var                                                    : statement            "
-      values=" tsi_gencs_action,tsi_gencs_mode,
+      values=" tsi_data_tsich,tsi_data_dmaen                          : %configRegAssignment ;
+               tsi_tshd_thresh,tsi_tshd_thresl                        : %configRegAssignment ;
+               tsi_gencs_scanmode,tsi_gencs_intsource,tsi_gencs_mode,
                tsi_gencs_refchrg,tsi_gencs_dvolt,tsi_gencs_extchrg,
                tsi_gencs_ps,tsi_gencs_nscn,tsi_gencs_stpe,
-               tsi_gencs_stm,tsi_gencs_cursw,
-               tsi_gencs_eosdmeo                                      : %configRegAssignment|TsiEnable_ModuleEnabled ;
-               tsi_data_tsich,tsi_data_dmaen                          : %configRegAssignment ;
-               tsi_tshd_thresh,tsi_tshd_thresl                        : %configRegAssignment " >
+               tsi_gencs_cursw,
+               tsi_gencs_eosdmeo                                      : %configRegAssignment " >
       <variableTemplate codeGenCondition="enablePeripheralSupport"
       variables="%(var)"
       linePadding="xxx"
@@ -764,7 +666,8 @@
       separator=","
       terminator=","
       variables="
-            tsi_gencs_action,tsi_gencs_mode,
+            tsi_gencs_scanmode,
+            tsi_gencs_intsource,tsi_gencs_mode,
             tsi_gencs_refchrg,tsi_gencs_dvolt,tsi_gencs_extchrg,
             tsi_gencs_ps,tsi_gencs_nscn,tsi_gencs_stpe,
             tsi_gencs_stm,tsi_gencs_cursw,
@@ -783,13 +686,6 @@
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t}; // class $(_Structname)BasicInfo::Init
-      \t\n
-   ]]>
-   </template>
-
-   <template where="basicInfo" >
-   <![CDATA[
-      }; // class $(_Structname)BasicInfo
       \t\n
    ]]>
    </template>
@@ -839,7 +735,7 @@
    <!-- ____ SIM configuration __________________ -->
 
    <category name="Advanced" description="SIM configuration"
-      toolTip="Thes settings only have effect if the SIM configuration is enabled" >
+      toolTip="These settings only have effect if the SIM configuration is enabled" >
       <title description="$(_BASENAME) Shared" />
       <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
@@ -851,6 +747,6 @@
       </for>
    </category>
 
-   <signals enabledBy="enablePeripheralSupport" />
+   <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 
 </fragment>

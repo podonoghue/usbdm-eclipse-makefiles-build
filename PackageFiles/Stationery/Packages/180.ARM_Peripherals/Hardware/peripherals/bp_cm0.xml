@@ -67,7 +67,7 @@
 
 <!--   ========== BP Init class =============================== -->
 
-   <template key="init_description" namespace="all">
+   <template key="init_description" where="all">
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Class)
@@ -95,7 +95,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template where="basicInfo">
    <![CDATA[
       class $(_Class)BasicInfo {
       \t
@@ -104,7 +104,7 @@
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template where="basicInfo">
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -125,14 +125,14 @@
 
 <!--   Member variables -->
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate where="basicInfo"
       variables="bp_ctrl_key,bp_ctrl_enable"
    ><![CDATA[
       \t   /// FlashPatch Control Register
       \t   uint32_t ctrl = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm"
+   <variableTemplate where="basicInfo"
       variables="bp_comp_bp_match,bp_comp_comp,bp_comp_enable"
    ><![CDATA[
       \t   /// FlashPatch Comparator Register %s
@@ -175,7 +175,7 @@
             bp_comp_bp_match;
             bp_comp_enable
             ">
-      <variableTemplate namespace="usbdm"
+      <variableTemplate where="basicInfo"
          variables="%(r)"
          linePadding="xxx">
       <![CDATA[
@@ -204,7 +204,7 @@
             bp_ctrl_key;
             bp_comp%s_comp
             ">
-      <variableTemplate namespace="usbdm"
+      <variableTemplate where="basicInfo"
          variables="%(r)"
          linePadding="xxx">
       <![CDATA[
@@ -248,13 +248,13 @@
       \t};\n\n
    ]]></variableTemplate>
 
-   <template namespace="usbdm">
+   <template where="basicInfo">
       <![CDATA[
       \t}; // $(_Class)::BasicInfo::Init\n\n
    ]]>
    </template>
 
-   <template namespace="usbdm">
+   <template where="basicInfo">
       <![CDATA[
       }; // $(_Class)::BasicInfo\n\n
    ]]>

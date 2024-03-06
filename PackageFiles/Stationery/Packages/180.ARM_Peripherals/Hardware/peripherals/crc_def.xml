@@ -4,11 +4,11 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Cyclic Redundancy Check" >
 
-   <constant key="irq_parameters"            type="String"  value='""'        />
-   <constant key="irq_dummy_parameters"      type="String"  value='""'        />
-   <constant key="irq_call"                  type="String"  value='""'        />
-   <constant key="generateDefault"           type="Boolean" value="false"     />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"     />
+   <equation key="irq_parameters"            type="String"  value='""'        />
+   <equation key="irq_dummy_parameters"      type="String"  value='""'        />
+   <equation key="irq_call"                  type="String"  value='""'        />
+   <equation key="generateDefault"           type="Boolean" value="false"     />
+   <equation key="configureInStartupDefault" type="Boolean" value="false"     />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -142,14 +142,6 @@
       ]]></variableTemplate>
    </for>
 
-   <!-- ____ class $(_Structname)BasicInfo ____________ -->
-
-   <template where="basicInfo" ><![CDATA[
-      class $(_Structname)BasicInfo {
-      \t
-      public:\n
-   ]]></template>
-
    <!-- ________ CRC Init class ____________________________ -->
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
@@ -164,7 +156,7 @@
       \t * @note This constructor may be used to create a const instance in Flash
       \t *
       \t * Example:
-      \t *
+      \t * @code
       \t * static const $(_Class)::Init $(_name)Init {
       \t *
       \t *   // Setup values
@@ -317,13 +309,6 @@
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t}; // class $(_Structname)BasicInfo::Init
-      \t\n
-   ]]>
-   </template>
-
-   <template where="basicInfo" >
-   <![CDATA[
-      }; // class $(_Structname)BasicInfo
       \t\n
    ]]>
    </template>

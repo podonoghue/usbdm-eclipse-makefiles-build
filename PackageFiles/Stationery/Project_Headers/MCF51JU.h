@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V0.0
- * @date     2024/01
+ * @date     2024/02
  *
  */
 
@@ -69,10 +69,10 @@ typedef enum {
   LLWU_IRQn                     =  66,   /**<  66 Low Leakage Wakeup                                                               */
   LOL_IRQn                      =  67,   /**<  67 MCG Loss of Clock                                                                */
   FLASH_IRQn                    =  68,   /**<  68 Flash                                                                            */
-  DMA_CH0_IRQn                  =  69,   /**<  69 DMA Channel 0                                                                    */
-  DMA_CH1_IRQn                  =  70,   /**<  70 DMA Channel 1                                                                    */
-  DMA_CH2_IRQn                  =  71,   /**<  71 DMA Channel 2                                                                    */
-  DMA_CH3_IRQn                  =  72,   /**<  72 DMA Channel 3                                                                    */
+  DMA0_Ch0_IRQn                 =  69,   /**<  69 DMA Channel 0                                                                    */
+  DMA0_Ch1_IRQn                 =  70,   /**<  70 DMA Channel 1                                                                    */
+  DMA0_Ch2_IRQn                 =  71,   /**<  71 DMA Channel 2                                                                    */
+  DMA0_Ch3_IRQn                 =  72,   /**<  72 DMA Channel 3                                                                    */
   USB0_IRQn                     =  73,   /**<  73 USB0 Status                                                                      */
   FTM1FAULT_OVF_IRQn            =  75,   /**<  75 FTM1 Fault & Overflow                                                            */
   FTM1_CH0_IRQn                 =  76,   /**<  76 FTM1 Channel 0                                                                   */
@@ -158,10 +158,10 @@ extern void LVD_IRQHandler(void);                    /**< Low Voltage Detect, Lo
 extern void LLWU_IRQHandler(void);                   /**< Low Leakage Wakeup                                                               */
 extern void LOL_IRQHandler(void);                    /**< MCG Loss of Clock                                                                */
 extern void FLASH_IRQHandler(void);                  /**< Flash                                                                            */
-extern void DMA_CH0_IRQHandler(void);                /**< DMA Channel 0                                                                    */
-extern void DMA_CH1_IRQHandler(void);                /**< DMA Channel 1                                                                    */
-extern void DMA_CH2_IRQHandler(void);                /**< DMA Channel 2                                                                    */
-extern void DMA_CH3_IRQHandler(void);                /**< DMA Channel 3                                                                    */
+extern void DMA0_Ch0_IRQHandler(void);               /**< DMA Channel 0                                                                    */
+extern void DMA0_Ch1_IRQHandler(void);               /**< DMA Channel 1                                                                    */
+extern void DMA0_Ch2_IRQHandler(void);               /**< DMA Channel 2                                                                    */
+extern void DMA0_Ch3_IRQHandler(void);               /**< DMA Channel 3                                                                    */
 extern void USB0_IRQHandler(void);                   /**< USB0 Status                                                                      */
 extern void FTM1FAULT_OVF_IRQHandler(void);          /**< FTM1 Fault & Overflow                                                            */
 extern void FTM1_CH0_IRQHandler(void);               /**< FTM1 Channel 0                                                                   */

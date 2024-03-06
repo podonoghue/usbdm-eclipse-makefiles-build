@@ -4,66 +4,26 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Enhanced direct memory access controller" >
 
-   <constant key="irq_pattern"               type="String"  value="&quot;^%b_?(\d+)(_DMA.*)?$&quot;"        />
-   <constant key="irq_ClassHandler"          type="String"  value="&quot;%c%i::irqHandler&lt;$1&gt;&quot;"  />
-   <constant key="irq_parameters"            type="String"  value="&quot;DmaChannelNum channel&quot;"       />
-   <constant key="irq_dummy_parameters"      type="String"  value="&quot;DmaChannelNum&quot;"               />
-   <constant key="irq_call"                  type="String"  value="&quot;DmaChannelNum(channel)&quot;"      />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="suppressIrqHandler"        value="" />
+   <equation key="irq_parameters"            value="DmaChannelNum channel" />
+   <equation key="irq_dummy_parameters"      value="DmaChannelNum"         />
+   <equation key="irq_call"                  value="dmaChannel"            />
+   <equation key="generateDefault"           value="false" />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
-<!--
-    * General substitutions
-    *  $(_NAME)         => e.g FTM2 => FTM2
-    *  $(_name)         => e.g FTM2 => ftm2
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
-    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
-    *  $(_Class)        => e.g FTM2 => Ftm2
-    *  $(_Baseclass)    => e.g FTM0 => Ftm
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A
--->
-
-<!--
-    * Template substitutions
-    *
-    * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
-    * %variable[index]                Variable name /ADC0/adc_sc2_acfe
-    * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
-    * %description[index]             Description from controlVar e.g. Compare Function Enable
-    * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
-    * %tooltip[index]                 Tool-tip from controlVar e.g. Each bit disables the GPIO function
-    * %paramDescription[index]        Tool-tip from controlVar formatted as param description @param ...
-    * %params                         Formatted parameter list for function
-    * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
-    * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
-    * %paramType[index]               As for %paramType
-    * %paramName[index]               As for %paramName
-    * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicExpression             Symbolic variable value e.g. AdcCompare_Disabled
-    * %fieldAssignment;               Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %maskingExpression              Based on variable etc. Similar to (%register&%mask)
-    * %variable[index]                Variable name from condition
-    * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
-    * %register[index]                Register associated with variable e.g. adc->APCTL1
-    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
-    * %registerNAME[index]            Name of corresponding register (uppercase for Init()) e.g. APCTL <br><br>
--->
-
-   <!-- ************* Class Declaration ****************** -->
+   <!-- ____ Class Declaration ________ -->
    <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
+      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
-   <!-- ************* Constants ****************** -->
+   <!-- _____ Constants __________________ -->
    <intOption key="NumChannels" locked="true" derived="true"
       value="=dma_dma_dim"
       description="Number of DMA channels"
       toolTip="The number of DMA channels available" />
 
    <intOption key="NumVectors" locked="true" derived="true"
-      value="=_irqCount"
+      value="=_hardwareIrqCount"
       description="Number of DMA interrupt vectors"
       toolTip="Number of DMA interrupt vectors - \n
                Multiple channels may be mapped to the same vector" />
@@ -96,13 +56,13 @@
       <choice                                       value="(1&lt;&lt;7)" name="None or Failed allocation" enum="None"  />
    </choiceOption>
 
-    <!-- ************* Source ****************** -->
+    <!-- _____ Source __________________ -->
 
    <title description="Source" />
 
    <intOption key="dma_sar_addr" condition="dma_sar_addr_present"
       enabledBy="enablePeripheralSupport"
-      typeName="DmaSource"
+      typeName="DmaSourceAddress"
       baseType="uint32_t"
       description="Source Address"
       toolTip="Each SAR contains the byte address used by the DMA controller to read data.\n
@@ -122,6 +82,7 @@
    <binaryOption key="dma_dcr_sinc" condition="dma_dcr_sinc_present"
       enabledBy="enablePeripheralSupport"
       typeName="DmaSourceIncrement"
+      baseType="uint32_t"
       toolTip="Controls whether the source address increments"
       description="Source increment" >
       <choice name="No increment"                 value="0" enum="NoIncrement" />
@@ -131,6 +92,7 @@
    <choiceOption key="dma_dcr_ssize" condition="dma_dcr_ssize_present"
       enabledBy="enablePeripheralSupport"
       typeName="DmaSourceSize"
+      baseType="uint32_t"
       toolTip="Determines the data size of the source bus cycle for the DMA controller."
       description="Source size" >
       <choice name="32-bit"      value="0" enum="32Bit"     />
@@ -142,6 +104,7 @@
    <choiceOption key="dma_dcr_smod" condition="dma_dcr_smod_present"
       enabledBy="enablePeripheralSupport"
       typeName="DmaSourceModulo"
+      baseType="uint32_t"
       toolTip="Defines the size of the data circular buffer used by the DMA Controller.\n
                If enabled, the buffer base address is located on a boundary of the buffer size.\n
                The value of this boundary depends on the initial transfer address (SAR).\n
@@ -167,13 +130,13 @@
       <choice name="256 KB"          value="15" enum="256Kb"    />
    </choiceOption >
 
-   <!-- ************* Destination ****************** -->
+   <!-- _____ Destination __________________ -->
 
    <title description="Destination" />
 
    <intOption key="dma_dar_addr" condition="dma_dar_addr_present"
       enabledBy="enablePeripheralSupport"
-      typeName="DmaDestination"
+      typeName="DmaDestinationAddress"
       baseType="uint32_t"
       description="Destination Address"
       toolTip="Each SAR contains the byte address used by the DMA controller to write data.\n
@@ -193,6 +156,7 @@
    <binaryOption key="dma_dcr_dinc" condition="dma_dcr_dinc_present"
       enabledBy="enablePeripheralSupport"
       typeName="DmaDestinationIncrement"
+      baseType="uint32_t"
       toolTip="Controls whether the destination address increments"
       description="Destination increment" >
       <choice name="No increment"                 value="0" enum="NoIncrement"     />
@@ -202,6 +166,7 @@
    <choiceOption key="dma_dcr_dsize" condition="dma_dcr_dsize_present"
       enabledBy="enablePeripheralSupport"
       typeName="DmaDestinationSize"
+      baseType="uint32_t"
       toolTip="Determines the data size of the destination bus cycle for the DMA controller."
       description="Destination size" >
       <choice name="32-bit"      value="0" enum="32Bit"    />
@@ -213,6 +178,7 @@
    <choiceOption key="dma_dcr_dmod" condition="dma_dcr_dmod_present"
       enabledBy="enablePeripheralSupport"
       typeName="DmaDestinationModulo"
+      baseType="uint32_t"
       toolTip="Defines the size of the data circular buffer used by the DMA Controller.\n
                If enabled, the buffer base address is located on a boundary of the buffer size.\n
                The value of this boundary depends on the initial transfer address (DAR).\n
@@ -238,83 +204,158 @@
       <choice name="256 KB"          value="15" enum="256Kb"     />
    </choiceOption >
 
-  <!-- ************* DSR_BCR ****************** -->
+  <!-- _____ Transfer Options __________________ -->
 
-   <title description="" />
+   <title description="Transfer Options" />
 
    <intOption key="dma_dsr_bcr_bcr" condition="dma_dsr_bcr_bcr_present"
+      register="dsr_bcr"
       enabledBy="enablePeripheralSupport"
       typeName="DmaByteCount"
       baseType="uint32_t"
       description="Byte Count"
-      toolTip="This field contains the number of bytes yet to be transferred for a given block.\n
-               BCR must be written with a value equal to or less than 0F_FFFFh.\n
-               After being written with a value in this range, bits 23-20 of BCR read back as 1110b.\n
-               A write to BCR of a value greater than 0F_FFFFh causes a configuration error when the channel starts to execute.\n
-               After being written with a value in this range, bits 23-20 of BCR read back as 1111b"
+      toolTip="This field contains the number of bytes to be transferred for a given block.\n
+               During the transfer it contains the number of bytes remaining."
       radix="16"
-      value="0" />
+      value="0"
+      min="0" max="0xFFFFF"
+      />
+
+   <choiceOption key="dma_dcr_erq_start"
+      enabledBy="enablePeripheralSupport"
+      valueFormat="DMA_DCR_ERQ(%s),DMA_DCR_START(%s)"
+      typeName="DmaMode"
+      baseType="uint32_t"
+      description="Channel Mode" 
+      toolTip="Enables and selects the mode of operation of the channel.\n
+               - Peripheral request = Transfers are initiated by an associated peripheral.\n
+               - Immediate = Transfers start immediately (software start)">
+      <choice name="Disabled"                                       value="0,0" enum="Disabled" />
+      <choice name="Peripheral controls transfer (peripheral req.)" value="1,0" enum="PeripheralRequest" />
+      <choice name="Immediately start transfer (software req.)"     value="0,1" enum="Immediate"         />
+   </choiceOption>
+
+   <binaryOption key="dma_dcr_d_req" condition="dma_dcr_d_req_present"
+      enabledBy="enablePeripheralSupport&amp;&amp;(dma_dcr_erq_start==1)"
+      typeName="DmaModeOnComplete"
+      baseType="uint32_t"
+      description="Disable peripheral request on completion" 
+      toolTip="Control whether the Peripheral requests are disabled when the BCR is exhausted">
+      <choice name="Request not affected"           value="0" enum="Unchanged" />
+      <choice name="Request disabled on completion" value="1" enum="Disabled"  />
+   </binaryOption >
 
    <binaryOption key="dma_dsr_bcr_done" condition="dma_dsr_bcr_done_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="DmaDsrBcrDone"
-      locked="true"
+      register="dsr_bcr"
+      hidden="true"
+      derived="true"
+      typeName="DmaDone"
+      baseType="uint32_t"
       toolTip="Indicates if the transfer has been completed\n
-               Writing a 1 to this bit clears all DMA status bits and should be used in an ISR\n
-               to clear the DMA interrupt and error bits"
+               Writing a 1 to this bit clears all DMA status bits and the BCR (byte count).\n
+               This should be used in an ISR to clear the DMA interrupt and error bits"
       description="Transactions done" >
       <choice name="Transfer not complete"  value="0" enum="TransferNotComplete" />
       <choice name="Transfer complete"      value="1" enum="TransferComplete"    />
    </binaryOption >
 
-   <!-- ************* DSR ****************** -->
+   <!-- _____ DSR __________________ -->
+
+   <binaryOption key="dma_dsr_ce" condition="dma_dsr_ce_present"
+      hidden="true"
+      typeName="DmaConfigError"
+      baseType="uint8_t"
+      description="Configuration error"
+      toolTip="Indicates error detection in initial configuration" >
+      <choice name="No configuration error"  value="0" enum="NoConfigurationError" />
+      <choice name="Configuration error"     value="1" enum="ConfigurationError" />
+   </binaryOption >
+
+   <binaryOption key="dma_dsr_bes" condition="dma_dsr_bes_present"
+      hidden="true"
+      typeName="DmaSourceError"
+      baseType="uint8_t"
+      description="Bus error on source"
+      toolTip="Indicates the DMA channel terminated with a bus error during the read portion of a transfer" >
+      <choice name="No bus error"    value="0" enum="NoBusError" />
+      <choice name="Read bus error"  value="1" enum="ReadBusError" />
+   </binaryOption >
+
+   <binaryOption key="dma_dsr_bed" condition="dma_dsr_bed_present"
+      hidden="true"
+      typeName="DmaDestinationError"
+      baseType="uint8_t"
+      description="Bus error on destination"
+      toolTip="Indicates the DMA channel terminated with a bus error during the write portion of a transfer" >
+      <choice name="No bus error"     value="0" enum="NoBusError" />
+      <choice name="Write bus error"  value="1" enum="WriteBusError" />
+   </binaryOption >
+
+   <binaryOption key="dma_dsr_req" condition="dma_dsr_req_present"
+      hidden="true"
+      typeName="DmaRequestPending"
+      baseType="uint8_t"
+      description="Request pending"
+      toolTip="Indicates a request is pending and channel has not been selected" >
+      <choice name="No request pending"  value="0" enum="NoRequestPending" />
+      <choice name="Request pending"     value="1" enum="RequestPending" />
+   </binaryOption >
+
+   <binaryOption key="dma_dsr_bsy" condition="dma_dsr_bsy_present"
+      hidden="true"
+      typeName="DmaBusy"
+      baseType="uint8_t"
+      description="Channel Busy"
+      toolTip="Indicates the channel is busy.\n
+               Cleared when the DMA has finished the last transaction\n
+               Set the first time the channel is enabled after a transfer is initiated" >
+      <choice name="Channel inactive"  value="0" enum="ChannelInactive" />
+      <choice name="Channel is busy"   value="1" enum="ChannelIsBusy" />
+   </binaryOption >
 
    <binaryOption key="dma_dsr_done" condition="dma_dsr_done_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="DmaDsrDone"
+      hidden="true"
+      derived="true"
+      typeName="DmaComplete"
+      baseType="uint8_t"
       toolTip="Indicates if the transfer has been completed\n
-               Writing a 1 to this bit clears all DMA status bits and should be used in an ISR to clear the DMA interrupt and error bits"
+               Writing a 1 to this bit clears all DMA status bits and the BCR (byte count).\n
+               This should be used in an ISR to clear the DMA interrupt and error bits"
       description="Transactions done" >
       <choice name="Transfer not complete"  value="0" enum="TransferNotComplete"/>
       <choice name="Transfer complete"      value="1" enum="TransferComplete"/>
    </binaryOption >
 
-   <!-- ************* DCR ****************** -->
+   <!-- _____ DCR __________________ -->
 
    <binaryOption key="dma_dcr_eint" condition="dma_dcr_eint_present"
       enabledBy="enablePeripheralSupport"
-      typeName="DmaDcrEint"
-      toolTip="Determines whether an interrupt is generated by completing a transfer\n
+      typeName="DmaActionOnComplete"
+      baseType="uint32_t"
+      toolTip="Determines action on completing a transfer\n
                or the occurrence of an error condition"
-      description="Enable interrupt on completion of transfer" >
-      <choice name="Interrupt masked"   value="0" enum="InterruptMasked"  />
-      <choice name="Interrupt enabled"  value="1" enum="InterruptEnabled" />
-   </binaryOption >
-
-   <binaryOption key="dma_dcr_erq" condition="dma_dcr_erq_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="DmaDcrErq"
-      toolTip="Allows the appropriate peripheral request REQC[DMACn] field to initiate transfer.\n
-               A software-initiated request (setting the START bit) is always enabled"
-      description="Enable peripheral request" >
-      <choice name="Peripheral Request ignored"   value="0" enum="RequestIgnored"  />
-      <choice name="Peripheral Request honoured"  value="1" enum="RequestHonoured" />
+      description="Action on completion of transfer" >
+      <choice name="No Action"  value="0" enum="NoAction"  />
+      <choice name="Interrupt"  value="1" enum="Interrupt" />
    </binaryOption >
 
    <binaryOption key="dma_dcr_cs" condition="dma_dcr_cs_present"
       enabledBy="enablePeripheralSupport"
-      typeName="DmaDcrCs"
-      toolTip="Control whether cycle-stealing is used or the DMA monopolises the bus until complete"
+      typeName="DmaTransferMode"
+      baseType="uint32_t"
+      toolTip="Controls whether cycle-stealing is used or the DMA monopolises the bus until complete"
       description="Cycle steal" >
-      <choice name="DMA is continuously"         value="0" enum="Continuously"    />
-      <choice name="Single read/write transfers"  value="1" enum="SingleTransfer" />
+      <choice name="DMA is continuously"                     value="0" enum="Continuous"       />
+      <choice name="Single read/write transfer per request"  value="1" enum="SinglePerRequest" />
    </binaryOption >
 
    <binaryOption key="dma_dcr_aa" condition="dma_dcr_aa_present"
       enabledBy="enablePeripheralSupport"
-      typeName="DmaDcrAa"
+      typeName="DmaAutoAlign"
+      baseType="uint32_t"
       toolTip="If enabled:\n
-               If SSIZE indicates a transfer no smaller than DSIZE, source accesses are auto-aligned; otherwise, destination accesses are auto-aligned.\n
+               If SSIZE indicates a transfer no smaller than DSIZE, source accesses are auto-aligned;\n
+               otherwise, destination accesses are auto-aligned.\n
                Source alignment takes precedence over destination alignment.\n
                If auto-alignment is enabled, the appropriate address register increments, regardless of DINC or SINC"
       description="Auto-align" >
@@ -324,31 +365,12 @@
 
    <binaryOption key="dma_dcr_eadreq" condition="dma_dcr_eadreq_present"
       enabledBy="enablePeripheralSupport"
-      typeName="DmaDcrEadreq"
-      toolTip="Enables the channel to support asynchronous DREQs while the MCU is in Stop mode"
-      description="Enable asynchronous DMA requests" >
+      typeName="DmaAsynchronousRequest"
+      baseType="uint32_t"
+      toolTip="Enables the channel to support asynchronous data requests while the MCU is in Stop mode"
+      description="Asynchronous requests" >
       <choice name="Disabled"    value="0" enum="Disabled" />
       <choice name="Enabled"     value="1" enum="Enabled"  />
-   </binaryOption >
-
-   <choiceOption key="dma_dcr_start" condition="dma_dcr_start_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="DmaStart"
-      toolTip="Set to start the DMA transfer\n
-               The DMA begins the transfer in accordance to the values in the TCDn.\n
-               START is cleared automatically after one module clock and always reads as logic 0"
-      description="Start transfer" >
-      <choice name="Start on request"   value="0" enum="OnRequuest"  />
-      <choice name="Start Immediately"  value="0" enum="Immediately" />
-   </choiceOption >
-
-   <binaryOption key="dma_dcr_d_req" condition="dma_dcr_d_req_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="DmaErqOnComplete"
-      toolTip="Control whether the ERQ bit is cleared when the BCR is exhausted"
-      description="Disable request on completion" >
-      <choice name="ERQ not affected"          value="0" enum="NotAffected" />
-      <choice name="ERQ cleared on completion" value="1" enum="Cleared"     />
    </binaryOption >
 
    <title description="Channel Linking" />
@@ -356,6 +378,7 @@
    <choiceOption key="dma_dcr_linkcc" condition="dma_dcr_linkcc_present"
       enabledBy="enablePeripheralSupport"
       typeName="DmaLinkAction"
+      baseType="uint32_t"
       description="Control Linking action of channel"
       toolTip="Allows DMA channels to have their transfers linked.\n
                The current DMA channel triggers a DMA request to the linked channels (LCH1 or LCH2) depending on the condition described by DmaLink bits.\n
@@ -369,6 +392,7 @@
    <choiceOption key="dma_dcr_lch1" condition="dma_dcr_lch1_present"
       enabledBy="dma_dcr_linkcc>0"
       typeName="DmaLinkChannelSel1"
+      baseType="uint32_t"
       description="Link channel 1"
       toolTip="This selects a channel to be used for linking" >
       <choice name="DMA Channel 0"  value="0" enum="Channel0" />
@@ -380,6 +404,7 @@
    <choiceOption key="dma_dcr_lch2" condition="dma_dcr_lch2_present"
       enabledBy="dma_dcr_linkcc==1"
       typeName="DmaLinkChannelSel2"
+      baseType="uint32_t"
       description="Link channel 2"
       toolTip="This selects a channel to be used for linking" >
       <choice name="DMA Channel 0"  value="0" enum="Channel0" />
@@ -388,67 +413,105 @@
       <choice name="DMA Channel 3"  value="3" enum="Channel3" />
    </choiceOption >
 
-<!-- Graphic here -->
+   <!-- ____ Getters and Setters ____________ -->
 
-   <for keys="field:name"
+   <for keys="field           : set   : get   : clear : genCode                 : context                 : name"
         values="
-         dma_sar_addr         : SarAddr;
-         dma_dar_addr         : DarAddr;
-         dma_dsr_bcr_ce       : DsrBcrCe;
-         dma_dsr_bcr_bes      : DsrBcrBes;
-         dma_dsr_bcr_bed      : DsrBcrBed;
-         dma_dsr_bcr_req      : DsrBcrReq;
-         dma_dsr_bcr_bsy      : DsrBcrBsy;
-         dma_dsr_bcr_done     : DsrBcrDone;
-         dma_dsr_bcr_bcr      : DsrBcrBcr;
-         dma_dsr_ce           : DsrCe;
-         dma_dsr_bes          : DsrBes;
-         dma_dsr_bed          : DsrBed;
-         dma_dsr_req          : DsrReq;
-         dma_dsr_bsy          : DsrBsy;
-         dma_dsr_done         : DsrDone;
-         dma_dcr_eint         : DcrEint;
-         dma_dcr_erq          : DcrErq;
-         dma_dcr_cs           : DcrCs;
-         dma_dcr_aa           : DcrAa;
-         dma_dcr_eadreq       : DcrEadreq;
-         dma_dcr_sinc         : DcrSinc;
-         dma_dcr_ssize        : DcrSsize;
-         dma_dcr_dinc         : DcrDinc;
-         dma_dcr_dsize        : DcrDsize;
-         dma_dcr_start        : DcrStart;
-         dma_dcr_smod         : DcrSmod;
-         dma_dcr_dmod         : DcrDmod;
-         dma_dcr_d_req        : DcrDReq;
-         dma_dcr_linkcc       : DcrLinkcc;
-         dma_dcr_lch1         : DcrLch1;
-         dma_dcr_lch2         : DcrLch2" >
-      <variableTemplate variables="%(field)" codeGenCondition="enableGettersAndSetters"
+         dma_sar_addr         : true  : true  : false : enableGettersAndSetters : DMA[index].SAR       : SourceAddress;
+
+         dma_dar_addr         : true  : true  : false : enableGettersAndSetters : DMA[index].SAR       : DestinationAddress;
+
+         dma_dsr_bcr_bcr      : true  : true  : false : enableGettersAndSetters : DMA[index].SAR       : ByteCount;
+
+         dma_dsr_ce           : false : true  : false : enableGettersAndSetters : DMA[index].SAR       : ConfigErrorFlag;
+         dma_dsr_bes          : false : true  : false : enableGettersAndSetters : DMA[index].SAR       : SourceErrorFlag;
+         dma_dsr_bed          : false : true  : false : enableGettersAndSetters : DMA[index].SAR       : DestinationErrorFlag;
+         dma_dsr_req          : false : true  : false : enableGettersAndSetters : DMA[index].SAR       : RequestFlag;
+         dma_dsr_bsy          : false : true  : false : enableGettersAndSetters : DMA[index].SAR       : BusyFlag;
+         dma_dsr_done         : false : true  : true  : enableGettersAndSetters : DMA[index].SAR       : CompletedFlag;
+
+         dma_dcr_erq_start    : true  : true  : false : enableGettersAndSetters : DMA[index].SAR       : Mode;
+
+         dma_dcr_eint         : true  : true  : false : enableGettersAndSetters : DMA[index].SAR       : EnableInterrupt;
+         dma_dcr_cs           : true  : true  : false : enableGettersAndSetters : DMA[index].SAR       : EnableCycleSteal;
+         dma_dcr_aa           : true  : true  : false : enableGettersAndSetters : DMA[index].SAR       : EnableAutoAlign;
+         dma_dcr_eadreq       : true  : true  : false : enableGettersAndSetters : DMA[index].SAR       : EnableAsynchronousRequests;
+         dma_dcr_sinc         : true  : true  : false : enableGettersAndSetters : DMA[index].SAR       : SourceIncrement;
+         dma_dcr_ssize        : true  : true  : false : enableGettersAndSetters : DMA[index].SAR       : SourceSize;
+         dma_dcr_dinc         : true  : true  : false : enableGettersAndSetters : DMA[index].SAR       : DestinationIncrement;
+         dma_dcr_dsize        : true  : true  : false : enableGettersAndSetters : DMA[index].SAR       : DestinationSize;
+         dma_dcr_smod         : true  : true  : false : enableGettersAndSetters : DMA[index].SAR       : SourceModulo;
+         dma_dcr_dmod         : true  : true  : false : enableGettersAndSetters : DMA[index].SAR       : DestinationModulo;
+         dma_dcr_d_req        : true  : true  : false : enableGettersAndSetters : DMA[index].SAR       : CLearRequestonComplete;
+         dma_dcr_linkcc       : true  : true  : false : enableGettersAndSetters : DMA[index].SAR       : LinkMode;
+         dma_dcr_lch1         : true  : true  : false : enableGettersAndSetters : DMA[index].SAR       : LinkChannel1;
+         dma_dcr_lch2         : true  : true  : false : enableGettersAndSetters : DMA[index].SAR       : LinkChannel2" >
+      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
       ><![CDATA[
          \t/**
          \t * Set %description
+         \t * (%(field))
          \t *
          %paramDescription
          \t */
-         \tstatic void set%(name)(DmaChannelNum dmaChannelNum, %params) {
-         \t   dma->DMA[dmaChannelNum].%registerNAME = (dma->DMA[dmaChannelNum].%registerNAME&~%mask)|%paramExpression;
+         \tstatic void set%(name)(int index, %params) {
+         \t   $(_basename)->%(context) = ($(_basename)->%(context) & ~%mask)|%paramExpression;
          \t}
-         \t
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
          \t/**
          \t * Get %description
+         \t * (%(field))
          \t *
          \t * @return %tooltip
          \t */
-         \tstatic %paramType get%(name)(DmaChannelNum dmaChannelNum) {
-         \t   return %paramType(dma->DMA[dmaChannelNum].%registerNAME&%mask);
+         \tstatic %paramType get%(name)(int index) {
+         \t   return %paramType($(_basename)->%(context)&%mask);
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Clear %description
+         \t * (%(field))
+         \t */
+         \tstatic void clear%(name)(int index) {
+         \t   $(_basename)->%(context) = $(_basename)->%(context)|%mask;
          \t}
          \t\n
       ]]></variableTemplate>
    </for>
 
-<!--   ========== DMA Init class =============================== -->
+   <!-- ____ Interrupt handling _____________ -->
 
-   <template key="init_description" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <variableTemplate codeGenCondition="irqHandlingMethod" variables="irq_enum" >
+   <![CDATA[
+      \t/**
+      \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
+      \t *
+      \t * @tparam %params %tooltip
+      \t */
+      \ttemplate<%params>
+      \tstatic void irqHandler() {
+      \t
+      \t   const DmaChannelNum dmaChannel = DmaChannelNum(%paramName0);
+      \t
+      \t   // Clear interrupt flag
+      \t   dma->DMA[dmaChannel].DSR = dma->DMA[dmaChannel].DSR &~ DMA_DSR_DONE_MASK;
+      \t
+      \t   // Execute call-back
+      \t   sCallbacks[%paramName0]($(irq_call));
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <!-- ________ DMA Init class ____________________________ -->
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of a $(_Baseclass) channel
@@ -460,6 +523,7 @@
       \t * @note This constructor may be used to create a const instance in Flash
       \t *
       \t * Example:
+      \t * @code
       \t * ///
       \t * /// $(_NAME) call-back
       \t * ///
@@ -469,146 +533,61 @@
       \t *    (void) status;
       \t * }
       \t *
-      \t * @code
-      \t * static const $(_Class)::Init $(_name)Init {
+      \t * Transfer Control
+      \t * @verbatim
+      \t * +------------------------------+  DMA mode
+      \t * | Loop =                       |  ===============================================================
+      \t * | +--------------------------+ |
+      \t * | | Each transfer            | |  The following are used during a loop:
+      \t * | |   mem[SADDR]->mem[DADDR] | |   - SADDR      Source address
+      \t * | |   SADDR += DCR.SSIZE     | |   - DCR.SSIZE  Adjustment applied to SADDR after each transfer
+      \t * | |   DADDR += DCR.DSIZE     | |   - DADDR      Destination address
+      \t * | +--------------------------+ |   - DCR.DSIZE  Adjustment applied to DADDR after each transfer
+      \t * |   Total transfer is BCR      |   - BCR        Number of bytes to transfer
+      \t * +------------------------------+
+      \t * @endverbatim
       \t *
-      \t *   // Setup values
-      \t *   DmaChannelNum_2 ,                          // DMA channel number - DMA channel 2
-      \t *   DmaByteCount(0x1000) ,                     // Byte Count
+      \t * static const uint8_t source[] = {1,2,3,4,5,6};
+      \t * static uint8_t destination[]  = {1,2,3,4,5,6};
       \t *
-      \t *   DmaSource(0x2000) ,                        // Source Address
-      \t *   DmaSourceSize_32Bit ,                      // Source size - 32-bit
-      \t *   DmaSourceModulo_Disabled ,                 // Source address modulo - Buffer disabled
-      \t *   DmaSourceIncrement_NoIncrement ,           // Source increment - No increment
+      \t * static const Dma0::Init initValue = {
+      \t *    DmaChannelNum_0 ,                               // (DmaChannelNum) DMA channel number - DMA channel 0
+      \t *    DmaByteCount(sizeof(source)) ,                  // (dma_dsr_bcr_bcr) Byte Count
+      \t *    DmaMode_Immediate,
       \t *
-      \t *   DmaDestination(0x3000) ,                   // Destination Address
-      \t *   DmaDestinationSize_32Bit ,                 // Destination size - 32-bit
-      \t *   DmaDestinationModulo_Disabled ,            // Destination address modulo - Buffer disabled
-      \t *   DmaDestinationIncrement_IncrementBySize ,  // Destination increment - Increments by transfer size
+      \t *    // Source
+      \t *    DmaSourceAddress(intptr_t(source)) ,            // (dma_sar_addr) Source Address
+      \t *    dmaSourceSize(source[0]) ,                      // (dma_dcr_ssize) Source size
+      \t *    DmaSourceModulo_Disabled ,                      // (dma_dcr_smod) Source address modulo - Buffer disabled
+      \t *    DmaSourceIncrement_IncrementBySize ,            // (dma_dcr_sinc) Source increment - Increment
       \t *
-      \t *   DmaDcrCs_SingleTransfer ,                  // Cycle steal - Single read/write transfers
-      \t *   DmaDcrAa_Disabled ,                        // Auto-align - Disabled
-      \t *   DmaStart_OnRequuest ,                      // Start transfer - Start on request
-      \t *   DmaDcrEadreq_Disabled ,                    // Enable asynchronous DMA requests - Disabled
-      \t *   DmaDcrErq_RequestIgnored ,                 // Enable peripheral request - Peripheral Request ignored
-      \t *   DmaErqOnComplete_Cleared ,                 // Disable request on completion - ERQ cleared on completion
-      \t *   DmaDcrEint_InterruptEnabled ,              // Enable interrupt on completion of transfer - Interrupt enabled
-      \t *   DmaDsrBcrDone_TransferNotComplete ,        // Transactions done - Transfer not complete
-      \t *   DmaDsrDone_TransferNotComplete ,           // Transactions done - Transfer not complete
+      \t *    // Destination
+      \t *    DmaDestinationAddress(intptr_t(destination)) ,  // (dma_dar_addr) Destination Address
+      \t *    dmaDestinationSize(destination[0]) ,            // (dma_dcr_dsize) Destination size
+      \t *    DmaDestinationModulo_Disabled ,                 // (dma_dcr_dmod) Destination address modulo - Buffer disabled
+      \t *    DmaSourceIncrement_IncrementBySize ,            // (dma_dcr_dinc) Destination increment - Increment
       \t *
-      \t *   DmaLinkAction_Complete ,                   // Control Linking action of channel - Link to LCH1 after the BCR decrements to zero
-      \t *   DmaLinkChannelSel1_Channel0 ,              // Link channel 1 - DMA Channel 0
-      \t *   DmaLinkChannelSel2_Channel0,               // Link channel 2 - DMA Channel 0
+      \t *    // Options
+      \t *    DmaTransferMode_Continuous ,                    // (dma_dcr_cs) Cycle steal - DMA is continuously
+      \t *    DmaAutoAlign_Disabled ,                         // (dma_dcr_aa) Auto-align - Disabled
+      \t *    DmaAsynchronousRequest_Disabled ,               // (dma_dcr_eadreq) Enable asynchronous DMA requests - Disabled
+      \t *    DmaModeOnComplete_Disabled ,                    // (dma_dcr_d_req) Disable request on completion - ERQ cleared
+      \t *    DmaActionOnComplete_Interrupt ,                 // (dma_dcr_eint) Enable interrupt on completion of transfer - Interrupt enabled
       \t *
-      \t *   $(_name)Callback,                // Call-back to execute on event - call-back function name
-      \t *   NvicPriority_Low,                // Priority for interrupt - Low
+      \t *    // Linking
+      \t *    DmaLinkAction_None ,                            // (dma_dcr_linkcc) Control Linking action of channel - No linking
+      \t *    DmaLinkChannelSel1_Channel0 ,                   // (dma_dcr_lch1) Link channel 1 - DMA Channel 0
+      \t *    DmaLinkChannelSel2_Channel0,                    // (dma_dcr_lch2) Link channel 2 - DMA Channel 0
+      \t *
+      \t *    $(_name)Callback,                // Call-back to execute on event - call-back function name
+      \t *    NvicPriority_Low,                // Priority for interrupt - Low
       \t * };
       \t *
       \t * // Initialise $(_Class) from values specified above
-      \t * $(_Class)::configure($(_name)Init)
+      \t * $(_Class)::configure(initValue)
+      \t   $(_Class)::waitUntilComplete(initValue.dmaChannelNum);
       \t * @endcode
       \t */
-   ]]>
-   </template>
-
-   <template namespace="usbdm" discardRepeats="true" >
-   <![CDATA[
-      class $(_Baseclass)BasicInfo {
-      \t
-      public:\n
-   ]]>
-   </template>
-
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="/$(_BASENAME)/irqHandlingMethod"
-   ><![CDATA[
-       \t//! Common class based callback code has been generated for this class of peripheral
-       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
-       \t\n
-   ]]></variableTemplate>
-
-   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
-   <![CDATA[
-      \t/**
-      \t * Type definition for $(_Baseclass) interrupt call back.
-      \t */
-      \ttypedef void (*CallbackFunction)($(irq_parameters));
-      \t
-      \t/**
-      \t * Callback to catch unhandled interrupt
-      \t */
-      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
-      \t   setAndCheckErrorCode(E_NO_HANDLER);
-      \t}
-      \t\n
-   ]]>
-   </template>
-
-   <template codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t/** Callback function for ISR */
-      \tstatic CallbackFunction sCallbacks[irqCount];
-      \t
-      \t/**
-      \t * Set interrupt callback function.
-      \t *
-      \t * @param[in]  dmaChannelNum   Channel to configure
-      \t * @param[in]  $(_basename)Callback Callback function to execute on interrupt
-      \t *                             Use nullptr to remove callback.
-      \t */
-      \tstatic void setCallback(DmaChannelNum dmaChannelNum, CallbackFunction $(_basename)Callback) {
-      \t   if ($(_basename)Callback == nullptr) {
-      \t      $(_basename)Callback = unhandledCallback;
-      \t   }
-      \t   // Allow either no handler set yet or removing handler
-      \t   usbdm_assert(
-      \t         (sCallbacks[dmaChannelNum] == unhandledCallback) || ($(_basename)Callback == unhandledCallback),
-      \t         "Handler already set");
-      \t   sCallbacks[dmaChannelNum] = $(_basename)Callback;
-      \t}
-      \t\n
-   ]]>
-   </template>
-
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t/**
-      \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
-      \t *
-      \t * @tparam channel Channel number
-      \t */
-      \ttemplate<unsigned channel>
-      \tstatic void irqHandler() {
-      \t
-      \t   // Clear interrupt flag
-      \t   dmac->DMA[channel].DSR = dmac->DMA[channel].DSR &~ DMA_DSR_DONE_MASK;
-      \t
-      \t   // Execute call-back
-      \t   Info::sCallbacks[channel]($(irq_call));
-      \t}
-      \t\n
-   ]]>
-   </template>
-
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t/**
-      \t * Callback table of programmatically set handlers for $(_Class)
-      \t */
-      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallbacks[] = {\n
-   ]]></template>
-   <for keys="ch" dim="=NumChannels" >
-      <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
-         \t   $(_Class)Info::unhandledCallback,\n
-      ]]></template>
-   </for>
-   <template key="/HARDWARE/StaticObjects" codeGenCondition="irqHandlingMethod" ><![CDATA[
-      \t};\n\n
-   ]]></template>
-
-   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
-   <![CDATA[
-      $(init_description)
       \tclass Init {
       \t
       \tpublic:
@@ -625,103 +604,54 @@
    ]]>
    </template>
 
-<!--   Member variables -->
+   <!-- ____ Init class Member variables ________ -->
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="DmaChannelNum"
-      linePadding=""
-      tooltipPadding="///x"
+      linePadding="xxx"
    ><![CDATA[
-      \t   /// %description
-      \t   /// %tooltip
+      %multilineDescription
       \t   %paramType %paramName = DmaChannelNum_None;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" variables="irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
-      linePadding=""
-      tooltipPadding="xxx///x"
-    ><![CDATA[
-      \t   /// %description
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+   ><![CDATA[
+      %multilineDescription
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="dma_sar_addr"
-   ><![CDATA[
-      \t   /// Source Address Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
+   <for keys=" type        : variables                                            : init    "
+       values="%baseType   : dma_sar_addr                                         :   0      ;
+               %baseType   : dma_dar_addr                                         :   0      ;
+               %baseType   : dma_dsr_bcr_bcr                                      :   0      ;
+               %baseType   : dma_dcr_eint,dma_dcr_erq,dma_dcr_cs,dma_dcr_aa,
+                             dma_dcr_eadreq,dma_dcr_sinc,dma_dcr_ssize,
+                             dma_dcr_dinc,dma_dcr_dsize,dma_dcr_start,
+                             dma_dcr_smod,dma_dcr_dmod,dma_dcr_d_req,dma_dcr_linkcc,
+                             dma_dcr_lch1,dma_dcr_lch2                            :   0      " >
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(variables)"
+         linePadding="xxx"
+      ><![CDATA[
+         %multilineDescription
+         \t   %(type) %registerName = %(init);\n\n
+      ]]></variableTemplate>
+   </for>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="dma_dar_addr"
-   ><![CDATA[
-      \t   /// Destination Address Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="dma_dsr_bcr_done,dma_dsr_bcr_bcr"
-   ><![CDATA[
-      \t   /// DMA Status / Byte Count Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="dma_dcr_eint,dma_dcr_erq,dma_dcr_cs,dma_dcr_aa,dma_dcr_eadreq,dma_dcr_sinc,dma_dcr_ssize,dma_dcr_dinc,dma_dcr_dsize,dma_dcr_start,dma_dcr_smod,dma_dcr_dmod,dma_dcr_d_req,dma_dcr_linkcc,dma_dcr_lch1,dma_dcr_lch2"
-   ><![CDATA[
-      \t   /// DMA Control Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel,irqLevel"
+      linePadding="xxx"
    ><![CDATA[
-      \t   /// %description
+      %multilineDescription
       \t   %paramType %registerName0 = %defaultValue;
       \t\n
    ]]></variableTemplate>
 
-<!--   Configure methods -->
+   <!-- ____ Init class Constructors ____________ -->
 
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
-   <![CDATA[
-      \t/**
-      \t * Configure $(_BASENAME) from values specified in init
-      \t *
-      \t * @param init Class containing initialisation values
-      \t */
-      \tstatic void configure(const typename Info::Init &init) {
-      \t   // ..........  Configure ...........
-      \t
-      \t   // Enable peripheral clock
-      \t   Info::enableClock();
-      \t\n
-   ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-             condition="/$(_BASENAME)/irqHandlingMethod" >   <![CDATA[
-      \t   if constexpr (Info::irqHandlerInstalled) {
-      \t      // Only set call-backs if feature enabled
-      \t      Info::setCallback(init.dmaChannelNum, init.callbackFunction);
-      \t      enableNvicInterrupts(init.dmaChannelNum, init.irqlevel);
-      \t   }
-      \t\n
-   ]]>
-   </template>
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
-   <![CDATA[
-      \t   // ..........  Regs to init .......... ;
-      \t   dmac->DMA[init.dmaChannelNum].SAR      = init.sar;
-      \t   dmac->DMA[init.dmaChannelNum].DAR      = init.dar;
-      \t   dmac->DMA[init.dmaChannelNum].DSR      = init.dsr;
-      \t   dmac->DMA[init.dmaChannelNum].DCR      = init.dcr;
-      \t}
-      \t\n
-   ]]>
-   </template>
-
-   <!--   Constructors -->
-
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -730,7 +660,7 @@
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
-      \t
+      \t    *
       %paramDescription
       \t    */
       \t   template <typename... Types>
@@ -740,7 +670,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -749,7 +679,7 @@
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
-      \t
+      \t    *
       %paramDescription
       \t    */
       \t   template <typename... Types>
@@ -759,7 +689,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="DmaChannelNum"
       linePadding="xxx" >
    <![CDATA[
@@ -782,35 +712,35 @@
 
    <for keys="r"
       values="
+            dma_dsr_bcr_bcr;
+
+            dma_sar_addr;
             dma_dcr_ssize;
             dma_dcr_smod;
             dma_dcr_sinc;
 
+            dma_dar_addr;
             dma_dcr_dsize;
             dma_dcr_dmod;
             dma_dcr_dinc;
 
             dma_dcr_cs;
             dma_dcr_aa;
-            dma_dcr_start;
             dma_dcr_eadreq;
-            dma_dcr_erq;
+            dma_dcr_erq_start;
             dma_dcr_d_req;
             dma_dcr_eint;
 
-            dma_dsr_bcr_done;
-            dma_dsr_done;
-
             dma_dcr_linkcc;
             dma_dcr_lch1;
-            dma_dcr_lch2
-            " >
-      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+            dma_dcr_lch2" >
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
          \t   /**
          \t    * Constructor for %description
+         \t    * (%(r))
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -820,49 +750,70 @@
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t
-         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t      %constructorFieldAssignment;
          \t   }
          \t\n
       ]]>
       </variableTemplate>
    </for>
 
-   <for keys="r"
-      values="
-            dma_sar_addr;
-            dma_dar_addr;
-            dma_dsr_bcr_bcr
-            " >
-      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables="%(r)"
-         linePadding="xxx" >
-      <![CDATA[
-         \t   /**
-         \t    * Constructor for %description
-         \t    *
-         \t    * @tparam   Types
-         \t    * @param    rest
-         \t    *
-         \t    * @param value %description
-         \t    */
-         \t   template <typename... Types>
-         \t   constexpr Init(%paramType0 value, Types... rest) : Init(rest...) {
+   <!-- ____ Init class Configure method ____ -->
+
+   <template codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const Init &init) {
+      \t
+      \t   // Enable peripheral
+      \t   enable();
+      \t\n
+   ]]></template>
+   <template codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t   // Configure call-backs
+      \t   setCallback(Dma0IrqNum(init.dmaChannelNum), init.callbackFunction);
+      \t   enableNvicInterrupts(Dma0IrqNum(init.dmaChannelNum), init.irqlevel);
+      \t\n
+   ]]>
+   </template>
+   <for keys=
+             " var                                                    : statement            "
+      values=" dma_dsr_bcr_done,dma_dsr_bcr_bcr                       : dma->DMA[init.dmaChannelNum].DSR_BCR = init.dsr_bcr|DMA_DSR_BCR_DONE_MASK ;
+               dma_sar_addr                                           : dma->DMA[init.dmaChannelNum].SAR     = init.sar ;
+               dma_dar_addr                                           : dma->DMA[init.dmaChannelNum].DAR     = init.dar ;
+               dma_dcr_eint,dma_dcr_erq,dma_dcr_cs,dma_dcr_aa,
+               dma_dcr_eadreq,dma_dcr_sinc,dma_dcr_ssize,
+               dma_dcr_dinc,dma_dcr_dsize,dma_dcr_start,
+               dma_dcr_smod,dma_dcr_dmod,dma_dcr_d_req,dma_dcr_linkcc,
+               dma_dcr_lch1,dma_dcr_lch2                              : dma->DMA[init.dmaChannelNum].DCR = init.dcr " >
+      <variableTemplate codeGenCondition="enablePeripheralSupport"
+      variables="%(var)"
+      linePadding="xxx"
+      ><![CDATA[
          \t
-         \t      %registerName = (%registerName&~%mask0) | %macro0(value);
-         \t   }
-         \t\n
-      ]]>
-      </variableTemplate>
+         %multilineDescription
+         \t   %(statement);\n
+      ]]></variableTemplate>
    </for>
+   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t}
+      \t\n
+   ]]>
+   </template>
 
+   <!-- ____  Default Initialisation value ____ -->
 
-<!--   Default Initialisation value -->
-
-   <variableTemplate codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
       variables="
             DmaChannelNum,
+
             dma_dsr_bcr_bcr,
 
             dma_sar_addr,
@@ -877,14 +828,10 @@
 
             dma_dcr_cs,
             dma_dcr_aa,
-            dma_dcr_start,
             dma_dcr_eadreq,
-            dma_dcr_erq,
+            dma_dcr_erq_start,
             dma_dcr_d_req,
             dma_dcr_eint,
-
-            dma_dsr_bcr_done,
-            dma_dsr_done,
 
             dma_dcr_linkcc,
             dma_dcr_lch1,
@@ -892,7 +839,7 @@
          "
    ><![CDATA[
       \t/**
-      \t * Default initialisation value for $(_Class)
+      \t * Example initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr Init ExampleValue = {%initExpression
@@ -901,22 +848,14 @@
    ]]>
    </variableTemplate>
 
-<!--   ========== BasicInfo class - end =============================== -->
-
-   <template namespace="usbdm" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
-      <![CDATA[
-      \t}; // class $(_Baseclass)BasicInfo::Init
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t}; // class $(_Structname)BasicInfo::Init
       \t\n
    ]]>
    </template>
 
-   <template namespace="usbdm" discardRepeats="true" >
-      <![CDATA[
-      }; // class $(_Class)BasicInfo\n\n
-   ]]>
-   </template>
-
-   <!-- ************* Common ****************** -->
+   <!-- ____ Common __________________ -->
 
    <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
@@ -939,7 +878,7 @@
       <copy source="Snippets/dma-uart-example-mkl25.cpp"          target="Snippets/dma-uart-example-mkl25.cpp"          overwrite="true"  derived="true" />
    </projectActionList>
 
-   <!-- ************* Startup ****************** -->
+   <!-- ____ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
@@ -951,14 +890,19 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <!-- ************* SIM configuration ****************** -->
+   <!-- ____ SIM configuration __________________ -->
 
-   <category name="Advanced" description="SIM configuration">
+   <category name="Advanced" description="SIM configuration"
+      toolTip="These settings only have effect if the SIM configuration is enabled" >
+      <title description="$(_BASENAME) Shared" />
+      <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+      <title description="$(_NAME) Specific" />
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
       <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
       </for>
    </category>
-   <deleteVariables variables="_scgc_clock"  mustExist="false" />
 
 </peripheralPage>

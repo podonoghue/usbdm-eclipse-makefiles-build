@@ -5,9 +5,9 @@
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
    <constant key="irq_parameters "           type="String" value='""'  />
-   <constant key="irq_call"                  type="String" value='""'  />
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="irq_call"                  type="String" value='""'  />
+   <equation key="generateDefault"           type="Boolean" value="false"         />
+   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml" />
    <title />
 
@@ -52,7 +52,7 @@
       <choice value="true"  name="Enabled"  isDefault="true" />
    </binaryOption>
 
-   <for keys="n" dim="=1,/SIM/numberOfClockSettings" >
+   <for keys="n" dim="=1,(/SIM/numberOfClockSettings-1)" >
       <binaryOption key="enableClockConfiguration[%(n)]"
          enabledBy="enablePeripheralSupport"
          hidden="true"
@@ -1205,7 +1205,7 @@
       ><![CDATA[\t   /// SIM CLKDIV3 System Clock Divider Register 3 %initExpression\n\n ]]></variableTemplate>
 
       <template key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]" ><![CDATA[
-         \t   Sim::DefaultSopt2Values[$(ClockConfig[%(n)])].sopt2,\n\n
+         \t   Sim::DefaultClockSouceInitValues[$(ClockConfig[%(n)])].sopt2,\n\n
       ]]></template>
 
       <variableTemplate key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
@@ -1304,21 +1304,21 @@
       \tstruct ClockInfo {\n\n
    ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="/SIM/sim_clkdiv1_outdiv4[]||/SIM/sim_clkdiv1_outdiv3[]||/SIM/sim_clkdiv1_outdiv2[]||/SIM/sim_clkdiv1_outdiv1[]"
    ><![CDATA[
       \t   /// SIM CLKDIV1 - System Clock Divider Register 1
       \t   const uint32_t clkdiv1;\n\n ]]>
    </template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="/SIM/sim_clkdiv3_pllfll[]"
    ><![CDATA[
       \t   /// SIM CLKDIV3 - PLLFLL clock divider divisor & fraction
       \t   const uint32_t clkdiv3;\n\n ]]>
    </template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="(/SIM/sim_sopt2_pllfllsel[])||(/SIM/sim_sopt2_tpmsrc[])"
    ><![CDATA[
       \t   /// SIM SOPT2 - Clock selectors for various peripherals
@@ -1326,74 +1326,74 @@
    </template>
 
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="mcgClockMode[]"
    ><![CDATA[
       \t   /// Clock Mode
       \t   const McgClockMode clockMode;\n\n
    ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="/SMC/smc_pmctrl_runm[]"
    ><![CDATA[
       \t   /// Run Mode
       \t   const SmcRunMode runMode; \n\n ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="mcg_c1_frdiv[]||mcg_c1_irclken[]||mcg_c1_irefsten[]"
    ><![CDATA[
       \t   /// Control Register 1 - FRDIV, IRCLKEN, IREFSTEN, (-CLKS, -IREFS)
       \t   const uint8_t c1; \n ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="mcg_c2_locre0[]||mcg_c2_range0[]||oscMode||mcg_c2_ircs[]"
    ><![CDATA[
       \t   /// Control Register 2 - LOCRE0, RANGE0, HGO0, EREFS0, IRCS, (-LP, -FCTRIM)
       \t   const uint8_t c2;\n ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="mcg_c4_dmx32[]||mcg_c4_drst_drs[]"
    ><![CDATA[
       \t   /// Control Register 4 - DMX32, DRST_DRS, (-FCTRIM, -SCFTRIM)
       \t   const uint8_t c4;\n ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="mcg_c5_pllclken0[]||mcg_c5_pllsten0[]||mcg_c5_prdiv0[]"
    ><![CDATA[
       \t   /// Control Register 5 - PLLCLKEN0, PLLSTEN0, PRDIV0
       \t   const uint8_t c5;\n ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="mcg_c6_lolie0[]||mcg_c6_cme0[]||mcg_c6_vdiv0[]"
    ><![CDATA[
       \t   /// Control Register 6 - LOLIE0, CME0, VDIV0, (-PLLS)
       \t   const uint8_t c6;\n ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="mcg_sc_fcrdiv[]"
    ><![CDATA[
       \t   /// Status and Control Register - FCRDIV
       \t   const uint8_t sc;\n ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="mcg_c7_oscsel[]"
    ><![CDATA[
       \t   /// Control Register 7 - OSCSEL
       \t   const uint8_t c7;\n ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="mcg_c8_locre1[]||mcg_c8_cme1[]||mcg_c8_lolre[]"
    ><![CDATA[
       \t   /// Control Register 8 - LOCRE1, CME1, LOLRE
       \t   const uint8_t c8;\n ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="mcg_c9_pll_cme[]||mcg_c9_pll_locre[]"
    ><![CDATA[
       \t   /// Control Register 9 - PLL_CME
       \t   const uint8_t c9;\n ]]></template>
 
-   <template key="ClockInfoType" namespace="all"
+   <template key="ClockInfoType" where="all"
       condition="mcg_c11_pllcs[]"
    ><![CDATA[
       \t   /// Control Register 11 - PLLCS

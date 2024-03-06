@@ -108,7 +108,7 @@ $(/PIT/publicMethods: // /PIT/publicMethods not found)
       return (PitChannelNum) channelNum;
    }
 
-#if $(/DMA/enablePeripheralSupport:false) // (/DMA/enablePeripheralSupport) not found
+#if $(/DMA/enablePeripheralSupport:false) // (/DMA/enablePeripheralSupport)
    /**
     * Allocate PIT channel associated with DMA channel.
     * This is a channel that may be used to throttle the associated DMA channel.
@@ -130,7 +130,7 @@ $(/PIT/publicMethods: // /PIT/publicMethods not found)
       allocatedChannels &= ~channelMask;
       return (PitChannelNum) dmaChannelNum;
    }
-#endif
+#endif // (/DMA/enablePeripheralSupport)
 
    /**
     * Free PIT channel.
@@ -157,13 +157,8 @@ $(/PIT/publicMethods: // /PIT/publicMethods not found)
     * @param[in]  pitChannelNum Channel being modified
     * @param[in]  enable  True => enable, False => disable
     */
-   static void enableInterrupts(PitChannelNum pitChannelNum, bool enable=true) {
-      if (enable) {
-         pit->CHANNEL[pitChannelNum].TCTRL = pit->CHANNEL[pitChannelNum].TCTRL | PIT_TCTRL_TIE_MASK;
-      }
-      else {
-         pit->CHANNEL[pitChannelNum].TCTRL = pit->CHANNEL[pitChannelNum].TCTRL & ~PIT_TCTRL_TIE_MASK;
-      }
+   static void setChannelAction(PitChannelNum pitChannelNum, PitChannelAction pitChannelAction) {
+      pit->CHANNEL[pitChannelNum].TCTRL = pit->CHANNEL[pitChannelNum].TCTRL | pitChannelAction;
    }
 
 #if $(/PIT/irqHandlingMethod:false) // /PIT/irqHandlingMethod
@@ -248,7 +243,7 @@ $(/PIT/publicMethods: // /PIT/publicMethods not found)
       };
       return fn;
    }
-#endif
+#endif // /PIT/irqHandlingMethod
 
 protected:
    /** Pointer to hardware */
@@ -297,7 +292,7 @@ public:
     *
     *  @param[in]  pitChannelNum     Channel to configure
     *  @param[in]  tickInterval      Interval in timer ticks (usually bus clock period)
-    *  @param[in]  pitChannelIrq     Whether to enable interrupts
+    *  @param[in]  pitChannelAction  Action to take on timer event
     *
     *  @note The timer channel is disabled before configuring so that period changes have
     *        immediate effect.
@@ -305,14 +300,14 @@ public:
    static void configureChannel(
          PitChannelNum     pitChannelNum,
          Ticks             tickInterval,
-         PitChannelIrq     pitChannelIrq=PitChannelIrq_Disabled) {
+         PitChannelAction  pitChannelAction=PitChannelAction_None) {
 
       usbdm_assert((unsigned)tickInterval>0, "Interval too short");
 
       pit->CHANNEL[pitChannelNum].TCTRL = 0;
       pit->CHANNEL[pitChannelNum].LDVAL = (unsigned)tickInterval-1;
       pit->CHANNEL[pitChannelNum].TFLG  = PIT_TFLG_TIF_MASK;
-      pit->CHANNEL[pitChannelNum].TCTRL = pitChannelIrq|PIT_TCTRL_TEN(1);
+      pit->CHANNEL[pitChannelNum].TCTRL = pitChannelAction|PIT_TCTRL_TEN(1);
    }
 
 #if $(/PIT/secondsSupport:false) // /PIT/secondsSupport
@@ -321,7 +316,7 @@ public:
     *
     *  @param[in]  pitChannelNum     Channel to configure
     *  @param[in]  intervalInSeconds Interval in seconds
-    *  @param[in]  pitChannelIrq      Whether to enable interrupts
+    *  @param[in]  pitChannelAction  Action to take on timer event
     *
     *  @note The timer channel is disabled before configuring so that period changes have
     *        immediate effect.
@@ -329,18 +324,18 @@ public:
    static void configureChannel(
          PitChannelNum     pitChannelNum,
          Seconds           intervalInSeconds,
-         PitChannelIrq     pitChannelIrq=PitChannelIrq_Disabled) {
+         PitChannelAction  pitChannelAction=PitChannelAction_None) {
 
-      configureChannel(pitChannelNum, convertSecondsToTicks(intervalInSeconds), pitChannelIrq);
+      configureChannel(pitChannelNum, convertSecondsToTicks(intervalInSeconds), pitChannelAction);
    }
-#endif
+#endif // /PIT/secondsSupport
 
    /**
     *  Configure the PIT channel in milliseconds
     *
     *  @param[in]  pitChannelNum    Channel to configure
     *  @param[in]  milliseconds     Interval in seconds
-    *  @param[in]  pitChannelIrq    Whether to enable interrupts
+    *  @param[in]  pitChannelAction Action to take on timer event
     *
     *  @note The timer channel is disabled before configuring so that period changes have
     *        immediate effect.
@@ -348,9 +343,9 @@ public:
    static void configureChannelInMilliseconds(
          PitChannelNum     pitChannelNum,
          unsigned          milliseconds,
-         PitChannelIrq     pitChannelIrq=PitChannelIrq_Disabled) {
+         PitChannelAction  pitChannelAction=PitChannelAction_None) {
 
-      configureChannel(pitChannelNum, convertMillisecondsToTicks(milliseconds), pitChannelIrq);
+      configureChannel(pitChannelNum, convertMillisecondsToTicks(milliseconds), pitChannelAction);
    }
 
    /**
@@ -358,7 +353,7 @@ public:
     *
     *  @param[in]  pitChannelNum    Channel to configure
     *  @param[in]  microseconds     Interval in microseconds
-    *  @param[in]  pitChannelIrq    Whether to enable interrupts
+    *  @param[in]  pitChannelAction Action to take on timer event
     *
     *  @note The timer channel is disabled before configuring so that period changes have
     *        immediate effect.
@@ -366,9 +361,9 @@ public:
    static void configureChannelInMicroseconds(
          PitChannelNum     pitChannelNum,
          unsigned          microseconds,
-         PitChannelIrq     pitChannelIrq=PitChannelIrq_Disabled) {
+         PitChannelAction     pitChannelAction=PitChannelAction_None) {
 
-      configureChannel(pitChannelNum, convertMicrosecondsToTicks(microseconds), pitChannelIrq);
+      configureChannel(pitChannelNum, convertMicrosecondsToTicks(microseconds), pitChannelAction);
    }
 
 #if $(/PIT/secondsSupport:false) // /PIT/secondsSupport
@@ -404,7 +399,7 @@ public:
       }
       return Ticks(intervalInTicks);
    }
-#endif
+#endif // /PIT/secondsSupport
 
    /**
     * Convert time in ticks to time in microseconds
@@ -524,7 +519,7 @@ public:
    static void setPeriod(PitChannelNum pitChannelNum, Seconds interval) {
       setPeriod(pitChannelNum, Ticks((float)interval*Info::getClockFrequency()));
    }
-#endif
+#endif // /PIT/secondsSupport
 
    /**
     *  Use a PIT channel to implement a busy-wait delay
@@ -558,7 +553,7 @@ public:
       }
       disableChannel(pitChannelNum);
    }
-#endif
+#endif // /PIT/secondsSupport
 
 #if $(/PIT/irqHandlingMethod:false) // /PIT/irqHandlingMethod
 #if $(/PIT/secondsSupport:false) // /PIT/secondsSupport
@@ -572,11 +567,34 @@ public:
     *  @param[in]  interval          Interval in seconds until callback is executed
     */
    static void oneShot(PitChannelNum pitChannelNum, typename Info::CallbackFunction callback, Seconds interval) {
+      Info::setCallback(PitIrqNum(pitChannelNum), callback);
+      configureChannel(pitChannelNum, interval, PitChannelAction_Interrupt);
+      CriticalSection cs;
       clearOnEvent |= (1<<pitChannelNum);
-      setCallback(pitChannelNum, callback);
-      configureChannel(pitChannelNum, interval, PitChannelIrq_Enabled);
    }
-#endif
+
+   /**
+    * Set interrupt callback function.
+    *
+    *  @param pitChannelNum   Channel to configure
+    *  @param callback        Callback function to execute on interrupt
+    *                         Use nullptr to remove callback.
+    */
+   static void setCallback(PitChannelNum pitChannelNum, CallbackFunction callback) {
+      Info::setCallback(PitIrqNum(pitChannelNum), callback);
+   }
+
+   /**
+    * Set interrupt callback function.
+    *
+    * @param pitIrqNum Used to identify peripheral interrupt
+    * @param callback  Callback function to execute on interrupt
+    *                  Use nullptr to remove callback.
+    */
+   static void setCallback(PitIrqNum pitIrqNum, CallbackFunction callback) {
+      Info::setCallback(pitIrqNum, callback);
+   }
+#endif // /PIT/secondsSupport
 
    /**
     * Set one-shot timer callback in microseconds
@@ -588,9 +606,10 @@ public:
     *  @param[in]  microseconds      Interval in milliseconds
     */
    static void oneShotInMicroseconds(PitChannelNum pitChannelNum, typename Info::CallbackFunction callback, uint32_t microseconds) {
+      Info::setCallback(PitIrqNum(pitChannelNum), callback);
+      configureChannelInMicroseconds(pitChannelNum, microseconds, PitChannelAction_Interrupt);
+      CriticalSection cs;
       clearOnEvent |= (1<<pitChannelNum);
-      setCallback(pitChannelNum, callback);
-      configureChannelInMicroseconds(pitChannelNum, microseconds, PitChannelIrq_Enabled);
    }
 
    /**
@@ -603,9 +622,10 @@ public:
     *  @param[in]  milliseconds      Interval in milliseconds
     */
    static void oneShotInMilliseconds(PitChannelNum pitChannelNum, typename Info::CallbackFunction callback, uint32_t milliseconds) {
+      Info::setCallback(PitIrqNum(pitChannelNum), callback);
+      configureChannelInMilliseconds(pitChannelNum, milliseconds, PitChannelAction_Interrupt);
+      CriticalSection cs;
       clearOnEvent |= (1<<pitChannelNum);
-      setCallback(pitChannelNum, callback);
-      configureChannelInMilliseconds(pitChannelNum, milliseconds, PitChannelIrq_Enabled);
    }
 
    /**
@@ -618,11 +638,12 @@ public:
     *  @param[in]  tickInterval      Interval in timer ticks (usually bus clock period)
     */
    static void oneShot(PitChannelNum pitChannelNum, typename Info::CallbackFunction callback, Ticks tickInterval) {
+      Info::setCallback(PitIrqNum(pitChannelNum), callback);
+      configureChannel(pitChannelNum, tickInterval, PitChannelAction_Interrupt);
+      CriticalSection cs;
       clearOnEvent |= (1<<pitChannelNum);
-      setCallback(pitChannelNum, callback);
-      configureChannel(pitChannelNum, tickInterval, PitChannelIrq_Enabled);
    }
-#endif
+#endif // /PIT/irqHandlingMethod
 
    /**
     * Class representing a PIT channel.
@@ -665,22 +686,6 @@ $(/PIT/memberFunctions: // /PIT/memberFunctions not found)
       static constexpr PitChannelNum CHANNEL = (PitChannelNum)channel;
 
       
-#if $(/PIT/irqHandlingMethod:false) // /PIT/irqHandlingMethod
-      /**
-       * PIT interrupt handler - Calls PIT callback
-       * Used when each channel has an individual handler
-       */
-      static void irqHandler() {
-         // Clear interrupt flag
-         PitBase_T<Info>::pit->CHANNEL[channel].TFLG = PIT_TFLG_TIF_MASK;
-
-         if (clearOnEvent&(1<<channel)) {
-            disable();
-            clearOnEvent &= ~(1<<channel);
-         }
-         Info::sCallbacks[channel]();
-      }
-#endif
 
 $(/PIT/staticFunctions: // /PIT/staticFunctions not found)
    };

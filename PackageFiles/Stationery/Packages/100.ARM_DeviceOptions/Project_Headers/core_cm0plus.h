@@ -227,7 +227,7 @@
 #define     __OM     volatile            /*! Defines 'write only' structure member permissions */
 #define     __IOM    volatile            /*! Defines 'read / write' structure member permissions */
 
-/*@} end of group Cortex-M0+ */
+/** @} end of group Cortex-M0+ */
 
 
 
@@ -360,7 +360,7 @@ typedef union
 #define CONTROL_nPRIV_Pos                   0U                                            /*!< CONTROL: nPRIV Position */
 #define CONTROL_nPRIV_Msk                  (1UL /*<< CONTROL_nPRIV_Pos*/)                 /*!< CONTROL: nPRIV Mask */
 
-/*@} end of group CMSIS_CORE */
+/** @} end of group CMSIS_CORE */
 
 
 /**
@@ -387,7 +387,7 @@ typedef struct
   __IOM uint32_t IP[8U];                 /*!< Offset: 0x300 (R/W)  Interrupt Priority Register */
 }  NVIC_Type;
 
-/*@} end of group CMSIS_NVIC */
+/** @} end of group CMSIS_NVIC */
 
 
 /**
@@ -504,7 +504,7 @@ typedef struct
 #define SCB_SHCSR_SVCALLPENDED_Pos         15U                                            /*!< SCB SHCSR: SVCALLPENDED Position */
 #define SCB_SHCSR_SVCALLPENDED_Msk         (1UL << SCB_SHCSR_SVCALLPENDED_Pos)            /*!< SCB SHCSR: SVCALLPENDED Mask */
 
-/*@} end of group CMSIS_SCB */
+/** @} end of group CMSIS_SCB */
 
 
 /**
@@ -556,7 +556,7 @@ typedef struct
 #define SysTick_CALIB_TENMS_Pos             0U                                            /*!< SysTick CALIB: TENMS Position */
 #define SysTick_CALIB_TENMS_Msk            (0xFFFFFFUL /*<< SysTick_CALIB_TENMS_Pos*/)    /*!< SysTick CALIB: TENMS Mask */
 
-/*@} end of group CMSIS_SysTick */
+/** @} end of group CMSIS_SysTick */
 
 #if (__MPU_PRESENT == 1U)
 /**
@@ -643,7 +643,7 @@ typedef struct
 #define MPU_RASR_ENABLE_Pos                 0U                                            /*!< MPU RASR: Region enable bit Position */
 #define MPU_RASR_ENABLE_Msk                (1UL /*<< MPU_RASR_ENABLE_Pos*/)               /*!< MPU RASR: Region enable bit Disable Mask */
 
-/*@} end of group CMSIS_MPU */
+/** @} end of group CMSIS_MPU */
 #endif
 
 
@@ -654,7 +654,7 @@ typedef struct
             Therefore they are not covered by the Cortex-M0+ header file.
   @{
  */
-/*@} end of group CMSIS_CoreDebug */
+/** @} end of group CMSIS_CoreDebug */
 
 
 /**
@@ -680,7 +680,7 @@ typedef struct
 */
 #define _FLD2VAL(field, value)    ((value & field ## _Msk) >> field ## _Pos)
 
-/*@} end of group CMSIS_core_bitfield */
+/** @} end of group CMSIS_core_bitfield */
 
 
 /**
@@ -705,7 +705,7 @@ typedef struct
   #define MPU               ((MPU_Type       *)     MPU_BASE      )   /*!< Memory Protection Unit */
 #endif
 
-/*@} */
+/** @} */
 
 
 
@@ -857,7 +857,7 @@ __STATIC_INLINE void NVIC_SystemReset(void)
   }
 }
 
-/*@} end of CMSIS_Core_NVICFunctions */
+/** @} end of CMSIS_Core_NVICFunctions */
 
 
 
@@ -900,7 +900,7 @@ __STATIC_INLINE uint32_t SysTick_Config(uint32_t ticks)
 
 #endif
 
-/*@} end of CMSIS_Core_SysTickFunctions */
+/** @} end of CMSIS_Core_SysTickFunctions */
 
 
 

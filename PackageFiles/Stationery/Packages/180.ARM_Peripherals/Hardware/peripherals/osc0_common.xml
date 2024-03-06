@@ -5,8 +5,8 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <constant key="generateDefault"           type="Boolean" value="false"         />
-   <constant key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="generateDefault"           type="Boolean" value="false"         />
+   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -46,7 +46,7 @@
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Class)BasicInfo&quot;" />
+      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
    <!-- ************* CR ****************** -->
 
@@ -300,17 +300,9 @@
       \t}\n\n
    ]]></template>
 
-   <!--   ========== class $(_Class)BasicInfo =============================== -->
-
-   <template namespace="usbdm" ><![CDATA[
-      class $(_Class)BasicInfo {
-
-      public:\n
-   ]]></template>
-
 <!--   ========== OSC Init class =============================== -->
 
-   <template namespace="usbdm" discardRepeats="true" codeGenCondition="enablePeripheralSupport" >
+   <template where="basicInfo" discardRepeats="true" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -351,14 +343,14 @@
 
 <!--   Member variables -->
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="enablePeripheralSupport"
       variables="osc_cr_erclken,osc_cr_erefsten,osc_cr_scp,osc_cr_scp"
    ><![CDATA[
       \t   /// Control Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="enablePeripheralSupport"
       variables="osc_div_erps"
    ><![CDATA[
       \t   /// Clock Divider Register
@@ -374,7 +366,7 @@
             osc_cr_scp;
             osc_div_erps
             " >
-      <variableTemplate namespace="usbdm" discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -453,16 +445,10 @@
    ]]>
    </template>
 
-   <template namespace="usbdm" discardRepeats="true" codeGenCondition="enablePeripheralSupport" >
+   <template where="basicInfo" discardRepeats="true" codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
-      \t}; // class $(_Baseclass)BasicInfo::Init
+      \t}; // class $(_Structname)BasicInfo::Init
       \t\n
-   ]]>
-   </template>
-
-   <template namespace="usbdm" discardRepeats="true" >
-      <![CDATA[
-      }; // class $(_Baseclass)BasicInfo\n\n
    ]]>
    </template>
 
