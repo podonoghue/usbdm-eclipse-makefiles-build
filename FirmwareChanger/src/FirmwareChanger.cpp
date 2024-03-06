@@ -1531,23 +1531,23 @@ int FirmwareChangerApp::OnExit() {
    return wxApp::OnExit();
 }
 
-static const std::string returnCodeText = std::string("\nReturn codes:\n") +
-      "\t0 = SUCCESS\n" +
-      "\t1 = FAILURE\n" +
-      "\t2 = INVALID PARAMETER\n"   +
+static const char * returnCodeText = "\nReturn codes:\n"
+      "\t0 = SUCCESS\n"
+      "\t1 = FAILURE\n"
+      "\t2 = INVALID PARAMETER\n"
       "\t3 = INVALID COMMAND";
 static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
-      { wxCMD_LINE_PARAM,      NULL,          NULL, _("Firmware file (including path)"),          wxCMD_LINE_VAL_STRING,  wxCMD_LINE_PARAM_OPTIONAL },
-      { wxCMD_LINE_SWITCH,     _("auto"),     NULL, _("Auto select & load firmware file")      },
-      { wxCMD_LINE_OPTION,     _("serial"),   NULL, _("Serial number to write to BDM device"),    wxCMD_LINE_VAL_STRING },
-      { wxCMD_LINE_SWITCH,     _("program"),  NULL, _("Program and verify flash contents"),    },
-      { wxCMD_LINE_SWITCH,     _("verify"),   NULL, _("Verify flash contents")                 },
-      { wxCMD_LINE_SWITCH,     _("verbose"),  NULL, _("Print progress messages to stdout")     },
+      { wxCMD_LINE_PARAM,      NULL,       NULL, "Firmware file (including path)",       wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
+      { wxCMD_LINE_SWITCH,     "auto",     NULL, "Auto select & load firmware file"                                                       },
+      { wxCMD_LINE_OPTION,     "serial",   NULL, "Serial number to write to BDM device", wxCMD_LINE_VAL_STRING                            },
+      { wxCMD_LINE_SWITCH,     "program",  NULL, "Program and verify flash contents",                                                     },
+      { wxCMD_LINE_SWITCH,     "verify",   NULL, "Verify flash contents"                                                                  },
+      { wxCMD_LINE_SWITCH,     "verbose",  NULL, "Print progress messages to stdout"                                                      },
 #ifdef _WIN32
-      { wxCMD_LINE_SWITCH,     _("console"),  NULL, _("Enable output to stdout and stderr")    },
+      { wxCMD_LINE_SWITCH,     "console",  NULL, "Enable output to stdout and stderr"                                                     },
 #endif
-      { wxCMD_LINE_SWITCH,     _("help"),     NULL, _("Show this help message"),                   wxCMD_LINE_VAL_NONE,    wxCMD_LINE_OPTION_HELP },
-      { wxCMD_LINE_USAGE_TEXT, NULL,          NULL, _(returnCodeText)                          },
+      { wxCMD_LINE_SWITCH,     "help",     NULL, "Show this help message",               wxCMD_LINE_VAL_NONE,    wxCMD_LINE_OPTION_HELP   },
+      { wxCMD_LINE_USAGE_TEXT, NULL,       NULL, returnCodeText                                                                           },
       { wxCMD_LINE_NONE }
 };
 

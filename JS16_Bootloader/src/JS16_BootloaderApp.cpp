@@ -116,32 +116,32 @@ bool JS16_BootloaderApp::OnInit(void) {
 
    // call for default command parsing behaviour
    if (!wxApp::OnInit()) {
-	  applicationRC = BDM_RC_ILLEGAL_COMMAND;
+     applicationRC = BDM_RC_ILLEGAL_COMMAND;
    }
    else if(applicationRC == BDM_RC_OK){
-	   // Prepare the GUI application
-	  if(dialogue->inGUIMode()){
-	     appSettings.reset(new AppSettings("JS16_Bootloader.cfg", "JS16 Bootloader"));
-	     appSettings->load();
-	     dialogue->loadSettings(*appSettings);
-	     SetTopWindow(dialogue);
-	     dialogue->ShowModal();
-	     dialogue->saveSettings(*appSettings);
-	     appSettings->save();
-	  }
-	  else{
-		 attachConsole();
-	     applicationRC = dialogue->doCommandLineProgram();
-	     if(dialogue->consoleIsEnabled()){
-	    	 if(applicationRC != BDM_RC_OK){
-	    		 fprintf(stderr, "Programming failed, rc = %s\n", UsbdmSystem::getErrorString(applicationRC));
-	    	 }
-	    	 else{
-	    		 fprintf(stdout, "Programming completed successfully\n");
-	    	 }
-	     }
-		 freeConsole();
-	  }
+      // Prepare the GUI application
+     if(dialogue->inGUIMode()){
+        appSettings.reset(new AppSettings("JS16_Bootloader.cfg", "JS16 Bootloader"));
+        appSettings->load();
+        dialogue->loadSettings(*appSettings);
+        SetTopWindow(dialogue);
+        dialogue->ShowModal();
+        dialogue->saveSettings(*appSettings);
+        appSettings->save();
+     }
+     else{
+       attachConsole();
+        applicationRC = dialogue->doCommandLineProgram();
+        if(dialogue->consoleIsEnabled()){
+          if(applicationRC != BDM_RC_OK){
+             fprintf(stderr, "Programming failed, rc = %s\n", UsbdmSystem::getErrorString(applicationRC));
+          }
+          else{
+             fprintf(stdout, "Programming completed successfully\n");
+          }
+        }
+       freeConsole();
+     }
    }
    dialogue->Destroy();
    return true; // Return true regardless as we want OnRun() to execute
@@ -155,10 +155,10 @@ int JS16_BootloaderApp::OnRun(void) {
 
    // Everything is done in OnInit()
    if (applicationRC != BDM_RC_OK){
-	  log.error("JS16 Bootloader app::OnRun() - error code = %s\n", UsbdmSystem::getErrorString(applicationRC));
+     log.error("JS16 Bootloader app::OnRun() - error code = %s\n", UsbdmSystem::getErrorString(applicationRC));
    }
    else{
-	  log.print("JS16 Bootloader app::OnRun() success\n");
+     log.print("JS16 Bootloader app::OnRun() success\n");
    }
 
    return applicationRC;
@@ -173,96 +173,96 @@ int JS16_BootloaderApp::OnExit(void) {
    return wxApp::OnExit();
 }
 
-static const std::string firmwareSelectionUsage = std::string("Valid firmware choices:\n")          +
-															  "\t0 = " + firmwareSelection[0] +"\n" +
-		                                                      "\t1 = " + firmwareSelection[1] +"\n" +
-		                                                      "\t2 = " + firmwareSelection[2] +"\n" +
-		                                                      "\t3 = " + firmwareSelection[3] +"\n" +
-		                                                      "\t4 = " + firmwareSelection[4] +"\n" +
-		                                                      "\t5 = " + firmwareSelection[5] +"\n" +
-		                                                      "\t6 = " + firmwareSelection[6] +"\n" ;
+static const char * firmwareSelectionUsage = (std::string("Valid firmware choices:\n")          +
+                                               "\t0 = " + firmwareSelection[0] +"\n" +
+                                                "\t1 = " + firmwareSelection[1] +"\n" +
+                                                "\t2 = " + firmwareSelection[2] +"\n" +
+                                                "\t3 = " + firmwareSelection[3] +"\n" +
+                                                "\t4 = " + firmwareSelection[4] +"\n" +
+                                                "\t5 = " + firmwareSelection[5] +"\n" +
+                                                "\t6 = " + firmwareSelection[6] +"\n").c_str() ;
 
 static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
-	  { wxCMD_LINE_PARAM,       NULL,           NULL, _("Custom BDM firmware. Must be specified if firmware option is 0"),   wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
-	  { wxCMD_LINE_OPTION,      _("firmware"),  NULL, _("BDM firmware choice"),                                              wxCMD_LINE_VAL_NUMBER },
-	  { wxCMD_LINE_USAGE_TEXT,  NULL,           NULL, _(firmwareSelectionUsage)                    },
-      { wxCMD_LINE_SWITCH,      _("verbose"),   NULL, _("Print progress messages to stdout")       },
+     { wxCMD_LINE_PARAM,       NULL,        NULL, "Custom BDM firmware. Must be specified if firmware option is 0",   wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
+     { wxCMD_LINE_OPTION,      "firmware",  NULL, "BDM firmware choice",                                              wxCMD_LINE_VAL_NUMBER },
+     { wxCMD_LINE_USAGE_TEXT,  NULL,        NULL, firmwareSelectionUsage                     },
+      { wxCMD_LINE_SWITCH,     "verbose",   NULL, "Print progress messages to stdout"        },
 #ifdef _WIN32
-	  { wxCMD_LINE_SWITCH,      _("console"),   NULL, _("Enable output to stdout and stderr")                 },
+     { wxCMD_LINE_SWITCH,      "console",   NULL, "Enable output to stdout and stderr"       },
 #endif
-	  { wxCMD_LINE_SWITCH,      _("help"),      NULL, _("Show this help message"),                                           wxCMD_LINE_VAL_NONE,     wxCMD_LINE_OPTION_HELP  },
-	  { wxCMD_LINE_USAGE_TEXT,  NULL,           NULL, _("\nReturn codes: Check USBDM Error Codes") },
+     { wxCMD_LINE_SWITCH,      "help",      NULL, "Show this help message",                                           wxCMD_LINE_VAL_NONE,     wxCMD_LINE_OPTION_HELP  },
+     { wxCMD_LINE_USAGE_TEXT,  NULL,        NULL, "\nReturn codes: Check USBDM Error Codes"  },
       { wxCMD_LINE_NONE }
 };
 
 void JS16_BootloaderApp::OnInitCmdLine(wxCmdLineParser& parser){
 
-	parser.SetDesc (g_cmdLineDesc);
-	 // must refuse '/' as parameter starter or cannot use "/path" style paths
-	parser.SetSwitchChars (_("-"));
-	parser.SetLogo(_("JS16 Bootloader\n"));
+   parser.SetDesc (g_cmdLineDesc);
+    // must refuse '/' as parameter starter or cannot use "/path" style paths
+   parser.SetSwitchChars (_("-"));
+   parser.SetLogo(_("JS16 Bootloader\n"));
 
-	#if (wxCHECK_VERSION(2, 9, 0))
-	    parser.AddUsageText(_(
-	          "\nExamples:\n"
-	          "-firmware=1\n"
-	          "    Program BDM using firmware choice 1 - " + firmwareSelection[1] + "\n"
-	    	  "-firmware=0 Image.sx\n"
-	    	  "    Program BDM using custom image file  "
-	     ));
+   #if (wxCHECK_VERSION(2, 9, 0))
+       parser.AddUsageText(_(
+             "\nExamples:\n"
+             "-firmware=1\n"
+             "    Program BDM using firmware choice 1 - " + firmwareSelection[1] + "\n"
+           "-firmware=0 Image.sx\n"
+           "    Program BDM using custom image file  "
+        ));
     #ifdef _WIN32
-	    parser.AddUsageText(_("\nRecommendation! When running on console, use \"start/wait\" to execute the application."
-    		              " For example:\n\tstart/wait JS16_Bootloader -program -firmware=1"));
+       parser.AddUsageText(_("\nRecommendation! When running on console, use \"start/wait\" to execute the application."
+                       " For example:\n\tstart/wait JS16_Bootloader -program -firmware=1"));
     #endif // _WIN32
-	#endif
+   #endif
 }
 
 bool JS16_BootloaderApp::OnCmdLineParsed(wxCmdLineParser& parser){
 
-	applicationRC = dialogue->parseCommandLine(parser);
+   applicationRC = dialogue->parseCommandLine(parser);
     if (applicationRC != BDM_RC_OK) {
-	   parser.Usage();
+      parser.Usage();
     }
-	return true; // return true regardless to catch unknown/illegal command line option in OnInit()
+   return true; // return true regardless to catch unknown/illegal command line option in OnInit()
 }
 JS16_BootloaderApp::~JS16_BootloaderApp() {
    LOGGING_E;
 }
 
 void JS16_BootloaderApp::attachConsole(){
-	LOGGING;
+   LOGGING;
 
-	if(consoleIsAttached){
-		return;
-	}
+   if(consoleIsAttached){
+      return;
+   }
 #ifdef _WIN32
-	if ((GetConsoleWindow() == NULL) && dialogue->consoleIsEnabled()) {
-		if(AttachConsole(ATTACH_PARENT_PROCESS)){ // attach to parent console if possible
-			consoleIsAttached = true;
-			log.print("Parent console attached\n");
-		}
-		else{
-			log.print("Unable to attach parent console to application. Error: %lu\n", GetLastError());
-		}
-		if(consoleIsAttached){
-			freopen("CONOUT$", "w", stdout);
-			freopen("CONOUT$", "w", stderr);
-		}
-		// Set stdout to no buffering; stderr is unbuffered by default
-		setvbuf(stdout, NULL, _IONBF, 0);
-	}
+   if ((GetConsoleWindow() == NULL) && dialogue->consoleIsEnabled()) {
+      if(AttachConsole(ATTACH_PARENT_PROCESS)){ // attach to parent console if possible
+         consoleIsAttached = true;
+         log.print("Parent console attached\n");
+      }
+      else{
+         log.print("Unable to attach parent console to application. Error: %lu\n", GetLastError());
+      }
+      if(consoleIsAttached){
+         freopen("CONOUT$", "w", stdout);
+         freopen("CONOUT$", "w", stderr);
+      }
+      // Set stdout to no buffering; stderr is unbuffered by default
+      setvbuf(stdout, NULL, _IONBF, 0);
+   }
 #endif
 }
 
 void JS16_BootloaderApp::freeConsole(){
-	LOGGING;
+   LOGGING;
 
-	if(!consoleIsAttached){
-		return;
-	}
+   if(!consoleIsAttached){
+      return;
+   }
 #ifdef _WIN32
-	FreeConsole();
-	consoleIsAttached = false;
-	log.print("Console detached");
+   FreeConsole();
+   consoleIsAttached = false;
+   log.print("Console detached");
 #endif
 }
