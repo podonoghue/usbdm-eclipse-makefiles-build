@@ -3192,6 +3192,35 @@
          <param type="StringVariable"         name="_hardwareIrqNums"               value=""                 key="/POWER/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/POWER/_hasPcrTable" />
       </peripheral>
+      <peripheral baseName="RCM"      instance=""         instanceList="RCM"  version="rcm_mk10d5">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRcm" />
+         <param type="StringVariable"         name="_instanceList"                  value="RCM"              key="/RCM/_instanceList" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value=""                 key="/RCM/_hardwareIrqNums" />
+         <param type="BooleanVariable"        name="_present"                       value="true"             key="/RCM/_present" />
+         <param type="BooleanVariable"        name="rcm_mr_ezp_ms_present"          value="true"             key="/RCM/rcm_mr_ezp_ms_present" />
+         <param type="BooleanVariable"        name="rcm_mr_present"                 value="true"             key="/RCM/rcm_mr_present" />
+         <param type="BooleanVariable"        name="rcm_rpfc_present"               value="true"             key="/RCM/rcm_rpfc_present" />
+         <param type="BooleanVariable"        name="rcm_rpfc_rstfltsrw_present"     value="true"             key="/RCM/rcm_rpfc_rstfltsrw_present" />
+         <param type="BooleanVariable"        name="rcm_rpfc_rstfltss_present"      value="true"             key="/RCM/rcm_rpfc_rstfltss_present" />
+         <param type="BooleanVariable"        name="rcm_rpfw_present"               value="true"             key="/RCM/rcm_rpfw_present" />
+         <param type="BooleanVariable"        name="rcm_rpfw_rstfltsel_present"     value="true"             key="/RCM/rcm_rpfw_rstfltsel_present" />
+         <param type="BooleanVariable"        name="rcm_srs0_loc_present"           value="true"             key="/RCM/rcm_srs0_loc_present" />
+         <param type="BooleanVariable"        name="rcm_srs0_lol_present"           value="true"             key="/RCM/rcm_srs0_lol_present" />
+         <param type="BooleanVariable"        name="rcm_srs0_lvd_present"           value="true"             key="/RCM/rcm_srs0_lvd_present" />
+         <param type="BooleanVariable"        name="rcm_srs0_pin_present"           value="true"             key="/RCM/rcm_srs0_pin_present" />
+         <param type="BooleanVariable"        name="rcm_srs0_por_present"           value="true"             key="/RCM/rcm_srs0_por_present" />
+         <param type="BooleanVariable"        name="rcm_srs0_present"               value="true"             key="/RCM/rcm_srs0_present" />
+         <param type="BooleanVariable"        name="rcm_srs0_wakeup_present"        value="true"             key="/RCM/rcm_srs0_wakeup_present" />
+         <param type="BooleanVariable"        name="rcm_srs0_wdog_present"          value="true"             key="/RCM/rcm_srs0_wdog_present" />
+         <param type="BooleanVariable"        name="rcm_srs1_ezpt_present"          value="true"             key="/RCM/rcm_srs1_ezpt_present" />
+         <param type="BooleanVariable"        name="rcm_srs1_jtag_present"          value="true"             key="/RCM/rcm_srs1_jtag_present" />
+         <param type="BooleanVariable"        name="rcm_srs1_lockup_present"        value="true"             key="/RCM/rcm_srs1_lockup_present" />
+         <param type="BooleanVariable"        name="rcm_srs1_mdm_ap_present"        value="true"             key="/RCM/rcm_srs1_mdm_ap_present" />
+         <param type="BooleanVariable"        name="rcm_srs1_present"               value="true"             key="/RCM/rcm_srs1_present" />
+         <param type="BooleanVariable"        name="rcm_srs1_sackerr_present"       value="true"             key="/RCM/rcm_srs1_sackerr_present" />
+         <param type="BooleanVariable"        name="rcm_srs1_sw_present"            value="true"             key="/RCM/rcm_srs1_sw_present" />
+         <param type="StringVariable"         name="structName"                     value="RCM"              key="/RCM/structName" />
+      </peripheral>
       <peripheral baseName="RNGA"     instance=""         instanceList="RNGA" version="rnga_0x40029000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRnga" />
          <irq num="RNGA_IRQn" />

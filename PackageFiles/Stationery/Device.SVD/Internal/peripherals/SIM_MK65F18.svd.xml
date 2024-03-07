@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MK65F18
       MK66F18
 -->
@@ -2228,7 +2228,7 @@ Devices using this peripheral:
                   <field derivedFrom="RNGA" > <name>CAN1</name> <description>CAN1 Clock Gate Control</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="RNGA" > <name>SPI2</name> <description>SPI2 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="RNGA" > <name>SDHC</name> <description>SDHC Clock Gate Control</description> <bitOffset>17</bitOffset> </field>
-                  <field derivedFrom="RNGA" > <name>FTM2</name> <description>FTM2 Clock Gate Control</description> <bitOffset>24</bitOffset> </field>
+                  <!-- field derivedFrom="RNGA" > <name>FTM2</name> <description>FTM2 Clock Gate Control</description> <bitOffset>24</bitOffset> </field -->
                   <field derivedFrom="RNGA" > <name>FTM3</name> <description>FTM3 Clock Gate Control</description> <bitOffset>25</bitOffset> </field>
                   <field derivedFrom="RNGA" > <name>ADC1</name> <description>ADC1 Clock Gate Control</description> <bitOffset>27</bitOffset> </field>
                </fields>
@@ -2344,12 +2344,7 @@ Devices using this peripheral:
                   </field>
                   <field derivedFrom="FTF" > <name>DMAMUX0</name> <description>DMA Mux Clock Gate Control</description> <bitOffset>1</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>CAN0</name> <description>CAN0 Clock Gate Control</description> <bitOffset>4</bitOffset> </field>
-                  <field>
-                     <name>RNGA</name>
-                     <description>RNGA Clock Gate Control</description>
-                     <bitOffset>9</bitOffset>
-                     <bitWidth>1</bitWidth>
-                  </field>
+                  <!-- field derivedFrom="FTF" > <name>RNGA</name> <description>RNGA Clock Gate Control</description> <bitOffset>9</bitOffset> </field -->
                   <field derivedFrom="FTF" > <name>SPI0</name> <description>SPI0 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>SPI1</name> <description>SPI1 Clock Gate Control</description> <bitOffset>13</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>I2S0</name> <description>I2S Clock Gate Control</description> <bitOffset>15</bitOffset> </field>
@@ -2379,7 +2374,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="FTF" > <name>DAC0</name> <description>DAC0 Clock Gate Control</description> <bitOffset>31</bitOffset> </field>
+                  <!-- field derivedFrom="FTF" > <name>DAC0</name> <description>DAC0 Clock Gate Control</description> <bitOffset>31</bitOffset> </field -->
                </fields>
             </register>
             <register>

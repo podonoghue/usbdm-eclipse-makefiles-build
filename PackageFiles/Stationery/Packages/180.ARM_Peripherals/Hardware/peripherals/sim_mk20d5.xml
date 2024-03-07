@@ -107,7 +107,6 @@
    <constant key="_class_declaration" type="String"
       value='"$(_Class)Info : public $(_Baseclass)BasicInfo"' />
 
-
    <!-- _____________ USB Clock __________________ -->
 
    <intOption key="system_usb_clkin_clock"

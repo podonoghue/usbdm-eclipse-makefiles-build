@@ -4,7 +4,7 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <!-- ___ Vectors _______ 
+   <!-- ___ Vectors _______
 
    <equation key="irq_vectors" value='IrqVectors("^(PORT.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$1 used by $5")' />
    <printVar key="irq_vectors" split=";"/>
@@ -468,7 +468,7 @@
    </for>
 
    <for keys="n" values=";0;1;2;3;4">
-      <equation key="lpuart%(n)_src_available" value="" condition="sim_sopt2_lpuart%(n)src[]" />
+      <constant key="lpuart%(n)_src_available" value='"Available"' condition="sim_sopt2_lpuart%(n)src[]" />
       <clockCodeTemplate variable="sim_sopt2_lpuart%(n)src[]"
          returnFormat="%s"
       ><![CDATA[

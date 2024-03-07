@@ -1,5 +1,5 @@
 <!--
-Devices using this vector table: 
+Devices using this vector table:
    MK65F18
    MK66F18
 -->
@@ -7,97 +7,97 @@ Devices using this vector table:
    <name>MK65F18_VectorTable</name>
    <description>MK65F18 VectorTable</description>
    <interrupt>
-      <name>DMA0_Ch0_DMA16</name>
+      <name>DMA0_Ch0_16</name>
       <description>Direct memory access controller</description>
       <value>0</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_Ch1_DMA17</name>
+      <name>DMA0_Ch1_17</name>
       <description>Direct memory access controller</description>
       <value>1</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_Ch2_DMA18</name>
+      <name>DMA0_Ch2_18</name>
       <description>Direct memory access controller</description>
       <value>2</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_Ch3_DMA19</name>
+      <name>DMA0_Ch3_19</name>
       <description>Direct memory access controller</description>
       <value>3</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_Ch4_DMA20</name>
+      <name>DMA0_Ch4_20</name>
       <description>Direct memory access controller</description>
       <value>4</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_Ch5_DMA21</name>
+      <name>DMA0_Ch5_21</name>
       <description>Direct memory access controller</description>
       <value>5</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_Ch6_DMA22</name>
+      <name>DMA0_Ch6_22</name>
       <description>Direct memory access controller</description>
       <value>6</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_Ch7_DMA23</name>
+      <name>DMA0_Ch7_23</name>
       <description>Direct memory access controller</description>
       <value>7</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_Ch8_DMA24</name>
+      <name>DMA0_Ch8_24</name>
       <description>Direct memory access controller</description>
       <value>8</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_Ch9_DMA25</name>
+      <name>DMA0_Ch9_25</name>
       <description>Direct memory access controller</description>
       <value>9</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_Ch10_DMA26</name>
+      <name>DMA0_Ch10_26</name>
       <description>Direct memory access controller</description>
       <value>10</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_Ch11_DMA27</name>
+      <name>DMA0_Ch11_27</name>
       <description>Direct memory access controller</description>
       <value>11</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_Ch12_DMA28</name>
+      <name>DMA0_Ch12_28</name>
       <description>Direct memory access controller</description>
       <value>12</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_Ch13_DMA29</name>
+      <name>DMA0_Ch13_29</name>
       <description>Direct memory access controller</description>
       <value>13</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_Ch14_DMA30</name>
+      <name>DMA0_Ch14_30</name>
       <description>Direct memory access controller</description>
       <value>14</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>DMA0_Ch15_DMA31</name>
+      <name>DMA0_Ch15_31</name>
       <description>Direct memory access controller</description>
       <value>15</value>
       <peripheral>DMA0</peripheral>

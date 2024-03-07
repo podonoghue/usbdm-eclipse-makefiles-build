@@ -834,26 +834,26 @@
       </peripheral>
       <peripheral baseName="DMA"      instance="0"        instanceList="DMA0" version="dma0_32ch_ears">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDma" />
-         <irq num="DMA0_Ch0_DMA16_IRQn" />
-         <irq num="DMA0_Ch1_DMA17_IRQn" />
-         <irq num="DMA0_Ch2_DMA18_IRQn" />
-         <irq num="DMA0_Ch3_DMA19_IRQn" />
-         <irq num="DMA0_Ch4_DMA20_IRQn" />
-         <irq num="DMA0_Ch5_DMA21_IRQn" />
-         <irq num="DMA0_Ch6_DMA22_IRQn" />
-         <irq num="DMA0_Ch7_DMA23_IRQn" />
-         <irq num="DMA0_Ch8_DMA24_IRQn" />
-         <irq num="DMA0_Ch9_DMA25_IRQn" />
-         <irq num="DMA0_Ch10_DMA26_IRQn" />
-         <irq num="DMA0_Ch11_DMA27_IRQn" />
-         <irq num="DMA0_Ch12_DMA28_IRQn" />
-         <irq num="DMA0_Ch13_DMA29_IRQn" />
-         <irq num="DMA0_Ch14_DMA30_IRQn" />
-         <irq num="DMA0_Ch15_DMA31_IRQn" />
+         <irq num="DMA0_Ch0_16_IRQn" />
+         <irq num="DMA0_Ch1_17_IRQn" />
+         <irq num="DMA0_Ch2_18_IRQn" />
+         <irq num="DMA0_Ch3_19_IRQn" />
+         <irq num="DMA0_Ch4_20_IRQn" />
+         <irq num="DMA0_Ch5_21_IRQn" />
+         <irq num="DMA0_Ch6_22_IRQn" />
+         <irq num="DMA0_Ch7_23_IRQn" />
+         <irq num="DMA0_Ch8_24_IRQn" />
+         <irq num="DMA0_Ch9_25_IRQn" />
+         <irq num="DMA0_Ch10_26_IRQn" />
+         <irq num="DMA0_Ch11_27_IRQn" />
+         <irq num="DMA0_Ch12_28_IRQn" />
+         <irq num="DMA0_Ch13_29_IRQn" />
+         <irq num="DMA0_Ch14_30_IRQn" />
+         <irq num="DMA0_Ch15_31_IRQn" />
          <irq num="DMA0_Error_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="DMA0"             key="/DMA0/_instanceList" />
          <param type="LongVariable"           name="_hardwareIrqCount"              value="17"               key="/DMA0/_hardwareIrqCount" />
-         <param type="StringVariable"         name="_hardwareIrqNums"               value="DMA0_Ch0_DMA16_IRQn;DMA0_Ch1_DMA17_IRQn;DMA0_Ch2_DMA18_IRQn;DMA0_Ch3_DMA19_IRQn;DMA0_Ch4_DMA20_IRQn;DMA0_Ch5_DMA21_IRQn;DMA0_Ch6_DMA22_IRQn;DMA0_Ch7_DMA23_IRQn;DMA0_Ch8_DMA24_IRQn;DMA0_Ch9_DMA25_IRQn;DMA0_Ch10_DMA26_IRQn;DMA0_Ch11_DMA27_IRQn;DMA0_Ch12_DMA28_IRQn;DMA0_Ch13_DMA29_IRQn;DMA0_Ch14_DMA30_IRQn;DMA0_Ch15_DMA31_IRQn;DMA0_Error_IRQn" key="/DMA0/_hardwareIrqNums" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="DMA0_Ch0_16_IRQn;DMA0_Ch1_17_IRQn;DMA0_Ch2_18_IRQn;DMA0_Ch3_19_IRQn;DMA0_Ch4_20_IRQn;DMA0_Ch5_21_IRQn;DMA0_Ch6_22_IRQn;DMA0_Ch7_23_IRQn;DMA0_Ch8_24_IRQn;DMA0_Ch9_25_IRQn;DMA0_Ch10_26_IRQn;DMA0_Ch11_27_IRQn;DMA0_Ch12_28_IRQn;DMA0_Ch13_29_IRQn;DMA0_Ch14_30_IRQn;DMA0_Ch15_31_IRQn;DMA0_Error_IRQn" key="/DMA0/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/DMA0/_present" />
          <param type="BooleanVariable"        name="dma_attr_dmod_present"          value="true"             key="/DMA0/dma_attr_dmod_present" />
          <param type="BooleanVariable"        name="dma_attr_dsize_present"         value="true"             key="/DMA0/dma_attr_dsize_present" />
@@ -3783,6 +3783,50 @@
          <param type="StringVariable"         name="_hardwareIrqNums"               value=""                 key="/POWER/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/POWER/_hasPcrTable" />
       </peripheral>
+      <peripheral baseName="RCM"      instance=""         instanceList="RCM"  version="rcm_mk_ssrs">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRcm" />
+         <param type="StringVariable"         name="_instanceList"                  value="RCM"              key="/RCM/_instanceList" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value=""                 key="/RCM/_hardwareIrqNums" />
+         <param type="BooleanVariable"        name="_present"                       value="true"             key="/RCM/_present" />
+         <param type="BooleanVariable"        name="rcm_mr_ezp_ms_present"          value="true"             key="/RCM/rcm_mr_ezp_ms_present" />
+         <param type="BooleanVariable"        name="rcm_mr_present"                 value="true"             key="/RCM/rcm_mr_present" />
+         <param type="BooleanVariable"        name="rcm_rpfc_present"               value="true"             key="/RCM/rcm_rpfc_present" />
+         <param type="BooleanVariable"        name="rcm_rpfc_rstfltsrw_present"     value="true"             key="/RCM/rcm_rpfc_rstfltsrw_present" />
+         <param type="BooleanVariable"        name="rcm_rpfc_rstfltss_present"      value="true"             key="/RCM/rcm_rpfc_rstfltss_present" />
+         <param type="BooleanVariable"        name="rcm_rpfw_present"               value="true"             key="/RCM/rcm_rpfw_present" />
+         <param type="BooleanVariable"        name="rcm_rpfw_rstfltsel_present"     value="true"             key="/RCM/rcm_rpfw_rstfltsel_present" />
+         <param type="BooleanVariable"        name="rcm_srs0_loc_present"           value="true"             key="/RCM/rcm_srs0_loc_present" />
+         <param type="BooleanVariable"        name="rcm_srs0_lol_present"           value="true"             key="/RCM/rcm_srs0_lol_present" />
+         <param type="BooleanVariable"        name="rcm_srs0_lvd_present"           value="true"             key="/RCM/rcm_srs0_lvd_present" />
+         <param type="BooleanVariable"        name="rcm_srs0_pin_present"           value="true"             key="/RCM/rcm_srs0_pin_present" />
+         <param type="BooleanVariable"        name="rcm_srs0_por_present"           value="true"             key="/RCM/rcm_srs0_por_present" />
+         <param type="BooleanVariable"        name="rcm_srs0_present"               value="true"             key="/RCM/rcm_srs0_present" />
+         <param type="BooleanVariable"        name="rcm_srs0_wakeup_present"        value="true"             key="/RCM/rcm_srs0_wakeup_present" />
+         <param type="BooleanVariable"        name="rcm_srs0_wdog_present"          value="true"             key="/RCM/rcm_srs0_wdog_present" />
+         <param type="BooleanVariable"        name="rcm_srs1_ezpt_present"          value="true"             key="/RCM/rcm_srs1_ezpt_present" />
+         <param type="BooleanVariable"        name="rcm_srs1_jtag_present"          value="true"             key="/RCM/rcm_srs1_jtag_present" />
+         <param type="BooleanVariable"        name="rcm_srs1_lockup_present"        value="true"             key="/RCM/rcm_srs1_lockup_present" />
+         <param type="BooleanVariable"        name="rcm_srs1_mdm_ap_present"        value="true"             key="/RCM/rcm_srs1_mdm_ap_present" />
+         <param type="BooleanVariable"        name="rcm_srs1_present"               value="true"             key="/RCM/rcm_srs1_present" />
+         <param type="BooleanVariable"        name="rcm_srs1_sackerr_present"       value="true"             key="/RCM/rcm_srs1_sackerr_present" />
+         <param type="BooleanVariable"        name="rcm_srs1_sw_present"            value="true"             key="/RCM/rcm_srs1_sw_present" />
+         <param type="BooleanVariable"        name="rcm_ssrs0_present"              value="true"             key="/RCM/rcm_ssrs0_present" />
+         <param type="BooleanVariable"        name="rcm_ssrs0_sloc_present"         value="true"             key="/RCM/rcm_ssrs0_sloc_present" />
+         <param type="BooleanVariable"        name="rcm_ssrs0_slol_present"         value="true"             key="/RCM/rcm_ssrs0_slol_present" />
+         <param type="BooleanVariable"        name="rcm_ssrs0_slvd_present"         value="true"             key="/RCM/rcm_ssrs0_slvd_present" />
+         <param type="BooleanVariable"        name="rcm_ssrs0_spin_present"         value="true"             key="/RCM/rcm_ssrs0_spin_present" />
+         <param type="BooleanVariable"        name="rcm_ssrs0_spor_present"         value="true"             key="/RCM/rcm_ssrs0_spor_present" />
+         <param type="BooleanVariable"        name="rcm_ssrs0_swakeup_present"      value="true"             key="/RCM/rcm_ssrs0_swakeup_present" />
+         <param type="BooleanVariable"        name="rcm_ssrs0_swdog_present"        value="true"             key="/RCM/rcm_ssrs0_swdog_present" />
+         <param type="BooleanVariable"        name="rcm_ssrs1_present"              value="true"             key="/RCM/rcm_ssrs1_present" />
+         <param type="BooleanVariable"        name="rcm_ssrs1_sezpt_present"        value="true"             key="/RCM/rcm_ssrs1_sezpt_present" />
+         <param type="BooleanVariable"        name="rcm_ssrs1_sjtag_present"        value="true"             key="/RCM/rcm_ssrs1_sjtag_present" />
+         <param type="BooleanVariable"        name="rcm_ssrs1_slockup_present"      value="true"             key="/RCM/rcm_ssrs1_slockup_present" />
+         <param type="BooleanVariable"        name="rcm_ssrs1_smdm_ap_present"      value="true"             key="/RCM/rcm_ssrs1_smdm_ap_present" />
+         <param type="BooleanVariable"        name="rcm_ssrs1_ssackerr_present"     value="true"             key="/RCM/rcm_ssrs1_ssackerr_present" />
+         <param type="BooleanVariable"        name="rcm_ssrs1_ssw_present"          value="true"             key="/RCM/rcm_ssrs1_ssw_present" />
+         <param type="StringVariable"         name="structName"                     value="RCM"              key="/RCM/structName" />
+      </peripheral>
       <peripheral baseName="RNGA"     instance=""         instanceList="RNGA" version="rnga_0x400a0000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRnga" />
          <irq num="RNGA_IRQn" />
@@ -4134,7 +4178,7 @@
          <param type="StringVariable"         name="_clockInfo"                     value="SCGC6,FTF"        key="/FTF/_clockInfo" />
          <param type="StringVariable"         name="_clockInfo"                     value="SCGC6,FTM0"       key="/FTM0/_clockInfo" />
          <param type="StringVariable"         name="_clockInfo"                     value="SCGC6,FTM1"       key="/FTM1/_clockInfo" />
-         <param type="StringVariable"         name="_clockInfo"                     value="SCGC3,FTM2"       key="/FTM2/_clockInfo" />
+         <param type="StringVariable"         name="_clockInfo"                     value="SCGC6,FTM2"       key="/FTM2/_clockInfo" />
          <param type="StringVariable"         name="_clockInfo"                     value="SCGC3,FTM3"       key="/FTM3/_clockInfo" />
          <param type="StringVariable"         name="_clockInfo"                     value="SCGC4,I2C0"       key="/I2C0/_clockInfo" />
          <param type="StringVariable"         name="_clockInfo"                     value="SCGC4,I2C1"       key="/I2C1/_clockInfo" />
@@ -4195,7 +4239,6 @@
          <param type="BooleanVariable"        name="sim_scgc2_tpm2_present"         value="true"             key="/SIM/sim_scgc2_tpm2_present" />
          <param type="BooleanVariable"        name="sim_scgc3_adc1_present"         value="true"             key="/SIM/sim_scgc3_adc1_present" />
          <param type="BooleanVariable"        name="sim_scgc3_can1_present"         value="true"             key="/SIM/sim_scgc3_can1_present" />
-         <param type="BooleanVariable"        name="sim_scgc3_ftm2_present"         value="true"             key="/SIM/sim_scgc3_ftm2_present" />
          <param type="BooleanVariable"        name="sim_scgc3_ftm3_present"         value="true"             key="/SIM/sim_scgc3_ftm3_present" />
          <param type="BooleanVariable"        name="sim_scgc3_present"              value="true"             key="/SIM/sim_scgc3_present" />
          <param type="BooleanVariable"        name="sim_scgc3_rnga_present"         value="true"             key="/SIM/sim_scgc3_rnga_present" />
@@ -4227,7 +4270,6 @@
          <param type="BooleanVariable"        name="sim_scgc6_adc0_present"         value="true"             key="/SIM/sim_scgc6_adc0_present" />
          <param type="BooleanVariable"        name="sim_scgc6_can0_present"         value="true"             key="/SIM/sim_scgc6_can0_present" />
          <param type="BooleanVariable"        name="sim_scgc6_crc_present"          value="true"             key="/SIM/sim_scgc6_crc_present" />
-         <param type="BooleanVariable"        name="sim_scgc6_dac0_present"         value="true"             key="/SIM/sim_scgc6_dac0_present" />
          <param type="BooleanVariable"        name="sim_scgc6_dmamux0_present"      value="true"             key="/SIM/sim_scgc6_dmamux0_present" />
          <param type="BooleanVariable"        name="sim_scgc6_ftf_present"          value="true"             key="/SIM/sim_scgc6_ftf_present" />
          <param type="BooleanVariable"        name="sim_scgc6_ftm0_present"         value="true"             key="/SIM/sim_scgc6_ftm0_present" />
@@ -4237,7 +4279,6 @@
          <param type="BooleanVariable"        name="sim_scgc6_pdb_present"          value="true"             key="/SIM/sim_scgc6_pdb_present" />
          <param type="BooleanVariable"        name="sim_scgc6_pit_present"          value="true"             key="/SIM/sim_scgc6_pit_present" />
          <param type="BooleanVariable"        name="sim_scgc6_present"              value="true"             key="/SIM/sim_scgc6_present" />
-         <param type="BooleanVariable"        name="sim_scgc6_rnga_present"         value="true"             key="/SIM/sim_scgc6_rnga_present" />
          <param type="BooleanVariable"        name="sim_scgc6_rtc_present"          value="true"             key="/SIM/sim_scgc6_rtc_present" />
          <param type="BooleanVariable"        name="sim_scgc6_spi0_present"         value="true"             key="/SIM/sim_scgc6_spi0_present" />
          <param type="BooleanVariable"        name="sim_scgc6_spi1_present"         value="true"             key="/SIM/sim_scgc6_spi1_present" />

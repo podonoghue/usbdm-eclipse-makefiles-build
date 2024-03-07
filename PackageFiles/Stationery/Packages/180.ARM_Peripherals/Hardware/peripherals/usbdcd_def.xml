@@ -13,10 +13,10 @@
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
-   <!-- ************* Class Declaration ****************** -->
+   <!-- _____ Class Declaration _______ -->
    <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
-   <!-- ************* CONTROL ****************** -->
+   <!-- _____ CONTROL _______ -->
 
    <binaryOption key="usbdcd_control_sr" condition="usbdcd_control_sr_present"
       enabledBy="enablePeripheralSupport"
@@ -71,7 +71,7 @@
       <choice name="Write 1 to clear IF"  value="0" enum="ClearFlag" />
    </choiceOption >
 
-   <!-- ************* CLOCK ****************** -->
+   <!-- _____ CLOCK _______ -->
 
    <aliasOption key="/SIM/system_bus_clock[0]" />
 
@@ -100,7 +100,7 @@
       min="1" max="1024" value="48"
    />
 
-   <!-- ************* STATUS ****************** -->
+   <!-- _____ STATUS _______ -->
 
    <binaryOption key="usbdcd_status_active" condition="usbdcd_status_active_present"
       hidden="true"
@@ -152,7 +152,7 @@
       <choice name="Dedicated charger"  value="3" enum="DedicatedCharger" />
    </choiceOption >
 
-   <!-- ************* SIGNAL_OVERRIDE ****************** -->
+   <!-- _____ SIGNAL_OVERRIDE _______ -->
 
    <choiceOption key="usbdcd_signal_override_ps" condition="usbdcd_signal_override_ps_present"
       enabledBy="enablePeripheralSupport"
@@ -166,7 +166,7 @@
       <choice name="Enables VDP_SRC->USB_DP and IDM_SINK->USB_DM pin"   value="2" enum="EnableVdp_srcIdm_sink" />
    </choiceOption >
 
-   <!-- ************* TIMER0 ****************** -->
+   <!-- _____ TIMER0 _______ -->
 
    <intOption key="usbdcd_timer0_tseq_init" condition="usbdcd_timer0_tseq_init_present"
       enabledBy="enablePeripheralSupport"
@@ -191,7 +191,7 @@
                The timer is automatically initialized with the value of TSEQ_INIT"
    />
 
-   <!-- ************* TIMER1 ****************** -->
+   <!-- _____ TIMER1 _______ -->
 
    <intOption key="usbdcd_timer1_tdcd_dbnc" condition="usbdcd_timer1_tdcd_dbnc_present"
       enabledBy="enablePeripheralSupport"
@@ -213,7 +213,7 @@
       min="0" max="1023" value="40"
    />
 
-   <!-- ************* TIMER2 ****************** -->
+   <!-- _____ TIMER2 _______ -->
 
    <intOption key="usbdcd_timer2_tvdpsrc_con" condition="usbdcd_timer2_tvdpsrc_con_present"
       enabledBy="enablePeripheralSupport"
@@ -237,7 +237,7 @@
       min="1" max="15" value="1"
    />
 
-   <!-- ************* TIMER2_BC11 ****************** -->
+   <!-- _____ TIMER2_BC11 _______ -->
 
    <intOption key="usbdcd_timer2_bc11_tvdpsrc_con" condition="usbdcd_timer2_bc11_tvdpsrc_con_present"
       enabledBy="enablePeripheralSupport"
@@ -263,7 +263,7 @@
       min="1" max="15" value="1"
    />
 
-   <!-- ************* TIMER2_BC12 ****************** -->
+   <!-- _____ TIMER2_BC12 _______ -->
 
    <intOption key="usbdcd_timer2_bc12_twait_after_prd" condition="usbdcd_timer2_bc12_twait_after_prd_present"
       enabledBy="enablePeripheralSupport"
@@ -344,7 +344,7 @@
       ><![CDATA[
          \t/**
          \t * Clear %description
-         \t *
+         \t */
          \tstatic void clear%(name)() {
          \t   %register = %register|%mask;
          \t}
@@ -667,7 +667,7 @@
    ]]>
    </template>
 
-   <!-- ************* Common ****************** -->
+   <!-- _____ Common _______ -->
 
    <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
@@ -689,7 +689,7 @@
       <copy source="Snippets/usbdcd-example.cpp"    target="Snippets/usbdcd-example.cpp"       overwrite="true" derived="true" />
    </projectActionList>
 
-   <!-- ************* Startup ****************** -->
+   <!-- _____ Startup _______ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
@@ -701,7 +701,7 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <!-- ************* SIM configuration ****************** -->
+   <!-- _____ SIM configuration _______ -->
    <category name="Advanced" description="SIM configuration">
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
       <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
