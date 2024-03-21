@@ -30,11 +30,34 @@
 namespace USBDM {
 
 /**
+ * Calculate a FTM channel number using an offset from an existing number
+ *
+ * @param pitChannelNum Base channel to use
+ * @param offset  Offset from base channel
+ *
+ * @return  FTM channel number calculated from channel+offset
+ */
+constexpr FtmChannelNum inline operator+(FtmChannelNum pitChannelNum, unsigned offset) {
+   return FtmChannelNum(unsigned(pitChannelNum) + offset);
+}
+
+/**
+ * Calculate a FTM channel number using an offset from an existing number
+ *
+ * @param pitChannelNum Base channel to use
+ * @param offset  Offset from base channel
+ *
+ * @return  FTM channel number calculated from channel+offset
+ */
+constexpr FtmChannelNum inline operator+(FtmChannelNum pitChannelNum, int offset) {
+   return FtmChannelNum(unsigned(pitChannelNum) + unsigned(offset));
+}
+
+/**
  * @addtogroup FTM_Group FTM, PWM, Input capture and Output compare
  * @brief Pins used for PWM, Input capture and Output compare
  * @{
  */
-
 
 /**
  * Controls value forced to pin by forceChannelOutputs()

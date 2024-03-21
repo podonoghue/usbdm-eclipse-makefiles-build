@@ -41,6 +41,10 @@ class I2c : public I2cBasicInfo {
 
 public:
 
+#if $(/PCR/_present:false) // /PCR/_present
+   CreatePinChecker("I2C");
+#endif
+
    /** States for the I2C state machine */
    enum I2C_State { i2c_idle, i2c_txData, i2c_rxData, i2c_rxAddress };
 
@@ -65,9 +69,6 @@ $(/I2C/protected:// /I2C/protected not found)
    uint8_t                     addressedDevice;     //!< Address of device being communicated with
    ErrorCode                   errorCode;           //!< Error code from last transaction
 
-   /** I2C baud rate divisor table */
-   static const uint16_t I2C_DIVISORS[4*16];
-
    /**
     * Construct I2C interface
     *
@@ -84,18 +85,6 @@ $(/I2C/protected:// /I2C/protected not found)
     * Destructor
     */
    ~I2c() {}
-
-   /**
-    * Calculate value for baud rate register of I2C
-    *
-    * This is calculated from processor bus frequency and given bps
-    *
-    * @param[in]  clockFrequency Frequency of I2C input clock
-    * @param[in]  speed          Interface speed in bits-per-second
-    *
-    * @return I2C_F value representing speed
-    */
-   static uint8_t calculateBPSValue(uint32_t clockFrequency, uint32_t speed);
 
    /**
     * Start Rx/Tx sequence by sending address byte
@@ -455,7 +444,7 @@ $(/I2C/public:// /I2C/public not found)
  *
  * @tparam Info            Class describing I2C hardware
  */
-template<class Info> class I2cBase_T : public I2c {
+template<class Info> class I2cBase_T : public I2c, public Info {
 
 public:
    // Handle on I2C hardware
@@ -503,7 +492,19 @@ public:
    virtual osStatus endTransaction() override {
       return mutex().release();
    }
-#endif 
+#endif
+
+   /**
+    * Class-based interrupt handler
+    * Polls device
+    */
+    void _irqHandler() {
+      poll();
+      if (state == I2C_State::i2c_idle) {
+        // Execute call-back
+        Info::sCallback(errorCode);
+      }
+   }
 
 public:
    $(/I2C/classInfo: // No class Info found)
@@ -516,21 +517,29 @@ public:
 
 #if $(/PCR/_present:false) // /PCR/_present
       // Check pin assignments
-      PcrBase::CheckPinExistsAndIsMapped<Info::info[Info::sclPin].pinIndex>::check();
-      PcrBase::CheckPinExistsAndIsMapped<Info::info[Info::sclPin].pinIndex>::check();
+      I2c::CheckPinExistsAndIsMapped<Info::sclPinIndex>::check();
+      I2c::CheckPinExistsAndIsMapped<Info::sdaPinIndex>::check();
 #endif
 
       busHangReset();
       
       thisPtr = this;
 
-      configure(init);
+      Info::configure(init);
    }
 
    /**
     * Destructor
     */
    virtual ~I2cBase_T() {}
+
+   /**
+    * IRQ handler
+    */
+   static void irqHandler() {
+      thisPtr->_irqHandler();
+   }
+
 
 $(/I2C/static:// /I2C/static not found)
 $(/I2C/InitMethod: // /I2C/InitMethod not found)
@@ -561,12 +570,12 @@ $(/I2C/InitMethod: // /I2C/InitMethod not found)
             __asm__("nop");
          }
       };
-#ifdef PORT_PCR_MUX_MASK
+#if $(/PCR/_present:false) // /PCR/_present
       // I2C SCL (clock) Pin
-      using sclGpio = GpioTable_T<Info, Info::sclPin, USBDM::ActiveHigh>;
+      using sclGpio = Gpio_T<PcrValue(0), Info::sclPinIndex, ActiveHigh>;
 
       // I2C SDA (data) Pin
-      using sdaGpio = GpioTable_T<Info, Info::sdaPin, USBDM::ActiveHigh>;
+      using sdaGpio = Gpio_T<PcrValue(0), Info::sdaPinIndex, ActiveHigh>;
 #else
       // I2C SCL (clock) Pin
       using sclGpio = Gpio_T<Info::sclPinIndex, ActiveHigh>;

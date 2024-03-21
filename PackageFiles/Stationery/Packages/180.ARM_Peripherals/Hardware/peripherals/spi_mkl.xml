@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- spi_mkl.xml -->
 
@@ -10,11 +10,9 @@
    <equation key="generateDefault"           value="false"         />
    <equation key="configureInStartupDefault" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
-   <title />
 
    <!-- _____________ Class Declaration __________________ -->
-   <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
+   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Baseclass)BasicInfo"' />
 
    <template><![CDATA[
       \t//! Pin number in Info table for SCK if mapped to a pin
@@ -27,14 +25,17 @@
       \tstatic constexpr int soutPin  = 2;\n\n
    ]]></template>
 
+<!-- Clocking -->
+
+   <title description="Clocking" />
    <binaryOption key="/$(_BASENAME)/baudSupport"
       enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       modify="true"
       description="Enable specifying speed in Hertz"
       toolTip="If not selected, the communication speed must be specified using the\n
                prescale values (SPPR and SPP) in initialisation structures" >
-      <choice value="false" enum="Disabled" name="Prescale values must be used" isDefault="true" />
-      <choice value="true"  enum="Enabled"  name="Speed may be specified in Hertz" />
+      <choice value="false" name="Prescale values must be used" isDefault="true" />
+      <choice value="true"  name="Speed may be specified in Hertz" />
    </binaryOption>
 
    <choiceOption key="spiClockConfig" condition="/MCG/_present"

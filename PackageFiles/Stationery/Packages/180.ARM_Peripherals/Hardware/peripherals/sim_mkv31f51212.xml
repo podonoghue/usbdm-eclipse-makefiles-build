@@ -603,8 +603,8 @@ Devices using this peripheral:
          \t */
          \tenum SimAdc0TriggerMode {
          \t   SimAdc0TriggerMode_Pdb           = SIM_SOPT7_ADC0ALTTRGEN(0),                              //!< PDB trigger
-         \t   SimAdc0TriggerMode_Alt_PreTrigger_0  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(0),   //!< Pre-trigger 0 = A (SC1[0])
-         \t   SimAdc0TriggerMode_Alt_PreTrigger_1  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(1),   //!< Pre-trigger 1 = B (SC1[1])
+         \t   SimAdc0TriggerMode_Alt_PreTrigger_0  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(0),   //!< External trigger using SC1[0]/R[0]
+         \t   SimAdc0TriggerMode_Alt_PreTrigger_1  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(1),   //!< External trigger using SC1[1]/R[1]
          \t};\n\n
       ]]></template>
 
@@ -690,8 +690,8 @@ Devices using this peripheral:
          \t */
          \tenum SimAdc1TriggerMode {
          \t   SimAdc1TriggerMode_Pdb           = SIM_SOPT7_ADC1ALTTRGEN(0),                              //!< PDB trigger
-         \t   SimAdc1TriggerMode_Alt_PreTrigger_0  = SIM_SOPT7_ADC1ALTTRGEN(1)|SIM_SOPT7_ADC1PRETRGSEL(0),   //!< Pre-trigger 0 = A (SC1[0])
-         \t   SimAdc1TriggerMode_Alt_PreTrigger_1  = SIM_SOPT7_ADC1ALTTRGEN(1)|SIM_SOPT7_ADC1PRETRGSEL(1),   //!< Pre-trigger 1 = B (SC1[1])
+         \t   SimAdc1TriggerMode_Alt_PreTrigger_0  = SIM_SOPT7_ADC1ALTTRGEN(1)|SIM_SOPT7_ADC1PRETRGSEL(0),   //!< External trigger using SC1[0]/R[0]
+         \t   SimAdc1TriggerMode_Alt_PreTrigger_1  = SIM_SOPT7_ADC1ALTTRGEN(1)|SIM_SOPT7_ADC1PRETRGSEL(1),   //!< External trigger using SC1[1]/R[1]
          \t};\n\n
       ]]></template>
 

@@ -11,54 +11,16 @@
 
    <constant key="enableGettersAndSetters" type="Boolean" value="false" />
 
-   <equation key="irq_parameters"            type="String"  value='""'  />
-   <equation key="irq_dummy_parameters"      type="String"  value='""'  />
-   <equation key="irq_call"                  type="String"  value='""'  />
-   <equation key="generateDefault"           type="Boolean" value="true"         />
-   <equation key="configureInStartupDefault" type="Boolean" value="true"         />
+   <equation key="irq_parameters"            value=""  />
+   <equation key="irq_dummy_parameters"      value=""  />
+   <equation key="irq_call"                  value=""  />
+   <equation key="generateDefault"           value="true"         />
+   <equation key="configureInStartupDefault" value="true"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
-<!--
-    * General substitutions
-    *  $(_NAME)         => e.g FTM2 => FTM2
-    *  $(_name)         => e.g FTM2 => ftm2
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
-    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
-    *  $(_Class)        => e.g FTM2 => Ftm2
-    *  $(_Baseclass)    => e.g FTM0 => Ftm
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A
--->
-
-<!--
-    * Template substitutions
-    *
-    * %valueExpression[index]         Formatted value as numeric e.g. 0x12
-    * %symbolicExpression[index] Symbolic formatted value e.g. AdcCompare_Disabled
-    * %variable[index]                Variable name /ADC0/adc_sc2_acfe
-    * %macro[index](value)            C register macro e.g. ADC_SC2_ACFGT(value)
-    * %description[index]             Description from controlVar e.g. Compare Function Enable
-    * %shortDescription[index]        Short description from controlVar e.g. Compare Function Enable
-    * %tooltip[index]                 Tool-tip from controlVar e.g. Each bit disables the GPIO function
-    * %paramDescription[index]        Tool-tip from controlVar formatted as param description @param ...
-    * %params                         Formatted parameter list for function
-    * %paramType[index]               Based on enumStem or typename e.g. AdcCompare (or uint32_t)
-    * %paramName[index]               Based on enumStem with lower-case first letter adcCompare
-    * %paramType[index]               As for %paramType
-    * %paramName[index]               As for %paramName
-    * %valueExpression                Numeric variable value e.g. 0x3
-    * %symbolicExpression        Symbolic variable value e.g. AdcCompare_Disabled
-    * %fieldAssignment;         Based on variable etc. Similar to %register = (%register&~%mask) | %paramName;
-    * %maskingExpression       Based on variable etc. Similar to (%register&%mask)
-    * %variable[index]                Variable name from condition
-    * %mask[index]                    From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
-    * %register[index]                Register associated with variable e.g. adc->APCTL1
-    * %registerName[index]            Name of corresponding register (lowercase for Init()) e.g. apctl1 <br><br>
--->
-
    <!-- ************* Class Declaration ****************** -->
-   <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Structname)BasicInfo&quot;" />
+   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
    <binaryOption key="fullCodeSupport"
       enabledBy="enablePeripheralSupport"
@@ -187,6 +149,7 @@
    ><![CDATA[
       \t/**
       \t * Set %description
+      \t * (%variables)
       \t *
       \t * @param %paramName %tooltip
       \t */
@@ -196,6 +159,7 @@
 
       \t/**
       \t * Get %description
+      \t * (%variables)
       \t *
       %paramDescription
       \t *
@@ -211,6 +175,7 @@
       \t
       \t/**
       \t * Get %description
+      \t * (%variables)
       \t *
       \t * @return Clock frequency in Hz
       \t */
@@ -253,7 +218,6 @@
       enabledBy="wdog_cs1_en"
       description="Watchdog Timeout"
       toolTip="The watchdog must be refreshed before this interval expires"
-      typeName="const Seconds &amp;"
       units="s"
       value="10"/>
 
@@ -270,12 +234,12 @@
    />
 
    <floatOption key="wdog_windowPeriod"
+      valueFormat="%s"
       enabledBy="wdog_cs2_win&amp;&amp;wdog_cs1_en"
       description="Watchdog Window"
       toolTip="Refresh of the watchdog may not be carried out before this interval has expired i.e.\n
                Refresh must occur within [window...timeout] if window mode is enabled.\n
                A refresh outside of this range resets the system"
-      typeName="const Seconds &amp;"
       derived="true"
       units="s"
       value="0"/>
@@ -337,8 +301,7 @@
       \t
       %paramDescription
       \t */
-      \tstatic void configure(
-      %params) {
+      \tstatic void configure(%params) {
       \t
       \t   // Protect sequence from interrupts
       \t   CriticalSection cs;
@@ -354,83 +317,6 @@
       \t   wdog->CS2 = wdogClock|wdogWindow;
       \t}
    ]]></variableTemplate>
-
-   <!--   ========== Interrupt handling =============================== -->
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="irqHandlingMethod"
-   ><![CDATA[
-       \t//! Common class based callback code has been generated for this class of peripheral
-       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
-       \t\n
-   ]]></variableTemplate>
-
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
-   <![CDATA[
-      \t/**
-      \t * Type definition for $(_Baseclass) interrupt call back.
-      \t */
-      \ttypedef void (*CallbackFunction)($(irq_parameters));
-      \t
-      \t/**
-      \t * Callback to catch unhandled interrupt
-      \t */
-      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
-      \t   setAndCheckErrorCode(E_NO_HANDLER);
-      \t}
-      \t\n
-   ]]>
-   </template>
-
-   <template codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t/** Callback function for ISR */
-      \tstatic CallbackFunction sCallback;
-      \t
-      \t/**
-      \t * Set interrupt callback function.
-      \t *
-      \t * The callback may be executed prior to the WDOG reset.
-      \t * This allows the system to save important information or log the watchdog event.
-      \t *
-      \t * @param[in]  $(_basename)Callback Callback function to execute on interrupt
-      \t *                             Use nullptr to remove callback.
-      \t */
-      \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
-      \t   if ($(_basename)Callback == nullptr) {
-      \t      $(_basename)Callback = unhandledCallback;
-      \t   }
-      \t   // Allow either no handler set yet or removing handler
-      \t   usbdm_assert(
-      \t         (sCallback == unhandledCallback) || ($(_basename)Callback == unhandledCallback),
-      \t         "Handler already set");
-      \t   sCallback = $(_basename)Callback;
-      \t}
-      \t
-      \t/**
-      \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
-      \t */
-      \tstatic void irqHandler() {
-      \t
-      \t   //.....IRQ handler code here..........
-      \t
-      \t   // Execute call-back
-      \t   sCallback($(irq_call));
-      \t}
-      \t\n
-   ]]>
-   </template>
-
-   <template where="static" codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t
-      \t/**
-      \t * Callback for programmatically set handler for $(_Class)
-      \t */
-      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Structname)BasicInfo::unhandledCallback;
-      \t\n
-   ]]>
-   </template>
 
    <!--   ========== WDOG Init class =============================== -->
 
@@ -642,15 +528,13 @@
       \t   /**
       \t    * Constructor for %description0, %description1 & %description2
       \t    *
-      \t    *
       \t    * @tparam   Types
       \t    * @param    rest
       \t    *
       %paramDescription
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(
-      %params, Types... rest) : Init(rest...) {
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
       \t      this->%registerName1.fromTicks(%paramName1);
       \t      this->%registerName2.fromTicks(%paramName2);
@@ -673,9 +557,7 @@
       %paramDescription
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(
-      \t        %paramType0 %paramName0,
-      \t        %paramType1 %paramName1 = 0.0, Types... rest) : Init(rest...) {
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
       \t      this->%paramName0.fromSeconds(%paramName0);
       \t      this->%paramName1.fromSeconds(%paramName1);
@@ -772,7 +654,7 @@
       \t\n
    ]]></template>
    <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="secondsSupport&amp;&amp;fullCodeSupport" ><![CDATA[
-      \t   if (presc == ((uint16_t)-1)) {
+      \t   if (init.calculatePrescale) {
       \t
       \t      // Calculate timeout, window and prescaler
       \t      ErrorCode rc = calculateTimingParameters(cs2, timeout, window);
@@ -857,12 +739,10 @@
       \t\n
    ]]></template>
 
-   <!-- ************* Signal mapping ****************** -->
-   <category name="Advanced" description="SIM configuration">
+   <!-- ************* SIM configuration ****************** -->
+
+   <category name="Advanced" description="SIM configuration" >
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
-      <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
-         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
-      </for>
       <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
       </for>
@@ -870,7 +750,6 @@
       <aliasOption key="/SIM/sim_pinsel0_$(_name)ps" locked="false" optional="true" />
       <aliasOption key="/SIM/sim_pinsel1_$(_name)ps" locked="false" optional="true" />
    </category>
-   <deleteVariables variables="_scgc_clock"  mustExist="false" />
 
    <signals enabledBy="fullCodeSupport" locked="!/PCR/_present" />
 

@@ -623,7 +623,7 @@
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -652,7 +652,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
+   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -823,7 +823,8 @@
             cmt_cgh2_sh,
             cmt_cgl2_sl,
             cmt_mark,
-            cmt_space
+            cmt_space,
+            irqLevel
          "
    ><![CDATA[
       \t/**

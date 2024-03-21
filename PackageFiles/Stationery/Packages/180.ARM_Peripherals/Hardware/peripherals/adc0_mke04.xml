@@ -4,18 +4,17 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Analog-to-Digital Converter" >
 
-   <equation key="irq_parameters"            type="String"  value='""'       />
-   <equation key="irq_dummy_parameters"      type="String"  value='""'       />
-   <equation key="irq_call"                  type="String"  value='""'       />
-   <equation key="generateDefault"           type="Boolean" value="false"  />
-   <equation key="configureInStartupDefault" type="Boolean" value="false"  />
-   <xi:include href="enablePeripheral.xml"  />
-
    <constant key="disable_peripheral" value='"adc->SC1[0] = ADC_SC1_ADCH(-1);"'  type="String" />
 
+   <equation key="irq_parameters"            value=""       />
+   <equation key="irq_dummy_parameters"      value=""       />
+   <equation key="irq_call"                  value=""       />
+   <equation key="generateDefault"           value="false"  />
+   <equation key="configureInStartupDefault" value="false"  />
+   <xi:include href="enablePeripheral.xml"  />
+
    <!-- ____ Class Declaration ________ -->
-   <constant key="_class_declaration" type="String"
-      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
    <!-- ____ Interrupts continued ____ -->
 
@@ -446,8 +445,8 @@
       <choiceExpansion value="%(i)" name="Index %(i)" enum="%(i)" keys="i" values="0" />
    </choiceOption>
 
-   <constant key="sc1_index" type="String" value='"0"'        condition="=(adc_sc1_dim==1)" />
-   <constant key="sc1_index" type="String" value='"adcIndex"' condition="=(adc_sc1_dim>1)"  />
+   <equation key="sc1_index" value="0"        condition="=(adc_sc1_dim==1)" />
+   <equation key="sc1_index" value="adcIndex" condition="=(adc_sc1_dim>1)"  />
    <!--
    <printVar key="adc_sc1_dim" />
    <printVar key="sc1_index" />
@@ -525,82 +524,6 @@
       \t   %register1 = %register1 & ~(1<<%paramName0);
       \t}\n\n
    ]]></variableTemplate>
-
-   <!-- ____ Interrupt handling _____________ -->
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="/$(_BASENAME)/irqHandlingMethod"
-   ><![CDATA[
-       \t//! Common class based callback code has been generated for this class of peripheral
-       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
-       \t\n
-   ]]></variableTemplate>
-
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
-   <![CDATA[
-      \t/**
-      \t * Type for Analogue to Digital Converter call back function.
-      \t */
-      \ttypedef void (*CallbackFunction)($(irq_parameters));
-      \t
-      \t/**
-      \t * Callback to catch unhandled interrupt
-      \t */
-      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
-      \t   setAndCheckErrorCode(E_NO_HANDLER);
-      \t}
-      \t\n
-   ]]>
-   </template>
-
-   <template codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t/** Callback function for Analogue to Digital Converter */
-      \tstatic CallbackFunction sCallback;
-      \t
-      \t/**
-      \t * Analogue to Digital Converter interrupt handler
-      \t * Passes control to call-back function
-      \t */
-      \tstatic void irqHandler() {
-      \t
-      \t   // Execute call-back
-      \t   sCallback($(irq_call));
-      \t}
-      \t
-      \t/**
-      \t * Set Analogue to Digital Converter callback function.
-      \t *
-      \t * @param $(_basename)Callback Callback function to execute on interrupt
-      \t *                        Use nullptr to remove callback.
-      \t */
-      \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
-      \t   if ($(_basename)Callback == nullptr) {
-      \t      $(_basename)Callback = (CallbackFunction)unhandledCallback;
-      \t   }
-      \t   // Allow either no handler set yet or removing handler
-      \t   usbdm_assert(
-      \t         ((void*)sCallback == (void*)unhandledCallback) ||
-      \t         ((void*)$(_basename)Callback == (void*)unhandledCallback),
-      \t         "Handler already set");
-      \t   sCallback = $(_basename)Callback;
-      \t}
-      \t
-      \t\n
-   ]]>
-   </template>
-
-   <template where="static" codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t
-      \t/**
-      \t * Callback function for Analogue to Digital Converter
-      \t */
-      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = (CallbackFunction)$(_Class)Info::unhandledCallback;
-      \t
-      \t\n
-   ]]>
-   </template>
 
    <!-- ________ ADC Init class ____________________________ -->
 

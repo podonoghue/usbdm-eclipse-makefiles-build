@@ -33,8 +33,7 @@
    </category>
 
    <!-- ************* Class Declaration ****************** -->
-   <constant key="_class_declaration" type="String"
-      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
    <binaryOption key="rtc_cr_osce" condition="rtc_cr_osce_present&amp;&amp;!/SIM/RtcForcing"
       enabledBy="enablePeripheralSupport"
@@ -790,7 +789,7 @@
          rtc_rar_srr          : true  : true  : false : enableGettersAndSetters : StatusRegRead;
          rtc_rar_crr          : true  : true  : false : enableGettersAndSetters : ControlRegRead;
          rtc_rar_tcrr         : true  : true  : false : enableGettersAndSetters : TimeCompensationRegRead;
-         rtc_rar_tarr         : true  : true  : false : enableGettersAndSetters : Alarm RegRead;
+         rtc_rar_tarr         : true  : true  : false : enableGettersAndSetters : AlarmRegRead;
          rtc_rar_tprr         : true  : true  : false : enableGettersAndSetters : PrescalerRegRead;
          rtc_rar_tsrr         : true  : true  : false : enableGettersAndSetters : SecondsRegRead" >
       <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"

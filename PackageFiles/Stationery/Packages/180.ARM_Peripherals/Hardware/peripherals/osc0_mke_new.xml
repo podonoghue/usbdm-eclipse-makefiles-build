@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-
 <!-- osc0_mke.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Oscillator" >
@@ -17,131 +16,80 @@
    <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
    <!-- ____ CR ____ -->
-
-   <choiceOption key="osc_cr_oscMode" condition="osc_cr_oscos_present"
-      valueFormat="OSC_CR_OSCOS(%s),OSC_CR_HGO(%s)"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-      typeName="OscMode"
-      description="OSC0 mode"
-      toolTip="Determines oscillator power mode and\n
-               whether an external clock or crystal is used." >
-      <choice value="0,0" name="External clock"          enum="ExternalClock"        isDefault="true" />
-      <choice value="1,0" name="Low Power Oscillator"    enum="LowPowerOscillator"   />
-      <choice value="1,1" name="High Gain Oscillator"    enum="HighPowerOscillator"  />
-   </choiceOption>
-
-   <constant key="/OscMode_ExternalClock"            type="Long" value="0"  condition="osc_cr_oscos_present" />
-   <constant key="/OscMode_LowGainOsc"               type="Long" value="1"  condition="osc_cr_oscos_present" />
-   <constant key="/OscMode_HighGainOsc"              type="Long" value="2"  condition="osc_cr_oscos_present" />
-
-   <intOption key="osc_input_freq"
-      units="Hz"
-      description="OSC input frequency"
-      toolTip="Frequency of external crystal or clock on XTAL/EXTAL"
-      value="8000000"
-      disabledValue="0" />
+   <title description="Control Register" />
 
    <binaryOption key="osc_cr_oscen" condition="osc_cr_oscen_present"
-      enabledBy="enablePeripheralSupport&amp;&amp;(osc_cr_oscMode!=/OscMode_ExternalClock)"
-      typeName="OscEnable"
+      enabledBy="enablePeripheralSupport"
+      typeName="OscCrOscen"
       baseType="uint8_t"
       toolTip="Enables the OSC module. The OSC module can also be enabled by the ICS module"
       description="OSC Enable" >
-      <choice name="OSC disabled"  value="0" enum="Disabled" isDefault="true" />
-      <choice name="OSC enabled"   value="1" enum="Enabled" />
+      <choice name="OSC disabled"  value="0" enum="OscDisabled" />
+      <choice name="OSC enabled"   value="1" enum="OscEnabled" />
    </binaryOption >
 
-   <intOption key="osc_clock"
-      enabledBy="enablePeripheralSupport"
-      ref="osc_input_freq"
-      valueFormat="%s"
-      locked="true"
-      derived="true"
-      hidden="true"
-      units="Hz"
-      description="Frequency of OSC Clock or Crystal [OSCCLK]"
-      toolTip="Frequency of oscillator or external clock if OSC is enabled"
-      disabledValue="0"
-      min="1" />
-
    <binaryOption key="osc_cr_oscsten" condition="osc_cr_oscsten_present"
-      enabledBy="osc_cr_oscen"
-      typeName="OscInStopMode"
+      enabledBy="enablePeripheralSupport"
+      typeName="OscCrOscsten"
       baseType="uint8_t"
-      toolTip="Controls whether or not the OSC clock remains enabled when MCU enters Stop mode when OSCEN is set.\n
+      toolTip="Controls whether or not the OSC clock remains enabled when MCU enters Stop mode and OSCEN is set.\n
                OSCSTEN has no effect if ICS requests OSC enable"
       description="OSC Enable in Stop mode" >
-      <choice name="Disabled in Stop mode"  value="0" enum="Disabled" isDefault="true" />
-      <choice name="Enabled in Stop mode"   value="1" enum="Enabled"  />
-   </binaryOption>
+      <choice name="Disabled in Stop mode"  value="0" enum="DisabledInStopMode" />
+      <choice name="Enabled in Stop mode"   value="1" enum="EnabledInStopMode" />
+   </binaryOption >
 
    <binaryOption key="osc_cr_oscos" condition="osc_cr_oscos_present"
       enabledBy="enablePeripheralSupport"
-      ref="osc_cr_oscMode&gt;=/OscMode_LowGainOsc"
-      derived="true"
-      locked="true"
-      typeName="OscOutputSelect"
+      typeName="OscCrOscos"
+      baseType="uint8_t"
       toolTip="Selects the output clock of the OSC module"
       description="OSC Output Select" >
-      <choice name="External clock source"    value="0" enum="ExternalClock" isDefault="true" />
-      <choice name="Oscillator clock source"  value="1" enum="Oscillator" />
-   </binaryOption>
+      <choice name="External clock source"    value="0" enum="ExternalClockSource" />
+      <choice name="Oscillator clock source"  value="1" enum="OscillatorClockSource" />
+   </binaryOption >
 
    <binaryOption key="osc_cr_range" condition="osc_cr_range_present"
       enabledBy="enablePeripheralSupport"
-      ref="osc_input_freq&gt;=4_MHz"
-      derived="true"
-      locked="true"
-      typeName="OscFrequencyRange"
+      typeName="OscCrRange"
+      baseType="uint8_t"
       toolTip="Selects the frequency range for the OSC module"
       description="Frequency Range Select" >
-      <choice name="Low range of 32 kHz"     value="0" enum="LowRange" isDefault="true" />
-      <choice name="High range of 4-20 MHz"  value="1" enum="HighRange" />
-   </binaryOption>
+      <choice name="Low range of 32 kHz"     value="0" enum="LowRangeOf32Khz" />
+      <choice name="High range of 4-20 MHz"  value="1" enum="HighRangeOf420Mhz" />
+   </binaryOption >
 
    <binaryOption key="osc_cr_hgo" condition="osc_cr_hgo_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-      ref="osc_cr_oscMode&gt;=/OscMode_HighGainOsc"
-      derived="true"
-      locked="true"
+      enabledBy="enablePeripheralSupport"
       typeName="OscCrHgo"
       baseType="uint8_t"
       toolTip="Controls the OSC mode of operation"
       description="High Gain Oscillator Select" >
-      <choice name="Low-power mode"  value="0" enum="LowPowerMode" isDefault="true" />
+      <choice name="Low-power mode"  value="0" enum="LowPowerMode" />
       <choice name="High-gain mode"  value="1" enum="HighGainMode" />
-   </binaryOption>
+   </binaryOption >
 
    <binaryOption key="osc_cr_oscinit" condition="osc_cr_oscinit_present"
       hidden="true"
-      typeName="OscStatus"
+      typeName="OscCrOscinit"
       baseType="uint8_t"
       toolTip="This field is set after the initialization cycles of oscillator are completed"
       description="OSC Initialization" >
-      <choice name="Initialization is not complete"  value="0" enum="NotReady" />
-      <choice name="Initialization is completed"     value="1" enum="Ready"    />
+      <choice name="Initialization is not complete"  value="0" enum="InitializationIsNotComplete" />
+      <choice name="Initialization is completed"     value="1" enum="InitializationIsCompleted" />
    </binaryOption >
-
-   <intOption key="oscer_clock"
-      enabledBy="osc_cr_oscen||!osc_cr_oscos"
-      ref="osc_clock"
-      valueFormat="%s"
-      derived="true"
-      locked="true"
-      units="Hz"
-      description="OSC External reference clock [OSCERCLK]"
-      toolTip="Frequency of clock available from OSC"
-      value="8000000"
-      disabledValue="0" />
 
    <!-- ____ Getters and Setters ____________ -->
 
    <for keys="field                     : set   : get   : clear : genCode                 : name"
         values="
-         osc_cr_oscen                   : true  : true  : false : enableGettersAndSetters : OscEnable;
-         osc_cr_oscsten                 : true  : true  : false : enableGettersAndSetters : OscStopMode;
-         osc_cr_oscMode                 : true  : true  : false : enableGettersAndSetters : OscMode;
-         osc_cr_range                   : true  : true  : false : enableGettersAndSetters : OscFrequencyRange" >
+
+         osc_cr_oscen                   : true  : true  : false : enableGettersAndSetters : CrOscen;
+         osc_cr_oscsten                 : true  : true  : false : enableGettersAndSetters : CrOscsten;
+         osc_cr_oscos                   : true  : true  : false : enableGettersAndSetters : CrOscos;
+         osc_cr_range                   : true  : true  : false : enableGettersAndSetters : CrRange;
+         osc_cr_hgo                     : true  : true  : false : enableGettersAndSetters : CrHgo;
+         osc_cr_oscinit                 : false : true  : false : enableGettersAndSetters : CrOscinit" >
       <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
       ><![CDATA[
          \t/**
@@ -183,7 +131,7 @@
       ]]></variableTemplate>
    </for>
 
-<!--   __________ OSC Init class _______________________________ -->
+   <!-- ________ OSC Init class ____________________________ -->
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
@@ -198,13 +146,25 @@
       \t *
       \t * Example:
       \t * @code
+      \t * ///
+      \t * /// $(_NAME) call-back
+      \t * ///
+      \t * /// @param status  Status reflecting active inputs
+      \t * ///
+      \t * void $(_name)Callback(ErrorCode ec) {
+      \t *    ....
+      \t * }
+      \t *
       \t * static const $(_Class)::Init $(_name)Init {
       \t *
       \t *   // Setup values
-      \t *   OscEnable_Enabled ,           // OSC Enable - OSC enabled
-      \t *   OscInStopMode_Enabled ,       // OSC Enable in Stop mode - Enabled in Stop mode
-      \t *   OscMode_LowPowerOscillator ,  // OSC0 mode - Low Power Oscillator
-      \t *   OscFrequencyRange_HighRange,  // Frequency Range Select - High range of 4-20 MHz
+XXXXXXXXXXXXXXXXXXXXXX
+      \t *
+      \t *   $(_name)Callback,                 // Call-back to execute on event - call-back function name
+      \t *   NvicPriority_Low,                 // Priority for interrupt - Low
+      \t *
+      \t *   // Optional base value to start with (must be last parameter)
+      \t *   $(_Class)::DefaultInitValue   // Used as base value modified by above
       \t * };
       \t *
       \t * // Initialise $(_Class) from values specified above
@@ -236,22 +196,45 @@
 
    <!-- ____ Init class Member variables ________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="osc_cr_oscen,osc_cr_oscsten,osc_cr_oscos,osc_cr_range,osc_cr_hgo"
+   <for keys=" type        : variables                                            : init    "
+       values="%baseType   : osc_cr_oscen,osc_cr_oscsten,osc_cr_oscos,
+                             osc_cr_range,osc_cr_hgo                              :   0      ;
+               %paramType  : /PCR/nvic_irqLevel                                   :   %defaultValue   " >
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(variables)"
          linePadding="xxx"
-   ><![CDATA[
-      %multilineDescription
-         \t   %baseType %registerName = 0;\n\n
-   ]]></variableTemplate>
+      ><![CDATA[
+         %multilineDescription
+         \t   %(type) %registerName = %(init);\n\n
+      ]]></variableTemplate>
+   </for>
 
    <!-- ____ Init class Constructors ____________ -->
 
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    * (%variables)
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      this->%paramName = %paramExpression;
+      \t   }\n\n
+   ]]></variableTemplate>
+
    <for keys="r"
-      values="
-            osc_cr_oscen;
-            osc_cr_oscsten;
-            osc_cr_oscMode;
-            osc_cr_range
+      values="/PCR/nvic_irqLevel;
+            osc_cr_oscen;osc_cr_oscsten;osc_cr_oscos;
+            osc_cr_range;osc_cr_hgo;
             " >
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
@@ -281,35 +264,53 @@
    <template codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t/**
-      \t * Configure $(_BASENAME)
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
       \t */
-      \tstatic void configure(const Init &configValue) {
-      \t   osc->CR              = configValue.cr;
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(DefaultInitValue);
       \t}
-      \t\n
-   ]]>
-   </template>
-
-   <template discardRepeats="true" key="/$(_BASENAME)/InitMethod" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t
       \t/**
-      \t * Default initialisation for $(_BASENAME)
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
       \t */
-      \tstatic void defaultConfigure() {
-      \t   Info::configure(Info::DefaultInitValue);
+      \tstatic void configure(const Init &init) {
+      \t
+      \t   // Enable peripheral
+      \t   enable();
+      \t\n
+   ]]>
+   </template>
+   <template codeGenCondition="irqHandlingMethod" condition="irqHandlingMethod" >
+   <![CDATA[
+      \t   // Configure call-backs
+      \t   setCallback(init.callbackFunction);\n
+   ]]>
+   </template>
+   <for keys=
+             " var                                                    : statement            "
+      values=" irqLevel                                               : enableNvicInterrupts(init.irqlevel) ;
+               osc_cr_oscen,osc_cr_oscsten,osc_cr_oscos,
+               osc_cr_range,osc_cr_hgo                                : %configRegAssignment " >
+      <variableTemplate codeGenCondition="enablePeripheralSupport"
+      variables="%(var)"
+      linePadding="xxx"
+      ><![CDATA[
+         \t
+         %multilineDescription
+         \t   %(statement);\n
+      ]]></variableTemplate>
+   </for>
+   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
       \t}
       \t\n
    ]]>
    </template>
-
-   <variableTemplate
-      variables="osc_clock"
-   ><![CDATA[
-      \t//! Frequency of OSC Clock or Crystal
-      \tstatic constexpr uint32_t osc_clock = %initExpression
-      \t\n
-   ]]>
-   </variableTemplate>
 
    <!-- ____  Default Initialisation value ____ -->
 

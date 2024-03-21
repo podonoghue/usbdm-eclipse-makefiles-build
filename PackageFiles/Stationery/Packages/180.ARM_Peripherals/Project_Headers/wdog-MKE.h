@@ -53,10 +53,10 @@ static constexpr uint16_t WdogUnlock2 = 0xD928;
  * @tparam info      Information class for WDOG
  */
 template<class Info>
-class WdogBase_T : public WdogInfo {
+class WdogBase_T : public Info {
 
 protected:
-$(/WDOG/protectedMethods: // No protected methods found)
+$(/WDOG/protectedMethods: // No private methods found)
 
 public:
 $(/WDOG/publicMethods: // No public methods found)
@@ -125,8 +125,8 @@ protected:
       if (timeout.toSeconds()>maxTime) {
          return setErrorCode(E_TOO_LARGE);
       }
-      timeout.fromTicks(roundf(timeout.toSeconds()*counterFrequency));
-      window.fromTicks(roundf(window.toSeconds()*counterFrequency));
+      timeout.fromTicks((Ticks)roundf(timeout.toSeconds()*counterFrequency));
+      window.fromTicks((Ticks)roundf(window.toSeconds()*counterFrequency));
       return E_NO_ERROR;
    }
 #endif
@@ -179,7 +179,7 @@ public:
       wdog->WINL   = (unsigned)window;
    }
 
-#if $(/WDOG/secondsSupport:false)
+#if $(/WDOG/secondsSupport: false) // /WDOG/secondsSupport
    /**
     * Sets the watchdog time-out value in seconds.
     *
@@ -238,8 +238,6 @@ public:
    }
 
 };
-
-$(/WDOG/staticDefinitions: // No static declarations found)
 
 $(/WDOG/declarations: // No declarations found)
 /**

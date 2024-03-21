@@ -570,7 +570,7 @@ $(/I2C/InitMethod: // /I2C/InitMethod not found)
             __asm__("nop");
          }
       };
-#ifdef PORT_PCR_MUX_MASK
+#if $(/PCR/_present:false) // /PCR/_present
       // I2C SCL (clock) Pin
       using sclGpio = Gpio_T<PcrValue(0), Info::sclPinIndex, ActiveHigh>;
 

@@ -74,17 +74,15 @@ private:
    PitBase_T(const PitBase_T&) = delete;
    PitBase_T(PitBase_T&&) = delete;
 
-   /** Bit-mask of allocated channels */
-   static uint32_t allocatedChannels;
-
 protected:
 
    /** Default TCTRL value for timer channel */
    static constexpr uint32_t PIT_TCTRL_DEFAULT_VALUE = (PIT_TCTRL_TEN_MASK);
 
-   /** Bitmask used to indicate a channel call-back is one-shot */
-   static uint8_t clearOnEvent;
-   
+   // Reduce clutter
+   using Info::allocatedChannels;
+   using Info::NumChannels;
+
 $(/PIT/protectedMethods: // /PIT/protectedMethods not found)
 public:
    /// Defaulted constructor
@@ -100,7 +98,7 @@ $(/PIT/publicMethods: // /PIT/publicMethods not found)
    static PitChannelNum allocateChannel() {
       CriticalSection cs;
       unsigned channelNum = __builtin_ffs(allocatedChannels);
-      if ((channelNum == 0)||(--channelNum>=Info::NumChannels)) {
+      if ((channelNum == 0)||(--channelNum>=NumChannels)) {
          setErrorCode(E_NO_RESOURCE);
          return PitChannelNum_None;
       }
@@ -120,7 +118,7 @@ $(/PIT/publicMethods: // /PIT/publicMethods not found)
     */
    static PitChannelNum allocateDmaAssociatedChannel(DmaChannelNum dmaChannelNum) {
       const uint32_t channelMask = (1<<dmaChannelNum);
-      usbdm_assert(dmaChannelNum<Info::NumChannels, "No PIT channel associated with DMA channel");
+      usbdm_assert(dmaChannelNum<NumChannels, "No PIT channel associated with DMA channel");
       CriticalSection cs;
       usbdm_assert((allocatedChannels & channelMask) != 0, "PIT channel already allocated");
       if ((allocatedChannels & channelMask) == 0) {
@@ -143,7 +141,7 @@ $(/PIT/publicMethods: // /PIT/publicMethods not found)
          return;
       }
       const uint32_t channelMask = (1<<pitChannelNum);
-      usbdm_assert(pitChannelNum<Info::NumChannels, "Illegal PIT channel");
+      usbdm_assert(pitChannelNum<NumChannels, "Illegal PIT channel");
       usbdm_assert((allocatedChannels & channelMask) == 0, "Freeing unallocated PIT channel");
 
       disableChannel(pitChannelNum);
@@ -164,7 +162,7 @@ $(/PIT/publicMethods: // /PIT/publicMethods not found)
 #if $(/PIT/irqHandlingMethod:false) // /PIT/irqHandlingMethod
 
    using CallbackFunction = typename Info::CallbackFunction;
-
+   
    /**
     * Wrapper to allow the use of a class member as a callback function
     * @note Only usable with static objects.
@@ -197,8 +195,8 @@ $(/PIT/publicMethods: // /PIT/publicMethods not found)
     * @endcode
     */
    template<class T, void(T::*callback)(), T &object>
-   static typename Info::CallbackFunction wrapCallback() {
-      static typename Info::CallbackFunction fn = []() {
+   static CallbackFunction wrapCallback() {
+      static CallbackFunction fn = []() {
          (object.*callback)();
       };
       return fn;
@@ -236,9 +234,9 @@ $(/PIT/publicMethods: // /PIT/publicMethods not found)
     * @endcode
     */
    template<class T, void(T::*callback)()>
-   static typename Info::CallbackFunction wrapCallback(T &object) {
+   static CallbackFunction wrapCallback(T &object) {
       static T &obj = object;
-      static typename Info::CallbackFunction fn = []() {
+      static CallbackFunction fn = []() {
          (obj.*callback)();
       };
       return fn;
@@ -288,6 +286,13 @@ public:
    }
 
    /**
+    * Clear channel interrupt flag
+    */
+   static void clearInterruptFlag(PitChannelNum pitChannelNum)  {
+      pit->CHANNEL[pitChannelNum].TFLG = PIT_TFLG_TIF_MASK;
+   }
+
+   /**
     *  Configure the PIT channel
     *
     *  @param[in]  pitChannelNum     Channel to configure
@@ -326,7 +331,7 @@ public:
          Seconds           intervalInSeconds,
          PitChannelAction  pitChannelAction=PitChannelAction_None) {
 
-      configureChannel(pitChannelNum, convertSecondsToTicks(intervalInSeconds), pitChannelAction);
+      configureChannel(pitChannelNum, Info::convertSecondsToTicks(intervalInSeconds), pitChannelAction);
    }
 #endif // /PIT/secondsSupport
 
@@ -365,41 +370,6 @@ public:
 
       configureChannel(pitChannelNum, convertMicrosecondsToTicks(microseconds), pitChannelAction);
    }
-
-#if $(/PIT/secondsSupport:false) // /PIT/secondsSupport
-   /**
-    * Convert time in ticks to time in seconds
-    *
-    * @param[in] ticks Time interval in ticks
-    *
-    * @return Time interval in seconds
-    */
-   static Seconds convertTicksToSeconds(Ticks ticks) {
-      return Seconds(((float)(unsigned)ticks)/Info::getClockFrequency());
-   }
-
-   /**
-    * Converts time in seconds to time in ticks
-    *
-    * @param[in] seconds Time interval in seconds
-    *
-    * @return Time interval in ticks
-    *
-    * @note Will set error code if calculated value is unsuitable
-    */
-   static Ticks convertSecondsToTicks(Seconds seconds) {
-      float intervalInTicks = rintf((float)seconds*Info::getClockFrequency());
-      usbdm_assert(intervalInTicks <= 0xFFFFFFFFUL, "Interval is too long");
-      usbdm_assert(intervalInTicks > 0, "Interval is too short");
-      if (intervalInTicks > 0xFFFFFFFFUL) {
-         setErrorCode(E_TOO_LARGE);
-      }
-      if (intervalInTicks <= 0) {
-         setErrorCode(E_TOO_SMALL);
-      }
-      return Ticks(intervalInTicks);
-   }
-#endif // /PIT/secondsSupport
 
    /**
     * Convert time in ticks to time in microseconds
@@ -556,23 +526,6 @@ public:
 #endif // /PIT/secondsSupport
 
 #if $(/PIT/irqHandlingMethod:false) // /PIT/irqHandlingMethod
-#if $(/PIT/secondsSupport:false) // /PIT/secondsSupport
-   /**
-    * Set one-shot timer callback.
-    *
-    *  @note It is necessary to enable NVIC interrupts beforehand
-    *
-    *  @param[in]  pitChannelNum     Channel to configure
-    *  @param[in]  callback          Callback function to be executed on timeout
-    *  @param[in]  interval          Interval in seconds until callback is executed
-    */
-   static void oneShot(PitChannelNum pitChannelNum, typename Info::CallbackFunction callback, Seconds interval) {
-      Info::setCallback(PitIrqNum(pitChannelNum), callback);
-      configureChannel(pitChannelNum, interval, PitChannelAction_Interrupt);
-      CriticalSection cs;
-      clearOnEvent |= (1<<pitChannelNum);
-   }
-
    /**
     * Set interrupt callback function.
     *
@@ -594,7 +547,6 @@ public:
    static void setCallback(PitIrqNum pitIrqNum, CallbackFunction callback) {
       Info::setCallback(pitIrqNum, callback);
    }
-#endif // /PIT/secondsSupport
 
    /**
     * Set one-shot timer callback in microseconds
@@ -605,11 +557,11 @@ public:
     *  @param[in]  callback          Callback function to be executed on timeout
     *  @param[in]  microseconds      Interval in milliseconds
     */
-   static void oneShotInMicroseconds(PitChannelNum pitChannelNum, typename Info::CallbackFunction callback, uint32_t microseconds) {
+   static void oneShotInMicroseconds(PitChannelNum pitChannelNum, CallbackFunction callback, uint32_t microseconds) {
       Info::setCallback(PitIrqNum(pitChannelNum), callback);
       configureChannelInMicroseconds(pitChannelNum, microseconds, PitChannelAction_Interrupt);
       CriticalSection cs;
-      clearOnEvent |= (1<<pitChannelNum);
+      Info::clearOnEvent |= (1<<pitChannelNum);
    }
 
    /**
@@ -621,15 +573,15 @@ public:
     *  @param[in]  callback          Callback function to be executed on timeout
     *  @param[in]  milliseconds      Interval in milliseconds
     */
-   static void oneShotInMilliseconds(PitChannelNum pitChannelNum, typename Info::CallbackFunction callback, uint32_t milliseconds) {
+   static void oneShotInMilliseconds(PitChannelNum pitChannelNum, CallbackFunction callback, uint32_t milliseconds) {
       Info::setCallback(PitIrqNum(pitChannelNum), callback);
       configureChannelInMilliseconds(pitChannelNum, milliseconds, PitChannelAction_Interrupt);
       CriticalSection cs;
-      clearOnEvent |= (1<<pitChannelNum);
+      Info::clearOnEvent |= (1<<pitChannelNum);
    }
 
    /**
-    * Set one-shot timer callback
+    * Set one-shot timer callback in Ticks
     *
     *  @note It is necessary to enable NVIC interrupts beforehand
     *
@@ -637,12 +589,27 @@ public:
     *  @param[in]  callback          Callback function to be executed on timeout
     *  @param[in]  tickInterval      Interval in timer ticks (usually bus clock period)
     */
-   static void oneShot(PitChannelNum pitChannelNum, typename Info::CallbackFunction callback, Ticks tickInterval) {
+   static void oneShot(PitChannelNum pitChannelNum, CallbackFunction callback, Ticks tickInterval) {
       Info::setCallback(PitIrqNum(pitChannelNum), callback);
-      configureChannel(pitChannelNum, tickInterval, PitChannelAction_Interrupt);
       CriticalSection cs;
-      clearOnEvent |= (1<<pitChannelNum);
+      configureChannel(pitChannelNum, tickInterval, PitChannelAction_Interrupt);
+      Info::clearOnEvent |= (1<<pitChannelNum);
    }
+   
+#if $(/PIT/secondsSupport:false) // /PIT/secondsSupport
+   /**
+    * Set one-shot timer callback.
+    *
+    *  @note It is necessary to enable NVIC interrupts beforehand
+    *
+    *  @param[in]  pitChannelNum     Channel to configure
+    *  @param[in]  callback          Callback function to be executed on timeout
+    *  @param[in]  interval          Interval in seconds until callback is executed
+    */
+   static void oneShot(PitChannelNum pitChannelNum, CallbackFunction callback, Seconds interval) {
+      oneShot(pitChannelNum, callback, Info::convertSecondsToTicks(interval));
+   }
+#endif // /PIT/secondsSupport
 #endif // /PIT/irqHandlingMethod
 
    /**
@@ -655,6 +622,7 @@ public:
 
       // PIT Owning this channel
       using Owner = PitBase_T<Info>;
+      using ChannelInit = typename Info::ChannelInit;
 
       constexpr PitChannel(PitChannelNum channel) : chan(channel) {}
 
@@ -672,34 +640,26 @@ $(/PIT/memberFunctions: // /PIT/memberFunctions not found)
     * @tparam channel Timer channel number
     */
    template <int channel>
-   class Channel : public PitChannel {
+   class Channel : public PitChannel, private Info {
 
    private:
       Channel(const Channel&) = delete;
       Channel(Channel&&) = delete;
 
    public:
+      // Allow access to channel initialisation type
+      using typename Info::ChannelInit;
 
       constexpr Channel() : PitChannel(CHANNEL) {};
 
       /** Timer channel number */
       static constexpr PitChannelNum CHANNEL = (PitChannelNum)channel;
-
       
-
 $(/PIT/staticFunctions: // /PIT/staticFunctions not found)
    };
    
 $(/PIT/InitMethod: // /PIT/InitMethod Not found)
 }; // class PitBase_T
-
-/** Bit-mask of allocated channels */
-template<class Info> uint32_t PitBase_T<Info>::allocatedChannels = -1;
-
-/** Bitmask used to indicate a channel call-back is one-shot */
-template<class Info> uint8_t PitBase_T<Info>::clearOnEvent = 0;
-
-$(/PIT/staticDefinitions:  // No static definitions found)
 
 $(/PIT/declarations:  // No declarations found)
 /**

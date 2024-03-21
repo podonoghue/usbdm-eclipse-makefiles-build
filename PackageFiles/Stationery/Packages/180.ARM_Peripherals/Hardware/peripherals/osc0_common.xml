@@ -5,48 +5,13 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <equation key="generateDefault"           type="Boolean" value="false"         />
-   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="generateDefault"           value="false"         />
+   <equation key="configureInStartupDefault" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
-<!--
-    * General substitutions
-    *  $(_NAME)         => e.g FTM2 => FTM2
-    *  $(_name)         => e.g FTM2 => ftm2
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
-    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
-    *  $(_Class)        => e.g FTM2 => Ftm2
-    *  $(_Baseclass)    => e.g FTM0 => Ftm
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A
--->
-
-<!--
-    * Template substitutions
-    *
-    * <li>%paramExpression            Parameters ORed together e.g. adcPretrigger|adcRefSel
-    * <li>%valueExpression            Numeric variable value e.g. 0x3
-    * <li>%symbolicExpression[index]  Symbolic formatted value e.g. AdcCompare_Disabled
-    * <li>%variable[index]            Variable name /ADC0/adc_sc2_acfe
-    * <li>%macro[index](value)        C register macro e.g. ADC_SC2_ACFGT(value)
-    * <li>%description[index]         Description from controlVar e.g. Compare Function Enable
-    * <li>%shortDescription[index]    Short description from controlVar e.g. Compare Function Enable
-    * <li>%tooltip[index]             Tool-tip from controlVar e.g. Each bit disables the GPIO function
-    * <li>%params                     Formatted parameter list for function
-    * <li>%paramDescription[index]    Tool-tip from controlVar formatted as param description @param ...
-    * <li>%paramType[index]           Based on typeName e.g. AdcCompare (or uint32_t)
-    * <li>%paramName[index]           Based on typeName with lower-case first letter adcCompare
-    * <li>%fieldAssignment            Expression of form '%register <= (%register & ~%mask)|%paramExpression
-    * <li>%maskingExpression          Based on variable etc. Similar to (%register&%mask)
-    * <li>%mask[index]                From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
-    * <li>%register[index]            Register associated with variable e.g. adc->APCTL1
-    * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
-    * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
--->
-
    <!-- ************* Class Declaration ****************** -->
-   <constant key="_class_declaration" type="String"
-      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
    <!-- ************* CR ****************** -->
 
@@ -343,14 +308,14 @@
 
 <!--   Member variables -->
 
-   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="osc_cr_erclken,osc_cr_erefsten,osc_cr_scp,osc_cr_scp"
    ><![CDATA[
       \t   /// Control Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="osc_div_erps"
    ><![CDATA[
       \t   /// Clock Divider Register
@@ -366,7 +331,7 @@
             osc_cr_scp;
             osc_div_erps
             " >
-      <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="enablePeripheralSupport"
+      <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -463,6 +428,8 @@
       \t\n
    ]]>
    </template>
+
+   <!-- ************* Common ****************** -->
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.OscValidate">

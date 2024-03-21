@@ -725,7 +725,7 @@
        ><![CDATA[
          \t   /**
          \t    * Constructor for %description
-         \t    * (%variable)
+         \t    * (%variables)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -746,7 +746,7 @@
     ><![CDATA[
       \t   /**
       \t    * Constructor for %description
-      \t    * (%variable)
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -767,7 +767,7 @@
     ><![CDATA[
       \t   /**
       \t    * Constructor for %description and %description1
-      \t    * (%variable)
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -789,7 +789,7 @@
     ><![CDATA[
       \t   /**
       \t    * Constructor for %description and %description1
-      \t    * (%variable)
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -812,7 +812,7 @@
     ><![CDATA[
       \t   /**
       \t    * Constructor for %description and %description1
-      \t    * (%variable)
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -836,7 +836,7 @@
     ><![CDATA[
       \t   /**
       \t    * Constructor for %description and %description1
-      \t    * (%variable)
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -858,7 +858,7 @@
     ><![CDATA[
       \t   /**
       \t    * Constructor for %description
-      \t    * (%variable)
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -879,7 +879,7 @@
     ><![CDATA[
       \t   /**
       \t    * Constructor for %description
-      \t    * (%variable)
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -902,7 +902,7 @@
     ><![CDATA[
       \t   /**
       \t    * Constructor for %description0 and %description1
-      \t    * (%variable)
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -925,7 +925,7 @@
     ><![CDATA[
       \t   /**
       \t    * Constructor for %description0 and %description1
-      \t    * (%variable)
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -970,7 +970,7 @@
        ><![CDATA[
          \t   /**
          \t    * Constructor for Channel Pretrigger %(m) with delay
-         \t    * (%variable)
+         \t    * (%variables)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -991,7 +991,7 @@
        ><![CDATA[
          \t   /**
          \t    * Constructor for Channel Pretrigger %(m)
-         \t    * (%variable)
+         \t    * (%variables)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -1016,7 +1016,7 @@
        ><![CDATA[
          \t   /**
          \t    * Constructor for %description0 with %description1
-         \t    * (%variable)
+         \t    * (%variables)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -1038,7 +1038,7 @@
        ><![CDATA[
          \t   /**
          \t    * Constructor for %description0 with %description1
-         \t    * (%variable)
+         \t    * (%variables)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -1059,7 +1059,7 @@
        ><![CDATA[
          \t   /**
          \t    * Constructor for %description0
-         \t    * (%variable)
+         \t    * (%variables)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -1087,7 +1087,7 @@
          \t    * Constructor for %description0 %(y) with
          \t    *         %description1,
          \t    *         %description2
-         \t    * (%variable)
+         \t    * (%variables)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -1113,7 +1113,7 @@
          \t    * Constructor for %description0 %(y) with
          \t    *         %description1,
          \t    *         %description2
-         \t    * (%variable)
+         \t    * (%variables)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest

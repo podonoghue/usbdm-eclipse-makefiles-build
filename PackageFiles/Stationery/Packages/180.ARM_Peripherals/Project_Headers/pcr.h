@@ -602,7 +602,7 @@ constexpr PcrValue analoguePcrValue(PcrValue op) {
 }
 
 
-$(/PCR/extra_methods: // /GPIO/extra_methods Not found)
+$(/PCR/extra_methods: // /PCR/extra_methods Not found)
 #if 0
 /**
  * Port information

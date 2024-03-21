@@ -7,7 +7,7 @@
 <!-- GENERAL SETTINGS -->
 
    <equation key="_debugcode" value="false" />
-   
+
    <title description="General Settings" toolTip="" />
 
    <!-- _________ Peripheral support _________________  -->
@@ -177,7 +177,7 @@
       <title description="Interrupts" />
 
       <equation key="_userIrqCount" value="=_hardwareIrqCount" condition="!_userIrqCount" />
-      
+
       <!-- If not explicitly controlled, IRQ options are always enabled -->
       <constant key="irqEnable"        type="Boolean" value="true"  condition="!irqEnable"/>
 
@@ -258,33 +258,75 @@
       <aliasOption key="/$(_STRUCTNAME)/generateSharedIrqInfo" optional="true"  condition="=_debugcode" />
       <aliasOption key="/$(_BASENAME)/irqHandlingMethod"       optional="true"  condition="=_debugcode"/>
    </if>
-   
-   <if condition="_hardwareIrqCount&amp;&amp;!suppressIrqArray" >
-   
-      <!-- Create only if needed -->
-      <choiceOption key="irqLevel" condition="!irqLevel"
-         hidden="true"
-         modify="true"
-         enabledBy="irqHandlingMethod"
-         description="IRQ level for this peripheral"
-         toolTip="Priority level used to configure the NVIC"
-         valueFormat="%s"
-         disabledValue="Not Installed"
-         derivedFrom="/PCR/nvic_irqLevel"
-         >
-      </choiceOption>
 
-      <!--  stringOption key="irqHandlerName" condition="irqLevel&amp;&amp;!irqHandlerName"
-         valueFormat="%s"
-         hidden="true"
-         enabledBy="irqLevel>0"
-         description="Name of interrupt handler"
-         toolTip="This must be the name of a globally accessible static function"
-         value=""
-      / -->
+   <if condition="_hardwareIrqCount&amp;&amp;!suppressIrqArray" >
+
+      <!-- Create only if needed -->
+
+      <for keys="irqNum" values="=_hardwareIrqNums" iterationVar="ch" condition='=(_hardwareIrqCount>1)' >
+         <equation key="irqmodifier" value='=ReplaceAll("%(irqNum)","^(.+)_(.+)_IRQn$","$2")' />
+
+         <equation key="handlerName"  value='="handler_template_"+irqmodifier' />
+         <clipboard key='=handlerName' condition='=!Exists(handlerName)'
+            hiddenBy="irqHandlingMethod||!enablePeripheralSupport"
+            description='="Interrupt handler template for "+irqmodifier'
+            toolTip='Interrupt handler example'>
+            <![CDATA[="
+               \t/**
+               \t * Handler for $(_NAME) "+irqmodifier+" interrupt
+               \t */
+               \tstatic void "+irqmodifier+"_IRQHandler() {
+               \t   ...
+               \t};
+               \t"
+            ]]>
+         </clipboard>
+
+         <equation key="irqLevelName" value='="irqLevel_"+irqmodifier'         />
+         <choiceOption key='=irqLevelName' condition='=!Exists(irqLevelName)'
+            enabledBy="enablePeripheralSupport"
+            description='="IRQ priority level for "+irqmodifier'
+            toolTip='="Priority level used to configure the NVIC for "+irqmodifier+"\n
+                     Selecting -Interrupts Disabled- will disable interrupts in the NVIC when configured"'
+            valueFormat="%s"
+            disabledValue="Interrupts disabled"
+            derivedFrom="/PCR/nvic_irqLevel"
+            >
+         </choiceOption>
+      </for>
+
+      <for keys="irqNum" values="=_hardwareIrqNums" iterationVar="ch" condition='=_hardwareIrqCount==1' >
+         <equation key="irqmodifier" value='=ReplaceAll("%(irqNum)","^(.+)_IRQn$","$1")'/>
+         <clipboard key='="handler_template"' condition="!handler_template"
+            hiddenBy="irqHandlingMethod||!enablePeripheralSupport"
+            description="Interrupt handler template"
+            toolTip='Interrupt handler example'>
+            <![CDATA[="
+               \t/**
+               \t * Handler for $(_NAME) interrupt
+               \t */
+               \tstatic void "+irqmodifier+"_IRQHandler() {
+               \t   ...
+               \t};
+               \t"
+            ]]>
+         </clipboard>
+         <equation key="irqLevelName" value='="irqLevel_"+irqmodifier'         />
+         <choiceOption key="irqLevel" condition="!irqLevel"
+            hidden="true"
+            enabledBy="enablePeripheralSupport"
+            description="IRQ priority level"
+            toolTip="Priority level used to configure the NVIC.\n
+                     Selecting -Interrupts Disabled- will disable interrupts in the NVIC when configured"
+            valueFormat="%s"
+            disabledValue="Interrupts disabled"
+            derivedFrom="/PCR/nvic_irqLevel"
+            >
+         </choiceOption>
+      </for>
 
       <!-- Display here (wherever the original) -->
-      <aliasOption key="irqLevel"       locked="false" />
+      <aliasOption key="irqLevel"       locked="false" optional="true" />
       <!--  aliasOption key="irqHandlerName" locked="false" / -->
 
       <variableTemplate codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
@@ -332,7 +374,7 @@
          \t\n
       ]]></variableTemplate>
 
-      <variableTemplate variables="irqLevel" codeGenCondition="irqHandlingMethod"
+      <variableTemplate variables="irqLevel" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
          \t//! Default IRQ level
          \tstatic constexpr NvicPriority irqLevel =  %symbolicExpression;
@@ -433,7 +475,7 @@
       <template codeGenCondition="irqHandlingMethod" condition="!irq_enum" >
       <![CDATA[
          \t/** Callback function for $(_Class) */
-         \tstatic CallbackFunction sCallback;
+         \tstatic inline CallbackFunction sCallback = $(_Class)Info::unhandledCallback; // $(_hardwareIrqNums);
          \t
          \t/**
          \t * Set interrupt callback function.
@@ -454,17 +496,6 @@
          \t\n
       ]]>
       </template>
-
-      <!--  Callback function -->
-      <template where="static" codeGenCondition="irqHandlingMethod" condition="!irq_enum" >
-      <![CDATA[
-         \t/**
-         \t * Callback for programmatically set handler for $(_Class)
-         \t */
-         \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback =
-         \t      $(_Class)Info::unhandledCallback; // $(_hardwareIrqNums)
-         \t\n
-      ]]></template>
 
       <!-- ____ Multiple user/hardware handlers _____________ -->
 
@@ -487,11 +518,21 @@
       </variableTemplate>
 
       <!--  Set callback -->
-      <variableTemplate codeGenCondition="irqHandlingMethod" variables="irq_enum" 
+      <variableTemplate codeGenCondition="irqHandlingMethod" variables="irq_enum"
          immediateVariables="_userIrqCount" >
       <![CDATA[
          \t/** Callback function for $(_Class) */
-         \tstatic CallbackFunction sCallbacks[$(_userIrqCount)];
+         \tstatic inline CallbackFunction sCallbacks[$(_userIrqCount)] = {\n
+      ]]></variableTemplate>
+      <for keys="irqName" values="=_hardwareIrqNums" >
+         <template codeGenCondition="irqHandlingMethod" condition="irq_enum" ><![CDATA[
+            \t   $(_Class)Info::unhandledCallback,  // %(irqName) \n
+         ]]></template>
+      </for>
+      <variableTemplate codeGenCondition="irqHandlingMethod" variables="irq_enum"
+         immediateVariables="_userIrqCount" >
+      <![CDATA[
+         \t};
          \t
          \t/**
          \t * Set interrupt callback function.
@@ -514,23 +555,6 @@
       ]]>
       </variableTemplate>
 
-      <!--  Callback functions -->
-      <template where="static" codeGenCondition="irqHandlingMethod" condition="irq_enum" >
-      <![CDATA[
-         \t/**
-         \t * Callback table of programmatically set handlers for $(_Class)
-         \t */
-         \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallbacks[] = {\n
-      ]]></template>
-      <for keys="irqName" values="=_hardwareIrqNums" >
-         <template where="static" codeGenCondition="irqHandlingMethod" condition="irq_enum" ><![CDATA[
-            \t   $(_Class)Info::unhandledCallback,  // %(irqName) \n
-         ]]></template>
-      </for>
-      <template where="static" codeGenCondition="irqHandlingMethod" condition="irq_enum" ><![CDATA[
-         \t};\n\n
-      ]]></template>
-      
    </if> <!-- condition="_hardwareIrqCount&amp;&amp;!suppressHardwareIrq" -->
 
 <!-- ___________ Peripheral clock ____________________ -->
@@ -538,13 +562,13 @@
    <!-- Try both e.g. /CMP/_clockMask and /CMP1/_clockMask - prefer latter -->
    <equation key="clock_data"  value="=/$(_BASENAME)/_clockInfo" condition="/$(_BASENAME)/_clockInfo" />
    <equation key="clock_data"  value="=_clockInfo"               condition="_clockInfo" />
-   
+
    <!-- SIM clock control register e.g. SCGC3 -->
    <equation key="clock_reg"   value='=ReplaceAll(clock_data, "^(.+?),(.+?)$", "$1")' condition="clock_data" />
 
    <!-- SIM clock control register mask (partial) e.g. CMP3 -->
    <equation key="clock_mask"  value='=ReplaceAll(clock_data, "^(.+?),(.+?)$", "$2")' condition="clock_data" />
-   
+
    <!-- SIM clock control in GUI -->
    <equation key="_scgc_clock" value='="/SIM/"+ToLowerCase("sim_"+clock_reg+"_"+clock_mask)' condition="clock_data" />
 
@@ -599,14 +623,14 @@
          <printVar key="prettyIrqNum" />
           -->
 
-         <template codeGenCondition="irqHandlingMethod"
+         <template codeGenCondition="enablePeripheralSupport"
             immediateVariables="prettyIrqNum" >
          <![CDATA[
             \t   disableNvicInterrupts($(_Class)IrqNum_$(prettyIrqNum));\n
          ]]></template>
       </for>
 
-      <template codeGenCondition="irqHandlingMethod" condition="!suppressHardwareIrq&amp;&amp;(@_hardwareIrqCount==1)" >
+      <template codeGenCondition="enablePeripheralSupport" condition="!suppressHardwareIrq&amp;&amp;(@_hardwareIrqCount==1)" >
       <![CDATA[
          \t   disableNvicInterrupts();\n
       ]]></template>

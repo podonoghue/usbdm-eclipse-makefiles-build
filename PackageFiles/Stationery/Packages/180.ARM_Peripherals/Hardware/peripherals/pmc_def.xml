@@ -14,6 +14,7 @@
    <title />
 
    <!-- ************* Class Declaration ****************** -->
+
    <constant key="_class_declaration" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
    <intOption key="system_low_power_clock"
@@ -247,7 +248,7 @@
       ]]></variableTemplate>
    </for>
 
-   <!--   ========== class $(_Structname)BasicInfo =============================== -->
+   <!--   __________ class $(_Structname)BasicInfo _______________________________ -->
 
    <template where="definitions" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
@@ -262,7 +263,7 @@
    ]]>
    </template>
 
-   <!--   ========== Interrupt handling =============================== -->
+   <!--   __________ Interrupt handling _______________________________ -->
 
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
@@ -291,7 +292,7 @@
    ]]>
    </template>
 
-   <!--   ========== PMC Init class =============================== -->
+<!--   __________ PMC Init class _______________________________ -->
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
@@ -311,11 +312,12 @@
       \t * ///
       \t * /// @param status  Status reflecting active inputs
       \t * ///
-      \t * void $(_name)Callback(ErrorCode ec) {
-      \t *    ....
+      \t * void $(_name)Callback(uint32_t status) {
+      \t *    (void) status;
       \t * }
       \t *
-      \t * static const $(_Class)::Init $(_name)Init {
+      \t * @code
+      \t * static const $(_Class)::Init init {
       \t *
       \t *   // Setup values
       \t *   PmcLowVoltageAction_Interrupt ,           // Low-voltage detect action - Interrupt
@@ -356,42 +358,42 @@
    <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="irqHandlingMethod"
     ><![CDATA[
-      \t   /// %description
+      %multilineDescription
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
    <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="pmc_lvdsc1_lvdack,pmc_lvdsc1_action,pmc_lvdsc1_lvdv"
    ><![CDATA[
-      \t   /// Low Voltage Status and Control 1
+      %multilineDescription
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
    <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="pmc_lvdsc2_lvwack,pmc_lvdsc2_lvwie,pmc_lvdsc2_lvwv"
    ><![CDATA[
-      \t   /// Low Voltage Status and Control 2
+      %multilineDescription
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
    <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="pmc_regsc_bgen,pmc_regsc_ackiso,pmc_regsc_bgbe"
    ><![CDATA[
-      \t   /// Regulator Status and Control
+      %multilineDescription
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
    <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
-      \t   /// %description
+      %multilineDescription
       \t   %paramType %registerName0 = %defaultValue;
       \t\n
    ]]></variableTemplate>
 
 <!--   Constructors -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="irqHandlingMethod"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -410,7 +412,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="irqHandlingMethod"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[

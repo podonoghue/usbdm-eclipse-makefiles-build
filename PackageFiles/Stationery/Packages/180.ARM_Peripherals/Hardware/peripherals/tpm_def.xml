@@ -13,6 +13,8 @@
    <constant key="_class_declaration" type="String"
       value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
+   <constant key = "disable_peripheral"      value = '"tpm->SC = TPM_SC_CMOD(0);"' type="String"  />
+
    <equation key="irq_parameters"            value=""  />
    <equation key="irq_dummy_parameters"      value=""  />
    <equation key="irq_call"                  value=""  />
@@ -21,8 +23,6 @@
    <xi:include href="enablePeripheral.xml"  />
 
    <!-- ____ Constants ____________ -->
-
-   <constant key = "disable_peripheral"      value = '"tpm->SC = TPM_SC_CMOD(0);"' type="String"  />
 
    <template><![CDATA[
       \t//! Number of channels implemented
@@ -2185,6 +2185,13 @@
       \t */
       \tclass Init {
       \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(Types...) = delete;
+      \t
       \tpublic:
       \t   /**
       \t    * Copy Constructor
@@ -2539,6 +2546,13 @@
       \t */
       \tclass ChannelInit {
       \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr ChannelInit(Types...) = delete;
+      \t
       \tpublic:
       \t   /**
       \t    * Copy Constructor
@@ -2748,6 +2762,13 @@
       \t * @endcode
       \t */
       \tclass DualChannelInit {
+      \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr DualChannelInit(Types...) = delete;
       \t
       \tpublic:
       \t   /**

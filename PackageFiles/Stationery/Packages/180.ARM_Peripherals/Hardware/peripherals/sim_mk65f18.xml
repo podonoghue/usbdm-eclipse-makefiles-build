@@ -550,8 +550,8 @@
                _Alt_PreTrigger_0 - ADC is triggered by SimAdc%(adc)Trigger selection and uses pretrigger 0 = A (SC1[0]/R[0])\n
                _Alt_PreTrigger_1 - ADC is triggered by SimAdc%(adc)Trigger selection and uses pretrigger 1 = B (SC1[1]/R[1])" >
             <choice value="0,0"   name="Triggered by PDB"             enum="Pdb" isDefault="true" />
-            <choice value="1,0"   name="Pre-trigger 0 = A (SC1[0])"   enum="Alt_PreTrigger_0" />
-            <choice value="1,1"   name="Pre-trigger 1 = B (SC1[1])"   enum="Alt_PreTrigger_1" />
+            <choice value="1,0"   name="External trigger using SC1[0]/R[0]"   enum="Alt_PreTrigger_0" />
+            <choice value="1,1"   name="External trigger using SC1[1]/R[1]"   enum="Alt_PreTrigger_1" />
          </choiceOption>
 
          <choiceOption key="sim_sopt7_adc%(adc)trgsel" condition="sim_sopt7_adc%(adc)pretrgsel_present"

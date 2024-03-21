@@ -43,11 +43,11 @@ namespace USBDM {
 template<class Info>
 class WdogBase_T : public Info {
 
-
 protected:
 $(/WDOG/protectedMethods: // No private methods found)
 
 public:
+$(/WDOG/publicMethods: // No public methods found)
    /**
     * Hardware instance pointer.
     *
@@ -79,7 +79,7 @@ public:
    }
 
 protected:
-#if $(/WDOG/secondsSupport)
+#if $(/WDOG/secondsSupport:false)
    /**
     *
     * @param[in]     stctrlh   Used to obtain clock source (STCTRLH.CLKSRC)
@@ -339,8 +339,6 @@ public:
       }
    }
 };
-
-//template<class Info> typename WdogBase_T<Info>::CallbackFunction WdogBase_T<Info>::callback = WdogBase_T<Info>::unhandledCallback;
 
 $(/WDOG/declarations: // No declarations found)
 /**

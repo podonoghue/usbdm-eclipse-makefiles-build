@@ -4,10 +4,10 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Integration Module" >
 
-<!-- ==================== Constants ==================== -->
+<!-- ___________ Constants ____________________ -->
 
-   <equation key="generateDefault"           type="Boolean" value="false"         />
-   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="generateDefault"           value="false"         />
+   <equation key="configureInStartupDefault" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -43,6 +43,9 @@
       description="LLWU Wakeup sources"
       type="String"
       value='"LPTMR0;CMP0;CMP1;;TSI0;RtcAlarm;;RtcSeconds"' />
+
+   <!-- LPTMR inputs -->
+   <constant key="/LPTMR0/input_pins" value='"CMP0;LPTMR0_ALT1;LPTMR0_ALT2"' />
 
    <!-- Clock divider -->
    <constant key="clock_divider_type" type="Long" value="1" />
@@ -103,11 +106,10 @@
 
    <xi:include href="simCommon.xml"/>
 
-   <!-- _____________ Class Declaration __________________ -->
-   <constant key="_class_declaration" type="String"
-      value='"$(_Class)Info : public $(_Baseclass)BasicInfo"' />
+   <!-- ____ Class Declaration __________________ -->
+   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Baseclass)BasicInfo"' />
 
-   <!-- _____________ USB Clock __________________ -->
+   <!-- ____ USB Clock __________________ -->
 
    <intOption key="system_usb_clkin_clock"
       addToVar="Usb0ExternalItems"
@@ -118,7 +120,7 @@
       toolTip="Externally provided clock for USB on USB_CLKIN"
       value="0" />
 
-   <!-- _____________ SOPT1 __________________ -->
+   <!-- ____ SOPT1 __________________ -->
 
    <category name="SOPT1" description="RTC clocks" >
 
@@ -143,7 +145,7 @@
       </choiceOption>
    </category>
 
-   <!-- _____________ SOPT2 __________________ -->
+   <!-- ____ SOPT2 __________________ -->
 
    <category name="SOPT2" description="Clock Gating" >
 
@@ -238,7 +240,7 @@
       </binaryOption>
    </category>
 
-   <!-- _____________ SOPT4 __________________ -->
+   <!-- ____ SOPT4 __________________ -->
 
    <category name="SOPT4" description="FTM signals" >
 
@@ -500,7 +502,7 @@
       </for>
    </category>
 
-   <!-- _____________ SOPT5 __________________ -->
+   <!-- ____ SOPT5 __________________ -->
 
    <category name="SOPT5" description="UART signals" >
 
@@ -533,7 +535,7 @@
       </for>
    </category>
 
-   <!-- _____________ SOPT7 __________________ -->
+   <!-- ____ SOPT7 __________________ -->
 
    <category name="SOPT7" description="ADC signals" >
       <for keys="adc" values="0;1" >
@@ -547,9 +549,9 @@
                _Pdb              - ADC is triggered by PDB\n
                _Alt_PreTrigger_0 - ADC is triggered by SimAdc%(adc)Trigger selection and uses pretrigger 0 = A (SC1[0]/R[0])\n
                _Alt_PreTrigger_1 - ADC is triggered by SimAdc%(adc)Trigger selection and uses pretrigger 1 = B (SC1[1]/R[1])" >
-            <choice value="0,0"   name="Triggered by PDB"             enum="Pdb" isDefault="true" />
-            <choice value="1,0"   name="Pre-trigger 0 = A (SC1[0])"   enum="Alt_PreTrigger_0" />
-            <choice value="1,1"   name="Pre-trigger 1 = B (SC1[1])"   enum="Alt_PreTrigger_1" />
+            <choice value="0,0"   name="Triggered by PDB"                     enum="Pdb" isDefault="true" />
+            <choice value="1,0"   name="External trigger using SC1[0]/R[0]"   enum="Alt_PreTrigger_0" />
+            <choice value="1,1"   name="External trigger using SC1[1]/R[1]"   enum="Alt_PreTrigger_1" />
          </choiceOption>
 
          <choiceOption key="sim_sopt7_adc%(adc)trgsel" condition="sim_sopt7_adc%(adc)pretrgsel_present"
@@ -947,7 +949,7 @@
             value="24_MHz"
             disabledValue="0" />
 
-   <!-- _____________ CLKDIV1 __________________ -->
+   <!-- ____ CLKDIV1 __________________ -->
 
          <category name="CLKDIV1" description="System Clock Dividers" >
             <choiceOption key="sim_clkdiv1_outdiv1[%(n)]"  condition="sim_clkdiv1_outdiv1_present"
@@ -1005,7 +1007,6 @@
       </aliasCategoryOption>
    </for>
 
-<!-- Graphic here -->
 
    <xi:include href="sim_commonTemplates.xml" />
 
@@ -1034,7 +1035,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <!-- _____________ Common __________________ -->
+   <!-- ____ Common __________________ -->
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate" dim="=numberOfClockSettings" >
@@ -1049,7 +1050,7 @@
       <param type="long" value="1MHz"   />     <!-- VLPR Flash        -->
    </validate>
 
-   <!-- _____________ Startup __________________ -->
+   <!-- ____ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n

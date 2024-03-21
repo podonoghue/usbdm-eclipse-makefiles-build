@@ -64,6 +64,10 @@ protected:
       static constexpr void check() {}
    };
 
+#if $(/LLWU/irqHandlingMethod:false) // /LLWU/irqHandlingMethod
+
+   using CallbackFunction = typename Info::CallbackFunction;
+
 public:
 
    /**
@@ -98,8 +102,8 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)(), T &object>
-   static typename Info::CallbackFunction wrapCallback() {
-      static typename Info::CallbackFunction fn = []() {
+   static CallbackFunction wrapCallback() {
+      static CallbackFunction fn = []() {
          (object.*callback)();
       };
       return fn;
@@ -137,13 +141,14 @@ public:
     * @endcode
     */
    template<class T, void(T::*callback)()>
-   static typename Info::CallbackFunction wrapCallback(T &object) {
+   static CallbackFunction wrapCallback(T &object) {
       static T &obj = object;
-      static typename Info::CallbackFunction fn = []() {
+      static CallbackFunction fn = []() {
          (obj.*callback)();
       };
       return fn;
    }
+#endif
 
 public:
    /** Pointer to hardware */

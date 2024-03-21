@@ -20,18 +20,18 @@
       typeName="NvicPriority"
       baseType="int8_t"
       valueFormat="%s"
-      disabledValue="Not Installed"
+      disabledValue="Interrupts disabled"
       description="IRQ priority levels"
       toolTip="Priority level used to configure the NVIC\n
                Subset of available levels">
-      <choice name="Not Installed"  value="(int8_t)255"                   enum="NotInstalled" isDefault="true" />
-      <choice name="VeryLow"        value="(1&lt;&lt;__NVIC_PRIO_BITS)-1" enum="VeryLow"      />
-      <choice name="Low"            value="(NvicPriority_VeryLow*5/6)"    enum="Low"          />
-      <choice name="Midlow"         value="(NvicPriority_VeryLow*4/6)"    enum="Midlow"       />
-      <choice name="Normal"         value="(NvicPriority_VeryLow*3/6)"    enum="Normal"       />
-      <choice name="MidHigh"        value="(NvicPriority_VeryLow*2/6)"    enum="MidHigh"      />
-      <choice name="High"           value="(NvicPriority_VeryLow*1/6)"    enum="High"         />
-      <choice name="VeryHigh"       value="0"                             enum="VeryHigh"     />
+      <choice name="Interrupts Disabled"  value="(int8_t)255"                   enum="Disabled"     />
+      <choice name="Very Low"             value="(1&lt;&lt;__NVIC_PRIO_BITS)-1" enum="VeryLow"      />
+      <choice name="Low"                  value="(NvicPriority_VeryLow*5/6)"    enum="Low"          />
+      <choice name="Mid-low"              value="(NvicPriority_VeryLow*4/6)"    enum="Midlow"       />
+      <choice name="Normal"               value="(NvicPriority_VeryLow*3/6)"    enum="Normal"       isDefault="true" />
+      <choice name="Mid-High"             value="(NvicPriority_VeryLow*2/6)"    enum="MidHigh"      />
+      <choice name="High"                 value="(NvicPriority_VeryLow*1/6)"    enum="High"         />
+      <choice name="Very High"            value="0"                             enum="VeryHigh"     />
    </choiceOption>
 
 </fragment>

@@ -4,6 +4,8 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
+   <constant key="disable_peripheral" value = '"dac->C0 = DAC_C0_DACEN(0);"' type="String" />
+
    <equation key="irq_parameters"             value="uint8_t status"  />
    <equation key="irq_dummy_parameters"       value="uint8_t"  />
    <equation key="irq_call"                   value="getAndClearStatus()"  />
@@ -14,8 +16,6 @@
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
-
-   <constant key="disable_peripheral" value = '"dac->C0 = DAC_C0_DACEN(0);"' type="String" />
 
    <template><![CDATA[
       \t//! Pin number in Info table for DAC output if mapped to a pin
@@ -397,7 +397,7 @@
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -442,7 +442,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -515,7 +515,8 @@
             dac_c1_dacbfwm,
             dac_c1_buffer_mode,
             dac_c2_dacbfrp,
-            dac_c2_dacbfup
+            dac_c2_dacbfup,
+            irqLevel
          "
    ><![CDATA[
       \t/**

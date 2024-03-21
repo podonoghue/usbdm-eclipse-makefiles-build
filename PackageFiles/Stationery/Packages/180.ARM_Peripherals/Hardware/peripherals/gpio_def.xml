@@ -35,15 +35,6 @@
    
       <equation key="portVectors" value='=IrqVectors("^(PORT.*?)\|.*$","$1")' />
       
-      <!--  Callback table + numbers -->
-      <template where="static" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
-      <![CDATA[
-         \t/**
-         \t * Callback table of programmatically set handlers for Ports
-         \t */
-         \tPinCallbackFunction PcrBase::sCallbacks[] = {\n
-      ]]></template>
-      
       <template key="/PORT/Declarations" >
       <![CDATA[
          \t/**
@@ -54,6 +45,15 @@
          \tenum PortIrqNum : int8_t {\n
       ]]>
       </template>
+      
+      <!--  Callback table + numbers -->
+      <template where="static" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
+      <![CDATA[
+         \t/**
+         \t * Callback table of programmatically set handlers for Ports
+         \t */
+         \tPinCallbackFunction PcrBase::sCallbacks[] = {\n
+      ]]></template>
       
       <equation key="portVectors" value='=IrqVectors("^(PORT.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$1|$5")' />
       <for keys="vector" values="=portVectors" >
@@ -81,17 +81,18 @@
          ]]></template>
       </for>
       
-      <template where="static" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
-      <![CDATA[
-         \t};\n\n
-      ]]></template>
-      
       <template key="/PORT/Declarations" >
       <![CDATA[
          \t};
          \t\n
       ]]>
       </template>
+      
+      <template where="static" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
+      <![CDATA[
+         \t};
+         \t\n
+      ]]></template>
       
       <template key="/PORT/AccessFunctions" >
       <![CDATA[
@@ -956,7 +957,7 @@
    ]]></template>
    <for keys="v" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc" >
       <variableTemplate variables="%(v)" key="/PCR/extra_methods" discardRepeats="true" ><![CDATA[
-         $(%variable.enum[])|
+         $(%variable0.enum[])|
       ]]></variableTemplate>
    </for>
    <template key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[

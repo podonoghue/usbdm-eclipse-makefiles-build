@@ -102,14 +102,14 @@ ErrorCode checkError() {
  * @param[in]  nvicPriority  Interrupt priority
  *
  * @note Any pending interrupts are cleared before enabling.
- * @note NvicPriority_NotInstalled will actually disable interrupts
+ * @note NvicPriority_Disabled will actually disable interrupts
  */
 void enableNvicInterrupt(IRQn_Type irqNum, NvicPriority nvicPriority) {
 
    // Clear Pending interrupts
    NVIC_ClearPendingIRQ(irqNum);
 
-   if(nvicPriority == NvicPriority_NotInstalled) {
+   if(nvicPriority == NvicPriority_Disabled) {
       // Disable interrupts
       NVIC_DisableIRQ(irqNum);
    }

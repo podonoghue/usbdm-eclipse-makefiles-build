@@ -159,7 +159,7 @@ Control extended Boot features on these devices
  
 #define BOOT_ENABLE    (1)      // e0
 #define FOPT_BOOTSRC   (0x0)    // o1
-#define FOPT_MISC      (0x2E)   // q2
+#define FOPT_MISC      (0x2A)   // q2
 #define FOPT_LPBOOT    (0x11)   // o3
 #define FOPT_RESERVED  (0x00)   // Bits not controlled by above
 #define FOPT_BOOT_OFF  (0xC2)   // Value to use when (BOOT_ENABLE=0)

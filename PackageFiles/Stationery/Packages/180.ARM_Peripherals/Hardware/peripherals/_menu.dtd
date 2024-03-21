@@ -1,45 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- all templates -->    
+<!-- ____ All templates -->    
 <!ENTITY % template_items   "template|variableTemplate|clockCodeTemplate" >
 
-<!-- High level items-->
+<!-- ____  High level items-->
 <!ENTITY % structure_items  "xi:include|section|list" >
 
-<!-- Drawing elements with a Graphic -->
+<!-- ____  Drawing elements with a Graphic -->
 <!ENTITY % graphic_items    "graphicGroup|graphicBox|graphicItem|equation|for|if" >
 
-<!-- Dialogue elements -->
+<!-- ____  Dialogue elements -->
 <!ENTITY % dialogue_items    "timeOption|intOption|floatOption|stringOption|binaryOption|choiceOption|bitmaskOption" >
 
-<!-- Simple items that don't recurse -->
+<!-- ____  Simple items that don't recurse -->
 <!ENTITY % simple_items     "xi:include|printVar|print|
                               deleteVariables|projectActionList|
                               title|constant|signals|variable|
                               rtcTimeOption|timeOption|intOption|floatOption|stringOption|binaryOption|choiceOption|bitmaskOption|irqOption|pinListOption|aliasOption|pinMapOption|
-                              clockSelectionOption|validate|equation|signal|
+                              clockSelectionOption|validate|equation|signal|clipboard|
                               %template_items;" >
                   
 <!ENTITY % general_items    "dynamicSignalMapping|dialogue|graphic|category|categoryOption|aliasCategoryOption|if|for|%simple_items;" >
 
+<!-- ____  dialogue -->
 <!ELEMENT dialogue (%dialogue_items;)*>
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST dialogue condition     CDATA        #IMPLIED>
 
-<!-- Include another file -->
+<!-- ____  Include another file -->
 <!ELEMENT xi:include EMPTY>
    <!ATTLIST xi:include href      CDATA        #REQUIRED>
 
-<!-- Root fileElement -->
-<!ELEMENT peripheralPage ((%structure_items;|%general_items;)*) >
+<!-- ____  Root fileElement -->
+<!ELEMENT peripheralPage ANY >
    <!ATTLIST peripheralPage xmlns:xi     CDATA        #IMPLIED>
    <!ATTLIST peripheralPage name         CDATA        #REQUIRED>
    <!ATTLIST peripheralPage description  CDATA        #REQUIRED>
    <!ATTLIST peripheralPage toolTip      CDATA        #IMPLIED>
 
-<!ELEMENT fragment ((%structure_items;|%general_items;)*)  >
+<!ELEMENT fragment ANY >
    <!ATTLIST fragment xmlns:xi CDATA #IMPLIED>
 
+<!-- ____  list -->
 <!ELEMENT list ((%structure_items;|%general_items;)*) >
    <!-- Name for variable associated with list -->
    <!ATTLIST list name         CDATA        #IMPLIED>
@@ -52,10 +54,12 @@
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST list condition    CDATA        #IMPLIED>
 
+<!-- ____  section -->
 <!ELEMENT section ((%structure_items;|%general_items;)*) >
    <!ATTLIST section name         CDATA        #IMPLIED>
 
-<!ELEMENT for (%general_items;|%structure_items;|%general_items;|%graphic_items;|break|continue)* >
+<!-- ____  for -->
+<!ELEMENT for ANY >
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST for condition           CDATA        #IMPLIED>
    <!-- Substitution keys separated by ':'' -->
@@ -71,6 +75,7 @@
    <!-- Name of symbol to use for iteration - available as $(<name>) -->
    <!ATTLIST for iterationVar         CDATA       #IMPLIED>
 
+<!-- ____  printVar -->
 <!ELEMENT printVar EMPTY >
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST printVar condition     CDATA        #IMPLIED>
@@ -79,30 +84,37 @@
    <!-- Whether to split the variable value on delimiter -->
    <!ATTLIST printVar  split              CDATA        #IMPLIED>
 
+<!-- ____  print -->
 <!ELEMENT print EMPTY >
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST print condition     CDATA        #IMPLIED>
    <!--  Text to print -->
    <!ATTLIST print  text               CDATA        #REQUIRED>
 
+<!-- ____  break -->
 <!ELEMENT break EMPTY >
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST break condition           CDATA        #IMPLIED>
 
+<!-- ____  continue -->
 <!ELEMENT continue EMPTY >
 
+<!-- ____  if_clause_items -->
 <!ENTITY % if_clause_items "%general_items;|%structure_items;|break" >
 
 <!ELEMENT if ( (%if_clause_items;)+, (else_if, (%if_clause_items;)+)*, (else, (%if_clause_items;)+)?) >
    <!-- Condition evaluated during parsing that enables processing of remaining children (up to else/else_if) -->
    <!ATTLIST if condition             CDATA        #REQUIRED>
 
+<!-- ____  else -->
 <!ELEMENT else EMPTY >
 
+<!-- ____  else_if -->
 <!ELEMENT else_if EMPTY >
    <!-- Condition evaluated during parsing that enables processing of remaining children (up to else/else_if) -->
    <!ATTLIST else_if condition             CDATA        #REQUIRED>
 
+<!-- ____  variable -->
 <!-- This is a deferred evaluation expression -->
 <!ELEMENT variable EMPTY>
    <!ATTLIST variable  key                CDATA        #REQUIRED>
@@ -114,6 +126,7 @@
    <!-- Log changes to associated variable -->
    <!ATTLIST variable  logging            (true)       #IMPLIED >
 
+<!-- ____  graphic -->
 <!ELEMENT graphic ((%graphic_items;)*) >
    <!ATTLIST graphic  key                CDATA        #REQUIRED>
    <!ATTLIST graphic  var                CDATA        #IMPLIED>
@@ -122,12 +135,14 @@
    <!ATTLIST graphic  condition          CDATA        #IMPLIED>
    <!ATTLIST graphic  clockConfigIndex   CDATA        #IMPLIED>
    
+<!-- ____  graphicGroup -->
 <!ELEMENT graphicGroup ((%graphic_items;)*) >
    <!ATTLIST graphicGroup  x                CDATA        #IMPLIED>
    <!ATTLIST graphicGroup  y                CDATA        #IMPLIED>
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST graphicGroup  condition        CDATA        #IMPLIED>
 
+<!-- ____  graphicBox -->
 <!ELEMENT graphicBox ((%graphic_items;)*) >
    <!ATTLIST graphicBox  id               CDATA        #IMPLIED>
    <!ATTLIST graphicBox  x                CDATA        #REQUIRED>
@@ -136,6 +151,7 @@
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST graphicBox  condition        CDATA        #IMPLIED>
 
+<!-- ____  graphicItem -->
 <!ELEMENT graphicItem EMPTY >
    <!ATTLIST graphicItem  id              CDATA        #IMPLIED>
    <!ATTLIST graphicItem  name            CDATA        #IMPLIED>
@@ -146,6 +162,7 @@
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST graphicItem  condition       CDATA        #IMPLIED>
 
+<!-- ____  aliasCategoryOption -->
 <!ELEMENT aliasCategoryOption ((%general_items;)*) >
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST aliasCategoryOption  condition    CDATA        #IMPLIED>
@@ -156,6 +173,7 @@
    <!-- Locks option in GUI -->
    <!ATTLIST aliasCategoryOption  locked       (false|true) #IMPLIED>
 
+<!-- ____  category -->
 <!-- Expandable grouping -->
 <!ELEMENT category ((%general_items;)*) >
    <!-- Locks option in GUI -->
@@ -168,6 +186,7 @@
    <!ATTLIST category  derived      (false|true) #IMPLIED>
    <!ATTLIST category  hidden       (false|true) #IMPLIED>
 
+<!-- ____  categoryOption -->
 <!-- Expandable grouping with associated variable -->
 <!ELEMENT categoryOption  ((%structure_items;|%general_items;)*) >
    <!-- Key for option - also used as visible name if not provided -->
@@ -193,6 +212,7 @@
    <!-- Include another XML file -->
    <!ATTLIST categoryOption  xmlns:xi           CDATA        #IMPLIED>
 
+<!-- ____  title -->
 <!ELEMENT title EMPTY >
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST title condition              CDATA        #IMPLIED>
@@ -205,6 +225,7 @@
    <!-- Dynamic expression that hides the title -->
    <!ATTLIST title hiddenBy               CDATA        #IMPLIED>
 
+<!-- ____  equation -->
 <!-- This is an immediate value expression.  The value is assumed to be
      a literal string unless the attribute is force evaluated by prefixing with '=' 
 -->
@@ -216,12 +237,14 @@
    <!-- Value expressed as equation for immediate evaluation?? -->
    <!ATTLIST equation  value           CDATA        #REQUIRED>
 
+<!-- ____  deleteVariables -->
 <!ELEMENT deleteVariables EMPTY >
    <!-- Key for variable to delete -->
    <!ATTLIST deleteVariables variables      CDATA        #REQUIRED>
    <!-- May be used to disable the check for existence that is done before deleting -->
    <!ATTLIST deleteVariables mustExist     (false)      #IMPLIED>
 
+<!-- ____  aliasOption -->
 <!ELEMENT aliasOption EMPTY >
    <!-- Allows reference to an option (possibly) in another file -->
    <!ATTLIST aliasOption key               CDATA        #REQUIRED>
@@ -242,6 +265,7 @@
         (true=may not exist but keep, required=must exist, discard=discard immediately if non-existent)-->
    <!ATTLIST aliasOption optional         (true|required|discard)  #IMPLIED>
 
+<!-- ____  timeOption -->
 <!ELEMENT timeOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
    <!ATTLIST timeOption name          CDATA        #IMPLIED>
@@ -289,6 +313,7 @@
    <!-- Log changes to associated variable -->
    <!ATTLIST timeOption logging         (true)      #IMPLIED>
 
+<!-- ____  intOption -->
 <!ELEMENT intOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
    <!ATTLIST intOption name          CDATA        #IMPLIED>
@@ -357,6 +382,7 @@
    <!ATTLIST intOption signal        CDATA        #IMPLIED>
    
   
+<!-- ____  bitmaskOption -->
 <!ELEMENT bitmaskOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
    <!ATTLIST bitmaskOption name           CDATA        #IMPLIED>
@@ -418,6 +444,7 @@
    <!-- Name of associate signal -->
    <!ATTLIST bitmaskOption signal          CDATA #IMPLIED>
 
+<!-- ____  floatOption -->
 <!ELEMENT floatOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
    <!ATTLIST floatOption name          CDATA        #IMPLIED>
@@ -472,6 +499,7 @@
    <!-- Name of associate signal -->
    <!ATTLIST floatOption signal        CDATA        #IMPLIED>
 
+<!-- ____  stringOption -->
 <!ELEMENT stringOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
    <!ATTLIST stringOption name             CDATA        #IMPLIED>
@@ -517,6 +545,7 @@
    <!-- Equation that controls the value of the variable -->
    <!ATTLIST stringOption ref           CDATA        #IMPLIED> 
   
+<!-- ____  numericListOption -->
 <!ELEMENT numericListOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
    <!ATTLIST numericListOption name          CDATA        #IMPLIED>
@@ -550,6 +579,7 @@
   
 <!-- Signal to add a dependency -->
 
+<!-- ____  pinListOption -->
 <!ELEMENT pinListOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
    <!ATTLIST pinListOption name               CDATA        #IMPLIED>
@@ -580,6 +610,7 @@
    <!-- Log changes to associated variable -->
    <!ATTLIST pinListOption logging            (true)       #IMPLIED>
 
+<!-- ____  clockSelectionOption -->
 <!ELEMENT clockSelectionOption ((choice)*) >
    <!-- Visible name of option - also used for key if not provided -->
    <!ATTLIST clockSelectionOption name                CDATA        #IMPLIED>
@@ -629,6 +660,7 @@
    <!-- Log changes to associated variable -->
    <!ATTLIST clockSelectionOption logging             (true)       #IMPLIED>
    
+<!-- ____  choiceOption -->
 <!ELEMENT choiceOption ((choice|choiceExpansion)*) >
    <!-- Visible name of option - also used for key if not provided -->
    <!ATTLIST choiceOption name                CDATA        #IMPLIED>
@@ -715,8 +747,8 @@
    <!-- Name of associate signal -->
    <!ATTLIST choiceOption signal              CDATA #IMPLIED>
 
+<!-- ____  choice -->
 <!ELEMENT choice EMPTY >
-
    <!-- Values may be a list e.g. 1,0,3 for use with valueFormat -->
    <!ATTLIST choice value                     CDATA        #REQUIRED>
    <!-- Visible name of choice -->
@@ -742,6 +774,7 @@
    <!-- Name of signal associated with this choice -->
    <!ATTLIST choice signal                    CDATA        #IMPLIED>
 
+<!-- ____  choiceExpansion -->
 <!ELEMENT choiceExpansion EMPTY >
 
    <!-- Value for choice (substitutions will be applied) --> 
@@ -752,6 +785,8 @@
    <!ATTLIST choiceExpansion enum                 CDATA        #IMPLIED>
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST choiceExpansion condition            CDATA        #IMPLIED>
+   <!-- Name of symbol to use for iteration - available as $(<name>) -->
+   <!ATTLIST choiceExpansion iterationVar         CDATA       #IMPLIED>
 
    <!-- Substitution keys separated by ':'' e.g 'ch' => '%(ch)' -->
    <!ATTLIST choiceExpansion keys                 CDATA        #REQUIRED>
@@ -764,6 +799,7 @@
    <!-- Name of signal associated with this choiceExpansion -->
    <!ATTLIST choiceExpansion signal               CDATA        #IMPLIED>
    
+<!-- ____  binaryOption -->
 <!ELEMENT binaryOption (choice?, choice?) >
    <!-- Visible name of option - also used for key if not provided -->
    <!ATTLIST binaryOption name                CDATA        #IMPLIED>
@@ -849,6 +885,7 @@
    <!-- Name of associate signal -->
    <!ATTLIST binaryOption signal              CDATA #IMPLIED>
 
+<!-- ____  irqOption -->
 <!ELEMENT irqOption EMPTY >
    <!-- Visible name of option - also used for key if not provided -->
    <!ATTLIST irqOption name          CDATA        #IMPLIED>
@@ -895,6 +932,7 @@
    <!-- Log changes to associated variable -->
    <!ATTLIST irqOption logging    (true)       #IMPLIED>
 
+<!-- ____  rtcTimeOption -->
 <!ELEMENT rtcTimeOption (#PCDATA)>
    <!-- Key for option - also used as visible name if not provided -->
    <!ATTLIST rtcTimeOption key          CDATA       #REQUIRED>
@@ -915,6 +953,7 @@
    <!-- Log changes to associated variable -->
    <!ATTLIST rtcTimeOption logging       (true)       #IMPLIED>
       
+<!-- ____  pinMapOption -->
 <!-- Describes pin mapping for a peripheral -->
 <!ELEMENT pinMapOption (choice?, choice?) >
    <!-- Condition evaluated during parsing that enables processing of this option -->
@@ -940,6 +979,7 @@
    <!-- List of pin mappings if option disabled#Expression to enable pin map -->
    <!ATTLIST pinMapOption disabledPinMap      CDATA        #IMPLIED>
    
+<!-- ____  constant -->
 <!-- This is an 'variable' with a fixed value generated from an immediately evaluated expression -->
 <!ELEMENT constant EMPTY >
    <!-- Used as visible name in GUI (model) -->
@@ -964,7 +1004,7 @@
    <!-- Condition to include this constant -->
    <!ATTLIST constant condition    CDATA                          #IMPLIED>
    
-<!-- ____ template ____ -->
+<!-- ____  template -->
 <!ELEMENT template (#PCDATA)* >
    <!-- Where to place generated code -->
    <!ATTLIST template where                     (all|usbdm|definitions|commonInfo|basicInfo|info|static) #IMPLIED >
@@ -992,7 +1032,7 @@
    <!-- Indicates parameters should start on a new line if there are multiple -->
    <!ATTLIST template multipleParamsOnNewline  (true)                   #IMPLIED >
 
-<!-- ____ variableTemplate ____ -->
+<!-- ____  variableTemplate -->
 <!ELEMENT variableTemplate (#PCDATA)* >
    <!-- Where to place generated code -->
    <!ATTLIST variableTemplate where                     (all|usbdm|definitions|commonInfo|basicInfo|info|static) #IMPLIED >
@@ -1040,7 +1080,7 @@
    <!-- Indicates parameters should start on a new line if there are multiple -->
    <!ATTLIST variableTemplate multipleParamsOnNewline  (true)                   #IMPLIED >
 
-<!-- ____ clockCodeTemplate ____ -->
+<!-- ____ clockCodeTemplate -->
 <!ELEMENT clockCodeTemplate (#PCDATA)* >
    <!-- Where to place generated code -->
    <!ATTLIST clockCodeTemplate where                     (all|usbdm|definitions|commonInfo|basicInfo|info|static)  #IMPLIED >
@@ -1080,14 +1120,17 @@
    <!-- Indicates parameters should start on a new line if there are multiple -->
    <!ATTLIST clockCodeTemplate multipleParamsOnNewline  (true)                   #IMPLIED >
 
+<!-- ____ validate -->
 <!ELEMENT validate (param*) >
    <!ATTLIST validate class         CDATA        #REQUIRED>
    <!ATTLIST validate dim  		   CDATA        "0" >
    
+<!-- ____ param -->
 <!ELEMENT param EMPTY >
    <!ATTLIST param type       (long|string) #REQUIRED>
    <!ATTLIST param value      CDATA         #REQUIRED>
    
+<!-- ____ signal -->
 <!ELEMENT signal EMPTY >
    <!-- Name of signal to create -->
    <!ATTLIST signal name        CDATA     #REQUIRED>
@@ -1096,6 +1139,7 @@
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST signal condition   CDATA     #IMPLIED>
 
+<!-- ____ signals -->
 <!ELEMENT signals EMPTY >
    <!-- Visible name of signal -->
    <!ATTLIST signals name        CDATA          "" >
@@ -1106,6 +1150,7 @@
    <!ATTLIST signals locked      CDATA          #IMPLIED>
    <!ATTLIST signals filter      CDATA          #IMPLIED>
 
+<!-- ____ projectActionList -->
 <!-- List of actions to be applied to a project -->
 <!ELEMENT projectActionList ((deleteResource|copy|constant|createFolder)*) >
    <!ATTLIST projectActionList id                  ID            #REQUIRED>
@@ -1116,24 +1161,29 @@
    <!-- Condition evaluated during code generation that enables this action list -->
    <!ATTLIST projectActionList codeGenCondition    CDATA         #IMPLIED>
       
+<!-- ____ excludeSourceFile -->
 <!-- Exclude/include source file in Eclipse project -->
 <!ELEMENT excludeSourceFile EMPTY >
    <!ATTLIST excludeSourceFile   target     CDATA          #REQUIRED>
    <!ATTLIST excludeSourceFile   excluded   (true|false)   "true" >
 
+<!-- ____ excludeSourceFolder -->
 <!-- Exclude/include source folder in Eclipse project -->
 <!ELEMENT excludeSourceFolder EMPTY >
    <!ATTLIST excludeSourceFolder    target      CDATA          #REQUIRED>
    <!ATTLIST excludeSourceFolder    excluded    (true|false)   "true" >
 
+<!-- ____ deleteResource -->
 <!-- Remove file from Eclipse project -->
 <!ELEMENT deleteResource EMPTY >
    <!ATTLIST deleteResource target  CDATA         #REQUIRED>
 
+<!-- ____ createFolder -->
  <!ELEMENT createFolder EMPTY >
    <!ATTLIST createFolder target  CDATA #REQUIRED>
    <!ATTLIST createFolder type    (source|include|normal) "normal">
 
+<!-- ____ copy -->
 <!-- File to be copied to a project -->
 <!ELEMENT copy EMPTY >
    <!--  Path of source -->
@@ -1149,6 +1199,7 @@
    <!-- Target file will be marked as derived -->
    <!ATTLIST copy derived              (true|false) #IMPLIED>
    
+<!-- ____ dynamicSignalMapping -->
 <!-- List of signal mappings available for given signal -->
 <!ELEMENT dynamicSignalMapping (signalMapping)* >
    <!-- Condition evaluated during parsing that enables processing of this option -->
@@ -1156,6 +1207,7 @@
    <!-- Name of signal to dynamically map -->
    <!ATTLIST dynamicSignalMapping signal        CDATA    #REQUIRED>
  
+<!-- ____ signalMapping -->
 <!-- Each signal mapping is checked in order and 1st enabled is used  -->   
 <!ELEMENT signalMapping EMPTY >
    <!-- Condition evaluated during parsing that enables processing of this option -->
@@ -1166,3 +1218,23 @@
    <!-- Dynamic expression enabling this mapping (assumed true if absent) -->
    <!ATTLIST signalMapping expression           CDATA    #IMPLIED>
 
+<!-- ____ signalMapping -->
+<!-- Each signal mapping is checked in order and 1st enabled is used  -->   
+<!ELEMENT clipboard (#PCDATA)* >
+   <!-- Key for option -->
+   <!ATTLIST clipboard key                       CDATA                   #IMPLIED >
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST clipboard condition                 CDATA                   #IMPLIED>
+   <!-- Description of use of clip-board -->
+   <!ATTLIST clipboard description         CDATA        #IMPLIED>
+   <!-- Tool-tip to display in GUI and used for documentation in C++ code -->
+   <!ATTLIST clipboard toolTip             CDATA        #IMPLIED>
+   <!-- Hides option in GUI -->
+   <!ATTLIST clipboard hidden              CDATA        #IMPLIED>
+   <!-- Expression enables this option- 'expression#primaryVar#message'- 'expression#primaryVar#message' -->
+   <!ATTLIST clipboard enabledBy           CDATA        #IMPLIED> 
+   <!-- Dynamic expression that disables and hides this option -->
+   <!ATTLIST clipboard hiddenBy            CDATA        #IMPLIED>
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST clipboard condition     CDATA        #IMPLIED>
+   

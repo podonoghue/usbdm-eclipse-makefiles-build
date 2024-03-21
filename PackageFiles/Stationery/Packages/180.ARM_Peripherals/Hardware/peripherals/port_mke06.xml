@@ -4,8 +4,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Port control" >
 
-   <equation key="generateDefault"           type="Boolean" value="false"         />
-   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="generateDefault"            value="false"  />
+   <equation key="configureInStartupDefault"  value="false"  />
    <xi:include href="enablePeripheral.xml" />
    <title />
 
@@ -345,14 +345,6 @@
 
    <template where="basicInfo" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
-      class $(_Class)BasicInfo {
-      \t
-      public:\n
-   ]]>
-   </template>
-
-   <template where="basicInfo" codeGenCondition="enablePeripheralSupport" >
-   <![CDATA[
       $(init_description)
       \tclass Init {
       \t
@@ -567,12 +559,6 @@
    ]]>
    </template>
 
-   <template where="basicInfo" codeGenCondition="enablePeripheralSupport" >
-      <![CDATA[
-      }; // $(_Class)BasicInfo\n\n
-   ]]>
-   </template>
-
    <!-- ************* Common ****************** -->
 
    <template key="protectedMethods" codeGenCondition="enablePeripheralSupport" >
@@ -716,7 +702,7 @@
       \tUSBDM::$(_Class)::defaultConfigure();
    ]]></template>
 
-   <template key="/PORT/PinIndex" >
+   <template key="/PORT/Declarations" >
    <![CDATA[
       /**
        * Port pin index
@@ -750,7 +736,7 @@
                     =%(pinIndex)+5 : 5 ;
                     =%(pinIndex)+6 : 6 ;
                     =%(pinIndex)+7 : 7 " >
-         <template key="/PORT/PinIndex" discardRepeats="true" condition="%(field)_present"
+         <template key="/PORT/Declarations" discardRepeats="true" condition="%(field)_present"
          ><![CDATA[
             \tPT%(Name)%(i) = %(ii),\n
          ]]></template>
@@ -777,7 +763,7 @@
       \t    class Port%(Name)Field : public PortField_T<PinIndex(leftPinNum+%(pinIndex)), PinIndex(rightPinNum+%(pinIndex))> {};\n\n
       ]]></template>
    </for>
-   <template key="/PORT/PinIndex" >
+   <template key="/PORT/Declarations" >
       <![CDATA[
          \tMAX_PIN_INDEX, // Last available pin (exclusive)
          };

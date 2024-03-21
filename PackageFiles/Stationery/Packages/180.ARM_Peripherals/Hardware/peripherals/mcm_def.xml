@@ -405,7 +405,7 @@
       %paramDescription
       \t */
       \tstatic void enable%paramType() {
-      \t   %register = %register|$(%variable.enum[1]);
+      \t   %register = %register|$(%(v).enum[1]);
       \t}
       \t
       \t/**
@@ -414,7 +414,7 @@
       %paramDescription
       \t */
       \tstatic void disable%paramType() {
-      \t   %register = %register&~$(%variable.enum[1]);
+      \t   %register = %register&~$(%(v).enum[1]);
       \t}
       \t\n
    ]]></variableTemplate>

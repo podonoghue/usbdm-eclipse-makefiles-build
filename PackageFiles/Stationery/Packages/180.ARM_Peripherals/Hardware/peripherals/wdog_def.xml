@@ -144,6 +144,7 @@
    ><![CDATA[
       \t/**
       \t * Set %description
+      \t * (%variables)
       \t *
       \t * @param %paramName %tooltip
       \t */
@@ -153,6 +154,7 @@
 
       \t/**
       \t * Get %description
+      \t * (%variables)
       \t *
       %paramDescription
       \t *
@@ -168,6 +170,7 @@
       \t
       \t/**
       \t * Get %description
+      \t * (%variables)
       \t *
       \t * @return Clock frequency in Hz
       \t */
@@ -303,8 +306,6 @@
    </choiceOption>
 
 <!-- Setters and getters -->
-
-   <!--   ========== class $(_Structname)BasicInfo =============================== -->
 
    <variableTemplate key="/$(_BASENAME)/publicMethods" codeGenCondition="fullCodeSupport"
       variables="
@@ -754,7 +755,6 @@
    ]]></template>
 
    <!-- ************* SIM configuration ****************** -->
-   <stringOption key="xxx" value="=_scgc_clock" condition="_scgc_clock"  />
 
    <category name="Advanced" description="SIM configuration" >
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />

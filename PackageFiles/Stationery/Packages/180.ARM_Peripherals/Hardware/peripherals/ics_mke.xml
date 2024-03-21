@@ -4,11 +4,12 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Internal clock source" >
 
-   <equation key="irq_parameters"            type="String" value='""'  />
-   <equation key="irq_call"                  type="String" value='""'  />
-   <equation key="generateDefault"           type="Boolean" value="false"         />
-   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
-   <xi:include href="enablePeripheral.xml" />
+   <equation key="irq_parameters"             value=""          />
+   <equation key="irq_dummy_parameters"       value=""          />
+   <equation key="irq_call"                   value=""          />
+   <equation key="generateDefault"            value="false"     />
+   <equation key="configureInStartupDefault"  value="false"     />
+   <xi:include href="enablePeripheral.xml"    />
    <title />
 
    <!-- Clock mode as indicated by icsClockMode[%(n)] choice index -->
@@ -20,14 +21,17 @@
    <constant key="FBELP" value="5" type="Long" />
 
 
+   <!-- ____ Class Declaration ________ -->
+   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+
    <clockSelectionOption key="currentClockConfig"
       derived="true"
       description="Active clock selection"
       toolTip="Selects the clock configuration used for general peripheral timing calculations" >
-      <choice value="0" name="@ClockConfig[0]" ref="&quot;0: &quot;+ClockConfig[0]" isDefault="true" />
-      <choice value="1" name="@ClockConfig[1]" ref="&quot;1: &quot;+ClockConfig[1]" />
-      <choice value="2" name="@ClockConfig[2]" ref="&quot;2: &quot;+ClockConfig[2]" />
-      <choice value="3" name="@ClockConfig[3]" ref="&quot;3: &quot;+ClockConfig[3]" />
+      <choice value="0" name="@ClockConfig[0]" ref='"0: "+ClockConfig[0]' isDefault="true" />
+      <choice value="1" name="@ClockConfig[1]" ref='"1: "+ClockConfig[1]' />
+      <choice value="2" name="@ClockConfig[2]" ref='"2: "+ClockConfig[2]' />
+      <choice value="3" name="@ClockConfig[3]" ref='"3: "+ClockConfig[3]' />
    </clockSelectionOption>
 
    <aliasOption key="/SIM/numberOfClockSettings" />
@@ -509,7 +513,7 @@
 
             <binaryOption key="fll_enabled[%(n)]"
                enabledBy="((irefs_clock[%(n)]&gt;=31.25_kHz)&amp;&amp;(irefs_clock[%(n)]&lt;=39.0625_kHz))#irefs_clock[%(n)]"
-               ref="(icsClockMode[%(n)]!=@FBILP)&amp;&amp;(icsClockMode[%(n)]!=@FBELP)"
+               ref="(icsClockMode[%(n)]!=FBILP)&amp;&amp;(icsClockMode[%(n)]!=FBELP)"
                derived="true"
                locked="true"
                description="FLL State"
@@ -564,7 +568,7 @@
                disabledValue="0" />
 
             <binaryOption key="ics_c1_irefs[%(n)]"
-               ref="(icsClockMode[%(n)]==@FEI)||(icsClockMode[%(n)]==@FBI)||(icsClockMode[%(n)]==@FBILP)"
+               ref="(icsClockMode[%(n)]==FEI)||(icsClockMode[%(n)]==FBI)||(icsClockMode[%(n)]==FBILP)"
                typeName="IcsIref"
                target="irefs_clock[%(n)]"
                derived="true"
@@ -585,7 +589,7 @@
             <intOption key="system_icsffclk_clock[%(n)]"
                ref="irefs_clock[%(n)]"
                enabledBy="((%(n)==0)||enableClockConfiguration[%(n)]) &amp;&amp;
-                          ((irefs_clock[%(n)]&lt;=(system_icsoutclk_clock[%(n)]/8))&amp;&amp;(icsClockMode[%(n)]!=@FBILP))"
+                          ((irefs_clock[%(n)]&lt;=(system_icsoutclk_clock[%(n)]/8))&amp;&amp;(icsClockMode[%(n)]!=FBILP))"
                units="Hz"
                derived="true"
                locked="true"
@@ -624,8 +628,8 @@
          <aliasOption key="system_icsfllclk_clock[%(n)]" />
 
          <choiceOption key="ics_c1_clks[%(n)]" condition="ics_c1_clks_present"
-            ref="((icsClockMode[%(n)]==@FEI)||(icsClockMode[%(n)]==@FEE))?0b00:
-                 ((icsClockMode[%(n)]==@FBI)||(icsClockMode[%(n)]==@FBILP))?0b01:0b10
+            ref="((icsClockMode[%(n)]==FEI)||(icsClockMode[%(n)]==FEE))?0b00:
+                 ((icsClockMode[%(n)]==FBI)||(icsClockMode[%(n)]==FBILP))?0b01:0b10
                  #icsClockMode[%(n)]"
             typeName="IcsClkSrc"
             target="icsoutclk_undivided[%(n)]"
@@ -717,12 +721,11 @@
                <aliasOption key="ics_c4_lolie0[%(n)]" />
                <aliasOption key="ics_c4_cme[%(n)]" />
             </category>
-
          </category>
       </categoryOption>
    </for>
 
-<!--   ========== Methods =============================== -->
+<!--   __________ Methods _______________________________ -->
 
    <variableTemplate codeGenCondition="!enablePeripheralSupport"
       variables="ics_c2_bdiv[0],ics_c2_lp[0]"
@@ -742,7 +745,7 @@
       \t */
       \tstatic uint32_t getExternalReferenceClock() {
       \t
-      \t   return $(%variable.code[0]);
+      \t   return $(%variable0.code[0]);
       \t}\n\n
       ]]></variableTemplate>
 
@@ -910,120 +913,19 @@
       ]]></variableTemplate>
    </for>
 
-<!--   ========== ICS Init class =============================== -->
-
-   <template key="init_description" >
-   <![CDATA[
-      \t/**
-      \t * Class used to do initialisation of the $(_Class)
-      \t *
-      \t * This class has a templated constructor that accepts various values.
-      \t *
-      \t * @note This constructor may be used to create a const instance in Flash
-      \t *
-      \t * Example:
-      \t * @code
-      \t * static const $(_Class)::Init init {
-      \t *
-      \t *   // Setup values
-      \t *   IcsClkSrc_Fll ,                    // ICSOUTCLK Clock Source Select - Output of FLL
-      \t *   IcsFllPrescale_HighDivBy128 ,      // FLL External Reference Divider - /128 (high)
-      \t *   IcsIref_Internal ,                 // Internal Reference Select - Internal Refernce Clock
-      \t *   IcsIrClkEn_Disabled ,              // Internal Reference Clock [ICSIRCLK] - Disabled
-      \t *   IcsIrefs_DisabledInStop ,          // Internal Reference [ICSIRCLK] Stop Enable - IR disabled in STOP
-      \t *   IcsBusDivider_DivideBy8 ,          // Bus Frequency Divider - Divide by 8
-      \t *   IcsFllInLowpower_Enabled ,         // Low Power Select - FLL is enabled in bypass modes
-      \t *   IcsLossOfLockInterrupt_Disabled ,  // Loss of Lock Interrupt Enable - Interrupt disabled
-      \t *   IcsClockMonitor_Disabled ,         // Clock Monitor Enable - Clock monitor disabled
-      \t *   NvicPriority_Normal,               // IRQ level for this peripheral - Normal
-      \t * };
-      \t *
-      \t * // Initialise $(_Class) from values specified above
-      \t * $(_Class)::configure(init)
-      \t * @endcode
-      \t */
-   ]]>
-   </template>
-
-   <template where="basicInfo" codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t
-      \t/**
-      \t * Type definition for $(_Class) interrupt call back.
-      \t */
-      \ttypedef void (*CallbackFunction)($(irq_parameters));
-      \t\n
-   ]]>
-   </template>
-
-   <template key="privateMethods" codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t
-      \t/**
-      \t * Type definition for $(_Class) interrupt call back.
-      \t */
-      \ttypedef $(_Class)BasicInfo::CallbackFunction CallbackFunction;
-      \t
-      \t/** Callback function for ISR */
-      \tstatic CallbackFunction sCallback;
-      \t
-      \t/**
-      \t * Callback to catch unhandled interrupt
-      \t */
-      \tstatic void unhandledCallback() {
-      \t   setAndCheckErrorCode(E_NO_HANDLER);
-      \t}
-      \t\n
-   ]]>
-   </template>
-
-   <template key="publicMethods" codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t
-      \t/**
-      \t * Set callback for ISR
-      \t *
-      \t * @param[in] icsCallback The function to call from stub ISR
-      \t */
-      \tstatic void setCallback(CallbackFunction icsCallback) {
-      \t   $(_Baseclass)::sCallback = icsCallback;
-      \t}
-      \t
-      \t/**
-      \t * ICS interrupt handler -  Calls ICS callback
-      \t */
-      \tstatic void irqHandler() {
-      \t   sCallback();
-      \t}\n
-   ]]>
-   </template>
-
-   <template key="staticDefinitions" codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t
-      /** Callback for programmatically set handler */
-      Ics::CallbackFunction Ics::sCallback = unhandledCallback;\n
-   ]]>
-   </template>
 
 <!--   Configure methods -->
-
-   <template where="basicInfo" >
-      <![CDATA[
-      }; // $(_Class)::BasicInfo\n\n
-   ]]>
-   </template>
 
    <!--
       Global clock frequencies
    -->
-   <template where="basicInfo" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
+   <template where="usbdm" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
       \t/*
       \t * Global clocks
       \t */
       \t\n
    ]]></template>
-   <template where="basicInfo" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
+   <template where="usbdm" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
       \t/*
       \t * Global clock constants
       \t * These are provided when minimal clock generator code is used.
@@ -1038,11 +940,12 @@
                system_icsoutclk_clock[0]   : SystemIcsOutClock;
                system_icsfllclk_clock[0]   : SystemIcsFllClock
          ">
-      <variableTemplate where="basicInfo" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport"
+      <variableTemplate where="usbdm" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport"
                    tooltipPadding="x*xx" ><![CDATA[
          \t/**
          \t *  %description
          \t *  %tooltip
+         \t *  (Full configuration - declaration)
          \t */
          \textern volatile uint32_t %(name);
          \t\n
@@ -1052,22 +955,24 @@
          \t/**
          \t *  %description
          \t *  %tooltip
+         \t *  (Full configuration - definition)
          \t */
          \tvolatile uint32_t %(name);
          \t\n
       ]]></variableTemplate>
-      <variableTemplate where="basicInfo" variables="%(clock)" codeGenCondition="!/ICS/enablePeripheralSupport"
+      <variableTemplate where="usbdm" variables="%(clock)" codeGenCondition="!/ICS/enablePeripheralSupport"
                    tooltipPadding="x*xx" ><![CDATA[
          \t/**
          \t *  %description
          \t *  %tooltip
+         \t *  (Minimal configuration - definition)
          \t */
          \tconstexpr uint32_t %(name) = %valueExpression;
          \t\n
       ]]></variableTemplate>
    </for>
 
-   <!-- ************* Common ****************** -->
+   <!-- _____________ Common __________________ -->
 
    <template key="/ICS/Includes"  ><![CDATA[
    #include "osc.h"\n

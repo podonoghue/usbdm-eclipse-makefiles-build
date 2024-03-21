@@ -13,6 +13,8 @@
    <constant key="_class_declaration" type="String"
       value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
+   <constant key = "disable_peripheral"      value = '"ftm->SC = FTM_SC_CLKS(0);"' type="String"  />
+
    <equation key="irq_parameters"             value=""  />
    <equation key="irq_dummy_parameters"       value=""  />
    <equation key="irq_call"                   value=""  />
@@ -21,8 +23,6 @@
    <xi:include href="enablePeripheral.xml"  />
 
    <!-- ____ Constants ____________ -->
-
-   <constant key = "disable_peripheral"      value = '"ftm->SC = FTM_SC_CLKS(0);"' type="String"  />
 
    <template><![CDATA[
       \t//! Number of channels implemented
@@ -1931,7 +1931,7 @@
       ><![CDATA[
          \t/**
          \t * Set action on event
-         \t * (%variable)
+         \t * (%variables)
          \t *
          %paramDescription
          \t */
@@ -2176,7 +2176,7 @@
       \t
       \t   /**
       \t    * Set %description
-      \t    * (%variable)
+      \t    * (%variables)
       \t    *
       %paramDescription
       \t    *
@@ -2199,7 +2199,7 @@
       \t
       \t   /**
       \t    * Set %description
-      \t    * (%variable)
+      \t    * (%variables)
       \t    *
       %paramDescription
       \t
@@ -2535,6 +2535,13 @@
       \t */
       \tclass Init {
       \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(Types...) = delete;
+      \t
       \tpublic:
       \t   /**
       \t    * Copy Constructor
@@ -2576,7 +2583,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   // %description
@@ -2604,7 +2611,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -2776,8 +2783,7 @@
             ftm_cnt_count                         : %register = 0                      ;
             ftm_sc_action,ftm_sc_cpwms,
             ftm_sc_clks,ftm_sc_ps                 : %register = sc                     ;
-            ftm_mode_faultie,ftm_mode_wpdis,
-            ftm_mode_ftmen                        : %configRegAssignment               ;
+            ftm_mode_wpdis,ftm_mode_ftmen         : %configRegAssignment               ;
             ftm_pol_pol                           : %configRegAssignment               ;
             ftm_deadtime_dtps,ftm_deadtime_dtval  : %configRegAssignment               ;
             ftm_exttrig_trig                      : %configRegAssignment               ;
@@ -2816,11 +2822,13 @@
       variables="
          ftm_sc_action,ftm_sc_cpwms,ftm_sc_clks,ftm_sc_ps,
          ftm_mod_mod,
-         ftm_mode_faultie, ftm_mode_wpdis, ftm_mode_ftmen,
+         ftm_mode_wpdis, ftm_mode_ftmen,
          ftm_pol_pol,
          ftm_deadtime_dtps,ftm_deadtime_dtval,
          ftm_exttrig_trig,
-         ftm_conf_gtbeout,ftm_conf_gtbeen,ftm_conf_bdmmode,ftm_conf_numtof"
+         ftm_conf_gtbeout,ftm_conf_gtbeen,ftm_conf_bdmmode,ftm_conf_numtof,
+         irqLevel
+         "
    ><![CDATA[
       \t/**
       \t * Default initialisation value for $(_Class)
@@ -2863,6 +2871,13 @@
       \t * @endcode
       \t */
       \tclass ChannelInit {
+      \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr ChannelInit(Types...) = delete;
       \t
       \tpublic:
       \t   /**
@@ -3082,6 +3097,13 @@
       \t */
       \tclass DualChannelInit {
       \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr DualChannelInit(Types...) = delete;
+      \t
       \tpublic:
       \t   /**
       \t    * Copy Constructor
@@ -3134,7 +3156,7 @@
    ><![CDATA[
       \t   /**
       \t    * Constructor for %description
-      \t    * (%variable)
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -3239,7 +3261,7 @@
    ><![CDATA[
       \t   /**
       \t    * Constructor for %description
-      \t    * (%variable)
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest

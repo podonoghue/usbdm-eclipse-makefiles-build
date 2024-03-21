@@ -11,7 +11,7 @@
    <equation key="configureInStartupDefault" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
 
-   <!-- ************* Class Declaration ****************** -->
+   <!-- _____________ Class Declaration __________________ -->
    <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
    <title description="Clock Settings" />
@@ -90,7 +90,7 @@
       locked="true"
    />
 
-   <!-- ************* C1 ****************** -->
+   <!-- _____________ C1 __________________ -->
 
    <!--binaryOption key="i2c_c1_iicen" condition="i2c_c1_iicen_present"
       enabledBy="enablePeripheralSupport"
@@ -174,7 +174,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       <choice name="DMA enabled"   value="1" enum="DmaEnabled"/>
    </binaryOption -->
 
-   <!-- ************* S ****************** -->
+   <!-- _____________ S __________________ -->
 
    <!--binaryOption key="i2c_s_iaas" condition="i2c_s_iaas_present"
       enabledBy="enablePeripheralSupport"
@@ -211,7 +211,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       <choice name="Interrupt pending"      value="1" enum="InterruptPending"/>
    </binaryOption -->
 
-   <!-- ************* D ****************** -->
+   <!-- _____________ D __________________ -->
 
    <!--intOption key="i2c_d_data" condition="i2c_d_data_present"
       enabledBy="enablePeripheralSupport"
@@ -219,7 +219,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       description="Data"
    / -->
 
-   <!-- ************* C2 ****************** -->
+   <!-- _____________ C2 __________________ -->
 
    <binaryOption key="i2c_c2_gcaen" condition="i2c_c2_gcaen_present"
       enabledBy="enablePeripheralSupport"
@@ -239,7 +239,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       <choice name="High drive mode"    value="1" enum="HighDriveMode"/>
    </binaryOption >
 
-   <!-- ************* C2_ADEXT, C2_RMEM, A1, RA ****************** -->
+   <!-- _____________ C2_ADEXT, C2_RMEM, A1, RA __________________ -->
 
    <binaryOption key="i2c_c2_adext" condition="i2c_c2_adext_present"
       enabledBy="enablePeripheralSupport"
@@ -319,7 +319,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       description="Range Slave Address"
    />
 
-   <!-- ************* FLT ****************** -->
+   <!-- _____________ FLT __________________ -->
 
    <binaryOption key="i2c_flt_shen" condition="i2c_flt_shen_present"
       enabledBy="enablePeripheralSupport"
@@ -392,7 +392,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       <choice name="15 clock cycles"  value="15" enum="15_ClockCycles" />
    </choiceOption >
 
-   <!-- ************* SMB ****************** -->
+   <!-- _____________ SMB __________________ -->
 
    <category name="SMB" description="SMB options" >
 
@@ -460,7 +460,7 @@ In other cases, if the master reads data from the slave, then it is required to 
          <choice name="Interrupt enabled"   value="1" enum="Enabled" />
       </binaryOption >
 
-      <!-- ************* SMB_SIICAEN, A2 ****************** -->
+      <!-- _____________ SMB_SIICAEN, A2 __________________ -->
 
       <binaryOption key="i2c_smb_siicaen" condition="i2c_smb_siicaen_present"
          enabledBy="/$(_BASENAME)/smbOptionsAvailable"
@@ -481,7 +481,7 @@ In other cases, if the master reads data from the slave, then it is required to 
          value="0"
       />
 
-      <!-- ************* SLTH & SLTL****************** -->
+      <!-- _____________ SLTH & SLTL__________________ -->
 
       <intOption key="i2c_slt_value" condition="i2c_slth_sslt_present"
          units="ticks"
@@ -876,7 +876,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t   uint16_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -976,7 +976,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -1234,7 +1234,8 @@ In other cases, if the master reads data from the slave, then it is required to 
             i2c_flt_shen,
             i2c_flt_stopie,
             i2c_flt_ssie,
-            i2c_flt_flt
+            i2c_flt_flt,
+            irqLevel
          "
    ><![CDATA[
       \t/**
@@ -1283,7 +1284,7 @@ In other cases, if the master reads data from the slave, then it is required to 
    ]]>
    </template>
 
-   <!-- ************* Common ****************** -->
+   <!-- _____________ Common __________________ -->
 
    <projectActionList id = "i2c_files" >
       <copy source="Project_Headers/i2c.h"            target="Project_Headers/i2c.h"            overwrite="true"  derived="true" />
@@ -1339,7 +1340,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       class="net.sourceforge.usbdm.deviceEditor.validators.I2cValidate_MKE" >
    </validate>
 
-   <!-- ************* Startup ****************** -->
+   <!-- _____________ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
@@ -1351,9 +1352,12 @@ In other cases, if the master reads data from the slave, then it is required to 
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <!-- ************* SIM configuration ****************** -->
+   <!-- _____________ SIM configuration __________________ -->
    <category name="Advanced" description="SIM configuration">
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+      <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
       <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
       </for>

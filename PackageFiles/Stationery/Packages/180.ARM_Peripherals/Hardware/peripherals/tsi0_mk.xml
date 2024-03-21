@@ -281,8 +281,6 @@
       baseType="uint32_t"
       description="TSI input"
       toolTip="Used to select a TSI input"
-      enumText="$(InputMapping)"
-
       >
       <choiceExpansion value="%(i)"
                        name='@SignalDescriptionFromIndex(%(i),"^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'

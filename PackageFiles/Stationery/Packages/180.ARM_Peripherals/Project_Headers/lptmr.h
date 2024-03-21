@@ -53,9 +53,6 @@ protected:
    /** Minimum resolution required when setting interval */
    static constexpr int MINIMUM_RESOLUTION = 100;
 
-   /** Callback function for ISR */
-   static typename Info::CallbackFunction sCallback;
-
    /** Hardware instance */
    static constexpr HardwarePtr<LPTMR_Type> lptmr = Info::baseAddress;
 
@@ -65,10 +62,127 @@ protected:
    }
 
 public:
+   /**
+    * Configure LPTMR in time counting mode.
+    * The timer is enabled
+    *
+    * @param lptmrCounterActionOnEvent Counter action when compare event occurs
+    *             The counter can continue counting or be reset to zero.
+    * @param lptmrEventAction          Enables LPTMR interrupts
+    * @param lptmrClockSel             Selects the clock source for LPTMR
+    * @param ticks                     Comparison value
+    *             The timer comparison flag is set when the counter reaches this value and increments.
+    *             The hardware trigger will assert until the next time the counter increments.
+    *             This value determines the period in TimeInterval mode or the event time in Pulse Counting mode
+    * @param lptmrPrescale             Configures the size of the Prescaler in Time Interval mode
+    */
+   static void configureTimeIntervalMode(
+         LptmrCounterActionOnEvent  lptmrCounterActionOnEvent,
+         LptmrEventAction           lptmrEventAction,
+         LptmrClockSel              lptmrClockSel,
+         const Ticks&               ticks              = 65535_ticks,
+         LptmrPrescale              lptmrPrescale      = LptmrPrescale_Direct) {
 
-$(/LPTMR/classInfo: // No class Info found)
-$(/LPTMR/StaticMethods: // /LPTMR/StaticMethods not found)
-$(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
+      Info::enable();
+
+      // Change settings with timer disabled 1
+      lptmr->CSR = lptmrCounterActionOnEvent|LptmrMode_TimeInterval|LPTMR_CSR_TCF_MASK;
+
+      // Set clock source and prescaler
+      lptmr->PSR = lptmrClockSel|lptmrPrescale;
+
+      // Set event time
+      lptmr->CMR = ticks;
+
+      // Enable timer
+      lptmr->CSR = lptmrCounterActionOnEvent|lptmrEventAction|LptmrMode_TimeInterval|LPTMR_CSR_TCF_MASK|LPTMR_CSR_TEN_MASK;
+   }
+
+   /**
+    * Configure LPTMR in time counting mode.
+    * The timer is enabled
+    *
+    * @param lptmrCounterActionOnEvent Counter action when compare event occurs
+    *             The counter can continue counting or be reset to zero.
+    * @param lptmrEventAction          Enables LPTMR interrupts
+    * @param seconds                   Comparison value
+    *             The timer comparison flag is set when the counter reaches this value and increments.
+    *             The hardware trigger will assert until the next time the counter increments.
+    *             This value determines the period in TimeInterval mode or the event time in Pulse Counting mode
+    * @param lptmrClockSel             Selects the clock source for LPTMR
+    */
+   static ErrorCode configureTimeIntervalMode(
+         LptmrCounterActionOnEvent  lptmrCounterActionOnEvent,
+         LptmrEventAction           lptmrEventAction,
+         const Seconds&             seconds,
+         LptmrClockSel              lptmrClockSel      = LptmrClockSel_Lpoclk) {
+
+      Info::enable();
+
+      uint8_t  psr = lptmrClockSel;
+      uint32_t cmr;
+
+      ErrorCode rc = calculateDurationValues(seconds, psr, cmr);
+      if (rc != E_NO_ERROR) {
+         return rc;
+      }
+
+      // Change settings with timer disabled 2
+      lptmr->CSR = lptmrCounterActionOnEvent|LptmrMode_TimeInterval|LPTMR_CSR_TCF_MASK;
+
+      // Set clock source and prescaler
+      lptmr->PSR = psr;
+
+      // Set event time
+      lptmr->CMR = cmr;
+
+      // Enable timer
+      lptmr->CSR = lptmrCounterActionOnEvent|lptmrEventAction|LptmrMode_TimeInterval|LPTMR_CSR_TCF_MASK|LPTMR_CSR_TEN_MASK;
+
+      return E_NO_ERROR;
+   }
+
+   /**
+    * Configure LPTMR in pulse counting mode.
+    * Provides selection of input pin, edge selection and reset mode.
+    * The timer is enabled and pins configured.
+    *
+    * @param lptmrInput                   Input source to be used in Pulse Counter mode
+    * @param lptmrInputEdge               Polarity of the input source in Pulse Counter mode
+    * @param lptmrClockSel                Selects the clock source for LPTMR
+    * @param lptmrGlitchFilter            Configures the size of the glitch filter in Pulse Counting mode
+    * @param lptmrCounterActionOnEvent    Counter action when compare event occurs
+    *        The counter can continue counting or be reset to zero.
+    * @param lptmrEventAction             Enables LPTMR interrupts
+    * @param ticks                        Comparison value
+    *        The timer comparison flag is set when the counter reaches this value and increments.
+    *        The hardware trigger will assert until the next time the counter increments.
+    *        This value determines the period in TimeInterval mode or the event time in Pulse Counting mode
+    */
+   static void configurePulseCountingMode(
+         LptmrInput                 lptmrInput,
+         LptmrInputEdge             lptmrInputEdge,
+         LptmrClockSel              lptmrClockSel              = LptmrClockSel_Lpoclk,
+         LptmrGlitchFilter          lptmrGlitchFilter          = LptmrGlitchFilter_Direct,
+         LptmrCounterActionOnEvent  lptmrCounterActionOnEvent  = LptmrCounterActionOnEvent_Reset,
+         LptmrEventAction           lptmrEventAction           = LptmrEventAction_None,
+         const Ticks&               ticks                      = 65535_ticks) {
+
+      Info::enable();
+
+      // Change settings with timer disabled 3
+      lptmr->CSR = lptmrInput|lptmrInputEdge|lptmrCounterActionOnEvent|LptmrMode_PulseCounting|LPTMR_CSR_TCF_MASK;
+
+      // Set clock source and prescaler
+      lptmr->PSR = lptmrClockSel|lptmrGlitchFilter;
+
+      // Set Event time
+      lptmr->CMR = ticks;
+
+      // Enable timer
+      lptmr->CSR = lptmrInput|lptmrInputEdge|lptmrCounterActionOnEvent|lptmrEventAction|LptmrMode_PulseCounting|LPTMR_CSR_TCF_MASK|LPTMR_CSR_TEN_MASK;
+   }
+
    /**
     * Restarts the counter\n
     * Mostly for debug.
@@ -156,31 +270,6 @@ $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
          (obj.*callback)();
       };
       return fn;
-   }
-
-   /**
-    * Set callback for ISR and enable NVIC interrupts.
-    *
-    *   @param[in]  callback Callback function to be executed on interrupt\n
-    *                        Use nullptr to remove callback.
-    */
-   static void setCallback(typename Info::CallbackFunction callback) {
-      static_assert(Info::irqHandlerInstalled, "LPTMR not configure for interrupts");
-      if (callback == nullptr) {
-         callback = unhandledCallback;
-      }
-      sCallback = callback;
-   }
-
-   /**
-    * PIT interrupt handler. \n
-    * Calls PIT0 callback
-    */
-   static void irqHandler() {
-      // Clear interrupt flag
-      lptmr->CSR = lptmr->CSR | LPTMR_CSR_TCF_MASK;
-
-      sCallback();
    }
 
    /**
@@ -347,16 +436,12 @@ $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
     */
    static ErrorCode calculateDurationValues(Seconds duration, uint8_t &psr, uint32_t &cmr) {
 
-      float    inputClock = Info::getInputClockFrequency((LptmrClockSel)(psr&LPTMR_PSR_PCS_MASK));
+      float    inputClock = Info::getInputClockFrequency(LptmrClockSel(psr&LPTMR_PSR_PCS_MASK));
       int      prescaleFactor=1;
       uint32_t prescalerValue=0;
       while (prescalerValue<=16) {
          float    clockFrequency = inputClock/prescaleFactor;
          uint32_t mod   = rintf(float(duration*clockFrequency))-1;
-         if (mod < Info::minimumResolution) {
-            // Too short a period for reasonable resolution
-            return setAndCheckErrorCode(E_TOO_SMALL);
-         }
          if (mod <= LPTMR_CMR_COMPARE_MASK) {
             cmr  = mod;
             psr  = (psr&LPTMR_PSR_PCS_MASK)|LPTMR_PSR_PRESCALE(prescalerValue-1)|LPTMR_PSR_PBYP(prescalerValue==0);
@@ -381,7 +466,7 @@ $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
     */
    static ErrorCode calculateFilterValues(Seconds interval, uint8_t &psr) {
 
-      float    inputClock = Info::getInputClockFrequency((LptmrClockSel)(psr&LPTMR_PSR_PCS_MASK));
+      float    inputClock = Info::getInputClockFrequency(LptmrClockSel(psr&LPTMR_PSR_PCS_MASK));
       int      prescaleFactor=1;
       uint32_t prescalerValue=0;
       while (prescalerValue<=16) {
@@ -411,7 +496,7 @@ $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
 
       uint8_t  psr = lptmr->PSR;
       uint32_t cmr;
-      ErrorCode rc = calculateDurationValues(period, psr, cmr);
+      ErrorCode rc = Info::calculateDurationValues(period, psr, cmr);
       if (rc != E_NO_ERROR) {
          return rc;
       }
@@ -472,8 +557,6 @@ $(/LPTMR/InitMethod: // /LPTMR/InitMethod not found)
    }
 
 };
-
-template<class Info> typename Info::CallbackFunction LptmrBase_T<Info>::sCallback = LptmrBase_T<Info>::unhandledCallback;
 
 $(/LPTMR/declarations: // No declarations found)
 #endif // /LPTMR/enablePeripheralSupport

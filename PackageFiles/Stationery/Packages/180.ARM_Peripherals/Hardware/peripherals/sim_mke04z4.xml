@@ -4,10 +4,10 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Integration Module" >
 
-<!-- ____________________ Constants ____________________ -->
+<!-- ___________ Constants ____________________ -->
 
-   <equation key="generateDefault"           type="Boolean" value="false"         />
-   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="generateDefault"           value="false"         />
+   <equation key="configureInStartupDefault" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -144,6 +144,9 @@
    </for>
 
    <xi:include href="simCommon.xml" />
+
+   <!-- ____ Class Declaration __________________ -->
+   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Baseclass)BasicInfo"' />
 
    <for keys="n" dim="=numberOfClockSettings" >
       <aliasCategoryOption key="/ICS/ClockConfig[%(n)]" derived="true" locked="true" >
@@ -730,10 +733,6 @@
 
 <!-- Grahic here -->
 
-   <!-- _____________ Class Declaration __________________ -->
-   <constant key="_class_declaration" type="String"
-      value='"$(_Class)Info : public $(_Baseclass)BasicInfo"' />
-
    <variableTemplate variables="sim_sopt_ftmsync" codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
       \t/**
@@ -858,16 +857,7 @@
       ]]></variableTemplate>
    </for>
 
-<!--   ________== SIM Init class ____________________________=== -->
-
-   <template where="basicInfo" >
-   <![CDATA[
-      class $(_Class)BasicInfo {
-      \t
-      public:
-      \t\n
-   ]]>
-   </template>
+<!--   __________ SIM Init class _______________________________ -->
 
    <template where="basicInfo" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
@@ -1120,13 +1110,7 @@
    ]]>
    </template>
 
-   <template where="basicInfo" >
-      <![CDATA[
-      }; // class $(_Class)::BasicInfo\n\n
-   ]]>
-   </template>
-
-   <!-- _____________ Clock Variables __________________ -->
+   <!-- ____ Clock Variables __________________ -->
 
    <template where="basicInfo" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
       \t/*
@@ -1144,15 +1128,17 @@
       \t\n
    ]]></template>
 
-   <for keys=" clock                  : name "
-      values=" system_core_clock[0]   : SystemCoreClock;
-               system_bus_clock[0]    : SystemBusClock;
-               system_timer_clock[0]  : SystemTimerClock
-         ">
-      <variableTemplate where="basicInfo" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
+   <for keys=" clock                            : name "
+      values=" system_core_clock[0]             : SystemCoreClock;
+               system_bus_clock[0]              : SystemBusClock;
+               system_timer_clock[0]            : SystemTimerClock;
+               system_flexbus_clock[0]          : SystemFlexbusClock
+         " >
+      <variableTemplate where="usbdm" variables="%(clock)" codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
          \t/**
          \t *  %description
          \t *  %tooltip
+         \t *  (Full configuration - declaration)
          \t */
          \textern "C" uint32_t %(name);
          \t\n
@@ -1161,19 +1147,28 @@
          \t/**
          \t *  %description
          \t *  %tooltip
+         \t *  (Full configuration - definition)
          \t */
          \tuint32_t %(name);
          \t\n
       ]]></variableTemplate>
-      <variableTemplate where="basicInfo" variables="%(clock)" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
+      <variableTemplate where="usbdm" variables="%(clock)" codeGenCondition="!/ICS/enablePeripheralSupport" ><![CDATA[
          \t/**
          \t *  %description
          \t *  %tooltip
+         \t *  (Minimal configuration - definition)
          \t */
          \tconstexpr uint32_t %(name) = %valueExpression;
          \t\n
       ]]></variableTemplate>
    </for>
+
+   <template><![CDATA[
+      \t/*
+      \t * Template:sim_commonTemplates.xml
+      \t */ \n
+   ]]></template>
+
 
    <template codeGenCondition="/ICS/enablePeripheralSupport" ><![CDATA[
       \t/**
@@ -1189,7 +1184,7 @@
       \t}\n\n
    ]]></template>
 
-   <!-- _____________ Common __________________ -->
+   <!-- ____ Common __________________ -->
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >

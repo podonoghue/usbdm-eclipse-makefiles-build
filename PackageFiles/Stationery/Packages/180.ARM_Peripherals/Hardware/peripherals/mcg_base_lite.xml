@@ -2,15 +2,14 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- mgc_lite.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator" >
 
-   <equation key="irq_parameters"           type="String"  value='""'  />
-   <equation key="irq_dummy_parameters"     type="String"  value='""'  />
-   <equation key="irq_call"                 type="String"  value='""'  />
-   <equation key="generateDefault"           type="Boolean" value="false"         />
-   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
-   <xi:include href="enablePeripheral.xml"  />
-
+   <equation key="irq_parameters"             value=""          />
+   <equation key="irq_dummy_parameters"       value=""          />
+   <equation key="irq_call"                   value=""          />
+   <equation key="generateDefault"            value="false"     />
+   <equation key="configureInStartupDefault"  value="false"     />
+   <xi:include href="enablePeripheral.xml"    />
    <title />
 
    <!-- Clock mode as indicated by mcgClockMode[%(n)] choice index -->
@@ -31,10 +30,10 @@
       derived="true"
       description="Active clock selection"
       toolTip="Selects the clock configuration used for general peripheral timing calculations" >
-      <choice value="0" name="@ClockConfig[0]" ref="&quot;0: &quot;+ClockConfig[0]" isDefault="true" />
-      <choice value="1" name="@ClockConfig[1]" ref="&quot;1: &quot;+ClockConfig[1]" />
-      <choice value="2" name="@ClockConfig[2]" ref="&quot;2: &quot;+ClockConfig[2]" />
-      <choice value="3" name="@ClockConfig[3]" ref="&quot;3: &quot;+ClockConfig[3]" />
+      <choice value="0" name="@ClockConfig[0]" ref='"0: "+ClockConfig[0]' isDefault="true" />
+      <choice value="1" name="@ClockConfig[1]" ref='"1: "+ClockConfig[1]' />
+      <choice value="2" name="@ClockConfig[2]" ref='"2: "+ClockConfig[2]' />
+      <choice value="3" name="@ClockConfig[3]" ref='"3: "+ClockConfig[3]' />
    </clockSelectionOption>
 
    <category name="HIRC" description="High Speed Internal Clock Sources"
@@ -97,7 +96,7 @@
       hidden="true"
       description="OSC0 mode"
       toolTip="Determines oscillator power mode and\n
-               whether an external clock or crystal is used.">
+               whether an external clock or crystal is used." >
       <choice value="0"                               name="OSC0 Not configured"            enum="NotConfigured"        />
       <choice value="MCG_C2_EREFS0(0)"                name="External clock"                 enum="ExternalClock"        />
       <choice value="MCG_C2_EREFS0(1)"                name="Low Power Oscillator"           enum="LowPowerOscillator"   isDefault="true"                />
@@ -127,12 +126,12 @@
       ref="mcg_c2_oscMode==3"
       derived="true"
       description="Oscillator mode"
-      toolTip="Operation mode for oscillator">
+      toolTip="Operation mode for oscillator" >
       <choice value="0" name="Low Power" enum="LowPower"   />
       <choice value="1" name="High Gain" enum="HighPower"  />
    </choiceOption>
 
-   <for keys="n" dim="=/SIM/numberOfClockSettings">
+   <for keys="n" dim="=/SIM/numberOfClockSettings" >
       <categoryOption key="ClockConfig[%(n)]"
          enabledBy="enablePeripheralSupport&amp;&amp;enableClockConfiguration[%(n)]"
          description="Clock configuration[%(n)]"
@@ -354,7 +353,7 @@
                </graphicGroup>
 
                <!-- RTCCLKOUTSEL => RTCCLKOUT -->
-               <graphicGroup x="0" y="y" condition="/SIM/sim_sopt2_rtcclkoutsel">
+               <graphicGroup x="0" y="y" condition="/SIM/sim_sopt2_rtcclkoutsel" >
                   <graphicItem id=""                          var=""                                   type="connector"   params="OSCERCLK.1,0, RTCCLKOUTSEL,1, x145,d,y,x"          condition="/SIM/RtcForcing" />
                   <graphicItem id=""                          var=""                                   type="connector"   params="RTC32K,0,     RTCCLKOUTSEL,1, x165,y,x"          condition="/SIM/rtc_independent" />
                   <graphicItem id=""                          var=""                                   type="connector"   params="RTC1Hz,0,     RTCCLKOUTSEL,0, x0.9,y,x"         />
@@ -366,7 +365,7 @@
                </graphicGroup>
 
                <!-- TRACECLKSEL => TRACE_CLK -->
-               <graphicGroup x="0" y="y" condition="/SIM/sim_sopt2_traceclksel_present">
+               <graphicGroup x="0" y="y" condition="/SIM/sim_sopt2_traceclksel_present" >
                   <graphicItem id="MCGOUTCLK.1"               var="system_mcgoutclk_clock[%(n)]"       type="reference"   params="330,  0, 180"                                  />
                   <graphicItem id="CORE_CLK.1"                var="/SIM/system_core_clock[%(n)]"       type="reference"   params="330, 20, 180"                                  />
                   <graphicItem id=""                          var="system_mcgoutclk_clock[%(n)]"       type="connector"   params="MCGOUTCLK.1,0, TRACECLKSEL,0"                   />
@@ -636,7 +635,7 @@
             <aliasOption key="/OSC0/oscer_clock"             />
          </category>
 
-         <category name="OSC1 (Real Time Clock)" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
+         <category name="OSC1 (Real Time Clock)" description="RTC External Reference Clock/Oscillator [ERCLK32K]" >
             <aliasOption key="/RTC/osc_input_freq"        optional="true" locked="false"  />
             <aliasOption key="/RTC/rtc_cr_osce"           optional="true" locked="false"/>
             <aliasOption key="/RTC/osc_clock"             optional="true"/>
@@ -674,7 +673,7 @@
          typeName="McgHircEnable"
          enabledBy="/SMC/smc_pmctrl_runm[%(n)] != 1"
          description="High-frequency IRC Clock Enable [MCGPCLK]"
-         toolTip="Enables the HIRC even when MCG_Lite is not working at HIRC mode">
+         toolTip="Enables the HIRC even when MCG_Lite is not working at HIRC mode" >
          <choice value="0" enum="AsNeeded" name="Enabled as required by MCG mode" />
          <choice value="1" enum="Always"   name="Always enabled" />
       </binaryOption>
@@ -682,7 +681,7 @@
       <binaryOption key="mcg_mc_hircen[%(n)]" condition="mcg_mc_hircen_present&amp;&amp;mcg_mc_hirclpen_present"
          typeName="McgHircEnable"
          description="High-frequency IRC Clock Enable [MCGPCLK]"
-         toolTip="Enables the HIRC even when MCG_Lite is not working at HIRC mode">
+         toolTip="Enables the HIRC even when MCG_Lite is not working at HIRC mode" >
          <choice value="0" enum="AsNeeded" name="Enabled as required by MCG mode" />
          <choice value="1" enum="Always"   name="Always enabled" />
       </binaryOption>
@@ -690,7 +689,7 @@
       <binaryOption key="mcg_mc_hirclpen[%(n)]" condition="mcg_mc_hirclpen_present"
          enabledBy="mcg_mc_hircen[%(n)]"
          description="High-frequency IRC Low-power Mode Enable [MCGPCLK]"
-         toolTip="Enables the HIRC in Low-power modes such as Stop/VLPR/VLPW/VLPS mode">
+         toolTip="Enables the HIRC in Low-power modes such as Stop/VLPR/VLPW/VLPS mode" >
          <choice value="0" name="Disabled in low power modes" />
          <choice value="1" name="Enabled in low power modes"  />
       </binaryOption>
@@ -716,7 +715,7 @@
       <binaryOption key="mcg_c1_irclken[%(n)]"
          typeName="McgIrClkEn"
          description="Internal Reference Clock Enable [MCGIRCLK]"
-         toolTip="Enables the LIRC, even when MCG not using LIRC">
+         toolTip="Enables the LIRC, even when MCG not using LIRC" >
          <choice value="0" enum="Disabled" name="Disabled when not used by MCG" />
          <choice value="1" enum="Enabled"  name="Always Enabled" isDefault="true" />
       </binaryOption>
@@ -725,7 +724,7 @@
          typeName="McgIrefs"
          enabledBy="mcg_c1_irclken[%(n)]"
          description="Internal Reference Stop Enable [MCGIRCLK]"
-         toolTip="Enables the LIRC in Stop mode (also requires IRCLKEN=1)">
+         toolTip="Enables the LIRC in Stop mode (also requires IRCLKEN=1)" >
          <choice value="0" enum="DisabledInStop" name="IR disabled in STOP" />
          <choice value="1" enum="EnabledInStop"  name="IR enabled in STOP" />
       </binaryOption>
@@ -736,7 +735,7 @@
          target="system_lirc_div1_clock[%(n)]"
          description="Internal Clock Reference Divider[LIRC_DIV1]"
          toolTip="Selects the amount to divide down the selected internal reference clock\n
-            The FIR clock is available for use as MCGOUTCLK and after further division as MCGIRCLK">
+            The FIR clock is available for use as MCGOUTCLK and after further division as MCGIRCLK" >
          <choice value="0" enum="DivBy1"    name="/1"   ref="(system_lirc_clock[%(n)])"     isDefault="true" />
          <choice value="1" enum="DivBy2"    name="/2"   ref="(system_lirc_clock[%(n)])/2"   />
          <choice value="2" enum="DivBy4"    name="/4"   ref="(system_lirc_clock[%(n)])/4"   />
@@ -760,7 +759,7 @@
          enabledBy="system_lirc_div1_clock[%(n)]!=0"
          target="system_mcgirclk_clock[%(n)]"
          description="Second Low-frequency Internal Reference Clock Divider"
-         toolTip="Selects the factor value to further divide the LIRC source">
+         toolTip="Selects the factor value to further divide the LIRC source" >
          <choice value="0" enum="DivBy1"    name="/1"   ref="system_lirc_div1_clock[%(n)]"     isDefault="true" />
          <choice value="1" enum="DivBy2"    name="/2"   ref="system_lirc_div1_clock[%(n)]/2"   />
          <choice value="2" enum="DivBy4"    name="/4"   ref="system_lirc_div1_clock[%(n)]/4"   />
@@ -821,7 +820,7 @@
          locked="true"
          description="Frequency Range Select"
          toolTip="Selects the frequency range for the crystal oscillator if used.\n
-                  It may determine the divider for FLL input clock">
+                  It may determine the divider for FLL input clock" >
          <choice value="0" enum="Low"      name="Low range" />
          <choice value="1" enum="High"     name="High range" />
          <choice value="2" enum="VeryHigh" name="Very High range" />
@@ -856,14 +855,14 @@
       <aliasOption key="/SIM/system_core_clock[%(n)]"    locked="false" />
       <aliasOption key="/SIM/system_bus_clock[%(n)]"     locked="false" />
 
-      <category name="Device Parameters" description="Register values">
-         <category name="MCG_C1" description="MCG Control Register 1">
+      <category name="Device Parameters" description="Register values" >
+         <category name="MCG_C1" description="MCG Control Register 1" >
             <aliasOption key="mcg_c1_clks[%(n)]" />
             <aliasOption key="mcg_c1_irclken[%(n)]" />
             <aliasOption key="mcg_c1_irefsten[%(n)]" />
          </category>
 
-         <category name="MCG_C2" description="MCG Control Register 2">
+         <category name="MCG_C2" description="MCG Control Register 2" >
             <aliasOption key="mcg_c2_range0[%(n)]" optional="true" />
             <aliasOption key="mcg_c2_hgo0"         optional="true" />
             <aliasOption key="mcg_c2_erefs0"     />
@@ -990,13 +989,13 @@
       \t};
    ]]></template>
 
-   <for keys="n" dim="=/SIM/numberOfClockSettings">
+   <for keys="n" dim="=/SIM/numberOfClockSettings" >
       <template key="ClockConfig" codeGenCondition="enableClockConfiguration[%(n)]" ><![CDATA[
          \t$(ClockConfig[%(n)]://-- missing name for configuration --),\n
       ]]></template>
    </for>
 
-   <for keys="n" dim="=/SIM/numberOfClockSettings">
+   <for keys="n" dim="=/SIM/numberOfClockSettings" >
       <template key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
       ><![CDATA[
          \t{  // $(ClockConfig[%(n)]) ($(mcgClockMode[%(n)].enum[]))
@@ -1067,15 +1066,18 @@
       ]]></template>
    </for>
 
-<!--   ========== Global Clocks =============================== -->
 
-   <template where="basicInfo" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
+
+   <!--
+      Global clock frequencies
+   -->
+   <template where="usbdm" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
       \t/*
       \t * Global clocks
       \t */
       \t\n
    ]]></template>
-   <template where="basicInfo" codeGenCondition="!/MCG/enablePeripheralSupport" ><![CDATA[
+   <template where="usbdm" codeGenCondition="!/MCG/enablePeripheralSupport" ><![CDATA[
       \t/*
       \t * Global clock constants
       \t * These are provided when minimal clock generator code is used.
@@ -1095,6 +1097,7 @@
          \t/**
          \t *  %description
          \t *  %tooltip
+         \t *  (Full configuration - declaration)
          \t */
          \textern volatile uint32_t %(name);
          \t\n
@@ -1104,22 +1107,24 @@
          \t/**
          \t *  %description
          \t *  %tooltip
+         \t *  (Full configuration - definition)
          \t */
          \tvolatile uint32_t %(name);
          \t\n
       ]]></variableTemplate>
-      <variableTemplate where="basicInfo" variables="%(clock)" codeGenCondition="!/MCG/enablePeripheralSupport"
+      <variableTemplate where="usbdm" variables="%(clock)" codeGenCondition="!/MCG/enablePeripheralSupport"
                    tooltipPadding="x*xx" ><![CDATA[
          \t/**
          \t *  %description
          \t *  %tooltip
+         \t *  (Minimal configuration - definition)
          \t */
          \tconstexpr uint32_t %(name) = %valueExpression;
          \t\n
       ]]></variableTemplate>
    </for>
 
-   <!-- ************* Common ****************** -->
+   <!-- _____________ Common __________________ -->
 
    <template key="/MCG/Includes"  ><![CDATA[
    #include "osc.h"\n
@@ -1133,7 +1138,7 @@
       class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG_Lite" dim="=/SIM/numberOfClockSettings" >
    </validate>
 
-   <projectActionList id = "mcg_files" >
+   <projectActionList id="mcg_files" >
       <copy source="Startup_Code/mcg_lite.cpp"            target="Startup_Code/mcg_lite.cpp"             overwrite="true"  derived="true" />
       <copy source="Project_Headers/mcg_lite.h"           target="Project_Headers/mcg.h"                 overwrite="true"  derived="true" />
       <copy source="Snippets/mcg-lite-test.cpp"           target="Snippets/mcg-lite-test.cpp"            overwrite="true"  derived="true" />

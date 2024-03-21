@@ -4,6 +4,8 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
+   <constant key="disable_peripheral" value='"cmp->CR1 = CMP_CR1_EN(0);"' type="String" />
+
    <equation key="suppressIrqHandler"         value="" />
    <equation key="irq_parameters"             value="const CmpStatus &amp;status"  />
    <equation key="irq_dummy_parameters"       value="const CmpStatus &amp;"  />
@@ -13,9 +15,8 @@
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
-   <!-- ************* Class Declaration ****************** -->
-   <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Structname)BasicInfo&quot;" />
+   <!-- ____ Class Declaration ________ -->
+   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
    <template>
       <![CDATA[
@@ -24,12 +25,11 @@
       ]]>
    </template>
 
-   <constant key="disable_peripheral" value="&quot;cmp->CR1 = CMP_CR1_EN(0);&quot;" type="String" />
-
    <!-- Interrupts and DMA -->
    <choiceOption key="cmp_scr_interrupt" condition="cmp_scr_ier_present || cmp_scr_ief_present"
       enabledBy="irqHandlingMethod"
       typeName="CmpEvent"
+      baseType="uint8_t"
       valueFormat="CMP_SCR_IER(%s),CMP_SCR_IEF(%s)"
       description="Action on transition"
       toolTip="Enables interrupt request on comparator transition">
@@ -41,6 +41,7 @@
 
    <binaryOption key="cmp_scr_dmaen" condition="cmp_scr_dmaen_present"
       typeName="CmpDma"
+      baseType="uint8_t"
       description="DMA Enable Control"
       toolTip="Enables the DMA transfer triggered from the CMP module (If DMA supported by device)\n
                When this field is set, a DMA request is asserted when CFR or CFF is set">
@@ -74,6 +75,7 @@
    <choiceOption key="cmp_cr0_hystctr" condition="cmp_cr0_hystctr_present"
       enabledBy="enablePeripheralSupport"
       typeName="CmpHysteresis"
+      baseType="uint8_t"
       description="Comparator hard block hysteresis control"
       toolTip="Defines the programmable hysteresis level.\n
                The hysteresis values associated with each level are device specific">
@@ -83,11 +85,12 @@
       <choice value="3" name="Level 3" enum="Level_3" />
    </choiceOption>
 
-   <!-- ************* CR1 ****************** -->
+   <!-- ____ CR1 ________ -->
 
    <binaryOption key="cmp_cr1_pmode" condition="cmp_cr1_pmode_present"
       enabledBy="enablePeripheralSupport"
       typeName="CmpPower"
+      baseType="uint8_t"
       description="Power Mode Select"
       toolTip="Selects trade-off between speed and power consumption">
       <choice value="0" name="Low-Speed Comparison mode"  enum="LowSpeed"  />
@@ -97,6 +100,7 @@
    <binaryOption key="cmp_cr1_inv" condition="cmp_cr1_inv_present"
       enabledBy="enablePeripheralSupport"
       typeName="CmpPolarity"
+      baseType="uint8_t"
       description="Comparator Invert"
       toolTip="Allows selection of the polarity of the analog comparator function">
       <choice value="0" name="Not inverted" enum="Normal"   />
@@ -106,6 +110,7 @@
    <binaryOption key="cmp_cr1_trigm" condition="cmp_cr1_trigm_present"
       enabledBy="enablePeripheralSupport"
       typeName="CmpTrigger"
+      baseType="uint8_t"
       description="Trigger Mode Enable"
       toolTip="CMP and DAC are configured to CMP Trigger mode.  \n
               CMP Trigger mode depends on an external timer resource to periodically enable \n
@@ -118,6 +123,7 @@
    <choiceOption key="cmp_cr1_output" condition="cmp_cr1_ope_present || cmp_cr1_cos_present"
       enabledBy="enablePeripheralSupport"
       typeName="CmpOutput"
+      baseType="uint8_t"
       valueFormat="CMP_CR1_OPE(%s),CMP_CR1_COS(%s)"
       description="Comparator output pin source"
       toolTip="Selects whether the output pin is driven by the filtered or unfiltered comparator output">
@@ -130,6 +136,7 @@
       hidden="true"
       valueFormat="CMP_MUXCR_PSEL(%s)"
       typeName="CmpInputPlus"
+      baseType="uint8_t"
       description="Plus Input Mux Control"
       toolTip="Determines which input is selected for the plus input of the comparator" >
       <choiceExpansion value="%(i)" name='CMP_IN%(i) as positive input' enum="%(i)" keys="i" dim="8" />
@@ -139,6 +146,7 @@
       hidden="true"
       valueFormat="CMP_MUXCR_MSEL(%s)"
       typeName="CmpInputMinus"
+      baseType="uint8_t"
       description="Minus Input Mux Control"
       toolTip="Determines which input is selected for the minus input of the comparator" >
       <choiceExpansion value="%(i)" name='CMP_IN%(i) as negative input' enum="%(i)" keys="i" dim="8" />
@@ -147,6 +155,7 @@
    <choiceOption key="cmp_muxcr_psel"
       valueFormat="CMP_MUXCR_PSEL(%s)"
       typeName="CmpInputPlus"
+      baseType="uint8_t"
       description="Plus Input Mux Control"
       toolTip="Determines which input is selected for the plus input of the comparator" >
       <choiceExpansion value="%(i)" name='@SignalDescriptionFromIndex(%(i),"^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")' enum="%(i)" keys="i" dim="8" />
@@ -155,6 +164,7 @@
    <choiceOption key="cmp_muxcr_msel"
       valueFormat="CMP_MUXCR_MSEL(%s)"
       typeName="CmpInputMinus"
+      baseType="uint8_t"
       description="Minus Input Mux Control"
       toolTip="Determines which input is selected for the minus input of the comparator" >
       <choiceExpansion value="%(i)" name='@SignalDescriptionFromIndex(%(i),"^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")' enum="%(i)" keys="i" dim="8" />
@@ -166,6 +176,7 @@
    <binaryOption key="cmp_daccr_dacen" condition="cmp_daccr_dacen_present"
       enabledBy="enablePeripheralSupport"
       typeName="CmpDacEnable"
+      baseType="uint8_t"
       description="DAC Enable"
       toolTip="Enables the internal DAC">
       <choice value="0" name="Disabled" enum="Disabled" />
@@ -175,6 +186,7 @@
    <binaryOption key="cmp_daccr_vrsel" condition="cmp_daccr_vrsel_present"
       enabledBy="cmp_daccr_dacen"
       typeName="CmpDacrefSel"
+      baseType="uint8_t"
       description="DAC Reference Voltage Select"
       toolTip="Supply Voltage Reference Source Select">
       <choice value="0" name="Vin1 (Vref_OUT)"  enum="VrefOut" />
@@ -183,7 +195,8 @@
 
    <intOption key="cmp_daccr_vosel" condition="cmp_daccr_vosel_present"
       enabledBy="cmp_daccr_dacen"
-      typeName="uint8_t"
+      typeName="int"
+      baseType="int8_t"
       description="DAC level"
       toolTip="Specifies the output level of the internal DAC"
       value="31" min="0" max="63"/>
@@ -204,6 +217,7 @@
       enabledBy="enablePeripheralSupport"
       target="cmp_cr1_en;cmp_cr1_we;cmp_cr1_se;cmp_cr0_filter;cmp_fpr_filt_per"
       valueFormat="%s"
+      baseType="uint8_t"
       typeName="CmpFilterMode"
       description="Comparator Filtering Mode"
       toolTip="Disabled\n
@@ -256,6 +270,7 @@
    <binaryOption key="cmp_cr1_en"
       enabledBy="cmp_filter>0"
       typeName="CmpEnable"
+      baseType="uint8_t"
       description="Comparator Enable"
       toolTip="Enable comparator"
       disabledValue="false"
@@ -268,6 +283,7 @@
    <binaryOption key="cmp_cr1_we"
       enabledBy="cmp_filter>0"
       typeName="CmpWindowEnable"
+      baseType="uint8_t"
       description="Windowing Enable"
       toolTip="Enable the use of an external signal to qualify the comparator output (before filtering).\n
                The comparator output is held when the external signal is inactive and\n
@@ -283,6 +299,7 @@
    <binaryOption key="cmp_cr1_se"
       enabledBy="cmp_filter>0"
       typeName="CmpSampleEnable"
+      baseType="uint8_t"
       description="Sample Enable"
       toolTip="Select between the divided bus clock and an external clock for the filter block"
       disabledValue="false"
@@ -292,7 +309,7 @@
       <choice value="1" name="External clock" enum="External" isDefault="true" />
    </binaryOption>
 
-   <!-- ************* FPR ****************** -->
+   <!-- ____ FPR ________ -->
 
    <intOption key="cmp_fpr_filt_per"
       enabledBy="(cmp_filter==3)||(cmp_filter==5)||(cmp_filter>=7)"
@@ -301,20 +318,22 @@
                This has no effect if SE=1. In that case, the external SAMPLE signal is used to \n
                determine the sampling period."
       units="ticks"
+      baseType="uint8_t"
       disabledValue="0"
       value="1" min="1" max="255"/>
 
-   <floatOption key="cmp_fpr_filt_period"
+   <floatOption key="cmp_filterPeriod"
       enabledBy="cmp_filter>0"
       ref="(1.0*cmp_fpr_filt_per)/input_clock#input_clock"
-      valueFormat="%s_seconds"
+      units="s"
+      valueFormat="%s"
       description="Filter Sample Period in seconds"
       toolTip="The calculated sampling period of the comparator output filter \n
                This has no effect if SE=1. In that case, the external SAMPLE signal is used to \n
                determine the sampling period."
       derived="true"
       locked="true"
-      value="1k" min="0" units="s" />
+      value="1k" min="0" />
 
    <choiceOption key="cmp_cr0_filter"
       hidden="true"
@@ -352,7 +371,7 @@
 
    <floatOption key="cmp_fpr_filt_interval"
       enabledBy="cmp_filter>0"
-      ref="cmp_fpr_filt_period*cmp_cr0_filter_cnt"
+      ref="cmp_filterPeriod*cmp_cr0_filter_cnt"
       valueFormat="%s_seconds"
       description="Filter Sample Interval in seconds"
       toolTip="The calculated interval of the comparator output filter (sample period*number of samples)."
@@ -363,6 +382,7 @@
    <choiceOption key="cmp_cr1_mode"
       hidden="true"
       typeName="CmpMode"
+      baseType="uint8_t"
       valueFormat="CMP_CR1_SE(%s),CMP_CR1_WE(%s)"
       description="Operating mode"
       toolTip="Selects operation in sampling or windowed mode">
@@ -394,35 +414,42 @@
       toolTip="Returns the current value of the Analog Comparator output,"
    />
 
-<!-- Setters and getters -->
+   <!-- ____ Getters and Setters ____________ -->
 
-   <for keys="field           : get   : set   : genCode                 : name"
+   <for keys="field           : set   : get   : clear : genCode                 : name"
         values="
-         cmp_cr0_filter       : true  : true  : enableGettersAndSetters : FilterCount;
-         cmp_cr0_hystctr      : true  : true  : enableGettersAndSetters : Hysteresis;
-         cmp_cr1_se           : true  : true  : enableGettersAndSetters : SamppleEnable;
-         cmp_cr1_we           : true  : true  : enableGettersAndSetters : WindowingEnable;
-         cmp_cr1_trigm        : true  : true  : enableGettersAndSetters : TriggerMode;
-         cmp_cr1_pmode        : true  : true  : enableGettersAndSetters : Power;
-         cmp_cr1_inv          : true  : true  : enableGettersAndSetters : Invert;
-         cmp_cr1_cos          : true  : true  : enableGettersAndSetters : OutputSelect;
-         cmp_cr1_ope          : true  : true  : enableGettersAndSetters : OutputEnable;
-         cmp_cr1_en           : true  : true  : enableGettersAndSetters : Enable;
-         cmp_fpr_filt_per     : true  : true  : enableGettersAndSetters : FiltPeriod;
-         cmp_scr_dmaen        : true  : true  : enableGettersAndSetters : DmaEnable;
-         cmp_scr_ier          : true  : true  : enableGettersAndSetters : InterruptEnable;
-         cmp_scr_ief          : true  : true  : enableGettersAndSetters : InterruptFlag;
-         cmp_scr_edge         : true  : true  : enableGettersAndSetters : Edge;
-         cmp_scr_cout         : true  : false : enableGettersAndSetters : OutputState;
-         cmp_daccr_dacen      : true  : true  : enableGettersAndSetters : DacEnable;
-         cmp_daccr_vrsel      : true  : true  : enableGettersAndSetters : DacReferenceSelect;
-         cmp_daccr_vosel      : true  : true  : enableGettersAndSetters : DacVout;
-         cmp_muxcr_psel       : true  : true  : enableGettersAndSetters : PlusSelect;
-         cmp_muxcr_msel       : true  : true  : enableGettersAndSetters : MinusSelect" >
+
+         cmp_cr0_filter       : true  : true  : false : enableGettersAndSetters : FilterCount;
+         cmp_cr0_hystctr      : true  : true  : false : enableGettersAndSetters : Hysteresis;
+
+         cmp_cr1_se           : true  : true  : false : enableGettersAndSetters : SamppleEnable;
+         cmp_cr1_we           : true  : true  : false : enableGettersAndSetters : WindowingEnable;
+         cmp_cr1_trigm        : true  : true  : false : enableGettersAndSetters : TriggerMode;
+         cmp_cr1_pmode        : true  : true  : false : enableGettersAndSetters : Power;
+         cmp_cr1_inv          : true  : true  : false : enableGettersAndSetters : Invert;
+         cmp_cr1_cos          : true  : true  : false : enableGettersAndSetters : OutputSelect;
+         cmp_cr1_ope          : true  : true  : false : enableGettersAndSetters : OutputEnable;
+
+         cmp_cr1_en           : true  : true  : false : enableGettersAndSetters : Enable;
+
+         cmp_fpr_filt_per     : true  : true  : false : enableGettersAndSetters : FiltPeriod;
+         cmp_scr_dmaen        : true  : true  : false : enableGettersAndSetters : DmaEnable;
+         cmp_scr_ier          : true  : true  : false : enableGettersAndSetters : InterruptEnable;
+         cmp_scr_ief          : true  : true  : false : enableGettersAndSetters : InterruptFlag;
+         cmp_scr_edge         : true  : true  : false : enableGettersAndSetters : Edge;
+         cmp_scr_cout         : false : true  : false : enableGettersAndSetters : OutputState;
+
+         cmp_daccr_dacen      : true  : true  : false : enableGettersAndSetters : DacEnable;
+         cmp_daccr_vrsel      : true  : true  : false : enableGettersAndSetters : DacReferenceSelect;
+         cmp_daccr_vosel      : true  : true  : false : enableGettersAndSetters : DacVout;
+
+         cmp_muxcr_psel       : true  : true  : false : enableGettersAndSetters : PlusSelect;
+         cmp_muxcr_msel       : true  : true  : false : enableGettersAndSetters : MinusSelect" >
       <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
       ><![CDATA[
          \t/**
          \t * Set %description
+         \t * (%(field))
          \t *
          %paramDescription
          \t */
@@ -435,17 +462,29 @@
       ><![CDATA[
          \t/**
          \t * Get %description
+         \t * (%(field))
          \t *
          \t * @return %tooltip
          \t */
          \tstatic %returnType get%(name)() {
-         \t   return %returnType(%register&%mask);
+         \t   return %fieldExtract;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Clear %description
+         \t * (%(field))
+         \t */
+         \tstatic void clear%(name)() {
+         \t   %register = %register|%mask;
          \t}
          \t\n
       ]]></variableTemplate>
    </for>
 
-   <!--   ========== Misc =============================== -->
+   <!--   _____ Misc __________ -->
 
    <variableTemplate
       variables="/GPIOA/port_pcr_dse,/GPIOA/port_pcr_ode,/GPIOA/port_pcr_sre"
@@ -514,12 +553,13 @@
    ]]>
    </template>
 
-   <!--   ========== Interrupt handling =============================== -->
+   <!-- ____ Interrupt handling _____________ -->
 
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t/**
-      \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
+      \t * $(_Class) interrupt handler
+      \t * Passes control to call-back function
       \t */
       \tstatic void irqHandler() {
       \t
@@ -543,7 +583,7 @@
    ]]>
    </template>
 
-   <!--   ========== CMP Init class =============================== -->
+   <!-- ________ CMP Init class ____________________________ -->
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
@@ -609,6 +649,13 @@
       \t */
       \tclass Init {
       \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(Types...) = delete;
+      \t
       \tpublic:
       \t   /**
       \t    * Copy Constructor
@@ -623,83 +670,45 @@
    ]]>
    </template>
 
-   <!--   Member variables -->
+   <!-- ____ Init class Member variables ________ -->
 
    <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
       variables="irqHandlingMethod"
+      linePadding="xxx"
    ><![CDATA[
-      \t   /// %description
+      %multilineDescription
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="cmp_daccr_dacen,cmp_daccr_vrsel,cmp_daccr_vosel"
-   ><![CDATA[
-      \t   /// DAC Control Register
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
+   <for keys=" type        : variables                                            : init    "
+       values="%baseType   : cmp_cr0_filter_cnt,cmp_cr0_hystctr                   :   0      ;
+               %baseType   : cmp_cr1_se,cmp_cr1_we,cmp_cr1_pmode,cmp_cr1_inv,
+                             cmp_cr1_cos,cmp_cr1_ope,cmp_cr1_en                   :   0      ;
+               %baseType   : cmp_fpr_filt_per                                     :   0      ;
+               %baseType   : cmp_scr_dmaen,cmp_scr_interrupt,cmp_scr_cfr,
+                             cmp_scr_cff                                          :   0      ;
+               %baseType   : cmp_daccr_dacen,cmp_daccr_vrsel,cmp_daccr_vosel      :   0      ;
+               %baseType   : cmp_muxcr_psel,cmp_muxcr_msel                        :   0      ;
+               %baseType   : cmp_filterPeriod                                     :   0_s    ;
+               %paramType  : /PCR/nvic_irqLevel                                   :   %defaultValue   " >
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(variables)"
+         linePadding="xxx"
+      ><![CDATA[
+         %multilineDescription
+         \t   %(type) %registerName = %(init);\n\n
+      ]]></variableTemplate>
+   </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="cmp_cr0_filter, cmp_cr0_hystctr">
-   <![CDATA[
-      \t   ///  CMP Control Register 0
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="cmp_cr1_en,cmp_cr1_mode,cmp_cr1_trigm,cmp_cr1_pmode,cmp_cr1_inv,cmp_cr1_output">
-   <![CDATA[
-      \t   ///  CMP Control Register 1
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="cmp_scr_dmaen,cmp_scr_interrupt">
-   <![CDATA[
-      \t   ///  CMP Status and Control Register
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="cmp_fpr_filt_per">
-   <![CDATA[
-      \t   ///  CMP Filter Period Register
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="secondsSupport"
-      variables="cmp_fpr_filt_period">
-   <![CDATA[
-      \t   ///  CMP Filter Period Register
-      \t   Seconds period = 0_s;\n\n
-   ]]>
-   </variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="cmp_muxcr_psel, cmp_muxcr_msel">
-   <![CDATA[
-      \t   ///  CMP MUX Control Register
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
+   <!-- ____ Init class Constructors ____________ -->
 
    <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
-      variables="/PCR/nvic_irqLevel,irqLevel"
-   ><![CDATA[
-      \t   /// %description
-      \t   %returnType %registerName0 = %defaultValue;
-      \t\n
-   ]]></variableTemplate>
-
-   <!--   Constructors -->
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
-      variables="cmp_scr_interrupt, irqHandlingMethod"
-      nonDefaultParams="2"
-      defaultParamValue=",,nullptr"
+      variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
       \t    * Constructor for %description
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -709,43 +718,19 @@
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t      %registerName0 = (%registerName0 & ~%mask0) | %paramName0;
-      \t      this->%paramName1 = %paramName1;
-      \t   }\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
-      variables="/PCR/nvic_irqLevel"
-      linePadding="xxx"
-   ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      %registerName = %paramExpression;
+      \t      this->%paramName = %paramExpression;
       \t   }\n\n
    ]]></variableTemplate>
 
    <for keys="r"
-      values="
-            cmp_cr1_en;
-            cmp_cr1_mode;
-            cmp_cr1_trigm;
-            cmp_cr1_pmode;
-            cmp_cr1_inv;
-            cmp_cr1_output;
+      values="/PCR/nvic_irqLevel;
+            cmp_cr1_en;cmp_cr1_mode;cmp_cr1_trigm;
+            cmp_cr1_pmode;cmp_cr1_inv;cmp_cr1_output;
             cmp_cr0_hystctr;
-            cmp_scr_dmaen;
-            cmp_scr_interrupt;
-            cmp_muxcr_psel;
-            cmp_muxcr_msel
+            cmp_scr_dmaen;cmp_scr_interrupt;
+            cmp_muxcr_psel;cmp_muxcr_msel;
+            cmp_cr0_filter;cmp_fpr_filt_per;cmp_filterPeriod;
+            cmp_daccr_dacen;cmp_daccr_vrsel;cmp_daccr_vosel
             " >
       <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
@@ -753,6 +738,7 @@
       <![CDATA[
          \t   /**
          \t    * Constructor for %description
+         \t    * (%variables)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -762,104 +748,13 @@
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t
-         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t      %constructorFieldAssignment;
          \t   }
          \t\n
       ]]>
       </variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="cmp_cr0_filter,cmp_fpr_filt_per"
-      nonDefaultParams="2"
-      linePadding="xxx">
-   <![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      %registerName0 = (%registerName0&~%mask0) | %paramName;
-      \t      %registerName1 = %paramName1;
-      \t   }
-      \t\n
-   ]]>
-   </variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="secondsSupport"
-      variables="cmp_cr0_filter,cmp_fpr_filt_period"
-      nonDefaultParams="2"
-      linePadding="xxx">
-   <![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      %registerName0 = (%registerName0&~%mask0) | %paramName;
-      \t      period   = %paramName1;
-      \t   }
-      \t\n
-   ]]>
-   </variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="cmp_daccr_dacen,cmp_daccr_vrsel,cmp_daccr_vosel"
-      nonDefaultParams="3"
-      linePadding="xxx">
-   <![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      %registerName0 = (%registerName0&~(%mask0|%mask1)) | %paramName0 | %paramName1;
-      \t      %registerName2 = (%registerName2&~%mask2) | %macro2(%paramName2);
-      \t   }
-      \t\n
-   ]]>
-   </variableTemplate>
-
-<!--   Default Initialisation value -->
-
-   <variableTemplate codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      separator=","
-      terminator=","
-      variables="
-         cmp_cr1_en,cmp_cr1_mode,cmp_cr1_trigm,cmp_cr1_pmode,cmp_cr1_inv,cmp_cr1_output,
-         cmp_cr0_hystctr,
-         cmp_scr_dmaen,cmp_scr_interrupt,
-         cmp_cr0_filter, cmp_fpr_filt_per,
-         cmp_daccr_dacen, cmp_daccr_vrsel, cmp_daccr_vosel,
-         cmp_muxcr_psel, cmp_muxcr_msel"
-   ><![CDATA[
-      \t/**
-      \t * Default initialisation value for $(_Class)
-      \t * This value is created from Configure.usbdmProject settings
-      \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression
-      \t};
-      \t\n
-   ]]>
-   </variableTemplate>
 
    <!-- Templates -->
    <template><![CDATA[
@@ -914,8 +809,6 @@
    ]]>
    </variableTemplate>
 
-<!--   Configure methods -->
-
    <template codeGenCondition="enablePeripheralSupport" >
     <![CDATA[
       \t/**
@@ -936,8 +829,10 @@
       \t\n
    ]]></template>
 
+   <!-- ____ Init class Configure method ____ -->
+
    <template codeGenCondition="enablePeripheralSupport" >
-    <![CDATA[
+   <![CDATA[
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
@@ -947,13 +842,7 @@
       \t   // Update settings
       \t   configure(DefaultInitValue);
       \t}
-      \t\n
-   ]]></template>
-
-   <variableTemplate codeGenCondition="enablePeripheralSupport"
-      variables="cmp_cr1_en,
-                 cmp_fpr_filt_per" >
-   <![CDATA[
+      \t
       \t/**
       \t * Configure $(_BASENAME) from values specified in init
       \t *
@@ -963,53 +852,82 @@
       \t
       \t   // Enable peripheral
       \t   enable();
-      \t
-      \t   %register0 = 0;
-      \t
-      \t   uint8_t %registerName1 = init.%registerName1;
-      \t\n
-   ]]></variableTemplate>
-   <variableTemplate codeGenCondition="secondsSupport"
-      variables="cmp_cr1_en,
-                 cmp_fpr_filt_per"  >
-   <![CDATA[
-      \t   if (init.period != 0) {
-      \t      %registerName1 = convertSecondsToTicks(init.period);
-      \t   }
       \t\n
    ]]>
-   </variableTemplate>
-   <template codeGenCondition="irqHandlingMethod"
-             condition="irqHandlingMethod" >
+   </template>
+   <template codeGenCondition="irqHandlingMethod" condition="irqHandlingMethod" >
    <![CDATA[
-      \t   // Set call-backs
-      \t   setCallback(init.callbackFunction);
-      \t   enableNvicInterrupt(irqNums[0], init.irqlevel);
+      \t   // Configure call-backs
+      \t   setCallback(init.callbackFunction);\n
+   ]]>
+   </template>
+   <for keys=
+             " var                                                    : statement            "
+      values=" irqLevel                                               : enableNvicInterrupts(init.irqlevel) ;
+               cmp_cr1_en                                             : %register = 0 ;
+               cmp_fpr_filt_per                                       : uint8_t %registerName = init.%registerName " >
+      <variableTemplate codeGenCondition="enablePeripheralSupport"
+      variables="%(var)"
+      linePadding="xxx"
+      ><![CDATA[
+         \t
+         %multilineDescription
+         \t   %(statement);\n
+      ]]></variableTemplate>
+   </for>
+   <variableTemplate codeGenCondition="secondsSupport"
+      variables="cmp_fpr_filt_per, cmp_fpr_filt_per"  >
+   <![CDATA[
+      \t   if (init.filterperiod != 0) {
+      \t      %registerName0 = convertSecondsToTicks(init.filterperiod);
+      \t   }
+   ]]>
+   </variableTemplate>
+   <for keys=
+             " var                                                    : statement            "
+      values=" cmp_fpr_filt_per                                       : %register = %registerName ;
+               cmp_daccr_dacen,cmp_daccr_vrsel,cmp_daccr_vosel        : %configRegAssignment ;
+               cmp_muxcr_psel,cmp_muxcr_msel                          : %configRegAssignment ;
+               cmp_cr0_filter,cmp_cr0_hystctr                         : %configRegAssignment ;
+               cmp_scr_dmaen,cmp_scr_interrupt                        : %configRegAssignment ;
+               cmp_cr1_en,cmp_cr1_mode,cmp_cr1_pmode,cmp_cr1_inv,
+               cmp_cr1_output                                         : %configRegAssignment  " >
+      <variableTemplate codeGenCondition="enablePeripheralSupport"
+      variables="%(var)"
+      linePadding="xxx"
+      ><![CDATA[
+         \t
+         %multilineDescription
+         \t   %(statement);\n
+      ]]></variableTemplate>
+   </for>
+   <template codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t}
       \t\n
    ]]>
    </template>
 
+   <!-- ____  Default Initialisation value ____ -->
+
    <variableTemplate codeGenCondition="enablePeripheralSupport"
-             variables="cmp_scr_dmaen"  >
-   <![CDATA[
-      \t   %register0 = init.%registerName0;
-   ]]>
-   </variableTemplate>
-   <variableTemplate codeGenCondition="enablePeripheralSupport"
+      separator=","
+      terminator=","
       variables="
-         cmp_cr1_en,
-         cmp_fpr_filt_per,
-         cmp_daccr_dacen,
-         cmp_muxcr_psel,
-         cmp_cr0_filter,
-         cmp_scr_dmaen" >
-   <![CDATA[
-      \t   %register1 = %registerName1;
-      \t   %register2 = init.%registerName2;
-      \t   %register3 = init.%registerName3;
-      \t   %register4 = init.%registerName4;
-      \t   %register0 = init.%registerName0;
-      \t}
+            cmp_cr1_en,cmp_cr1_mode,cmp_cr1_trigm,cmp_cr1_pmode,cmp_cr1_inv,cmp_cr1_output,
+            cmp_cr0_hystctr,
+            cmp_scr_dmaen,cmp_scr_interrupt,
+            cmp_cr0_filter,cmp_fpr_filt_per,
+            cmp_daccr_dacen,cmp_daccr_vrsel,cmp_daccr_vosel,
+            cmp_muxcr_psel,cmp_muxcr_msel,
+            irqLevel" >
+    <![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};
       \t\n
    ]]>
    </variableTemplate>
@@ -1021,7 +939,7 @@
    ]]>
    </template>
 
-   <!-- ************* Common ****************** -->
+   <!-- ____ Common __________________ -->
 
    <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
@@ -1042,7 +960,7 @@
       <copy source="Snippets/cmp-example.cpp" target="Snippets/cmp-example.cpp" overwrite="true" derived="true"/>
    </projectActionList>
 
-   <!-- ************* Startup ****************** -->
+   <!-- ____ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
@@ -1054,15 +972,22 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <!-- ************* SIM configuration ****************** -->
+   <!-- ____ SIM configuration __________________ -->
 
-   <category name="Advanced" description="SIM configuration">
+   <category name="Advanced" description="SIM configuration"
+      toolTip="These settings only have effect if the SIM configuration is enabled" >
+      <title description="$(_BASENAME) Shared" />
+      <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+      <title description="$(_NAME) Specific" />
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
       <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
       </for>
    </category>
 
+   <!--  ____ Signal mapping __________________ -->
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 
 </fragment>

@@ -4,12 +4,12 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <equation key="irq_parameters"             value=""  />
-   <equation key="irq_dummy_parameters"       value=""  />
-   <equation key="irq_call"                   value=""  />
-   <equation key="generateDefault"            value="false"  />
-   <equation key="configureInStartupDefault"  value="false"  />
-   <xi:include href="enablePeripheral.xml" />
+   <equation key="irq_parameters"             value=""          />
+   <equation key="irq_dummy_parameters"       value=""          />
+   <equation key="irq_call"                   value=""          />
+   <equation key="generateDefault"            value="false"     />
+   <equation key="configureInStartupDefault"  value="false"     />
+   <xi:include href="enablePeripheral.xml"    />
    <title />
 
    <!-- Clock mode as indicated by mcgClockMode[%(n)] choice index -->
@@ -27,7 +27,7 @@
    <constant key="VLPR"    value="1" type="Long" />
    <constant key="HSRUN"   value="2" type="Long" />
 
-   <!-- ************* Class Declaration ****************** -->
+   <!-- _____________ Class Declaration __________________ -->
    <constant key="_class_declaration" type="String"
       value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
@@ -131,8 +131,7 @@
          description="Clock configuration[%(n)]"
          toolTip="Clock configurations for different run modes"
          value="ClockConfig_%(n)"
-         locked="false"
-         disabledValue='=(%(n)==0)?"Reset Configuration":"Disabled"' >
+         disabledValue="=(%(n)==0)?&quot;Reset Configuration&quot;:&quot;Disabled&quot;" >
 
          <if condition="%(n)==0" >
             <aliasOption key="enableClockConfiguration[%(n)]" />
@@ -1527,7 +1526,7 @@
       \t */
       \tstatic uint32_t getExternalReferenceClock() {
       \t
-      \t   return $(%variable.code[0]);
+      \t   return $(%variable0.code[0]);
       \t}\n\n
       ]]></variableTemplate>
 
@@ -1960,7 +1959,7 @@
       ]]></variableTemplate>
    </for>
 
-   <!-- ************* Common ****************** -->
+   <!-- _____________ Common __________________ -->
 
    <template key="/MCG/Includes"  ><![CDATA[
    #include "osc.h"\n

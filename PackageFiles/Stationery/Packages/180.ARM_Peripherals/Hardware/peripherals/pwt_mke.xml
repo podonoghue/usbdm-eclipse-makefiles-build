@@ -4,17 +4,16 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Pulse Width Timer" >
 
-   <equation key="irq_parameters"            type="String"  value='""'        />
-   <equation key="irq_dummy_parameters"      type="String"  value='""'        />
-   <equation key="irq_call"                  type="String"  value='""'        />
-   <equation key="generateDefault"           type="Boolean" value="false"     />
-   <equation key="configureInStartupDefault" type="Boolean" value="false"     />
+   <equation key="irq_parameters"            value=""        />
+   <equation key="irq_dummy_parameters"      value=""        />
+   <equation key="irq_call"                  value=""        />
+   <equation key="generateDefault"           value="false"     />
+   <equation key="configureInStartupDefault" value="false"     />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
    <!-- ____ Class Declaration ________ -->
-   <constant key="_class_declaration" type="String"
-      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
    <!-- ____ R1 ____ -->
    <intOption key="pwt_r1_ppw" condition="pwt_r1_ppw_present"
@@ -320,82 +319,6 @@
       ]]></variableTemplate>
    </for>
 
-   <!-- ____ Interrupt handling _____________ -->
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="/$(_STRUCTNAME)/generateSharedIrqInfo"
-   ><![CDATA[
-       \t//! Common class based callback code has been generated for this class of peripheral
-       \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
-       \t\n
-   ]]></variableTemplate>
-
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
-   <![CDATA[
-      \t/**
-      \t * Type for Pulse Width Timer call back function.
-      \t */
-      \ttypedef void (*CallbackFunction)($(irq_parameters));
-      \t
-      \t/**
-      \t * Callback to catch unhandled interrupt
-      \t */
-      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
-      \t   setAndCheckErrorCode(E_NO_HANDLER);
-      \t}
-      \t\n
-   ]]>
-   </template>
-
-   <template codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t/** Callback function for Pulse Width Timer */
-      \tstatic CallbackFunction sCallback;
-      \t
-      \t/**
-      \t * Pulse Width Timer interrupt handler
-      \t * Passes control to call-back function
-      \t */
-      \tstatic void irqHandler() {
-      \t
-      \t   // Execute call-back
-      \t   sCallback($(irq_call));
-      \t}
-      \t
-      \t/**
-      \t * Set Pulse Width Timer callback function.
-      \t *
-      \t * @param $(_basename)Callback Callback function to execute on interrupt
-      \t *                        Use nullptr to remove callback.
-      \t */
-      \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
-      \t   if ($(_basename)Callback == nullptr) {
-      \t      $(_basename)Callback = (CallbackFunction)unhandledCallback;
-      \t   }
-      \t   // Allow either no handler set yet or removing handler
-      \t   usbdm_assert(
-      \t         ((void*)sCallback == (void*)unhandledCallback) ||
-      \t         ((void*)$(_basename)Callback == (void*)unhandledCallback),
-      \t         "Handler already set");
-      \t   sCallback = $(_basename)Callback;
-      \t}
-      \t
-      \t\n
-   ]]>
-   </template>
-
-   <template where="static" codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t
-      \t/**
-      \t * Callback function for Pulse Width Timer
-      \t */
-      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = (CallbackFunction)$(_Class)Info::unhandledCallback;
-      \t
-      \t\n
-   ]]>
-   </template>
-
    <!-- ________ PWT Init class ____________________________ -->
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
@@ -585,8 +508,12 @@
    ]]></template>
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
-      \t   // Only set call-backs if feature enabled
+      \t   // Set call-backs as needed
       \t   setCallback(init.callbackFunction);
+      \t\n
+   ]]></template>
+   <template codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
       \t   enableNvicInterrupts(init.irqlevel);
       \t\n
    ]]></template>

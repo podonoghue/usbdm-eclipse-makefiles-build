@@ -61,10 +61,10 @@
       hidden="true"
       baseType="uint8_t"
       typeName="EwmService"
-      description="The EWM service mechanism requires the CPU to write two values to the SERV register:\n
-            a first data byte of 0xB4, \n
-            followed by a second data byte of 0x2C."
-      toolTip="Values to write to service the EWM">
+      toolTip="The EWM service mechanism requires the CPU to write two values to the SERV register:\n
+               - a first data byte of 0xB4, \n
+               - followed by a second data byte of 0x2C."
+      description="Values to write to service the EWM">
       <choice value="0xB4" name="First value in sequence"  enum="First"  />
       <choice value="0x2C" name="Second value in sequence" enum="Second" />
    </choiceOption>
@@ -322,7 +322,7 @@
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -351,7 +351,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -470,7 +470,8 @@
             ewm_ctrl_input,
             ewm_clkprescaler_clk_div,
             ewm_cmpl_comparel,
-            ewm_cmph_compareh
+            ewm_cmph_compareh,
+            irqLevel
          "
    ><![CDATA[
       \t/**

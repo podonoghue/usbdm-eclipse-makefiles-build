@@ -115,8 +115,7 @@
       hidden="true"
       typeName="UsbdcdTimeoutStatus"
       toolTip="Indicates whether the detection sequence has passed the 1s timeout threshhold."
-      description="Timeout Flag\n
-                   Indicates whether the detection sequence has passed the timeout threshhold" >
+      description="Timeout Flag" >
       <choice name="&lt;= 1 second"                value="0" enum="NoTimeout" />
       <choice name="&gt;= 1 second since contact"  value="1" enum="TimeoutOccurred" />
    </binaryOption >

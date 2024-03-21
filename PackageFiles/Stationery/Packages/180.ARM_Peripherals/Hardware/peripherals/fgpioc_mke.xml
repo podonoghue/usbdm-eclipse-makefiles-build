@@ -4,9 +4,9 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="General Purpose Input/Output" >
 
-   <constant key="suppressInstance"          type="Boolean"  value="true"         />
-   <equation key="generateDefault"           type="Boolean" value="false"         />
-   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
+   <constant key="suppressInstance"          value="true"    />
+   <equation key="generateDefault"           value="false"   />
+   <equation key="configureInStartupDefault" value="false"   />
    <xi:include href="enablePeripheral.xml" />
    <title />
 

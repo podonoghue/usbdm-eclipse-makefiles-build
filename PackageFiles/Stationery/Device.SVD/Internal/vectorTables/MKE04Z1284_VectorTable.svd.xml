@@ -1,5 +1,5 @@
 <!--
-Devices using this vector table: 
+Devices using this vector table:
    MKE04Z1284
 -->
 <interrupts>
@@ -96,7 +96,7 @@ Devices using this vector table:
       <peripheral>FTM2</peripheral>
    </interrupt>
    <interrupt>
-      <name>RTC_Alarm</name>
+      <name>RTC</name>
       <description>Real Time Clock</description>
       <value>20</value>
       <peripheral>RTC</peripheral>

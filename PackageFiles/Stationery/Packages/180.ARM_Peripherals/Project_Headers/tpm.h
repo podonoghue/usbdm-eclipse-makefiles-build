@@ -30,6 +30,30 @@
 namespace USBDM {
 
 /**
+ * Calculate a TPM channel number using an offset from an existing number
+ *
+ * @param pitChannelNum Base channel to use
+ * @param offset  Offset from base channel
+ *
+ * @return  TPM channel number calculated from channel+offset
+ */
+constexpr TpmChannelNum inline operator+(TpmChannelNum pitChannelNum, unsigned offset) {
+   return TpmChannelNum(unsigned(pitChannelNum) + offset);
+}
+
+/**
+ * Calculate a TPM channel number using an offset from an existing number
+ *
+ * @param pitChannelNum Base channel to use
+ * @param offset  Offset from base channel
+ *
+ * @return  TPM channel number calculated from channel+offset
+ */
+constexpr TpmChannelNum inline operator+(TpmChannelNum pitChannelNum, int offset) {
+   return TpmChannelNum(unsigned(pitChannelNum) + unsigned(offset));
+}
+
+/**
  * @addtogroup TPM_Group TPM, PWM, Input capture and Output compare
  * @brief Pins used for PWM, Input capture and Output compare
  * @{

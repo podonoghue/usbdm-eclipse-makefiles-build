@@ -57,8 +57,8 @@
 
    <template  codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
-      \t * Class used to do initialisation of the $(_Baseclass)Output initilisation settings
-      \t * When applied the FTM outputs are initilised to the values specified in the constructor
+      \t * Class used to do initialisation of the $(_Baseclass)Output initialisation settings
+      \t * When applied the FTM outputs are initialised to the values specified in the constructor
       \t *
       \t * This class has a templated constructor that accepts various values.
       \t *

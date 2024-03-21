@@ -1399,7 +1399,7 @@
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -1428,7 +1428,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -1634,7 +1634,8 @@
             i2s_mcr_moe,
             i2s_mcr_mics,
             i2s_mdr_fract,
-            i2s_mdr_divide
+            i2s_mdr_divide,
+            irqLevel
          "
    ><![CDATA[
       \t/**

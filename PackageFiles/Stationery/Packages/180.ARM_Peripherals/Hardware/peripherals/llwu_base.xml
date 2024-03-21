@@ -325,7 +325,7 @@
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -399,7 +399,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -546,11 +546,11 @@
    </for>
 
    <variableTemplate codeGenCondition="enablePeripheralSupport"
-      variables="llwu_rst_llrste, llwu_rst_rstfilt"
+      variables="llwu_rst_llrste, llwu_rst_rstfilt, irqLevel"
       terminator=","
       separator=","
    ><![CDATA[
-      \t   %symbolicExpression0, %symbolicExpression1,  \n
+      \t   %initExpression,  \n
    ]]></variableTemplate>
 
    <template codeGenCondition="enablePeripheralSupport"
@@ -586,16 +586,20 @@
       \t */
       \tstatic void configure(const Init &init) {
       \t
-      \t   // Enable peripheral clock
       \t\n
    ]]></template>
-   <template codeGenCondition="enablePeripheralSupport"
+   <template codeGenCondition="irqHandlingMethod"
       condition="irqHandlingMethod" >
    <![CDATA[
       \t   setCallback(init.callbackFunction);
-      \t   enableNvicInterrupts(init.irqlevel);
       \t\n
    ]]></template>
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
+      variables="irqLevel" >
+   <![CDATA[
+      \t   enableNvicInterrupts(init.irqlevel);
+      \t\n
+   ]]></variableTemplate>
    <for keys="r" dim="1,4" >
       <template codeGenCondition="enablePeripheralSupport"
          condition='="llwu_pf%(r)_present"' >

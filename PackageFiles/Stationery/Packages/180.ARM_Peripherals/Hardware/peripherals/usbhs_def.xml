@@ -12,12 +12,8 @@
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
-   <template key="/USBHS/declarations"  ><![CDATA[
-   \t/**
-   \t * Class representing $(_NAME)
-   \t */
-   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
-   ]]></template>
+   <!-- _____ Class Declaration _______ -->
+   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >

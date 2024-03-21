@@ -742,6 +742,19 @@ protected:
       adc->SC1[adcPretrigger] = sc1Value;
    }
 #endif
+   /**
+    * Initiates a conversion but does not wait for it to complete.
+    * Intended for use with interrupts or DMA.
+    *
+    * @param[in] sc1Value SC1 register value.
+    *                     This includes channel, differential mode and interrupts enable.
+    * @param adcResolution      New Resolution to use (persistent)
+    */
+   static void startConversion(const int sc1Value, AdcResolution adcResolution) {
+      // Trigger conversion
+      adc->CFG1 = (adc->CFG1&~ADC_CFG1_MODE_MASK)|adcResolution;
+      adc->SC1[0] = sc1Value;
+   };
 
    /**
     * Initiates a conversion but does not wait for it to complete.
@@ -949,6 +962,21 @@ public:
                   "ADC not configured for interrupts. Modify Configure.usbdmProject");
          }
          AdcBase_T::startConversion(channel|adcInterrupt);
+      };
+
+      /**
+       * Initiates a conversion but does not wait for it to complete.
+       * Intended for use with interrupts or DMA.
+       *
+       * @param adcResolution      New Resolution to use (persistent)
+       * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
+       */
+      static void startConversion(AdcResolution adcResolution, AdcAction adcInterrupt=AdcAction_None) {
+         if constexpr(!Info::irqHandlerInstalled) {
+            usbdm_assert((adcInterrupt == AdcAction_None),
+                  "ADC not configured for interrupts. Modify Configure.usbdmProject");
+         }
+         AdcBase_T::startConversion(channel|adcInterrupt, adcResolution);
       };
 
       /**
