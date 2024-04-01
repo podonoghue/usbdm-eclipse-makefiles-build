@@ -574,10 +574,10 @@
       <peripheral baseName="GPIO"     instance="B"        instanceList="GPIOA;GPIOB;GPIOC" version="fgpioa_0xf8000000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock clockEnable="SIM->SCGC5 = SIM->SCGC5 | SIM_SCGC5_PORTB_MASK;" clockDisable="SIM->SCGC5 = SIM->SCGC5 &amp; ~SIM_SCGC5_PORTB_MASK;" />
-         <irq num="PORTB_PORTC_IRQn" />
+         <irq num="PORTBC_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="GPIOA;GPIOB;GPIOC" key="/GPIOB/_instanceList" />
          <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/GPIOB/_hardwareIrqCount" />
-         <param type="StringVariable"         name="_hardwareIrqNums"               value="PORTB_PORTC_IRQn" key="/GPIOB/_hardwareIrqNums" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="PORTBC_IRQn"      key="/GPIOB/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/GPIOB/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/GPIOB/_present" />
          <param type="BooleanVariable"        name="gpio_gpchr_gpwd_present"        value="true"             key="/GPIOB/gpio_gpchr_gpwd_present" />
@@ -635,10 +635,10 @@
       <peripheral baseName="GPIO"     instance="C"        instanceList="GPIOA;GPIOB;GPIOC" version="fgpioa_0xf8000000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock clockEnable="SIM->SCGC5 = SIM->SCGC5 | SIM_SCGC5_PORTC_MASK;" clockDisable="SIM->SCGC5 = SIM->SCGC5 &amp; ~SIM_SCGC5_PORTC_MASK;" />
-         <irq num="PORTB_PORTC_IRQn" />
+         <irq num="PORTBC_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="GPIOA;GPIOB;GPIOC" key="/GPIOC/_instanceList" />
          <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/GPIOC/_hardwareIrqCount" />
-         <param type="StringVariable"         name="_hardwareIrqNums"               value="PORTB_PORTC_IRQn" key="/GPIOC/_hardwareIrqNums" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="PORTBC_IRQn"      key="/GPIOC/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_hasPcrTable"                   value="true"             key="/GPIOC/_hasPcrTable" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/GPIOC/_present" />
          <param type="BooleanVariable"        name="gpio_gpchr_gpwd_present"        value="true"             key="/GPIOC/gpio_gpchr_gpwd_present" />
@@ -1159,10 +1159,10 @@
       </peripheral>
       <peripheral baseName="PMC"      instance=""         instanceList="PMC"  version="pmc_mkl27644">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPmc" />
-         <irq num="PMC_DCDC_IRQn" />
+         <irq num="PMC_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="PMC"              key="/PMC/_instanceList" />
          <param type="LongVariable"           name="_hardwareIrqCount"              value="1"                key="/PMC/_hardwareIrqCount" />
-         <param type="StringVariable"         name="_hardwareIrqNums"               value="PMC_DCDC_IRQn"    key="/PMC/_hardwareIrqNums" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value="PMC_IRQn"         key="/PMC/_hardwareIrqNums" />
          <param type="BooleanVariable"        name="_present"                       value="true"             key="/PMC/_present" />
          <param type="BooleanVariable"        name="pmc_lvdsc1_lvdack_present"      value="true"             key="/PMC/pmc_lvdsc1_lvdack_present" />
          <param type="BooleanVariable"        name="pmc_lvdsc1_lvdf_present"        value="true"             key="/PMC/pmc_lvdsc1_lvdf_present" />

@@ -1632,16 +1632,16 @@
          \t%(static)Ticks convertSecondsToTicks(Seconds seconds)%(const) {
          \t
          \t   // Calculate period
-         \t   float    tickRate = getTickFrequencyAsFloat();
-         \t   uint64_t rv       = rintf((float)seconds*tickRate);
-         \t   usbdm_assert(rv <= 0xFFFFUL, "Interval is too long");
-         \t   if (rv > 0xFFFFUL) {
+         \t   float tickRate = getTickFrequencyAsFloat();
+         \t   float rv       = rintf((float)seconds*tickRate);
+         \t   usbdm_assert(rv <= float(0xFFFFUL), "Interval is too long");
+         \t   if (rv > float(0xFFFFUL)) {
          \t      // Attempt to set too long a period
          \t      setErrorCode(E_TOO_LARGE);
          \t   }\n
       ]]></template>
       <template key="/$(_BASENAME)/%(key)" where="all" discardRepeats="true" codeGenCondition="%(isStatic)" ><![CDATA[
-         \t   if (rv < Info::minimumInterval) {
+         \t   if (rv < float(Info::minimumInterval)) {
          \t      // Attempt to set too short a period
          \t      setErrorCode(E_TOO_SMALL);
          \t   }\n

@@ -1278,7 +1278,12 @@
 
 <!-- ========== SOPT7 =============================== -->
 
-   <template key="AdcInit_description" ><![CDATA[
+   <variableTemplate where="basicInfo"
+      variables="
+         sim_sopt7_adc0trigger,sim_sopt7_adc0trgsel,
+         sim_sopt7_adc1trigger,sim_sopt7_adc1trgsel"
+      linePadding="xxx"
+   ><![CDATA[
       \t/**
       \t * Class used to do initialisation of all Adc trigger sources
       \t *
@@ -1286,23 +1291,14 @@
       \t *
       \t * Example:
       \t * @code
-      \t * static const AdcInit adcInit {
+      \t * static const AdcHardwareTriggerInit adcHardwareTriggerInit {
       \t * };
       \t *
       \t * // Initialise Adc signals from values specified above
-      \t * Sim::configure(adcInit)
+      \t * Sim::configure(adcHardwareTriggerInit)
       \t * @endcode
       \t */
-   ]]></template>
-
-   <variableTemplate where="basicInfo"
-      variables="
-         sim_sopt7_adc0trigger,sim_sopt7_adc0trgsel,
-         sim_sopt7_adc1trigger,sim_sopt7_adc1trgsel"
-      linePadding="xxx"
-   ><![CDATA[
-$(AdcInit_description)
-      \tclass AdcInit {
+      \tclass AdcHardwareTriggerInit {
       \t
       \tpublic:
       \t   /// Adc signals
@@ -1311,12 +1307,12 @@ $(AdcInit_description)
       \t   /**
       \t    * Copy Constructor
       \t    */
-      \t   constexpr AdcInit(const AdcInit &other) = default;
+      \t   constexpr AdcHardwareTriggerInit(const AdcHardwareTriggerInit &other) = default;
       \t
       \t   /**
       \t    * Default Constructor
       \t    */
-      \t   constexpr AdcInit() = default;
+      \t   constexpr AdcHardwareTriggerInit() = default;
       \t\n
    ]]></variableTemplate>
 
@@ -1334,7 +1330,7 @@ $(AdcInit_description)
          %paramDescription
          \t    */
          \t   template <typename... Types>
-         \t   constexpr AdcInit(%params, Types... rest) : AdcInit(rest...) {
+         \t   constexpr AdcHardwareTriggerInit(%params, Types... rest) : AdcHardwareTriggerInit(rest...) {
          \t
          \t      %registerName = (%registerName & ~%mask) | %paramExpression;
          \t   }
@@ -1355,7 +1351,7 @@ $(AdcInit_description)
          %paramDescription
          \t    */
          \t   template <typename... Types>
-         \t   constexpr AdcInit(%params, Types... rest) : AdcInit(rest...) {
+         \t   constexpr AdcHardwareTriggerInit(%params, Types... rest) : AdcHardwareTriggerInit(rest...) {
          \t
          \t      %registerName = (%registerName & ~%mask) | %paramExpression;
          \t   }
@@ -1372,7 +1368,7 @@ $(AdcInit_description)
       \t/**
       \t * Configure ADC trigger sources from values specified
       \t */
-      \tstatic void configure(const AdcInit &config) {\n
+      \tstatic void configure(const AdcHardwareTriggerInit &config) {\n
       \t   %register = (%register&~%mask) |
       \t                config.%registerName;
       \t}
@@ -1389,9 +1385,30 @@ $(AdcInit_description)
       \t\n
    ]]></variableTemplate>
 
+   <!-- ____  Default ADC Hardware Trigger Initialisation value ____ -->
+
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
+      separator=","
+      terminator=","
+      variables="
+         sim_sopt7_adc0trigger,sim_sopt7_adc0trgsel,
+         sim_sopt7_adc1trigger,sim_sopt7_adc1trgsel"
+   ><![CDATA[
+      \t/**
+      \t * Default initialisation value for ADC hardware triggers
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr AdcHardwareTriggerInit DefaultAdcHardwareTriggerInitValue = {%initExpression
+      \t};
+      \t\n
+   ]]></variableTemplate>
+
    <for keys="p" values=";0;1">
 
-      <template key="Adc%(p)Init_description" ><![CDATA[
+      <variableTemplate where="basicInfo"
+         variables="sim_sopt7_adc%(p)trigger,sim_sopt7_adc%(p)trgsel"
+            linePadding="xxx"
+      ><![CDATA[
          \t/**
          \t * Class used to do initialisation of Adc%(p) trigger sources
          \t *
@@ -1406,13 +1423,6 @@ $(AdcInit_description)
          \t * adc%(p)Init.configure()
          \t * @endcode
          \t */
-      ]]></template>
-
-      <variableTemplate where="basicInfo"
-         variables="sim_sopt7_adc%(p)trigger,sim_sopt7_adc%(p)trgsel"
-            linePadding="xxx"
-      ><![CDATA[
-$(Adc%(p)Init_description)
          \tclass Adc%(p)Init {
          \t
          \tpublic:

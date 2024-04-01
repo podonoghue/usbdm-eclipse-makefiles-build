@@ -132,7 +132,29 @@
       <choice value="1,0" name="Filtered"             enum="Filtered" />
    </choiceOption>
 
-   <choiceOption key="cmp_muxcr_plus"
+   <choiceOption key="cmp_muxcr_psel"
+      valueFormat="CMP_MUXCR_PSEL(%s)"
+      typeName="CmpInputPlus"
+      baseType="uint8_t"
+      description="Plus Input Mux Control"
+      toolTip="Determines which input is selected for the plus input of the comparator" >
+      <choiceExpansion value="%(i)"  enum="%(i)"
+                       name='@SignalDescriptionFromIndex(%(i),"^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
+                       keys="i" dim="8" />
+   </choiceOption>
+
+   <choiceOption key="cmp_muxcr_msel"
+      valueFormat="CMP_MUXCR_MSEL(%s)"
+      typeName="CmpInputMinus"
+      baseType="uint8_t"
+      description="Minus Input Mux Control"
+      toolTip="Determines which input is selected for the minus input of the comparator" >
+      <choiceExpansion value="%(i)"  enum="%(i)"
+                       name='@SignalDescriptionFromIndex(%(i),"^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
+                       keys="i" dim="8" />
+   </choiceOption>
+
+   <!--  choiceOption key="cmp_muxcr_plus"
       hidden="true"
       valueFormat="CMP_MUXCR_PSEL(%s)"
       typeName="CmpInputPlus"
@@ -150,25 +172,7 @@
       description="Minus Input Mux Control"
       toolTip="Determines which input is selected for the minus input of the comparator" >
       <choiceExpansion value="%(i)" name='CMP_IN%(i) as negative input' enum="%(i)" keys="i" dim="8" />
-   </choiceOption>
-
-   <choiceOption key="cmp_muxcr_psel"
-      valueFormat="CMP_MUXCR_PSEL(%s)"
-      typeName="CmpInputPlus"
-      baseType="uint8_t"
-      description="Plus Input Mux Control"
-      toolTip="Determines which input is selected for the plus input of the comparator" >
-      <choiceExpansion value="%(i)" name='@SignalDescriptionFromIndex(%(i),"^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")' enum="%(i)" keys="i" dim="8" />
-   </choiceOption>
-
-   <choiceOption key="cmp_muxcr_msel"
-      valueFormat="CMP_MUXCR_MSEL(%s)"
-      typeName="CmpInputMinus"
-      baseType="uint8_t"
-      description="Minus Input Mux Control"
-      toolTip="Determines which input is selected for the minus input of the comparator" >
-      <choiceExpansion value="%(i)" name='@SignalDescriptionFromIndex(%(i),"^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")' enum="%(i)" keys="i" dim="8" />
-   </choiceOption>
+   </choiceOption -->
 
    <!-- DAC Configuration -->
    <title description="Internal DAC Configuration" />
@@ -195,7 +199,7 @@
 
    <intOption key="cmp_daccr_vosel" condition="cmp_daccr_vosel_present"
       enabledBy="cmp_daccr_dacen"
-      typeName="int"
+      typeName="CmpDacLevel"
       baseType="int8_t"
       description="DAC level"
       toolTip="Specifies the output level of the internal DAC"
@@ -472,10 +476,12 @@
          \t\n
       ]]></variableTemplate>
       <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
-      ><![CDATA[
+         tooltipPadding="x*x"      ><![CDATA[
          \t/**
          \t * Clear %description
          \t * (%(field))
+         \t *
+         \t * %tooltip
          \t */
          \tstatic void clear%(name)() {
          \t   %register = %register|%mask;
@@ -754,7 +760,6 @@
       ]]>
       </variableTemplate>
    </for>
-
 
    <!-- Templates -->
    <template><![CDATA[

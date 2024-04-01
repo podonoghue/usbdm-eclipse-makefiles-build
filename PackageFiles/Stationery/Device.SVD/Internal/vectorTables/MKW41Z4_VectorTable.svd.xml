@@ -1,5 +1,5 @@
 <!--
-Devices using this vector table: 
+Devices using this vector table:
    MKW41Z4
 -->
 <interrupts>
@@ -36,7 +36,7 @@ Devices using this vector table:
       <peripheral>FTFA</peripheral>
    </interrupt>
    <interrupt>
-      <name>PMC_DCDC</name>
+      <name>PMC</name>
       <description>Power Management Controller, DC-DC converter</description>
       <value>6</value>
       <peripheral>PMC</peripheral>
@@ -187,7 +187,7 @@ Devices using this vector table:
       <peripheral>PORTA</peripheral>
    </interrupt>
    <interrupt>
-      <name>PORTB_PORTC</name>
+      <name>PORTBC</name>
       <description>General Purpose Input/Output</description>
       <value>31</value>
       <peripheral>PORTB</peripheral>

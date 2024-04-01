@@ -722,12 +722,12 @@
                   <graphicItem id="BUS_CLK.COP"               var="/SIM/system_bus_clock[%(n)]"        type="reference"   params="250,  70, 150, 40"        />
                   <graphicItem id="COP_WINDOW,NONAME"         var="/SIM/sim_copc_copw"                 type="annotation"  params="185,  70, 100, 18"                              />
 
-                  <graphicItem id=""                          var=""                                   type="connector"   params="LPO_OSC.COP,0, /2^5,0"  />
-                  <graphicItem id=""                          var=""                                   type="connector"   params="LPO_OSC.COP,0, /2^8,0"  />
-                  <graphicItem id=""                          var=""                                   type="connector"   params="LPO_OSC.COP,0, /2^10,0"  />
-                  <graphicItem id=""                          var=""                                   type="connector"   params="BUS_CLK.COP,0, /2^13,0"  />
-                  <graphicItem id=""                          var=""                                   type="connector"   params="BUS_CLK.COP,0, /2^16,0"  />
-                  <graphicItem id=""                          var=""                                   type="connector"   params="BUS_CLK.COP,0, /2^18,0"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="LPO_OSC.COP,0, /2^5,0,  x+40,d,y,x"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="LPO_OSC.COP,0, /2^8,0,  x+40,y,x"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="LPO_OSC.COP,0, /2^10,0, x+40,y,x"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="BUS_CLK.COP,0, /2^13,0, x+40,d,y,x"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="BUS_CLK.COP,0, /2^16,0, x+40,y,x"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="BUS_CLK.COP,0, /2^18,0, x+40,y,x"  />
 
                   <graphicItem id="/2^5"                      var=""                                   type="label"       params="430, -10, 50, small"       />
                   <graphicItem id="/2^8"                      var=""                                   type="label"       params="430,  10, 50, small"       />

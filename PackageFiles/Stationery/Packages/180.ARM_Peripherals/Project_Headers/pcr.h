@@ -906,7 +906,7 @@ public:
       static_assert(portIrqNum>=0, "Port doesn't support interrupts or they are disabled");
       PcrBase::setPinCallback(portIrqNum, pinCallback);
    }
-#endif // /GPIO/irqHandlingMethod   
+#endif // /GPIO/irqHandlingMethod
 
    /**
     * Enable Pin interrupts in NVIC.
@@ -1263,6 +1263,119 @@ class PcrTable_T : public Pcr_T<Info::info[index].pcrValue, Info::info[index].pi
 #define USBDM_OR5(a,b,c,d,e)   (PcrValue)(a|b|c|d|e)
 #define USBDM_OR6(a,b,c,d,e,f) (PcrValue)(a|b|c|d|e|f)
 #endif
+
+/**
+ * Helper class to wrap member functions as static callback function
+ *
+ * @tparam T      Type of class containing callback
+ * @tparam unique Type used to obtain unique instance
+ * @tparam P      Parameters of callback
+ */
+template<typename T, typename unique, typename... P>
+class CallbackWrapper {
+
+   typedef  void(T::*TMemberFunction)(P...);
+
+   inline static TMemberFunction memberFunction;
+   inline static T*              classInstance;
+
+private:
+   /** No Default Constructor */
+   constexpr CallbackWrapper() = delete;
+   
+   /** No Copy Constructor */
+   constexpr CallbackWrapper(const CallbackWrapper &) = delete;
+
+   /** No Copy-Assignment */
+   CallbackWrapper& operator=(const CallbackWrapper&) = delete; 
+   
+public:
+   /**
+    * Function to wrap a member function as a static callback function
+    *
+    * @param classInstance    Reference to instance of class
+    * @param memberFunction   Pointer to the member function
+    *
+    * @return  Wrapper
+    */
+   constexpr CallbackWrapper(T *classInstance, TMemberFunction memberFunction) {
+      CallbackWrapper::classInstance  = classInstance;
+      CallbackWrapper::memberFunction = memberFunction;
+   }
+
+   /**
+    * Static callback function
+    *
+    * @param args
+    */
+   static void callback(P... args) {
+      (classInstance->*memberFunction)(args...);
+   }
+};
+
+/**
+ * Function to wrap a member function as a static callback function
+ *
+ * @tparam T               Type of class containing callback (inferred)
+ *
+ * @param classInstance    Reference to instance of class
+ * @param memberFunction   Pointer to the member function
+ *
+ * @return  Wrapper
+ */
+template<typename T>
+inline auto wrapCallback(T &classInstance, void (T::*memberFunction)()) {
+   static CallbackWrapper<T, PinIndex> sClass(&classInstance, memberFunction);
+   return sClass.callback;
+}
+
+/**
+ * Function to wrap a member function as a static callback function
+ *
+ * @tparam T               Type of class containing callback (inferred)
+ *
+ * @param classInstance    Pointer to instance of class
+ * @param memberFunction   Pointer to the member function
+ *
+ * @return  Wrapper
+ */
+template<typename T>
+inline auto wrapCallback(T *classInstance, void (T::*memberFunction)()) {
+   static CallbackWrapper<T, PinIndex> sClass(classInstance, memberFunction);
+   return sClass.callback;
+}
+
+/**
+ * Function to wrap a member function as a static callback function
+ *
+ * @tparam T               Type of class containing callback (inferred)
+ *
+ * @param classInstance    Reference to instance of class
+ * @param memberFunction   Pointer to the member function
+ *
+ * @return  Wrapper
+ */
+template<typename T, typename... P>
+auto wrapCallback(T &classInstance, void (T::*memberFunction)(P...)) {
+   static CallbackWrapper<T, PinIndex, P...> sClass(&classInstance, memberFunction);
+   return sClass.callback;
+}
+
+/**
+ * Function to wrap a member function as a static callback function
+ *
+ * @tparam T               Type of class containing callback (inferred)
+ *
+ * @param classInstance    Pointer to instance of class
+ * @param memberFunction   Pointer to the member function
+ *
+ * @return  Wrapper
+ */
+template<typename T, typename... P>
+auto wrapCallback(T *classInstance, void (T::*memberFunction)(P...)) {
+   static CallbackWrapper<T, PinIndex, P...> sClass(classInstance, memberFunction);
+   return sClass.callback;
+}
 
 #pragma GCC pop_options
 

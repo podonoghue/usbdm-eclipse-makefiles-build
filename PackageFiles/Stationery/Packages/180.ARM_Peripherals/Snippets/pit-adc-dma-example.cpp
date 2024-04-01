@@ -16,27 +16,31 @@
 using namespace USBDM;
 
 // Connection - change as required
-using Led          = $(/HARDWARE/Led2:GpioB<1,ActiveLow>);
-using Pwm          = $(/HARDWARE/Ftm1:Ftm0\:\:Channel<0>);
-using MyAdcChannel = $(/HARDWARE/Analogue0:MyAdc\:\:Channel<19>);
-using MyAdc        = MyAdcChannel::OwningAdc;
+using Led          = RGB_Green;     //GpioA<2,  ActiveLow>;
+using Pwm          = Timer_D7;      //Ftm0::Channel<0>;
+using MyAdcChannel = Analogue_A0;   //Adc0::Channel<AdcChannelNum_3>
 using MyTmrChannel = Pit::Channel<0>;
+
+// DMA channel number to use
+static constexpr DmaChannelNum DMA_CHANNEL = DmaChannelNum_1;
+static constexpr Dma0IrqNum    DMA_IRQNUM  = Dma0IrqNum_Ch1;
 
 /**
  * This example used the PIT to trigger 100 ADC conversions @1ms interval.
  * Each conversion result is captured by the DMAC and transferred to memory.
  *
- * +------------+     +-----------+     +-----------+     +----------+
- * |            |     |           |     |           |     |          |
- * |    PIT     | ==> |    ADC    | ==> |    DMA    | ==> |  Memory  |
- * |            |     |           |     |           |     |          |
- * +------------+     +-----------+     +-----------+     +----------+
+ * +------------+     +-----------+     +----------+     +----------+
+ * |            |     |           |     |          |     |          |
+ * |    PIT     | ==> |    ADC    | ==> |   DMAC   | ==> |  Memory  |
+ * |            |     |           |     |          |     |          |
+ * +------------+     +-----------+     +----------+     +----------+
  *
  * Requires:
  *  DMAx_IRQHandler
  *  PITx_IRQHandler
+ *  ADCx_IRQHandler
  *
- *  Use loop-back from PWM (FTM output) to ADC channel
+ *  Use external link from PWM (FTM) output to ADC channel input for changing input to acquire
  */
 
 /**
@@ -46,23 +50,28 @@ using MyTmrChannel = Pit::Channel<0>;
  */
 static void configureAdc() {
 
-   // Enable and configure ADC with mostly default settings
-   MyAdc::configure(AdcResolution_16bit_se);
-
-   // Calibrate before use
-   MyAdc::calibrate();
-
-   // Set averaging to reduce noise
-   MyAdc::setAveraging(AdcAveraging_16);
-
-   // Configure the ADC to use hardware with trigger 0 + DMA
-   MyAdcChannel::enableHardwareConversion(AdcPretrigger_0, AdcInterrupt_Disabled, AdcDma_Enabled);
+   // Configure ADC + channel
+   static const MyAdcChannel::Owner::Init adcInit {
+      AdcResolution_16bit_se,       // Resolution
+      AdcAveraging_16,              // Set averaging to reduce noise
+      AdcTrigger_Hardware,          // Use hardware trigger
+      AdcPretrigger_0,              // Set up pretriggerA to use given channel with interrupt
+      MyAdcChannel::CHANNEL,
+      AdcAction_None,
+      AdcDma_Enabled,               // Use DMA for results
+      AdcClockSource_Asynch,        // Use async (internal) clock
+   };
+   MyAdcChannel::Owner::configure(adcInit);
 
    // Connect channel to pin
    MyAdcChannel::setInput();
 
-   // Connect ADC trigger 0 to PIT
-   SimInfo::setAdc0Triggers(SimAdc0TriggerMode_Alt_PreTrigger_0, SimAdc0TriggerSrc_PitCh0);
+   // Connect ADC trigger 0 (SCA) to PIT channel 0
+   // Note ADC trigger number and Pit channel must agree with definitions
+   static const SimInfo::AdcHardwareTriggerInit adcTriggerInit {
+      SimAdc0TriggerMode_Alt_PreTrigger_0, SimAdc0TriggerSrc_PitCh0
+   };
+   SimInfo::configure(adcTriggerInit);
 
    // Check for errors so far
    checkError();
@@ -78,24 +87,21 @@ bool complete;
  * Stops PIT generating events
  * Clears DMA IRQ
  */
-void dmaCallback(DmaChannelNum channel) {
+void dmaCallback() {
 
-   // Only one channel operating - don't bother checking which channel.
+   // Assume individual channel call-backs so no need to check IRQ source
 
    // Clear status
-   Dma0::clearInterruptRequest(channel);
+   Dma0::clearInterruptRequest(DMA_CHANNEL);
 
    // Clear LED for debug
    Led::off();
-
-   // Disable PIT->ADC requests
-   MyTmrChannel::disable();
 
    // Flag complete to main-line
    complete = true;
 }
 
-uint16_t buffer[100] = {1,2,3,4,5,6,7,8,9};
+static std::array<uint16_t, 100> buffer  = {1,2,3,4,5,6,7,8,9};
 
 /**
  * Configure the DMA
@@ -103,9 +109,6 @@ uint16_t buffer[100] = {1,2,3,4,5,6,7,8,9};
  * - Transfers results from the ADC to memory buffer
  */
 static void configureDma() {
-
-   // DMA channel number to use
-   static constexpr DmaChannelNum DMA_CHANNEL = DmaChannelNum_1;
 
    /*
     * Structure to define a DMA transfer
@@ -130,52 +133,48 @@ static void configureDma() {
     */
    /**
     * Structure to define the Transmit DMA transfer
-    *
-    * Note: This uses a 32-bit transfer even though the transmit data is only 8-bit
     */
-   static constexpr DmaTcd tcd = DmaTcd (
-      /* Source address                 */ MyAdc::adcR(0),                 // ADC result register
+   static const DmaTcd tcd {
+      DmaInfo {
+      /* Source address                 */ MyAdcChannel::Owner::adcR(0),   // ADC result register
       /* Source offset                  */ 0,                              // SADDR does not change
-      /* Source size                    */ DmaSize_16bit,                  // 16-bit read from ADR->R (ignores MSBs)
+      /* Source size                    */ dmaSize(buffer[0]),             // 16-bit read from ADR->R (ignores MSBs) must match buffer
+      /* Last source adjustment         */ 0,                              // No adjustment as SADDR is unchanged
       /* Source modulo                  */ DmaModulo_Disabled,             // Disabled
-      /* Last source adjustment         */ 0,                              // No adjustment as SADDR was unchanged
-
-      /* Destination address            */ (uint32_t)(buffer),             // Start of array for result
-      /* Destination offset             */ sizeof(buffer[0]),              // DADDR advances 2 bytes for each request
-      /* Destination size               */ DmaSize_16bit,                  // 16-bit write to array
+      },
+      DmaInfo {
+      /* Destination address            */ uint32_t(&buffer),              // Start of array for result
+      /* Destination offset             */ sizeof(buffer[0]),              // DADDR advances size of element for each request
+      /* Destination size               */ dmaSize(buffer[0]),             // 16-bit write to array
+      /* Last destination adjustment    */ -int(sizeof(buffer)),           // Reset DADDR to start of array on completion
       /* Destination modulo             */ DmaModulo_Disabled,             // Disabled
-      /* Last destination adjustment    */ -sizeof(buffer[0]),             // Reset DADDR to start of array on completion
-
+      },
       /* Minor loop byte count          */ dmaNBytes(sizeof(buffer[0])),   // 2-bytes for each ADC DMA request
-      /* Major loop count               */ dmaCiter(sizeofArray(buffer)),  // Number of requests to do for entire buffer
-
-      /* Start channel                  */ false,                          // Don't start (triggered by hardware)
-      /* Disable Req. on major complete */ true,                           // Clear hardware request when major loop completed
-      /* Interrupt on major complete    */ true,                           // Interrupt on completion
-      /* Interrupt on half complete     */ false,                          // No interrupt
-      /* Bandwidth (speed) Control      */ DmaSpeed_NoStalls               // Full speed (throttled by PIT->ADC)
-   );
+      /* Major loop count               */ dmaCiter(buffer.size()),        // Number of requests to do for entire buffer
+      DmaTcdCsr {
+      /* Disable Req. on major complete */ DmaStopOnComplete_Enabled,      // Clear hardware request when major loop completed
+      /* Interrupt on major complete    */ DmaIntMajor_Enabled,            // Interrupt on completion
+      /* Start channel                  */ DmaStart_Hardware,              // Don't start (triggered by hardware)
+      },
+   };
 
    // Sequence not complete yet
    complete = false;
 
    // Enable DMAC with default settings
-   Dma0::configure();
+   Dma0::defaultConfigure();
 
    // Set callback for end of transfer
-   Dma0::setCallback(DMA_CHANNEL, dmaCallback);
+   Dma0::setCallback(DMA_IRQNUM, dmaCallback);
 
    // Enable interrupts in NVIC
-   Dma0::enableNvicInterrupts(DMA_CHANNEL);
+   Dma0::enableNvicInterrupts(DMA_IRQNUM);
 
    // Configure the transfer
    Dma0::configureTransfer(DMA_CHANNEL, tcd);
 
-   // Enable requests from the channel
-   Dma0::enableRequests(DMA_CHANNEL);
-
    // DMA triggered by ADC requests (continuous = whenever ADC wants)
-   DmaMux0::configure(DMA_CHANNEL, Dma0Slot_ADC0, DmaMuxEnable_Continuous);
+   Dmamux0::configure(DMA_CHANNEL, Dma0Slot_ADC0, DmamuxMode_Continuous);
 
    // Check for errors so far
    checkError();
@@ -197,12 +196,17 @@ void pitCallback() {
  */
 void configurePit() {
    // Configure base PIT
-   Pit::configure(PitDebugMode_Stop);
-
-   MyTmrChannel::setCallback(pitCallback);
+   Pit::defaultConfigure();
 
    // Configure channel
-   MyTmrChannel::configure(1_ms, PitChannelIrq_Enabled);
+   static constexpr MyTmrChannel::ChannelInit channelInit {
+      PitChannelEnable_Enabled , // (pit_tctrl_ten[0]) Timer Channel Enable - Channel enabled
+      PitChannelAction_Interrupt , // (pit_tctrl_tie[0]) Action on timer event - Interrupt
+      1_ms , // (pit_ldval_tsv[0]) Reload value channel 0
+      NvicPriority_Normal,  // (irqLevel_Ch0) IRQ priority level for Ch0 - Normal
+      pitCallback,
+      };
+   MyTmrChannel::configure(channelInit);
    MyTmrChannel::enableNvicInterrupts(NvicPriority_Normal);
 
    // Check for errors so far
@@ -214,32 +218,56 @@ void configurePit() {
  * use as measurement input for the ADC.
  */
 void createWaveform() {
-   Pwm::OwningFtm::enable();
-   Pwm::OwningFtm::configure(FtmMode_LeftAligned);
-   Pwm::OwningFtm::setPeriod(10.0_ms);
 
-   Pwm::configure(FtmChannelMode_PwmHighTruePulses);
-   Pwm::setDutyCycle(50);
+   static const Pwm::OwningFtm::Init init {
+      FtmCountMode_LeftAligned ,    // (ftm_sc_cpwms) Counting mode - Left-aligned (count up)
+      FtmClockSource_SystemClock ,  // (ftm_sc_clks) Clock Source - System clock
+      10.0_ms ,                     // (ftm_deadtime_dtval) Dead-time Value
+   };
+   Pwm::OwningFtm::configure(init);
+   Pwm::OwningFtm::ChannelInit channelInit {
+      FtmChannelMode_PwmHighTruePulses ,           // (ftm_cnsc_mode_independent[0]) Channel Mode - Pwm High-true Pulses (Edge/Centre)
+      FtmChannelAction_None ,                      // (ftm_cnsc_action_independent[0]) Action on Channel Event - No action
+      Pwm::OwningFtm::convertSecondsToTicks(5_ms), // (ftm_cnv_independent[0]) Output Compare Event time in ticks
+      FtmInputFilter_Disabled,                     // (ftm_filter_fval_independent[0]) Channel Input Filter - Filter Disabled
+   };
+   Pwm::configure(channelInit);
    Pwm::setOutput();
 }
 
 /**
  * Do 100 ADC conversions @1ms interval into memory buffer
  */
-void testHardwareConversions() {
+void setupTransfers() {
    // Clear buffer initially
-   memset(buffer, 0, sizeof(buffer));
+   buffer.fill(0xA5);
 
-   configureAdc();
    configureDma();
+   configureAdc();
    configurePit();
+}
+
+/**
+ * Do 100 ADC conversions @1ms interval into memory buffer
+ */
+void testHardwareConversions() {
+
+   complete = false;
+
+   // Enable DMA requests from the channel
+   Dma0::enableRequest(DMA_CHANNEL);
 
    while (!complete) {
       __asm__("nop");
    }
 
    console.writeln("Completed Transfer\nResults:");
-   console.setPadding(Padding_LeadingSpaces).setWidth(5);
+   static const IntegerFormat format {
+      Padding_LeadingSpaces,
+      Width_5,
+   };
+
+   console.setFormat(format);
    for (unsigned index=0; index<(sizeof(buffer)/sizeof(buffer[0]));) {
       console.write(index).write(": ");
       for (int row=0; row<10; row++, index++) {
@@ -247,7 +275,7 @@ void testHardwareConversions() {
       }
       console.writeln();
    }
-   console.resetFormat();
+   console.resetIntegerFormat();
 }
 
 int main() {
@@ -257,10 +285,12 @@ int main() {
    Led::setOutput();
 
    createWaveform();
-   testHardwareConversions();
+
+   setupTransfers();
 
    for(;;) {
-      __asm__("nop");
+      waitMS(500);
+      testHardwareConversions();
    }
    return 0;
 }

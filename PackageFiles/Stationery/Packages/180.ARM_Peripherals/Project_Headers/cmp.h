@@ -572,7 +572,7 @@ $(/CMP/set_output: // /CMP/set_output not found)
    }
 
    /** Maximum DAC value corresponding to Vref) */
-   static constexpr int MAXIMUM_DAC_VALUE = CMP_DACCR_VOSEL_MASK;
+   static constexpr CmpDacLevel MAXIMUM_DAC_VALUE = CmpDacLevel(CMP_DACCR_VOSEL_MASK);
 
    /**
     * Set DAC level\n

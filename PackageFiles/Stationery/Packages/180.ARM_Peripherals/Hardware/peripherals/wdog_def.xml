@@ -664,7 +664,6 @@
    <template key="/$(_BASENAME)/InitMethod" discardRepeats="true"
              codeGenCondition="irqHandlingMethod" ><![CDATA[
       \t   Info::setCallback(init.callbackFunction);
-      \t   Info::enableNvicInterrupts(init.irqlevel);
       \t\n
    ]]></template>
    <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="secondsSupport&amp;&amp;fullCodeSupport" ><![CDATA[
@@ -697,9 +696,8 @@
       \t   wdog->TOVALL   = timeout.toTicks();
       \t
       \t   // For some reason this must be done after above
-      \t   if constexpr (Info::irqHandlerInstalled) {
-      \t      Info::enableNvicInterrupts(init.irqlevel);
-      \t   }
+      \t   Info::enableNvicInterrupts(init.irqlevel);
+      \t
       \t   return E_NO_ERROR;
       \t}\n\n
    ]]></template>

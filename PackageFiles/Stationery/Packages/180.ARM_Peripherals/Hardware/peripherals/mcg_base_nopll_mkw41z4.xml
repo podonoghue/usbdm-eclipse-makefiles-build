@@ -2,12 +2,13 @@
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
 <!-- mcg_base_nopll_mkw41z4.xml -->
 
-<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <constant key="irq_parameters "           type="String" value='""'  />
-   <equation key="irq_call"                  type="String" value='""'  />
-   <equation key="generateDefault"           type="Boolean" value="false"         />
-   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="irq_parameters"            value=""  />
+   <equation key="irq_dummy_parameters"      value=""  />
+   <equation key="irq_call"                  value=""  />
+   <equation key="generateDefault"           value="false"         />
+   <equation key="configureInStartupDefault" value="false"         />
    <xi:include href="enablePeripheral.xml" />
    <title />
 
@@ -24,14 +25,18 @@
    <constant key="VLPR"    value="1" type="Long" />
    <constant key="HSRUN"   value="2" type="Long" />
 
+   <!-- ************* Class Declaration ****************** -->
+   <constant key="_class_declaration" type="String"
+      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+
    <clockSelectionOption key="currentClockConfig"
       derived="true"
       description="Active clock selection"
       toolTip="Selects the clock configuration used for general peripheral timing calculations" >
-      <choice value="0" name="@ClockConfig[0]" ref="&quot;0: &quot;+ClockConfig[0]" isDefault="true" />
-      <choice value="1" name="@ClockConfig[1]" ref="&quot;1: &quot;+ClockConfig[1]" />
-      <choice value="2" name="@ClockConfig[2]" ref="&quot;2: &quot;+ClockConfig[2]" />
-      <choice value="3" name="@ClockConfig[3]" ref="&quot;3: &quot;+ClockConfig[3]" />
+      <choice value="0" name="@ClockConfig[0]" ref='"0: "+ClockConfig[0]' isDefault="true" />
+      <choice value="1" name="@ClockConfig[1]" ref='"1: "+ClockConfig[1]' />
+      <choice value="2" name="@ClockConfig[2]" ref='"2: "+ClockConfig[2]' />
+      <choice value="3" name="@ClockConfig[3]" ref='"3: "+ClockConfig[3]' />
    </clockSelectionOption>
 
    <aliasOption key="/SIM/numberOfClockSettings" />
@@ -63,66 +68,67 @@
       </binaryOption>
    </for>
 
-   <intOption key="slowInternalClockTrim" condition="mcg_c4_scftrim_present"
-      description="Slow clock trim value"
-      toolTip="This 9-bit trim value is written to MCG.C3[SCTRIM] and MCG.C4[SCFTRIM] if non-zero"
-      value="0"
-      min="0" max="511"
-   />
-
-   <intOption key="fastInternalClockTrim"  condition="mcg_c4_fcftrim_present"
-      description="Fast clock trim value"
-      toolTip="This 4-bit trim value is written to MCG.C4[FCFTRIM] if non-zero"
-      value="0"
-      min="0" max="15"
-   />
+   <binaryOption key="assumeSlowIrcTrimmed"
+      enabledBy="!enablePeripheralSupport"
+      description="Assume slow IRC trimmed in minimal configuration"
+      toolTip="Used to indicate that the Slow Internal Reference clock has been trimmed and\n
+               hence it is safe to use higher clock frequencies derived from the IRC\n
+               without danger of exceeding the maximim clock frequency.\n
+               Only used in minimal configuration"
+      >
+      <choice value="false" name="Clock is not trimmed" />
+      <choice value="true"  name="Clock is trimmed"     />
+   </binaryOption>
 
    <!--  Run mode independent -->
-   <choiceOption key="oscMode" condition="mcg_c2_erefs0_present"
+   <choiceOption key="mcg_c2_oscMode" condition="mcg_c2_erefs0_present"
       typeName="OscMode"
-      valueFormat="%s"
+      valueFormat="MCG_C2_EREFS0(%s),MCG_C2_HGO0(%s)"
       hidden="true"
       description="OSC0 mode"
       toolTip="Determines oscillator power mode and\n
-               whether an external clock or crystal is used.">
-      <choice value="0"                               name="OSC0 Not configured"            enum="NotConfigured"        />
-      <choice value="MCG_C2_EREFS0(0)"                name="External clock"                 enum="ExternalClock"        />
-      <choice value="MCG_C2_EREFS0(1)"                name="Low Power Oscillator"           enum="LowPowerOscillator"   isDefault="true"                />
-      <choice value="MCG_C2_EREFS0(1)|MCG_C2_HGO0(1)" name="High Gain Oscillator"           enum="HighPowerOscillator"  condition="mcg_c2_hgo0_present" />
-      <choice value="1-1"                             name="32kHz Oscillator driven by RTC" enum="RTC_Controlled"       condition="/SIM/RtcForcing"     enabledBy="/RTC/enablePeripheralSupport"  />
+               whether an external clock or crystal is used." >
+      <choice value="0,2-2" name="OSC0 Not configured"            enum="NotConfigured"        />
+      <choice value="0,0"   name="External clock"                 enum="ExternalClock"        />
+      <choice value="1,0"   name="Low Power Oscillator"           enum="LowPowerOscillator"   isDefault="true"                />
+      <choice value="1,1"   name="High Gain Oscillator"           enum="HighPowerOscillator"  condition="mcg_c2_hgo0_present" />
+      <choice value="0,1-1" name="32kHz Oscillator driven by RTC" enum="RTC_Controlled"       condition="/SIM/RtcForcing"     enabledBy="/RTC/enablePeripheralSupport"  />
    </choiceOption>
 
-   <constant key="/OscMode_NotConfigured"  type="Long" value="0"                        condition="mcg_c2_erefs0_present"/>
-   <constant key="/OscMode_ExternalClock"  type="Long" value="1"                        condition="mcg_c2_erefs0_present"/>
-   <constant key="/OscMode_RTC_Controlled" type="Long" value="mcg_c2_hgo0_present?4:3"  condition="mcg_c2_erefs0_present"/>
+   <constant key="/OscMode_NotConfigured"  type="Long" value="0"                                 condition="mcg_c2_erefs0_present"/>
+   <constant key="/OscMode_ExternalClock"  type="Long" value="1"                                 condition="mcg_c2_erefs0_present"/>
+   <constant key="/OscMode_RTC_Controlled" type="Long" value='Exists("mcg_c2_hgo0_present")?4:3' condition="mcg_c2_erefs0_present"/>
 
    <choiceOption key="mcg_c2_erefs0"  condition="mcg_c2_erefs0_present"
       hidden="true"
-      ref="oscMode>=2"
+      typeName="McgExternalClock"
+      ref="mcg_c2_oscMode>=2"
       derived="true"
       description="External Reference Select"
-      toolTip="Determines whether an external clock or crystal is used">
-      <choice value="0" name="External clock"     />
-      <choice value="1" name="Oscillator"         isDefault="true" />
+      toolTip="Determines whether an external clock or crystal is used" >
+      <choice value="0" name="External clock"   enum="ExternalClk"  />
+      <choice value="1" name="Oscillator"       enum="Oscillator"  isDefault="true" />
    </choiceOption>
 
    <choiceOption key="mcg_c2_hgo0"  condition="mcg_c2_hgo0_present"
       hidden="true"
-      ref="oscMode==3"
+      typeName="McgOscMode"
+      ref="mcg_c2_oscMode==3"
       derived="true"
       description="Oscillator mode"
-      toolTip="Operation mdoe for oscillator">
-      <choice value="0" name="Low Power"  />
-      <choice value="1" name="High Gain"  />
+      toolTip="Operation mode for oscillator" >
+      <choice value="0" name="Low Power" enum="LowPower"   />
+      <choice value="1" name="High Gain" enum="HighPower"  />
    </choiceOption>
 
-   <for keys="n" dim="=/SIM/numberOfClockSettings">
+   <for keys="n" dim="=/SIM/numberOfClockSettings" >
       <categoryOption key="ClockConfig[%(n)]"
          enabledBy="enablePeripheralSupport&amp;&amp;enableClockConfiguration[%(n)]"
          description="Clock configuration[%(n)]"
          toolTip="Clock configurations for different run modes"
          value="ClockConfig_%(n)"
-         disabledValue="=(%(n)==0)?&quot;Reset Configuration&quot;:&quot;Disabled&quot;" >
+         locked="false"
+         disabledValue='=(%(n)==0)?"Reset Configuration":"Disabled"' >
 
          <if condition="%(n)==0" >
             <aliasOption key="enableClockConfiguration[%(n)]" />
@@ -209,7 +215,7 @@
 
                <!-- MCG OSCSEL Inputs -->
                <graphicItem id="OSCCLK_C_OSCSEL0"          var=""                                   type="connector"   params="OSCCLK,0,   MCGERCLK_IN_IN0,0, x"               condition="!mcg_c7_oscsel_present"  />
-               <graphicItem id="OSCCLK_C_OSCSEL0"          var=""                                   type="connector"   params="OSCCLK,0,   OSCSEL_IN0,0, x,d,y"                condition="mcg_c7_oscsel_present"   />
+               <graphicItem id="OSCCLK_C_OSCSEL0"          var=""                                   type="connector"   params="OSCCLK,0,   OSCSEL_IN0,0, x,d,y"                   condition="mcg_c7_oscsel_present"   />
                <graphicItem id=""                          var=""                                   type="connector"   params="RTC32K,0,   OSCSEL_IN1,0, x,y"                  condition="/SIM/rtc_independent || /SIM/rtc_mkw41z4" />
             </graphicBox>
 
@@ -267,7 +273,7 @@
                <equation key="y" value="=y+80" />
             </graphicBox>
 
-            <graphicBox    id="SIM" x="310" y="70" params="290,0, x310, y1040, x-600, y-700, x" >
+            <graphicBox    id="SIM" x="310" y="70" params="290,0, x310, y1240, x-600, y-900, x" >
 
                <!-- MGCIRCLK -->
                <graphicItem id="MCGIRCLK"                  var="system_mcgirclk_clock[%(n)]"        type="node"        params="600, 55"                                        />
@@ -339,7 +345,7 @@
                </graphicGroup>
 
                <!-- TRACECLKSEL => TRACE_CLK -->
-               <graphicGroup x="0" y="y" condition="/SIM/sim_sopt2_traceclksel_present">
+               <graphicGroup x="0" y="y" condition="/SIM/sim_sopt2_traceclksel_present" >
                   <graphicItem id="MCGOUTCLK.1"               var="system_mcgoutclk_clock[%(n)]"       type="reference"   params="330,  0, 180"                                  />
                   <graphicItem id="CORE_CLK.1"                var="/SIM/system_core_clock[%(n)]"       type="reference"   params="330, 20, 180"                                  />
                   <graphicItem id=""                          var="system_mcgoutclk_clock[%(n)]"       type="connector"   params="MCGOUTCLK.1,0, TRACECLKSEL,0"                   />
@@ -511,6 +517,49 @@
                   <equation key="y" value="=y+100" />
                </graphicGroup>
 
+               <!-- COP -->
+               <equation key="y" value="=y+20" />
+               <graphicGroup x="0" y="y" condition="/SIM/sim_copc_copt" >
+                  <graphicItem id="LPO_OSC.COP"               var="/PMC/system_low_power_clock"        type="reference"   params="150,  10, 150"            />
+                  <graphicItem id="MCGIRCLK.COP"              var="/MCG/system_mcgirclk_clock[%(n)]"   type="reference"   params="150,  30, 150"            />
+                  <graphicItem id="OSC.COP"                   var="/OSC0/oscer_clock"                  type="reference"   params="150,  50, 150"            />
+                  <graphicItem id="BUS_CLK.COP"               var="/SIM/system_bus_clock[%(n)]"        type="reference"   params="150,  70, 150"            />
+                  <!--  graphicItem id="COP_WINDOW,NONAME"         var="/SIM/sim_copc_copw"                 type="annotation"  params="185,  70, 100, 18"        / -->
+
+                  <graphicItem id=""                          var=""                                   type="connector"   params="LPO_OSC.COP,0,  COPC_CLKSEL,0, (x-20),y,x"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="MCGIRCLK.COP,0, COPC_CLKSEL,1, (x-20),y,x"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="OSC.COP,0,      COPC_CLKSEL,2"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="BUS_CLK.COP,0,  COPC_CLKSEL,3"  />
+                  <graphicItem id="COPC_CLKSEL"               var="/SIM/sim_copc_copclksel"            type="mux"         params="270,  40, 4"        />
+
+                  <graphicItem id=""                          var=""                                   type="connector"   params="COPC_CLKSEL,0, /2^5,0,  (x-30),d,y,x"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="COPC_CLKSEL,0, /2^8,0,  (x-30),y,x"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="COPC_CLKSEL,0, /2^10,0, (x-30),y,x"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="COPC_CLKSEL,0, /2^13,0, (x-30),y,x"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="COPC_CLKSEL,0, /2^16,0, (x-30),y,x"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="COPC_CLKSEL,0, /2^18,0, (x-30),y,x"  />
+
+                  <graphicItem id="/2^5"                      var=""                                   type="label"       params="430, -10, 50, small"       />
+                  <graphicItem id="/2^8"                      var=""                                   type="label"       params="430,  10, 50, small"       />
+                  <graphicItem id="/2^10"                     var=""                                   type="label"       params="430,  30, 50, small"       />
+                  <graphicItem id="/2^13"                     var=""                                   type="label"       params="430,  50, 50, small"       />
+                  <graphicItem id="/2^16"                     var=""                                   type="label"       params="430,  70, 50, small"       />
+                  <graphicItem id="/2^18"                     var=""                                   type="label"       params="430,  90, 50, small"       />
+
+                  <graphicItem id=""                          var=""                                   type="connector"   params="/2^5,0,  COPSRC,1"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="/2^8,0,  COPSRC,2"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="/2^10,0, COPSRC,3"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="/2^13,0, COPSRC,4"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="/2^16,0, COPSRC,5"  />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="/2^18,0, COPSRC,6"  />
+
+                  <graphicItem id="COPSRC"                    var="/SIM/sim_copc_copt"                 type="mux"         params="500, 30, 8"               />
+                  <graphicItem id=""                          var=""                                   type="connector"   params="COPSRC,0, COP_PERIOD,0"   />
+                  <graphicItem id="COP_PERIOD"                var="/SIM/cop_timeout_period[%(n)]"      type="node"        params="600, 30"                  />
+
+                  <equation key="y" value="=y+120" />
+               </graphicGroup>
+
                <!-- SDHCSRC -->
                <graphicGroup x="0" y="y" condition="/SIM/sim_sopt2_sdhcsrc_present" >
                   <graphicItem id="CORE_CLK.8"                var="/SIM/system_core_clock[%(n)]"       type="reference"   params="370,-20, 180"                       />
@@ -554,7 +603,7 @@
          <aliasOption key="/SMC/smc_pmctrl_runm[%(n)]" locked="false" />
 
          <category name="OSC0 (Main Oscillator)" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
-            <aliasOption key="oscMode"                       locked="false"  optional="true" />
+            <aliasOption key="mcg_c2_oscMode"                locked="false"  optional="true" />
             <aliasOption key="/OSC0/rsim_control_rf_osc_en"  locked="false"  optional="true" />
             <aliasOption key="/OSC0/osc_input_freq"          locked="false"  />
             <aliasOption key="/OSC0/osc_clock"               optional="true"   />
@@ -562,7 +611,7 @@
             <aliasOption key="/OSC0/oscer_clock"             />
          </category>
 
-         <category name="OSC1 (Real Time Clock)" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
+         <category name="OSC1 (Real Time Clock)" description="RTC External Reference Clock/Oscillator [ERCLK32K]" >
             <aliasOption key="/RTC/osc_input_freq"        optional="true" locked="false"  />
             <aliasOption key="/RTC/rtc_cr_osce"           optional="true" locked="false"/>
             <aliasOption key="/RTC/osc_clock"             optional="true"/>
@@ -610,42 +659,43 @@
             baseType="uint8_t"
             valueFormat="%s"
             description="MCG Clock Mode"
-            toolTip="FLL Engaged Internal(FEI)\n
+            toolTip="Selects the basic clock mode for the Clock generator" >
+            <choice name="FLL Engaged Internal (FEI)"          enum="FEI"  code="McgClockMode_FEI"  value="0"
+               toolTip="FLL Engaged Internal(FEI)\n
                      In FEI mode, MCGOUT is derived from the FLL clock (DCOCLK) that is controlled by the 32 kHz Internal Reference Clock (IRC).\n
                      The FLL loop will lock the DCO frequency to the FLL factor, as selected by the C4[DRST_DRS] and C4[DMX32] bits, times the\n
-                     internal reference frequency.\n
-                     \n
-                     FLL Engaged External(FEE)\n
+                     internal reference frequency."
+            />
+            <choice name="FLL Engaged External (FEE)"          enum="FEE"  code="McgClockMode_FEE"  value="1"
+               toolTip="FLL Engaged External(FEE)\n
                      In FEE mode, MCGOUT is derived from the FLL clock (DCOCLK) that is controlled by the external reference clock. The FLL loop\n
                      will lock the DCO frequency to the FLL factor, as selected by C4[DRST_DRS] and C4[DMX32] bits, times the external reference\n
-                     frequency, as specified by the C1[FRDIV] and C2[RANGE].\n
-                     \n
-                     FLL Bypassed Internal(FBI)\n
+                     frequency, as specified by the C1[FRDIV] and C2[RANGE]."
+            />
+            <choice name="FLL bypassed internal (FBI)"         enum="FBI"  code="McgClockMode_FBI"  value="2"
+               toolTip="FLL Bypassed Internal(FBI)\n
                      In FBI mode, the MCGOUT clock is derived either from the slow (32 kHz IRC) or fast (2/4 MHz IRC) internal reference clock,\n
                      as selected by the C2[IRCS] bit. The FLL is operational but its output is not used. This mode is useful to allow the FLL\n
                      to acquire its target frequency while the MCGOUT clock is driven from the C2[IRCS] selected internal reference clock. The\n
                      FLL clock (DCOCLK) is controlled by the slow internal reference clock, and the DCO clock frequency locks to a multiplication\n
-                     factor, as selected by the C4[DRST_DRS] and C4[DMX32] bits, times the internal reference frequency.\n
-                     \n
-                     FLL Bypassed External(FBE)\n
+                     factor, as selected by the C4[DRST_DRS] and C4[DMX32] bits, times the internal reference frequency."
+            />
+            <choice name="FLL bypassed external (FBE)"         enum="FBE"  code="McgClockMode_FBE"  value="4"
+               toolTip="FLL Bypassed External(FBE)\n
                      In FBE mode, the MCGOUT clock is derived from the external reference clock. The FLL is operational but its output is not\n
                      used. This mode is useful to allow the FLL to acquire its target frequency while the MCGOUT clock is driven from the\n
                      external reference clock. The FLL clock (DCOCLK) is controlled by the external reference clock, and the DCO clock frequency\n
                      locks to a multiplication factor, as selected by the C4[DRST_DRS] and C4[DMX32] bits, times the divided external reference\n
-                     frequency.\n
-                     \n
-                     Bypassed Low Power Internal (BLPI/FBILP)\n
-                     In BLPI mode, MCGOUT is derived from the internal reference clock. The FLL is disabled\n
-                     \n
-                     Bypassed Low Power External (BLPE/FBELP)\n
-                     In BLPE mode, MCGOUT is derived from the external reference clock. The FLL is disabled\n
-                     ">
-            <choice name="FLL Engaged Internal (FEI)"          enum="FEI"  code="McgClockMode_FEI"  value="0" />
-            <choice name="FLL Engaged External (FEE)"          enum="FEE"  code="McgClockMode_FEE"  value="1" />
-            <choice name="FLL bypassed internal (FBI)"         enum="FBI"  code="McgClockMode_FBI"  value="2" />
-            <choice name="FLL bypassed external (FBE)"         enum="FBE"  code="McgClockMode_FBE"  value="4" />
-            <choice name="Bypassed low power internal (BLPI)"  enum="BLPI" code="McgClockMode_BLPI" value="3" />
-            <choice name="Bypassed low power external (BLPE)"  enum="BLPE" code="McgClockMode_BLPE" value="5" />
+                     frequency."
+            />
+            <choice name="Bypassed low power internal (BLPI)"  enum="BLPI" code="McgClockMode_BLPI" value="3"
+               toolTip="Bypassed Low Power Internal (BLPI/FBILP)\n
+                     In BLPI mode, MCGOUT is derived from the internal reference clock. The FLL is disabled"
+            />
+            <choice name="Bypassed low power external (BLPE)"  enum="BLPE" code="McgClockMode_BLPE" value="5"
+               toolTip="Bypassed Low Power External (BLPE/FBELP)\n
+                     In BLPE mode, MCGOUT is derived from the external reference clock. The FLL is disabled"
+            />
          </choiceOption>
 
          <category name="Clock monitors"
@@ -665,7 +715,7 @@
                enabledBy="mcg_c6_cme0[%(n)]"
                description="OSC0 Action on Loss of Clock"
                toolTip="Determines if an Interrupt or Reset occurs on loss of OSC0 external reference\n
-                        This option only has effect if the clock monitor is first enabled bye C6.CME0">
+                        This option only has effect if the clock monitor is first enabled bye C6.CME0" >
                <choice value="0" enum="Interrupt" name="Interrupt request" />
                <choice value="1" enum="Reset"     name="Reset request" />
             </binaryOption>
@@ -674,7 +724,7 @@
                typeName="McgOsc1ClockMonitor"
                description="OSC1 (RTC) Clock Monitor Enable"
                toolTip="Determines if the clock monitor is enabled for the RTC external clock.\n
-                        CME1 bit must be set to a logic 0 before the MCG enters any Stop mode">
+                        CME1 bit must be set to a logic 0 before the MCG enters any Stop mode" >
                <choice value="0" enum="Disabled" name="Clock monitor disabled" />
                <choice value="1" enum="Enabled"  name="Clock monitor enabled" />
             </binaryOption>
@@ -697,7 +747,7 @@
                target="firc_divided_clock[%(n)]"
                description="Fast Internal Clock [FIRC] Reference Divider"
                toolTip="Selects the amount to divide down the fast internal reference clock\n
-                  The FIR clock is available for use as MCGIRCLK or MCGOUTCLK">
+                  The FIR clock is available for use as MCGIRCLK or MCGOUTCLK" >
                <choice value="0" enum="DivBy1"   ref="system_fast_irc_clock[%(n)]"       name="/1" isDefault="true" />
                <choice value="1" enum="DivBy2"   ref="(system_fast_irc_clock[%(n)])/2"   name="/2"   />
                <choice value="2" enum="DivBy4"   ref="(system_fast_irc_clock[%(n)])/4"   name="/4"   />
@@ -708,7 +758,12 @@
                <choice value="7" enum="DivBy128" ref="(system_fast_irc_clock[%(n)])/128" name="/128" />
             </choiceOption>
 
-            <intOption key="firc_divided_clock[%(n)]" units="Hz" locked="true" derived="true" />
+            <intOption key="firc_divided_clock[%(n)]"
+               description="FIRC divided clock frequency"
+               toolTip="Fast IRC after division by FCRDIV"
+               units="Hz"
+               locked="true"
+               derived="true" />
 
             <binaryOption key="mcg_c2_ircs[%(n)]"
                typeName="McgIrClkSrc"
@@ -719,7 +774,11 @@
                <choice value="1" ref="firc_divided_clock[%(n)]"    enum="Fast" name="Fast internal reference clock" code="getFastInternalReferenceClock()" isDefault="true" />
             </binaryOption>
 
-            <intOption key="system_mcgirclk_ungated[%(n)]" units="Hz" locked="true" derived="true" />
+            <intOption key="system_mcgirclk_ungated[%(n)]"
+               description="MGCIRCLK (internal) frequency"
+               units="Hz"
+               locked="true"
+               derived="true" />
 
             <binaryOption key="mcg_c1_irclken[%(n)]"
                typeName="McgIrClkEn"
@@ -734,7 +793,7 @@
                typeName="McgIrefs"
                enabledBy="mcg_c1_irclken[%(n)]"
                description="Internal Reference [MCGIRCLK] Stop Enable"
-               toolTip="Determines if MCGIRCLK is enabled in Stop mode">
+               toolTip="Determines if MCGIRCLK is enabled in Stop mode" >
                <choice value="0" enum="DisabledInStop" name="IR disabled in STOP" />
                <choice value="1" enum="EnabledInStop"  name="IR enabled in STOP" />
             </binaryOption>
@@ -747,12 +806,12 @@
                toolTip="Derived from system_slow_irc_clock or system_fast_irc_clock/fcrdiv" />
          </category>
 
-         <if condition="mcg_c7_oscsel_present">
+         <if condition="mcg_c7_oscsel_present" >
             <choiceOption key="mcg_c7_oscsel[%(n)]"
                typeName="McgErcSelect"
                target="mcg_erc_clock[%(n)]"
                description="MCG External reference clock"
-               toolTip="Source for MCG External Reference Clock">
+               toolTip="Source for MCG External Reference Clock" >
                <choice value="0" ref="/OSC0/osc_clock"                condition="/OSC0/osc_clock"                 enum="OscClk"   code="Osc0Info::getOscClock()"        name="OSC0 Clock"         />
                <choice value="1" ref="/RTC/rtcclk_gated_clock"        condition="/RTC/rtcclk_gated_clock"         enum="RtcClk"   code="RtcInfo::getExternalClock()"    name="RTC 32kHz clock"    />
                <choice value="2" ref="/SIM/system_irc48m_clock[%(n)]" condition="/SIM/system_irc48m_clock[%(n)]"  enum="Irc48MHz" code="$(/SIM/system_irc48m_clock[0])" name="IRC 48MHz clock"     />
@@ -761,7 +820,7 @@
             <choiceOption key="mcg_c7_oscsel_fixed[%(n)]"
                target="mcg_erc_clock[%(n)]"
                description="MCG External reference clock"
-               toolTip="Source for MCG External Reference Clock">
+               toolTip="Source for MCG External Reference Clock" >
                <choice value="0" ref="/OSC0/osc_clock"          enum="OscClk"   code="Osc0Info::getOscClock()"      name="OSC0 Clock" />
             </choiceOption>
          </if>
@@ -774,10 +833,10 @@
             toolTip="External reference clock used by MCG"
             value="0" />
 
-         <category name="FLL" description="FLL Settings">
+         <category name="FLL" description="FLL Settings" >
 
             <binaryOption key="fll_enabled[%(n)]"
-               ref="(mcgClockMode[%(n)]!=@BLPI)&amp;&amp;(mcgClockMode[%(n)]!=@BLPE)"
+               ref="(mcgClockMode[%(n)]!=BLPI)&amp;&amp;(mcgClockMode[%(n)]!=BLPE)"
                derived="true"
                locked="true"
                description="FLL State"
@@ -792,7 +851,7 @@
                locked="true"
                description="Frequency Range Select"
                toolTip="Selects the frequency range for the crystal oscillator if used.\n
-                        It may determine the divider for FLL input clock">
+                        It may determine the divider for FLL input clock" >
                <choice value="0" enum="Low"      name="Low range" />
                <choice value="1" enum="High"     name="High range" />
                <choice value="2" enum="VeryHigh" name="Very High range" />
@@ -809,7 +868,7 @@
                origin="Determined by FLL input frequency constraints and external reference clock frequency"
                toolTip="Selects the amount to divide down the external reference clock for the FLL.\n
                         The resulting frequency must be in [31.25 kHz to 39.0625 kHz] to be suitable for the FLL\n
-                        Division factors choices depends on clock Range [MGC_C2_RANGE0] and clock source [MCG_C6_OSCSEL]">
+                        Division factors choices depends on clock Range [MGC_C2_RANGE0] and clock source [MCG_C6_OSCSEL]" >
                <choice value="0" name="Disabled"     enum="Disabled"      enabledBy="true"                          ref="Disabled" />
 
                <choice value="0" name="/1 (low)"    enum="LowDivBy1"     enabledBy="(mcg_c2_range0[%(n)] == 0)||(mcg_c7_oscsel[%(n)] == 1)" ref="mcg_erc_clock[%(n)]"      />
@@ -841,7 +900,7 @@
                origin="Determined by FLL input frequency constraints and external reference clock frequency"
                toolTip="Selects the amount to divide down the external reference clock for the FLL.\n
                         The resulting frequency must be in [31.25 kHz to 39.0625 kHz] to be suitable for the FLL\n
-                        Division factors choices depends on clock Range [MGC_C2_RANGE0] and clock source [MCG_C6_OSCSEL]">
+                        Division factors choices depends on clock Range [MGC_C2_RANGE0] and clock source [MCG_C6_OSCSEL]" >
                <choice value="0" name="Disabled"     enum="Disabled"      enabledBy="true"                          ref="Disabled" />
 
                <choice value="0" name="/1 (low)"     enum="LowDivBy1"     enabledBy="(mcg_c2_range0[%(n)] == 0)" ref="mcg_erc_clock[%(n)]"      />
@@ -874,7 +933,7 @@
                disabledValue="0" />
 
             <binaryOption key="mcg_c1_irefs[%(n)]"
-               ref="(mcgClockMode[%(n)]==@FEI)||(mcgClockMode[%(n)]==@FBI)||(mcgClockMode[%(n)]==@BLPI)"
+               ref="(mcgClockMode[%(n)]==FEI)||(mcgClockMode[%(n)]==FBI)||(mcgClockMode[%(n)]==BLPI)"
                typeName="McgIref"
                target="irefs_clock[%(n)]"
                derived="true"
@@ -882,24 +941,25 @@
                description="Internal Reference Select"
                disabledValue="1"
                toolTip="Selects the reference clock source for the FLL\n
-                        This option is determined by the Clock Mode selection">
+                        This option is determined by the Clock Mode selection" >
                <choice value="0" name="External Reference Clock" enum="External" ref="mcg_erc_clock_divided[%(n)]" />
                <choice value="1" name="Slow Internal Clock"      enum="Internal" ref="system_slow_irc_clock[%(n)]" />
             </binaryOption>
 
             <intOption key="irefs_clock[%(n)]"
-               hidden="true"
+               enabledBy="((%(n)==0)||enableClockConfiguration[%(n)])&amp;&amp;(mcgClockMode[%(n)]!=BLPI)##Unavailable in BLPI"
                derived="true"
-               enabledBy="(mcgClockMode[%(n)]!=@BLPI)##Unavailable in BLPI" />
+               hidden="true" />
 
             <intOption key="system_mcgffclk_clock[%(n)]"
                ref="irefs_clock[%(n)]"
-               enabledBy="(irefs_clock[%(n)]&lt;=(system_mcgoutclk_clock[%(n)]/8))&amp;&amp;(mcgClockMode[%(n)]!=@BLPI)##Disabled in BLPI and limited to f &lt;= (MCGOUTCLK/8)"
-               hidden="true"
+               enabledBy="((%(n)==0)||enableClockConfiguration[%(n)]) &amp;&amp;
+                          ((irefs_clock[%(n)]&lt;=(system_mcgoutclk_clock[%(n)]/8))&amp;&amp;(mcgClockMode[%(n)]!=BLPI))##Disabled in BLPI and limited to f &lt;= (MCGOUTCLK/8))"
                units="Hz"
                derived="true"
                locked="true"
                description="MCG Fixed Frequency Clock [MCGFFCLK]"
+               isNamedClock="true"
                toolTip="Used as input clock to FLL and available to some peripherals\n
                         Derived from External Reference Clock or Slow IRC"
                value="0"/>
@@ -964,12 +1024,14 @@
          <aliasOption key="/PMC/system_low_power_clock" />
 
          <intOption key="system_mcgoutclk_clock[%(n)]"
+            enabledBy="((%(n)==0)||enableClockConfiguration[%(n)])"
             max="/SIM/MCGOUTCLK_max[/SMC/smc_pmctrl_runm[%(n)]]"
             min="1"
             derived="true"
             locked="true"
             units="Hz"
             description="System MCG Output Clock [MCGOUTCLK]"
+            isNamedClock="true"
             toolTip="MCG Main clock output"
             value="120000000"
             disabledValue="0" />
@@ -979,8 +1041,8 @@
          <aliasOption key="/SIM/system_flexbus_clock[%(n)]" locked="false"  optional="true" />
          <aliasOption key="/SIM/system_flash_clock[%(n)]"   locked="false"  optional="true" />
 
-         <category name="Device Parameters" description="Register values">
-            <category name="MCG_C1" description="MCG Control Register 1">
+         <category name="Device Parameters" description="Register values" >
+            <category name="MCG_C1" description="MCG Control Register 1" >
                <choiceOption key="mcg_c1_clks[%(n)]"
                   target="system_mcgoutclk_clock[%(n)]"
                   derived="true"
@@ -1000,7 +1062,7 @@
                <aliasOption key="mcg_c1_irefsten[%(n)]" />
             </category>
 
-            <category name="MCG_C2" description="MCG Control Register 2">
+            <category name="MCG_C2" description="MCG Control Register 2" >
                <aliasOption key="mcg_c2_locre0[%(n)]" />
                <aliasOption key="mcg_c2_range0[%(n)]" />
                <aliasOption key="mcg_c2_erefs0"       optional="true" />
@@ -1011,7 +1073,7 @@
                   locked="true"
                   description="Low Power Select"
                   toolTip="Whether FLL continues operation when bypassed\n
-                           This option is determined by the Clock Mode selection">
+                           This option is determined by the Clock Mode selection" >
                   <choice value="0" name="FLL is enabled in bypass modes" />
                   <choice value="1" name="FLL is disabled in bypass modes" />
                </binaryOption>
@@ -1019,13 +1081,13 @@
                <aliasOption key="mcg_c2_ircs[%(n)]" />
             </category>
 
-            <category name="MCG_C4" description="MCG Control Register 4">
+            <category name="MCG_C4" description="MCG Control Register 4" >
                <aliasOption key="mcg_c4_dmx32[%(n)]" />
                <aliasOption key="mcg_c4_drst_drs[%(n)]" />
             </category>
 
 
-            <category name="MCG_C6" description="MCG Control Register 6">
+            <category name="MCG_C6" description="MCG Control Register 6" >
                <aliasOption key="mcg_c6_lolie0[%(n)]" optional="true" />
 
                <aliasOption key="mcg_c6_cme0[%(n)]"  optional="true"/>
@@ -1035,23 +1097,23 @@
                <aliasOption key="mcg_sc_fcrdiv[%(n)]" />
             </category>
 
-            <category name="MCG_C7" description="MCG Control Register 7">
+            <category name="MCG_C7" description="MCG Control Register 7" >
                <aliasOption key="mcg_c7_oscsel[%(n)]"       optional="true" />
                <aliasOption key="mcg_c7_oscsel_fixed[%(n)]" optional="true" />
             </category>
 
-            <category name="MCG_C8" description="MCG Control Register 8">
+            <category name="MCG_C8" description="MCG Control Register 8" >
                <aliasOption key="mcg_c8_locre1[%(n)]" optional="true" />
                <aliasOption key="mcg_c8_lolre[%(n)]"  optional="true" />
                <aliasOption key="mcg_c8_cme1[%(n)]"   optional="true" />
             </category>
 
-            <category name="MCG_C9" description="MCG Control Register 9">
+            <category name="MCG_C9" description="MCG Control Register 9" >
                <aliasOption key="mcg_c9_pll_cme[%(n)]"   optional="true" />
                <aliasOption key="mcg_c9_pll_locre[%(n)]" optional="true" />
             </category>
 
-            <category name="MCG_C11" description="MCG Control Register 11">
+            <category name="MCG_C11" description="MCG Control Register 11" >
                <aliasOption key="mcg_c11_pllcs[%(n)]" optional="true" />
             </category>
          </category>
@@ -1084,14 +1146,14 @@
       \t */
       \tstatic uint32_t getExternalReferenceClock() {
       \t
-      \t   return $(%variable.code[0]);
+      \t   return $(%variable0.code[0]);
       \t}\n\n
       ]]></variableTemplate>
 
    <template condition="mcg_sc_fcrdiv[]"
    ><![CDATA[
       \t/**
-      \t * Get Fast Internal Reference Clock (undivided)
+      \t * Get Fast Internal Reference Clock (divided)
       \t *
       \t * @return Clock frequency in Hz
       \t */
@@ -1112,7 +1174,7 @@
       \tstatic void setInternalReferenceClock(%paramType %paramName) {
       \t   %fieldAssignment;
       \t}
-
+      \t
       \t/**
       \t * Get %description
       \t *
@@ -1138,7 +1200,7 @@
       \tstatic void enableMcgIrClock(%paramType %paramName) {
       \t   %fieldAssignment;
       \t}
-
+      \t
       \t/**
       \t * Get %description
       \t *
@@ -1152,6 +1214,41 @@
       \t   }
       \t}\n\n
       ]]></clockCodeTemplate>
+
+   <for
+      keys   = "var              : name        "
+      values = "
+                mcg_c2_oscMode   : ExternalReference;
+                mcg_c1_irclken[] : McgIrClkEn;
+                mcg_c2_ircs[]    : McgIrClkSrc;
+                mcg_sc_fcrdiv[]  : FastIrcDivider;
+                mcg_c6_cme0[]    : OSC0ClockMonitor;
+                mcg_c2_locre0[]  : OSC0ActionOnLossOfClock;
+                mcg_c8_cme1[]    : RTCClockMonitor;
+                mcg_c8_locre1[]  : RTCActionOnLossOfClock "
+      >
+      <variableTemplate variables="%(var)" codeGenCondition="/$(_BASENAME)/enableGettersAndSetters"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         \t * @param %paramName %tooltip
+         \t */
+         \tstatic void set%(name)(%paramType %paramName) {
+         \t   %fieldAssignment;
+         \t}
+
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return Clock frequency in Hz
+         \t */
+         \tstatic %paramType get%(name)() {
+         \t
+         \t      return %paramType(%register&%mask);
+         \t}\n\n
+         ]]></variableTemplate>
+   </for>
 
    <template><![CDATA[
       \t/*
@@ -1176,13 +1273,13 @@
       \t\n
    ]]></template>
 
-   <for keys="n" dim="=/SIM/numberOfClockSettings">
+   <for keys="n" dim="=/SIM/numberOfClockSettings" >
       <template key="ClockConfig" codeGenCondition="enableClockConfiguration[%(n)]" ><![CDATA[
          \t$(ClockConfig[%(n)]://-- missing name for configuration --),\n
       ]]></template>
    </for>
 
-   <for keys="n" dim="=/SIM/numberOfClockSettings">
+   <for keys="n" dim="=/SIM/numberOfClockSettings" >
       <template key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
       ><![CDATA[
          \t{  // $(ClockConfig[%(n)]) ($(mcgClockMode[%(n)].enum[]))
@@ -1233,7 +1330,7 @@
          variables=
             "mcg_c2_locre0[%(n)],
              mcg_c2_range0[%(n)],
-             oscMode,
+             mcg_c2_oscMode,
              mcg_c2_ircs[%(n)]"
       ><![CDATA[\t   /// Control Register 2 - Excluding LP, FCTRIM %initExpression\n\n ]]></variableTemplate>
 
@@ -1346,7 +1443,7 @@
       \t   const uint8_t c1; \n ]]></template>
 
    <template key="ClockInfoType" where="all"
-      condition="mcg_c2_locre0[]||mcg_c2_range0[]||oscMode||mcg_c2_ircs[]"
+      condition="mcg_c2_locre0[]||mcg_c2_range0[]||mcg_c2_oscMode||mcg_c2_ircs[]"
    ><![CDATA[
       \t   /// Control Register 2 - LOCRE0, RANGE0, HGO0, EREFS0, IRCS, (-LP, -FCTRIM)
       \t   const uint8_t c2;\n ]]></template>
@@ -1403,6 +1500,58 @@
       \t};\n\n
    ]]></template>
 
+<!--   ========== Global Clocks =============================== -->
+
+   <template where="basicInfo" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
+      \t/*
+      \t * Global clocks
+      \t */
+      \t\n
+   ]]></template>
+   <template where="basicInfo" codeGenCondition="!/MCG/enablePeripheralSupport" ><![CDATA[
+      \t/*
+      \t * Global clock constants
+      \t * These are provided when minimal clock generator code is used.
+      \t * They assume no clock changes are made after startup.
+      \t * Values provided are from USBDM configuration.
+      \t */
+      \t\n
+   ]]></template>
+
+   <for keys=" clock                       : name "
+      values=" system_mcgffclk_clock[0]    : SystemMcgFFClock;
+               system_mcgoutclk_clock[0]   : SystemMcgOutClock;
+               system_mcgfllclk_clock[0]   : SystemMcgFllClock
+         " >
+      <variableTemplate where="usbdm" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport"
+                   tooltipPadding="x*xx" ><![CDATA[
+         \t/**
+         \t *  %description
+         \t *  %tooltip
+         \t */
+         \textern volatile uint32_t %(name);
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate key="/$(_BASENAME)/clocks" variables="%(clock)" codeGenCondition="/MCG/enablePeripheralSupport"
+                   tooltipPadding="x*xx" ><![CDATA[
+         \t/**
+         \t *  %description
+         \t *  %tooltip
+         \t */
+         \tvolatile uint32_t %(name);
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate where="basicInfo" variables="%(clock)" codeGenCondition="!/MCG/enablePeripheralSupport"
+                   tooltipPadding="x*xx" ><![CDATA[
+         \t/**
+         \t *  %description
+         \t *  %tooltip
+         \t */
+         \tconstexpr uint32_t %(name) = %valueExpression;
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
    <!-- ************* Common ****************** -->
 
    <template key="/MCG/Includes"  ><![CDATA[
@@ -1415,7 +1564,7 @@
 
    <!-- Validator is in parent file -->
 
-   <projectActionList id = "mcg_files" >
+   <projectActionList id="mcg_files" >
       <copy source="Project_Headers/mcg.h"                target="Project_Headers/mcg.h"                 overwrite="true"  derived="true" />
       <copy source="Startup_Code/mcg_no_pll.cpp"          target="Startup_Code/mcg_no_pll.cpp"           overwrite="true"  derived="true" />
       <copy source="Snippets/mcg-test.cpp"                target="Snippets/mcg-test.cpp"                 overwrite="true"  derived="true" />

@@ -750,7 +750,6 @@
          <if condition="=%(evenCh) >=_channelCount">
             <break/>
          </if>
-
          <constant key="channelPairing[%(evenCh)]" value="false" condition="!tpm_combine_combine%(Num)_present" type="Boolean"/>
 
          <binaryOption key="channelPairing[%(evenCh)]" condition="tpm_combine_combine%(Num)_present"
@@ -788,7 +787,7 @@
 
          <!-- Odd channel -->
          <variable key="outputModeCh%(oddCh)" type="Boolean"
-            expression="(tpm_cnsc_mode_independent[%(oddCh)]>=5)||(tpm_combine_comswap_pwm%(evenCh)==1)" />
+            expression="(tpm_cnsc_mode_independent[%(oddCh)]>=5)||(tpm_combine_comswap_pwm%(Num)==1)" />
       <else/>
          <!-- Even channel -->
          <variable key="inputModeCh%(evenCh)" type="Boolean"

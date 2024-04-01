@@ -456,6 +456,55 @@
 
       <!-- ____ Single user/hardware handler _____________ -->
 
+      <equation key="wrapped_irq_dummy_parameters" value='=(irq_dummy_parameters=="")?"":", "+irq_dummy_parameters' />
+      <!-- printVar key="wrapped_irq_dummy_parameters"/ -->
+      <!-- printVar key="suppressIrqHandler"/ -->
+      
+      <!--  Wrappers for interrupt handlers -->
+      <template codeGenCondition="irqHandlingMethod"
+         immediateVariables="wrapped_irq_dummy_parameters,irq_parameters"
+      >
+      <![CDATA[
+         \ttemplate<typename T>
+         \tusing CallbackWrapper = USBDM::CallbackWrapper<T, $(_Class)Info$(wrapped_irq_dummy_parameters)>;
+         \t
+         \t/**
+         \t * Function to wrap a member function as a static callback function
+         \t * Example:
+         \t * @code
+         \t * class AClass {
+         \t * public:
+         \t *    int y;
+         \t *
+         \t *    // Member function used as callback
+         \t *    // This function must match CallbackFunction
+         \t *    void callbackFuction($(irq_parameters)) {
+         \t *       ...;
+         \t *    }
+         \t * };
+         \t * ...
+         \t *    AClass *tester = new AClass{};
+         \t *
+         \t *    auto cb = $(_Class)::wrapCallback(tester, &AClass::callbackFuction);
+         \t *    $(_Class)::setCallback(cb);
+         \t *   @endcode
+         \t *
+         \t * @tparam T               Type of class containing callback (inferred)
+         \t *
+         \t * @param classInstance    Pointer to instance of class
+         \t * @param memberFunction   Pointer to the member function
+         \t *
+         \t * @return  Wrapper
+         \t */
+         \ttemplate<typename T>
+         \tstatic auto wrapCallback(T *classInstance, void (T::*memberFunction)($(irq_parameters))) {
+         \t   static CallbackWrapper<T> sClass(classInstance, memberFunction);
+         \t   return sClass.callback;
+         \t}
+         \t\n
+      ]]>
+      </template>
+      
       <!--  Interrupt handler -->
       <template codeGenCondition="irqHandlingMethod" condition="!irq_enum&amp;&amp;!suppressIrqHandler" >
       <![CDATA[
@@ -487,9 +536,11 @@
          \t   if ($(_basename)Callback == nullptr) {
          \t      $(_basename)Callback = unhandledCallback;
          \t   }
-         \t   // Allow either no handler set yet or removing handler
+         \t   // Allow either no handler set yet or removing handler or setting same handler
          \t   usbdm_assert(
-         \t         (sCallback == unhandledCallback) || ($(_basename)Callback == unhandledCallback),
+         \t         (sCallback == unhandledCallback) ||
+         \t         (sCallback == $(_basename)Callback) || 
+         \t         ($(_basename)Callback == unhandledCallback),
          \t         "Handler already set");
          \t   sCallback = $(_basename)Callback;
          \t}
@@ -546,8 +597,11 @@
          \t      $(_basename)Callback = unhandledCallback;
          \t   }
          \t   // Allow either no handler set yet or removing handler
+         \t   // Allow either no handler set yet or removing handler or setting same handler
          \t   usbdm_assert(
-         \t         (sCallbacks[%paramName0] == unhandledCallback) || ($(_basename)Callback == unhandledCallback),
+         \t         (sCallbacks[%paramName0] == unhandledCallback) ||
+         \t         (sCallbacks[%paramName0] == $(_basename)Callback) || 
+         \t         ($(_basename)Callback == unhandledCallback),
          \t         "Handler already set");
          \t   sCallbacks[%paramName0] = $(_basename)Callback;
          \t}

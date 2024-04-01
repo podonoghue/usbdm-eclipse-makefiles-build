@@ -262,7 +262,7 @@
    <!ATTLIST aliasOption hidden           (true)        #IMPLIED>
    
    <!-- Indicates requirement for existence of variable 
-        (true=may not exist but keep, required=must exist, discard=discard immediately if non-existent)-->
+        (true=may not exist but keep for deferred existence check, required=must exist, discard=discard if currently non-existent)-->
    <!ATTLIST aliasOption optional         (true|required|discard)  #IMPLIED>
 
 <!-- ____  timeOption -->
@@ -440,7 +440,7 @@
    <!-- Log changes to associated variable -->
    <!ATTLIST bitmaskOption logging        (true)       #IMPLIED>
    <!-- Used to control generation of enum (default is true) -->
-   <!ATTLIST bitmaskOption generateEnum   (empty|false)  #IMPLIED>
+   <!ATTLIST bitmaskOption generateEnum   (true)       #IMPLIED>
    <!-- Name of associate signal -->
    <!ATTLIST bitmaskOption signal          CDATA #IMPLIED>
 
@@ -741,11 +741,11 @@
    <!-- List of pin mappings applied if option disabled#Expression to enable use of any pin map -->
    <!ATTLIST choiceOption disabledPinMap      CDATA        #IMPLIED>
    <!-- Log changes to associated variable -->
-   <!ATTLIST choiceOption logging             (true) #IMPLIED>
-   <!-- Create choice values as constants rather than as an enum -->
-   <!ATTLIST choiceOption createAsConstants   (true) #IMPLIED>
+   <!ATTLIST choiceOption logging             (true)       #IMPLIED>
+   <!-- Generate choice values as constants rather than as an enum -->
+   <!ATTLIST choiceOption generateAsConstants (true)       #IMPLIED>
    <!-- Name of associate signal -->
-   <!ATTLIST choiceOption signal              CDATA #IMPLIED>
+   <!ATTLIST choiceOption signal              CDATA        #IMPLIED>
 
 <!-- ____  choice -->
 <!ELEMENT choice EMPTY >

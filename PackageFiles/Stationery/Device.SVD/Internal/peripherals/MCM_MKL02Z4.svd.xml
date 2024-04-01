@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKL02Z4
       MKL04Z4
       MKL05Z4
@@ -65,12 +65,12 @@ Devices using this peripheral:
                      <bitWidth>8</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0</name>
                            <description>A bus slave connection to AXBS input port n is absent</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>1</name>
                            <description>A bus slave connection to AXBS input port n is present</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -93,12 +93,12 @@ Devices using this peripheral:
                      <bitWidth>8</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0</name>
                            <description>A bus master connection to AXBS input port n is absent</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>1</name>
                            <description>A bus master connection to AXBS input port n is present</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -118,12 +118,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0</name>
                            <description>Fixed-priority arbitration for the crossbar masters</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>1</name>
                            <description>Round-robin arbitration for the crossbar masters</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -143,12 +143,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0</name>
                            <description>Enable flash controller data caching</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>1</name>
                            <description>Disable flash controller data caching</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -161,12 +161,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0</name>
                            <description>Enable flash controller instruction caching</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>1</name>
                            <description>Disable flash controller instruction caching</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -179,12 +179,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0</name>
                            <description>Enable flash controller cache</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>1</name>
                            <description>Disable flash controller cache</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -197,12 +197,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0</name>
                            <description>Disable flash data speculation</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>1</name>
                            <description>Enable flash data speculation</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -215,12 +215,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0</name>
                            <description>Enable flash controller speculation</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>1</name>
                            <description>Disable flash controller speculation</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -233,12 +233,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0</name>
                            <description>Disable stalling flash controller when flash is busy</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>1</name>
                            <description>Enable stalling flash controller when flash is busy</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -258,12 +258,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0</name>
                            <description>Request is cleared</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>1</name>
                            <description>Request Compute Operation</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -277,12 +277,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0</name>
                            <description>Compute operation entry has not completed or compute operation exit has completed</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>1</name>
                            <description>Compute operation entry has completed or compute operation exit has not completed</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -295,12 +295,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0</name>
                            <description>No effect</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>1</name>
                            <description>When set, the CPOREQ is cleared on any interrupt or exception vector fetch</description>
                            <value>0b1</value>
                         </enumeratedValue>

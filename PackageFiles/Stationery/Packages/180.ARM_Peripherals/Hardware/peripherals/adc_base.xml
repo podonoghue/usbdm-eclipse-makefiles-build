@@ -8,9 +8,9 @@
    <constant key="disable_peripheral" value='"adc->SC1[0] = ADC_SC1_ADCH(-1);"'  type="String" />
 
    <equation key="suppressIrqHandler"        value="" />
-   <equation key="irq_parameters"            value='uint32_t result, int channel'  />
-   <equation key="irq_dummy_parameters"      value='uint32_t, int'                 />
-   <equation key="irq_call"                  value='adc->R[0], adc->SC1[0]&amp;ADC_SC1_ADCH_MASK'  />
+   <equation key="irq_parameters"            value='uint32_t result, AdcChannelNum channel'  />
+   <equation key="irq_dummy_parameters"      value='uint32_t, AdcChannelNum'                 />
+   <equation key="irq_call"                  value='adc->R[0], AdcChannelNum(adc->SC1[0]&amp;ADC_SC1_ADCH_MASK)'  />
    <equation key="generateDefault"           value="false"  />
    <equation key="configureInStartupDefault" value="false"  />
    <xi:include href="enablePeripheral.xml"  />
@@ -20,44 +20,68 @@
    <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
    <!-- ____ SC1 ____ -->
-   <if condition="!adc_sc1_diff_present">
-      <choiceOption key="adc_sc1_channel" condition="adc_sc1_adch_present"
-         hidden="true"
-         valueFormat="ADC_SC1_ADCH(%s)"
-         typeName="AdcChannelNum"
-         baseType="uint8_t"
-         toolTip="Selects an ADC channel"
-         description="ADC Channel number" >
-         <choiceExpansion keys="ch" dim="31" value="%(ch)" name="Channel %(ch)" enum="%(ch)" />
-         <choice                             value="31"    name="Disabled"      enum="Disabled" isDefault="true" />
-      </choiceOption>
-   <else/>
-      <choiceOption key="adc_sc1_channel" condition="adc_sc1_adch_present"
-         hidden="true"
-         valueFormat="ADC_SC1_DIFF(%s),ADC_SC1_ADCH(%s)"
-         typeName="AdcChannelNum"
-         baseType="uint8_t"
-         toolTip="Selects an ADC channel"
-         description="ADC Channel number" >
-         <choiceExpansion keys="ch" dim="31"  value="0,%(ch)" name="Channel %(ch)"   enum="%(ch)"      />
-         <choiceExpansion keys="ch" dim="5"   value="1,%(ch)" name="Channel %(ch)"   enum="Diff%(ch)"  />
-         <choice                              value="0,31"    name="Disabled"        enum="Disabled"   isDefault="true" />
-      </choiceOption>
-   </if>
-   <choiceOption key="adc_sc1_channelb" condition="adc_sc1_adch_present"
+   <choiceOption key="adc_sc1_channel" condition="adc_sc1_adch_present"
       hidden="true"
-      valueFormat="ADC_SC1_ADCH(%s)"
-      typeName="AdcChannelNumB"
+      valueFormat="%s"
+      typeName="AdcChannelNum"
       baseType="uint8_t"
-      toolTip="Selects an ADC channel (alternative B)"
+      toolTip="Selects an ADC channel"
       description="ADC Channel number" >
-      <choiceExpansion keys="ch" dim="4,7" value="%(ch)" name="Channel %(ch) B" enum="%(ch)"     />
-      <choice                             value="31"     name="Disabled"      enum="Disabled" isDefault="true" />
+      <choiceExpansion keys="ch" dim="0,3"  value="%(ch)"               name="Channel SE%(ch)"    enum="Se%(ch)"    />
+      <choice                               value="4"                   name="AFirst"             enum="AFirst"     />
+      <choiceExpansion keys="ch" dim="4,7"  value="%(ch)"               name="Channel SE%(ch)a"   enum="Se%(ch)a"   />
+      <choice                               value="7"                   name="ALast"              enum="ALast"      />
+      <choiceExpansion keys="ch" dim="8,30" value="%(ch)"               name="Channel SE%(ch)"    enum="Se%(ch)"    />
+      <choice                               value="31"                  name="Disabled"           enum="Disabled"  isDefault="true" />
+      <choice                               value="32"                  name="DiffFirst"          enum="DiffFirst" condition="adc_sc1_diff_present" />
+      <choiceExpansion keys="ch" dim="0,3"  value="=ToString(32+%(ch))" name="Diff Channel %(ch)" enum="Diff%(ch)" condition="adc_sc1_diff_present" />
+      <choice                               value="=ToString(32+3)"     name="DiffLast"           enum="DiffLast"  condition="adc_sc1_diff_present" />
+      <choice                               value="=ToString(36+4)"     name="BFirst"             enum="BFirst"    />
+      <choiceExpansion keys="ch" dim="4,7"  value="=ToString(36+%(ch))" name="Channel SE%(ch)b"   enum="Se%(ch)b"  />
+      <choice                               value="=ToString(36+7)"     name="BLast"              enum="BLast"     />
    </choiceOption>
+
+   <choiceOption key="adc$(_instance)_sc1_channel" condition="adc_sc1_adch_present"
+      hidden="true"
+      derived="true"
+      valueFormat="%s"
+      typeName="Adc$(_instance)ChannelNum"
+      baseType="AdcChannelNum"
+      toolTip="Selects an ADC channel"
+      description="ADC Channel number"
+      generateAsConstants="true" >
+      <choiceExpansion keys="sig" values='=SignalList("^($(_NAME)_SE.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$1")'
+         signal="%(sig)"
+         name='@SignalDescription("%(sig)","^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
+         enum='=Prettify(ToUppercase(ReplaceAll("%(sig)","^$(_NAME)_(.*)$","$1")))' delimiter="," condition='="%(sig)"!="-"'
+         value='="AdcChannelNum_"+Prettify(ToUppercase(ReplaceAll("%(sig)","^$(_NAME)_(.*)$","$1")))' />
+      <choiceExpansion keys="sig" values='=SignalList("^($(_NAME)_DP.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$1")'
+         signal="%(sig)"
+         name='@SignalDescription("%(sig)","^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
+         enum='=Prettify(ToUppercase(ReplaceAll("%(sig)","^$(_NAME)_DP(.*)$","Diff$1")))' delimiter="," condition='="%(sig)"!="-"'
+         value='="AdcChannelNum_"+Prettify(ToUppercase(ReplaceAll("%(sig)","^$(_NAME)_DP(.*)$","Diff$1")))' />
+   </choiceOption>
+
+   <!--
+   condition='=SignalExists("$(_NAME)_SE%(ch)")'
+   <for keys="ch" dim="31" >
+   <equation key="adc_signal" value="$(_NAME)_SE%(ch)" />
+   <printVar key="adc_signal" />
+   <equation key="constant_name" value="$(_NAME)_SE%(ch)" />
+   <printVar key="constant_name" />
+
+   <equation key="adc_signal_exists" value='=SignalExists(adc_signal)' />
+   <printVar key="adc_signal_exists" />
+   <template where="definitions" condition='=SignalExists(adc_signal)' >
+   <![CDATA[
+       static constexpr AdcChannelNum Adc$(_instance)ChannelNum_%(ch) = AdcChannelNum_%(ch);\n
+   ]]>
+   </template>
+   </for>
+    -->
 
    <binaryOption key="adc_sc1_aien"
       description="Action on conversion completion"
-      enabledBy="irqHandlingMethod"
       typeName="AdcAction"
       baseType="uint8_t"
       hidden="true"
@@ -285,17 +309,6 @@
       <choice value="1" enum="Enabled"  name="Enabled" />
    </binaryOption>
 
-   <binaryOption key="adc_pretrigger" description="Selects the pretrigger"
-      enabledBy="enablePeripheralSupport"
-      typeName="AdcPretrigger"
-      valueFormat="(%s)"
-      baseType="uint8_t"
-      hidden="true"
-      toolTip="Selects which SC1[x]/R[x] register pair to use">
-      <choice value="0" enum="0"  name="Use pretrigger 0 = SC1[0]/R[0]" isDefault="true" />
-      <choice value="1" enum="1"  name="Use pretrigger 1 = SC1[1]/R[1]" />
-   </binaryOption>
-
    <binaryOption key="adc_cfg2_muxsel"
       enabledBy="enablePeripheralSupport"
       typeName="AdcMuxsel"
@@ -364,7 +377,7 @@
    </choiceOption>
 
    <intOption key="adc_cv1" description="ADC CV low value"
-      enabledBy="adc_sc2_compare>=1"
+      hiddenBy="adc_sc2_compare==0"
       valueFormat="%s"
       baseType="uint16_t"
       toolTip="CV Low threshold value\n
@@ -372,7 +385,7 @@
       derived="true" />
 
    <intOption key="adc_cv2" description="ADC CV high value"
-      enabledBy="adc_sc2_compare>=3"
+      hiddenBy="adc_sc2_compare&lt;3"
       valueFormat="%s"
       baseType="uint16_t"
       toolTip="CV High threshold value\n
@@ -404,6 +417,32 @@
       <choice value="0" enum="Software" name="Software trigger (by writing to SC1[0])" isDefault="true" />
       <choice value="1" enum="Hardware" name="Hardware trigger (ADHWT source)" />
    </binaryOption>
+
+   <choiceOption key="adc_pretrigger" description="Selects the pretrigger"
+      enabledBy="enablePeripheralSupport"
+      typeName="AdcPretrigger"
+      valueFormat="(%s)"
+      baseType="uint8_t"
+      hidden="true"
+      toolTip="Selects which SC1[x]/R[x] register pair to use">
+      <choiceExpansion keys="pretrigger" dim="=adc_sc1_dim"
+         name="Use pretrigger %(pretrigger) = SC1[%(pretrigger)]/R[%(pretrigger)]" value="%(pretrigger)" enum="%(pretrigger)"/>
+   </choiceOption>
+
+   <for keys="pretrigger" dim="=adc_sc1_dim" >
+
+      <title description="Pretrigger %(pretrigger)" hiddenBy="!adc_sc2_adtrg" />
+
+      <choiceOption key="adc_sc1[%(pretrigger)]_adch"
+         derivedFrom="adc$(_instance)_sc1_channel"
+         hiddenBy="(%(pretrigger)!=0)&amp;&amp;!adc_sc2_adtrg" >
+      </choiceOption>
+
+      <binaryOption key="adc_sc1[%(pretrigger)]_aien"
+         derivedFrom="adc_sc1_aien"
+         hiddenBy="(%(pretrigger)!=0)&amp;&amp;!adc_sc2_adtrg" >
+      </binaryOption>
+   </for>
 
    <binaryOption key="adc_sc2_adact" description="Conversion Active"
       hidden="true"
@@ -699,6 +738,32 @@
 
    <template where="basicInfo" ><![CDATA[
    \t/**
+   \t * Map ADC Channel number to physical channel index
+   \t *
+   \t * @param adcChannelNum Channel number (index into Info table)
+   \t *
+   \t * @return  Physical channel number i.e. hardware value
+   \t */
+   \tstatic constexpr int mapChannelNumToPhysicalChannelNum(AdcChannelNum adcChannelNum) {
+   \t
+   \t   if (adcChannelNum<=AdcChannelNum_Disabled) {
+   \t      // channels SE0-SE4,SE4a-SE7a,SE8-SE31
+   \t      return int(adcChannelNum);
+   \t   }
+   \t   if (adcChannelNum<=AdcChannelNum_DiffLast) {
+   \t      // channels DIFF0-DIFF4
+   \t      return ADC_SC1_DIFF_MASK|(int(adcChannelNum)-AdcChannelNum_DiffFirst);
+   \t   }
+   \t   if (adcChannelNum<=AdcChannelNum_BLast) {
+   \t      // channels SE4b-SE7b
+   \t      return int(adcChannelNum)-AdcChannelNum_BFirst+AdcChannelNum_AFirst;
+   \t   }
+   \t   return -1;
+   \t}\t\n
+   ]]></template>
+
+   <template where="basicInfo" ><![CDATA[
+   \t/**
    \t * ADC calibrate.
    \t * Calibrates the ADC before first use.
    \t *
@@ -778,11 +843,11 @@
       \t
       \t   if (adc->SC1[0] & ADC_SC1_COCO_MASK) {
       \t      // Execute call-back
-      \t      sCallback(adc->R[0], adc->SC1[0]&ADC_SC1_ADCH_MASK);
+      \t      sCallback(adc->R[0], AdcChannelNum(adc->SC1[0]&ADC_SC1_ADCH_MASK));
       \t   }
       \t   if (adc->SC1[1] & ADC_SC1_COCO_MASK) {
       \t      // Execute call-back
-      \t      sCallback(adc->R[1], adc->SC1[1]&ADC_SC1_ADCH_MASK);
+      \t      sCallback(adc->R[1], AdcChannelNum(adc->SC1[1]&ADC_SC1_ADCH_MASK));
       \t   }
       \t   return;
       \t}
@@ -960,7 +1025,13 @@
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t      %registerName1[%paramName0] = %paramName1|%paramName2;
+      \t      if ((adcChannelNum>=AdcChannelNum_AFirst)&&(adcChannelNum<=AdcChannelNum_ALast)) {
+      \t         cfg2 &= ~ADC_CFG2_MUXSEL_MASK;
+      \t      }
+      \t      else if ((adcChannelNum>=AdcChannelNum_BFirst)&&(adcChannelNum<=AdcChannelNum_BLast)) {
+      \t         cfg2 |= ADC_CFG2_MUXSEL_MASK;
+      \t      }
+      \t      %registerName1[%paramName0] = mapChannelNumToPhysicalChannelNum(%paramName1)|%paramName2;
       \t   }
       \t\n
    ]]>
@@ -1119,25 +1190,23 @@
          \t   %(statement);\n
       ]]></variableTemplate>
    </for>
-   <variableTemplate codeGenCondition="enablePeripheralSupport" condition="adc_sc2_adtrg"
-      variables="adc_sc2_adtrg,adc_sc1_channel" >
-   <![CDATA[
-      \t
-      \t   // Set up hardware trigger conversion information if enabled
-      \t   if (init.%registerName0 & %mask0) {
-      \t      for (size_t index=0; index<$(_STRUCTNAME)_SC1_COUNT; index++) {
-      \t         %register1[index] = init.%registerName1[index];
-      \t      }
-      \t   }\n
-   ]]>
-   </variableTemplate>
    <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t   calibrate(adc);
-      \t}
       \t\n
    ]]>
    </template>
+   <variableTemplate codeGenCondition="enablePeripheralSupport" condition="adc_sc2_adtrg"
+      variables="adc_sc2_adtrg,adc_sc1_channel" >
+   <![CDATA[
+      \t   // Set up channel information
+      \t   for (size_t index=0; index<$(_STRUCTNAME)_SC1_COUNT; index++) {
+      \t      %register1[index] = init.%registerName1[index];
+      \t   }
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
 
    <!-- ____  Default Initialisation value ____ -->
 
@@ -1157,18 +1226,43 @@
          adc_sc3_avg,
          adc_sc3_adco,
          adc_sample,
-         adc_sc2_compare,adc_cv1,adc_cv2,
-         irqLevel,
-         adc_pretrigger,adc_sc1_channel,adc_sc1_aien "
+         irqLevel"
    ><![CDATA[
       \t/**
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \tstatic constexpr Init DefaultInitValue = {%initExpression\n
+   ]]></variableTemplate>
+
+   <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;(adc_sc2_compare!=0)"
+      separator=","
+      terminator=","
+      variables="
+         adc_sc2_compare,
+         adc_cv1,
+         adc_cv2"
+   ><![CDATA[
+      \t   %initExpression\n
+   ]]></variableTemplate>
+
+   <for keys="pretrigger" dim="=adc_sc1_dim" >
+      <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;((%(pretrigger)==0)||adc_sc2_adtrg)"
+         separator=","
+         terminator=","
+         variables="
+            adc_sc1[%(pretrigger)]_adch,
+            adc_sc1[%(pretrigger)]_aien"
+      ><![CDATA[
+         \t   AdcPretrigger_%(pretrigger), // sc1[%(pretrigger)]/r[%(pretrigger)] ,%initExpression\n
+      ]]></variableTemplate>
+   </for>
+
+   <template codeGenCondition="enablePeripheralSupport"
+   ><![CDATA[
       \t};
       \t\n
-   ]]></variableTemplate>
+   ]]></template>
 
 <!--  __________  ADC MISC _______________________________ -->
 

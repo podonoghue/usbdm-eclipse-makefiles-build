@@ -27,56 +27,49 @@ using MyAdcChannel  = $(/HARDWARE/Analogue0:Adc0\:\:Channel<10>);
 using MyAdc         = MyAdcChannel::OwningAdc;
 
 // Resolution to use for ADC
-constexpr AdcResolution adcResolution = AdcResolution_10bit_se;
+constexpr AdcResolution ADC_RESOLUTION = AdcResolution_10bit_se;
 
 // Lower window threshold for comparison 20%
-constexpr int LOWER_THRESHOLD = MyAdc::getSingleEndedMaximum(adcResolution)*0.2;
+constexpr int LOWER_THRESHOLD = MyAdc::getSingleEndedMaximum(ADC_RESOLUTION)*0.2;
 
 // Upper window threshold for comparison 60%
-constexpr int UPPER_THRESHOLD = MyAdc::getSingleEndedMaximum(adcResolution)*0.6;
+constexpr int UPPER_THRESHOLD = MyAdc::getSingleEndedMaximum(ADC_RESOLUTION)*0.6;
 
 /**
  * ADC callback
  *
  * Will toggle LED while comparison is true
  */
-void adcComparisonCallback(uint32_t, int) {
+void adcComparisonCallback(uint32_t result, int channel) {
+   (void)result;
+   (void)channel;
    Led::toggle();
 }
 
 int main() {
+
    // Enable LED
    Led::setOutput();
-
-#ifdef USBDM_PCC_IS_DEFINED
-   // Enable and configure ADC
-   PccInfo::setAdc0ClockSource(PccDiv2Clock_Sirc);
-#endif
-   MyAdc::configure(adcResolution);
-
-   // Calibrate before first use
-   MyAdc::calibrate();
-
-   // Set up comparison range
-   MyAdc::enableComparison(AdcCompare_OutsideRangeExclusive, LOWER_THRESHOLD, UPPER_THRESHOLD);
-
-   /**
-    * Set callback
-    * The callback is executed each time the Conversion Complete (COCO) flag sets.
-    * In comparison mode this only occurs when the converted value matches the comparison set.
-    */
-   MyAdc::setCallback(adcComparisonCallback);
-   MyAdc::enableNvicInterrupts(NvicPriority_Normal);
 
    // Connect ADC channel to pin
    MyAdcChannel::setInput();
 
-   /**
-    * Start continuous conversions with interrupts on comparison true.
-    * A bit wasteful of power - should throttle.
-    */
-   MyAdc::enableContinuousConversions(AdcContinuous_Enabled);
-   MyAdcChannel::startConversion(AdcInterrupt_Enabled);
+   static constexpr MyAdc::Init adcInitValue = {
+      AdcClockSource_Asynch ,             // (adc_cfg1_adiclk) ADC Clock Source
+      ADC_RESOLUTION ,                    // (adc_cfg1_mode) ADC Resolution
+      AdcTrigger_Software ,               // (adc_sc2_adtrg) Conversion Trigger Select
+      AdcAveraging_4 ,                    // (adc_sc3_avg) Hardware Average Select
+      AdcContinuous_Enabled ,             // (adc_sc3_adco) Single or continuous conversion
+      AdcSample_4cycles ,                 // (adc_sample) Long Sample Time Select
+      AdcCompare_OutsideRangeExclusive ,  // (adc_sc2_compare) Compare function
+      LOWER_THRESHOLD ,                   // (adc_cv1) ADC CV low value
+      UPPER_THRESHOLD ,                   // (adc_cv2) ADC CV high value
+      NvicPriority_Normal ,               // (irqLevel) IRQ priority level
+      adcComparisonCallback,              // Call-back
+      // Software triggered (Pre-trigger0 = SC1A), (adc_sc1_adch) Channel to use and (adc_sc1_aien) IRQ when complete
+      AdcPretrigger_0, MyAdcChannel::CHANNEL, AdcAction_Interrupt,
+   };
+   MyAdc::configure(adcInitValue);
 
    for(;;) {
       Smc::enterWaitMode();

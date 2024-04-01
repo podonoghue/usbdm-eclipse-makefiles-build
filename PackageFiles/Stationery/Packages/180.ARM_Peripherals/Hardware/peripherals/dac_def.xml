@@ -58,7 +58,7 @@
    <binaryOption key="dac_c0_lpen" condition="dac_c0_lpen_present"
       enabledBy="dac_c0_dacen"
       typeName="DacPower"
-      baseType="uint8_t"      
+      baseType="uint8_t"
       toolTip="Controls power consumption of DAC"
       description="DAC Low Power Control" >
       <choice value="0" name="High-Power mode" enum="High" isDefault="true" />
@@ -68,7 +68,7 @@
    <binaryOption key="dac_c0_dacbwien" condition="dac_c0_dacbwien_present"
       enabledBy="dac_c0_dacen"
       typeName="DacWatermarkAction"
-      baseType="uint8_t" 
+      baseType="uint8_t"
       toolTip="Control whether an interrupt is generated when SR.DACBFWMF is set i.e.\n
                when the DAC buffer read pointer has reached the watermark level."
       description="Buffer Watermark Action" >
@@ -80,7 +80,7 @@
       locked="true"
       enabledBy="enablePeripheralSupport"
       typeName="DacTrigger"
-      baseType="uint8_t" 
+      baseType="uint8_t"
       description="Software Trigger" >
       <choice name="Trigger is not valid"  value="0" enum="TriggerIsNotValid"/>
       <choice name="Trigger is valid"      value="1" enum="TriggerIsValid"/>
@@ -89,7 +89,7 @@
    <binaryOption key="dac_c0_dacbtien" condition="dac_c0_dacbtien_present"
       enabledBy="dac_c0_dacen"
       typeName="DacReadPtrTopAction"
-      baseType="uint8_t" 
+      baseType="uint8_t"
       toolTip="Control whether an interrupt is generated when SR.DACBFRPTF is set i.e.\n
                when the DAC buffer read pointer is zero."
       description="Read Pointer Top Action" >
@@ -100,7 +100,7 @@
    <binaryOption key="dac_c0_dacbbien" condition="dac_c0_dacbbien_present"
       enabledBy="dac_c0_dacen"
       typeName="DacReadPtrBottomAction"
-      baseType="uint8_t" 
+      baseType="uint8_t"
       toolTip="Control whether an interrupt is generated when SR.DACBFRPBF is set i.e. \n
                when the DAC buffer read pointer is equal to buffer upper limit (C2.DACBFUP)"
       description="Read Pointer Bottom Action" >
@@ -113,7 +113,7 @@
    <binaryOption key="dac_c1_dmaen" condition="dac_c1_dmaen_present"
       enabledBy="dac_c0_dacen"
       typeName="DacDma"
-      baseType="uint8_t" 
+      baseType="uint8_t"
       toolTip="When DMA is enabled, DMA requests are generated instead of interrupt requests. \n
                The DMA Done signal clears the DMA request. \n
                The status register flags are still set and are cleared automatically when the DMA completes."
@@ -126,7 +126,7 @@
       enabledBy="dac_c0_dacen"
       valueFormat="DAC_C1_DACBFEN(%s),DAC_C1_DACBFMD(%s)"
       typeName="DacBufferMode"
-      baseType="uint8_t" 
+      baseType="uint8_t"
       toolTip="Modes:\n
                Disabled: The first word of the buffer is used to control the DAC output level.\n
                Normal:   Pointer moves [0..max] and wraps \n
@@ -146,7 +146,7 @@
    <choiceOption key="dac_c1_dacbfwm" condition="dac_c1_dacbfwm_present"
       enabledBy="dac_c0_dacen"
       typeName="DacWaterMark"
-      baseType="uint8_t" 
+      baseType="uint8_t"
       description="Buffer Watermark Select"
       toolTip="Controls when SR[DACBFWMF] is set.\n
                Normal Mode: \n
@@ -170,7 +170,7 @@
       locked="true"
       enabledBy="enablePeripheralSupport"
       typeName="DacC2Dacbfrp"
-      baseType="uint8_t" 
+      baseType="uint8_t"
       toolTip="In normal mode it keeps the current value of the buffer read pointer.\n
                In FIFO mode it is the FIFO read pointer. \n
                It is writable in FIFO mode. User can configure it to same address to reset FIFO as empty."
@@ -181,7 +181,7 @@
    <choiceOption key="dac_c2_dacbfup" condition="dac_c2_dacbfup_present"
       enabledBy="dac_c0_dacen"
       typeName="DacBufferUpperLimit"
-      baseType="uint8_t" 
+      baseType="uint8_t"
       toolTip="Normal mode\n
                - Selects the upper limit of the DAC buffer. The buffer read pointer cannot exceed it\n
                FIFO mode\n
@@ -200,7 +200,7 @@
       description="DAC Buffer Watermark Flag"
       hidden="true"
       typeName="DacWatermarkFlag"
-      baseType="uint8_t" 
+      baseType="uint8_t"
       toolTip="This bit is set if the remaining FIFO data is less than the watermark setting.\n
                It is cleared automatically by writing data into FIFO by DMA or CPU. \n
                Write to this bit is ignored in FIFO mode." >
@@ -212,7 +212,7 @@
       description="DAC Buffer Read Pointer Top Position Flag"
       hidden="true"
       typeName="DacReadPtrTopFlag"
-      baseType="uint8_t" 
+      baseType="uint8_t"
       toolTip="In FIFO mode, it is FIFO nearly empty flag. \n
                It is set when only one data remains in FIFO. \n
                Any DAC trigger does not increase the Read Pointer if this bit is set to \n
@@ -373,6 +373,13 @@
       \t * @endcode
       \t */
       \tclass Init {
+      \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(Types...) = delete;
       \t
       \tpublic:
       \t   /**
@@ -580,8 +587,8 @@
       \t};
       \t\n
    ]]></template>
-   
-   
+
+
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
       \t}; // class $(_Structname)BasicInfo::Init

@@ -7,7 +7,7 @@
    <!-- ____ Common ____________ -->
    <equation key="irqName"       value='=ReplaceAll(/GPIO$(_instance)/_hardwareIrqNums,"^(.*?)_.*$","$1")' />
    <equation key="prettyIrqName" value='=ReplaceAll(irqName,"^PORT(.*)$","Port$1")' />
-   
+
    <!-- IRQ vector patterns for PORT! - This assumes a single vector with expected pattern -->
    <constant key="irq_pattern"      type="String"  value='irqName' />
    <constant key="irq_ClassHandler" type="String"  value='"PcrBase::irqHandler&lt;PortIrqNum_"+prettyIrqName+"&gt;"' />
@@ -21,20 +21,20 @@
    <equation key="configureInStartupDefault" value="false"        />
    <xi:include href="enablePeripheral.xml"  />
    <title />
-   
+
    <template><![CDATA[
        \t//! Class based callback handler has been installed in vector table for this instance
        \tstatic constexpr bool irqHandlerInstalled = $(irqHandlingMethod:false);
        \t\n
    ]]></template>
-   
+
    <!-- ____ Interrupts ____________ -->
    <if condition="!/Port" >
 
       <constant key="/Port" type="Boolean" />
-   
+
       <equation key="portVectors" value='=IrqVectors("^(PORT.*?)\|.*$","$1")' />
-      
+
       <template key="/PORT/Declarations" >
       <![CDATA[
          \t/**
@@ -45,7 +45,7 @@
          \tenum PortIrqNum : int8_t {\n
       ]]>
       </template>
-      
+
       <!--  Callback table + numbers -->
       <template where="static" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
       <![CDATA[
@@ -54,46 +54,46 @@
          \t */
          \tPinCallbackFunction PcrBase::sCallbacks[] = {\n
       ]]></template>
-      
+
       <equation key="portVectors" value='=IrqVectors("^(PORT.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$1|$5")' />
       <for keys="vector" values="=portVectors" >
-      
+
          <equation key="name"        value='=ReplaceAll("%(vector)","^PORT(.*?)\|(.*?)$","PortIrqNum_Port$1")'/>
          <equation key="irqName"     value='=ReplaceAll("%(vector)","^(PORT.*?)\|(.*?)$","$1_IRQn")'/>
          <equation key="peripherals" value='=ReplaceAll("%(vector)","^(.*?)\|(PORT.*?)$","$2")'/>
-         
+
          <equation key="cond" value=""/>
          <for keys="gpios" values="=peripherals" delimiter="," >
             <equation key="cond" value='=cond+"||"' condition='=cond!=""'/>
             <equation key="cond" value='=cond+"/"+ReplaceAll("%(gpios)","^PORT(.*)$","GPIO$1")+"/irqHandlingMethod"' />
          </for>
-         
+
          <template key="/PORT/Declarations" codeGenCondition="=cond"
             immediateVariables="name,peripherals,cond"
          ><![CDATA[
             \t   $(name), // Used by $(peripherals)\n
          ]]></template>
-         
+
          <template where="static" codeGenCondition="=cond"
             immediateVariables="name,peripherals,cond,irqName"
          ><![CDATA[
             \t   PcrBase::unhandledCallback,  // $(irqName), used by $(peripherals)\n
          ]]></template>
       </for>
-      
+
       <template key="/PORT/Declarations" >
       <![CDATA[
          \t};
          \t\n
       ]]>
       </template>
-      
+
       <template where="static" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
       <![CDATA[
          \t};
          \t\n
       ]]></template>
-      
+
       <template key="/PORT/AccessFunctions" >
       <![CDATA[
          \t/**
@@ -103,14 +103,13 @@
          \t *
          \t * @return IRQ number
          \t */
-         \tstatic constexpr PortIrqNum getIrqIndex(PortIndex portIndex) {
-         \t\n
+         \tstatic constexpr PortIrqNum getIrqIndex(PortIndex portIndex) {\n
       ]]></template>
       <for keys=   "Name" values= "  A;B;C;D;E;F;G;H;I" >
-      
+
          <equation key="prettyIrqName" condition="/GPIO%(Name)/_present"
             value='=ReplaceAll(/GPIO%(Name)/_hardwareIrqNums,"^PORT(.*?)_.*$","Port$1")' />
-      
+
          <template key="/PORT/AccessFunctions"
             condition="/GPIO%(Name)/_present&amp;&amp;/GPIO%(Name)/_hardwareIrqCount"
             codeGenCondition="/GPIO%(Name)/irqHandlingMethod"
@@ -129,7 +128,7 @@
          \t}
          \t\n
       ]]></template>
-      
+
       <template key="/PORT/AccessFunctions" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" >
       <![CDATA[
       \t/** Callback functions for ISRs */
@@ -165,9 +164,9 @@
       ]]>
       </template>
    </if>
-   
+
    <!-- ____ PCR patterns ____________ -->
-   
+
    <if condition="!/SYSTEM/$pcrPattern">
       <!--
           *  %i => pin.getPortInstance());     => port instance e.g."A"
@@ -243,7 +242,8 @@
        *
        * Global indices for ports
        */
-      enum class PortIndex : int16_t {\n
+      enum class PortIndex : int16_t {
+      \tNoPort = -1,\n
    ]]></template>
    <for keys=   "Name : portIndex"
         values= "  A   :  0;
@@ -258,7 +258,7 @@
 
       <template key="/PORT/Declarations" discardRepeats="true" condition="/GPIO%(Name)/_present"
       ><![CDATA[
-         \tPort%(Name) = %(portIndex),\n
+         \tPort%(Name)  = %(portIndex),\n
       ]]></template>
    </for>
    <template key="/PORT/Declarations" discardRepeats="true" >
@@ -278,6 +278,9 @@
       \t * @return portIndex
       \t */
       \tconstexpr PortIndex mapPinToPort(PinIndex pinIndex) {
+      \t   if (int(pinIndex)<0) {
+      \t      return PortIndex::NoPort;
+      \t    }
       \t   return PortIndex(int(pinIndex)/32);
 	   \t}
       \t
@@ -295,7 +298,7 @@
    ]]></template>
 
    <!-- ____ GpioPcrValue() ____________ -->
-   
+
    <template key="/GPIO/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t/**
@@ -334,7 +337,7 @@
    ]]></template>
 
    <!-- ____ getGpioAddress() ____________ -->
-   
+
    <template key="/GPIO/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t/**
@@ -368,7 +371,7 @@
    ]]></template>
 
    <!-- ____ getPortAddress() ____________ -->
-   
+
    <template key="/PORT/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t/**
@@ -376,9 +379,12 @@
       \t *
       \t * @param portIndex Port index e.g. PortIndex::PortA. Used to determine return value
       \t *
-      \t * @return Pointer to relevant PORT
+      \t * @return Address of relevant PORT or 0 if none.
       \t */
       \tstatic constexpr uint32_t getPortAddress(PortIndex portIndex) {
+      \t   if (portIndex == PortIndex::NoPort) {
+      \t      return 0;
+      \t   }
       \t\n
    ]]></template>
    <for keys=   "Name" values= "  A;B;C;D;E;F;G;H;I" >
@@ -400,7 +406,7 @@
    ]]></template>
 
    <!-- ____ getClockMask() ____________ -->
-   
+
    <template key="/PORT/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t/**
@@ -435,7 +441,7 @@
    ]]></template>
 
    <!-- ____ getIrqNum() ____________ -->
-   
+
    <template key="/PORT/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t/**
@@ -467,7 +473,7 @@
    ]]></template>
 
    <!-- ____ isHandlerInstalled() ____________ -->
-   
+
    <template key="/PORT/AccessFunctions" discardRepeats="true" >
    <![CDATA[
       \t/**
@@ -520,7 +526,7 @@
    </validate>
 
    <!-- ____ gpio_files ____________ -->
-   
+
    <projectActionList id = "gpio_files" >
       <copy source="Snippets/digital-rotary-encoder-example.cpp" target="Snippets/digital-rotary-encoder-example.cpp" overwrite="true" derived="true" />
       <copy source="Snippets/digital-interrupt-example.cpp"      target="Snippets/digital-interrupt-example.cpp"      overwrite="true" derived="true" />

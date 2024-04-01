@@ -5,13 +5,16 @@
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="TSI">
 
    <choiceOption key="tsi_gencs_dvolt"
+      enabledBy="enablePeripheralSupport"
       hidden="true"
-      description="Oscillator's voltage rails" >
-      <choice value="0" name="dV = 1.03 V; Vp = 1.33 V; Vm = 0.30 V" />
-      <choice value="0" name="dV = 0.59 V; Vp = 1.11 V; Vm = 0.52 V" />
-      <choice value="0" name="dV = 0.34 V; Vp = 0.99 V; Vm = 0.64 V" />
-      <choice value="0" name="dV = 0.20 V; Vp = 0.91 V; Vm = 0.72 V" />
+      typeName="TsiDeltaVoltage"
+      description="Oscillator voltage rails" >
+      <choice value="0" name="dV = 1.03 V; Vp = 1.33 V; Vm = 0.30 V" enum="High"    />
+      <choice value="0" name="dV = 0.59 V; Vp = 1.11 V; Vm = 0.52 V" enum="MidHigh" />
+      <choice value="0" name="dV = 0.34 V; Vp = 0.99 V; Vm = 0.64 V" enum="MidLow"  />
+      <choice value="0" name="dV = 0.20 V; Vp = 0.91 V; Vm = 0.72 V" enum="Low"     />
    </choiceOption>
 
    <xi:include href="tsi0_base_mkl.xml"/>
+
 </peripheralPage>

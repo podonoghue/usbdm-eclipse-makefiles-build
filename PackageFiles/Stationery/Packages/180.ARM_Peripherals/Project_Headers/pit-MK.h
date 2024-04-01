@@ -159,90 +159,6 @@ $(/PIT/publicMethods: // /PIT/publicMethods not found)
       pit->CHANNEL[pitChannelNum].TCTRL = pit->CHANNEL[pitChannelNum].TCTRL | pitChannelAction;
    }
 
-#if $(/PIT/irqHandlingMethod:false) // /PIT/irqHandlingMethod
-
-   using CallbackFunction = typename Info::CallbackFunction;
-   
-   /**
-    * Wrapper to allow the use of a class member as a callback function
-    * @note Only usable with static objects.
-    *
-    * @tparam T         Type of the object containing the callback member function
-    * @tparam callback  Member function pointer
-    * @tparam object    Object containing the member function
-    *
-    * @return  Pointer to a function suitable for the use as a callback
-    *
-    * @code
-    * class AClass {
-    * public:
-    *    int y;
-    *
-    *    // Member function used as callback
-    *    // This function must match CallbackFunction
-    *    void callback() {
-    *       ...;
-    *    }
-    * };
-    * ...
-    * // Instance of class containing callback member function
-    * static AClass aClass;
-    * ...
-    * // Wrap member function
-    * auto fn = Pit::wrapCallback<AClass, &AClass::callback, aClass>();
-    * // Use as callback
-    * Pit::Channel<0>::oneShot(fn, 1.5*USBDM::seconds);
-    * @endcode
-    */
-   template<class T, void(T::*callback)(), T &object>
-   static CallbackFunction wrapCallback() {
-      static CallbackFunction fn = []() {
-         (object.*callback)();
-      };
-      return fn;
-   }
-
-   /**
-    * Wrapper to allow the use of a class member as a callback function
-    * @note There is a considerable space and time overhead to using this method
-    *
-    * @tparam T         Type of the object containing the callback member function
-    * @tparam callback  Member function pointer
-    * @tparam object    Object containing the member function
-    *
-    * @return  Pointer to a function suitable for the use as a callback
-    *
-    * @code
-    * class AClass {
-    * public:
-    *    int y;
-    *
-    *    // Member function used as callback
-    *    // This function must match CallbackFunction
-    *    void callback() {
-    *       ...;
-    *    }
-    * };
-    * ...
-    * // Instance of class containing callback member function
-    * AClass aClass;
-    * ...
-    * // Wrap member function
-    * auto fn = Pit::wrapCallback<AClass, &AClass::callback>(aClass);
-    * // Use as callback
-    * Pit::Channel<0>::oneShot(fn, 1.5*USBDM::seconds);
-    * @endcode
-    */
-   template<class T, void(T::*callback)()>
-   static CallbackFunction wrapCallback(T &object) {
-      static T &obj = object;
-      static CallbackFunction fn = []() {
-         (obj.*callback)();
-      };
-      return fn;
-   }
-#endif // /PIT/irqHandlingMethod
-
 protected:
    /** Pointer to hardware */
    static constexpr HardwarePtr<PIT_Type> pit = Info::baseAddress;
@@ -526,6 +442,9 @@ public:
 #endif // /PIT/secondsSupport
 
 #if $(/PIT/irqHandlingMethod:false) // /PIT/irqHandlingMethod
+
+   using CallbackFunction = typename Info::CallbackFunction;
+   
    /**
     * Set interrupt callback function.
     *

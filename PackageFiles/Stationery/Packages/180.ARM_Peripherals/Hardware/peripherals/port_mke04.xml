@@ -152,6 +152,9 @@
          <bitmaskOption key="port_puel_pt%(p)pe"  condition="port_puel_pt%(p)pe_present"
             description="Pull-up control for Port %(P)"
             toolTip="Each bit controls the pull-up for the corresponding pin"
+            baseType="uint32_t"
+            bitList="Pin%i"
+            typeName="PortPullUp%(P)"
             value="%(v)"
             bitmask="%(m)" />
       </for>
@@ -356,12 +359,11 @@
 
    <for keys="r"
       values="
-            port_puel_ptcpe,port_puel_ptbpe,port_puel_ptape
+            port_puel_ptape,port_puel_ptbpe,port_puel_ptcpe
             " >
       <variableTemplate codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
-         linePadding="xxx"
-         useDefinitions="true" >
+         linePadding="xxx" >
       <![CDATA[
          \t   /** Default value for %description */
          \t   static constexpr uint32_t %registerName = %initExpression;
@@ -372,7 +374,7 @@
 
    <for keys="r"
       values="
-            port_hdrve_ptc5,port_hdrve_ptc1,port_hdrve_ptb5
+            port_hdrve_ptb5,port_hdrve_ptc1,port_hdrve_ptc5
             " >
       <variableTemplate codeGenCondition="enablePeripheralSupport"
          variables="%(r)"

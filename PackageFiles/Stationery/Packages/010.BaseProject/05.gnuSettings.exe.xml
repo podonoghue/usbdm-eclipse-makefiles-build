@@ -17,6 +17,9 @@
       <projectOption id="gnu.c.link.option.paths">
          <value>&quot;../Project_Settings/Linker_Files&quot;</value>
       </projectOption>
+      <projectOption id="gnu.c.link.option.other">
+         <value>&quot;-print-memory-usage&quot;</value>
+      </projectOption>
 
       <!-- Predefined symbols for debug build -->
       <projectOption id="net.sourceforge.usbdm.cdt.toolchain.cppAssembler.preprocess.definedSymbols" config="debug">
@@ -65,6 +68,9 @@
       </projectOption>
       <projectOption id="gnu.cpp.link.option.paths">
          <value>&quot;../Project_Settings/Linker_Files&quot;</value>
+      </projectOption>
+      <projectOption id="gnu.cpp.link.option.other">
+         <value>&quot;-print-memory-usage&quot;</value>
       </projectOption>
 
       <!-- Semi-hosting library option-->

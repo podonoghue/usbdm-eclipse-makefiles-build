@@ -18,8 +18,9 @@ using namespace USBDM;
 
 // Connections - change as required
 using Cmp              = Cmp0;
-using CmpPositiveInput = Cmp::Pin<Cmp0::Input_Ptc8>;   // Change as needed in Configure.usbdmProject
-using CmpNegativeInput = Cmp::Pin<Cmp0::Input_CmpDac>;
+
+using CmpPositiveInput = Cmp0::Pin<Cmp0InputMinus_Ptc6>;   // Change as needed
+using CmpNegativeInput = Cmp0::Pin<Cmp0InputMinus_CmpDac>; // Change as needed
 
 // Led to control - change as required
 using Led   = GpioA<2, ActiveLow>;
@@ -29,17 +30,17 @@ using Led   = GpioA<2, ActiveLow>;
  *
  * @param[in]  status Struct indicating interrupt source and state
  */
-void callback(CmpStatus status) {
+void callback(const CmpStatus &status) {
    switch(status.event) {
-      case CmpEvent_Falling:
+      case CmpEventId_FallingEdge:
          // Falling edge
          console.write("Falling, State = ");
          break;
-      case CmpEvent_Rising:
+      case CmpEventId_RisingEdge:
          // Rising edge
          console.write("Rising,  State = ");
          break;
-      case CmpEvent_Both:
+      case CmpEventId_BothEdges:
          // Rising+Falling edges
          console.write("Both,    State = ");
          break;
@@ -61,30 +62,24 @@ int main() {
    Led::setOutput();
 
    // Configure comparator before use
-   Cmp::configure(
-         CmpPower_HighSpeed,
-         CmpHysteresis_2,
-         CmpPolarity_Noninverted);
-
-   // Internal DAC used for one input - set level to 50%
-   Cmp::setDacLevel(Cmp::MAXIMUM_DAC_VALUE/2);
-
-   // Set callback to execute on event
-   Cmp::setCallback(callback);
+   static constexpr Cmp::Init cmpInit {
+      CmpPower_HighSpeed,
+      CmpHysteresis_Level_2,
+      CmpPolarity_Normal,
+      Cmp::MAXIMUM_DAC_VALUE/2,
+      CmpEvent_OnEither,
+      CmpPositiveInput::plusPin,
+      CmpNegativeInput::minusPin,
+      callback,
+   };
+   Cmp::configure(cmpInit);
 
    // Connect CMP inputs to pins as needed
    CmpPositiveInput::setInput();
 //   CmpNegativeInput::setInput(); // No actual pin for DacRef as internal connection
 
-   // Select comparator inputs
-   Cmp::selectInputs(CmpPositiveInput::pinNum, CmpNegativeInput::pinNum);
-
    // Connect CMP output to pin
    Cmp::setOutput(PinDriveStrength_High, PinDriveMode_PushPull);
-
-   // Enable interrupts on Rising and Falling edges
-   Cmp::enableInterrupts(CmpInterrupt_Both);
-   Cmp::enableNvicInterrupts(NvicPriority_Normal);
 
    for(;;) {
       //      Led::toggle();

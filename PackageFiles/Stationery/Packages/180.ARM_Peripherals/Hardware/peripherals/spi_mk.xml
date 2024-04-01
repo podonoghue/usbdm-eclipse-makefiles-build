@@ -28,6 +28,9 @@
 
 <!-- Clocking -->
 
+   <!--  Default clock is Bus Clock -->
+   <constant key="ClockSource" value='"SystemBusClock"' condition="!ClockSource" />
+
    <title description="Clocking" />
    <binaryOption key="/$(_BASENAME)/baudSupport"
       enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
@@ -39,35 +42,59 @@
       <choice value="true"  name="Speed may be specified in Hertz" />
    </binaryOption>
 
-   <choiceOption key="spiClockConfig" condition="/MCG/_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-      target="spiInputClock"
-      description="Clock configuration"
-      toolTip="Selects the clock configuration used for calculations involving the bus clock" >
-      <choice value="0" name="@/MCG/ClockConfig[0]" ref="/SIM/system_bus_clock[0]"  isDefault="true" />
-      <choice value="1" name="@/MCG/ClockConfig[1]" ref="/SIM/system_bus_clock[1]"  />
-      <choice value="2" name="@/MCG/ClockConfig[2]" ref="/SIM/system_bus_clock[2]"  />
-      <choice value="3" name="@/MCG/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
-   </choiceOption>
+   <if condition='=ClockSource=="SystemBusClock"'>
+      <choiceOption key="spiClockConfig" condition="/MCG/_present"
+         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         target="spiInputClock"
+         description="Clock configuration"
+         toolTip="Selects the clock configuration used for calculations involving the bus clock" >
+         <choice value="0" name="@/MCG/ClockConfig[0]" ref="/SIM/system_bus_clock[0]"  isDefault="true" />
+         <choice value="1" name="@/MCG/ClockConfig[1]" ref="/SIM/system_bus_clock[1]"  />
+         <choice value="2" name="@/MCG/ClockConfig[2]" ref="/SIM/system_bus_clock[2]"  />
+         <choice value="3" name="@/MCG/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
+      </choiceOption>
 
-   <choiceOption key="spiClockConfig" condition="/ICS/_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-      target="spiInputClock"
-      description="Clock configuration"
-      toolTip="Selects the clock configuration used for calculations involving the bus clock" >
-      <choice value="0" name="@/ICS/ClockConfig[0]" ref="/SIM/system_bus_clock[0]"  isDefault="true" />
-      <choice value="1" name="@/ICS/ClockConfig[1]" ref="/SIM/system_bus_clock[1]"  />
-      <choice value="2" name="@/ICS/ClockConfig[2]" ref="/SIM/system_bus_clock[2]"  />
-      <choice value="3" name="@/ICS/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
-   </choiceOption>
+      <choiceOption key="spiClockConfig" condition="/ICS/_present"
+         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         target="spiInputClock"
+         description="Clock configuration"
+         toolTip="Selects the clock configuration used for calculations involving the bus clock" >
+         <choice value="0" name="@/ICS/ClockConfig[0]" ref="/SIM/system_bus_clock[0]"  isDefault="true" />
+         <choice value="1" name="@/ICS/ClockConfig[1]" ref="/SIM/system_bus_clock[1]"  />
+         <choice value="2" name="@/ICS/ClockConfig[2]" ref="/SIM/system_bus_clock[2]"  />
+         <choice value="3" name="@/ICS/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
+      </choiceOption>
+   </if>
+   <if condition='=ClockSource=="SystemCoreClock"'>
+      <choiceOption key="spiClockConfig" condition="/MCG/_present"
+         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         target="spiInputClock"
+         description="Clock configuration"
+         toolTip="Selects the clock configuration used for calculations involving the bus clock" >
+         <choice value="0" name="@/MCG/ClockConfig[0]" ref="/SIM/system_core_clock[0]"  isDefault="true" />
+         <choice value="1" name="@/MCG/ClockConfig[1]" ref="/SIM/system_core_clock[1]"  />
+         <choice value="2" name="@/MCG/ClockConfig[2]" ref="/SIM/system_core_clock[2]"  />
+         <choice value="3" name="@/MCG/ClockConfig[3]" ref="/SIM/system_core_clock[3]"  />
+      </choiceOption>
+
+      <choiceOption key="spiClockConfig" condition="/ICS/_present"
+         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         target="spiInputClock"
+         description="Clock configuration"
+         toolTip="Selects the clock configuration used for calculations involving the bus clock" >
+         <choice value="0" name="@/ICS/ClockConfig[0]" ref="/SIM/system_core_clock[0]"  isDefault="true" />
+         <choice value="1" name="@/ICS/ClockConfig[1]" ref="/SIM/system_core_clock[1]"  />
+         <choice value="2" name="@/ICS/ClockConfig[2]" ref="/SIM/system_core_clock[2]"  />
+         <choice value="3" name="@/ICS/ClockConfig[3]" ref="/SIM/system_core_clock[3]"  />
+      </choiceOption>
+   </if>
 
    <intOption key="spiInputClock"
       enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       locked="true"
       derived="true"
       description="SPI input clock"
-      toolTip="The SPI uses the bus clock for timing.\n
-               The frequency shown is based on the selected clock configuration.\n
+      toolTip="The frequency shown is based on the selected clock configuration.\n
                This frequency is used as the basis for calculations on this page."
       units="Hz"
       />
@@ -1239,14 +1266,15 @@
    <template key="/SPI/handlerSlot" ><![CDATA[
       \t{nullptr}, // $(_NAME)\n
    ]]></template>
-   <template><![CDATA[
+
+   <template codeGenCondition="enablePeripheralSupport" immediateVariables="ClockSource" ><![CDATA[
       \t/**
       \t * Get SPI input clock frequency
       \t *
       \t * @return Frequency in Hz
       \t */
       \tstatic uint32_t getClockFrequency() {
-      \t   return SystemBusClock;
+      \t   return $(ClockSource);
       \t}\n\n
    ]]></template>
 

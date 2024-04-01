@@ -61,8 +61,9 @@
       <choice value="1" name="Enabled"  enum="Enabled"  isDefault="true" />
    </binaryOption>
 
+   <!-- Preserve factory trim -->
    <intOption key="vref_trm_trim" condition="vref_trm_trim_present"
-      enabledBy="enablePeripheralSupport"
+      hidden="true"
       toolTip="Changes the resulting VREF by approximately ~0.5 mV for each step"
       description="Trim bits"
       typeName="int8_t"
@@ -186,6 +187,13 @@
       \t */
       \tclass Init {
       \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(Types...) = delete;
+      \t
       \tpublic:
       \t   /**
       \t    * Copy Constructor
@@ -203,7 +211,7 @@
    <!--   Member variables -->
 
    <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="vref_trm_chopen,vref_trm_trim"
+      variables="vref_trm_chopen"
    ><![CDATA[
       \t   /// Trim Register
       \t   uint8_t %registerName = 0;\n\n
@@ -221,7 +229,6 @@
    <for keys="r"
       values="
             vref_trm_chopen;
-            vref_trm_trim;
             vref_sc_vrefen;
             vref_sc_regen;
             vref_sc_icompen;
@@ -262,7 +269,6 @@
       terminator=","
       variables="
             vref_trm_chopen,
-            vref_trm_trim,
             vref_sc_vrefen,
             vref_sc_regen,
             vref_sc_icompen,
@@ -301,26 +307,13 @@
       \t
       \t   // Enable peripheral
       \t   enable();
-      \t
-      \t   uint8_t trm = init.trm;
       \t\n
    ]]></template>
-   <if condition="vref_sc_regen&amp;&amp;vref_trm_chopen" >
-      <variableTemplate codeGenCondition="enablePeripheralSupport"
-         variables="vref_sc_regen, vref_trm_chopen"
-         linePadding="xxx"
-      ><![CDATA[
-         \t   if (init.%registerName0&%mask0) {
-         \t      // Chop must be enabled if regulator enabled
-         \t      %registerName1 |= %mask1;
-         \t   }\n
-      ]]></variableTemplate>
-   </if>
    <variableTemplate codeGenCondition="enablePeripheralSupport"
       variables="vref_sc_regen" >
    <![CDATA[
-      \t   vref->TRM = trm;
-      \t   %register0  = init.%registerName0 & ~%mask0;
+      \t   vref->TRM |= init.trm;
+      \t   %register0   = init.%registerName0 & ~%mask0;
       \t
       \t   // Regulator must be enabled >300ns after other settings
       \t   waitUS(1);

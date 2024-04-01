@@ -24,40 +24,56 @@ using namespace USBDM;
 using MyAdc        = Adc0;
 
 // ADC channel to use
-using BandgapAdcChannel  = Adc0::Channel<27>;  // Internal bandgap
-using MyAdcChannel       = Adc0::Channel<26>;  // Internal chip temperature
+using BandgapAdcChannel  = Adc0::Channel<AdcChannelNum_27>;  // Internal bandgap
+using MyAdcChannel       = Adc0::Channel<AdcChannelNum_26>;  // Internal chip temperature
 
 // Resolution to use for ADC
 constexpr AdcResolution adcResolution = AdcResolution_16bit_se;
 
 void reportChipTemperature() {
-   using TemperatureChannel    = Adc0::Channel<0b11010>;  // Internal temp sensor
-   constexpr float VREF_H      = 3.3;                     // External Vref voltage ~ Vcc
+   using TemperatureChannel    = Adc0::Channel<AdcChannelNum_26>;  // Internal temp sensor
+   constexpr float VREF_H      = 3.3;                              // External Vref voltage ~ Vcc
 
    unsigned tMeasure        = TemperatureChannel::readAnalogue();
    float    tVoltage        = tMeasure*(VREF_H/Adc0::getSingleEndedMaximum(adcResolution));
    // Formula from data sheets
    float    chipTemperature = 25 - (tVoltage-0.719)/.001715;
 
-   console.setFloatFormat(1, Padding_LeadingSpaces, 2);
+   static constexpr FloatFormat format {
+      Precision_2,
+      Padding_LeadingSpaces,
+      Width_auto,
+   };
+   console.setFormat(format);
    console.writeln("Temp = ", chipTemperature, " degrees");
-   console.resetFormat();
+   console.resetFloatFormat();
 }
 
 int main(void) {
-   // Enable and configure ADC
-   MyAdc::configure(adcResolution);
 
-   // Calibrate before first use
-   MyAdc::calibrate();
+   MyAdc::Init adcInit {
+      adcResolution,
+      AdcAveraging_32,
+   };
+
+   // Enable and configure ADC
+   MyAdc::configure(adcInit);
 
    // Connect ADC channel to pin
    MyAdcChannel::setInput();
 
    // Enable band-gap voltage reference buffer in PMC
-   Pmc::configureBandgapOperation(PmcBandgapBuffer_Enabled, PmcBandgapOperationInLowPower_Disabled);
+   static constexpr Pmc::Init pmcInit {
+      PmcBandgapOperationInLowPower_Enabled , // (pmc_regsc_bgen) Bandgap Enable In VLPx Operation - Disabled
+      PmcBandgapBuffer_Enabled,  // (pmc_regsc_bgbe) Bandgap Buffer Enable - Disabled
+   };
+   Pmc::configure(pmcInit);
 
-   console.setFloatFormat(6, Padding_LeadingSpaces, 2);
+   static constexpr FloatFormat format {
+      Precision_3,
+      Padding_LeadingSpaces,
+      Width_6,
+   };
 
    for(;;) {
 //      reportChipTemperature();
@@ -69,6 +85,7 @@ int main(void) {
       float voltage = value*3.3/MyAdc::getSingleEndedMaximum(adcResolution);
 
       // Report
+      console.setFormat(format);
       console.writeln("Value = ", voltage, " volts");
       waitMS(200);
    }

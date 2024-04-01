@@ -4,57 +4,24 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="True Random Number Generator">
 
-   <equation key="irq_parameters"            type="String"  value='""'  />
-   <equation key="irq_dummy_parameters"      type="String"  value='""'  />
-   <equation key="irq_call"                  type="String"  value='""'  />
-   <equation key="generateDefault"           type="Boolean" value="false"         />
-   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
-   <xi:include href="enablePeripheral.xml"  />
+   <equation key="irq_parameters"             value=""          />
+   <equation key="irq_dummy_parameters"       value=""          />
+   <equation key="irq_call"                   value=""          />
+   <equation key="generateDefault"            value="false"     />
+   <equation key="configureInStartupDefault"  value="false"     />
+   <xi:include href="enablePeripheral.xml"    />
    <title />
 
-<!--
-    * General substitutions
-    *  $(_NAME)         => e.g FTM2 => FTM2
-    *  $(_name)         => e.g FTM2 => ftm2
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
-    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
-    *  $(_Class)        => e.g FTM2 => Ftm2
-    *  $(_Baseclass)    => e.g FTM0 => Ftm
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A
--->
+   <!-- ____ Class Declaration ________ -->
+   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
-<!--
-    * Template substitutions
-    *
-    * <li>%paramExpression            Parameters ORed together e.g. adcPretrigger|adcRefSel
-    * <li>%valueExpression            Numeric variable value e.g. 0x3
-    * <li>%symbolicExpression[index]  Symbolic formatted value e.g. AdcCompare_Disabled
-    * <li>%variable[index]            Variable name /ADC0/adc_sc2_acfe
-    * <li>%macro[index](value)        C register macro e.g. ADC_SC2_ACFGT(value)
-    * <li>%description[index]         Description from controlVar e.g. Compare Function Enable
-    * <li>%shortDescription[index]    Short description from controlVar e.g. Compare Function Enable
-    * <li>%tooltip[index]             Tool-tip from controlVar e.g. Each bit disables the GPIO function
-    * <li>%params                     Formatted parameter list for function
-    * <li>%paramDescription[index]    Tool-tip from controlVar formatted as param description @param ...
-    * <li>%paramType[index]           Based on typeName e.g. AdcCompare (or uint32_t)
-    * <li>%paramName[index]           Based on typeName with lower-case first letter adcCompare
-    * <li>%fieldAssignment            Expression of form '%register <= (%register & ~%mask)|%paramExpression
-    * <li>%maskingExpression          Based on variable etc. Similar to (%register&%mask)
-    * <li>%mask[index]                From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
-    * <li>%register[index]            Register associated with variable e.g. adc->APCTL1
-    * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
-    * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
--->
-
-   <!-- ************* Class Declaration ****************** -->
-   <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Structname)BasicInfo&quot;" />
-
-   <!-- ************* MCTL ****************** -->
+   <!-- ____ MCTL ____ -->
+   <title description="Miscellaneous Control Register" />
 
    <binaryOption key="trng_mctl_prgm" condition="trng_mctl_prgm_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngMode"
+      baseType="uint32_t"
       toolTip="No Entropy value will be generated while the TRNG is in Program Mode.\n
                Note that different RNG registers are accessible at the same address \n
                depending on whether PRGM is set to 1 or 0."
@@ -65,7 +32,9 @@
 
    <binaryOption key="trng_mctl_tstop_ok" condition="trng_mctl_tstop_ok_present"
       hidden="true"
+      derived="true"
       typeName="TrngStopOk"
+      baseType="uint32_t"
       toolTip="Software should check that this bit is a 1 before transitioning TRNG0 to low power mode\n
                The TRNG turns on the free-running ring oscillator whenever new entropy is being \n
                generated. If the TRNG clock is stopped while the TRNG ring oscillator is running,\n
@@ -73,21 +42,25 @@
                TSTOP_OK is asserted when the TRNG ring oscillator is not running and may be stopped."
       description="Indicates the Trng may be stopped" >
       <choice name="Busy and may not be stopped"  value="0" enum="Busy" />
-      <choice name="Idle and may be stopped"      value="1" enum="Idle"     />
+      <choice name="Idle and may be stopped"      value="1" enum="Idle" />
    </binaryOption >
 
    <binaryOption key="trng_mctl_err" condition="trng_mctl_err_present"
       hidden="true"
+      derived="true"
       typeName="TrngStatus"
+      baseType="uint32_t"
       toolTip="Write-1 to clear error status"
       description="Error status" >
-      <choice name="No error"                           value="0" enum="NoError" />
-      <choice name="Error"                              value="1" enum="Error" />
+      <choice name="No action"    value="0" enum="NoError" />
+      <choice name="Clear error"  value="1" enum="Error"   isDefault="true" />
    </binaryOption >
 
    <binaryOption key="trng_mctl_tst_out" condition="trng_mctl_tst_out_present"
       hidden="true"
+      derived="true"
       typeName="TrngTestOutput"
+      baseType="uint32_t"
       toolTip="Read only: Test point inside ring oscillator"
       description="Test point for oscillator" >
       <choice name="Low value"                           value="0" enum="Low" />
@@ -96,7 +69,9 @@
 
    <binaryOption key="trng_mctl_ent_val" condition="trng_mctl_ent_val_present"
       hidden="true"
+      derived="true"
       typeName="TrngEntropy"
+      baseType="uint32_t"
       toolTip="Read only: Entropy Valid.\n
                Will assert only if TRNG ACC bit is set, and then after an entropy value is generated.\n
                Will be cleared at most one (1) bus clock cycle after reading the TRNG0_ENT15 register."
@@ -107,7 +82,9 @@
 
    <binaryOption key="trng_mctl_fct_val" condition="trng_mctl_fct_val_present"
       hidden="true"
-      typeName="TrngMFrequencyCountStatus"
+      derived="true"
+      typeName="TrngFrequencyCountStatus"
+      baseType="uint32_t"
       toolTip="Read only: Frequency Count Valid.\n
                Indicates that a valid frequency count may be read from TRNG0_FRQCNT."
       description="Frequency Count Valid" >
@@ -117,7 +94,9 @@
 
    <binaryOption key="trng_mctl_fct_fail" condition="trng_mctl_fct_fail_present"
       hidden="true"
-      typeName="TrngMctlFctFail"
+      derived="true"
+      typeName="TrngFrequencyCountFailed"
+      baseType="uint32_t"
       toolTip="Read Only: Indicates the frequency counter has detected a failure.\n
                This may be due to improper programming of the TRNG0_FRQMAX and/or\n
                TRNG0_FRQMIN registers, or a hardware failure in the ring oscillator.\n
@@ -127,9 +106,23 @@
       <choice name="Failure"    value="1" enum="Failed" />
    </binaryOption >
 
+   <binaryOption key="trng_mctl_for_sclk" condition="trng_mctl_for_sclk_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="TrngForceClock"
+      baseType="uint32_t"
+      toolTip="Forces use of the system clock operate the TRNG, instead of the ring oscillator.\n
+               This is for test use only, and indeterminate results may occur.\n
+               This bit is writable only if PRGM bit is 1, or PRGM bit is being written to 1\n
+               simultaneously to writing this bit. This bit is cleared by writing the RST_DEF bit to 1."
+      description="Force System Clock" >
+      <choice name="Normal mode - Ring oscillator" value="0" enum="Normal" />
+      <choice name="Test mode - System clock"      value="1" enum="Test"   />
+   </binaryOption>
+
    <binaryOption key="trng_mctl_rst_def" condition="trng_mctl_rst_def_present"
-      hidden="true"
+      enabledBy="enablePeripheralSupport"
       typeName="TrngReset"
+      baseType="uint32_t"
       toolTip="Writing a 1 to this bit clears various TRNG registers, and bits within registers,\n
                to their default state. This bit is writable only if PRGM bit is 1, or PRGM bit\n
                is being written to 1 simultaneously to writing this bit.\n
@@ -142,30 +135,19 @@
    <binaryOption key="trng_mctl_trng_acc" condition="trng_mctl_trng_acc_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngAccessMode"
+      baseType="uint32_t"
       toolTip="When set to 1, the TRNG will generate an Entropy value that can be read via the\n
                TRNG0_ENT0-TRNG0_ENT15 registers.\n
                The Entropy value may be read once the ENT VAL bit is asserted."
       description="Access Mode" >
-      <choice name="Stopped"  value="0" enum="Stopped" />
-      <choice name="Generate" value="1" enum="Generate" />
+      <choice name="Stopped"  value="0" enum="Stopped"  />
+      <choice name="Generate" value="1" enum="Generate" isDefault="true" />
    </binaryOption >
-
-   <choiceOption key="trng_mctl_samp_mode" condition="trng_mctl_samp_mode_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="TrngMctlSampMode"
-      toolTip="Determines the method of sampling the ring oscillator while generating the Entropy value.\n
-               This field is writable only if PRGM bit is 1, or PRGM bit is being written to 1\n
-               simultaneously with writing this field.\n
-               This field is cleared to the POR default value by writing the RST_DEF bit to 1."
-      description="Sample Mode" >
-      <choice name="Von Neumann data -> Entropy shifter and Statistical Checker"          value="0" enum="VonNeumann" />
-      <choice name="Raw data -> Entropy shifter and Statistical Checker"                  value="1" enum="RawData"    isDefault="true" />
-      <choice name="Von Neumann data -> Entropy shifter. Raw data -> Statistical Checker" value="2" enum="VonNeumannToEntropy_RawDataToChecker" />
-   </choiceOption >
 
    <choiceOption key="trng_mctl_osc_div" condition="trng_mctl_osc_div_present"
       enabledBy="enablePeripheralSupport"
       typeName="TrngOscDivide"
+      baseType="uint32_t"
       toolTip="Determines the amount of dividing done to the ring oscillator before it is used by the TRNG.\n
                This field is writable only if PRGM bit is 1, or PRGM bit is being written to 1\n
                simultaneously to writing this field.\n
@@ -177,54 +159,58 @@
       <choice name="Ring oscillator divided-by-8"    value="3" enum="DivBy8" />
    </choiceOption >
 
-   <binaryOption key="trng_mctl_for_sclk" condition="trng_mctl_for_sclk_present"
+   <choiceOption key="trng_mctl_samp_mode" condition="trng_mctl_samp_mode_present"
       enabledBy="enablePeripheralSupport"
-      typeName="TrngForceClock"
-      toolTip="Forces use of the system clock operate the TRNG, instead of the ring oscillator.\n
-               This is for test use only, and indeterminate results may occur.\n
-               This bit is writable only if PRGM bit is 1, or PRGM bit is being written to 1\n
-               simultaneously to writing this bit. This bit is cleared by writing the RST_DEF bit to 1."
-      description="Force System Clock" >
-      <choice name="Normal mode - Ring oscillator" value="0" enum="Normal" />
-      <choice name="Test mode - System clock"      value="1" enum="Test" />
-   </binaryOption>
+      typeName="TrngSampleMode"
+      baseType="uint32_t"
+      toolTip="Determines the method of sampling the ring oscillator while generating the Entropy value.\n
+               This field is writable only if PRGM bit is 1, or PRGM bit is being written to 1\n
+               simultaneously with writing this field.\n
+               This field is cleared to the POR default value by writing the RST_DEF bit to 1."
+      description="Sample Mode" >
+      <choice name="Von Neumann data -> Entropy shifter and Statistical Checker"          value="0" enum="VonNeumann" />
+      <choice name="Raw data -> Entropy shifter and Statistical Checker"                  value="1" enum="RawData"    isDefault="true" />
+      <choice name="Von Neumann data -> Entropy shifter. Raw data -> Statistical Checker" value="2" enum="VonNeumannToEntropy_RawDataToChecker" />
+   </choiceOption >
 
-   <!-- ************* SCMISC ****************** -->
+   <!-- ____ SCMISC ____ -->
+   <title description="Statistical Check Miscellaneous Register" />
 
    <intOption key="trng_scmisc_rty_ct" condition="trng_scmisc_rty_ct_present"
       enabledBy="enablePeripheralSupport"
-      typeName="TrngScmiscRtyCt"
+      typeName="TrngMaximumRetry"
       baseType="uint32_t"
-      description="Retry Count"
       toolTip="If a statistical check fails during the TRNG Entropy Generation, the RTY_CT value\n
                indicates the number of times a retry should occur before generating an error.\n
                This field is writable only if TRNG0_MCTL[PRGM] bit is 1.\n
                This field will read zeroes if TRNG0_MCTL[PRGM] = 0.\n
                This field is cleared to the default POR value by writing the TRNG0_MCTL[RST_DEF] bit to 1."
+      description="Retry Count"
       value="1"
+      min="0" max="15"
    />
 
    <intOption key="trng_scmisc_lrun_max" condition="trng_scmisc_lrun_max_present"
       enabledBy="enablePeripheralSupport"
-      typeName="TrngScmiscLrunMax"
+      typeName="TrngMaximumConsecutiveRun"
       baseType="uint32_t"
-      description="Long Run Limit"
       toolTip="This value is the largest allowable number of consecutive samples of all 1, or all 0 \n
                that is allowed during the Entropy generation.\n
                This field is writable only if TRNG0_MCTL[PRGM] bit is 1.\n
                This field will read zeroes if TRNG0_MCTL[PRGM] = 0.\n
                This field is cleared to the POR reset value by writing the TRNG0_MCTL[RST_DEF] bit to 1."
+      description="Long Run Limit"
       value="0b100010"
+      min="0" max="255"
    />
 
-   <title description="Poker Test" />
-
-   <!-- ************* PKRRNG ****************** -->
+   <!-- ____ PKRRNG ____ -->
+   <title description="Poker Range Register" />
 
    <intOption key="trng_pkrrng_pkr_rng" condition="trng_pkrrng_pkr_rng_present"
       enabledBy="enablePeripheralSupport"
-      typeName="TrngPkrrngPkrRng"
-      baseType="uint32_t"
+      typeName="TrngPokerRange"
+      baseType="uint16_t"
       description="Poker Range"
       toolTip="During the TRNG Statistical Checks, a Poker Test is run which requires a maximum and minimum limit.\n
                The maximum is programmed in the PKRMAX[PKR_MAX] register, and the minimum is derived by subtracting\n
@@ -234,13 +220,15 @@
                This field is cleared to the default POR value by writing the TRNG0_MCTL[RST_DEF] bit to 1.\n
                Note that the minimum allowable Poker result is PKR_MAX - PKR_RNG + 1."
       value="0b100110100011"
+      min="0" max="65535"
    />
 
-   <!-- ************* PKRMAX ****************** -->
+   <!-- ____ PKRMAX ____ -->
+   <title description="Poker Maximum Limit Register" />
 
    <intOption key="trng_pkrmax_pkr_max" condition="trng_pkrmax_pkr_max_present"
       enabledBy="enablePeripheralSupport"
-      typeName="TrngPkrmaxPkrMax"
+      typeName="TrngPokerLimit"
       baseType="uint32_t"
       description="Poker Maximum Limit"
       toolTip="During the TRNG Statistical Checks, a Poker Test is run which requires a maximum and minimum limit.\n
@@ -252,12 +240,15 @@
                Note that if TRNG0_MCTL[PRGM] bit is 0, this register address is used to read the Poker Test Square\n
                Calculation result in register TRNG0_PKRSQ"
       value="0b110100100100000"
+      min="0" max="16777215"
    />
 
-   <!-- ************* PKRSQ ****************** -->
+   <!-- ____ PKRSQ ____ -->
+   <title description="Poker Square Calculation Result Register" />
 
    <intOption key="trng_pkrsq_pkr_sq" condition="trng_pkrsq_pkr_sq_present"
       hidden="true"
+      derived="true"
       typeName="uint32_t"
       description="Poker Square Calculation Result"
       toolTip="During the TRNG Statistical Checks, a Poker Test is run which starts with the value\n
@@ -268,13 +259,12 @@
 			      Test Maximum Limit in register TRNG0_PKRMAX."
    />
 
-   <title/>
-
-   <!-- ************* SDCTL ****************** -->
+   <!-- ____ SDCTL ____ -->
+   <title description="Seed Control Register" />
 
    <intOption key="trng_sdctl_ent_dly" condition="trng_sdctl_ent_dly_present"
       enabledBy="enablePeripheralSupport"
-      typeName="TrngSdctlEntDly"
+      typeName="TrngEntropyDelay"
       baseType="uint32_t"
       description="Entropy Delay"
       toolTip="Defines the length (in system clocks) of each Entropy sample taken.\n
@@ -282,11 +272,12 @@
                This field will read zeroes if TRNG0_MCTL[PRGM] = 0.\n
                This field is cleared to its reset value at POR."
       value="0b110010000000"
+      min="0" max="65535"
    />
 
    <intOption key="trng_sdctl_samp_size" condition="trng_sdctl_samp_size_present"
       enabledBy="enablePeripheralSupport"
-      typeName="TrngSdctlSampSize"
+      typeName="TrngEntropySampleSize"
       baseType="uint32_t"
       description="Sample Size"
       toolTip="Defines the total number of Entropy samples that will be taken during Entropy generation.\n
@@ -294,14 +285,16 @@
                This field will read zeroes if TRNG0_MCTL[PRGM] = 0.\n
                This field is cleared to the default POR value by writing the TRNG0_MCTL[RST_DEF] bit to 1."
       value="0b100111000100"
+      min="0" max="65535"
    />
 
-   <!-- ************* SBLIM ****************** -->
+   <!-- ____ SBLIM ____ -->
+   <title description="Sparse Bit Limit Register" />
 
    <intOption key="trng_sblim_sb_lim" condition="trng_sblim_sb_lim_present"
       enabledBy="enablePeripheralSupport"
-      typeName="TrngSblimSbLim"
-      baseType="uint32_t"
+      typeName="TrngSparseBitLimit"
+      baseType="uint16_t"
       description="Sparse Bit Limit"
       toolTip="During Von Neumann sampling, samples are discarded if two consecutive raw samples\n
                are both 0 or both 1.\n
@@ -314,12 +307,15 @@
                Note that if TRNG0_MCTL[PRGM] bit is 0, this register address is used to read the Total\n
                Samples count in register TRNG0_TOTSAM"
       value="0b111111"
+      min="0" max="1023"
    />
 
-   <!-- ************* TOTSAM ****************** -->
+   <!-- ____ TOTSAM ____ -->
+   <title description="Total Samples Register" />
 
    <intOption key="trng_totsam_tot_sam" condition="trng_totsam_tot_sam_present"
       hidden="true"
+      derived="true"
       typeName="uint32_t"
       description="Total Samples"
       toolTip="During Entropy generation, the total number of raw samples is counted.\n
@@ -329,11 +325,12 @@
                the Sparse Bit Limit in register TRNG0_SBLIM"
    />
 
-   <!-- ************* FRQMIN ****************** -->
+   <!-- ____ FRQMIN ____ -->
+   <title description="Frequency Count Minimum Limit Register" />
 
    <intOption key="trng_frqmin_frq_min" condition="trng_frqmin_frq_min_present"
       enabledBy="enablePeripheralSupport"
-      typeName="TrngFrqminFrqMin"
+      typeName="TrngFrequencyCountMinimum"
       baseType="uint32_t"
       description="Frequency Count Minimum Limit"
       toolTip="Defines the minimum allowable count taken during each entropy sample.\n
@@ -341,12 +338,15 @@
                This field will read zeroes if TRNG0_MCTL[PRGM] = 0.\n
                This field is cleared to its reset value at POR."
       value="0b11001000000"
+      min="0" max="4194303"
    />
 
-   <!-- ************* FRQCNT ****************** -->
+   <!-- ____ FRQCNT ____ -->
+   <title description="Frequency Count Register" />
 
    <intOption key="trng_frqcnt_frq_ct" condition="trng_frqcnt_frq_ct_present"
       hidden="true"
+      derived="true"
       typeName="uint32_t"
       description="Frequency Count"
       toolTip="If TRNG0_MCTL[TRNG_ACC] = 1, reads a sample frequency count taken during entropy generation.\n
@@ -355,7 +355,8 @@
                the Poker Test Maximum Limit in register TRNG0_PKRMAX"
    />
 
-   <!-- ************* FRQMAX ****************** -->
+   <!-- ____ FRQMAX ____ -->
+   <title description="Frequency Count Limit Register" />
 
    <intOption key="trng_frqmax_frq_max" condition="trng_frqmax_frq_max_present"
       enabledBy="enablePeripheralSupport"
@@ -368,12 +369,15 @@
                Note that if TRNG0_MCTL[PRGM] bit is 0, this register address is used to \n
                read the Frequency Count result in register TRNG0_FRQCNT"
       value="0b110010000000000"
+      min="0" max="4194303"
    />
 
-   <!-- ************* SCMC ****************** -->
+   <!-- ____ SCMC ____ -->
+   <title description="Statistical Check Monobit Count" />
 
    <intOption key="trng_scmc_mono_ct" condition="trng_scmc_mono_ct_present"
       hidden="true"
+      derived="true"
       typeName="uint32_t"
       description="Monobit Count"
       toolTip="Reads the final Monobit count after entropy generation.\n
@@ -382,7 +386,8 @@
                access the Statistical Check Monobit Limit in register TRNG0_SCML"
    />
 
-   <!-- ************* SCML ****************** -->
+   <!-- ____ SCML ____ -->
+   <title description="Statistical Check Monobit Limit" />
 
    <intOption key="trng_scml_mono_rng" condition="trng_scml_mono_rng_present"
       enabledBy="enablePeripheralSupport"
@@ -393,6 +398,7 @@
                MONO_MAX - MONO_RNG, else a retry or error will occur.\n
                This register is cleared to the default POR value by writing the TRNG0_MCTL[RST_DEF] bit to 1."
       value="0b100001100"
+      min="0" max="65535"
    />
 
    <intOption key="trng_scml_mono_max" condition="trng_scml_mono_max_present"
@@ -405,381 +411,133 @@
                less than MONO_MAX, else a retry or error will occur.\n
                This register is cleared to the default POR value by writing the TRNG0_MCTL[RST_DEF] bit to 1."
       value="0b10101101000"
+      min="0" max="65535"
    />
 
-   <!-- ************* SCR1C ****************** -->
+   <for keys="   run_length :  limit1      :  limit2        "
+        values=" 1          :  0b10110010  :  0b110010101   ;
+                 2          :  0b01111010  :  0b11011100    ;
+                 3          :  0b01011000  :  0b01111101    ;
+                 4          :  0b01000000  :  0b01001011    ;
+                 5          :  0b00101110  :  0b00101111    ;
+                 6p         :  0b00101110  :  0b00101111    " >
+      <!-- ____ SCR1C ____ -->
+      <title description="Run Length %(run_length) Count" />
+      <intOption key="trng_scr%(run_length)c_r%(run_length)_1_ct" condition="trng_scr%(run_length)c_r%(run_length)_1_ct_present"
+         hidden="true"
+         derived="true"
+         typeName="uint32_t"
+         description="Runs of One, Length %(run_length) Count\n"
+         toolTip="Reads the final Runs of Ones, length %(run_length) count after entropy generation.\n
+                  Requires TRNG0_MCTL[PRGM] = 0."
+      />
+      <intOption key="trng_scr%(run_length)c_r%(run_length)_0_ct" condition="trng_scr%(run_length)c_r%(run_length)_0_ct_present"
+         hidden="true"
+         derived="true"
+         typeName="uint32_t"
+         description="Runs of Zero, Length %(run_length) Count"
+         toolTip="Reads the final Runs of Zeroes, length %(run_length) count after entropy generation.\n
+                  Requires TRNG0_MCTL[PRGM] = 0."
+      />
 
-   <intOption key="trng_scr1c_r1_1_ct" condition="trng_scr1c_r1_1_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Runs of One, Length 1 Count"
-      toolTip=""
-   />
+      <!-- ____ SCRnL ____ -->
+      <title description="Run Length %(run_length) Limit" />
 
-   <intOption key="trng_scr1c_r1_0_ct" condition="trng_scr1c_r1_0_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Runs of Zero, Length 1 Count"
-      toolTip=""
-   />
+      <intOption key="trng_scr%(run_length)l_run%(run_length)_rng" condition="trng_scr%(run_length)l_run%(run_length)_rng_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="TrngScr1lRun1Rng"
+         baseType="uint32_t"
+         description="Run Length %(run_length) Range"
+         toolTip="The number of runs of length %(run_length) (for both 0 and 1) detected during entropy\n
+                  generation must be greater than RUN1_MAX - RUN1_RNG, else a retry or error\n
+                  will occur. \n
+                  This register is cleared to the default POR value by writing the TRNG0_MCTL[RST_DEF] bit to 1."
+         value="%(limit1)"
+         radix="16"
+         min="0" max="32767"
+      />
 
-   <!-- ************* SCR1L ****************** -->
+      <intOption key="trng_scr%(run_length)l_run%(run_length)_max" condition="trng_scr%(run_length)l_run%(run_length)_max_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="TrngScr%(run_length)lRun%(run_length)Max"
+         baseType="uint32_t"
+         description="Run Length %(run_length) Maximum Limit"
+         toolTip="Defines the maximum allowable runs of length %(run_length) (for both 0 and 1) detected\n
+                  during entropy generation. The number of runs of length 1 detected during\n
+                  entropy generation must be less than RUN1_MAX, else a retry or error will occur.\n
+                  This register is cleared to the default POR value by writing the TRNG0_MCTL[RST_DEF] bit to 1."
+         value="%(limit2)"
+         radix="16"
+         min="0" max="32767"
+      />
+   </for>
 
-   <intOption key="trng_scr1l_run1_rng" condition="trng_scr1l_run1_rng_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="TrngScr1lRun1Rng"
-      baseType="uint32_t"
-      description="Run Length 1 Range"
-      toolTip=""
-      value="0"
-   />
-
-   <intOption key="trng_scr1l_run1_max" condition="trng_scr1l_run1_max_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="TrngScr1lRun1Max"
-      baseType="uint32_t"
-      description="Run Length 1 Maximum Limit"
-      toolTip=""
-      value="0"
-   />
-
-   <!-- ************* SCR2C ****************** -->
-
-   <intOption key="trng_scr2c_r2_1_ct" condition="trng_scr2c_r2_1_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Runs of One, Length 2 Count"
-      toolTip=""
-   />
-
-   <intOption key="trng_scr2c_r2_0_ct" condition="trng_scr2c_r2_0_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Runs of Zero, Length 2 Count"
-      toolTip=""
-   />
-
-   <!-- ************* SCR2L ****************** -->
-
-   <intOption key="trng_scr2l_run2_rng" condition="trng_scr2l_run2_rng_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="TrngScr2lRun2Rng"
-      baseType="uint32_t"
-      description="Run Length 2 Range"
-      toolTip=""
-      value="0"
-   />
-
-   <intOption key="trng_scr2l_run2_max" condition="trng_scr2l_run2_max_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="TrngScr2lRun2Max"
-      baseType="uint32_t"
-      description="Run Length 2 Maximum Limit"
-      toolTip=""
-      value="0"
-   />
-
-   <!-- ************* SCR3C ****************** -->
-
-   <intOption key="trng_scr3c_r3_1_ct" condition="trng_scr3c_r3_1_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Runs of Ones, Length 3 Count"
-      toolTip=""
-   />
-
-   <intOption key="trng_scr3c_r3_0_ct" condition="trng_scr3c_r3_0_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Runs of Zeroes, Length 3 Count"
-      toolTip=""
-   />
-
-   <!-- ************* SCR3L ****************** -->
-
-   <intOption key="trng_scr3l_run3_rng" condition="trng_scr3l_run3_rng_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="TrngScr3lRun3Rng"
-      baseType="uint32_t"
-      description="Run Length 3 Range"
-      toolTip=""
-      value="0"
-   />
-
-   <intOption key="trng_scr3l_run3_max" condition="trng_scr3l_run3_max_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="TrngScr3lRun3Max"
-      baseType="uint32_t"
-      description="Run Length 3 Maximum Limit"
-      toolTip=""
-      value="0"
-   />
-
-   <!-- ************* SCR4C ****************** -->
-
-   <intOption key="trng_scr4c_r4_1_ct" condition="trng_scr4c_r4_1_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Runs of One, Length 4 Count"
-      toolTip=""
-   />
-
-   <intOption key="trng_scr4c_r4_0_ct" condition="trng_scr4c_r4_0_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Runs of Zero, Length 4 Count"
-      toolTip=""
-   />
-
-   <!-- ************* SCR4L ****************** -->
-
-   <intOption key="trng_scr4l_run4_rng" condition="trng_scr4l_run4_rng_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="TrngScr4lRun4Rng"
-      baseType="uint32_t"
-      description="Run Length 4 Range"
-      toolTip=""
-      value="0"
-   />
-
-   <intOption key="trng_scr4l_run4_max" condition="trng_scr4l_run4_max_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="TrngScr4lRun4Max"
-      baseType="uint32_t"
-      description="Run Length 4 Maximum Limit"
-      toolTip=""
-      value="0"
-   />
-
-   <!-- ************* SCR5C ****************** -->
-
-   <intOption key="trng_scr5c_r5_1_ct" condition="trng_scr5c_r5_1_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Runs of One, Length 5 Count"
-      toolTip=""
-   />
-
-   <intOption key="trng_scr5c_r5_0_ct" condition="trng_scr5c_r5_0_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Runs of Zero, Length 5 Count"
-      toolTip=""
-   />
-
-   <!-- ************* SCR5L ****************** -->
-
-   <intOption key="trng_scr5l_run5_rng" condition="trng_scr5l_run5_rng_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="TrngScr5lRun5Rng"
-      baseType="uint32_t"
-      description="Run Length 5 Range"
-      toolTip=""
-      value="0"
-   />
-
-   <intOption key="trng_scr5l_run5_max" condition="trng_scr5l_run5_max_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="TrngScr5lRun5Max"
-      baseType="uint32_t"
-      description="Run Length 5 Maximum Limit"
-      toolTip=""
-      value="0"
-   />
-
-   <!-- ************* SCR6PC ****************** -->
-
-   <intOption key="trng_scr6pc_r6p_1_ct" condition="trng_scr6pc_r6p_1_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Runs of One, Length 6+ Count"
-      toolTip=""
-   />
-
-   <intOption key="trng_scr6pc_r6p_0_ct" condition="trng_scr6pc_r6p_0_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Runs of Zero, Length 6+ Count"
-      toolTip=""
-   />
-
-   <!-- ************* SCR6PL ****************** -->
-
-   <intOption key="trng_scr6pl_run6p_rng" condition="trng_scr6pl_run6p_rng_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="TrngScr6plRun6pRng"
-      baseType="uint32_t"
-      description="Run Length 6+ Range"
-      toolTip=""
-      value="0"
-   />
-
-   <intOption key="trng_scr6pl_run6p_max" condition="trng_scr6pl_run6p_max_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="TrngScr6plRun6pMax"
-      baseType="uint32_t"
-      description="Run Length 6+ Maximum Limit"
-      toolTip=""
-      value="0"
-   />
-
-   <!-- ************* STATUS ****************** -->
+   <!-- ____ STATUS ____ -->
+   <title description="Status Register" />
 
    <intOption key="trng_status_retry_ct" condition="trng_status_retry_ct_present"
       hidden="true"
+      derived="true"
       typeName="uint32_t"
+      toolTip="This represents the current number of entropy generation retries left before a\n
+               statistical test failure will cause the RNG to generate an error condition."
       description="RETRY COUNT"
-      toolTip=""
    />
 
-   <binaryOption key="trng_status_tfmb" condition="trng_status_tfmb_present"
-      hidden="true"
-      typeName="TrngStatusTfmb"
-      toolTip=""
-      description="Test Fail, Mono Bit. If TFMB=1, the Mono Bit Test has failed" >
-      <choice name="Choice 0"  value="0" enum="Choice0"/>
-      <choice name="Choice 1"  value="1" enum="Choice1"/>
-   </binaryOption >
+   <for keys="   bit_name : description "
+        values=" tfmb     : Mono Bit   ;
+                 tfp      : Poker      ;
+                 tflr     : Long Run   ;
+                 tfsb     : Sparse Bit " >
+      <binaryOption key="trng_status_%(bit_name)" condition="trng_status_%(bit_name)_present"
+         hidden="true"
+         derived="true"
+         typeName="TrngStatusTfmb"
+         baseType="uint32_t"
+         toolTip="Indicates if the %(description) Test has failed"
+         description="%(description) Test Result" >
+         <choice name="Test OK"      value="0" enum="TestOK"     />
+         <choice name="Test Failed"  value="1" enum="Choice1" />
+      </binaryOption >
+   </for>
 
-   <binaryOption key="trng_status_tfp" condition="trng_status_tfp_present"
-      hidden="true"
-      typeName="TrngStatusTfp"
-      toolTip=""
-      description="Test Fail, Poker. If TFP=1, the Poker Test has failed" >
-      <choice name="Choice 0"  value="0" enum="Choice0"/>
-      <choice name="Choice 1"  value="1" enum="Choice1"/>
-   </binaryOption >
+   <for keys="   run_length "
+        values=" 1          ;
+                 2          ;
+                 3          ;
+                 4          ;
+                 5          ;
+                 6p         " >
 
-   <binaryOption key="trng_status_tflr" condition="trng_status_tflr_present"
-      hidden="true"
-      typeName="TrngStatusTflr"
-      toolTip=""
-      description="Test Fail, Long Run. If TFLR=1, the Long Run Test has failed" >
-      <choice name="Choice 0"  value="0" enum="Choice0"/>
-      <choice name="Choice 1"  value="1" enum="Choice1"/>
-   </binaryOption >
+      <binaryOption key="trng_status_tf%(run_length)br1" condition="trng_status_tf%(run_length)br1_present"
+         hidden="true"
+         derived="true"
+         typeName="TrngStatusTf%(run_length)br1"
+         baseType="uint32_t"
+         toolTip="Indicates if test failed"
+         description="%(run_length) Bit Run, Sampling 1s, Test Result" >
+         <choice name="Test OK"      value="0" enum="TestOK"     />
+         <choice name="Test Failed"  value="1" enum="TestFailed" />
+      </binaryOption >
 
-   <binaryOption key="trng_status_tfsb" condition="trng_status_tfsb_present"
-      hidden="true"
-      typeName="TrngStatusTfsb"
-      toolTip=""
-      description="Test Fail, Sparse Bit. If TFSB=1, the Sparse Bit Test has failed" >
-      <choice name="Choice 0"  value="0" enum="Choice0"/>
-      <choice name="Choice 1"  value="1" enum="Choice1"/>
-   </binaryOption >
+      <binaryOption key="trng_status_tf%(run_length)br0" condition="trng_status_tf%(run_length)br0_present"
+         hidden="true"
+         derived="true"
+         typeName="TrngStatusTf%(run_length)br0"
+         baseType="uint32_t"
+         toolTip="Indicates if test failed"
+         description="%(run_length) Bit Run, Sampling 0s, Test Result" >
+         <choice name="Test OK"      value="0" enum="TestOK"     />
+         <choice name="Test Failed"  value="1" enum="TestFailed" />
+      </binaryOption >
+   </for>
 
-   <binaryOption key="trng_status_tf6pbr1" condition="trng_status_tf6pbr1_present"
-      hidden="true"
-      typeName="TrngStatusTf6pbr1"
-      toolTip=""
-      description="Test Fail, 6 Plus Bit Run, Sampling 1s" >
-      <choice name="Choice 0"  value="0" enum="Choice0"/>
-      <choice name="Choice 1"  value="1" enum="Choice1"/>
-   </binaryOption >
-
-   <binaryOption key="trng_status_tf6pbr0" condition="trng_status_tf6pbr0_present"
-      hidden="true"
-      typeName="TrngStatusTf6pbr0"
-      toolTip=""
-      description="Test Fail, 6 Plus Bit Run, Sampling 0s" >
-      <choice name="Choice 0"  value="0" enum="Choice0"/>
-      <choice name="Choice 1"  value="1" enum="Choice1"/>
-   </binaryOption >
-
-   <binaryOption key="trng_status_tf5br1" condition="trng_status_tf5br1_present"
-      hidden="true"
-      typeName="TrngStatusTf5br1"
-      toolTip=""
-      description="Test Fail, 5-Bit Run, Sampling 1s. If TF5BR1=1, the 5-Bit Run, Sampling 1s Test has failed" >
-      <choice name="Choice 0"  value="0" enum="Choice0"/>
-      <choice name="Choice 1"  value="1" enum="Choice1"/>
-   </binaryOption >
-
-   <binaryOption key="trng_status_tf5br0" condition="trng_status_tf5br0_present"
-      hidden="true"
-      typeName="TrngStatusTf5br0"
-      toolTip=""
-      description="Test Fail, 5-Bit Run, Sampling 0s. If TF5BR0=1, the 5-Bit Run, Sampling 0s Test has failed" >
-      <choice name="Choice 0"  value="0" enum="Choice0"/>
-      <choice name="Choice 1"  value="1" enum="Choice1"/>
-   </binaryOption >
-
-   <binaryOption key="trng_status_tf4br1" condition="trng_status_tf4br1_present"
-      hidden="true"
-      typeName="TrngStatusTf4br1"
-      toolTip=""
-      description="Test Fail, 4-Bit Run, Sampling 1s. If TF4BR1=1, the 4-Bit Run, Sampling 1s Test has failed" >
-      <choice name="Choice 0"  value="0" enum="Choice0"/>
-      <choice name="Choice 1"  value="1" enum="Choice1"/>
-   </binaryOption >
-
-   <binaryOption key="trng_status_tf4br0" condition="trng_status_tf4br0_present"
-      hidden="true"
-      typeName="TrngStatusTf4br0"
-      toolTip=""
-      description="Test Fail, 4-Bit Run, Sampling 0s. If TF4BR0=1, the 4-Bit Run, Sampling 0s Test has failed" >
-      <choice name="Choice 0"  value="0" enum="Choice0"/>
-      <choice name="Choice 1"  value="1" enum="Choice1"/>
-   </binaryOption >
-
-   <binaryOption key="trng_status_tf3br1" condition="trng_status_tf3br1_present"
-      hidden="true"
-      typeName="TrngStatusTf3br1"
-      toolTip=""
-      description="Test Fail, 3-Bit Run, Sampling 1s. If TF3BR1=1, the 3-Bit Run, Sampling 1s Test has failed" >
-      <choice name="Choice 0"  value="0" enum="Choice0"/>
-      <choice name="Choice 1"  value="1" enum="Choice1"/>
-   </binaryOption >
-
-   <binaryOption key="trng_status_tf3br0" condition="trng_status_tf3br0_present"
-      hidden="true"
-      typeName="TrngStatusTf3br0"
-      toolTip=""
-      description="Test Fail, 3-Bit Run, Sampling 0s. If TF3BR0=1, the 3-Bit Run, Sampling 0s Test has failed" >
-      <choice name="Choice 0"  value="0" enum="Choice0"/>
-      <choice name="Choice 1"  value="1" enum="Choice1"/>
-   </binaryOption >
-
-   <binaryOption key="trng_status_tf2br1" condition="trng_status_tf2br1_present"
-      hidden="true"
-      typeName="TrngStatusTf2br1"
-      toolTip=""
-      description="Test Fail, 2-Bit Run, Sampling 1s. If TF2BR1=1, the 2-Bit Run, Sampling 1s Test has failed" >
-      <choice name="Choice 0"  value="0" enum="Choice0"/>
-      <choice name="Choice 1"  value="1" enum="Choice1"/>
-   </binaryOption >
-
-   <binaryOption key="trng_status_tf2br0" condition="trng_status_tf2br0_present"
-      hidden="true"
-      typeName="TrngStatusTf2br0"
-      toolTip=""
-      description="Test Fail, 2-Bit Run, Sampling 0s. If TF2BR0=1, the 2-Bit Run, Sampling 0s Test has failed" >
-      <choice name="Choice 0"  value="0" enum="Choice0"/>
-      <choice name="Choice 1"  value="1" enum="Choice1"/>
-   </binaryOption >
-
-   <binaryOption key="trng_status_tf1br1" condition="trng_status_tf1br1_present"
-      hidden="true"
-      typeName="TrngStatusTf1br1"
-      toolTip=""
-      description="Test Fail, 1-Bit Run, Sampling 1s. If TF1BR1=1, the 1-Bit Run, Sampling 1s Test has failed" >
-      <choice name="Choice 0"  value="0" enum="Choice0"/>
-      <choice name="Choice 1"  value="1" enum="Choice1"/>
-   </binaryOption >
-
-   <binaryOption key="trng_status_tf1br0" condition="trng_status_tf1br0_present"
-      hidden="true"
-      typeName="TrngStatusTf1br0"
-      toolTip=""
-      description="Test Fail, 1-Bit Run, Sampling 0s. If TF1BR0=1, the 1-Bit Run, Sampling 0s Test has failed" >
-      <choice name="Choice 0"  value="0" enum="Choice0"/>
-      <choice name="Choice 1"  value="1" enum="Choice1"/>
-   </binaryOption >
-
-   <!-- ************* ENT ****************** -->
+   <!-- ____ ENT ____ -->
+   <title description="Entropy Read Register" />
 
    <intOption key="trng_ent_ent" condition="trng_ent_ent_present"
       hidden="true"
+      derived="true"
       typeName="uint32_t"
       description="Entropy Value"
       toolTip="Will be non-zero only if TRNG0_MCTL[PRGM] = 0 Run Mode) and TRNG0_MCTL[ENT_VAL] = 1 (Entropy Valid).\n
@@ -787,431 +545,398 @@
                bits are read from the highest offset.\n
                Note that reading the highest offset also clears the entire entropy value, and starts a new entropy generation."
    />
+   <for keys="   rl1 :  rl2 "
+        values="  1   :  0   ;
+                  3   :  2   ;
+                  5   :  4   ;
+                  7   :  6   ;
+                  9   :  8   ;
+                  b   :  a   ;
+                  d   :  c   ;
+                  f   :  e   " >
+      <!-- ____ PKRCNTnn ____ -->
+      <title description='="Statistical Check Poker Count "+ToUpperCase("%(rl2)")+" and "+ToUpperCase("%(rl1)")+" Register"' />
 
-   <!-- ************* PKRCNT10 ****************** -->
+      <intOption key="trng_pkrcnt%(rl1)%(rl2)_pkr_%(rl2)_ct" condition="trng_pkrcnt%(rl1)%(rl2)_pkr_%(rl2)_ct_present"
+         hidden="true"
+         derived="true"
+         typeName="uint32_t"
+         toolTip=""
+         description='="Poker "+ToUpperCase("%(rl2)")+" Count"'
+      />
 
-   <intOption key="trng_pkrcnt10_pkr_1_ct" condition="trng_pkrcnt10_pkr_1_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Poker 1h Count"
-      toolTip=""
-   />
+      <intOption key="trng_pkrcnt%(rl1)%(rl2)_pkr_%(rl1)_ct" condition="trng_pkrcnt%(rl1)%(rl2)_pkr_%(rl1)_ct_present"
+         hidden="true"
+         derived="true"
+         typeName="uint32_t"
+         toolTip=""
+         description='="Poker "+ToUpperCase("%(rl1)")+" Count"'
+      />
+   </for>
 
-   <intOption key="trng_pkrcnt10_pkr_0_ct" condition="trng_pkrcnt10_pkr_0_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Poker 0h Count"
-      toolTip=""
-   />
-
-   <!-- ************* PKRCNT32 ****************** -->
-
-   <intOption key="trng_pkrcnt32_pkr_3_ct" condition="trng_pkrcnt32_pkr_3_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Poker 3h Count"
-      toolTip=""
-   />
-
-   <intOption key="trng_pkrcnt32_pkr_2_ct" condition="trng_pkrcnt32_pkr_2_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Poker 2h Count"
-      toolTip=""
-   />
-
-   <!-- ************* PKRCNT54 ****************** -->
-
-   <intOption key="trng_pkrcnt54_pkr_5_ct" condition="trng_pkrcnt54_pkr_5_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Poker 5h Count"
-      toolTip=""
-   />
-
-   <intOption key="trng_pkrcnt54_pkr_4_ct" condition="trng_pkrcnt54_pkr_4_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Poker 4h Count"
-      toolTip=""
-   />
-
-   <!-- ************* PKRCNT76 ****************** -->
-
-   <intOption key="trng_pkrcnt76_pkr_7_ct" condition="trng_pkrcnt76_pkr_7_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Poker 7h Count"
-      toolTip=""
-   />
-
-   <intOption key="trng_pkrcnt76_pkr_6_ct" condition="trng_pkrcnt76_pkr_6_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Poker 6h Count"
-      toolTip=""
-   />
-
-   <!-- ************* PKRCNT98 ****************** -->
-
-   <intOption key="trng_pkrcnt98_pkr_9_ct" condition="trng_pkrcnt98_pkr_9_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Poker 9h Count"
-      toolTip=""
-   />
-
-   <intOption key="trng_pkrcnt98_pkr_8_ct" condition="trng_pkrcnt98_pkr_8_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Poker 8h Count"
-      toolTip=""
-   />
-
-   <!-- ************* PKRCNTBA ****************** -->
-
-   <intOption key="trng_pkrcntba_pkr_b_ct" condition="trng_pkrcntba_pkr_b_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Poker Bh Count"
-      toolTip=""
-   />
-
-   <intOption key="trng_pkrcntba_pkr_a_ct" condition="trng_pkrcntba_pkr_a_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Poker Ah Count"
-      toolTip=""
-   />
-
-   <!-- ************* PKRCNTDC ****************** -->
-
-   <intOption key="trng_pkrcntdc_pkr_d_ct" condition="trng_pkrcntdc_pkr_d_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Poker Dh Count"
-      toolTip=""
-   />
-
-   <intOption key="trng_pkrcntdc_pkr_c_ct" condition="trng_pkrcntdc_pkr_c_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Poker Ch Count"
-      toolTip=""
-   />
-
-   <!-- ************* PKRCNTFE ****************** -->
-
-   <intOption key="trng_pkrcntfe_pkr_f_ct" condition="trng_pkrcntfe_pkr_f_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Poker Fh Count"
-      toolTip=""
-   />
-
-   <intOption key="trng_pkrcntfe_pkr_e_ct" condition="trng_pkrcntfe_pkr_e_ct_present"
-      hidden="true"
-      typeName="uint32_t"
-      description="Poker Eh Count"
-      toolTip=""
-   />
-
-   <!-- ************* SEC_CFG ****************** -->
-
-   <binaryOption key="trng_sec_cfg_sk_val" condition="trng_sec_cfg_sk_val_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="TrngSecCfgSkVal"
-      toolTip=""
-      description="Reserved. DRNG-specific, not applicable to this version" >
-      <choice name="See DRNG version"  value="0" enum="SeeDrngVersion"/>
-      <choice name="See DRNG version"  value="1" enum="SeeDrngVersion"/>
-   </binaryOption >
+   <!-- ____ SEC_CFG ____ -->
+   <title description="Security Configuration Register" />
 
    <binaryOption key="trng_sec_cfg_no_prgm" condition="trng_sec_cfg_no_prgm_present"
       enabledBy="enablePeripheralSupport"
+      register="sec_cfg"
       typeName="TrngSecCfgNoPrgm"
-      toolTip=""
-      description="If set, the TRNG registers cannot be programmed" >
-      <choice name="Programability of registers controlled only by the Miscellaneous Control Register&apos;s access mode bit"  value="0" enum="ProgramabilityOfRegistersControlledOnlyByTheMiscellaneousControlRegisterAposSAccessModeBit"/>
-      <choice name="Overides Miscellaneous Control Register access mode and prevents TRNG register programming"           value="1" enum="OveridesMiscellaneousControlRegisterAccessModeAndPreventsTrngRegisterProgramming"/>
+      baseType="uint32_t"
+      toolTip="If set, the TRNG registers cannot be programmed"
+      description="Register protection" >
+      <choice name="Normal access"  value="0" enum="Normal" />
+      <choice name="Protected"      value="1" enum="Protected" />
    </binaryOption >
 
-   <binaryOption key="trng_sec_cfg_sh0" condition="trng_sec_cfg_sh0_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="TrngSecCfgSh0"
-      toolTip=""
-      description="Reserved. DRNG specific, not applicable to this version" >
-      <choice name="See DRNG version"  value="0" enum="SeeDrngVersion"/>
-      <choice name="See DRNG version"  value="1" enum="SeeDrngVersion"/>
-   </binaryOption >
-
-   <!-- ************* INT_CTRL ****************** -->
+   <!-- ____ INT_CTRL ____ -->
+   <title description="Interrupt Control Register" />
 
    <binaryOption key="trng_int_ctrl_frq_ct_fail" condition="trng_int_ctrl_frq_ct_fail_present"
+      enabledBy="enablePeripheralSupport"
+      register="int_ctrl"
       hidden="true"
+      derived="true"
       typeName="TrngCountErrorClear"
+      baseType="uint32_t"
       toolTip=""
-      description="Same behavior as bit 0 above" >
-      <choice name="Inactive" value="0" enum="Clear"/>
-      <choice name="Active"   value="1" enum="Active"/>
+      description="Clear Counter error" >
+      <choice name="Inactive" value="0" enum="Clear" />
+      <choice name="Active"   value="1" enum="Active" />
    </binaryOption >
 
    <binaryOption key="trng_int_ctrl_ent_val" condition="trng_int_ctrl_ent_val_present"
+      enabledBy="enablePeripheralSupport"
+      register="int_ctrl"
       hidden="true"
+      derived="true"
       typeName="TrngEntropyAvailableClear"
+      baseType="uint32_t"
       toolTip=""
-      description="Same behavior as bit 0 above" >
-      <choice name="Inactive" value="0" enum="Clear"/>
-      <choice name="Active"   value="1" enum="Active"/>
+      description="Clear entropy valid" >
+      <choice name="Inactive" value="0" enum="Clear" />
+      <choice name="Active"   value="1" enum="Active" />
    </binaryOption >
 
    <binaryOption key="trng_int_ctrl_hw_err" condition="trng_int_ctrl_hw_err_present"
+      enabledBy="enablePeripheralSupport"
+      register="int_ctrl"
       hidden="true"
-      typeName="TrngIntCtrlHwErr"
+      derived="true"
+      typeName="TrngHardwareErrorClear"
+      baseType="uint32_t"
       toolTip=""
-      description="Bit position that can be cleared if corresponding bit of INT_STATUS has been asserted" >
-      <choice name="Inactive" value="0" enum="Clear"/>
-      <choice name="Active"   value="1" enum="Active"/>
+      description="Clear Hardware error" >
+      <choice name="Inactive" value="0" enum="Clear" />
+      <choice name="Active"   value="1" enum="Active" />
    </binaryOption >
 
-   <!-- ************* INT_MASK ****************** -->
+   <!-- ____ INT_MASK ____ -->
+   <title description="Mask Register" />
 
    <binaryOption key="trng_int_mask_frq_ct_fail" condition="trng_int_mask_frq_ct_fail_present"
-      hidden="true"
+      enabledBy="enablePeripheralSupport"
+      register="int_mask"
       typeName="TrngCountErrorAction"
+      baseType="uint32_t"
       toolTip="This enables an interrupt when the frequency counter has detected a failure"
       description="Counter error action" >
-      <choice name="No Action"  value="0" enum="None"/>
-      <choice name="Interrupt"  value="1" enum="Interrupt"/>
+      <choice name="No Action"  value="0" enum="None"      />
+      <choice name="Interrupt"  value="1" enum="Interrupt" />
    </binaryOption >
 
    <binaryOption key="trng_int_mask_ent_val" condition="trng_int_mask_ent_val_present"
-      hidden="true"
+      enabledBy="enablePeripheralSupport"
+      register="int_mask"
       typeName="TrngEntropyAvailableAction"
+      baseType="uint32_t"
       toolTip="This enables an interrupt when TRNG ACC bit is set (Entropy value is available)"
-      description="Entropy evailable action" >
-      <choice name="No Action"  value="0" enum="None"/>
-      <choice name="Interrupt"  value="1" enum="Interrupt"/>
+      description="Entropy available action" >
+      <choice name="No Action"  value="0" enum="None"    />
+      <choice name="Interrupt"  value="1" enum="Interrupt" />
    </binaryOption >
 
    <binaryOption key="trng_int_mask_hw_err" condition="trng_int_mask_hw_err_present"
-      hidden="true"
+      enabledBy="enablePeripheralSupport"
+      register="int_mask"
       typeName="TrngHardwareErrorAction"
+      baseType="uint32_t"
       toolTip="This enables an interrupt when a hardware error occurs"
       description="Hardware error action" >
-      <choice name="No Action"  value="0" enum="None"/>
-      <choice name="Interrupt"  value="1" enum="Interrupt"/>
+      <choice name="No Action"  value="0" enum="None"      />
+      <choice name="Interrupt"  value="1" enum="Interrupt" />
    </binaryOption >
 
-   <!-- ************* INT_STATUS ****************** -->
+   <!-- ____ INT_STATUS ____ -->
+   <title description="Interrupt Status Register" />
 
    <binaryOption key="trng_int_status_frq_ct_fail" condition="trng_int_status_frq_ct_fail_present"
       hidden="true"
+      derived="true"
+      register="int_status"
       typeName="TrngCounterStatus"
+      baseType="uint32_t"
       toolTip="The frequency counter has detected a failure.\n
                This may be due to improper programming of the TRNG0_FRQMAX and/or \n
                TRNG0_FRQMIN registers, or a hardware failure FRQ_CT_FAIL in the ring oscillator.\n
                Read only"
       description="Frequency Counter Failure" >
-      <choice name="No errors"        value="0" enum="NoErrors"/>
-      <choice name="Counter failure"  value="1" enum="Failure"/>
+      <choice name="No errors"        value="0" enum="NoErrors" />
+      <choice name="Counter failure"  value="1" enum="Failure" />
    </binaryOption >
 
    <binaryOption key="trng_int_status_ent_val" condition="trng_int_status_ent_val_present"
       hidden="true"
+      derived="true"
+      register="int_status"
       typeName="TrngEntropyStatus"
+      baseType="uint32_t"
       toolTip="Will assert only if TRNG ACC bit is set, and then after an entropy value is generated.\n
                Will be cleared when TRNG0_ENT15 is read. (TRNG0_ENT0 through TRNG0_ENT14 should \n
                be read before reading TRNG0_ENT15).\n
                Read Only"
       description="Entropy Valid" >
-      <choice name="Busy - Entropy value read is invalid"  value="0" enum="Busy"/>
-      <choice name="Complete - Entropy is valid if read"   value="1" enum="EntropyAvailable"/>
+      <choice name="Busy - Entropy value read is invalid"  value="0" enum="Busy" />
+      <choice name="Complete - Entropy is valid if read"   value="1" enum="EntropyAvailable" />
    </binaryOption >
 
    <binaryOption key="trng_int_status_hw_err" condition="trng_int_status_hw_err_present"
       hidden="true"
+      derived="true"
+      register="int_status"
       typeName="TrngErrorStatus"
+      baseType="uint32_t"
       toolTip="Any HW error in the TRNG will trigger this interrupt.\n
                Read Only"
       description="Error status" >
-      <choice name="No error"        value="0" enum="NoError"/>
-      <choice name="Error detected"  value="1" enum="ErrorDetected"/>
+      <choice name="No error"        value="0" enum="NoError" />
+      <choice name="Error detected"  value="1" enum="ErrorDetected" />
    </binaryOption >
 
-   <!-- ************* VID1 ****************** -->
+   <!-- ____ VID1 ____ -->
+   <title description="Version ID Register (MS)" />
 
    <choiceOption key="trng_vid1_ip_id" condition="trng_vid1_ip_id_present"
       hidden="true"
+      derived="true"
       typeName="TrngVid1IpId"
+      baseType="uint32_t"
       toolTip=""
-      description="Shows the Freescale IP ID" >
-      <choice name="ID for TRNG" value="48" enum="IdForTrng"/>
+      description="Freescale IP ID" >
+      <choice name="ID for TRNG" value="48" enum="IdForTrng" />
    </choiceOption >
 
    <choiceOption key="trng_vid1_maj_rev" condition="trng_vid1_maj_rev_present"
       hidden="true"
+      derived="true"
       typeName="TrngVid1MajRev"
+      baseType="uint32_t"
       toolTip=""
-      description="Shows the Freescale IP&apos;s Major revision of the TRNG" >
-      <choice name="Major revision number for TRNG"  value="1" enum="MajorRevisionNumberForTrng"/>
+      description="Freescale IP Major revision of the TRNG" >
+      <choice name="Major revision number for TRNG"  value="1" enum="MajorRevisionNumberForTrng" />
    </choiceOption >
 
    <choiceOption key="trng_vid1_min_rev" condition="trng_vid1_min_rev_present"
       hidden="true"
+      derived="true"
       typeName="TrngVid1MinRev"
+      baseType="uint32_t"
       toolTip=""
-      description="Shows the Freescale IP&apos;s Minor revision of the TRNG" >
-      <choice name="Minor revision number for TRNG"  value="0" enum="MinorRevisionNumberForTrng"/>
+      description="Freescale IP Minor revision of the TRNG" >
+      <choice name="Minor revision number for TRNG"  value="0" enum="MinorRevisionNumberForTrng" />
    </choiceOption >
 
-   <!-- ************* VID2 ****************** -->
+   <!-- ____ VID2 ____ -->
+   <title description="Version ID Register (LS)" />
 
    <choiceOption key="trng_vid2_era" condition="trng_vid2_era_present"
       hidden="true"
+      derived="true"
       typeName="TrngVid2Era"
+      baseType="uint32_t"
       toolTip=""
-      description="Shows the Freescale compile options for the TRNG" >
-      <choice name="COMPILE_OPT for TRNG"  value="0" enum="Compile_optForTrng"/>
+      description="Freescale compile options for the TRNG" >
+      <choice name="COMPILE_OPT for TRNG"  value="0" enum="Compile_optForTrng" />
    </choiceOption >
 
    <choiceOption key="trng_vid2_intg_opt" condition="trng_vid2_intg_opt_present"
       hidden="true"
       typeName="TrngVid2IntgOpt"
+      baseType="uint32_t"
       toolTip=""
-      description="Shows the Freescale integration options for the TRNG" >
-      <choice name="INTG_OPT for TRNG"  value="0" enum="Intg_optForTrng"/>
+      description="Freescale integration options for the TRNG" >
+      <choice name="INTG_OPT for TRNG"  value="0" enum="Intg_optForTrng" />
    </choiceOption >
 
    <choiceOption key="trng_vid2_eco_rev" condition="trng_vid2_eco_rev_present"
       hidden="true"
+      derived="true"
       typeName="TrngVid2EcoRev"
+      baseType="uint32_t"
       toolTip=""
-      description="Shows the Freescale IP&apos;s ECO revision of the TRNG" >
-      <choice name="TRNG_ECO_REV for TRNG"  value="0" enum="Trng_eco_revForTrng"/>
+      description="Freescale IP ECO revision of the TRNG" >
+      <choice name="TRNG_ECO_REV for TRNG"  value="0" enum="Trng_eco_revForTrng" />
    </choiceOption >
 
    <choiceOption key="trng_vid2_config_opt" condition="trng_vid2_config_opt_present"
       hidden="true"
+      derived="true"
       typeName="TrngVid2ConfigOpt"
+      baseType="uint32_t"
       toolTip=""
-      description="Shows the Freescale IP&apos;s Configuaration options for the TRNG" >
-      <choice name="TRNG_CONFIG_OPT for TRNG"  value="0" enum="Trng_config_optForTrng"/>
+      description="Freescale IP Configuaration options for the TRNG" >
+      <choice name="TRNG_CONFIG_OPT for TRNG"  value="0" enum="Trng_config_optForTrng" />
    </choiceOption >
 
-<!-- Setters and getters -->
+   <!-- ____ Getters and Setters ____________ -->
 
-   <for keys="field                    : set   : get   : clear : genCode                 : name"
+   <for keys="field                     : set   : get   : clear : genCode                 : name"
         values="
-         trng_mctl_prgm                : true  : true  : false : true                    : Mode;
-         trng_mctl_tstop_ok            : false : true  : false : true                    : StopOk;
-         trng_mctl_err                 : true  : false : true  : true                    : Error;
-         trng_mctl_tst_out             : false : true  : false : enableGettersAndSetters : MctlTstOut;
-         trng_mctl_ent_val             : false : true  : false : true                    : MctlEntVal;
-         trng_mctl_fct_val             : false : true  : false : enableGettersAndSetters : MctlFctVal;
-         trng_mctl_fct_fail            : false : true  : false : enableGettersAndSetters : MctlFctFail;
-         trng_mctl_for_sclk            : true  : true  : false : enableGettersAndSetters : MctlForSclk;
-         trng_mctl_rst_def             : true  : false : false : true                    : MctlRstDef;
-         trng_mctl_trng_acc            : true  : true  : false : true                    : MctlTrngAcc;
-         trng_mctl_unused              : true  : true  : false : enableGettersAndSetters : MctlUnused;
-         trng_mctl_osc_div             : true  : true  : false : enableGettersAndSetters : MctlOscDiv;
-         trng_mctl_samp_mode           : true  : true  : false : enableGettersAndSetters : MctlSampMode;
-         trng_scmisc_rty_ct            : true  : true  : false : enableGettersAndSetters : ScmiscRtyCt;
-         trng_scmisc_lrun_max          : true  : true  : false : enableGettersAndSetters : ScmiscLrunMax;
-         trng_pkrrng_pkr_rng           : true  : true  : false : enableGettersAndSetters : PkrrngPkrRng;
-         trng_pkrmax_pkr_max           : true  : true  : false : enableGettersAndSetters : PkrmaxPkrMax;
-         trng_pkrsq_pkr_sq             : false : true  : false : enableGettersAndSetters : PkrsqPkrSq;
-         trng_sdctl_ent_dly            : true  : true  : false : enableGettersAndSetters : SdctlEntDly;
-         trng_sdctl_samp_size          : true  : true  : false : enableGettersAndSetters : SdctlSampSize;
-         trng_sblim_sb_lim             : true  : true  : false : enableGettersAndSetters : SblimSbLim;
-         trng_totsam_tot_sam           : false : true  : false : enableGettersAndSetters : TotsamTotSam;
-         trng_frqmin_frq_min           : true  : true  : false : enableGettersAndSetters : FrqminFrqMin;
-         trng_frqcnt_frq_ct            : false : true  : false : enableGettersAndSetters : FrqcntFrqCt;
-         trng_frqmax_frq_max           : true  : true  : false : enableGettersAndSetters : FrqmaxFrqMax;
-         trng_scmc_mono_ct             : false : true  : false : enableGettersAndSetters : ScmcMonoCt;
-         trng_scml_mono_rng            : true  : true  : false : enableGettersAndSetters : ScmlMonoRng;
-         trng_scml_mono_max            : true  : true  : false : enableGettersAndSetters : ScmlMonoMax;
-         trng_scr1c_r1_1_ct            : false : true  : false : enableGettersAndSetters : Scr1cR11Ct;
-         trng_scr1c_r1_0_ct            : false : true  : false : enableGettersAndSetters : Scr1cR10Ct;
-         trng_scr1l_run1_rng           : true  : true  : false : enableGettersAndSetters : Scr1lRun1Rng;
-         trng_scr1l_run1_max           : true  : true  : false : enableGettersAndSetters : Scr1lRun1Max;
-         trng_scr2c_r2_1_ct            : false : true  : false : enableGettersAndSetters : Scr2cR21Ct;
-         trng_scr2c_r2_0_ct            : false : true  : false : enableGettersAndSetters : Scr2cR20Ct;
-         trng_scr2l_run2_rng           : true  : true  : false : enableGettersAndSetters : Scr2lRun2Rng;
-         trng_scr2l_run2_max           : true  : true  : false : enableGettersAndSetters : Scr2lRun2Max;
-         trng_scr3c_r3_1_ct            : false : true  : false : enableGettersAndSetters : Scr3cR31Ct;
-         trng_scr3c_r3_0_ct            : false : true  : false : enableGettersAndSetters : Scr3cR30Ct;
-         trng_scr3l_run3_rng           : true  : true  : false : enableGettersAndSetters : Scr3lRun3Rng;
-         trng_scr3l_run3_max           : true  : true  : false : enableGettersAndSetters : Scr3lRun3Max;
-         trng_scr4c_r4_1_ct            : false : true  : false : enableGettersAndSetters : Scr4cR41Ct;
-         trng_scr4c_r4_0_ct            : false : true  : false : enableGettersAndSetters : Scr4cR40Ct;
-         trng_scr4l_run4_rng           : true  : true  : false : enableGettersAndSetters : Scr4lRun4Rng;
-         trng_scr4l_run4_max           : true  : true  : false : enableGettersAndSetters : Scr4lRun4Max;
-         trng_scr5c_r5_1_ct            : false : true  : false : enableGettersAndSetters : Scr5cR51Ct;
-         trng_scr5c_r5_0_ct            : false : true  : false : enableGettersAndSetters : Scr5cR50Ct;
-         trng_scr5l_run5_rng           : true  : true  : false : enableGettersAndSetters : Scr5lRun5Rng;
-         trng_scr5l_run5_max           : true  : true  : false : enableGettersAndSetters : Scr5lRun5Max;
-         trng_scr6pc_r6p_1_ct          : false : true  : false : enableGettersAndSetters : Scr6pcR6p1Ct;
-         trng_scr6pc_r6p_0_ct          : false : true  : false : enableGettersAndSetters : Scr6pcR6p0Ct;
-         trng_scr6pl_run6p_rng         : true  : true  : false : enableGettersAndSetters : Scr6plRun6pRng;
-         trng_scr6pl_run6p_max         : true  : true  : false : enableGettersAndSetters : Scr6plRun6pMax;
-         trng_status_retry_ct          : false : true  : false : enableGettersAndSetters : StatusRetryCt;
-         trng_status_tfmb              : false : true  : false : enableGettersAndSetters : StatusTfmb;
-         trng_status_tfp               : false : true  : false : enableGettersAndSetters : StatusTfp;
-         trng_status_tflr              : false : true  : false : enableGettersAndSetters : StatusTflr;
-         trng_status_tfsb              : false : true  : false : enableGettersAndSetters : StatusTfsb;
-         trng_status_tf6pbr1           : false : true  : false : enableGettersAndSetters : StatusTf6pbr1;
-         trng_status_tf6pbr0           : false : true  : false : enableGettersAndSetters : StatusTf6pbr0;
-         trng_status_tf5br1            : false : true  : false : enableGettersAndSetters : StatusTf5br1;
-         trng_status_tf5br0            : false : true  : false : enableGettersAndSetters : StatusTf5br0;
-         trng_status_tf4br1            : false : true  : false : enableGettersAndSetters : StatusTf4br1;
-         trng_status_tf4br0            : false : true  : false : enableGettersAndSetters : StatusTf4br0;
-         trng_status_tf3br1            : false : true  : false : enableGettersAndSetters : StatusTf3br1;
-         trng_status_tf3br0            : false : true  : false : enableGettersAndSetters : StatusTf3br0;
-         trng_status_tf2br1            : false : true  : false : enableGettersAndSetters : StatusTf2br1;
-         trng_status_tf2br0            : false : true  : false : enableGettersAndSetters : StatusTf2br0;
-         trng_status_tf1br1            : false : true  : false : enableGettersAndSetters : StatusTf1br1;
-         trng_status_tf1br0            : false : true  : false : enableGettersAndSetters : StatusTf1br0;
-         trng_pkrcnt10_pkr_1_ct        : false : true  : false : enableGettersAndSetters : Pkrcnt10Pkr1Ct;
-         trng_pkrcnt10_pkr_0_ct        : false : true  : false : enableGettersAndSetters : Pkrcnt10Pkr0Ct;
-         trng_pkrcnt32_pkr_3_ct        : false : true  : false : enableGettersAndSetters : Pkrcnt32Pkr3Ct;
-         trng_pkrcnt32_pkr_2_ct        : false : true  : false : enableGettersAndSetters : Pkrcnt32Pkr2Ct;
-         trng_pkrcnt54_pkr_5_ct        : false : true  : false : enableGettersAndSetters : Pkrcnt54Pkr5Ct;
-         trng_pkrcnt54_pkr_4_ct        : false : true  : false : enableGettersAndSetters : Pkrcnt54Pkr4Ct;
-         trng_pkrcnt76_pkr_7_ct        : false : true  : false : enableGettersAndSetters : Pkrcnt76Pkr7Ct;
-         trng_pkrcnt76_pkr_6_ct        : false : true  : false : enableGettersAndSetters : Pkrcnt76Pkr6Ct;
-         trng_pkrcnt98_pkr_9_ct        : false : true  : false : enableGettersAndSetters : Pkrcnt98Pkr9Ct;
-         trng_pkrcnt98_pkr_8_ct        : false : true  : false : enableGettersAndSetters : Pkrcnt98Pkr8Ct;
-         trng_pkrcntba_pkr_b_ct        : false : true  : false : enableGettersAndSetters : PkrcntbaPkrBCt;
-         trng_pkrcntba_pkr_a_ct        : false : true  : false : enableGettersAndSetters : PkrcntbaPkrACt;
-         trng_pkrcntdc_pkr_d_ct        : false : true  : false : enableGettersAndSetters : PkrcntdcPkrDCt;
-         trng_pkrcntdc_pkr_c_ct        : false : true  : false : enableGettersAndSetters : PkrcntdcPkrCCt;
-         trng_pkrcntfe_pkr_f_ct        : false : true  : false : enableGettersAndSetters : PkrcntfePkrFCt;
-         trng_pkrcntfe_pkr_e_ct        : false : true  : false : enableGettersAndSetters : PkrcntfePkrECt;
-         trng_sec_cfg_sk_val           : true  : true  : false : enableGettersAndSetters : SecCfgSkVal;
-         trng_sec_cfg_no_prgm          : true  : true  : false : enableGettersAndSetters : SecCfgNoPrgm;
-         trng_sec_cfg_sh0              : true  : true  : false : enableGettersAndSetters : SecCfgSh0;
-         trng_int_ctrl_unused          : true  : true  : false : enableGettersAndSetters : IntCtrlUnused;
-         trng_int_ctrl_frq_ct_fail     : true  : true  : false : enableGettersAndSetters : IntCtrlFrqCtFail;
-         trng_int_ctrl_ent_val         : true  : true  : false : enableGettersAndSetters : IntCtrlEntVal;
-         trng_int_ctrl_hw_err          : true  : true  : false : enableGettersAndSetters : IntCtrlHwErr;
-         trng_int_mask_frq_ct_fail     : true  : true  : false : enableGettersAndSetters : IntMaskFrqCtFail;
-         trng_int_mask_ent_val         : true  : true  : false : enableGettersAndSetters : IntMaskEntVal;
-         trng_int_mask_hw_err          : true  : true  : false : enableGettersAndSetters : IntMaskHwErr;
-         trng_int_status_frq_ct_fail   : true  : true  : false : enableGettersAndSetters : IntStatusFrqCtFail;
-         trng_int_status_ent_val       : false : true  : false : enableGettersAndSetters : IntStatusEntVal;
-         trng_int_status_hw_err        : false : true  : false : enableGettersAndSetters : IntStatusHwErr;
-         trng_vid1_ip_id               : false : true  : false : enableGettersAndSetters : Vid1IpId;
-         trng_vid1_maj_rev             : false : true  : false : enableGettersAndSetters : Vid1MajRev;
-         trng_vid1_min_rev             : false : true  : false : enableGettersAndSetters : Vid1MinRev;
-         trng_vid2_era                 : false : true  : false : enableGettersAndSetters : Vid2Era;
-         trng_vid2_intg_opt            : false : true  : false : enableGettersAndSetters : Vid2IntgOpt;
-         trng_vid2_eco_rev             : false : true  : false : enableGettersAndSetters : Vid2EcoRev;
-         trng_vid2_config_opt          : false : true  : false : enableGettersAndSetters : Vid2ConfigOpt" >
+         trng_mctl_prgm                 : true  : true  : false : true                    : Mode;
+         trng_mctl_tstop_ok             : false : true  : false : true                    : StopOk;
+         trng_mctl_err                  : false : true  : true  : true                    : Error;
+         trng_mctl_tst_out              : false : true  : false : enableGettersAndSetters : MctlTstOut;
+         trng_mctl_fct_val              : false : true  : false : enableGettersAndSetters : MctlFctVal;
+         trng_mctl_fct_fail             : false : true  : false : enableGettersAndSetters : MctlFctFail;
+         trng_mctl_for_sclk             : true  : true  : false : enableGettersAndSetters : MctlForSclk;
+         trng_mctl_rst_def              : true  : false : false : true                    : SoftwareReset;
+         trng_mctl_trng_acc             : true  : true  : false : true                    : Access;
+         trng_mctl_osc_div              : true  : true  : false : enableGettersAndSetters : MctlOscDiv;
+         trng_mctl_samp_mode            : true  : true  : false : enableGettersAndSetters : MctlSampMode;
+
+         trng_scmisc_rty_ct             : true  : true  : false : enableGettersAndSetters : ScmiscRtyCt;
+         trng_scmisc_lrun_max           : true  : true  : false : enableGettersAndSetters : ScmiscLrunMax;
+
+         trng_pkrrng_pkr_rng            : true  : true  : false : enableGettersAndSetters : PkrrngPkrRng;
+
+         trng_pkrmax_pkr_max            : true  : true  : false : enableGettersAndSetters : PkrmaxPkrMax;
+
+         trng_pkrsq_pkr_sq              : false : true  : false : enableGettersAndSetters : PkrsqPkrSq;
+
+         trng_sdctl_ent_dly             : true  : true  : false : enableGettersAndSetters : SdctlEntDly;
+         trng_sdctl_samp_size           : true  : true  : false : enableGettersAndSetters : SdctlSampSize;
+
+         trng_sblim_sb_lim              : true  : true  : false : enableGettersAndSetters : SblimSbLim;
+
+         trng_totsam_tot_sam            : false : true  : false : enableGettersAndSetters : TotsamTotSam;
+
+         trng_frqmin_frq_min            : true  : true  : false : enableGettersAndSetters : FrqminFrqMin;
+
+         trng_frqcnt_frq_ct             : false : true  : false : enableGettersAndSetters : FrqcntFrqCt;
+
+         trng_frqmax_frq_max            : true  : true  : false : enableGettersAndSetters : FrqmaxFrqMax;
+
+         trng_scmc_mono_ct              : false : true  : false : enableGettersAndSetters : ScmcMonoCt;
+
+         trng_scml_mono_rng             : true  : true  : false : enableGettersAndSetters : ScmlMonoRng;
+         trng_scml_mono_max             : true  : true  : false : enableGettersAndSetters : ScmlMonoMax;
+
+         trng_scr1c_r1_1_ct             : false : true  : false : enableGettersAndSetters : Scr1cR11Ct;
+         trng_scr1c_r1_0_ct             : false : true  : false : enableGettersAndSetters : Scr1cR10Ct;
+
+         trng_scr1l_run1_rng            : true  : true  : false : enableGettersAndSetters : Scr1lRun1Rng;
+         trng_scr1l_run1_max            : true  : true  : false : enableGettersAndSetters : Scr1lRun1Max;
+
+         trng_scr2c_r2_1_ct             : false : true  : false : enableGettersAndSetters : Scr2cR21Ct;
+         trng_scr2c_r2_0_ct             : false : true  : false : enableGettersAndSetters : Scr2cR20Ct;
+
+         trng_scr2l_run2_rng            : true  : true  : false : enableGettersAndSetters : Scr2lRun2Rng;
+         trng_scr2l_run2_max            : true  : true  : false : enableGettersAndSetters : Scr2lRun2Max;
+
+         trng_scr3c_r3_1_ct             : false : true  : false : enableGettersAndSetters : Scr3cR31Ct;
+         trng_scr3c_r3_0_ct             : false : true  : false : enableGettersAndSetters : Scr3cR30Ct;
+
+         trng_scr3l_run3_rng            : true  : true  : false : enableGettersAndSetters : Scr3lRun3Rng;
+         trng_scr3l_run3_max            : true  : true  : false : enableGettersAndSetters : Scr3lRun3Max;
+
+         trng_scr4c_r4_1_ct             : false : true  : false : enableGettersAndSetters : Scr4cR41Ct;
+         trng_scr4c_r4_0_ct             : false : true  : false : enableGettersAndSetters : Scr4cR40Ct;
+
+         trng_scr4l_run4_rng            : true  : true  : false : enableGettersAndSetters : Scr4lRun4Rng;
+         trng_scr4l_run4_max            : true  : true  : false : enableGettersAndSetters : Scr4lRun4Max;
+
+         trng_scr5c_r5_1_ct             : false : true  : false : enableGettersAndSetters : Scr5cR51Ct;
+         trng_scr5c_r5_0_ct             : false : true  : false : enableGettersAndSetters : Scr5cR50Ct;
+
+         trng_scr5l_run5_rng            : true  : true  : false : enableGettersAndSetters : Scr5lRun5Rng;
+         trng_scr5l_run5_max            : true  : true  : false : enableGettersAndSetters : Scr5lRun5Max;
+
+         trng_scr6pc_r6p_1_ct           : false : true  : false : enableGettersAndSetters : Scr6pcR6p1Ct;
+         trng_scr6pc_r6p_0_ct           : false : true  : false : enableGettersAndSetters : Scr6pcR6p0Ct;
+
+         trng_scr6pl_run6p_rng          : true  : true  : false : enableGettersAndSetters : Scr6plRun6pRng;
+         trng_scr6pl_run6p_max          : true  : true  : false : enableGettersAndSetters : Scr6plRun6pMax;
+
+         trng_status_retry_ct           : false : true  : false : enableGettersAndSetters : StatusRetryCt;
+         trng_status_tfmb               : false : true  : false : enableGettersAndSetters : StatusTfmb;
+         trng_status_tfp                : false : true  : false : enableGettersAndSetters : StatusTfp;
+         trng_status_tflr               : false : true  : false : enableGettersAndSetters : StatusTflr;
+         trng_status_tfsb               : false : true  : false : enableGettersAndSetters : StatusTfsb;
+         trng_status_tf6pbr1            : false : true  : false : enableGettersAndSetters : StatusTf6pbr1;
+         trng_status_tf6pbr0            : false : true  : false : enableGettersAndSetters : StatusTf6pbr0;
+         trng_status_tf5br1             : false : true  : false : enableGettersAndSetters : StatusTf5br1;
+         trng_status_tf5br0             : false : true  : false : enableGettersAndSetters : StatusTf5br0;
+         trng_status_tf4br1             : false : true  : false : enableGettersAndSetters : StatusTf4br1;
+         trng_status_tf4br0             : false : true  : false : enableGettersAndSetters : StatusTf4br0;
+         trng_status_tf3br1             : false : true  : false : enableGettersAndSetters : StatusTf3br1;
+         trng_status_tf3br0             : false : true  : false : enableGettersAndSetters : StatusTf3br0;
+         trng_status_tf2br1             : false : true  : false : enableGettersAndSetters : StatusTf2br1;
+         trng_status_tf2br0             : false : true  : false : enableGettersAndSetters : StatusTf2br0;
+         trng_status_tf1br1             : false : true  : false : enableGettersAndSetters : StatusTf1br1;
+         trng_status_tf1br0             : false : true  : false : enableGettersAndSetters : StatusTf1br0;
+
+         trng_pkrcnt10_pkr_1_ct         : false : true  : false : enableGettersAndSetters : Pkrcnt10Pkr1Ct;
+         trng_pkrcnt10_pkr_0_ct         : false : true  : false : enableGettersAndSetters : Pkrcnt10Pkr0Ct;
+
+         trng_pkrcnt32_pkr_3_ct         : false : true  : false : enableGettersAndSetters : Pkrcnt32Pkr3Ct;
+         trng_pkrcnt32_pkr_2_ct         : false : true  : false : enableGettersAndSetters : Pkrcnt32Pkr2Ct;
+
+         trng_pkrcnt54_pkr_5_ct         : false : true  : false : enableGettersAndSetters : Pkrcnt54Pkr5Ct;
+         trng_pkrcnt54_pkr_4_ct         : false : true  : false : enableGettersAndSetters : Pkrcnt54Pkr4Ct;
+
+         trng_pkrcnt76_pkr_7_ct         : false : true  : false : enableGettersAndSetters : Pkrcnt76Pkr7Ct;
+         trng_pkrcnt76_pkr_6_ct         : false : true  : false : enableGettersAndSetters : Pkrcnt76Pkr6Ct;
+
+         trng_pkrcnt98_pkr_9_ct         : false : true  : false : enableGettersAndSetters : Pkrcnt98Pkr9Ct;
+         trng_pkrcnt98_pkr_8_ct         : false : true  : false : enableGettersAndSetters : Pkrcnt98Pkr8Ct;
+
+         trng_pkrcntba_pkr_b_ct         : false : true  : false : enableGettersAndSetters : PkrcntbaPkrBCt;
+         trng_pkrcntba_pkr_a_ct         : false : true  : false : enableGettersAndSetters : PkrcntbaPkrACt;
+
+         trng_pkrcntdc_pkr_d_ct         : false : true  : false : enableGettersAndSetters : PkrcntdcPkrDCt;
+         trng_pkrcntdc_pkr_c_ct         : false : true  : false : enableGettersAndSetters : PkrcntdcPkrCCt;
+
+         trng_pkrcntfe_pkr_f_ct         : false : true  : false : enableGettersAndSetters : PkrcntfePkrFCt;
+         trng_pkrcntfe_pkr_e_ct         : false : true  : false : enableGettersAndSetters : PkrcntfePkrECt;
+
+         trng_sec_cfg_sk_val            : true  : true  : false : enableGettersAndSetters : SecCfgSkVal;
+         trng_sec_cfg_no_prgm           : true  : true  : false : enableGettersAndSetters : SecCfgNoPrgm;
+         trng_sec_cfg_sh0               : true  : true  : false : enableGettersAndSetters : SecCfgSh0;
+
+         trng_int_ctrl_frq_ct_fail      : false : false : true  : true                    : CountErrorClear;
+         trng_int_ctrl_ent_val          : false : false : true  : enableGettersAndSetters : EntropyAvailableClear;
+         trng_int_ctrl_hw_err           : false : false : true  : true                    : HardwareErrorClear;
+
+         trng_int_mask_frq_ct_fail      : true  : true  : false : enableGettersAndSetters : CountErrorAction;
+         trng_int_mask_ent_val          : true  : true  : false : enableGettersAndSetters : EntropyAvailableAction;
+         trng_int_mask_hw_err           : true  : true  : false : enableGettersAndSetters : HardwareErrorAction;
+
+         trng_int_status_frq_ct_fail    : false : true  : false : true                    : CounterStatus;
+         trng_int_status_ent_val        : false : true  : false : true                    : EntropyStatus;
+         trng_int_status_hw_err         : false : true  : false : true                    : ErrorStatus;
+
+         trng_vid1_ip_id                : false : true  : false : enableGettersAndSetters : Vid1IpId;
+         trng_vid1_maj_rev              : false : true  : false : enableGettersAndSetters : Vid1MajRev;
+         trng_vid1_min_rev              : false : true  : false : enableGettersAndSetters : Vid1MinRev;
+
+         trng_vid2_era                  : false : true  : false : enableGettersAndSetters : Vid2Era;
+         trng_vid2_intg_opt             : false : true  : false : enableGettersAndSetters : Vid2IntgOpt;
+         trng_vid2_eco_rev              : false : true  : false : enableGettersAndSetters : Vid2EcoRev;
+         trng_vid2_config_opt           : false : true  : false : enableGettersAndSetters : Vid2ConfigOpt" >
       <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
       ><![CDATA[
          \t/**
          \t * Set %description
+         \t * (%(field))
          \t *
          %paramDescription
          \t */
@@ -1224,19 +949,23 @@
       ><![CDATA[
          \t/**
          \t * Get %description
+         \t * (%(field))
          \t *
          \t * @return %tooltip
          \t */
-         \tstatic %paramType get%(name)() {
-         \t   return %paramType(%register&%mask);
+         \tstatic %returnType get%(name)() {
+         \t   return %fieldExtract;
          \t}
          \t\n
       ]]></variableTemplate>
       <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
-      ><![CDATA[
+         tooltipPadding="x*x"      ><![CDATA[
          \t/**
          \t * Clear %description
+         \t * (%(field))
          \t *
+         \t * %tooltip
+         \t */
          \tstatic void clear%(name)() {
          \t   %register = %register|%mask;
          \t}
@@ -1257,74 +986,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <!--   ========== Interrupt handling =============================== -->
-
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
-   <![CDATA[
-      \t/**
-      \t * Type for Random Number Generator Accelerator call back function.
-      \t */
-      \ttypedef void (*CallbackFunction)();
-      \t
-      \t/**
-      \t * Callback to catch unhandled interrupt
-      \t */
-      \tstatic void unhandledCallback($(irq_dummy_parameters)) {
-      \t   setAndCheckErrorCode(E_NO_HANDLER);
-      \t}
-      \t\n
-   ]]>
-   </template>
-
-   <template codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t/** Callback function for Random Number Generator Accelerator */
-      \tstatic CallbackFunction callbackFunction;
-      \t
-      \t/**
-      \t * Random Number Generator Accelerator interrupt handler
-      \t * Passes control to call-back function
-      \t */
-      \tstatic void irqHandler() {
-      \t
-      \t   // Execute call-back
-      \t   callbackFunction($(irq_call));
-      \t}
-      \t
-      \t/**
-      \t * Set Random Number Generator Accelerator callback function.
-      \t *
-      \t * @param      $(_basename)Callback Callback function to execute on interrupt
-      \t *                             Use nullptr to remove callback.
-      \t */
-      \tstatic void setCallback(CallbackFunction $(_basename)Callback) {
-      \t   if ($(_basename)Callback == nullptr) {
-      \t      $(_basename)Callback = (CallbackFunction)unhandledCallback;
-      \t   }
-      \t   // Allow either no handler set yet or removing handler
-      \t   usbdm_assert(
-      \t         ((void*)callbackFunction == (void*)unhandledCallback) ||
-      \t         ((void*)$(_basename)Callback == (void*)unhandledCallback),
-      \t         "Handler already set");
-      \t   callbackFunction = $(_basename)Callback;
-      \t}
-      \t
-      \t\n
-   ]]>
-   </template>
-
-   <template where="static" codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t/**
-      \t * Callback function for Random Number Generator Accelerator
-      \t */
-      \t$(_Class)Info::CallbackFunction $(_Class)Info::callbackFunction = (CallbackFunction)$(_Class)Info::unhandledCallback;
-      \t
-      \t\n
-   ]]>
-   </template>
-
-   <!--   ========== TRNG Init class =============================== -->
+   <!-- ________ TRNG Init class ____________________________ -->
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
@@ -1351,9 +1013,14 @@
       \t * static const $(_Class)::Init $(_name)Init {
       \t *
       \t *   // Setup values
-XXXXXXXXXXXXXXXXXXXXXX
+      \t *   TrngMode_Run ,                    // Programming Mode Select - Run mode
+      \t *   TrngReset_Apply ,                 // Reset to Defaults - Software reset
+      \t *   TrngAccessMode_Generate ,         // Access Mode - Generate
+      \t *   TrngCountErrorAction_Interrupt ,  // Counter error action - Interrupt
+      \t *   TrngEntropyAvailableAction_None , // Entropy available action - No Action
+      \t *   TrngHardwareErrorAction_None,     // Hardware error action - No Action
       \t *
-      \t *   $(_name)Callback,                 // Call-back to execute on event - call-back function name
+      \t *   $(_name)Callback,                    // Call-back to execute on event - call-back function name
       \t *   NvicPriority_Low,                 // Priority for interrupt - Low
       \t *
       \t *   // Optional base value to start with (must be last parameter)
@@ -1365,6 +1032,13 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t * @endcode
       \t */
       \tclass Init {
+      \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(Types...) = delete;
       \t
       \tpublic:
       \t   /**
@@ -1380,156 +1054,59 @@ XXXXXXXXXXXXXXXXXXXXXX
    ]]>
    </template>
 
-   <!--   Member variables -->
-
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
-   <![CDATA[
-      \t   /// Random Number Generator Accelerator
-      \t   CallbackFunction callbackFunction = nullptr;\n\n
-   ]]></template>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="trng_mctl_prgm,trng_mctl_err,trng_mctl_for_sclk,trng_mctl_rst_def,trng_mctl_trng_acc,trng_mctl_unused,trng_mctl_osc_div,trng_mctl_samp_mode"
-   ><![CDATA[
-      \t   /// Miscellaneous Control Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="trng_scmisc_rty_ct,trng_scmisc_lrun_max"
-   ><![CDATA[
-      \t   /// Statistical Check Miscellaneous Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-<!--
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="trng_pkrrng_pkr_rng"
-   ><![CDATA[
-      \t   /// Poker Range Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="trng_pkrmax_pkr_max"
-   ><![CDATA[
-      \t   /// Poker Maximum Limit Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="trng_sdctl_ent_dly,trng_sdctl_samp_size"
-   ><![CDATA[
-      \t   /// Seed Control Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="trng_sblim_sb_lim"
-   ><![CDATA[
-      \t   /// Sparse Bit Limit Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="trng_frqmin_frq_min"
-   ><![CDATA[
-      \t   /// Frequency Count Minimum Limit Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="trng_frqmax_frq_max"
-   ><![CDATA[
-      \t   /// Frequency Count Maximum Limit Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="trng_scml_mono_rng,trng_scml_mono_max"
-   ><![CDATA[
-      \t   /// Statistical Check Monobit Limit Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="trng_scr1l_run1_rng,trng_scr1l_run1_max"
-   ><![CDATA[
-      \t   /// Statistical Check Run Length 1 Limit Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="trng_scr2l_run2_rng,trng_scr2l_run2_max"
-   ><![CDATA[
-      \t   /// Statistical Check Run Length 2 Limit Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="trng_scr3l_run3_rng,trng_scr3l_run3_max"
-   ><![CDATA[
-      \t   /// Statistical Check Run Length 3 Limit Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="trng_scr4l_run4_rng,trng_scr4l_run4_max"
-   ><![CDATA[
-      \t   /// Statistical Check Run Length 4 Limit Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="trng_scr5l_run5_rng,trng_scr5l_run5_max"
-   ><![CDATA[
-      \t   /// Statistical Check Run Length 5 Limit Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="trng_scr6pl_run6p_rng,trng_scr6pl_run6p_max"
-   ><![CDATA[
-      \t   /// Statistical Check Run Length 6+ Limit Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="trng_sec_cfg_sk_val,trng_sec_cfg_no_prgm,trng_sec_cfg_sh0"
-   ><![CDATA[
-      \t   /// Security Configuration Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="trng_int_ctrl_unused,trng_int_ctrl_frq_ct_fail,trng_int_ctrl_ent_val,trng_int_ctrl_hw_err"
-   ><![CDATA[
-      \t   /// Interrupt Control Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="trng_int_mask_frq_ct_fail,trng_int_mask_ent_val,trng_int_mask_hw_err"
-   ><![CDATA[
-      \t   /// Mask Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="trng_int_status_frq_ct_fail"
-   ><![CDATA[
-      \t   /// Interrupt Status Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
+   <!-- ____ Init class Member variables ________ -->
 
    <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
-      variables="/PCR/nvic_irqLevel,irqLevel"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
    ><![CDATA[
-      \t   /// %description
+      %multilineDescription
+      \t   %params = nullptr;\n\n
+   ]]></variableTemplate>
+
+   <for keys=" type        : variables                                            : init    "
+       values="%baseType   : trng_mctl_prgm,trng_mctl_err,trng_mctl_for_sclk,
+                             trng_mctl_rst_def,trng_mctl_trng_acc,trng_mctl_unused,
+                             trng_mctl_osc_div,trng_mctl_samp_mode                :   0      ;
+               %baseType   : trng_scmisc_rty_ct,trng_scmisc_lrun_max              :   0      ;
+               %baseType   : trng_pkrrng_pkr_rng                                  :   0      ;
+               %baseType   : trng_pkrmax_pkr_max                                  :   0      ;
+               %baseType   : trng_sdctl_ent_dly,trng_sdctl_samp_size              :   0      ;
+               %baseType   : trng_sblim_sb_lim                                    :   0      ;
+               %baseType   : trng_frqmin_frq_min                                  :   0      ;
+               %baseType   : trng_frqmax_frq_max                                  :   0      ;
+               %baseType   : trng_scml_mono_rng,trng_scml_mono_max                :   0      ;
+               %baseType   : trng_scr1l_run1_rng,trng_scr1l_run1_max              :   0      ;
+               %baseType   : trng_scr2l_run2_rng,trng_scr2l_run2_max              :   0      ;
+               %baseType   : trng_scr3l_run3_rng,trng_scr3l_run3_max              :   0      ;
+               %baseType   : trng_scr4l_run4_rng,trng_scr4l_run4_max              :   0      ;
+               %baseType   : trng_scr5l_run5_rng,trng_scr5l_run5_max              :   0      ;
+               %baseType   : trng_scr6pl_run6p_rng,trng_scr6pl_run6p_max          :   0      ;
+               %baseType   : trng_sec_cfg_sk_val,trng_sec_cfg_no_prgm,
+                             trng_sec_cfg_sh0                                     :   0      ;
+               %baseType   : trng_int_ctrl_unused,trng_int_ctrl_frq_ct_fail,
+                             trng_int_ctrl_ent_val,trng_int_ctrl_hw_err           :   0      ;
+               %baseType   : trng_int_mask_frq_ct_fail,trng_int_mask_ent_val,
+                             trng_int_mask_hw_err                                 :   0      ;
+               %baseType   : trng_int_status_frq_ct_fail                          :   0      ;
+               %paramType  : /PCR/nvic_irqLevel                                   :   %defaultValue   " >
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(variables)"
+         linePadding="xxx"
+      ><![CDATA[
+         %multilineDescription
+         \t   %(type) %registerName = %(init);\n\n
+      ]]></variableTemplate>
+   </for>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="/PCR/nvic_irqLevel,irqLevel"
+      linePadding="xxx"
+   ><![CDATA[
+      %multilineDescription
       \t   %paramType %registerName0 = %defaultValue;
       \t\n
    ]]></variableTemplate>
--->
 
    <!-- Init Constructors -->
 
@@ -1557,6 +1134,7 @@ XXXXXXXXXXXXXXXXXXXXXX
    ><![CDATA[
       \t   /**
       \t    * Constructor for %description
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -1591,6 +1169,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       <![CDATA[
          \t   /**
          \t    * Constructor for %description
+         \t    * (%variables)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -1733,7 +1312,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       \tstatic inline void defaultConfigure() {
       \t
       \t   // Update settings
-      \t   configure(Info::DefaultInitValue);
+      \t   configure(DefaultInitValue);
       \t}
       \t
       \t/**
@@ -1741,70 +1320,106 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t *
       \t * @param init Class containing initialisation values
       \t */
-      \tstatic void configure(const typename Info::Init &init) {
-      \t   // ..........  Configure ...........
+      \tstatic void configure(const Init &init) {
       \t
-      \t   // Enable peripheral clock
-      \t   Info::enableClock();
+      \t   // Enable peripheral
+      \t   enable();
+      \t
+      \t   // Do software reset if requested
+      \t   trng->MCTL = init.mctl&TRNG_MCTL_RST_DEF_MASK;
       \t\n
-   ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
-             condition="/$(_STRUCTNAME)/generateSharedIrqInfo" >   <![CDATA[
-      \t   if constexpr (Info::irqHandlerInstalled) {
-      \t      // Only set call-backs if feature enabled
-      \t      Info::setCallback(init.callbackFunction);
-      \t      Info::enableNvicInterrupts(init.irqlevel);
-      \t   }
-      \t\n
-   ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   ]]>
+   </template>
+   <template codeGenCondition="irqHandlingMethod" condition="irqHandlingMethod" >
    <![CDATA[
-      \t   // ..........  Regs to init .......... ;
-      \t   trng->MCTL    = init.mctl;
-      \t   trng->SCMISC    = init.scmisc;
-      \t   trng->PKRRNG    = init.pkrrng;
-      \t   trng->PKRMAX    = init.pkrmax;
-      \t   trng->PKRSQ    = init.pkrsq;
-      \t   trng->SDCTL    = init.sdctl;
-      \t   trng->SBLIM    = init.sblim;
-      \t   trng->TOTSAM    = init.totsam;
-      \t   trng->FRQMIN    = init.frqmin;
-      \t   trng->FRQCNT    = init.frqcnt;
-      \t   trng->FRQMAX    = init.frqmax;
-      \t   trng->SCMC    = init.scmc;
-      \t   trng->SCML    = init.scml;
-      \t   trng->SCR1C    = init.scr1c;
-      \t   trng->SCR1L    = init.scr1l;
-      \t   trng->SCR2C    = init.scr2c;
-      \t   trng->SCR2L    = init.scr2l;
-      \t   trng->SCR3C    = init.scr3c;
-      \t   trng->SCR3L    = init.scr3l;
-      \t   trng->SCR4C    = init.scr4c;
-      \t   trng->SCR4L    = init.scr4l;
-      \t   trng->SCR5C    = init.scr5c;
-      \t   trng->SCR5L    = init.scr5l;
-      \t   trng->SCR6PC    = init.scr6pc;
-      \t   trng->SCR6PL    = init.scr6pl;
-      \t   trng->STATUS    = init.status;
-      \t   trng->ENT%S    = init.ent%s;
-      \t   trng->PKRCNT10    = init.pkrcnt10;
-      \t   trng->PKRCNT32    = init.pkrcnt32;
-      \t   trng->PKRCNT54    = init.pkrcnt54;
-      \t   trng->PKRCNT76    = init.pkrcnt76;
-      \t   trng->PKRCNT98    = init.pkrcnt98;
-      \t   trng->PKRCNTBA    = init.pkrcntba;
-      \t   trng->PKRCNTDC    = init.pkrcntdc;
-      \t   trng->PKRCNTFE    = init.pkrcntfe;
-      \t   trng->SEC_CFG    = init.sec_cfg;
-      \t   trng->INT_CTRL    = init.int_ctrl;
-      \t   trng->INT_MASK    = init.int_mask;
-      \t   trng->INT_STATUS    = init.int_status;
-      \t   trng->VID1    = init.vid1;
-      \t   trng->VID2    = init.vid2;
+      \t   // Configure call-backs
+      \t   setCallback(init.callbackFunction);\n
+   ]]>
+   </template>
+   <for keys=
+             " var                                                    : statement            "
+      values=" irqLevel                                               : enableNvicInterrupts(init.irqlevel) ;
+               trng_mctl_prgm,trng_mctl_err,trng_mctl_for_sclk,
+               trng_mctl_rst_def,trng_mctl_trng_acc,trng_mctl_unused,
+               trng_mctl_osc_div,trng_mctl_samp_mode                  : %configRegAssignment  ;
+               trng_scmisc_rty_ct,trng_scmisc_lrun_max                : %configRegAssignment  ;
+               trng_pkrrng_pkr_rng                                    : %configRegAssignment  ;
+               trng_pkrmax_pkr_max                                    : %configRegAssignment  ;
+               trng_sdctl_ent_dly,trng_sdctl_samp_size                : %configRegAssignment  ;
+               trng_sblim_sb_lim                                      : %configRegAssignment  ;
+               trng_frqmin_frq_min                                    : %configRegAssignment  ;
+               trng_frqmax_frq_max                                    : %configRegAssignment  ;
+               trng_scml_mono_rng,trng_scml_mono_max                  : %configRegAssignment  ;
+               trng_scr1l_run1_rng,trng_scr1l_run1_max                : %configRegAssignment  ;
+               trng_scr2l_run2_rng,trng_scr2l_run2_max                : %configRegAssignment  ;
+               trng_scr3l_run3_rng,trng_scr3l_run3_max                : %configRegAssignment  ;
+               trng_scr4l_run4_rng,trng_scr4l_run4_max                : %configRegAssignment  ;
+               trng_scr5l_run5_rng,trng_scr5l_run5_max                : %configRegAssignment  ;
+               trng_scr6pl_run6p_rng,trng_scr6pl_run6p_max            : %configRegAssignment  ;
+               trng_sec_cfg_sk_val,trng_sec_cfg_no_prgm,
+               trng_sec_cfg_sh0                                       : %configRegAssignment  ;
+               trng_int_ctrl_unused,trng_int_ctrl_frq_ct_fail,
+               trng_int_ctrl_ent_val,trng_int_ctrl_hw_err             : %configRegAssignment  ;
+               trng_int_mask_frq_ct_fail,trng_int_mask_ent_val,
+               trng_int_mask_hw_err                                   : %configRegAssignment  ;
+               trng_int_status_frq_ct_fail                            : %configRegAssignment " >
+      <variableTemplate codeGenCondition="enablePeripheralSupport"
+      variables="%(var)"
+      linePadding="xxx"
+      ><![CDATA[
+         \t
+         %multilineDescription
+         \t   %(statement);\n
+      ]]></variableTemplate>
+   </for>
+   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
       \t}
       \t\n
    ]]>
    </template>
+
+   <!-- ____  Default Initialisation value ____ -->
+
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
+      separator=","
+      terminator=","
+      variables="
+            trng_mctl_prgm,trng_mctl_err,trng_mctl_for_sclk,
+            trng_mctl_rst_def,trng_mctl_trng_acc,trng_mctl_unused,
+            trng_mctl_osc_div,trng_mctl_samp_mode,
+            trng_scmisc_rty_ct,trng_scmisc_lrun_max,
+            trng_pkrrng_pkr_rng,
+            trng_pkrmax_pkr_max,
+            trng_sdctl_ent_dly,trng_sdctl_samp_size,
+            trng_sblim_sb_lim,
+            trng_frqmin_frq_min,
+            trng_frqmax_frq_max,
+            trng_scml_mono_rng,trng_scml_mono_max,
+            trng_scr1l_run1_rng,trng_scr1l_run1_max,
+            trng_scr2l_run2_rng,trng_scr2l_run2_max,
+            trng_scr3l_run3_rng,trng_scr3l_run3_max,
+            trng_scr4l_run4_rng,trng_scr4l_run4_max,
+            trng_scr5l_run5_rng,trng_scr5l_run5_max,
+            trng_scr6pl_run6p_rng,trng_scr6pl_run6p_max,
+            trng_sec_cfg_sk_val,trng_sec_cfg_no_prgm,
+            trng_sec_cfg_sh0,
+            trng_int_ctrl_unused,trng_int_ctrl_frq_ct_fail,
+            trng_int_ctrl_ent_val,trng_int_ctrl_hw_err,
+            trng_int_mask_frq_ct_fail,trng_int_mask_ent_val,
+            trng_int_mask_hw_err,
+            trng_int_status_frq_ct_fail
+            irqLevel" >
+    <![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};
+      \t\n
+   ]]>
+   </variableTemplate>
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
@@ -1813,7 +1428,7 @@ XXXXXXXXXXXXXXXXXXXXXX
    ]]>
    </template>
 
-   <!-- ************* Common ****************** -->
+   <!-- ____ Common __________________ -->
 
    <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
@@ -1833,7 +1448,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       <copy source="Project_Headers/trng.h"         target="Project_Headers/trng.h"          overwrite="true" derived="true" />
    </projectActionList>
 
-   <!-- ************* Startup ****************** -->
+   <!-- ____ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
@@ -1845,9 +1460,19 @@ XXXXXXXXXXXXXXXXXXXXXX
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <!-- ************* SIM configuration ****************** -->
-   <category name="Advanced" description="SIM configuration" >
-      <aliasOption key="/SIM/sim_scgc3_$(_basename)"      locked="false" optional="true" />
+   <!-- ____ SIM configuration __________________ -->
+
+   <category name="Advanced" description="SIM configuration"
+      toolTip="These settings only have effect if the SIM configuration is enabled" >
+      <title description="$(_BASENAME) Shared" />
+      <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+      <title description="$(_NAME) Specific" />
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+      <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
    </category>
 
 </peripheralPage>

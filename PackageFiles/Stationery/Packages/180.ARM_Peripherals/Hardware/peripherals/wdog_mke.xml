@@ -528,6 +528,7 @@
       \t   /**
       \t    * Constructor for %description0, %description1 & %description2
       \t    *
+      \t    *
       \t    * @tparam   Types
       \t    * @param    rest
       \t    *
@@ -649,8 +650,7 @@
    ]]></template>
    <template key="/$(_BASENAME)/InitMethod" discardRepeats="true"
              codeGenCondition="irqHandlingMethod" ><![CDATA[
-      \t   setCallback(init.callbackFunction);
-      \t   enableNvicInterrupts(init.irqlevel);
+      \t   Info::setCallback(init.callbackFunction);
       \t\n
    ]]></template>
    <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="secondsSupport&amp;&amp;fullCodeSupport" ><![CDATA[
@@ -683,9 +683,8 @@
       \t   wdog->TOVALL   = timeout.toTicks();
       \t
       \t   // For some reason this must be done after above
-      \t   if constexpr (Info::irqHandlerInstalled) {
-      \t      enableNvicInterrupts(init.irqlevel);
-      \t   }
+      \t   Info::enableNvicInterrupts(init.irqlevel);
+      \t
       \t   return E_NO_ERROR;
       \t}\n\n
    ]]></template>

@@ -479,6 +479,30 @@
          <param type="BooleanVariable"        name="mcg_sc_present"                 value="true"             key="/MCG/mcg_sc_present" />
          <param type="StringVariable"         name="structName"                     value="MCG"              key="/MCG/structName" />
       </peripheral>
+      <peripheral baseName="MCM"      instance=""         instanceList="MCM"  version="mcm_mkl02z4">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcm" />
+         <param type="StringVariable"         name="_instanceList"                  value="MCM"              key="/MCM/_instanceList" />
+         <param type="StringVariable"         name="_hardwareIrqNums"               value=""                 key="/MCM/_hardwareIrqNums" />
+         <param type="BooleanVariable"        name="_present"                       value="true"             key="/MCM/_present" />
+         <param type="BooleanVariable"        name="mcm_cpo_cpoack_present"         value="true"             key="/MCM/mcm_cpo_cpoack_present" />
+         <param type="BooleanVariable"        name="mcm_cpo_cporeq_present"         value="true"             key="/MCM/mcm_cpo_cporeq_present" />
+         <param type="BooleanVariable"        name="mcm_cpo_cpowoi_present"         value="true"             key="/MCM/mcm_cpo_cpowoi_present" />
+         <param type="BooleanVariable"        name="mcm_cpo_present"                value="true"             key="/MCM/mcm_cpo_present" />
+         <param type="BooleanVariable"        name="mcm_placr_arb_present"          value="true"             key="/MCM/mcm_placr_arb_present" />
+         <param type="BooleanVariable"        name="mcm_placr_cfcc_present"         value="true"             key="/MCM/mcm_placr_cfcc_present" />
+         <param type="BooleanVariable"        name="mcm_placr_dfcc_present"         value="true"             key="/MCM/mcm_placr_dfcc_present" />
+         <param type="BooleanVariable"        name="mcm_placr_dfcda_present"        value="true"             key="/MCM/mcm_placr_dfcda_present" />
+         <param type="BooleanVariable"        name="mcm_placr_dfcic_present"        value="true"             key="/MCM/mcm_placr_dfcic_present" />
+         <param type="BooleanVariable"        name="mcm_placr_dfcs_present"         value="true"             key="/MCM/mcm_placr_dfcs_present" />
+         <param type="BooleanVariable"        name="mcm_placr_efds_present"         value="true"             key="/MCM/mcm_placr_efds_present" />
+         <param type="BooleanVariable"        name="mcm_placr_esfc_present"         value="true"             key="/MCM/mcm_placr_esfc_present" />
+         <param type="BooleanVariable"        name="mcm_placr_present"              value="true"             key="/MCM/mcm_placr_present" />
+         <param type="BooleanVariable"        name="mcm_plamc_amc_present"          value="true"             key="/MCM/mcm_plamc_amc_present" />
+         <param type="BooleanVariable"        name="mcm_plamc_present"              value="true"             key="/MCM/mcm_plamc_present" />
+         <param type="BooleanVariable"        name="mcm_plasc_asc_present"          value="true"             key="/MCM/mcm_plasc_asc_present" />
+         <param type="BooleanVariable"        name="mcm_plasc_present"              value="true"             key="/MCM/mcm_plasc_present" />
+         <param type="StringVariable"         name="structName"                     value="MCM"              key="/MCM/structName" />
+      </peripheral>
       <peripheral baseName="OSC"      instance="0"        instanceList="OSC0" version="osc0_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />
          <param type="StringVariable"         name="_instanceList"                  value="OSC0"             key="/OSC0/_instanceList" />

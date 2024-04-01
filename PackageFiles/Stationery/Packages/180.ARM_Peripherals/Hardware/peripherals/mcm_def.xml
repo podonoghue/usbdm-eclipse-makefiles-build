@@ -5,26 +5,50 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <equation key="irq_parameters"            value=""  />
-   <equation key="irq_dummy_parameters"      value=""  />
-   <equation key="irq_call"                  value=""  />
-   <equation key="generateDefault"           value="false"         />
-   <equation key="configureInStartupDefault" value="false"         />
-   <xi:include href="enablePeripheral.xml"  />
+   <equation key="irq_parameters"             value=""          />
+   <equation key="irq_dummy_parameters"       value=""          />
+   <equation key="irq_call"                   value=""          />
+   <equation key="generateDefault"            value="false"     />
+   <equation key="configureInStartupDefault"  value="false"     />
+   <xi:include href="enablePeripheral.xml"    />
 
-   <!-- ************* Class Declaration ****************** -->
+   <!-- ____ Class Declaration ________ -->
    <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
+   <!-- ____ PLASC ____ -->
+   <binaryOption key="mcm_plasc_asc" condition="mcm_plasc_asc_present"
+      hidden="true"
+      typeName="McmPlascAsc"
+      baseType="uint16_t"
+      toolTip=""
+      description="Each bit in the ASC field indicates whether there is a corresponding connection to the crossbar switch&apos;s slave input port" >
+      <choice name="A bus slave connection to AXBS input port n is absent"   value="0" enum="ABusSlaveConnectionToAxbsInputPortNIsAbsent" />
+      <choice name="A bus slave connection to AXBS input port n is present"  value="1" enum="ABusSlaveConnectionToAxbsInputPortNIsPresent" />
+   </binaryOption >
+
+   <!-- ____ PLAMC ____ -->
+   <binaryOption key="mcm_plamc_amc" condition="mcm_plamc_amc_present"
+      hidden="true"
+      typeName="McmPlamcAmc"
+      baseType="uint16_t"
+      toolTip=""
+      description="Each bit in the AMC field indicates whether there is a corresponding connection to the AXBS master input port" >
+      <choice name="A bus master connection to AXBS input port n is absent"   value="0" enum="ABusMasterConnectionToAxbsInputPortNIsAbsent" />
+      <choice name="A bus master connection to AXBS input port n is present"  value="1" enum="ABusMasterConnectionToAxbsInputPortNIsPresent" />
+   </binaryOption >
+
+   <!-- ____ PLACR ____ -->
    <template where="basicInfo"><![CDATA[
    \t// May be empty\n
    ]]></template>
    <!--
-      ******************** Flash Controller  ********************
+      ____________________ Flash Controller  ____________________
    -->
    <title description="Flash Controller" condition="mcm_placr_esfc_present" />
+
    <binaryOption key="mcm_placr_esfc" condition="mcm_placr_esfc_present"
       typeName="McmStallFlashController"
-      description="Enable Stalling Flash Controller"
+      baseType="uint32_t"
       toolTip="Enables stalling flash controller when flash is busy \n
       When software needs to access the flash memory while a flash memory resource is being manipulated \n
       by a flash command, software can enable a stall mechanism to avoid a read collision.  \n
@@ -33,6 +57,7 @@
       However, software must ensure the sector the flash operations are being performed on is not \n
       the same sector from which the code is executing. \n
       This must be set only just before the flash operation is executed and cleared when the operation completes"
+      description="Enable Stalling Flash Controller"
       >
       <choice name="Disabled" value="0" enum="Disabled" isDefault="true" />
       <choice name="Enabled"  value="1" enum="Enabled"  />
@@ -104,6 +129,7 @@
    ]]></variableTemplate>
 
    <binaryOption key="mcm_placr_cfcc" condition="mcm_placr_cfcc_present"
+      hidden="true"
       typeName="McmFlashControllerCache"
       description="Clear Flash Controller Cache"
       toolTip="Write to clear flash controller cache"
@@ -155,7 +181,7 @@
    ]]></variableTemplate>
 
    <variableTemplate variables="mcm_placr_flash_cache,mcm_placr_flash_speculation" >
-      ><![CDATA[
+      <![CDATA[
       \t/**
       \t **
       \t * Class used to do initialisation of MCM flash control.
@@ -179,6 +205,12 @@
       \tclass FlashInit {
       \t
       \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr FlashInit(Types...) = delete;
+      \t
       \t   /// Value for %registerName register
       \t   uint32_t %registerName = 0;
       \t
@@ -230,7 +262,7 @@
    </for>
 
    <template condition="mcm_placr_flash_cache||mcm_placr_flash_speculation" >
-      ><![CDATA[
+      <![CDATA[
       \t};\n\n
    ]]></template>
 
@@ -258,7 +290,7 @@
       \t}\n
    ]]></variableTemplate>
    <!--
-      ******************** Bus arbitration ********************
+      ____________________ Bus arbitration ____________________
    -->
    <title description="Bus Arbitration" condition="mcm_placr_arb_present" />
    <binaryOption key="mcm_placr_arb" condition="mcm_placr_arb_present"
@@ -285,7 +317,7 @@
    ]]></variableTemplate>
 
    <!--
-      ******************** Compute Mode ********************
+      ____________________ Compute Mode ____________________
    -->
    <title description="Compute Mode" condition="mcm_cpo_cporeq_present||mcm_cpo_cpowoi_present" />
    <choiceOption key="mcm_cpo_request" condition="mcm_cpo_cporeq_present||mcm_cpo_cpowoi_present"
@@ -337,7 +369,7 @@
    </binaryOption>
 
    <!--
-      ******************** Floating point exceptions ********************
+      ____________________ Floating point exceptions ____________________
    -->
    <title description="Floating point exceptions" condition="mcm_iscr_fidce_present" />
    <binaryOption key="mcm_iscr_fidce" condition="mcm_iscr_fidce_present"
@@ -463,6 +495,13 @@
       \t */
       \tclass FloatingPointIrqInit {
       \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr FloatingPointIrqInit(Types...) = delete;
+      \t
       \tpublic:
       \t   /// Mask indicating bits to set or clear in register
       \t   uint32_t %registerName = 0;
@@ -558,7 +597,7 @@
    </variableTemplate>
 
    <!--
-      ******************** MCM_CR ********************
+      ____________________ MCM_CR ____________________
    -->
 
    <binaryOption key="mcm_cr_sramlwp" condition="mcm_cr_sramlwp_present"
@@ -705,7 +744,7 @@
       \t};
    ]]></variableTemplate>
 
-   <!-- ************* Common ****************** -->
+   <!-- _____________ Common __________________ -->
 
    <template key="/$(_BASENAME)/declarations" condition="enablePeripheralSupport" ><![CDATA[
       \t/**
@@ -722,7 +761,7 @@
       <copy source="Project_Headers/mcm.h"         target="Project_Headers/mcm.h"          overwrite="true" derived="true" />
    </projectActionList>
 
-   <!-- ************* Startup ****************** -->
+   <!-- _____________ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n

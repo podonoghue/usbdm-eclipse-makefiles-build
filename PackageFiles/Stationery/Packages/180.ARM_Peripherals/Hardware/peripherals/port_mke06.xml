@@ -239,6 +239,9 @@
          <bitmaskOption key="port_pue%(r)_pt%(p)pe"  condition="port_pue%(r)_pt%(p)pe_present"
             description="Pull-up control for Port %(P)"
             toolTip="Each bit controls the pull-up for the corresponding pin"
+            baseType="uint32_t"
+            bitList="Pin%i"
+            typeName="PortPullUp%(P)"
             value="%(v)"
             bitmask="0xFF" />
       </for>
@@ -486,8 +489,7 @@
             " >
       <variableTemplate codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
-         linePadding="xxx"
-         useDefinitions="true" >
+         linePadding="xxx" >
       <![CDATA[
          \t   /** Default value for %description */
          \t   static constexpr uint32_t %registerName = %initExpression;

@@ -33,5 +33,5 @@
       <choice name="High"                 value="(NvicPriority_VeryLow*1/6)"    enum="High"         />
       <choice name="Very High"            value="0"                             enum="VeryHigh"     />
    </choiceOption>
-
+   <constant key="/NvicPriority_Disabled" value='0' type="Long" />
 </fragment>

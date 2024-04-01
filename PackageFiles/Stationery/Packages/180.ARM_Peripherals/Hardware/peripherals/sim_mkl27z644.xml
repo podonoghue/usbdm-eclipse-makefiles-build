@@ -6,8 +6,8 @@
 
 <!-- ==================== Constants ==================== -->
 
-   <equation key="generateDefault"           type="Boolean" value="false"         />
-   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="generateDefault"           value="false"         />
+   <equation key="configureInStartupDefault" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -92,7 +92,6 @@
       <choice value="63" name="Always Enabled 63"  enum="AlwaysEnabled63"  />
    </choiceOption>
 
-
    <!-- Indicate RTC arrangement: OSC0/RTC(OSC1) share XTAL/EXTAL pins -->
    <binaryOption key="RtcForcing"
       locked="true"
@@ -107,8 +106,7 @@
    <xi:include href="simCommon.xml"/>
 
    <!-- _____________ Class Declaration __________________ -->
-   <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
+   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Baseclass)BasicInfo"' />
 
    <!-- _____________ USB Clock __________________ -->
 
@@ -519,7 +517,7 @@
                toolTip="Frequency of Peripheral Clock available to various peripherals"  />
 
             <choiceOption key="sim_sopt2_usbsrc[%(n)]" condition="sim_sopt2_usbsrc_present"
-               enabledBy="enablePeripheralSupport"
+               addToVar="Usb0ExternalItems"
                target="system_usbfs_clock[%(n)]"
                typeName="SimUsbFullSpeedClockSource"
                description="USB Clock"
@@ -531,7 +529,7 @@
             <aliasOption key="system_usb_clkin_clock" locked="false" optional="true" />
 
             <intOption key="system_usbfs_clock[%(n)]"  condition="sim_sopt2_usbsrc_present"
-               enabledBy="enablePeripheralSupport"
+               addToVar="Usb0ExternalItems"
                errorPropagate="error"
                derived="true"
                locked="true"

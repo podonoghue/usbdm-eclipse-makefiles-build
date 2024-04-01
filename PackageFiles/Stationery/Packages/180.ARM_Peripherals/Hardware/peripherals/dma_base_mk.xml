@@ -4,10 +4,9 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Direct memory access controller" >
 
-   <equation key="suppressIrqHandler"        value="" />
-   <equation key="irq_parameters"            value="uint32_t status" />
-   <equation key="irq_dummy_parameters"      value="uint32_t"        />
-   <equation key="irq_call"                  value="0"               />
+   <equation key="irq_parameters"            value="" />
+   <equation key="irq_dummy_parameters"      value=""        />
+   <equation key="irq_call"                  value=""      />
    <equation key="generateDefault"           value="false"  />
    <xi:include href="enablePeripheral.xml"  />
    <title />
@@ -301,47 +300,6 @@
       <choice name="Offset Destination"            value="0,1" enum="Destination" />
       <choice name="Offset Source and Destination" value="1,1" enum="Both"        />
    </choiceOption >
-
-   <!--   ========== Interrupt handling =============================== -->
-
-   <variableTemplate codeGenCondition="irqHandlingMethod"
-      variables="irq_enum" >
-   <![CDATA[
-      \t/**
-      \t * $(_BASENAME) error interrupt handler -  Calls $(_BASENAME) channel callback with error flags
-      \t */
-      \tstatic void Error_irqHandler() {
-      \t
-      \t   // Capture error status
-      \t   uint32_t errorFlags = dma->ES;
-      \t
-      \t   // Error channel
-      \t   DmaChannelNum channel = (DmaChannelNum)((errorFlags&DMA_ES_ERRCHN_MASK)>>DMA_ES_ERRCHN_SHIFT);
-      \t
-      \t   // Disable channel
-      \t   dma->CERQ = channel;
-      \t
-      \t   // Clear channel error flag
-      \t   dma->CERR = channel;
-      \t
-      \t   // Call channel call-back with error flags
-      \t   sCallbacks[channel](errorFlags);
-      \t}
-      \t
-      \t/**
-      \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
-      \t *
-      \t * @tparam dma0IrqNum Irq number
-      \t */
-      \ttemplate<Dma0IrqNum dma0IrqNum>
-      \tstatic void irqHandler() {
-      \t
-      \t   // Execute call-back
-      \t   sCallbacks[dma0IrqNum]($(irq_call));
-      \t}
-      \t\n
-   ]]>
-   </variableTemplate>
 
 <!--   ========== DMA DmaTcdCsr class - start =============================== -->
 

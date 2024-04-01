@@ -15,6 +15,7 @@
    <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
    <title description="Clock Settings" />
+   <constant key="ClockSource" value='"SystemBusClock"' condition="!ClockSource" />
 
    <binaryOption key="/$(_BASENAME)/baudSupport"
       hidden="true"
@@ -28,27 +29,52 @@
       <choice value="true"  enum="Enabled"  name="Speed may be specified in Hertz" isDefault="true" />
    </binaryOption>
 
-   <choiceOption key="i2cClockConfig" condition="/MCG/_present"
-      enabledBy="enablePeripheralSupport"
-      target="i2cInputClock"
-      description="Clock configuration"
-      toolTip="Selects the clock configuration used for calculations involving the bus clock" >
-      <choice value="0" name="@/MCG/ClockConfig[0]" ref="/SIM/system_bus_clock[0]"  isDefault="true" />
-      <choice value="1" name="@/MCG/ClockConfig[1]" ref="/SIM/system_bus_clock[1]"  />
-      <choice value="2" name="@/MCG/ClockConfig[2]" ref="/SIM/system_bus_clock[2]"  />
-      <choice value="3" name="@/MCG/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
-   </choiceOption>
-
-   <choiceOption key="i2cClockConfig" condition="/ICS/_present"
-      enabledBy="enablePeripheralSupport"
-      target="i2cInputClock"
-      description="Clock configuration"
-      toolTip="Selects the clock configuration used for calculations involving the bus clock" >
-      <choice value="0" name="@/ICS/ClockConfig[0]" ref="/SIM/system_bus_clock[0]"  isDefault="true" />
-      <choice value="1" name="@/ICS/ClockConfig[1]" ref="/SIM/system_bus_clock[1]"  />
-      <choice value="2" name="@/ICS/ClockConfig[2]" ref="/SIM/system_bus_clock[2]"  />
-      <choice value="3" name="@/ICS/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
-   </choiceOption>
+   <if condition='=ClockSource=="SystemBusClock"'> 
+      <choiceOption key="i2cClockConfig" condition="/MCG/_present"
+         enabledBy="enablePeripheralSupport"
+         target="i2cInputClock"
+         description="Clock configuration"
+         toolTip="Selects the clock configuration used for calculations involving the bus clock" >
+         <choice value="0" name="@/MCG/ClockConfig[0]" ref="/SIM/system_bus_clock[0]"  isDefault="true" />
+         <choice value="1" name="@/MCG/ClockConfig[1]" ref="/SIM/system_bus_clock[1]"  />
+         <choice value="2" name="@/MCG/ClockConfig[2]" ref="/SIM/system_bus_clock[2]"  />
+         <choice value="3" name="@/MCG/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
+      </choiceOption>
+   
+      <choiceOption key="i2cClockConfig" condition="/ICS/_present"
+         enabledBy="enablePeripheralSupport"
+         target="i2cInputClock"
+         description="Clock configuration"
+         toolTip="Selects the clock configuration used for calculations involving the bus clock" >
+         <choice value="0" name="@/ICS/ClockConfig[0]" ref="/SIM/system_bus_clock[0]"  isDefault="true" />
+         <choice value="1" name="@/ICS/ClockConfig[1]" ref="/SIM/system_bus_clock[1]"  />
+         <choice value="2" name="@/ICS/ClockConfig[2]" ref="/SIM/system_bus_clock[2]"  />
+         <choice value="3" name="@/ICS/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
+      </choiceOption>
+   </if>
+   <if condition='=ClockSource=="SystemCoreClock"'> 
+      <choiceOption key="spiClockConfig" condition="/MCG/_present"
+         enabledBy="enablePeripheralSupport"
+         target="i2cInputClock"
+         description="Clock configuration"
+         toolTip="Selects the clock configuration used for calculations involving the bus clock" >
+         <choice value="0" name="@/MCG/ClockConfig[0]" ref="/SIM/system_core_clock[0]"  isDefault="true" />
+         <choice value="1" name="@/MCG/ClockConfig[1]" ref="/SIM/system_core_clock[1]"  />
+         <choice value="2" name="@/MCG/ClockConfig[2]" ref="/SIM/system_core_clock[2]"  />
+         <choice value="3" name="@/MCG/ClockConfig[3]" ref="/SIM/system_core_clock[3]"  />
+      </choiceOption>
+   
+      <choiceOption key="spiClockConfig" condition="/ICS/_present"
+         enabledBy="enablePeripheralSupport"
+         target="i2cInputClock"
+         description="Clock configuration"
+         toolTip="Selects the clock configuration used for calculations involving the bus clock" >
+         <choice value="0" name="@/ICS/ClockConfig[0]" ref="/SIM/system_core_clock[0]"  isDefault="true" />
+         <choice value="1" name="@/ICS/ClockConfig[1]" ref="/SIM/system_core_clock[1]"  />
+         <choice value="2" name="@/ICS/ClockConfig[2]" ref="/SIM/system_core_clock[2]"  />
+         <choice value="3" name="@/ICS/ClockConfig[3]" ref="/SIM/system_core_clock[3]"  />
+      </choiceOption>
+   </if>
 
    <intOption key="i2cInputClock"
       enabledBy="enablePeripheralSupport"
@@ -90,6 +116,8 @@
       locked="true"
    />
 
+   <title/>
+   
    <!-- _____________ C1 __________________ -->
 
    <!--binaryOption key="i2c_c1_iicen" condition="i2c_c1_iicen_present"
@@ -1211,6 +1239,12 @@ In other cases, if the master reads data from the slave, then it is required to 
       </variableTemplate>
    </for>
 
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+      <![CDATA[
+      \t}; // class $(_Structname)BasicInfo::Init
+      \t\n
+   ]]>
+   </template>
 
 <!--   Default Initialisation value -->
 
@@ -1265,24 +1299,17 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t\n
    ]]></template>
 
-   <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   <template codeGenCondition="enablePeripheralSupport" immediateVariables="ClockSource" ><![CDATA[
       \t/**
       \t * Get input clock frequency
       \t *
-      \t * @return Input clock frequency as a uint32_t in Hz
+      \t * @return Frequency in Hz
       \t */
       \tstatic uint32_t getClockFrequency() {
-      \t   return $(clockSource:SystemBusClock);
+      \t   return $(ClockSource);
       \t}
       \t\n
    ]]></template>
-
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
-      <![CDATA[
-      \t}; // class $(_Structname)BasicInfo::Init
-      \t\n
-   ]]>
-   </template>
 
    <!-- _____________ Common __________________ -->
 

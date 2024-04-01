@@ -47,7 +47,6 @@ protected:
 $(/WDOG/protectedMethods: // No private methods found)
 
 public:
-$(/WDOG/publicMethods: // No public methods found)
    /**
     * Hardware instance pointer.
     *

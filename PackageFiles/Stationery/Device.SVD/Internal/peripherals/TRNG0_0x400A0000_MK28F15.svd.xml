@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MK28F15
 -->
       <peripheral>
@@ -38,17 +38,17 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>00</name>
-                           <description>use Von Neumann data into both Entropy shifter and Statistical Checker</description>
+                           <description>Von Neumann data into both Entropy shifter and Statistical Checker</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>01</name>
-                           <description>use raw data into both Entropy shifter and Statistical Checker</description>
+                           <description>Raw data into both Entropy shifter and Statistical Checker</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>10</name>
-                           <description>use Von Neumann data into Entropy shifter. Use raw data into Statistical Checker</description>
+                           <description>Von Neumann data into Entropy shifter. Use raw data into Statistical Checker</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -60,43 +60,49 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>OSC_DIV</name>
-                     <description>Oscillator Divide</description>
+                     <description>Ring Oscillator Divider</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>00</name>
-                           <description>use ring oscillator with no divide</description>
+                           <description>Direct</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>01</name>
-                           <description>use ring oscillator divided-by-2</description>
+                           <description>Divide by 2</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>10</name>
-                           <description>use ring oscillator divided-by-4</description>
+                           <description>Divide by 4</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>11</name>
-                           <description>use ring oscillator divided-by-8</description>
+                           <description>Divide by 8</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>UNUSED</name>
-                     <description>This bit is unused but write-able. Must be left as zero</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
                   </field>
                   <field>
                      <name>TRNG_ACC</name>
                      <description>Access Mode</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Generate Entropy</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>RST_DEF</name>
@@ -104,46 +110,130 @@ Devices using this peripheral:
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No Action</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Software Reset</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>FOR_SCLK</name>
                      <description>Force System Clock</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Ring Oscillator</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>System Clock</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>FCT_FAIL</name>
-                     <description>Read only: Frequency Count Fail</description>
+                     <description>Frequency Count Fail</description>
                      <bitOffset>8</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No failure</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Failed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>FCT_VAL</name>
-                     <description>Read only: Frequency Count Valid. Indicates that a valid frequency count may be read from FRQCNT</description>
+                     <description>Frequency Count Valid. Indicates that a valid frequency count may be read from FRQCNT</description>
                      <bitOffset>9</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Invalid</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Valid</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>ENT_VAL</name>
-                     <description>Read only: Entropy Valid</description>
+                     <description>Entropy Valid</description>
                      <bitOffset>10</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Invalid</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Valid</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>TST_OUT</name>
-                     <description>Read only: Test point inside ring oscillator</description>
+                     <description>Test point inside ring oscillator</description>
                      <bitOffset>11</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>TP Low</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>TP High</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>ERR</name>
-                     <description>Read: Error status</description>
+                     <description>Error status</description>
                      <bitOffset>12</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No Error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Error detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>TSTOP_OK</name>
@@ -151,12 +241,36 @@ Devices using this peripheral:
                      <bitOffset>13</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Busy</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>OK to stop</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>PRGM</name>
                      <description>Programming Mode Select</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Run mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Program mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
@@ -879,42 +993,23 @@ Devices using this peripheral:
                <addressOffset>0xA0</addressOffset>
                <fields>
                   <field>
-                     <name>SH0</name>
-                     <description>Reserved. DRNG specific, not applicable to this version</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>See DRNG version</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>See DRNG version</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
                      <name>NO_PRGM</name>
-                     <description>If set, the TRNG registers cannot be programmed</description>
+                     <description>TRNG register protection</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0</name>
-                           <description>Programability of registers controlled only by the Miscellaneous Control Register&apos;s access mode bit</description>
+                           <description>Normal mode</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>Overides Miscellaneous Control Register access mode and prevents TRNG register programming</description>
+                           <description>Registers are protected</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="SH0" > <name>SK_VAL</name> <description>Reserved. DRNG-specific, not applicable to this version</description> <bitOffset>2</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -925,46 +1020,57 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>HW_ERR</name>
-                     <description>Bit position that can be cleared if corresponding bit of INT_STATUS has been asserted</description>
+                     <description>Clear Hardware Error flag</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0</name>
-                           <description>Corresponding bit of INT_STATUS cleared</description>
+                           <description>Flag Cleared</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>Corresponding bit of INT_STATUS active</description>
+                           <description>No Effect</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>ENT_VAL</name>
-                     <description>Same behavior as bit 0 above</description>
+                     <description>Clear Entropy Available flag</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0</name>
-                           <description>Same behavior as bit 0 above</description>
+                           <description>Flag Cleared</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>Same behavior as bit 0 above</description>
+                           <description>No Effect</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="ENT_VAL" > <name>FRQ_CT_FAIL</name> <bitOffset>2</bitOffset> </field>
                   <field>
-                     <name>UNUSED</name>
-                     <description>Reserved but writeable</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>29</bitWidth>
+                     <name>FRQ_CT_FAIL</name>
+                     <description>Clear Frequency Count Error flag</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Flag Cleared</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>No Effect</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
@@ -975,41 +1081,58 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>HW_ERR</name>
-                     <description>Bit position that can be cleared if corresponding bit of INT_STATUS has been asserted</description>
+                     <description>Hardware Error Action</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0</name>
-                           <description>Corresponding interrupt of INT_STATUS is masked</description>
+                           <description>No Action</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>Corresponding bit of INT_STATUS is active</description>
+                           <description>Interrupt</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>ENT_VAL</name>
-                     <description>Same behavior as bit 0 above</description>
+                     <description>Entropy Valid Action</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0</name>
-                           <description>Same behavior as bit 0 above</description>
+                           <description>No Action</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>Same behavior as bit 0 above</description>
+                           <description>Interrupt</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="ENT_VAL" > <name>FRQ_CT_FAIL</name> <bitOffset>2</bitOffset> </field>
+                  <field>
+                     <name>FRQ_CT_FAIL</name>
+                     <description>Frequency Count Error Action</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No Action</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Interrupt</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
                </fields>
             </register>
             <register>
@@ -1019,56 +1142,56 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>HW_ERR</name>
-                     <description>Read: Error status</description>
+                     <description>Hardware Error flag</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0</name>
-                           <description>no error</description>
+                           <description>No error</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>error detected</description>
+                           <description>Error detected</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>ENT_VAL</name>
-                     <description>Read only: Entropy Valid</description>
+                     <description>Entropy Valid flag</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0</name>
-                           <description>Busy generation entropy. Any value read is invalid</description>
+                           <description>Busy</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>TRNG can be stopped and entropy is valid if read</description>
+                           <description>Entropy available</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>FRQ_CT_FAIL</name>
-                     <description>Read only: Frequency Count Fail</description>
+                     <description>Frequency Count Error flag</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0</name>
-                           <description>No hardware nor self test frequency errors</description>
+                           <description>No error</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>The frequency counter has detected a failure</description>
+                           <description>Error detected</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
