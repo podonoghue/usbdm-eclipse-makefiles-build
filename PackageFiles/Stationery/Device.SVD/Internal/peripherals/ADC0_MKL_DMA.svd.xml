@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKL04Z4
       MKL05Z4
       MKL14Z4
@@ -537,7 +537,7 @@ Controls whether the Asynchronous clock output is always enabled or only as requ
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Enabled\t Request will be asserted when conversion completes</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

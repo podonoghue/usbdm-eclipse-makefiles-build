@@ -161,7 +161,7 @@
       </aliasCategoryOption>
    </for>
 
-   <clockCodeTemplate variable="usbphy_ctrl_sftrst"
+   <variableTemplate variables="usbphy_ctrl_sftrst"
    ><![CDATA[
       \t/**
       \t * Apply %description
@@ -183,9 +183,9 @@
       \tstatic void releasePhyReset() {
       \t   %register_CLR = %mask;
       \t}\n\n
-   ]]></clockCodeTemplate>
+   ]]></variableTemplate>
 
-   <clockCodeTemplate variable="usbphy_ctrl_clkgate"
+   <variableTemplate variables="usbphy_ctrl_clkgate"
    ><![CDATA[
       \t/**
       \t * Enable %description
@@ -204,9 +204,9 @@
       \tstatic void disableUtmiClocks() {
       \t   %register_SET = %mask;
       \t}\n\n
-   ]]></clockCodeTemplate>
+   ]]></variableTemplate>
 
-   <clockCodeTemplate variable="usbphy_pll_sic_pll_power"
+   <variableTemplate variables="usbphy_pll_sic_pll_power"
    ><![CDATA[
       \t/**
       \t * Enable %description
@@ -225,9 +225,9 @@
       \tstatic void disablePllPower() {
       \t   %register_SET = %mask;
       \t}\n\n
-   ]]></clockCodeTemplate>
+   ]]></variableTemplate>
 
-   <clockCodeTemplate variable="usbphy_pll_sic_pll_div_sel"
+   <variableTemplate variables="usbphy_pll_sic_pll_div_sel"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -243,9 +243,9 @@
 
       \t /// %description
       \t static constexpr %paramType %paramName_default = %symbolicExpression; // %shortDescription \n\n
-   ]]></clockCodeTemplate>
+   ]]></variableTemplate>
 
-   <clockCodeTemplate variable="usbphy_anactrl_pfd_frac[]"
+   <variableTemplate variables="usbphy_anactrl_pfd_frac[]"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -259,9 +259,9 @@
 
       \t /// %description
       \t static constexpr %paramType %paramName_default = %symbolicExpression; // %shortDescription\n\n
-   ]]></clockCodeTemplate>
+   ]]></variableTemplate>
 
-   <clockCodeTemplate variable="usbphy_anactrl_pfd_clk_sel[]"
+   <variableTemplate variables="usbphy_anactrl_pfd_clk_sel[]"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -275,7 +275,7 @@
 
       \t /// %description
       \t static constexpr %paramType %paramName_default = %symbolicExpression; // %shortDescription\n\n
-   ]]></clockCodeTemplate>
+   ]]></variableTemplate>
 
    <variableTemplate variables="usbphy_anactrl_pfd_clk_sel[],usbphy_anactrl_pfd_frac[]"
    ><![CDATA[

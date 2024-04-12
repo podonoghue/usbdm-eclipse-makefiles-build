@@ -195,6 +195,7 @@ void pitCallback() {
  * - Generates regular events at 1ms interval. Each event is used to initiate an ADC conversions.
  */
 void configurePit() {
+
    // Configure base PIT
    Pit::defaultConfigure();
 
@@ -279,6 +280,7 @@ void testHardwareConversions() {
 }
 
 int main() {
+
    console.writeln("\n\nStarting");
 
    // Debug LED

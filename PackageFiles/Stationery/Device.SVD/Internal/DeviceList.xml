@@ -266,6 +266,7 @@
       <device name="MKW41Z4"          svdFileName="MKW41Z4"  />
 
       <device name="FRDM_K20D50M"     svdFileName="MK20D5"      />
+      <device name="MK22F_MODULE"     svdFileName="MK22F51212"  />
       <device name="FRDM_K22F"        svdFileName="MK22F51212"  />
       <device name="FRDM_K22F1M0"     svdFileName="MK22F12"     />
       <device name="FRDM_K22FA1M0"    svdFileName="MK22FA12"    />

@@ -4,11 +4,11 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <equation key="irq_parameters"            type="String"  value='""'  />
-   <equation key="irq_dummy_parameters"      type="String"  value='""'  />
-   <equation key="irq_call"                  type="String"  value='""'  />
-   <equation key="generateDefault"           type="Boolean" value="false"         />
-   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="irq_parameters"             value=""         />
+   <equation key="irq_dummy_parameters"       value=""         />
+   <equation key="irq_call"                   value=""         />
+   <equation key="generateDefault"            value="false"    />
+   <equation key="configureInStartupDefault"  value="false"    />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -134,7 +134,7 @@
       <choice value="4" enum="VeryLowLeakageStop"  name="Very-Low-Leakage Stop (VLLSx)" />
    </choiceOption>
 
-   <clockCodeTemplate variable="smc_pmctrl_lpwui"  codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate variables="smc_pmctrl_lpwui"  codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -156,7 +156,7 @@
       \t   (void)smc->PMCTRL;
       \t   return E_NO_ERROR;
       \t}\n\n
-   ]]></clockCodeTemplate>
+   ]]></variableTemplate>
 
    <!-- ************* STOPCTRL ****************** -->
 
@@ -239,7 +239,7 @@
       <choice value="1" enum="Enabled"  name="LPO clock is disabled in LLS/VLLSx" />
    </binaryOption>
 
-   <clockCodeTemplate variable="smc_stopctrl_pstopo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate variables="smc_stopctrl_pstopo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -249,9 +249,9 @@
       \tstatic void setPartialStopMode(%paramType %paramName) {
       \t   %fieldAssignment;
       \t}\n\n
-   ]]></clockCodeTemplate>
+   ]]></variableTemplate>
 
-   <clockCodeTemplate variable="smc_stopctrl_porpo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate variables="smc_stopctrl_porpo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -261,9 +261,9 @@
       \tstatic void setPowerOnResetInVLLS0(%paramType %paramName) {
       \t   %fieldAssignment;
       \t}\n\n
-   ]]></clockCodeTemplate>
+   ]]></variableTemplate>
 
-   <clockCodeTemplate variable="smc_stopctrl_vllsm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate variables="smc_stopctrl_vllsm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -273,9 +273,9 @@
       \tstatic void setLowLeakageStopMode(%paramType %paramName) {
       \t   %fieldAssignment;
       \t}\n\n
-   ]]></clockCodeTemplate>
+   ]]></variableTemplate>
 
-   <clockCodeTemplate variable="smc_stopctrl_llsm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate variables="smc_stopctrl_llsm" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -285,9 +285,9 @@
       \tstatic void setLowLeakageStopMode(%paramType %paramName) {
       \t   %fieldAssignment;
       \t}\n\n
-   ]]></clockCodeTemplate>
+   ]]></variableTemplate>
 
-   <clockCodeTemplate variable="smc_stopctrl_ram2po" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate variables="smc_stopctrl_ram2po" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -297,9 +297,9 @@
       \tstatic void setRam2PoweredInLLS2_VLLS2(%paramType %paramName) {
       \t   %fieldAssignment;
       \t}\n\n
-   ]]></clockCodeTemplate>
+   ]]></variableTemplate>
 
-   <clockCodeTemplate variable="smc_stopctrl_lpopo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate variables="smc_stopctrl_lpopo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -309,9 +309,9 @@
       \tstatic void setLpoPoweredInLLS_VLLS(%paramType %paramName) {
       \t   %fieldAssignment;
       \t}\n\n
-   ]]></clockCodeTemplate>
+   ]]></variableTemplate>
 
-   <clockCodeTemplate variable="smc_stopctrl_vllsm_llsm"><![CDATA[
+   <variableTemplate variables="smc_stopctrl_vllsm_llsm"><![CDATA[
       \t/**
       \t * Set %description
       \t *
@@ -320,7 +320,7 @@
       \tstatic void setLowLeakageStopMode(%paramType %paramName) {
       \t   %fieldAssignment;
       \t}\n\n
-   ]]></clockCodeTemplate>
+   ]]></variableTemplate>
 
    <variableTemplate codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="smc_stopctrl_pstopo,smc_stopctrl_llsm,smc_stopctrl_vllsm,smc_stopctrl_vllsm_llsm,smc_stopctrl_porpo,smc_stopctrl_ram2po,smc_stopctrl_lpopo">

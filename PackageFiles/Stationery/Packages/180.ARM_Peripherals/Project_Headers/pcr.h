@@ -293,6 +293,8 @@ constexpr auto operator /(unsigned left,  Hertz right)   { return Seconds(left/r
 constexpr auto operator /(int left,       Hertz right)   { return Seconds(left/right.getValue()); }
 constexpr auto operator /(Ticks left,     Hertz right)   { return Seconds(left.getValue()/right.getValue()); }
 
+using Percent  = float;
+
 #else
 enum Ticks : unsigned {
 
@@ -300,6 +302,8 @@ enum Ticks : unsigned {
 //   using Ticks    = unsigned;
    using Seconds  = float;
    using Hertz    = float;
+   using Percent  = float;
+
 #endif
 
    /**
@@ -366,8 +370,8 @@ union Seconds_Ticks {
    consteval auto operator"" _MHz(unsigned long long int num)   { return static_cast<Hertz>((double)(num*1000000)); };
    consteval auto operator"" _MHz(long double num)              { return static_cast<Hertz>((double)(num*1000000)); };
 
-//   consteval auto operator"" _percent(unsigned long long int num)  { return static_cast<double>(num)*0.01; };
-//   consteval auto operator"" _percent(long double num)             { return static_cast<double>(num)*0.01; };
+   consteval auto operator"" _percent(unsigned long long int num)  { return static_cast<Percent>((num)*0.01); };
+   consteval auto operator"" _percent(long double num)             { return static_cast<Percent>((num)*0.01); };
 
 $(/PCR/nvicPriority: // /PCR/nvicPriority not found)
 /**
@@ -456,7 +460,7 @@ public:
  * @param[in]  nvicPriority  Interrupt priority
  *
  * @note Any pending interrupts are cleared before enabling.
- * @note NvicPriority_NotInstalled will actually disable interrupts
+ * @note NvicPriority_Disabled will actually disable interrupts
  */
 void enableNvicInterrupt(IRQn_Type irqNum, NvicPriority nvicPriority);
 

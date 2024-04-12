@@ -42,7 +42,7 @@ uint32_t Spi::calculateSpeed(uint32_t clockFrequency, uint32_t spiCtarValue) {
  * Used for ASC, DT and CSSCK
  *
  * @param[in]  clockFrequency Clock frequency of SPI in Hz
- * @param[in]  delay          Desired delay in seconds
+ * @param[in]  delay_ns       Desired delay in nanoseconds
  * @param[out] bestPrescale   Best prescaler value (0=>/1, 1=>/3, 2=/5, 3=>/7)
  * @param[out] bestDivider    Best divider value (N=>/(2**(N+1)))
  *

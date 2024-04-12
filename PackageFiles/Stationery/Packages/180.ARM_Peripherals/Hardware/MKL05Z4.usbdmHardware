@@ -1310,7 +1310,7 @@
          <reset sel="mux0" />
       </pin>
       <pin name="PTA7">
-         <mux sel="mux0"          signal="ADC0_SE7" />
+         <mux sel="mux0"          signal="ADC0_SE7a" />
          <mux sel="mux0"          signal="TSI0_CH5" />
          <mux sel="mux1"          signal="GPIOA_7" />
          <mux sel="mux1"          signal="LLWU_P3" />
@@ -1388,7 +1388,7 @@
          <reset sel="mux0" />
       </pin>
       <pin name="PTB0">
-         <mux sel="mux0"          signal="ADC0_SE6" />
+         <mux sel="mux0"          signal="ADC0_SE6a" />
          <mux sel="mux0"          signal="TSI0_CH4" />
          <mux sel="mux1"          signal="GPIOB_0" />
          <mux sel="mux1"          signal="LLWU_P4" />
@@ -1397,7 +1397,7 @@
          <reset sel="mux0" />
       </pin>
       <pin name="PTB1">
-         <mux sel="mux0"          signal="ADC0_SE5" />
+         <mux sel="mux0"          signal="ADC0_SE5a" />
          <mux sel="mux0"          signal="TSI0_CH3" />
          <mux sel="mux0"          signal="DAC0_OUT" />
          <mux sel="mux0"          signal="CMP0_IN3" />
@@ -1407,7 +1407,7 @@
          <reset sel="mux0" />
       </pin>
       <pin name="PTB2">
-         <mux sel="mux0"          signal="ADC0_SE4" />
+         <mux sel="mux0"          signal="ADC0_SE4a" />
          <mux sel="mux0"          signal="TSI0_CH2" />
          <mux sel="mux1"          signal="GPIOB_2" />
          <mux sel="mux1"          signal="LLWU_P5" />

@@ -1,5 +1,5 @@
 <!--
-Devices using this vector table: 
+Devices using this vector table:
    MK10D10
    MK10D5
    MK10D7
@@ -43,7 +43,7 @@ Devices using this vector table:
             <value>-15</value>
          </interrupt>
          <interrupt>
-            <name>NonMaskableInt</name>
+            <name>NMI</name>
             <description>Non maskable Interrupt, cannot be stopped or preempted</description>
             <value>-14</value>
          </interrupt>
@@ -53,7 +53,7 @@ Devices using this vector table:
             <value>-13</value>
          </interrupt>
          <interrupt>
-            <name>MemoryManagement</name>
+            <name>MemManage</name>
             <description>Memory Management, MPU mismatch, including Access Violation and No Match</description>
             <value>-12</value>
          </interrupt>
@@ -68,12 +68,12 @@ Devices using this vector table:
             <value>-10</value>
          </interrupt>
          <interrupt>
-            <name>SVCall</name>
+            <name>SVC</name>
             <description>System Service Call via SVC instruction</description>
             <value>-5</value>
          </interrupt>
          <interrupt>
-            <name>DebugMonitor</name>
+            <name>DebugMon</name>
             <description>Debug Monitor</description>
             <value>-4</value>
          </interrupt>

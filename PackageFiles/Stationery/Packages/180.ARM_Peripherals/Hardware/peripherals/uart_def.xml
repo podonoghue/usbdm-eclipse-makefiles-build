@@ -339,10 +339,11 @@
 
    <!-- ____  BAUD rate calculations ____________________ -->
 
-   <variableTemplate where="basicInfo" variables="uart_baudrate, uart_c4_osr" condition="!uart_c4_osr&amp;&amp;!uart_c4_brfa" >
+   <variableTemplate where="basicInfo" variables="uart_baudrate" condition="!uart_c4_osr_present&amp;&amp;!uart_c4_brfa_present" >
    <![CDATA[
       \t/**
       \t * Set baud rate
+      \t * (%variables, !uart_c4_osr_present, !uart_c4_brfa_present)
       \t * (for UART with fixed /16 prescaler)
       \t *
       \t * @param uart             Hardware instance
@@ -377,11 +378,12 @@
    ]]>
    </variableTemplate>
 
-   <variableTemplate where="basicInfo" variables="uart_baudrate, uart_c4_osr" condition="uart_c4_osr"
+   <variableTemplate where="basicInfo" variables="uart_baudrate, uart_c4_osr" condition="uart_c4_osr_present"
    params=", overSample" >
    <![CDATA[
       \t/**
       \t * Set baud rate
+      \t * (%variables, uart_c4_osr_present)
       \t * (for $(_BASENAME) with variable prescaler)
       \t *
       \t * @param $(_basename)     Hardware instance pointer
@@ -418,10 +420,11 @@
    ]]>
    </variableTemplate>
 
-   <variableTemplate where="basicInfo" variables="uart_baudrate" condition="uart_c4_brfa" >
+   <variableTemplate where="basicInfo" variables="uart_baudrate" condition="uart_c4_brfa_present" >
    <![CDATA[
       \t/**
       \t * Set baud rate
+      \t * (%variables, uart_c4_brfa_present)
       \t * (for UART with fractional divider)
       \t *
       %paramDescription
@@ -431,24 +434,27 @@
       \t    * Baudrate = clockFrequency / (OSR x (SBR + BRFD))
       \t    * Fixed OSR = 16
       \t    *
-      \t    * (OSR x (SBR + BRFD/32)) = clockFrequency/Baudrate
-      \t    * (SBR + BRFD/32) = clockFrequency/(Baudrate*OSR)
-      \t    * 32*SBR + BRFD = 2*clockFrequency/Baudrate
-      \t    * SBR  = (2*clockFrequency/Baudrate)>>5
-      \t    * BRFD = (2*clockFrequency/Baudrate)&0x1F
+      \t    * (OSR x (SBR + BRFA/32)) = clockFrequency/Baudrate
+      \t    * (SBR + BRFA/32) = clockFrequency/(Baudrate*OSR)
+      \t    * divisor = 32*SBR + BRFA = 2*clockFrequency/Baudrate
+      \t    * SBR  = divisor>>5
+      \t    * BRFA = divisor&0b11111
       \t    */
       \t   // Disable UART before changing registers
       \t   uint8_t c2Value = uart->C2;
       \t   uart->C2 = 0;
       \t
-      \t   // Calculate UART clock setting (5-bit fraction at right, +16 for rounding after /32)
-      \t   int divider = ((2*clockFrequency)/baudrate) + 16;
+      \t   // Rounded divider with 32-bit fraction
+      \t   uint32_t divisor = (2*clockFrequency+(uartBaudRate/2))/uartBaudRate;
+      \t   // Whole divider
+      \t   uint32_t sbr = divisor>>5;
+      \t   // Fractional (/32) divider to get closer to the baud rate
+      \t   uint32_t brfa = divisor&0b11111;
       \t
       \t   // Set Baud rate register
-      \t   uart->BDH = (uart->BDH&~UART_BDH_SBR_MASK) | UART_BDH_SBR((divider>>(8+5)));
-      \t   uart->BDL = UART_BDL_SBR(divider>>5);
-      \t   // Fractional divider to get closer to the baud rate
-      \t   uart->C4 = (uart->C4&~UART_C4_BRFA_MASK) | UART_C4_BRFA(divider);
+      \t   uart->BDH = (uart->BDH&~UART_BDH_SBR_MASK) | UART_BDH_SBR((sbr>>8));
+      \t   uart->BDL = UART_BDL_SBR(sbr);
+      \t   uart->C4  = (uart->C4&~UART_C4_BRFA_MASK) | UART_C4_BRFA(brfa);
       \t
       \t   // Restore UART settings
       \t   uart->C2 = c2Value;

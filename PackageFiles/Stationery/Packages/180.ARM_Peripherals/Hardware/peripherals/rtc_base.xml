@@ -1165,11 +1165,11 @@
    ]]></template>
    <for keys=
           " var                                   : statement                          "
-   values=" rtc_sr_tce                            : rtc->SR = RTC_SR_TCE_MASK          ;
-            rtc_tpr_tpr                           : %configRegAssignment               ;
+   values=" rtc_tpr_tpr                           : %configRegAssignment               ;
             rtc_tcr_cir,rtc_tcr_tcr               : %configRegAssignment               ;
             rtc_tsr_tsr                           : %configRegAssignment               ;
             rtc_tar_tar                           : %configRegAssignment               ;
+            rtc_sr_tce                            : rtc->SR = RTC_SR_TCE_MASK          ;
             rtc_war_ierw,rtc_war_lrw,rtc_war_srw,
             rtc_war_crw,rtc_war_tcrw,rtc_war_tarw,
             rtc_war_tprw,rtc_war_tsrw             : %configRegAssignment               ;

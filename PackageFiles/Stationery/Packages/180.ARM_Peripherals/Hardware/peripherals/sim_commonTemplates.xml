@@ -164,7 +164,7 @@
             description="RTC clock out frequency"
             toolTip="Clock frequency on the RTC_CLKOUT pin"  />
 
-         <clockCodeTemplate variable="sim_sopt2_rtcclkoutsel"
+         <variableTemplate variables="sim_sopt2_rtcclkoutsel"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -174,7 +174,7 @@
             \tstatic void setRtcClockout(%paramType %paramName) {
             \t   %fieldAssignment;
             \t}\n\n
-         ]]></clockCodeTemplate>
+         ]]></variableTemplate>
       </if>
 
    <else_if condition="RtcForcing" />
@@ -221,7 +221,7 @@
             description="RTC clock out frequency"
             toolTip="Clock frequency on the RTC_CLKOUT pin"  />
 
-         <clockCodeTemplate variable="sim_sopt2_rtcclkoutsel"
+         <variableTemplate variables="sim_sopt2_rtcclkoutsel"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -231,7 +231,7 @@
             \tstatic void setRtcClockout(%paramType %paramName) {
             \t   %fieldAssignment;
             \t}\n\n
-         ]]></clockCodeTemplate>
+         ]]></variableTemplate>
       </if>
 
    <else />
@@ -368,7 +368,7 @@
       \t}\n\n
    ]]></template>
 
-   <clockCodeTemplate variable="sim_sopt1_osc32kout" codeGenCondition="enableGettersAndSetters"
+   <variableTemplate variables="sim_sopt1_osc32kout" codeGenCondition="enableGettersAndSetters"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -378,9 +378,9 @@
       \tstatic void setErc32kClkoutPin(%paramType %paramName) {
       \t   %fieldAssignment;
       \t}\n\n
-   ]]></clockCodeTemplate>
+   ]]></variableTemplate>
 
-   <clockCodeTemplate variable="sim_sopt1_usbpower" codeGenCondition="enableGettersAndSetters"
+   <variableTemplate variables="sim_sopt1_usbpower" codeGenCondition="enableGettersAndSetters"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -391,7 +391,7 @@
       \t   sim->SOPT1CFG = SIM_SOPT1CFG_USSWE_MASK|SIM_SOPT1CFG_UVSWE_MASK|SIM_SOPT1CFG_URWE_MASK;
       \t   %fieldAssignment;
       \t}\n\n
-   ]]></clockCodeTemplate>
+   ]]></variableTemplate>
 
 <!-- ========== SOPT2 =============================== -->
 
@@ -405,7 +405,7 @@
                 sim_sopt2_ptd7pad         : enableGettersAndSetters : PortDPad;
                 sim_sopt2_rmiisrc         : enableGettersAndSetters : Rmiiclock
         ">
-      <clockCodeTemplate variable="%(var)" codeGenCondition="%(enable)"
+      <variableTemplate variables="%(var)" codeGenCondition="%(enable)"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -425,7 +425,7 @@
          \t
          \t   return %maskingExpression;
          \t}\n\n
-      ]]></clockCodeTemplate>
+      ]]></variableTemplate>
    </for>
 
 <!-- SOPT2 clock settings -->
@@ -986,7 +986,7 @@
 <!-- ========== SOPT4 =============================== -->
    <for keys="ftm" values="0;1;2;3">
       <for keys="flt" values="0;1;2;3">
-         <clockCodeTemplate variable="sim_sopt4_ftm%(ftm)flt%(flt)" codeGenCondition="enableGettersAndSetters"
+         <variableTemplate variables="sim_sopt4_ftm%(ftm)flt%(flt)" codeGenCondition="enableGettersAndSetters"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -1005,13 +1005,13 @@
             \tstatic %paramType getFtm%(ftm)Flt%(flt)() {
             \t   return %paramType(%maskingExpression);
             \t}\n\n
-         ]]></clockCodeTemplate>
+         ]]></variableTemplate>
       </for>
    </for>
 
    <for keys="ftm" values="0;1;2;3">
       <for keys="ch" values="0;1;2;3">
-         <clockCodeTemplate variable="sim_sopt4_ftm%(ftm)ch%(ch)src" codeGenCondition="enableGettersAndSetters"
+         <variableTemplate variables="sim_sopt4_ftm%(ftm)ch%(ch)src" codeGenCondition="enableGettersAndSetters"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -1030,12 +1030,12 @@
             \tstatic %paramType getFtm%(ftm)Ch%(ch)Src() {
             \t   return %paramType(%maskingExpression);
             \t}\n\n
-         ]]></clockCodeTemplate>
+         ]]></variableTemplate>
       </for>
    </for>
 
    <for keys="ftm" values="0;1;2;3">
-      <clockCodeTemplate variable="sim_sopt4_ftm%(ftm)clksel" codeGenCondition="enableGettersAndSetters"
+      <variableTemplate variables="sim_sopt4_ftm%(ftm)clksel" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -1054,12 +1054,12 @@
          \tstatic %paramType getFtm%(ftm)ClkSel() {
          \t   return %paramType(%maskingExpression);
          \t}\n\n
-      ]]></clockCodeTemplate>
+      ]]></variableTemplate>
    </for>
 
    <for keys="ftm" values="0;1;2;3">
       <for keys="trg" values="0;1;2;3">
-         <clockCodeTemplate variable="sim_sopt4_ftm%(ftm)trg%(trg)src" codeGenCondition="enableGettersAndSetters"
+         <variableTemplate variables="sim_sopt4_ftm%(ftm)trg%(trg)src" codeGenCondition="enableGettersAndSetters"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -1078,12 +1078,12 @@
             \tstatic %paramType getFtm%(ftm)Trg%(trg)Src() {
             \t   return %paramType(%maskingExpression);
             \t}\n\n
-         ]]></clockCodeTemplate>
+         ]]></variableTemplate>
       </for>
    </for>
 
    <for keys="tpm" values="0;1;2;3">
-      <clockCodeTemplate variable="sim_sopt4_tpm%(tpm)clksel" codeGenCondition="enableGettersAndSetters"
+      <variableTemplate variables="sim_sopt4_tpm%(tpm)clksel" codeGenCondition="enableGettersAndSetters"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -1108,12 +1108,12 @@
          \tstatic %paramType getTpm%(tpm)ExternalClockInput() {
          \t   return %paramType(%maskingExpression);
          \t}\n\n
-      ]]></clockCodeTemplate>
+      ]]></variableTemplate>
    </for>
 
     <for keys="tpm" values="0;1;2;3">
       <for keys="ch" values="0;1;2;3">
-         <clockCodeTemplate variable="sim_sopt4_tpm%(tpm)ch%(ch)src" codeGenCondition="enableGettersAndSetters"
+         <variableTemplate variables="sim_sopt4_tpm%(tpm)ch%(ch)src" codeGenCondition="enableGettersAndSetters"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -1138,7 +1138,7 @@
             \tstatic %paramType getTpm%(tpm)Ch%(ch)InputCaptureSource() {
             \t   return %paramType(%maskingExpression);
             \t}\n\n
-         ]]></clockCodeTemplate>
+         ]]></variableTemplate>
       </for>
    </for>
 
@@ -1250,7 +1250,7 @@
               values="ode    : %(Name)Drive ;
                       rxsrc  : %(Name)RxSrc ;
                       txsrc  : %(Name)TxSrc " >
-            <clockCodeTemplate variable="sim_sopt5_%(name)%(ext)" codeGenCondition="enableGettersAndSetters"
+            <variableTemplate variables="sim_sopt5_%(name)%(ext)" codeGenCondition="enableGettersAndSetters"
             ><![CDATA[
                \t/**
                \t * Set %description
@@ -1270,7 +1270,7 @@
                \t   return %paramType(%register&%mask);
                \t}
                \t\n
-            ]]></clockCodeTemplate>
+            ]]></variableTemplate>
          </for>
 
       </for>
@@ -1484,7 +1484,7 @@
 
    <for keys="p" values="0;1;2;3">
       <for keys="ch" values="0;1;2;3;4;5;6;7">
-         <clockCodeTemplate variable="sim_sopt8_ftm%(p)och%(ch)src" codeGenCondition="enableGettersAndSetters"
+         <variableTemplate variables="sim_sopt8_ftm%(p)och%(ch)src" codeGenCondition="enableGettersAndSetters"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -1494,11 +1494,11 @@
             \tstatic void setFtm%(p)Ch%(ch)OutputSrc(%paramType %paramName) {
             \t   %fieldAssignment;
             \t}\n\n
-         ]]></clockCodeTemplate>
+         ]]></variableTemplate>
       </for>
    </for>
 
-   <clockCodeTemplate variable="sim_sopt8_ftm_syncbits" codeGenCondition="enableGettersAndSetters"
+   <variableTemplate variables="sim_sopt8_ftm_syncbits" codeGenCondition="enableGettersAndSetters"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -1531,13 +1531,13 @@
       \t   sim->SOPT8 = sim->SOPT8 &
       \t      ~(SIM_SOPT8_FTM0SYNCBIT_MASK|SIM_SOPT8_FTM1SYNCBIT_MASK|SIM_SOPT8_FTM2SYNCBIT_MASK|SIM_SOPT8_FTM3SYNCBIT_MASK);
       \t}\n\n
-   ]]></clockCodeTemplate>
+   ]]></variableTemplate>
 
 <!-- ========== SOPT9 =============================== -->
 
    <for keys="p" values="1;2">
       <for keys="Fn:FN:fn" values="ClkSel:CLKSEL:clksel;Ch0Src:CH0SRC:ch0src">
-         <clockCodeTemplate variable="sim_sopt9_tpm%(p)%(fn)" codeGenCondition="enableGettersAndSetters"
+         <variableTemplate variables="sim_sopt9_tpm%(p)%(fn)" codeGenCondition="enableGettersAndSetters"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -1547,12 +1547,12 @@
             \tstatic void setTpm%(p)%(Fn)(%paramType %paramName) {
             \t   %fieldAssignment;
             \t}\n\n
-         ]]></clockCodeTemplate>
+         ]]></variableTemplate>
       </for>
    </for>
 
 <!-- ========== CLKDIV2 =============================== -->
-   <clockCodeTemplate variable="sim_sopt2_usbsrc[]"
+   <variableTemplate variables="sim_sopt2_usbsrc[]"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -1570,7 +1570,7 @@
       \t   // Set clock source
       \t   %fieldAssignment;
       \t\n
-   ]]></clockCodeTemplate>
+   ]]></variableTemplate>
    <variableTemplate variables="sim_clkdiv2_usb[]" ><![CDATA[
       \t   if (simUsbFullSpeedClockSource == SimUsbFullSpeedClockSource_PeripheralClk) {
       \t      // Set clock divider for internal clock
@@ -1631,7 +1631,7 @@
    ]]></variableTemplate>
 
 <!-- ========== CLKDIV3 =============================== -->
-   <clockCodeTemplate variable="sim_clkdiv3_pllfll[]"
+   <variableTemplate variables="sim_clkdiv3_pllfll[]"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -1657,7 +1657,7 @@
       \t   int  pllflldiv   = (sim->CLKDIV3&SIM_CLKDIV3_PLLFLLDIV_MASK)>>SIM_CLKDIV3_PLLFLLDIV_SHIFT;
       \t   return (getPeripheralClock()*(pllfllfrac+1))/(pllflldiv+1);
       \t}\n\n
-   ]]></clockCodeTemplate>
+   ]]></variableTemplate>
 
 <!-- ========== COP Watchdog =============================== -->
    <variableTemplate

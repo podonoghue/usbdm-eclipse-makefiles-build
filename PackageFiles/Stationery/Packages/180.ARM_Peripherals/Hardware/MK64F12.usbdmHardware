@@ -842,8 +842,6 @@
          <param type="BooleanVariable"        name="dma_ssrt_sast_present"          value="true"             key="/DMA0/dma_ssrt_sast_present" />
          <param type="BooleanVariable"        name="dma_ssrt_ssrt_present"          value="true"             key="/DMA0/dma_ssrt_ssrt_present" />
          <param type="LongVariable"           name="dma_tcd_dim"                    value="16"               key="/DMA0/dma_tcd_dim" />
-         <param type="LongVariable"           name="dma_tcd_raw_dim"                value="128"              key="/DMA0/dma_tcd_raw_dim" />
-         <param type="BooleanVariable"        name="dma_tcd_raw_present"            value="true"             key="/DMA0/dma_tcd_raw_present" />
          <param type="StringVariable"         name="structName"                     value="DMA"              key="/DMA0/structName" />
       </peripheral>
       <peripheral baseName="DMAMUX"   instance="0"        instanceList="DMAMUX0" version="dmamux0_16ch_trig_mk64f12">

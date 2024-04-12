@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKE04Z4
       MKE04Z1284
       MKE06Z4
@@ -392,7 +392,8 @@ Indicates if the ADC is busy with a conversion</description>
                   </field>
                   <field>
                      <name>MODE</name>
-                     <description>ADC resolution</description>
+                     <description>ADC resolution\n
+Single-ended/Differential(if available)</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>

@@ -1018,8 +1018,19 @@ protected:
     *
     * @return Reference to self
     */
-   FormattedIO &private_write(unsigned long value) {
+   FormattedIO &private_write(long unsigned value) {
       return private_write(value, fIntegerFormat);
+   }
+
+   /**
+    * Write an long long unsigned integer
+    *
+    * @param[in]  value Unsigned long long to print
+    *
+    * @return Reference to self
+    */
+   FormattedIO &private_write(long long unsigned value) {
+      return private_write((long unsigned)value, fIntegerFormat);
    }
 
    /**
@@ -1077,6 +1088,17 @@ protected:
     */
    FormattedIO &private_write(long value) {
       return private_write(value, fIntegerFormat);
+   }
+
+   /**
+    * Write a long long integer
+    *
+    * @param[in]  value Long long to print
+    *
+    * @return Reference to self
+    */
+   FormattedIO &private_write(long long value) {
+      return private_write(long(value), fIntegerFormat);
    }
 
    /**

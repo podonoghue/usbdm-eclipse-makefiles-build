@@ -10,8 +10,8 @@
 #define PROJECT_HEADERS_PID_H_
 
 #include <time.h>
+#include "hardware.h"
 #include "pit.h"
-#include "pid.h"
 
 class Pid {
 public:
@@ -28,7 +28,7 @@ public:
  * @tparam outputFn     Output function - used to control the output variable
  * @tparam timerChannel The PIT channel to use for timing
  */
-template<Pid::InFunction inputFn, Pid::OutFunction outputFn, unsigned timerChannel>
+template<Pid::InFunction inputFn, Pid::OutFunction outputFn, USBDM::PitChannelNum timerChannel>
 class Pid_T : Pid {
 
 private:
@@ -54,7 +54,7 @@ private:
 
 private:
    class FunctionWrapper {
-      static Pid_T *This;
+      inline static Pid_T *This = nullptr;
 
    public:
       FunctionWrapper(Pid_T *This) {
@@ -109,8 +109,8 @@ public:
       }
       enabled = enable;
       USBDM::Pit::setPeriod(timerChannel, interval);
-      USBDM::Pit::enableChannel(timerChannel, enable);
-      USBDM::Pit::enableInterrupts(timerChannel, enable);
+      USBDM::Pit::enableChannel(timerChannel);
+      USBDM::Pit::setChannelAction(timerChannel, USBDM::PitChannelAction_Interrupt);
    }
 
    /**
@@ -263,9 +263,6 @@ private:
       // Update output
       outputFn(currentOutput);
    }
-
 };
-template<Pid::InFunction inputFn, Pid::OutFunction outputFn, unsigned timerChannel>
-Pid_T<inputFn, outputFn, timerChannel>* Pid_T<inputFn, outputFn, timerChannel>::FunctionWrapper::This = nullptr;
 
 #endif // PROJECT_HEADERS_PID_H_

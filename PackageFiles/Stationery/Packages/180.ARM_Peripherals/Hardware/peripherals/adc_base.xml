@@ -20,9 +20,9 @@
    <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
 
    <!-- ____ SC1 ____ -->
-   <choiceOption key="adc_sc1_channel" condition="adc_sc1_adch_present"
+   <choiceOption key="adc_sc1_adch" condition="adc_sc1_adch_present"
+      valueFormat="ADC_SC1_ADCH(%s)"
       hidden="true"
-      valueFormat="%s"
       typeName="AdcChannelNum"
       baseType="uint8_t"
       toolTip="Selects an ADC channel"
@@ -557,7 +557,7 @@
         values="
          adc_sc1_coco         : false : true  : false : enableGettersAndSetters : SC1[%paramName0] : CompleteFlag;
          adc_sc1_aien         : true  : true  : false : enableGettersAndSetters : SC1[%paramName0] : Interrupt;
-         adc_sc1_channel      : true  : true  : false : enableGettersAndSetters : SC1[%paramName0] : Channel;
+         adc_sc1_adch         : true  : true  : false : enableGettersAndSetters : SC1[%paramName0] : Channel;
          adc_r_ud             : false : true  : false : enableGettersAndSetters : R[%paramName0]   : SignedResult;
          adc_r_d              : false : true  : false : enableGettersAndSetters : R[%paramName0]   : UnsignedResult" >
       <variableTemplate variables="adc_pretrigger,%(field)" condition="%(set)" codeGenCondition="%(genCode)"
@@ -750,10 +750,12 @@
    \t      // channels SE0-SE4,SE4a-SE7a,SE8-SE31
    \t      return int(adcChannelNum);
    \t   }
+   #if $(adc_sc1_diff_present:false) // adc_sc1_diff_present
    \t   if (adcChannelNum<=AdcChannelNum_DiffLast) {
    \t      // channels DIFF0-DIFF4
    \t      return ADC_SC1_DIFF_MASK|(int(adcChannelNum)-AdcChannelNum_DiffFirst);
    \t   }
+   #endif
    \t   if (adcChannelNum<=AdcChannelNum_BLast) {
    \t      // channels SE4b-SE7b
    \t      return int(adcChannelNum)-AdcChannelNum_BFirst+AdcChannelNum_AFirst;
@@ -971,7 +973,7 @@
    </for>
 
    <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" condition="adc_sc2_adtrg"
-      variables="adc_sc1_channel,adc_sc1_aien"
+      variables="adc_sc1_adch,adc_sc1_aien"
       linePadding="xxx"
    ><![CDATA[
       %multilineDescription
@@ -1009,7 +1011,7 @@
    ]]></variableTemplate>
 
    <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" condition="adc_sc2_adtrg"
-      variables="adc_pretrigger,adc_sc1_channel,adc_sc1_aien"
+      variables="adc_pretrigger,adc_sc1_adch,adc_sc1_aien"
       linePadding="xxx"
       nonDefaultParams="3" >
    <![CDATA[
@@ -1197,7 +1199,7 @@
    ]]>
    </template>
    <variableTemplate codeGenCondition="enablePeripheralSupport" condition="adc_sc2_adtrg"
-      variables="adc_sc2_adtrg,adc_sc1_channel" >
+      variables="adc_sc2_adtrg,adc_sc1_adch" >
    <![CDATA[
       \t   // Set up channel information
       \t   for (size_t index=0; index<$(_STRUCTNAME)_SC1_COUNT; index++) {

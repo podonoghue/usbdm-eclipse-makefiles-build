@@ -30,10 +30,12 @@ using Led    =   $(/HARDWARE/Led1:GpioA<2,ActiveLow>);
  *
  * @param[in] status 32-bit value from ISFR (each bit indicates a possible pin interrupt source)
  */
-static void callBack(uint32_t status) {
+static void callBack() {
    static int count = 0;
-   if (status & Switch::BITMASK) {
-      console.writeln(count++, ": Status = 0x", status, Radix_2);
+
+   if (Switch::getInterruptState()) {
+      Switch::clearInterruptState();
+      console.writeln(": Pin interrupt #", ++count);
    }
    else {
       console.writeln("Unexpected Pin interrupt");
@@ -47,14 +49,12 @@ static void callBack(uint32_t status) {
  * Can explicitly instantiate the handler instead of using the trampoline
  */
 template<>
-void Switch::Port::irqHandler() {
+void PcrBase::irqHandler<Switch::IRQ_INDEX>() {
    static int count = 0;
 
-   // Get and clear IRQ flags
-   uint32_t status = port().ISFR;
-   port().ISFR = status;
-   if (status & Switch::MASK) {
-      console.writeln(count++, ": Status = 0x", status, Radix_2);
+   if (Switch::getInterruptState()) {
+      Switch::clearInterruptState();
+      console.writeln(": Pin interrupt #", ++count);
    }
    else {
       console.writeln("Unexpected Pin interrupt");
@@ -64,8 +64,8 @@ void Switch::Port::irqHandler() {
 
 int main() {
    Led::setOutput();
-
-   // Install interrupt call-back
+   
+   // Install interrupt call-back using trampoline
    Switch::setPinCallback(callBack);
 
    // PUP + IRQ on falling edge
@@ -73,7 +73,7 @@ int main() {
          PinPull_Up,
          PinAction_IrqFalling,
          PinFilter_Passive);
-   Switch::enableNvicInterrupts(NvicPriority_Normal);
+   Switch::enableNvicPinInterrupts();
 
    for(;;) {
       Led::write(Switch::read());

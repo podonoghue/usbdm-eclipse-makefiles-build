@@ -138,12 +138,17 @@
    <item key="$pin$PTE7_pcrSetting_6"                      value="600" />
    <item key="$pin$PTE8_pcrSetting_1"                      value="100" />
    <item key="$pin$PTE8_pcrSetting_6"                      value="600" />
+   <item key="$signal$ADC0_DM1_codeIdentifier"             value="Analogue_Diff1" />
+   <item key="$signal$ADC0_DP1_codeIdentifier"             value="Analogue_Diff1" />
    <item key="$signal$ADC0_SE10_codeIdentifier"            value="Analogue_A0" />
    <item key="$signal$ADC0_SE11_codeIdentifier"            value="Analogue_A1" />
    <item key="$signal$ADC0_SE12_codeIdentifier"            value="Analogue_A5_D15" />
    <item key="$signal$ADC0_SE13_codeIdentifier"            value="Analogue_A4_D14" />
+   <item key="$signal$ADC0_SE14_codeIdentifier"            value="Analogue_A22" />
    <item key="$signal$ADC0_SE16_codeIdentifier"            value="LightSensor" />
    <item key="$signal$ADC0_SE16_descriptionSetting"        value="Light Sensor" />
+   <item key="$signal$ADC0_SE18_codeIdentifier"            value="Analogue_Se18" />
+   <item key="$signal$ADC0_SE1_codeIdentifier"             value="Analogue_Se1" />
    <item key="$signal$ADC0_SE22_codeIdentifier"            value="VrefOut" />
    <item key="$signal$ADC0_SE22_descriptionSetting"        value="Vref out" />
    <item key="$signal$ADC0_SE23_codeIdentifier"            value="DacOut" />
@@ -153,6 +158,7 @@
    <item key="$signal$ADC0_SE27_codeIdentifier"            value="Bandgap" />
    <item key="$signal$ADC0_SE27_descriptionSetting"        value="Internal band-gap reference" />
    <item key="$signal$ADC0_SE5b_codeIdentifier"            value="Analogue_A2" />
+   <item key="$signal$ADC0_SE6b_codeIdentifier"            value="Analogue_A9" />
    <item key="$signal$ADC0_SE7b_codeIdentifier"            value="Analogue_A3" />
    <item key="$signal$CLKOUT_codeIdentifier"               value="ClkOut" />
    <item key="$signal$CLKOUT_descriptionSetting"           value="Clkout" />
@@ -167,6 +173,7 @@
    <item key="$signal$FTM3_CH2_descriptionSetting"         value="Green LED PWM" />
    <item key="$signal$FTM3_CH3_codeIdentifier"             value="RGB_Blue_Pwm" />
    <item key="$signal$FTM3_CH3_descriptionSetting"         value="Blue LED PWM" />
+   <item key="$signal$FTM_CLKIN0_codeIdentifier"           value="FtmClkin" />
    <item key="$signal$FXIO0_D11_descriptionSetting"        value="FlexioD11" />
    <item key="$signal$FXIO0_D12_descriptionSetting"        value="FlexioD12" />
    <item key="$signal$FXIO0_D15_descriptionSetting"        value="FlexioD15" />
@@ -289,19 +296,19 @@
    <item key="$signal$USB0_DM_descriptionSetting"          value="Reserved(USB_DM)" />
    <item key="$signal$USB0_DP_descriptionSetting"          value="Reserved(USB_DP)" />
    <item key="$signal$XTAL32_descriptionSetting"           value="Reserved(Crystal)" />
+   <item key="/ADC0/enablePeripheralSupport"               value="true" />
    <item key="/Console/consoleDevice"                      value="USBDM::Lpuart0" />
    <item key="/FLEXIO/trigger_list"                        value="External;CMP0;CMP1;;PIT0;PIT1;PIT2;PIT3;FTM0;FTM1;FTM2;FTM3;RTC_Alarm;RTC_Seconds;LPTMR0;" />
    <item key="/HARDWARE/mapAllPins"                        value="true" />
    <item key="/HARDWARE/warnMultipleSignalsOnPin"          value="false" />
-   <item key="/LLWU/device_list"                           value="LPTMR0/LPTMR1;CMP0;CMP1;;;RTC_Alarm;;RTC_Seconds" />
-   <item key="/LPTMR0/lptmr_cmr"                           value="0" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_RUN_PEE_120MHz" />
    <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_VLPR_BLPI_4MHz" />
    <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_HSRUN_PEE_150MHz" />
    <item key="/MCG/ClockConfig[3]"                         value="ClockConfig_RUN_FEI_96MHz" />
    <item key="/MCG/ERRATA_E2448"                           value="false" />
    <item key="/MCG/ERRATA_E7993"                           value="false" />
-   <item key="/MCG/fllOutputFrequency[3]"                  value="95944704" />
+   <item key="/MCG/configurePeripheralInStartUp"           value="true" />
+   <item key="/MCG/enablePeripheralSupport"                value="true" />
    <item key="/MCG/mcgClockMode[0]"                        value="7" />
    <item key="/MCG/mcgClockMode[1]"                        value="3" />
    <item key="/MCG/mcgClockMode[2]"                        value="7" />
@@ -312,7 +319,8 @@
    <item key="/MCG/mcg_c4_dmx32[3]"                        value="true" />
    <item key="/MCG/pll0OutputFrequency[2]"                 value="150000000" />
    <item key="/MCG/system_mcgfllclk_clock[3]"              value="95944704" />
-   <item key="/OSC0/EnableOsc"                             value="true" />
+   <item key="/OSC0/configurePeripheralInStartUp"          value="true" />
+   <item key="/OSC0/enablePeripheralSupport"               value="true" />
    <item key="/OSC0/osc_cr_scp"                            value="4" />
    <item key="/OSC0/osc_input_freq"                        value="12000000" />
    <item key="/RTC/EnableRtc"                              value="true" />

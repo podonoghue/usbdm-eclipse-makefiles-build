@@ -24,7 +24,7 @@ int main() {
    LED::setOutput(PinDriveStrength_High);
 
    // Enable PIT
-   Timer::configure();
+   Timer::defaultConfigure();
 
    // Check for errors so far
    checkError();

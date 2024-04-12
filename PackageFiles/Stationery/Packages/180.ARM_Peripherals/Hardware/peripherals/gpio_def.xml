@@ -828,12 +828,17 @@
       \t * Example1:
       \t * @code
       \t * // Initialisation value
-      \t * static constexpr PcrInit pcrInit(PinDriveStrength_High, PinSlewRate_Slow, PinPull_Down, PinFilter_Passive);
+      \t * static constexpr PcrInit pcrInit {
+      \t *    PinDriveStrength_High,
+      \t *    PinSlewRate_Slow,
+      \t *    PinPull_Down,
+      \t *    PinFilter_Passive
+      \t * };
       \t *
-      \t * Initialise devices
-      \t * Led::setOutput(pcrInit.value);
-      \t * Switch::setInput(pcrInit.value);
-      \t * Cmt::setOutput(pcrInit.value);
+      \t * // Initialise devices
+      \t * Led::setOutput(pcrInit);
+      \t * Switch::setInput(pcrInit);
+      \t * Cmt::setOutput(pcrInit);
       \t * @endcode
       \t */
       \tclass PcrInit {

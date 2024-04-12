@@ -17,19 +17,21 @@
    <title description="Clock Settings" />
    <constant key="ClockSource" value='"SystemBusClock"' condition="!ClockSource" />
 
-   <binaryOption key="/$(_BASENAME)/baudSupport"
+   <binaryOption key="/$(_STRUCTNAME)/baudSupport" condition="!/$(_STRUCTNAME)/baudSupport"
       hidden="true"
       derived="true"
       enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
-      modify="true"
       description="Enable specifying speed in Hertz"
       toolTip="If not selected, the communication speed must be specified using the\n
-               prescale values (MULT and ICR) in initialisation structures" >
+               prescale values (MULT and ICR) in initialisation structures"
+      disabledValue="0" >
       <choice value="false" enum="Disabled" name="Prescale values must be used"  />
       <choice value="true"  enum="Enabled"  name="Speed may be specified in Hertz" isDefault="true" />
    </binaryOption>
 
-   <if condition='=ClockSource=="SystemBusClock"'> 
+   <aliasOption key="/$(_STRUCTNAME)/baudSupport" locked="false" />
+
+   <if condition='=ClockSource=="SystemBusClock"'>
       <choiceOption key="i2cClockConfig" condition="/MCG/_present"
          enabledBy="enablePeripheralSupport"
          target="i2cInputClock"
@@ -40,7 +42,7 @@
          <choice value="2" name="@/MCG/ClockConfig[2]" ref="/SIM/system_bus_clock[2]"  />
          <choice value="3" name="@/MCG/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
       </choiceOption>
-   
+
       <choiceOption key="i2cClockConfig" condition="/ICS/_present"
          enabledBy="enablePeripheralSupport"
          target="i2cInputClock"
@@ -52,7 +54,7 @@
          <choice value="3" name="@/ICS/ClockConfig[3]" ref="/SIM/system_bus_clock[3]"  />
       </choiceOption>
    </if>
-   <if condition='=ClockSource=="SystemCoreClock"'> 
+   <if condition='=ClockSource=="SystemCoreClock"'>
       <choiceOption key="spiClockConfig" condition="/MCG/_present"
          enabledBy="enablePeripheralSupport"
          target="i2cInputClock"
@@ -63,7 +65,7 @@
          <choice value="2" name="@/MCG/ClockConfig[2]" ref="/SIM/system_core_clock[2]"  />
          <choice value="3" name="@/MCG/ClockConfig[3]" ref="/SIM/system_core_clock[3]"  />
       </choiceOption>
-   
+
       <choiceOption key="spiClockConfig" condition="/ICS/_present"
          enabledBy="enablePeripheralSupport"
          target="i2cInputClock"
@@ -117,7 +119,7 @@
    />
 
    <title/>
-   
+
    <!-- _____________ C1 __________________ -->
 
    <!--binaryOption key="i2c_c1_iicen" condition="i2c_c1_iicen_present"
@@ -827,7 +829,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_BASENAME)/baudSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/baudSupport"
       variables="i2c_speed"
    ><![CDATA[
       \t   ///  %description
@@ -952,7 +954,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t   uint8_t f = init.f;
       \t\n
    ]]></template>
-   <template where="info"  codeGenCondition="enablePeripheralSupport&amp;&amp;/$(_BASENAME)/baudSupport" ><![CDATA[
+   <template where="info"  codeGenCondition="enablePeripheralSupport&amp;&amp;/$(_STRUCTNAME)/baudSupport" ><![CDATA[
       \t   if (f == 0xFFU) {
       \t      // Calculate prescale values from speed
       \t      f = calculateBPSValue(getClockFrequency(), init.speed);
@@ -1023,7 +1025,7 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="i2c_c2_adext,i2c_slaveaddress,i2c_c2_ad,i2c_a1_ad"
       linePadding="xxx"
       params=",address">
@@ -1047,7 +1049,7 @@ In other cases, if the master reads data from the slave, then it is required to 
    ]]>
    </variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="i2c_c2_rmen,i2c_rangeaddress,i2c_ra_rad"
       linePadding="xxx"
       nonDefaultParams="2"
@@ -1099,7 +1101,7 @@ In other cases, if the master reads data from the slave, then it is required to 
    ]]>
    </variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
       variables="i2c_f_mult,i2c_f_icr"
       linePadding="xxx"
       nonDefaultParams="2"
@@ -1123,7 +1125,7 @@ In other cases, if the master reads data from the slave, then it is required to 
    ]]>
    </variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_BASENAME)/baudSupport" discardRepeats="true"
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/baudSupport"
       variables="i2c_f_mult, i2c_speed"
       linePadding="xxx"
    >
@@ -1160,7 +1162,7 @@ In other cases, if the master reads data from the slave, then it is required to 
             i2c_flt_ssie;
             i2c_flt_flt
             " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[

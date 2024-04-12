@@ -24,10 +24,10 @@
       toolTip="The oscillator can be enabled by a Radio link layer,\n
         by an internal SoC clock mode (MCG), by an External Pin request, or by this field">
          <choice value="0b0000"  enum="Soc"                             name="Osc controlled by SoC, PIN or link layer" />
-         <choice value="0b0001"  enum="Run_Wait"                        name="Osc - Run/Wait" isDefault="true"/>
-         <choice value="0b0011"  enum="Run_Wait_Stop"                   name="Osc - Run/Wait/Stop" />
-         <choice value="0b0111"  enum="Run_Wait_Stop_Vlp_Run_Wait"      name="Osc - Run/Wait/Stop/VLPR/VLPW" />
-         <choice value="0b1111"  enum="Run_Wait_Stop_Vlp_Run_Wait_Stop" name="Osc - Run/Wait/Stop/VLPR/VLPW/VLPS" />
+         <choice value="0b0001"  enum="Run_Wait"                        name="Osc - Run/Wait" isDefault="true"          />
+         <choice value="0b0011"  enum="Run_Wait_Stop"                   name="Osc - Run/Wait/Stop"                      />
+         <choice value="0b0111"  enum="Run_Wait_Stop_Vlp_Run_Wait"      name="Osc - Run/Wait/Stop/VLPR/VLPW"            />
+         <choice value="0b1111"  enum="Run_Wait_Stop_Vlp_Run_Wait_Stop" name="Osc - Run/Wait/Stop/VLPR/VLPW/VLPS"       />
       </choiceOption>
 
    <choiceOption key="osc_input_freq"
@@ -77,7 +77,7 @@
       <copy source="Project_Headers/osc_rf.h"  target="Project_Headers/osc.h"  overwrite="true"  derived="true" />
    </projectActionList>
 
-   <clockCodeTemplate variable="rsim_control_rf_osc_en"
+   <variableTemplate variables="rsim_control_rf_osc_en"
    ><![CDATA[
       \t//! RF Reference Oscillator Enable Select
       \tstatic constexpr %paramType %registerName = %initExpression;
@@ -115,7 +115,7 @@
       \t      /* Wait for RF_OSC_READY */
       \t   }
       \t}\n\n
-   ]]></clockCodeTemplate>
+   ]]></variableTemplate>
 
    <template><![CDATA[
       \t//! Frequency of OSC Clock or Crystal

@@ -6,8 +6,8 @@
 
 <!-- ==================== Constants ==================== -->
 
-   <equation key="generateDefault"           type="Boolean" value="false"         />
-   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="generateDefault"           value="false"         />
+   <equation key="configureInStartupDefault" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -37,7 +37,7 @@
    <constant key="/LLWU/llwu_device_list"
       description="LLWU Wakeup sources"
       type="String"
-      value="&quot;LPTMR0;CMP0;;;;RtcAlarm;;RtcSeconds&quot;" />
+      value='"LPTMR0;CMP0;;;;RtcAlarm;;RtcSeconds"' />
 
    <!-- Clock divider -->
    <constant key="clock_divider_type" type="Long" value="2" />
@@ -107,8 +107,7 @@
    <xi:include href="simCommon.xml"/>
 
    <!-- _____________ Class Declaration __________________ -->
-   <constant key="_class_declaration" type="String"
-      value='"$(_Class)Info : public $(_Baseclass)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Baseclass)BasicInfo"' />
 
    <!-- _____________ USB Clock __________________ -->
 
@@ -232,7 +231,7 @@
 
             <clockCodeTemplate variable="sim_sopt4_tpm%(p)clksel"
                returnFormat="%s" >
-            ><![CDATA[
+            <![CDATA[
                \t/**
                \t * Select %description
                \t *
@@ -413,9 +412,9 @@
 
       <choiceOption key="sim_copc_copt"
          target="cop_timeout_period_fixed"
+         valueFormat="SIM_COPC_COPCLKS(%s),SIM_COPC_COPT(%s)"
          typeName="SimCopDuration"
          baseType="uint32_t"
-         valueFormat="SIM_COPC_COPCLKS(%s),SIM_COPC_COPT(%s)"
          description="COP Watchdog Timeout"
          toolTip="Selects the Computer Operating Properly Timeout\n
                   This is a write-once field" >

@@ -970,8 +970,9 @@ public:
       Channel(Channel&&) = delete;
 
       CheckPinExistsAndIsMapped<Info, channel> check;
-      static_assert(((channel<AdcChannelNum_DiffFirst)||(channel>AdcChannelNum_DiffLast)), "Illegal differential channel number");
-
+#if $(adc_sc1_diff_present:false) // adc_sc1_diff_present
+      static_assert(((channel<AdcChannelNum_DiffFirst)||(channel>AdcChannelNum_DiffLast)), "Illegal channel number");
+#endif
    public:
       /** The PCR associated with this channel (Not all channels have an associated PCR!) */
       using Pcr = PcrTable_T<Info, limitIndex<Info>(channel)>;
@@ -1025,7 +1026,7 @@ public:
     * uint32_t value = Adc0Ch6::readAnalogue();
     * @endcode
     */
-   class PgaChannel : public ChannelCommon<2> {
+   class PgaChannel : public ChannelCommon<AdcChannelNum_Diff2> {
    private:
       /**
        * This class is not intended to be instantiated
@@ -1038,75 +1039,6 @@ public:
    };
 #endif
 
-   /**
-    * Template class representing an ADC channel using B MUX setting
-    *
-    * Example
-    * @code
-    * // Instantiate the ADC and the differential channel (for ADC_DM0, ADC_DP0)
-    * using Adc0 = AdcBase_T<Adc0Info>;
-    * using Adc0Ch6 = Adc0::DiffChannel<0>;
-    *
-    * // Set ADC resolution
-    * Adc0.setMode(AdcResolution_11bit_diff );
-    *
-    * // Read ADC value
-    * uint32_t value = Adc0Ch0.readAnalogue();
-    * @endcode
-    *
-    * @tparam channel ADC channel
-    */
-   template<AdcChannelNum channel>
-   class ChannelB : public ChannelCommon<AdcChannelNum(channel)> {
-   private:
-      /**
-       * This class is not intended to be instantiated
-       */
-      ChannelB(const ChannelB&) = delete;
-      ChannelB(ChannelB&&) = delete;
-
-      CheckPinExistsAndIsMapped<typename Info::InfoBChannels, channel&ADC_SC1_ADCH_MASK> checkPos;
-
-   public:
-      constexpr ChannelB() : ChannelCommon<AdcChannelNum(channel)>() {}
-
-      /** PCR associated with plus channel */
-      using PcrB = PcrTable_T<typename Info::InfoBChannels, limitIndex<typename Info::InfoBChannels>(channel)>;
-
-      /** The ADC that owns this channel */
-      using Owner = AdcBase_T;
-
-      /** Information about this ADC */
-      using AdcInfo = Info;
-
-      /** Channel number */
-      static constexpr AdcChannelNum CHANNEL=channel;
-
-      /**
-       * Configure the pins associated with this ADC channel.
-       * The pins are in analogue mode so no PCR settings are active.
-       * This function is of use if mapAllPins and mapAllPinsOnEnable are not selected in USBDM configuration.
-       */
-      static void setInput() {
-         // Map pins to ADC
-         PcrB::setPCR(Info::InfoBChannels::info[channel].pcrValue);
-      }
-
-      /**
-       *  Disable Pin
-       *  This sets the pin to MUX 0 which is specified for minimum leakage in low-power modes.
-       *
-       *  @note The clock is left enabled as shared with other pins.
-       *  @note Mux(0) is also the Analogue MUX setting
-       */
-      static void disablePin() {
-         // Map pin to ADC
-         if constexpr (AdcInfo::InfoBChannels::info[channel].portAddress != 0) {
-            PcrB::disablePin();
-         }
-      }
-   };
-
 #ifdef ADC_SC1_DIFF_MASK
    /**
     * Template class representing an ADC differential channel
@@ -1115,7 +1047,7 @@ public:
     * @code
     * // Instantiate the ADC and the differential channel (for ADC_DM0, ADC_DP0)
     * using Adc0 = AdcBase_T<Adc0Info>;
-    * using Adc0Ch6 = Adc0::DiffChannel<0>;
+    * using Adc0Ch6 = Adc0::DiffChannel<AdcChannelNum_Diff1>;
     *
     * // Set ADC resolution
     * Adc0.setMode(AdcResolution_11bit_diff );

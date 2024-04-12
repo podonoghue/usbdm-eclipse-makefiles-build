@@ -6,8 +6,8 @@
 
 <!-- ==================== Constants ==================== -->
 
-   <equation key="generateDefault"           type="Boolean" value="false"         />
-   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="generateDefault"           value="false"         />
+   <equation key="configureInStartupDefault" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -192,7 +192,7 @@
 
             <clockCodeTemplate variable="sim_sopt4_tpm%(p)clksel"
                returnFormat="%s" >
-            ><![CDATA[
+            <![CDATA[
                \t/**
                \t * Select %description
                \t *

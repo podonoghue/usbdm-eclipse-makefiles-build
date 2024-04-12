@@ -177,7 +177,7 @@
          description="RTC clock out frequency"
          toolTip="Clock frequency on the RTC_CLKOUT pin"  />
 
-      <aliasOption key="system_peripheral_clock[]" optional="true" />
+      <aliasOption key="system_peripheral_clock[]"       optional="true" />
       <aliasOption key="/OSC0/oscer_clock"               optional="true" />
       <aliasOption key="/MCG/system_mcgirclk_clock[]"    optional="true" />
    </category>
@@ -228,7 +228,7 @@
 
             <clockCodeTemplate variable="sim_sopt4_tpm%(p)clksel"
                returnFormat="%s" >
-            ><![CDATA[
+            <![CDATA[
                \t/**
                \t * Select %description
                \t *
@@ -383,10 +383,9 @@
       </binaryOption >
    </category>
 
-   <intOption key="OSCERCLK0_DIV2" derived="true" ref="(/OSC0/oscer_clock)/2" value="0" />
-   <intOption key="OSCERCLK0_DIV4" derived="true" ref="(/OSC0/oscer_clock)/4" value="0" />
-   <intOption key="OSCERCLK0_DIV8" derived="true" ref="(/OSC0/oscer_clock)/8" value="0" />
-
+   <intOption key="OSCERCLK0_DIV2" derived="true" ref="(/OSC0/oscer_clock)/2" value="0" hidden="true" />
+   <intOption key="OSCERCLK0_DIV4" derived="true" ref="(/OSC0/oscer_clock)/4" value="0" hidden="true" />
+   <intOption key="OSCERCLK0_DIV8" derived="true" ref="(/OSC0/oscer_clock)/8" value="0" hidden="true" />
 
    <!-- _____________ COPC __________________ -->
 
@@ -501,6 +500,7 @@
 
             <intOption key="system_peripheral_clock[%(n)]"
                enabledBy="(%(n)==0)||/MCG/enableClockConfiguration[%(n)]"
+               ref="/MCG/system_mcgfllclk_clock[%(n)]"
                derived="true"
                locked="true"
                units="Hz"

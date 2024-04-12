@@ -25,7 +25,7 @@
 namespace USBDM {
 
 /**
- * @addtogroup USBPHY_Group USBPHY, USB High Speed OTG Controller
+ * @addtogroup USBPHY_Group USBPHY, USB PHY Controller
  * @brief C++ Class allowing access to USBPHY interface
  * @{
  */

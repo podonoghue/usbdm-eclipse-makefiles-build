@@ -21,23 +21,21 @@ using GreenLED = $(/HARDWARE/Led2:GpioB<1,ActiveLow>);
 using BlueLED  = $(/HARDWARE/Led3:GpioA<2,ActiveLow>);
 
 int main() {
-   RedLED::setOutput(
-         PinDriveStrength_High,
-         PinDriveMode_PushPull,
-         PinSlewRate_Slow);
-   GreenLED::setOutput(
-         PinDriveStrength_High,
-         PinDriveMode_PushPull,
-         PinSlewRate_Slow);
-   BlueLED::setOutput(
-         PinDriveStrength_High,
-         PinDriveMode_PushPull,
-         PinSlewRate_Slow);
+
+   static constexpr PcrInit ledInit {
+      PinDriveStrength_High,
+      PinDriveMode_PushPull,
+      PinSlewRate_Slow
+   };
+
+   RedLED::setOutput(ledInit);
+   GreenLED::setOutput(ledInit);
+   BlueLED::setOutput(ledInit);
 
    console.setEcho(EchoMode_Off);
 
+   console.write("Choose colour to toggle (R)ed or (G)reen or (B)lue :");
    for(;;) {
-      console.write("\rPress (R)ed or (G)reen or (B)lue :");
       switch(console.readChar()) {
          case 'r': case 'R' : RedLED::toggle();   break;
          case 'g': case 'G' : GreenLED::toggle(); break;

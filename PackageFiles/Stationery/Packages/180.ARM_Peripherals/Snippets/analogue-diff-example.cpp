@@ -14,6 +14,7 @@ using namespace USBDM;
 
 /*
  * Demonstrates differential conversion on a channel
+ * Uses default settings
  */
 
 // Connection mapping - change as required
@@ -23,7 +24,7 @@ using namespace USBDM;
 using MyAdc        = Adc0;
 
 // ADC channel to use
-using MyAdcChannel = MyAdc::DiffChannel<0>;
+using MyAdcChannel = Analogue_Diff1; //MyAdc::DiffChannel<Adc0ChannelNum_Diff1>;
 
 // Resolution to use for ADC
 constexpr AdcResolution adcResolution = AdcResolution_9bit_diff;
@@ -31,20 +32,14 @@ constexpr AdcResolution adcResolution = AdcResolution_9bit_diff;
 int main(void) {
 
    // Enable and configure ADC
-   MyAdc::configure(AdcResolution_11bit_diff);
+   MyAdc::defaultConfigure();
 
-   // Calibrate before first use
-   MyAdc::calibrate();
-
-   // May change current resolution as needed e.g.
-   MyAdc::setResolution(adcResolution);
-
-   // Connect ADC channel to pin
-   MyAdcChannel::setInput();
+   // Connect ADC channel to pin (if 'Map pins when configured' not selected in default settings)
+//   MyAdcChannel::setInput();
 
    for(;;) {
       // Do next conversion
       int32_t value = MyAdcChannel::readAnalogue();
-      console.writeln("Difference  = ", value*3.3/MyAdc::getDifferentialMaximum(adcResolution), " volts");
+      console.writeln("Difference  = ", value*(3.3/MyAdc::getDifferentialMaximum(adcResolution)), " volts");
    }
 }

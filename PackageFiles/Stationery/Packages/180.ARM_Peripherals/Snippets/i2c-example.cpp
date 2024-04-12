@@ -17,14 +17,13 @@ static const unsigned I2C_ADDRESS = 0x1D<<1;
 
 void i2cCallback(ErrorCode errorCode) {
    __asm__("nop");
-   console.writeln("RC = ", getErrorMessage(errorCode));
+   console.writeln("Tx complete, rc = ", getErrorMessage(errorCode));
 }
 
 int main() {
 #define SELECT 0
 
    static constexpr I2c0::Init i2cInit = {
-      I2cAddressLength_7Bit, 0, // Address Extension - 7-bit address, Slave Address
       400_kHz,                  // Speed
       I2cBusRole_Controller ,   // Bus Role Select - Controller mode
 

@@ -106,7 +106,6 @@ protected:
    /**
     * Constructor
     *
-    * @param[in]  instanceNum    SPI Instance number (for IRQ index)
     * @param[in]  baseAddress    Base address of SPI
     */
    Spi(uint32_t baseAddress) :
@@ -141,7 +140,7 @@ protected:
     * Used for ASC, DT and CSSCK
     *
     * @param[in]  clockFrequency Clock frequency of SPI in Hz
-    * @param[in]  delay          Desired delay in seconds
+    * @param[in]  delay_ns       Desired delay in nanoseconds
     * @param[out] bestPrescale   Best prescaler value (0=>/1, 1=>/3, 2=/5, 3=>/7)
     * @param[out] bestDivider    Best divider value (N=>/(2**(N+1)))
     *
@@ -1426,9 +1425,9 @@ public:
    SpiBase_T() : Spi(Info::baseAddress) {
 
       // Check pin assignments
-      static_assert(Info::info[Info::sckPin].gpioBit  != PinIndex::UNMAPPED_PCR, "SPIx_SCK has not been assigned to a pin - Modify Configure.usbdm");
-      static_assert(Info::info[Info::sinPin].gpioBit  != PinIndex::UNMAPPED_PCR, "SPIx_SIN has not been assigned to a pin - Modify Configure.usbdm");
-      static_assert(Info::info[Info::soutPin].gpioBit != PinIndex::UNMAPPED_PCR, "SPIx_SOUT has not been assigned to a pin - Modify Configure.usbdm");
+      static_assert(Info::info[Info::sckPin].pinIndex  != PinIndex::UNMAPPED_PCR, "SPIx_SCK has not been assigned to a pin - Modify Configure.usbdm");
+      static_assert(Info::info[Info::sinPin].pinIndex  != PinIndex::UNMAPPED_PCR, "SPIx_SIN has not been assigned to a pin - Modify Configure.usbdm");
+      static_assert(Info::info[Info::soutPin].pinIndex != PinIndex::UNMAPPED_PCR, "SPIx_SOUT has not been assigned to a pin - Modify Configure.usbdm");
 
       configure(Info::DefaultInitValue);
    }

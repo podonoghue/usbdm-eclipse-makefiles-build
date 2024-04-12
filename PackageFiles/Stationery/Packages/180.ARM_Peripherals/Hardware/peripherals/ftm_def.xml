@@ -276,7 +276,10 @@
       toolTip="In left-aligned or centre-aligned this is the period of the timer\n
                In free-running mode it is the minimum interval"
       derived="true"
-      units="s" />
+      units="s"
+      min="0"
+      max="clockPeriod*(ftm_sc_cpwms?(2*(65535)):(65535+1))"
+      />
 
    <choiceOption key="ftm_sc_action" condition="ftm_sc_toie_present&amp;&amp;ftm_sc_dma_present"
       hiddenBy="mode==(None)"
@@ -376,7 +379,7 @@
          hiddenBy="!(ftm_cnsc_mode_independent[%(ch)]!=0)"
          enabledBy="(ftm_cnsc_mode_independent[%(ch)]!=0)"
          valueFormat="FTM_CnSC_CHIE(%s),FTM_CnSC_DMA(%s)"
-         baseType="uint8_t"
+         baseType="uint16_t"
          typeName="FtmChannelAction"
          description="Action on Channel Event"
          toolTip="Enable interrupt or DMA on channel event" >
@@ -389,7 +392,7 @@
          hiddenBy="!(ftm_cnsc_mode_independent[%(ch)]!=0)"
          enabledBy="(ftm_cnsc_mode_independent[%(ch)]!=0)&amp;&amp;irqHandlingMethod"
          valueFormat="FTM_CnSC_CHIE(%s)"
-         baseType="uint8_t"
+         baseType="uint16_t"
          typeName="FtmChannelAction"
          description="Action on Channel Event"
          toolTip="Enable interrupt on channel event" >
@@ -426,7 +429,7 @@
          enabledBy="(ftm_cnsc_mode_independent[%(ch)]==(1,2,3))"
          valueFormat="FTM_CnSC_ICRST(%s)"
          typeName="FtmChannelReset"
-         baseType="uint8_t"
+         baseType="uint16_t"
          description="Reset counter on channel IC event"
          toolTip="FTM counter reset is driven by the selected event of the channel\n
                   in the Input Capture mode.\n
@@ -475,7 +478,7 @@
          ref="ftm_cnvHighTime_independent[%(ch)]/ftm_modPeriod"
          valueFormat="%s"
          units="percent"
-         description="Output duty cycle as pecentage"
+         description="Output duty cycle as percentage"
          toolTip="Calculated duty cycle" />
    </for>
 
@@ -493,6 +496,7 @@
       valueFormat="FTM_CnSC_ELS(%s)"
       description="Odd channel mode"
       typeName="FtmOddChannelMode"
+      baseType="uint16_t"
       disabledValue="0b00"
       toolTip="Behaviour of second channel when channels are paired"
       >
@@ -2896,7 +2900,7 @@
 
    <for keys=" type        : variables                         : init                 "
        values="%baseType   : ftm_cnv_independent[]             : 0                    ;
-               uint8_t     : ftm_cnsc_mode_independent[],
+               %baseType   : ftm_cnsc_mode_independent[],
                              ftm_cnsc_action_independent[],
                              ftm_cnsc_icrst_independent[]      : 0                    ;
                %paramType  : ftm_channel_number                : %paramType_None      ;
@@ -2940,6 +2944,28 @@
          \t\n
       ]]></variableTemplate>
    </for>
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      variables="ftm_cnvDutyCycle_independent[]"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    * (%(variables))
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
+      \t
+      \t      cnv   = roundf(10000*%paramExpression);
+      \t      cnsc |= 1<<15;
+      \t   }
+      \t\n
+   ]]></variableTemplate>
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
       \t}; // class  $(_Structname)BasicInfo::ChannelInit\n\n

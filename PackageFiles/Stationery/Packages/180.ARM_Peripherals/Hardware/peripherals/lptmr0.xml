@@ -324,6 +324,7 @@
    </for>
 
    <variableTemplate variables="lptmr_psr_pcs,lptmr_psr_prescaler" codeGenCondition="enablePeripheralSupport"
+      nonDefaultParams="2"
    ><![CDATA[
       \t/**
       \t * Set %description0 and %description1
@@ -343,6 +344,7 @@
    ]]></variableTemplate>
 
    <variableTemplate variables="lptmr_psr_pcs,lptmr_psr_glitchFilter" codeGenCondition="enablePeripheralSupport"
+      nonDefaultParams="2"
    ><![CDATA[
       \t/**
       \t * Set %description0 and %description1

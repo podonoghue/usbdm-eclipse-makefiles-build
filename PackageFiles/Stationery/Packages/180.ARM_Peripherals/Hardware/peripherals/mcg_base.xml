@@ -70,6 +70,16 @@
       </binaryOption>
    </for>
 
+   <binaryOption key="allowUserClockTrim"
+      hidden="true"
+      description="User IRC clock trim"
+      toolTip="Used to indicate that the Internal Reference clocks have been user trimmed.\n
+               This will allow the IRC values to be manually changed."
+      >
+      <choice value="false" name="Clock is not trimmed" />
+      <choice value="true"  name="Clock is trimmed"     />
+   </binaryOption>
+
    <intOption key="slowInternalClockTrim" condition="mcg_c4_scftrim_present"
       description="Slow clock trim value"
       toolTip="This 9-bit trim value is written to MCG.C3[SCTRIM] and MCG.C4[SCFTRIM] if non-zero"
@@ -131,7 +141,7 @@
          description="Clock configuration[%(n)]"
          toolTip="Clock configurations for different run modes"
          value="ClockConfig_%(n)"
-         disabledValue="=(%(n)==0)?&quot;Reset Configuration&quot;:&quot;Disabled&quot;" >
+         disabledValue='=(%(n)==0)?"Reset Configuration":"Disabled"' >
 
          <if condition="%(n)==0" >
             <aliasOption key="enableClockConfiguration[%(n)]" />
@@ -166,11 +176,13 @@
                <graphicItem id=""                          var="system_mcgirclk_clock[%(n)]"        type="connector"   params="MCGIRCLKEN,0, MCGIRCLK.1,0"                     />
                <graphicItem id="MCGIRCLK.1,NONAME"         var="system_mcgirclk_clock[%(n)]"        type="node"        params="570, 55"                                        />
 
-               <graphicItem id="FRDIV"                     var="mcg_c1_frdiv[%(n)]"                 type="choice"      params="75, 155, 85, large"                             />
-               <graphicItem id="RANGE,NONAME"              var="mcg_c2_range0[%(n)]"                type="annotation"  params="30, 175, 100, 20"                               />
-               <graphicItem id="FRDIV_OUT,NONAME"          var="mcg_erc_clock_divided[%(n)]"        type="annotation"  params="30, 190, 100, 20, Fout=%v"                               />
+               <graphicItem id="FRDIV"                     var="mcg_c1_frdiv[%(n)]"                 type="choice"      params="75, 175, 85, large"                             />
+               <graphicItem id="RANGE,NONAME"              var="mcg_c2_range0[%(n)]"                type="annotation"  params="30, 195, 100, 20"                               />
+               <graphicItem id="FRDIV_OUT,NONAME"          var="mcg_erc_clock_divided[%(n)]"        type="annotation"  params="30, 210, 100, 20, Fout=%v"                               />
                <graphicItem id=""                          var="mcg_erc_clock_divided[%(n)]"        type="connector"   params="FRDIV,0,    IREFS,0"                            />
                <graphicItem id=""                          var=""                                   type="connector"   params="SLOW IRC,0, IREFS,1, (x-20),d,y,x"              />
+
+               <graphicItem id="User Trim,x+40,y+17"       var="allowUserClockTrim"                 type="node"        params="20, 125"                                        />
 
                <!-- IREFS => FLL/MCGFFCLK -->
                <graphicItem id="IREFS"                     var="mcg_c1_irefs[%(n)]"                 type="mux"         params="185, 145, 2, mirror"                            />
@@ -809,31 +821,31 @@
             <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
          </category>
 
-         <category name="Clocks" description="Clock Sources"
+         <category name="Internal Clocks" description="Internal Clock Sources"
             toolTip="SLOW_IRC, FAST_IRC, USB_CLKIN, LPO" >
+
+            <aliasOption key="allowUserClockTrim" locked="false" />
 
             <intOption key="system_slow_irc_clock[%(n)]"
                enabledBy="(/SMC/smc_pmctrl_runm[%(n)]!=VLPR) &amp;&amp;
                           (mcg_c1_irclken[%(n)]||mcg_c1_irefs[%(n)])##Disabled in VLPR or when not in use"
-               locked="true"
-               derived="true"
                origin="Slow IRC"
                units="Hz"
                description="Frequency of Slow Internal Reference [SIRC] Clock"
                toolTip="Dependent on device and clock Trim. [Nominally 32kHz]"
                value="32768"
-               disabledValue="0" />
+               disabledValue="0"
+               min="31250" max="39062"  />
 
             <intOption key="system_fast_irc_clock[%(n)]"
                enabledBy="mcg_c1_irclken[%(n)]||mcg_c1_irefs[%(n)]##Disabled as not in use"
-               locked="true"
-               derived="true"
                origin="Fast IRC"
                units="Hz"
                description="Frequency of Fast Internal Reference [FIRC] Clock"
                toolTip="Dependent on device and clock Trim. [Nominally 4MHz]"
                value="4_MHz"
-               disabledValue="0" />
+               disabledValue="0"
+               min="3_MHz" max="5_MHz" />
 
             <aliasOption key="/PMC/system_low_power_clock" />
 
