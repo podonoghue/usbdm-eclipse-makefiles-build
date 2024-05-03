@@ -88,7 +88,7 @@
    \t/**
    \t * Class representing $(_NAME)
    \t */
-   \tusing $(_Class) = $(_Baseclass)Base_T<$(_Class)Info>;\n
+   \tusing $(_Class) = $(_Baseclass)Base_T<$(_Info)>;\n
    ]]></template>
 
    <validate

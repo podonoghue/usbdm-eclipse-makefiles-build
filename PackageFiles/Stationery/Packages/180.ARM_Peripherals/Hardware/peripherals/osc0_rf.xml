@@ -14,7 +14,7 @@
 
    <xi:include href="default_instance.xml"/>
 
-   <xi:include href="mapPinsOption_on.xml"/>
+   <xi:include href="mapPinsOption.xml"/>
 
    <choiceOption key="rsim_control_rf_osc_en"
       typeName="OscRunMode"
@@ -144,7 +144,7 @@
    \t/**
    \t * Class representing $(_NAME)
    \t */
-   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
+   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Info)> {};\n
    ]]></template>
 
    <template key="/MCG/Includes"  ><![CDATA[

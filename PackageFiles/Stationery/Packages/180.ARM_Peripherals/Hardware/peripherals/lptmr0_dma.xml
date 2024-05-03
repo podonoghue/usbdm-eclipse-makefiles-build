@@ -240,7 +240,7 @@
       \t * $(_Class)::setCallback(flash);
       \t * @endcode
       \t */
-      \tusing $(_Class) = $(_Baseclass)Base_T<$(_Class)Info>;
+      \tusing $(_Class) = $(_Baseclass)Base_T<$(_Info)>;
       
       \t/**
       \t * MACRO defining the start of a interrupt handler for a LPTMR

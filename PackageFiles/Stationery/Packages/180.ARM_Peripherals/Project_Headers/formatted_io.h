@@ -164,8 +164,20 @@ enum class EchoMode : bool {
    EchoMode_Off = false, //!< Turn echo off
    EchoMode_On  = true,  //!< Turn echo on
 };
+
 constexpr EchoMode EchoMode_Off = EchoMode::EchoMode_Off;
 constexpr EchoMode EchoMode_On  = EchoMode::EchoMode_On;
+
+enum class BlockingMode : bool {
+   /*
+    * For use with operator<< and operator>>
+    */
+   BlockingMode_Off = false, //!< Turn blocking off
+   BlockingMode_On  = true,  //!< Turn blocking on
+};
+
+constexpr BlockingMode BlockingMode_Off = BlockingMode::BlockingMode_Off;
+constexpr BlockingMode BlockingMode_On  = BlockingMode::BlockingMode_On;
 
 enum class FlushType {
    /**
@@ -346,6 +358,11 @@ public:
 class FormattedIO {
 
 protected:
+   enum Flags {
+      f_echo      = 1<<0,
+      f_blocking  = 1<<1,
+   };
+
    /**
     * Construct formatter interface
     */
@@ -379,9 +396,9 @@ protected:
    IntegerFormat fIntegerFormat;
 
    /**
-    * Echo settings
+    * Settings
     */
-   EchoMode fEcho = EchoMode_On;
+   uint8_t flags = f_echo|f_blocking;
 
    /**
     * One character look-ahead (-1 indicates invalid)
@@ -440,7 +457,7 @@ protected:
    }
 
    /**
-    * Receives a character (blocking)
+    * Receives a character (blocking or non-blocking)
     *
     * @return Character received
     */
@@ -582,10 +599,10 @@ public:
          return -1;
       }
       lookAhead = _readChar();
-      if (lookAhead == static_cast<uint8_t>('\r')) {
+      if (lookAhead == uint8_t('\r')) {
          lookAhead = '\n';
       }
-      if (bool(fEcho)) {
+      if (flags&f_echo) {
          _writeChar(lookAhead);
       }
       return lookAhead;
@@ -611,15 +628,16 @@ public:
 
    /**
     * Receives a single character
+    * This may block if blocking is enabled
     *
     * @return >0 Character received
-    * @return <0 No character available
+    * @return <0 No character available (may indicate EOF)
     */
    int readChar() {
       int ch;
       do {
          ch = peek();
-      } while (ch < 0);
+      } while ((flags&f_blocking) && (ch < 0));
       lookAhead = -1;
       return ch;
    }
@@ -870,13 +888,13 @@ public:
    int __attribute__((noinline)) gets(char data[], uint16_t size, char terminator='\n') {
       char *ptr = data;
 
-      char ch;
+      int ch;
       do {
          ch = readChar();
          if (ptr<(data+size)) {
             *ptr++ = ch;
          }
-      } while(ch != terminator);
+      } while((ch != terminator)&&(ch > 0));
       *--ptr = '\0';
       return ptr-data;
    }
@@ -1788,7 +1806,29 @@ public:
     * @return Reference to self
     */
    FormattedIO &setEcho(EchoMode echoMode=EchoMode_On) {
-      fEcho = echoMode;
+      if (bool(echoMode)) {
+         flags |= f_echo;
+      }
+      else {
+         flags &= ~f_echo;
+      }
+      return *this;
+   }
+
+   /**
+    * Controls echoing of input characters
+    *
+    * @param echoMode
+    *
+    * @return Reference to self
+    */
+   FormattedIO &setBlocking(BlockingMode blockingMode=BlockingMode_On) {
+      if (bool(blockingMode)) {
+         flags |= f_blocking;
+      }
+      else {
+         flags &= ~f_blocking;
+      }
       return *this;
    }
 

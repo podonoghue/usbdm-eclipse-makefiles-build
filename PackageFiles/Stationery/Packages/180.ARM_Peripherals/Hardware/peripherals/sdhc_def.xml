@@ -2,34 +2,2231 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- sdhc_def.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Secured Digital Host Controller">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Secured Digital Host Controller" >
 
-   <equation key="irq_parameters"            value=""  />
-   <equation key="irq_dummy_parameters"      value=""  />
-   <equation key="irq_call"                  value=""  />
-   <equation key="generateDefault"           value="false"         />
-   <equation key="configureInStartupDefault" value="false"         />
-   <xi:include href="enablePeripheral.xml"  />
-   <title />
+   <equation key="irq_parameters"             value=""          />
+   <equation key="irq_dummy_parameters"       value=""          />
+   <equation key="irq_call"                   value=""          />
+   <equation key="generateDefault"            value="false"     />
+   <equation key="configureInStartupDefault"  value="false"     />
+   <xi:include href="enablePeripheral.xml"    />
 
-   <!-- ************* Class Declaration ****************** -->
-   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+   <!-- ____ Class Declaration ________ -->
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
+
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
+   <!-- ____ SD Card Fields ____ -->
+   <bitfieldOption key="sdhc_ocr_field"
+      hidden="true"
+      derived="true"
+      valueFormat="%s"
+      description="OCR value"
+      toolTip="Indicates/selects voltage range and other features."
+      typeName="SdhcOcrValue"
+      enumClass="true"
+      baseType="uint32_t"
+      value="0" >
+      <choice name="Supports 1.6V To 1.7V"        enum="Supports_1_6V_1_7V"    value="=ToString(1&lt;&lt;4)" />
+      <choice name="Supports 1.7V To 1.8V"        enum="Supports_1_7V_1_8V"    value="=ToString(1&lt;&lt;5)" />
+      <choice name="Supports 1.8V To 1.9V"        enum="Supports_1_8V_1_9V"    value="=ToString(1&lt;&lt;6)" />
+      <choice name="Supports 1.9V To 2.0V"        enum="Supports_1_9V_2_0V"    value="=ToString(1&lt;&lt;7)" />
+      <choice name="Supports 2.0V To 2.1V"        enum="Supports_2_0V_2_1V"    value="=ToString(1&lt;&lt;8)" />
+      <choice name="Supports 2.1V To 2.2V"        enum="Supports_2_1V_2_2V"    value="=ToString(1&lt;&lt;9)" />
+      <choice name="Supports 2.2V To 2.3V"        enum="Supports_2_2V_2_3V"    value="=ToString(1&lt;&lt;10)" />
+      <choice name="Supports 2.3V To 2.4V"        enum="Supports_2_3V_2_4V"    value="=ToString(1&lt;&lt;11)" />
+      <choice name="Supports 2.4V To 2.5V"        enum="Supports_2_4V_2_5V"    value="=ToString(1&lt;&lt;12)" />
+      <choice name="Supports 2.5V To 2.6V"        enum="Supports_2_5V_2_6V"    value="=ToString(1&lt;&lt;13)" />
+      <choice name="Supports 2.6V To 2.7V"        enum="Supports_2_6V_2_7V"    value="=ToString(1&lt;&lt;14)" />
+      <choice name="Supports 2.7V To 2.8V"        enum="Supports_2_7V_2_8V"    value="=ToString(1&lt;&lt;15)" />
+      <choice name="Supports 2.8V To 2.9V"        enum="Supports_2_8V_2_9V"    value="=ToString(1&lt;&lt;16)" />
+      <choice name="Supports 2.9V To 3.0V"        enum="Supports_2_9V_3_0V"    value="=ToString(1&lt;&lt;17)" />
+      <choice name="Supports 3.0V To 3.1V"        enum="Supports_3_0V_3_1V"    value="=ToString(1&lt;&lt;18)" />
+      <choice name="Supports 3.1V To 3.2V"        enum="Supports_3_1V_3_2V"    value="=ToString(1&lt;&lt;19)" />
+      <choice name="Supports 3.2V To 3.3V"        enum="Supports_3_2V_3_3V"    value="=ToString(1&lt;&lt;20)" />
+      <choice name="Supports 3.3V To 3.4V"        enum="Supports_3_3V_3_4V"    value="=ToString(1&lt;&lt;21)" />
+      <choice name="Supports 3.4V To 3.5V"        enum="Supports_3_4V_3_5V"    value="=ToString(1&lt;&lt;22)" />
+      <choice name="Supports 3.5V To 3.6V"        enum="Supports_3_5V_3_6V"    value="=ToString(1&lt;&lt;23)" />
+      <choice name="Supports 1.8V"                enum="Supports_1_8V"         value="=ToString(1&lt;&lt;24)" />
+      <choice name="Supports 2TB"                 enum="Supports_2TB"          value="=ToString(1&lt;&lt;27)" />
+      <choice name="UHS-II Card Status"           enum="UHS_II_Status"         value="=ToString(1&lt;&lt;29)" />
+      <choice name="Card Capacity Status (ccs)"   enum="CardCapacityStatus"    value="=ToString(1&lt;&lt;30)" />
+      <choice name="Card Power-up status (ready)" enum="Ready"                 value="=ToString(1&lt;&lt;31)" />
+   </bitfieldOption>
+
+   <!-- ____ XFERTYP ____ -->
+   <title description="Command Setup" />
+
+   <choiceOption key="sdhc_xfertyp_response" condition="sdhc_xfertyp_cmdinx_present"
+      valueFormat="SDHC_XFERTYP_RSPTYP(%s),SDHC_XFERTYP_CICEN(%s),SDHC_XFERTYP_CCCEN(%s)"
+      hidden="true"
+      derived="true"
+      typeName="SdhcResponse"
+      baseType="uint32_t"
+      toolTip="Transfer format bits based on command response types R1, R2 etc.\n
+               Based on table Table 61-3, K28 reference manual K28P210M150SF5RM"
+      description="Command Index" >
+      <!--           +================ Command length 0=none, 1=136, 2=48, 3=48 with busy check
+                     | +============== Index check    0=none, 1=checked
+                     | | +============ CCR check      0=none, 1=CRC7
+                     | | |
+                     V V V                                          -->
+      <choice value="0,0,0"  name="None"                                                                                   enum="None" />
+      <choice value="2,1,1"  name="R1  -  48 bits R[39:8]  => CMDRSP[0]  =card status,     CRC7,Index check"               enum="R1"   />
+      <choice value="3,1,1"  name="R1b -  48 bits R[39:8]  => CMDRSP[3]  =card status,     CRC7,Index check,busy check"    enum="R1b"  />
+      <choice value="1,0,1"  name="R2  - 136 bits R[127:8] => CMDRSP[3-0]=CID/CSD register,CRC7"                           enum="R2"   />
+      <choice value="2,0,0"  name="R3  -  48 bits R[39:8]  => CMDRSP[0]  =OCR register"                                    enum="R3"   />
+      <choice value="2,0,0"  name="R4  -  48 bits R[39:8]  => CMDRSP[0]"                                                   enum="R4"   />
+      <choice value="2,1,1"  name="R5  -  48 bits R[39:8]  => CMDRSP[0]"                                                   enum="R5"   />
+      <choice value="3,1,1"  name="R5b -  48 bits R[39:8]  => CMDRSP[0],  busy check"                                      enum="R5b"  />
+      <choice value="2,1,1"  name="R6  -  48 bits R[39:8]  => CMDRSP[0]  =[31:16]=newRCA,[15:0]=card status 23,22,19,12:0" enum="R6"   />
+      <choice value="2,1,1"  name="R7  -  48 bits R[39:8]  => CMDRSP[0]  =Card interface condition"                        enum="R7"   />
+   </choiceOption>
+
+   <intOption key="sdhc_xfertyp_cmd" condition="sdhc_xfertyp_cmdinx_present" 
+      derived="true"
+      hidden="true"
+      valueFormat="%s"
+      baseType="uint32_t"
+      description="Command register (XFERTYP)"
+      toolTip="Value controlling command execution"
+   />
+   
+   <choiceOption key="sdhc_xfertyp_command" condition="sdhc_xfertyp_cmdinx_present"
+      valueFormat="(%s&lt;&lt;31),SDHC_XFERTYP_CMDINX(%s),SdhcResponse_%s,(%s&lt;&lt;30),
+                  SDHC_XFERTYP_DPSEL(%s),SDHC_XFERTYP_DTDSEL(%s),SDHC_XFERTYP_MSBSEL(%s),SDHC_XFERTYP_BCEN(%s)"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcCommand"
+      baseType="uint32_t"
+      toolTip="Command index (from SD Memory Card Physical Layer Specification and SDIO Card Specification)\n
+               and directly related response format flags e.g. R1, CRC etc.\n
+               Also indicates if ACMDx requiring prefix command"
+      description="Command Index" >
+      <!--           +====================== ACMDx flag,      0=none, 1=prefix command with APP_CMD
+                     |  +=================== Command index
+                     |  |  +================ Response type    (length,Index check,CRC)
+                     |  |  |   +============ Busy requirement 0=CDIHB, 1=CIHB
+                     |  |  |   | +========== Data present     0=none, 1=data present
+                     |  |  |   | | +======== Read/Write       0=write, 1=read
+                     |  |  |   | | | +====== Multi/Single     0=single block, 1=multiple blocks
+                     |  |  |   | | | | +==== Block Counter    0=disabled, 1=enabled
+                     |  |  |   | | | | |
+                     V  V  V   V V V V V                      -->
+      <choice value="0,0,None, 1,0,0,0,0"  name="GO_IDLE_STATE (CMD0,None)"          enum="CMD0_GO_IDLE_STATE"             />
+      <choice value="0,1,R3,   0,0,0,0,0"  name="SEND_OP_COND (CMD1,R3)"             enum="CMD1_SEND_OP_COND"              />
+      <choice value="0,2,R2,   0,0,0,0,0"  name="ALL_SEND_CID (CMD2,R2)"             enum="CMD2_ALL_SEND_CID"              />
+      <choice value="0,3,R1,   0,0,0,0,0"  name="SET_RELATIVE_ADDR (CMD3,R1)"        enum="CMD3_SET_RELATIVE_ADDR"         />
+      <choice value="0,3,R6,   0,0,0,0,0"  name="SEND_RELATIVE_ADDR (CMD3,R6)"       enum="CMD3_SEND_RELATIVE_ADDR"        />
+      <choice value="0,4,None, 0,0,0,0,0"  name="SET_DSR (CMD4,None)"                enum="CMD4_SET_DSR"                   />
+      <choice value="0,5,R4,   0,0,0,0,0"  name="IO_SEND_OP_COND (CMD5,R4)"          enum="CMD5_IO_SEND_OP_COND"           />
+      <choice value="0,6,R1,   0,0,0,0,0"  name="SWITCH_FUNC (CMD6,R1)"              enum="CMD6_SWITCH_FUNC"               />
+      <choice value="0,6,R1b,  0,0,0,0,0"  name="SWITCH (CMD6,R1b)"                  enum="CMD6_SWITCH"                    />
+      <choice value="0,7,R1b,  0,0,0,0,0"  name="SELECT_CARD (CMD7,R1b)"             enum="CMD7_SELECT_CARD"               />
+      <choice value="0,7,None, 0,0,0,0,0"  name="DESELECT_CARD (CMD7,None)"          enum="CMD7_DESELECT_CARD"             />
+      <choice value="0,8,R7,   0,0,0,0,0"  name="SEND_IF_COND (CMD8,R7)"             enum="CMD8_SEND_IF_COND"              />
+      <choice value="0,9,R2,   0,0,0,0,0"  name="SEND_CSD (CMD9,R2)"                 enum="CMD9_SEND_CSD"                  />
+      <choice value="0,10,R2,  0,0,0,0,0"  name="SEND_CID (CMD10,R2)"                enum="CMD10_SEND_CID"                 />
+      <choice value="0,11,R1,  0,0,0,0,0"  name="READ_DAT_UNTIL_STOP (CMD11,R1)"     enum="CMD11_READ_DAT_UNTIL_STOP"      />
+      <choice value="0,12,R1b, 1,0,0,0,0"  name="STOP_TRANSMISSION (CMD12,R1b)"      enum="CMD12_STOP_TRANSMISSION"        />
+      <choice value="0,13,R1,  1,0,0,0,0"  name="SEND_STATUS (CMD13,R1)"             enum="CMD13_SEND_STATUS"              />
+      <choice value="0,15,None,0,0,0,0,0"  name="GO_INACTIVE_STATE (CMD15,None)"     enum="CMD15_GO_INACTIVE_STATE"        />
+      <choice value="0,16,R1,  0,0,0,0,0"  name="SET_BLOCKLEN (CMD16,R1)"            enum="CMD16_SET_BLOCKLEN"             />
+      <choice value="0,17,R1,  0,1,1,0,0"  name="READ_SINGLE_BLOCK (CMD17,R1)"       enum="CMD17_READ_SINGLE_BLOCK"        />
+      <choice value="0,18,R1,  0,1,1,1,1," name="READ_MULTIPLE_BLOCK (CMD18,R1)"     enum="CMD18_READ_MULTIPLE_BLOCK"      />
+      <choice value="0,20,R1,  0,1,0,1,0"  name="WRITE_DAT_UNTIL_STOP (CMD20,R1)"    enum="CMD20_WRITE_DAT_UNTIL_STOP"     />
+      <choice value="0,24,R1,  0,1,0,0,0"  name="WRITE_BLOCK (CMD24,R1)"             enum="CMD24_WRITE_BLOCK"              />
+      <choice value="0,25,R1,  0,1,0,1,1"  name="WRITE_MULTIPLE_BLOCK (CMD25,R1)"    enum="CMD25_WRITE_MULTIPLE_BLOCK"     />
+      <choice value="0,26,R1,  0,1,0,0,0"  name="PROGRAM_CID (CMD26,R1)"             enum="CMD26_PROGRAM_CID"              />
+      <choice value="0,27,R1,  0,1,0,0,0"  name="PROGRAM_CSD (CMD27,R1)"             enum="CMD27_PROGRAM_CSD"              />
+      <choice value="0,28,R1b, 0,0,0,0,0"  name="SET_WRITE_PROT (CMD28,R1b)"         enum="CMD28_SET_WRITE_PROT"           />
+      <choice value="0,29,R1b, 0,0,0,0,0"  name="CLR_WRITE_PROT (CMD29,R1b)"         enum="CMD29_CLR_WRITE_PROT"           />
+      <choice value="0,30,R1,  0,0,0,0,0"  name="SEND_WRITE_PROT (CMD30,R1)"         enum="CMD30_SEND_WRITE_PROT"          />
+      <choice value="0,32,R1,  0,0,0,0,0"  name="TAG_SECTOR_START (CMD32,R1)"        enum="CMD32_TAG_SECTOR_START"         />
+      <choice value="0,33,R1,  0,0,0,0,0"  name="TAG_SECTOR_END (CMD33,R1)"          enum="CMD33_TAG_SECTOR_END"           />
+      <choice value="0,34,R1,  0,0,0,0,0"  name="UNTAG_SECTOR (CMD34,R1)"            enum="CMD34_UNTAG_SECTOR"             />
+      <choice value="0,35,R1,  0,0,0,0,0"  name="TAG_ERASE_GROUP_START (CMD35,R1)"   enum="CMD35_TAG_ERASE_GROUP_START"    />
+      <choice value="0,36,R1,  0,0,0,0,0"  name="TAG_ERASE_GROUP_END (CMD36,R1)"     enum="CMD36_TAG_ERASE_GROUP_END"      />
+      <choice value="0,37,R1,  0,0,0,0,0"  name="UNTAG_ERASE_GROUP (CMD37,R1)"       enum="CMD37_UNTAG_ERASE_GROUP"        />
+      <choice value="0,38,R1b, 0,0,0,0,0"  name="ERASE (CMD38,R1b)"                  enum="CMD38_ERASE"                    />
+      <choice value="0,39,R4,  0,0,0,0,0"  name="FAST_IO (CMD39,R4)"                 enum="CMD39_FAST_IO"                  />
+      <choice value="0,40,R5,  0,0,0,0,0"  name="GO_IRQ_STATE (CMD40,R5)"            enum="CMD40_GO_IRQ_STATE"             />
+      <choice value="0,42,R1b, 0,0,0,0,0"  name="LOCK_UNLOCK (CMD42,R1b)"            enum="CMD42_LOCK_UNLOCK"              />
+      <choice value="0,52,R5,  1,0,0,0,0"  name="IO_RW_DIRECT (CMD52,R5)"            enum="CMD52_IO_RW_DIRECT"             />
+      <choice value="0,53,R5,  0,0,0,0,0"  name="IO_RW_EXTENDED (CMD53,R5)"          enum="CMD53_IO_RW_EXTENDED"           />
+      <choice value="0,55,R1,  0,0,0,0,0"  name="APP_CMD (CMD55,R1)"                 enum="CMD55_APP_CMD"                  />
+      <choice value="0,56,R1b, 0,0,0,0,0"  name="GEN_CMD (CMD56,R1b)"                enum="CMD56_GEN_CMD"                  />
+      <choice value="0,60,R1b, 0,0,0,0,0"  name="RW_MULTIPLE_REGISTER (CMD60,R1b)"   enum="CMD60_RW_MULTIPLE_REGISTER"     />
+      <choice value="0,61,R1b, 0,0,0,0,0"  name="RW_MULTIPLE_BLOCK (CMD61,R1b)"      enum="CMD61_RW_MULTIPLE_BLOCK"        />
+      <choice value="1,6,R1,   0,0,0,0,0"  name="SET_BUS_WIDTH (ACMD6,R1)"           enum="ACMD6_SET_BUS_WIDTH"            />
+      <choice value="1,13,R1,  0,0,0,0,0"  name="SD_STATUS (ACMD13,R1)"              enum="ACMD13_SD_STATUS"               />
+      <choice value="1,22,R1,  0,0,0,0,0"  name="SEND_NUM_WR_SECTORS (ACMD22,R1)"    enum="ACMD22_SEND_NUM_WR_SECTORS"     />
+      <choice value="1,23,R1,  0,0,0,0,0"  name="SET_WR_BLK_ERASE_COUNT (ACMD23,R1)" enum="ACMD23_SET_WR_BLK_ERASE_COUNT"  />
+      <choice value="1,41,R3,  0,0,0,0,0"  name="SD_APP_OP_COND (ACMD41,R3)"         enum="ACMD41_SD_APP_OP_COND"          />
+      <choice value="1,42,R1,  0,0,0,0,0"  name="SET_CLR_CARD_DETECT (ACMD42,R1)"    enum="ACMD42_SET_CLR_CARD_DETECT"     />
+      <choice value="1,51,R1,  0,0,0,0,0"  name="SEND_SCR (ACMD51,R1)"               enum="ACMD51_SEND_SCR"                />
+
+   </choiceOption>
+
+   <!-- ____ XFERTYP ____ -->
+
+   <choiceOption key="sdhc_xfertyp_cmdtyp" condition="sdhc_xfertyp_cmdtyp_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcCommandType"
+      baseType="uint32_t"
+      toolTip="There are three types of special commands: suspend, resume, and abort. These bits shall be set to 0b00\n
+               for all other commands.\n
+               - Suspend command: If the suspend command succeeds, the SDHC shall assume that the card bus\n
+               has been released and that it is possible to issue the next command which uses the DAT line.\n
+               Because the SDHC does not monitor the content of command response, it does not know if the\n
+               suspend command succeeded or not. It is the host driver's responsibility to check the status of the\n
+               suspend command and send another command marked as suspend to inform the SDHC that a\n
+               suspend command was successfully issued. After the end bit of command is sent, the SDHC\n
+               deasserts read wait for read transactions and stops checking busy for write transactions. In 4-bit\n
+               mode, the interrupt cycle starts. If the suspend command fails, the SDHC will maintain its current\n
+               state, and the host driver shall restart the transfer by setting PROCTL[CREQ].\n
+               - Resume command: The host driver restarts the data transfer by restoring the registers saved before\n
+               sending the suspend command and then sends the resume command. The SDHC will check for a\n
+               pending busy state before starting write transfers.\n
+               - Abort command: If this command is set when executing a read transfer, the SDHC will stop reads to\n
+               the buffer. If this command is set when executing a write transfer, the SDHC will stop driving the\n
+               DAT line. After issuing the abort command, the host driver must issue a software reset (abort\n
+               transaction)."
+      description="Command Type" >
+      <choice name="Normal other commands"                             value="0" enum="Normal"           />
+      <choice name="Suspend CMD52 for writing bus suspend in CCCR"     value="1" enum="SuspendCmd52"     />
+      <choice name="Resume CMD52 for writing function select in CCCR"  value="2" enum="ResumeCmd52"      />
+      <choice name="Abort CMD12, CMD52 for writing I/O abort in CCCR"  value="3" enum="AbortCmd12_Cmd52" />
+   </choiceOption >
+
+   <binaryOption key="sdhc_xfertyp_ac12en" condition="sdhc_xfertyp_ac12en_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcAutoCmd12Enable"
+      baseType="uint32_t"
+      toolTip="Multiple block transfers for memory require a CMD12 to stop the transaction.\n
+               When enabled the SDHC will issue a CMD12 automatically when the last block transfer has completed.\n
+               Do not set this bit to issue commands that do not require CMD12 to stop a multiple block data transfer. In\n
+               particular, secure commands defined in File Security Specification (see reference list) do not require\n
+               CMD12.\n
+               In single block transfer, the SDHC will ignore this bit whether it is set or not."
+      description="Auto CMD12 Enable" >
+      <choice name="Disable"     value="0" enum="Disable" />
+      <choice name="Enable"      value="1" enum="Enable" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_xfertyp_dmaen" condition="sdhc_xfertyp_dmaen_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcDmaEnable"
+      baseType="uint32_t"
+      toolTip="Controls the DMA functionality. \n
+               When enabled a DMA operation shall begin when the host driver sets the DPSEL bit. \n
+               Whether the simple DMA, or the advanced DMA, is active depends on PROCTL[DMAS]."
+      description="DMA Enable" >
+      <choice name="Disable"     value="0" enum="Disable" />
+      <choice name="Enable"      value="1" enum="Enable" />
+   </binaryOption >
+
+   <!-- ____ CMDARG ____ -->
+   <intOption key="sdhc_cmdarg_cmdarg" condition="sdhc_cmdarg_cmdarg_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcCommandArgument"
+      baseType="uint32_t"
+      toolTip="The SD/MMC command argument is specified as bits 39-8 of the command format in the SD or MMC\n
+               specification.\n
+               This register is write protected when PRSSTAT[CDIHB0] is set."
+      description="Command Argument"
+      value="0"
+      min="0"
+   />
+
+   <title description="Data Transfer " />
+
+   <!-- ____ BLKATTR ____ -->
+
+   <intOption key="sdhc_blkattr_blkcnt" condition="sdhc_blkattr_blkcnt_present"
+      enabledBy="sdhc_xfertyp_command==(10,12)"
+      typeName="SdhcBlockCount"
+      baseType="uint32_t"
+      toolTip="This register is enabled when XFERTYP[BCEN] is set to 1 and is valid only for multiple block transfers.\n
+               For single block transfer, this register will always read as 1.\n
+               The SDHC decrements the block count after each block transfer and stops when the count reaches zero.\n
+               Setting the block count to 0 results in no data blocks being transferred.\n
+               This register must be accessed only when no transaction is executing, that is, after transactions are\n
+               stopped. During data transfer, read operations on this register may return an invalid value and write\n
+               operations are ignored.\n
+               When saving transfer content as a result of a suspend command, the number of blocks yet to be\n
+               transferred can be determined by reading this register. The reading of this register must be applied after\n
+               transfer is paused by stop at block gap operation and before sending the command marked as suspend.\n
+               This is because when suspend command is sent out, SDHC will regard the current transfer as aborted and\n
+               change BLKCNT back to its original value instead of keeping the dynamical indicator of remained block\n
+               count.\n
+               When restoring transfer content prior to issuing a resume command, the host driver must restore the\n
+               previously saved block count."
+      description="Blocks Count For Current Transfer"
+      value="1" min="1" max="65535" />
+
+   <intOption key="sdhc_blkattr_blksize" condition="sdhc_blkattr_blksize_present"
+      enabledBy="sdhc_xfertyp_command==(9,10,11,12,13)"
+      typeName="SdhcBlockSize"
+      baseType="uint32_t"
+      toolTip="Specifies the block size for block data transfers. \n
+               It can be accessed only when no transaction is executing, that is, after a transaction has\n
+               stopped. Read operations during transfers may return an invalid value, and write operations will be\n
+               ignored."
+      description="Transfer Block Size"
+      min="0" max="4096" />
+
+   <!-- ____ DSADDR ____ -->
+   <intOption key="sdhc_dsaddr_dsaddr" condition="sdhc_dsaddr_dsaddr_present"
+      enabledBy="sdhc_xfertyp_command==(9,10,11,12,13)"
+      typeName="SdhcDmaSourceAddress"
+      baseType="uint32_t"
+      toolTip="Contains the 32-bit system memory address for a DMA transfer. Because the address must be word\n
+               (4 bytes) aligned the least 2 bits are reserved, always 0. When the SDHC stops a DMA transfer,\n
+               this register points to the system address of the next contiguous data position.\n
+               It can be accessed only when no transaction is executing, that is, after a transaction has stopped.\n
+               Read operation during transfers may return an invalid value.\n
+               The host driver shall initialise this register before starting a DMA transaction. After DMA has stopped,\n
+               the system address of the next contiguous data position can be read from this register.\n
+               This register is protected during a data transfer.\n
+               The host driver shall wait, until PRSSTAT[DLA] is cleared, before writing to this register.\n
+               Due to AHB burst limitations, if the burst must cross the 1 KB boundary, SDHC will automatically change\n
+               SEQ burst type to NSEQ.\n
+               Because this register supports dynamic address reflecting, when IRQSTAT[TC] bit is set, it automatically\n
+               alters the value of internal address counter, so SW cannot change this register when IRQSTAT[TC] is set."
+      description="DMA System Address"
+      value="0"
+      radix="16"
+      min="0" max="1073741823"
+   />
+
+   <!-- ____ ADSADDR ____ -->
+   <intOption key="sdhc_adsaddr_adsaddr" condition="sdhc_adsaddr_adsaddr_present"
+      enabledBy="sdhc_xfertyp_command==(9,10,11,12,13)"
+      valueFormat="%s"
+      typeName="SdhcAdmaSystemAddress"
+      baseType="uint32_t"
+      toolTip="Holds the word address of the executing command in the descriptor table.\n
+               At the start of ADMA, the host driver shall set the start address of the\n
+               Descriptor table. The ADMA engine increments this register address whenever\n
+               fetching a descriptor command. When the ADMA is stopped at the block gap, this\n
+               register indicates the address of the next executable descriptor command.\n
+               When the ADMA error interrupt is generated, this register shall hold the \n
+               valid descriptor address depending on the ADMA state.\n
+               The lower 2 bits are always 0 so the ADMA address is word-aligned.\n
+               Because this register supports dynamic address reflecting, when TC bit\n
+               is set, it automatically alters the value of internal address counter, \n
+               so SW cannot change this register when TC bit is set."
+      description="ADMA System Address"
+      value="0"
+      radix="16"
+      min="0" max="1073741823"
+   />
+
+   <!-- ____ CMDRSP ____ -->
+   <intOption key="sdhc_cmdrsp_cmdrsp0" condition="sdhc_cmdrsp_cmdrsp0_present"
+      hidden="true"
+      derived="true"
+      typeName="uint32_t"
+      toolTip="Response for usual commands:\n
+               Response type             Meaning of response        Field    Response registers\n
+               R1,R1b (normal response)  Card status                R[39:8]  CMDRSP0\n
+               R1b (Auto CMD12 response) Card status for auto CMD12 R[39:8]  CMDRSP3\n
+               R2 (CID, CSD register)    CID/CSD register [127:8]   R[127:8] CMDRSP3[23:0],CMDRSP2,CMDRSP1,CMDRSP0\n
+               R3 (OCR register)         OCR register for memory    R[39:8]  CMDRSP0\n
+               R4 (OCR register)         OCR register for I/O etc.  R[39:8]  CMDRSP0\n
+               R5, R5b                   SDIO response              R[39:8]  CMDRSP0\n
+               R6 (Publish RCA)          New published RCA[31:16]   R[39:9]  CMDRSP0\n
+                                          and card status[15:0]"
+      description="Command Response"
+   />
+
+   <intOption key="sdhc_datport_datcont" condition="sdhc_datport_datcont_present"
+      hidden="true"
+      derived="true"
+      typeName="SdhcDataContent"
+      baseType="uint32_t"
+      toolTip="The Buffer Data Port register is for 32-bit data access by the CPU or the external DMA.\n
+               When the internal DMA is enabled, any write to this register is ignored, and any read\n
+               from this register will always yield 0."
+      description="Data Content"
+      value="0"
+      min="0" max="0"
+   />
+
+   <bitfieldOption key="sdhc_prsstat"
+      hidden="true"
+      derived="true"
+      valueFormat="%s"
+      description="Present State"
+      toolTip="The host driver can get status of the SDHC from this 32-bit read-only register."
+      typeName="SdhcStateFlags"
+      enumClass="true"
+      baseType="uint32_t"
+      value="0" >
+      <choice name="CMD Line Signal Level"             enum="CmdSignalLevel"      value="=ToString(1&lt;&lt;23)" condition="sdhc_prsstat_clsl_present"    />
+      <choice name="Card Inserted"                     enum="CardPresent"         value="=ToString(1&lt;&lt;16)" condition="sdhc_prsstat_cins_present"    />
+      <choice name="Buffer Read Enable"                enum="BufferReadEnable"    value="=ToString(1&lt;&lt;11)" condition="sdhc_prsstat_bren_present"    />
+      <choice name="Buffer Write Enable"               enum="BufferWriteEnable"   value="=ToString(1&lt;&lt;10)" condition="sdhc_prsstat_bwen_present"    />
+      <choice name="Read Transfer Active"              enum="ReadTransferActive"  value="=ToString(1&lt;&lt;9)"  condition="sdhc_prsstat_rta_present"     />
+      <choice name="Write Transfer Active"             enum="WriteTransferActive" value="=ToString(1&lt;&lt;8)"  condition="sdhc_prsstat_wta_present"     />
+      <choice name="SD Clock Gated Off Internally"     enum="SdClockStatus"       value="=ToString(1&lt;&lt;7)"  condition="sdhc_prsstat_sdoff_present"   />
+      <choice name="SDHC clock Gated Off Internally"   enum="SdhcClockStatus"     value="=ToString(1&lt;&lt;6)"  condition="sdhc_prsstat_peroff_present"  />
+      <choice name="System Clock Gated Off Internally" enum="CardInterrupt"       value="=ToString(1&lt;&lt;5)"  condition="sdhc_prsstat_hckoff_present"  />
+      <choice name="Bus Clock Internal Gating"         enum="CardRemoval"         value="=ToString(1&lt;&lt;4)"  condition="sdhc_prsstat_ipgoff_present"  />
+      <choice name="SD Clock Stable"                   enum="CardInsertion"       value="=ToString(1&lt;&lt;3)"  condition="sdhc_prsstat_sdstb_present"   />
+      <choice name="Data Line Active"                  enum="DatLineStatus"       value="=ToString(1&lt;&lt;2)"  condition="sdhc_prsstat_dla_present"     />
+      <choice name="Command Inhibit (DAT)"             enum="DatCmdInhibit"       value="=ToString(1&lt;&lt;1)"  condition="sdhc_prsstat_cdihb_present"   />
+      <choice name="Command Inhibit (CMD)"             enum="CmdInhibit"          value="=ToString(1&lt;&lt;0)"  condition="sdhc_prsstat_cihb_present"    />
+   </bitfieldOption>
+
+   <intOption key="sdhc_prsstat_dlsl" condition="sdhc_prsstat_dlsl_present"
+      hidden="true"
+      typeName="uint32_t"
+      toolTip="Used to check the DAT line level to recover from errors, and for debugging.\n
+      This is especially useful in detecting the busy signal level from DAT[0].\n
+      The reset value is effected by the external pullup/pulldown resistors.\n
+      By default, the read value of this field after reset is 8’b11110111, when DAT[3] is\n
+      pulled down and the other lines are pulled up."
+      description="DAT Line Signal Levels"
+   />
+
+   <binaryOption key="sdhc_prsstat_clsl" condition="sdhc_prsstat_clsl_present"
+      hidden="true"
+      typeName="SdhcCmdSignalLevel"
+      baseType="uint32_t"
+      toolTip="Reflects the current level of the CMD line signal"
+      description="CMD Line Signal Level" >
+      <choice name="Low"  value="0" enum="Low" />
+      <choice name="High" value="1" enum="High" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_prsstat_cins" condition="sdhc_prsstat_cins_present"
+      hidden="true"
+      typeName="SdhcCardPresent"
+      baseType="uint32_t"
+      toolTip="Indicates whether a card has been inserted.\n
+               The SDHC debounces this signal so that the host driver will not need to wait for it to stabilize.\n
+               A change from 0 to 1 generates a card insertion interrupt in the Interrupt Status register.\n
+               A change from a 1 to 0 generates a card removal interrupt in the Interrupt Status register."
+      description="Card Inserted" >
+      <choice name="Power on reset or no card"  value="0" enum="PowerOnResetOrNoCard" />
+      <choice name="Card inserted"              value="1" enum="CardInserted" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_prsstat_bren" condition="sdhc_prsstat_bren_present"
+      hidden="true"
+      typeName="SdhcBufferReadEnable"
+      baseType="uint32_t"
+      toolTip="Used for non-DMA read transfers.\n
+               The SDHC may implement multiple buffers to transfer data efficiently.\n
+               This read-only flag indicates that valid data exists in the host side buffer."
+      description="Buffer Read Enable" >
+      <choice name="Valid data less than the watermark level in the buffer"    value="0" enum="LessThanWatermark" />
+      <choice name="Valid data greater than the watermark level in the buffer" value="1" enum="GreaterThanWatermark" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_prsstat_bwen" condition="sdhc_prsstat_bwen_present"
+      hidden="true"
+      typeName="SdhcBufferWriteEnable"
+      baseType="uint32_t"
+      toolTip="Used for non-DMA write transfers.\n
+      The SDHC can implement multiple buffers to transfer data efficiently.\n
+      This read-only flag indicates whether space is available for write data."
+      description="Buffer Write Enable" >
+      <choice name="Buffer can hold valid data less than the write watermark level"     value="0" enum="ValidDataLessThanTheWriteWatermarkLevel" />
+      <choice name="Buffer can hold valid data greater than the write watermark level"  value="1" enum="ValidDataGreaterThanTheWriteWatermarkLevel" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_prsstat_rta" condition="sdhc_prsstat_rta_present"
+      hidden="true"
+      typeName="SdhcReadTransferActive"
+      baseType="uint32_t"
+      toolTip="Used for detecting completion of a read transfer.\n
+               This bit is set for either of the following conditions:\n
+               - After the end bit of the read command.\n
+               - When writing a 1 to PROCTL[CREQ] to restart a read transfer.\n
+               A transfer complete interrupt is generated when this bit changes to 0.\n
+               This bit is cleared for either of the following conditions:\n
+               - When the last data block as specified by block length is transferred to the system.\n
+               - When all valid data blocks have been transferred from SDHC internal buffer to the system\n
+                 and no current block transfers are being sent as a result of the stop at block gap\n
+                 request being set to 1."
+      description="Read Transfer Active" >
+      <choice name="No valid data"      value="0" enum="NoValidData" />
+      <choice name="Transferring data"  value="1" enum="TransferringData" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_prsstat_wta" condition="sdhc_prsstat_wta_present"
+      hidden="true"
+      typeName="SdhcWriteTransferActive"
+      baseType="uint32_t"
+      toolTip="Indicates if a write transfer is active"
+      description="Write Transfer Active" >
+      <choice name="No valid data"      value="0" enum="NoValidData" />
+      <choice name="Transferring data"  value="1" enum="TransferringData" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_prsstat_sdoff" condition="sdhc_prsstat_sdoff_present"
+      hidden="true"
+      typeName="SdhcSdClockStatus"
+      baseType="uint32_t"
+      toolTip="Indicates that the SD clock is internally gated off, because of buffer\n
+               over/under-run or read pause without read wait assertion, or the driver\n
+               has cleared SYSCTL[SDCLKEN] to stop the SD clock.\n
+               Allows the host driver to debug data transaction on the SD bus."
+      description="SD Clock Gated Off Internally" >
+      <choice name="SD clock is active"     value="0" enum="Active" />
+      <choice name="SD clock is gated off"  value="1" enum="GatedOff" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_prsstat_peroff" condition="sdhc_prsstat_peroff_present"
+      hidden="true"
+      typeName="SdhcSdhcClockStatus"
+      baseType="uint32_t"
+      toolTip="Indicates that the SDHC clock is internally gated off.\n
+      This bit is for the host driver to debug transaction on the SD bus.\n
+      When INITA bit is set, SDHC sending 80 clock cycles to the card, SDCLKEN\n
+      must be 1 to enable the output card clock, otherwise the will never be gate off,\n
+      so and will be always active."
+      description="SDHC clock Gated Off Internally" >
+      <choice name="SDHC clock is active"     value="0" enum="Active" />
+      <choice name="SDHC clock is gated off"  value="1" enum="GatedOff" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_prsstat_hckoff" condition="sdhc_prsstat_hckoff_present"
+      hidden="true"
+      typeName="SdhcSystemClockStatus"
+      baseType="uint32_t"
+      toolTip="Indicates that the system clock is internally gated off. \n
+               This bit is for the host driver to debug during a data transfer."
+      description="System Clock Gated Off Internally" >
+      <choice name="System clock is active"     value="0" enum="Active" />
+      <choice name="System clock is gated off"  value="1" enum="GatedOff" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_prsstat_ipgoff" condition="sdhc_prsstat_ipgoff_present"
+      hidden="true"
+      typeName="SdhcBusClockStatus"
+      baseType="uint32_t"
+      toolTip="Indicates that the bus clock is internally gated off.\n
+               This bit is for the host driver to debug."
+      description="Bus Clock Internal Gating" >
+      <choice name="Bus clock is active"     value="0" enum="Active" />
+      <choice name="Bus clock is gated off"  value="1" enum="GatedOff" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_prsstat_sdstb" condition="sdhc_prsstat_sdstb_present"
+      hidden="true"
+      typeName="SdhcSdClockStatus"
+      baseType="uint32_t"
+      toolTip="Indicates that the internal card clock is stable.\n
+               This bit is for the host driver to poll clock status when changing the clock frequency.\n
+               It is recommended to clear SYSCTL[SDCLKEN] to remove glitch on the
+               card clock when the frequency is changing."
+      description="SD Clock Stable" >
+      <choice name="Clock is changing frequency and not stable"  value="0" enum="NotStable" />
+      <choice name="Clock is stable"                             value="1" enum="Stable" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_prsstat_dla" condition="sdhc_prsstat_dla_present"
+      hidden="true"
+      typeName="SdhcDatLineStatus"
+      baseType="uint32_t"
+      toolTip="Indicates whether one of the DAT lines on the SD bus is in use.\n
+               In the case of read transactions:\n
+               This status indicates whether a read transfer is executing on the SD bus. Changes in this value from\n
+               1 to 0, between data blocks, generates a block gap event interrupt in the Interrupt Status register.\n
+               This bit will be set in either of the following cases:\n
+               - After the end bit of the read command.\n
+               - When writing a 1 to PROCTL[CREQ] to restart a read transfer.\n
+               This bit will be cleared in either of the following cases:\n
+               - When the end bit of the last data block is sent from the SD bus to the SDHC.\n
+               - When the read wait state is stopped by a suspend command and the DAT2 line is released.\n
+               The SDHC will wait at the next block gap by driving read wait at the start of the interrupt cycle.\n
+               If the read wait signal is already driven (data buffer cannot receive data), the SDHC can wait for\n
+               a current block gap by continuing to drive the read wait signal. It is necessary to support read wait\n
+               to use the suspend resume function. This bit will remain 1 during read wait.\n
+               In the case of write transactions:\n
+               This status indicates that a write transfer is executing on the SD bus. Changes in this value from\n
+               1 to 0 generate a transfer complete interrupt in the interrupt status register.\n
+               This bit will be set in either of the following cases:\n
+               - After the end bit of the write command.\n
+               - When writing to 1 to PROCTL[CREQ] to continue a write transfer.\n
+               This bit will be cleared in either of the following cases:\n
+               - When the SD card releases write busy of the last data block, the SDHC will also detect if the output\n
+               is not busy. If the SD card does not drive the busy signal after the CRC status is received, the SDHC\n
+               shall assume the card drive Not busy.\n
+               - When the SD card releases write busy, prior to waiting for write transfer, and as a result of a\n
+               stop at block gap request.\n
+               In the case of command with busy pending:\n
+               This status indicates that a busy state follows the command and the data line is in use. This bit will\n
+               be cleared when the DAT0 line is released."
+      description="Data Line Active" >
+      <choice name="DAT line inactive"  value="0" enum="Inactive" />
+      <choice name="DAT line active"    value="1" enum="Active" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_prsstat_cdihb" condition="sdhc_prsstat_cdihb_present"
+      hidden="true"
+      typeName="SdhcDataCmdInhibit"
+      baseType="uint32_t"
+      toolTip="This status bit is generated if either the DLA or the RTA is set to 1. \n
+               If this bit is 0, it indicates that the SDHC can issue the next SD/MMC Command.\n
+               Commands with a busy signal belong to CDIHB, for example, R1b, R5b type.\n
+               Except in the case when the command busy is finished, changing from 1 to 0 generates\n
+               a transfer complete interrupt in the Interrupt Status register.\n
+               NOTE: The SD host driver can save registers for a suspend transaction after this\n
+               bit has changed from 1 to 0."
+      description="Command Inhibit (DAT)" >
+      <choice name="Can issue command which uses the DAT line"     value="0" enum="CanUsesDat" />
+      <choice name="Cannot issue command which uses the DAT line"  value="1" enum="CannotUseDat" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_prsstat_cihb" condition="sdhc_prsstat_cihb_present"
+      hidden="true"
+      typeName="SdhctCmdInhibit"
+      baseType="uint32_t"
+      toolTip="If this status bit is 0, it indicates that the CMD line is not in use and the SDHC\n
+               can issue a SD/MMC Command using the CMD line.\n
+               This bit is set also immediately after the Transfer Type register is written.\n
+               This bit is cleared when the command response is received.\n
+               Even if the CDIHB bit is set to 1, Commands using only the CMD line can be issued\n
+               if this bit is 0.\n
+               Changing from 1 to 0 generates a command complete interrupt in the interrupt\n
+               status register.\n
+               If the SDHC cannot issue the command because of a command conflict error or because\n
+               of a command not issued by auto CMD12 error, this bit will remain 1 and the command\n
+               complete is not set. The status of issuing an auto CMD12 does not show on this bit."
+      description="Command Inhibit (CMD)" >
+      <choice name="Can issue command using only CMD line"  value="0" enum="CanIssueCommandUsingOnlyCmdLine" />
+      <choice name="Cannot issue command"                   value="1" enum="CannotIssueCommand" />
+   </binaryOption >
+
+   <!-- ____ PROCTL ____ -->
+   <title description="Protocol Control Register" />
+
+   <binaryOption key="sdhc_proctl_wecrm" condition="sdhc_proctl_wecrm_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcWakeupOnCardRemoval"
+      baseType="uint32_t"
+      toolTip="Enables a wakeup event, via IRQSTAT[CRM]. FN_WUS (Wake Up Support) in CIS does not effect this bit.
+When this bit is set, IRQSTAT[CRM] and the SDHC interrupt can be asserted without SD_CLK toggling.
+When the wakeup feature is not enabled, the SD_CLK must be active to assert IRQSTAT[CRM] and the
+SDHC interrupt."
+      description="Wakeup Event Enable On SD Card Removal" >
+      <choice name="Disabled"    value="0" enum="Disabled" />
+      <choice name="Enabled"     value="1" enum="Enabled" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_proctl_wecins" condition="sdhc_proctl_wecins_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcWakeupOnCardInsertion"
+      baseType="uint32_t"
+      toolTip="Enables a wakeup event, via IRQSTAT[CINS]. FN_WUS (Wake Up Support) in CIS does not effect this
+bit. When this bit is set, IRQSTATEN[CINSEN] and the SDHC interrupt can be asserted without SD_CLK
+toggling. When the wakeup feature is not enabled, the SD_CLK must be active to assert
+IRQSTATEN[CINSEN] and the SDHC interrupt."
+      description="Wakeup Event Enable On SD Card Insertion" >
+      <choice name="Disabled"    value="0" enum="Disabled" />
+      <choice name="Enabled"     value="1" enum="Enabled" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_proctl_wecint" condition="sdhc_proctl_wecint_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcWakeupOnCardInterrupt"
+      baseType="uint32_t"
+      toolTip="Enables a wakeup event, via IRQSTAT[CINT]. This bit can be set to 1 if FN_WUS (Wake Up Support) in
+CIS is set to 1. When this bit is set, the card interrupt status and the SDHC interrupt can be asserted
+without SD_CLK toggling. When the wakeup feature is not enabled, the SD_CLK must be active to assert
+the card interrupt status and the SDHC interrupt."
+      description="Wakeup Event Enable On Card Interrupt" >
+      <choice name="Disabled"    value="0" enum="Disabled" />
+      <choice name="Enabled"     value="1" enum="Enabled" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_proctl_iabg" condition="sdhc_proctl_iabg_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcInterruptAtBlockGap"
+      baseType="uint32_t"
+      toolTip="Valid only in 4-bit mode, of the SDIO card, and selects a sample point in the interrupt cycle. Setting to 1
+enables interrupt detection at the block gap for a multiple block transfer. Setting to 0 disables interrupt
+detection during a multiple block transfer. If the SDIO card can't signal an interrupt during a multiple block
+transfer, this bit must be set to 0 to avoid an inadvertent interrupt. When the host driver detects an SDIO
+card insertion, it shall set this bit according to the CCCR of the card."
+      description="Interrupt At Block Gap" >
+      <choice name="Disabled"    value="0" enum="Disabled" />
+      <choice name="Enabled"     value="1" enum="Enabled" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_proctl_rwctl" condition="sdhc_proctl_rwctl_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcReadWaitControl"
+      baseType="uint32_t"
+      toolTip="The read wait function is optional for SDIO cards. If the card supports read wait, set this bit to enable use
+of the read wait protocol to stop read data using the DAT[2] line. Otherwise, the SDHC has to stop the SD
+Clock to hold read data, which restricts commands generation. When the host driver detects an SDIO card
+insertion, it shall set this bit according to the CCCR of the card. If the card does not support read wait, this
+bit shall never be set to 1, otherwise DAT line conflicts may occur. If this bit is set to 0, stop at block gap
+during read operation is also supported, but the SDHC will stop the SD Clock to pause reading operation."
+      description="Read Wait Control" >
+      <choice name="Stop SD clock at block gap if SABGREQ is set"         value="0" enum="StopClock" />
+      <choice name="Assert read wait at block gap if SABGREQ bit is set"  value="1" enum="ReadWait" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_proctl_creq" condition="sdhc_proctl_creq_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcContinueRequest"
+      baseType="uint32_t"
+      toolTip="Used to restart a transaction which was stopped using the PROCTL[SABGREQ]. When a suspend
+operation is not accepted by the card, it is also by setting this bit to restart the paused transfer. To cancel
+stop at the block gap, set PROCTL[SABGREQ] to 0 and set this bit to 1 to restart the transfer.
+The SDHC automatically clears this bit, therefore it is not necessary for the host driver to set this bit to 0. If
+both PROCTL[SABGREQ] and this bit are 1, the continue request is ignored."
+      description="Continue Request" >
+      <choice name="No effect"   value="0" enum="NoEffect" />
+      <choice name="Restart"     value="1" enum="Restart" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_proctl_sabgreq" condition="sdhc_proctl_sabgreq_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcStopAtBlockGapRequest"
+      baseType="uint32_t"
+      toolTip="Used to stop executing a transaction at the next block gap for both DMA and non-DMA transfers. Until the
+IRQSTATEN[TCSEN] is set to 1, indicating a transfer completion, the host driver shall leave this bit set to
+1. Clearing both PROCTL[SABGREQ] and PROCTL[CREQ] does not cause the transaction to restart.
+Read Wait is used to stop the read transaction at the block gap. The SDHC will honor the
+PROCTL[SABGREQ] for write transfers, but for read transfers it requires that SDIO card support read
+wait. Therefore, the host driver shall not set this bit during read transfers unless the SDIO card supports
+read wait and has set PROCTL[RWCTL] to 1, otherwise the SDHC will stop the SD bus clock to pause the
+read operation during block gap. In the case of write transfers in which the host driver writes data to the
+data port register, the host driver shall set this bit after all block data is written. If this bit is set to 1, the
+host driver shall not write data to the Data Port register after a block is sent. Once this bit is set, the host
+driver shall not clear this bit before IRQSTATEN[TCSEN] is set, otherwise the SDHC's behavior is
+undefined.
+This bit effects PRSSTAT[RTA], PRSSTAT[WTA], and PRSSTAT[CDIHB]."
+      description="Stop At Block Gap Request" >
+      <choice name="Transfer"    value="0" enum="Transfer" />
+      <choice name="Stop"        value="1" enum="Stop" />
+   </binaryOption >
+
+   <choiceOption key="sdhc_proctl_dmas" condition="sdhc_proctl_dmas_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcDmaMode"
+      baseType="uint32_t"
+      toolTip="This field is valid while DMA (SDMA or ADMA) is enabled and selects the DMA mode."
+      description="DMA Select" >
+      <choice name="No DMA or simple DMA is selected"  value="0" enum="NoDmaOrSimpleDma" />
+      <choice name="ADMA1 is selected"                 value="1" enum="Adma1" />
+      <choice name="ADMA2 is selected"                 value="2" enum="Adma2" />
+   </choiceOption >
+
+   <choiceOption key="sdhc_proctl_cdss" condition="sdhc_proctl_cdss_present&amp;&amp;sdhc_proctl_cdtl_present"
+      hidden="true"
+      derived="true"
+      valueFormat="SDHC_PROCTL_CDSS(%s),SDHC_PROCTL_CDTL(%s)"
+      typeName="SdhcCardDetectTestMode"
+      baseType="uint32_t"
+      toolTip="Controls the functioning of the card detection."
+      description="DMA Select" >
+      <choice name="Card detection operates normally"   value="0,0" enum="Disabled"         />
+      <choice name="Test Mode - force card not present" value="1,0" enum="ForcedNotPresent" />
+      <choice name="Test mode - force card present"     value="1,1" enum="ForcedPresent"    />
+   </choiceOption >
+
+   <choiceOption key="sdhc_proctl_emode" condition="sdhc_proctl_emode_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcEndianMode"
+      baseType="uint32_t"
+      toolTip="The SDHC supports all four endian modes in data transfer."
+      description="Endian Mode" >
+      <choice name="Big endian mode"            value="0" enum="BigEndianMode"         />
+      <choice name="Half word big endian mode"  value="1" enum="HalfWordBigEndianMode" />
+      <choice name="Little endian mode"         value="2" enum="LittleEndianMode"      isDefault="true" />
+   </choiceOption >
+
+   <binaryOption key="sdhc_proctl_d3cd" condition="sdhc_proctl_d3cd_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcCardDetectMode"
+      baseType="uint32_t"
+      toolTip="If this bit is set, DAT3 should be pulled down to act as a card detection pin.\n
+               Be cautious when using this feature, because DAT3 is also a chip-select for the\n
+               SPI mode. A pulldown on this pin and CMD0 may set the card into the SPI mode,\n
+               which the SDHC does not support.\n
+               Note: Enable this option if SDIO interrupt is used."
+      description="Enabled use of DAT3 as Card Detection Pin" >
+      <choice name="DAT3 not used"                 value="0" enum="Disabled" />
+      <choice name="DAT3 used  for card detection" value="1" enum="UseDat3" />
+   </binaryOption >
+
+   <choiceOption key="sdhc_proctl_dtw" condition="sdhc_proctl_dtw_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcTransferWidth"
+      baseType="uint32_t"
+      toolTip="Selects the data width of the SD bus for a data transfer. The host driver shall set it to match the data width
+of the card. Possible data transfer width is 1-bit, 4-bits or 8-bits."
+      description="Data Transfer Width" >
+      <choice name="1-bit mode"  value="0" enum="1BitMode" />
+      <choice name="4-bit mode"  value="1" enum="4BitMode" />
+      <choice name="8-bit mode"  value="2" enum="8BitMode" />
+   </choiceOption >
+
+   <binaryOption key="sdhc_proctl_lctl" condition="sdhc_proctl_lctl_present"
+      hidden="true"
+      derived="true"
+      typeName="SdhcLed"
+      baseType="uint32_t"
+      toolTip="This bit, fully controlled by the host driver, is used to caution the user not to remove the card while the card
+is being accessed. If the software is going to issue multiple SD commands, this bit can be set during all
+these transactions. It is not necessary to change for each transaction. When the software issues multiple
+SD commands, setting the bit once before the first command is sufficient: it is not necessary to reset the
+bit between commands."
+      description="LED Control" >
+      <choice name="LED off"     value="0" enum="Off" />
+      <choice name="LED on"      value="1" enum="On" />
+   </binaryOption >
+
+   <!-- ____ SYSCTL ____ -->
+   <title description="System Control Register" />
+
+   <binaryOption key="sdhc_sysctl_inita" condition="sdhc_sysctl_inita_present"
+      hidden="true"
+      derived="true"
+      typeName="SdhcInitialise"
+      baseType="uint32_t"
+      toolTip="When this bit is set, 80 SD-clocks are sent to the card. After the 80 clocks are sent, this bit is self-cleared.
+This bit is very useful during the card power-up period when 74 SD-clocks are needed and the clock auto
+gating feature is enabled. Writing 1 to this bit when this bit is already 1 has no effect. Writing 0 to this bit at
+any time has no effect. When either of the PRSSTAT[CIHB] and PRSSTAT[CDIHB] bits are set, writing 1
+to this bit is ignored, that is, when command line or data lines are active, write to this bit is not allowed.\n
+On the other hand, when this bit is set, that is, during intialisation active period, it is allowed to issue command,
+and the command bit stream will appear on the CMD pad after all 80 clock cycles are done. So when this
+command ends, the driver can make sure the 80 clock cycles are sent out. This is very useful when the
+driver needs send 80 cycles to the card and does not want to wait till this bit is self-cleared."
+      description="Initialisation Active" >
+      <choice name="Not active"              value="0" enum="Inactive" />
+      <choice name="Start Init/Init active"  value="1" enum="active"   />
+   </binaryOption >
+
+   <binaryOption key="sdhc_sysctl_rstd" condition="sdhc_sysctl_rstd_present"
+      hidden="true"
+      derived="true"
+      typeName="SdhcDatReset"
+      baseType="uint32_t"
+      toolTip="Only part of the data circuit is reset. DMA circuit is also reset.\n
+The following registers and bits are cleared by this bit:\n
+- Data Port register\n
+- Buffer Is Cleared And Initialized.Present State register\n
+- Buffer Read Enable\n
+- Buffer Write Enable\n
+- Read Transfer Active\n
+- Write Transfer Active\n
+- DAT Line Active\n
+- Command Inhibit (DAT) Protocol Control register\n
+- Continue Request\n
+- Stop At Block Gap Request Interrupt Status register\n
+- Buffer Read Ready\n
+- Buffer Write Ready\n
+- DMA Interrupt\n
+- Block Gap Event\n
+- Transfer Complete"
+      description="Software Reset For DAT Line" >
+      <choice name="No reset"    value="0" enum="NoReset" />
+      <choice name="Reset"       value="1" enum="Reset" />
+   </binaryOption >
+
+   <bitfieldOption key="sdhc_sysctl_reset"
+      hidden="true"
+      derived="true"
+      valueFormat="%s"
+      description="Software Reset"
+      toolTip="Selects hardware to reset"
+      typeName="SdhcReset"
+      enumClass="true"
+      baseType="uint32_t"
+      value="0" >
+      <choice name="DAT Line" enum="Dat" value="=ToString(1&lt;&lt;26)" condition="sdhc_sysctl_rstd_present"  />
+      <choice name="CMD Line" enum="Cmd" value="=ToString(1&lt;&lt;25)" condition="sdhc_sysctl_rstc_present"  />
+      <choice name="ALL"      enum="All" value="=ToString(1&lt;&lt;24)" condition="sdhc_sysctl_rsta_present"  />
+   </bitfieldOption>
+
+   <binaryOption key="sdhc_sysctl_rstc" condition="sdhc_sysctl_rstc_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcCmdReset"
+      baseType="uint32_t"
+      toolTip="Only part of the command circuit is reset.\n
+               The following registers and bits are cleared by this bit:\n
+               - PRSSTAT[CIHB]\n
+               - IRQSTAT[CC]"
+      description="Software Reset For CMD Line" >
+      <choice name="No reset"    value="0" enum="NoReset" />
+      <choice name="Reset"       value="1" enum="Reset" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_sysctl_rsta" condition="sdhc_sysctl_rsta_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcResetAll"
+      baseType="uint32_t"
+      toolTip="Affects the entire host controller except for the card detection circuit. Register bits of type ROC, RW,
+RW1C, RWAC are cleared. During its Initialisation, the host driver shall set this bit to 1 to reset the SDHC.
+The SDHC shall reset this bit to 0 when the capabilities registers are valid and the host driver can read
+them. Additional use of software reset for all does not affect the value of the capabilities registers. After
+this bit is set, it is recommended that the host driver reset the external card and reinitialize it."
+      description="Software Reset For ALL" >
+      <choice name="No reset"    value="0" enum="NoReset" />
+      <choice name="Reset"       value="1" enum="Reset" />
+   </binaryOption >
+
+   <choiceOption key="sdhc_sysctl_dtocv" condition="sdhc_sysctl_dtocv_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcDataTimeout"
+      baseType="uint32_t"
+      toolTip="Determines the interval by which DAT line timeouts are detected. See IRQSTAT[DTOE] for information on
+factors that dictate time-out generation. Time-out clock frequency will be generated by dividing the base
+clock SDCLK value by this value.\n
+The host driver can clear IRQSTATEN[DTOESEN] to prevent inadvertent time-out events."
+      description="Data Timeout Counter Value"
+   >
+   <choiceExpansion keys="i" dim="15"
+      name='="SDCLK x 2^"+ToString(%(i)+13)' value="%(i)"
+      enum='="SDCLKx2_"+ToString(%(i)+13)' />
+   </choiceOption>
+
+   <aliasOption key="/SIM/sim_sopt2_sdhcsrc[0]" locked="false" />
+   <aliasOption key="/SIM/system_sdhc_clock[0]" />
+
+   <choiceOption key="sdhc_sysctl_sdclkfs" condition="sdhc_sysctl_sdclkfs_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcClockPrescaler"
+      baseType="uint32_t"
+      toolTip="Used to select the frequency of the SDCLK pin\n
+               This prescaler is used in conjunction with sdhc_sysctl_dvs to determine the SDCLK frequency:\n
+               Clock frequency = (Base clock) / (prescaler * divisor)"
+      description="SDCLK Prescale Select" >
+      <choiceExpansion  keys="i" dim="8"
+         name='="Base clock divided by "+ToString(1&lt;&lt;(%(i)+1))' value="=ToString(1&lt;&lt;%(i))"
+         enum='="DivBy"+ToString(1&lt;&lt;(%(i)+1))' isDefault="=%(i)==7" />
+   </choiceOption >
+
+   <choiceOption key="sdhc_sysctl_dvs" condition="sdhc_sysctl_dvs_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcSysctlDvs"
+      baseType="uint32_t"
+      toolTip="Used to select the frequency of the SDCLK pin\n
+               This divisor is used in conjunction with sdhc_sysctl_sdclkfs to determine the SDCLK frequency:\n
+               Clock frequency = (Base clock) / (prescaler * divisor)"
+      description="SDCLK Clock Divisor" >
+      <choiceExpansion keys="i" dim="16"
+         name='="Prescale clock divided by "+ToString(%(i)+1)' value="%(i)"
+         enum='="DivBy"+ToString(%(i)+1)' />
+   </choiceOption>
+   <intOption key="sdhc_clock_freq"
+      derived="true"
+      locked="true"
+      ref="(/SIM/system_sdhc_clock[0])/(1&lt;&lt;(sdhc_sysctl_sdclkfs+1))/(sdhc_sysctl_dvs+1)"
+      description="SDHC Clock frequency"
+      toolTip="Calculated SDHC Clock frequency"
+      units="Hz"
+   />
+   <binaryOption key="sdhc_sysctl_sdclken" condition="sdhc_sysctl_sdclken_present"
+      hidden="true"
+      derived="true"
+      typeName="SdhcClock"
+      baseType="uint32_t"
+      toolTip="The host controller shall stop SDCLK when writing this bit to 0.\n
+               SDCLK frequency can be changed when this bit is 0. Then, the host controller shall\n
+               maintain the same clock frequency until SDCLK is stopped (stop at SDCLK = 0).\n
+               If the IRQSTAT[CINS] is cleared, this bit must be cleared by the host driver to save power."
+      description="SD Clock Enable" >
+      <choice name="Clock disabled"  value="0" enum="Disabled" />
+      <choice name="Clock enabled"   value="1" enum="Enabled" isDefault="true" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_sysctl_peren" condition="sdhc_sysctl_peren_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcPeripheralClock"
+      baseType="uint32_t"
+      toolTip="If this bit is set, SDHC clock will always be active and no automatic gating is applied.\n
+               Thus the SDCLK is active except for when auto gating-off during buffer danger (buffer about to\n
+               over-run or under-run). \n
+               When this bit is cleared, the SDHC clock will be automatically off whenever there is no transaction\n
+               on the SD bus. \n
+               Because this bit is only a feature enabling bit, clearing this bit does not stop SDCLK immediately.\n
+               The SDHC clock will be internally gated off, if none of the following factors are met:\n
+               - The cmd part is reset, or \n
+               - Data part is reset, or \n
+               - A soft reset, or \n
+               - The cmd is about to send, or \n
+               - Clock divisor is just updated, or \n
+               - Continue request is just set, or \n
+               - This bit is set, or \n
+               - Card insertion is detected, or \n
+               - Card removal is detected, or"
+      description="Peripheral Clock Enable" >
+      <choice name="SDHC internally gated off"         value="0" enum="InternallyGatedOff"       />
+      <choice name="SDHC not automatically gated off"  value="1" enum="NotAutomaticallyGatedOff" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_sysctl_hcken" condition="sdhc_sysctl_hcken_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcSystemClock"
+      baseType="uint32_t"
+      toolTip="If this bit is set, system clock will always be active and no automatic gating is applied.\n
+               When this bit is cleared, the system clock will be automatically off when no data transfer is on the SD bus."
+      description="System Clock Enable" >
+      <choice name="System clock internally gated off"         value="0" enum="InternallyGatedOff" />
+      <choice name="System clock not automatically gated off"  value="1" enum="NotAutomaticallyGatedOff" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_sysctl_ipgen" condition="sdhc_sysctl_ipgen_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcBusClock"
+      baseType="uint32_t"
+      toolTip="If this bit is set, bus clock will always be active and no automatic gating is applied.\n
+               The bus clock will be internally gated off, if none of the following factors are met:\n
+               - The cmd part is reset, or \n
+               - Data part is reset, or \n
+               - Soft reset, or \n
+               - The cmd is about to send, or \n
+               - Clock divisor is just updated, or \n
+               - Continue request is just set, or \n
+               - This bit is set, or \n
+               - Card insertion is detected, or \n
+               - Card removal is detected, or \n
+               - Card external interrupt is detected, or \n
+               - The SDHC clock is not gated off"
+      description="IPG Clock Enable" >
+      <choice name="Bus clock internally gated off"         value="0" enum="InternallyGatedOff" />
+      <choice name="Bus clock not automatically gated off"  value="1" enum="NotAutomaticallyGatedOff" />
+   </binaryOption >
 
 
-<!-- Setters and getters -->
+   <!-- ____ IRQSTAT ____ -->
 
-<!--   Default Initialisation value -->
+   <bitfieldOption key="sdhc_irqstat"
+      hidden="true"
+      derived="true"
+      valueFormat="%s"
+      description="Interrupt Status Flags"
+      toolTip="Bitmask indicating individual interrupt flags.\n
+               Note: To successfully clear the Card Interrupt, it is required that the card stops \n
+               asserting the interrupt, otherwise the CINT bit will be immediately asserted again."
+      typeName="SdhcStatusFlag"
+      enumClass="true"
+      baseType="uint32_t"
+      value="0"
+      >
+      <choice name="DMA Error"             enum="DmaError"            value="=ToString(1&lt;&lt;28)" condition="sdhc_irqstat_dmae_present"  />
+      <choice name="Auto CMD12 Error"      enum="AutoCommand12Error"  value="=ToString(1&lt;&lt;24)" condition="sdhc_irqstat_ac12e_present" />
+      <choice name="Data End Bit Error"    enum="DataEndBitError"     value="=ToString(1&lt;&lt;22)" condition="sdhc_irqstat_debe_present"  />
+      <choice name="Data CRC Error"        enum="DataCrcError"        value="=ToString(1&lt;&lt;21)" condition="sdhc_irqstat_dce_present"   />
+      <choice name="Data Timeout Error"    enum="DataTimeoutError"    value="=ToString(1&lt;&lt;20)" condition="sdhc_irqstat_dtoe_present"  />
+      <choice name="Command Index Error"   enum="CommandIndexError"   value="=ToString(1&lt;&lt;19)" condition="sdhc_irqstat_cie_present"   />
+      <choice name="Command End Bit Error" enum="CommandEndBitError"  value="=ToString(1&lt;&lt;18)" condition="sdhc_irqstat_cebe_present"  />
+      <choice name="Command CRC Error"     enum="CommandCrcError"     value="=ToString(1&lt;&lt;17)" condition="sdhc_irqstat_cce_present"   />
+      <choice name="Command Timeout Error" enum="CommandTimeoutError" value="=ToString(1&lt;&lt;16)" condition="sdhc_irqstat_ctoe_present"  />
+      <choice name="Card Interrupt"        enum="CardInterrupt"       value="=ToString(1&lt;&lt;8)"  condition="sdhc_irqstat_cint_present"  />
+      <choice name="Card Removal"          enum="CardRemoval"         value="=ToString(1&lt;&lt;7)"  condition="sdhc_irqstat_crm_present"   />
+      <choice name="Card Insertion"        enum="CardInsertion"       value="=ToString(1&lt;&lt;6)"  condition="sdhc_irqstat_cins_present"  />
+      <choice name="Buffer Read Ready"     enum="BufferReadReady"     value="=ToString(1&lt;&lt;5)"  condition="sdhc_irqstat_brr_present"   />
+      <choice name="Buffer Write Ready"    enum="BufferWriteReady"    value="=ToString(1&lt;&lt;4)"  condition="sdhc_irqstat_bwr_present"   />
+      <choice name="DMA Interrupt"         enum="DmaComplete"         value="=ToString(1&lt;&lt;3)"  condition="sdhc_irqstat_dint_present"  />
+      <choice name="Block Gap Event"       enum="BlockGapEvent"       value="=ToString(1&lt;&lt;2)"  condition="sdhc_irqstat_bge_present"   />
+      <choice name="Transfer Complete"     enum="TransferComplete"    value="=ToString(1&lt;&lt;1)"  condition="sdhc_irqstat_tc_present"    />
+      <choice name="Command Complete"      enum="CommandComplete"     value="=ToString(1&lt;&lt;0)"  condition="sdhc_irqstat_cc_present"    />
+   </bitfieldOption>
 
-<!--   Configure methods -->
+   <!-- ____ IRQSTATEN ____ -->
 
-   <!-- ************* Common ****************** -->
+   <bitfieldOption key="sdhc_irqstaten"
+      derivedFrom="sdhc_irqstat"
+      valueFormat="%s"
+      enabledBy="enablePeripheralSupport"
+      description="Interrupt Status Flag Enables"
+      toolTip="Bitmask allowing individual interrupt status events to set status flags.\n
+               If any bit is cleared, the corresponding interrupt status flag is held cleared."
+      typeName="SdhcStatusFlagEnable"
+      enumClass="true"
+      baseType="uint32_t"
+      value="0b10001011111110000000100111111"
+      >
+   </bitfieldOption>
+
+   <!-- ____ IRQSIGEN ____ -->
+
+   <bitfieldOption key="sdhc_irqsigen"
+      derivedFrom="sdhc_irqstat"
+      valueFormat="%s"
+      enabledBy="enablePeripheralSupport"
+      description="Interrupt Enables"
+      toolTip="Bitmask selecting which interrupt status flags are enabled as interrupt sources.\n
+               If any bit is cleared, the corresponding interrupt status flag is ignored."
+      typeName="SdhcInterruptEnable"
+      enumClass="true"
+      baseType="uint32_t"
+      value="0" >
+   </bitfieldOption>
+
+   <!-- ____ AC12ERR ____ -->
+
+   <bitfieldOption key="sdhc_ac12err"
+      valueFormat="%s"
+      hidden="true"
+      derived="true"
+      description="Auto CMD12 Error Status"
+      toolTip="When the AC12ESEN bit in the Status register is set, this register identifies what kind of error\n
+               the Auto CMD12 indicated.\n
+               This register is valid only when the Auto CMD12 Error status bit is set."
+      typeName="SdhcAc12Error"
+      enumClass="true"
+      baseType="uint32_t" >
+      <choice name="Auto CMD12 Cmd Not Issued Error"  enum="CmdNotIssuedError"   value="=ToString(1&lt;&lt;7)" condition="sdhc_ac12err_cnibac12e_present" />
+      <choice name="Auto CMD12 Index Error"           enum="IndexError"          value="=ToString(1&lt;&lt;4)" condition="sdhc_ac12err_ac12ie_present"    />
+      <choice name="Auto CMD12 CRC Error"             enum="CrcError"            value="=ToString(1&lt;&lt;3)" condition="sdhc_ac12err_ac12ce_present"    />
+      <choice name="Auto CMD12 End Bit Error"         enum="EndBitError"         value="=ToString(1&lt;&lt;2)" condition="sdhc_ac12err_ac12ebe_present"   />
+      <choice name="Auto CMD12 Timeout Error"         enum="TimeoutError"        value="=ToString(1&lt;&lt;1)" condition="sdhc_ac12err_ac12toe_present"   />
+      <choice name="Auto CMD12 Cmd Not Executed"      enum="CmdNotExecutedError" value="=ToString(1&lt;&lt;0)" condition="sdhc_ac12err_ac12ne_present"    />
+   </bitfieldOption>
+
+   <!-- ____ HTCAPBLT ____ -->
+
+   <binaryOption key="sdhc_htcapblt_vs33" condition="sdhc_htcapblt_vs33_present"
+      hidden="true"
+      typeName="Sdhc3V3Support"
+      baseType="uint32_t"
+      toolTip="Indicates availability of 3.3V support"
+      description="Voltage Support 3.3 V" >
+      <choice name="3.3 V not supported"  value="0" enum="NotSupported" />
+      <choice name="3.3 V supported"      value="1" enum="Supported" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_htcapblt_srs" condition="sdhc_htcapblt_srs_present"
+      hidden="true"
+      typeName="SdhcHaltSupport"
+      baseType="uint32_t"
+      toolTip="This bit indicates whether the SDHC supports suspend / resume functionality.\n
+               If this bit is 0, the suspend and resume mechanism, as well as the read wait,\n
+               are not supported."
+      description="Suspend/Resume Support" >
+      <choice name="Not supported"  value="0" enum="NotSupported" />
+      <choice name="Supported"      value="1" enum="Supported" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_htcapblt_dmas" condition="sdhc_htcapblt_dmas_present"
+      hidden="true"
+      typeName="SdhcDmaSupport"
+      baseType="uint32_t"
+      toolTip="This bit indicates whether the SDHC is capable of using the internal DMA\n
+               to transfer data between system memory and the data buffer directly."
+      description="DMA Support" >
+      <choice name="DMA not supported"  value="0" enum="DmaNotSupported" />
+      <choice name="DMA supported"      value="1" enum="DmaSupported" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_htcapblt_hss" condition="sdhc_htcapblt_hss_present"
+      hidden="true"
+      typeName="SdhcHighSpeedSupport"
+      baseType="uint32_t"
+      toolTip="This bit indicates whether the SDHC supports high speed mode and\n
+               the host system can supply a SD Clock frequency from 25 MHz to 50 MHz."
+      description="High Speed Support" >
+      <choice name="High speed not supported"  value="0" enum="HighSpeedNotSupported" />
+      <choice name="High speed supported"      value="1" enum="HighSpeedSupported" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_htcapblt_admas" condition="sdhc_htcapblt_admas_present"
+      hidden="true"
+      typeName="SdhcAdmaSupport"
+      baseType="uint32_t"
+      toolTip="Indicates whether the SDHC supports the ADMA feature."
+      description="ADMA Support" >
+      <choice name="Advanced DMA not supported"  value="0" enum="AdvancedDmaNotSupported" />
+      <choice name="Advanced DMA supported"      value="1" enum="AdvancedDmaSupported" />
+   </binaryOption >
+
+   <choiceOption key="sdhc_htcapblt_mbl" condition="sdhc_htcapblt_mbl_present"
+      hidden="true"
+      typeName="SdhcMaxBlockSize"
+      baseType="uint32_t"
+      toolTip="This value indicates the maximum block size that the host driver can read and write\n
+               to the buffer in the SDHC. The buffer shall transfer block size without wait cycles."
+      description="Max Block Length" >
+      <choice name="512 bytes"   value="0" enum="512Bytes" />
+      <choice name="1024 bytes"  value="1" enum="1024Bytes" />
+      <choice name="2048 bytes"  value="2" enum="2048Bytes" />
+      <choice name="4096 bytes"  value="3" enum="4096Bytes" />
+   </choiceOption >
+
+   <!-- ____ WML ____ -->
+
+   <intOption key="sdhc_wml_wrwml" condition="sdhc_wml_wrwml_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcWriteWaterLevel"
+      baseType="uint32_t"
+      toolTip="The number of words used as the watermark level (FIFO threshold) in a\n
+               DMA write operation. Also the number of words as a sequence of write bursts\n
+               in back-to-back mode."
+      description="Write Watermark Level"
+      value="0b10000"
+      min="0" max="128"
+   />
+
+   <intOption key="sdhc_wml_rdwml" condition="sdhc_wml_rdwml_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcReadWaterLevel"
+      baseType="uint32_t"
+      toolTip="The number of words used as the watermark level (FIFO threshold) in a\n
+               DMA read operation. Also the number of words as a sequence of read bursts\n
+               in back-to-back mode."
+      description="Read Watermark Level"
+      value="0b10000"
+      min="0" max="128"
+   />
+
+   <!-- ____ FEVT ____ -->
+
+   <bitfieldOption key="sdhc_fevt"
+      hidden="true"
+      derived="true"
+      valueFormat="%s"
+      description="Force Event"
+      toolTip="Bitmask used to force events.\n
+               The Force Event (FEVT) register is not a physically implemented register. Rather, \n
+               it is an address at which the Interrupt Status register can be written if the\n
+               corresponding bit of the Interrupt Status Enable register is set.\n
+               Writing 1 to this register sets the corresponding bit of the ISR\n
+               Requires SYSCTL[IPGEN] so that bus clock is always active."
+      typeName="SdhcForceError"
+      enumClass="true"
+      baseType="uint32_t" >
+      <choice name="Card Interrupt"                         enum="CardInterrupt"         value="=ToString(1&lt;&lt;31)" condition="sdhc_fevt_cint_present"  />
+      <choice name="DMA Error"                              enum="DmaError"              value="=ToString(1&lt;&lt;28)" condition="sdhc_fevt_dmae_present"  />
+      <choice name="Auto CMD12 Error"                       enum="Acmd12Error"           value="=ToString(1&lt;&lt;24)" condition="sdhc_fevt_ac12e_present" />
+      <choice name="Data End Bit Error"                     enum="DataEndBitError"       value="=ToString(1&lt;&lt;22)" condition="sdhc_fevt_debe_present"  />
+      <choice name="Data CRC Error"                         enum="DataCrcError"          value="=ToString(1&lt;&lt;21)" condition="sdhc_fevt_dce_present"   />
+      <choice name="Data Timeout Error"                     enum="DataTimeoutError"      value="=ToString(1&lt;&lt;20)" condition="sdhc_fevt_dtoe_present"  />
+      <choice name="Command Index Error"                    enum="CommandIndexError"     value="=ToString(1&lt;&lt;19)" condition="sdhc_fevt_cie_present"   />
+      <choice name="Command End Bit Error"                  enum="CommandEndBitError"    value="=ToString(1&lt;&lt;18)" condition="sdhc_fevt_cebe_present"  />
+      <choice name="Command CRC Error"                      enum="CommandCrcError"       value="=ToString(1&lt;&lt;17)" condition="sdhc_fevt_cce_present"   />
+      <choice name="Command Timeout Error"                  enum="CommandTimeoutError"   value="=ToString(1&lt;&lt;16)" condition="sdhc_fevt_ctoe_present"  />
+      <choice name="Auto CMD12 Cmd Not Issued Error"        enum="Cmd12NotIssuedError"   value="=ToString(1&lt;&lt;7)"  condition="sdhc_fevt_cnibac12e_present" />
+      <choice name="Auto CMD12 Index Error"                 enum="Cmd12IndexError"       value="=ToString(1&lt;&lt;4)"  condition="sdhc_fevt_ac12ie_present"    />
+      <choice name="Auto CMD12 CRC Error"                   enum="Cmd12CrcError"         value="=ToString(1&lt;&lt;3)"  condition="sdhc_fevt_ac12ce_present"    />
+      <choice name="Auto CMD12 End Bit Error"               enum="Cmd12EndBitError"      value="=ToString(1&lt;&lt;2)"  condition="sdhc_fevt_ac12ebe_present"   />
+      <choice name="Auto CMD12 Timeout Error"               enum="Cmd12TimeoutError"     value="=ToString(1&lt;&lt;1)"  condition="sdhc_fevt_ac12toe_present"   />
+      <choice name="Auto CMD12 Cmd Not Executed"            enum="Cmd12NotExecutedError" value="=ToString(1&lt;&lt;0)"  condition="sdhc_fevt_ac12ne_present"    />
+   </bitfieldOption>
+
+
+   <!-- ____ ADMAES ____ -->
+
+   <binaryOption key="sdhc_admaes_admadce" condition="sdhc_admaes_admadce_present"
+      hidden="true"
+      typeName="SdhcAdmaDescriptorError"
+      baseType="uint32_t"
+      toolTip="This error occurs when an invalid descriptor is fetched by ADMA."
+      description="ADMA Descriptor Error" >
+      <choice name="No error"    value="0" enum="NoError" />
+      <choice name="Error"       value="1" enum="Error" />
+   </binaryOption >
+
+   <binaryOption key="sdhc_admaes_admalme" condition="sdhc_admaes_admalme_present"
+      hidden="true"
+      typeName="SdhcAdmaLengthError"
+      baseType="uint32_t"
+      toolTip="This error occurs in the following 2 cases:\n
+               - While the block count enable is being set, the total data length specified by the descriptor table is\n
+               different from that specified by the block count and block length.\n
+               - Total data length can not be divided by the block length."
+      description="ADMA Length Mismatch Error" >
+      <choice name="No error"    value="0" enum="NoError" />
+      <choice name="Error"       value="1" enum="Error" />
+   </binaryOption >
+
+   <choiceOption key="sdhc_admaes_admaes" condition="sdhc_admaes_admaes_present"
+      hidden="true"
+      typeName="SdhcAdmaErrorState"
+      baseType="uint32_t"
+      toolTip="Indicates the state of the ADMA when an error has occurred during an ADMA data transfer."
+      description="ADMA Error State (when ADMA Error has occurred.)" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <!-- ____ VENDOR ____ -->
+
+   <intOption key="sdhc_vendor_intstval" condition="sdhc_vendor_intstval_present"
+      hidden="true"
+      typeName="uint32_t"
+      toolTip="Internal state value, reflecting the corresponding state value selected by Debug Select field."
+      description="Internal State Value"
+   />
+
+   <binaryOption key="sdhc_vendor_exblknu" condition="sdhc_vendor_exblknu_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SdhcExactBlockNumberForSdioCmd53"
+      baseType="uint32_t"
+      toolTip="This bit must be set before S/W issues CMD53 multi-block read with exact block number.\n
+               This bit must not be set if the CMD53 multi-block read is not exact block number."
+      description="SDIO CMD53 Exact Block Number Block Read Enable For SDIO CMD53" >
+      <choice name="No exact block read"              value="0" enum="Disabled" />
+      <choice name="Exact block read for SDIO CMD53"  value="1" enum="Enabled" />
+   </binaryOption >
+
+   <!-- ____ MMCBOOT ____ -->
+   <category description="MMC Boot Options" >
+
+      <binaryOption key="sdhc_mmcboot_booten" condition="sdhc_mmcboot_booten_present"
+         enabledBy="enablePeripheralSupport"
+         typeName="SdhcMmcFastBootEnable"
+         baseType="uint32_t"
+         toolTip="Enable fast boot"
+         description="Boot Mode Enable" >
+         <choice name="Fast boot disable"  value="0" enum="FastBootDisable" />
+         <choice name="Fast boot enable"   value="1" enum="FastBootEnable" />
+      </binaryOption >
+
+      <binaryOption key="sdhc_mmcboot_bootmode" condition="sdhc_mmcboot_bootmode_present"
+         enabledBy="sdhc_mmcboot_booten"
+         typeName="SdhcMmcBootmode"
+         baseType="uint32_t"
+         toolTip="Controls boot mode"
+         description="Boot Mode Select" >
+         <choice name="Normal boot"       value="0" enum="NormalBoot" />
+         <choice name="Alternative boot"  value="1" enum="AlternativeBoot" />
+      </binaryOption >
+
+      <binaryOption key="sdhc_mmcboot_autosabgen" condition="sdhc_mmcboot_autosabgen_present"
+         enabledBy="sdhc_mmcboot_booten"
+         typeName="SdhcMmcBootStopAtGap"
+         baseType="uint32_t"
+         toolTip="This function will be triggered, and host will stop at block gap when received card block cnt is equal to BOOTBLKCNT"
+         description="Enable auto stop at block gap function." >
+         <choice name="Disabled"  value="0" enum="Disabled" />
+         <choice name="Enabled"   value="1" enum="Enabled"  />
+      </binaryOption >
+
+      <intOption key="sdhc_mmcboot_bootblkcnt" condition="sdhc_mmcboot_bootblkcnt_present"
+         enabledBy="sdhc_mmcboot_autosabgen"
+         typeName="SdhcMmcBootBlockCount"
+         baseType="uint16_t"
+         toolTip="When received card block cnt is equal to BOOTBLKCNT and AUTOSABGEN is 1, then stop at block gap"
+         description="Defines the stop at block gap value of automatic mode."
+         value="0"
+         radix="16"
+         min="0" max="65535"
+      />
+
+      <binaryOption key="sdhc_mmcboot_bootack" condition="sdhc_mmcboot_bootack_present"
+         enabledBy="sdhc_mmcboot_booten"
+         typeName="SdhcMmcBootAck"
+         baseType="uint32_t"
+         toolTip="Controls Boot Ack mode"
+         description="Boot Ack Mode Select" >
+         <choice name="No ack"      value="0" enum="NoAck" />
+         <choice name="Ack"         value="1" enum="Ack" />
+      </binaryOption >
+
+      <choiceOption key="sdhc_mmcboot_dtocvack" condition="sdhc_mmcboot_dtocvack_present"
+         enabledBy="sdhc_mmcboot_booten"
+         typeName="SdhcAckTimeout"
+         baseType="uint32_t"
+         toolTip="Controls timeout value"
+         description="Boot ACK Time Out Counter Value" >
+         <choice name="SDCLK x 2^8"   value="0" enum="SdclkBy2_8" />
+         <choice name="SDCLK x 2^9"   value="1" enum="SdclkBy2_9" />
+         <choice name="SDCLK x 2^10"  value="2" enum="SdclkBy2_10" />
+         <choice name="SDCLK x 2^11"  value="3" enum="SdclkBy2_11" />
+         <choice name="SDCLK x 2^12"  value="4" enum="SdclkBy2_12" />
+         <choice name="SDCLK x 2^13"  value="5" enum="SdclkBy2_13" />
+         <choice name="SDCLK x 2^14"  value="6" enum="SdclkBy2_14" />
+         <choice name="SDCLK x 2^15"  value="7" enum="SdclkBy2_15" />
+         <choice name="SDCLK x 2^22" value="14" enum="SdclkBy2_22" />
+      </choiceOption >
+   </category>
+
+   <!-- ____ HOSTVER ____ -->
+   <choiceOption key="sdhc_hostver_vvn" condition="sdhc_hostver_vvn_present"
+      hidden="true"
+      typeName="SdhcSpecificationVersion"
+      baseType="uint32_t"
+      toolTip="These status bits are reserved for the vendor version number.\n
+               The host driver shall not use this status."
+      description="Vendor Version Number" >
+      <choice name="SDHC version 1.0"  value="0" enum="SdhcVersion10" />
+      <choice name="SDHC version 2.0" value="16" enum="SdhcVersion20" />
+      <choice name="SDHC version 2.1" value="17" enum="SdhcVersion21" />
+      <choice name="SDHC version 2.2" value="18" enum="SdhcVersion22" />
+   </choiceOption >
+
+   <choiceOption key="sdhc_hostver_svn" condition="sdhc_hostver_svn_present"
+      hidden="true"
+      typeName="SdhcHostverSvn"
+      baseType="uint32_t"
+      toolTip="These status bits indicate the host controller specification version."
+      description="Specification Version Number" >
+      <choice name="Version 2.0, supports test event register and ADMA"  value="1" enum="Version2" />
+   </choiceOption >
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+   ><![CDATA[
+      \t// Pointer to SDHC hardware instance
+      \tvolatile $(_Type) *$(_basename);
+      \t
+      \t/**
+      \t * Constructor
+      \t *
+      \t * @param sdhc SDHC hardware instance
+      \t */
+      \t$(_BasicInfo)(volatile $(_Type) * $(_basename)) : $(_basename)($(_basename)) {
+      \t}
+      \t\n
+   ]]></template>
+
+   <!-- ____ Getters and Setters ____________ -->
+   <for keys="field                     : set   : get   : clear : genCode                 : name"
+        values="
+
+         sdhc_dsaddr_dsaddr             : true  : true  : false : enableGettersAndSetters : DmaSourceAddress;
+
+         sdhc_blkattr_blkcnt            : true  : true  : false : $(_BasicInfoGuard)      : BlockCount;
+         sdhc_blkattr_blksize           : true  : true  : false : $(_BasicInfoGuard)      : BlockSize;
+
+         sdhc_cmdarg_cmdarg             : true  : true  : false : $(_BasicInfoGuard)      : CommandArgument;
+         sdhc_xfertyp_cmd               : true  : true  : false : enableGettersAndSetters : CommandReg;
+
+         sdhc_datport_datcont           : true  : true  : false : enableGettersAndSetters : DataPort;
+
+         sdhc_prsstat                   : false : true  : false : $(_BasicInfoGuard)      : State;
+         sdhc_prsstat_dlsl              : false : true  : false : enableGettersAndSetters : DatLineLevel;
+         sdhc_prsstat_clsl              : false : true  : false : enableGettersAndSetters : CmdSignalLevel;
+         sdhc_prsstat_cins              : false : true  : false : $(_BasicInfoGuard)      : CardPresent;
+         sdhc_prsstat_bren              : false : true  : false : $(_BasicInfoGuard)      : BufferReadEnable;
+         sdhc_prsstat_bwen              : false : true  : false : $(_BasicInfoGuard)      : BufferWriteEnable;
+         sdhc_prsstat_rta               : false : true  : false : $(_BasicInfoGuard)      : ReadTransferActive;
+         sdhc_prsstat_wta               : false : true  : false : $(_BasicInfoGuard)      : WriteTransferActive;
+         sdhc_prsstat_sdoff             : false : true  : false : $(_BasicInfoGuard)      : SdClockStatus;
+         sdhc_prsstat_peroff            : false : true  : false : $(_BasicInfoGuard)      : SdhcClockStatus;
+         sdhc_prsstat_hckoff            : false : true  : false : $(_BasicInfoGuard)      : SystemClockStatus;
+         sdhc_prsstat_ipgoff            : false : true  : false : $(_BasicInfoGuard)      : BusClockStatus;
+         sdhc_prsstat_sdstb             : false : true  : false : $(_BasicInfoGuard)      : SdClockStable;
+         sdhc_prsstat_dla               : false : true  : false : enableGettersAndSetters : DatLineStatus;
+         sdhc_prsstat_cdihb             : false : true  : false : $(_BasicInfoGuard)      : CommandInhibitDatLine;
+         sdhc_prsstat_cihb              : false : true  : false : $(_BasicInfoGuard)      : CommandInhibitDatCmdLine;
+
+         sdhc_proctl_wecrm              : true  : true  : false : enableGettersAndSetters : WakeupOnCardRemoval;
+         sdhc_proctl_wecins             : true  : true  : false : enableGettersAndSetters : WakeupOnCardInsertion;
+         sdhc_proctl_wecint             : true  : true  : false : enableGettersAndSetters : WakeupOnCardInterrupt;
+         sdhc_proctl_iabg               : true  : true  : false : enableGettersAndSetters : InterruptAtBlockGap;
+         sdhc_proctl_rwctl              : true  : true  : false : enableGettersAndSetters : ReadWaitControl;
+         sdhc_proctl_creq               : true  : true  : false : enableGettersAndSetters : ContinueRequest;
+         sdhc_proctl_sabgreq            : true  : true  : false : enableGettersAndSetters : StopAtBlockGapRequest;
+         sdhc_proctl_dmas               : true  : true  : false : enableGettersAndSetters : DmaMode;
+         sdhc_proctl_cdss               : true  : true  : false : enableGettersAndSetters : CardDetectMode;
+         sdhc_proctl_emode              : true  : true  : false : $(_BasicInfoGuard)      : EndianMode;
+         sdhc_proctl_d3cd               : true  : true  : false : enableGettersAndSetters : CardDetectUsesDat3;
+         sdhc_proctl_dtw                : true  : true  : false : $(_BasicInfoGuard)      : TransferWidth;
+         sdhc_proctl_lctl               : true  : true  : false : $(_BasicInfoGuard)      : Led;
+
+         sdhc_sysctl_inita              : true  : true  : false : $(_BasicInfoGuard)      : Initialise;
+         sdhc_sysctl_dtocv              : true  : true  : false : enableGettersAndSetters : DataTimeout;
+         sdhc_sysctl_sdclkfs            : true  : true  : false : enableGettersAndSetters : ClockPrescaler;
+         sdhc_sysctl_dvs                : true  : true  : false : enableGettersAndSetters : SysctlDvs;
+         sdhc_sysctl_sdclken            : true  : true  : false : enableGettersAndSetters : Clock;
+         sdhc_sysctl_peren              : true  : true  : false : enableGettersAndSetters : PeripheralClock;
+         sdhc_sysctl_hcken              : true  : true  : false : enableGettersAndSetters : SystemClock;
+         sdhc_sysctl_ipgen              : true  : true  : false : enableGettersAndSetters : BusClock;
+
+         sdhc_irqstat_dmae              : false : true  : true  : enableGettersAndSetters : IrqStatusDma;
+         sdhc_irqstat_ac12e             : false : true  : true  : enableGettersAndSetters : IrqStatusAc12;
+         sdhc_irqstat_debe              : false : true  : true  : enableGettersAndSetters : IrqStatusDataBit;
+         sdhc_irqstat_dce               : false : true  : true  : enableGettersAndSetters : IrqStatusDataCrc;
+         sdhc_irqstat_dtoe              : false : true  : true  : enableGettersAndSetters : IrqStatusTimeout;
+         sdhc_irqstat_cie               : false : true  : true  : enableGettersAndSetters : IrqStatusCommandIndex;
+         sdhc_irqstat_cebe              : false : true  : true  : enableGettersAndSetters : IrqStatusEndBitIs0;
+         sdhc_irqstat_cce               : false : true  : true  : enableGettersAndSetters : IrqStatusCommandCrc;
+         sdhc_irqstat_ctoe              : false : true  : true  : enableGettersAndSetters : IrqStatusResponse;
+         sdhc_irqstat_cint              : false : true  : true  : enableGettersAndSetters : IrqStatusInterrupt;
+         sdhc_irqstat_crm               : false : true  : true  : enableGettersAndSetters : IrqStatusCardInserted;
+         sdhc_irqstat_cins              : false : true  : true  : enableGettersAndSetters : IrqStatusCardRemoved;
+         sdhc_irqstat_brr               : false : true  : true  : enableGettersAndSetters : IrqStatusBufferRead;
+         sdhc_irqstat_bwr               : false : true  : true  : enableGettersAndSetters : IrqStatusBufferWrite;
+         sdhc_irqstat_dint              : false : true  : true  : enableGettersAndSetters : IrqStatusDmaCompleted;
+         sdhc_irqstat_bge               : false : true  : true  : enableGettersAndSetters : IrqStatusBlockGap;
+         sdhc_irqstat_tc                : false : true  : true  : enableGettersAndSetters : IrqStatusTransfer;
+         sdhc_irqstat_cc                : false : true  : true  : enableGettersAndSetters : IrqStatusEndBit;
+
+         sdhc_irqstat                   : false : true  : false : $(_BasicInfoGuard)      : InterruptStatus;
+
+         sdhc_irqstaten                 : true  : true  : false : $(_BasicInfoGuard)      : InterruptStatusEnable;
+
+         sdhc_irqsigen                  : true  : true  : false : $(_BasicInfoGuard)      : InterruptEnable;
+
+         sdhc_ac12err                   : false : true  : false : $(_BasicInfoGuard)      : AutoCmd12Error;
+
+         sdhc_htcapblt_vs33             : false : true  : false : enableGettersAndSetters : Sdhc3V3Support;
+         sdhc_htcapblt_srs              : false : true  : false : enableGettersAndSetters : SdhcHaltSupport;
+         sdhc_htcapblt_dmas             : false : true  : false : enableGettersAndSetters : SdhcDmaSupport;
+         sdhc_htcapblt_hss              : false : true  : false : enableGettersAndSetters : SdhcHighSpeedSupport;
+         sdhc_htcapblt_admas            : false : true  : false : enableGettersAndSetters : SdhcAdmaSupport;
+         sdhc_htcapblt_mbl              : false : true  : false : enableGettersAndSetters : SdhcMaxBlockSize;
+
+         sdhc_wml_wrwml                 : true  : true  : false : enableGettersAndSetters : SdhcWriteWaterLevel;
+         sdhc_wml_rdwml                 : true  : true  : false : enableGettersAndSetters : SdhcReadWaterLevel;
+
+         sdhc_fevt                      : true  : false : false : $(_BasicInfoGuard)      : ForceEvent;
+
+         sdhc_admaes_admadce            : false : true  : false : enableGettersAndSetters : AdmaDescriptorError;
+         sdhc_admaes_admalme            : false : true  : false : enableGettersAndSetters : AdmaLengthError;
+         sdhc_admaes_admaes             : false : true  : false : enableGettersAndSetters : AdmaErrorState;
+
+         sdhc_adsaddr_adsaddr           : true  : true  : false : enableGettersAndSetters : AdmaSystemAddress;
+
+         sdhc_vendor_intstval           : false : true  : false : enableGettersAndSetters : VendorInternalStatel;
+         sdhc_vendor_exblknu            : true  : true  : false : enableGettersAndSetters : VendorExactBlockNumber;
+
+         sdhc_mmcboot_bootblkcnt        : true  : true  : false : enableGettersAndSetters : MmcBootBlockCount;
+         sdhc_mmcboot_autosabgen        : true  : true  : false : enableGettersAndSetters : MmcBootStopAtGap;
+         sdhc_mmcboot_booten            : true  : true  : false : enableGettersAndSetters : MmcBootEnable;
+         sdhc_mmcboot_bootmode          : true  : true  : false : enableGettersAndSetters : MmcBootMode;
+         sdhc_mmcboot_bootack           : true  : true  : false : enableGettersAndSetters : MmcBootAck;
+         sdhc_mmcboot_dtocvack          : true  : true  : false : enableGettersAndSetters : MmcBootAckTimeout;
+
+         sdhc_hostver_vvn               : false : true  : false : enableGettersAndSetters : HostVersion;
+         sdhc_hostver_svn               : false : true  : false : enableGettersAndSetters : HostSpecVersion" >
+      <variableTemplate where="basicInfo" variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t * (%(field))
+         \t *
+         %paramDescription
+         \t */
+         \tvoid set%(name)(%params) const {
+         \t   %fieldAssignment;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate where="basicInfo" variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Get %description
+         \t * (%(field))
+         \t *
+         \t * @return %tooltip
+         \t */
+         \t%returnType get%(name)() const {
+         \t   return %fieldExtract;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate where="basicInfo" variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+         tooltipPadding="x*x"      ><![CDATA[
+         \t/**
+         \t * Clear %description
+         \t * (%(field))
+         \t *
+         \t * %tooltip
+         \t */
+         \tvoid clear%(name)() const {
+         \t   %register = %register|%mask;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <for keys="field                     : enable : disable : clear : genCode                 : name"
+        values="
+         sdhc_sysctl_reset              : true   : false   : false : $(_BasicInfoGuard)       : Reset;
+         sdhc_irqstat                   : false  : false   : true  : $(_BasicInfoGuard)       : InterruptStatus;
+         sdhc_irqstaten                 : true   : true    : false : $(_BasicInfoGuard)       : InterruptStatusFlags;
+         sdhc_irqsigen                  : true   : true    : false : $(_BasicInfoGuard)       : InterruptSource" >
+      <variableTemplate where="basicInfo" variables="%(field)" condition="%(enable)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Enable %description
+         \t * (%(field))
+         \t *
+         %paramDescription
+         \t */
+         \tvoid enable%(name)(%params) const {
+         \t   %register = %register|%paramExpression;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate where="basicInfo" variables="%(field)" condition="%(disable)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Disable %description
+         \t * (%(field))
+         \t *
+         %paramDescription
+         \t */
+         \tvoid disable%(name)(%params) const {
+         \t   %register = %register&~%paramExpression;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate where="basicInfo" variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+         tooltipPadding="x*x"      ><![CDATA[
+         \t/**
+         \t * Clear %description
+         \t * (%(field))
+         \t *
+         %paramDescription
+         \t */
+         \tvoid clear%(name)(%params) const {
+         \t   %register = %paramExpression;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <for keys="   field                 : set   : get   : clear : genCode            : context              : name"
+        values=" sdhc_cmdrsp_cmdrsp0   : false : true  : false : $(_BasicInfoGuard) : CMDRSP[index]        : CommandResponse" >
+      <variableTemplate where="basicInfo" variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t * (%(field))
+         \t *
+         %paramDescription
+         \t */
+         \tvoid set%(name)(int index, %params) const {
+         \t   $(_basename)->%(context) = ($(_basename)->%(context) & ~%mask)|%paramExpression;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate where="basicInfo" variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Get %description
+         \t * (%(field))
+         \t *
+         \t * @return %tooltip
+         \t */
+         \t%paramType get%(name)(int index) const {
+         \t   return %paramType($(_basename)->%(context)&%mask);
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate where="basicInfo" variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+         tooltipPadding="x*x" >
+      <![CDATA[
+         \t/**
+         \t * Clear %description
+         \t * (%(field))
+         \t *
+         \t * %tooltip
+         \t */
+         \tvoid clear%(name)(int index) const {
+         \t   $(_basename)->%(context) = $(_basename)->%(context)|%mask;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      variables="sdhc_irqstat"
+      tooltipPadding="x*x"      >
+   <![CDATA[
+      \t/**
+      \t * Get and clear interrupt status flags
+      \t * (sdhc_irqstat)
+      \t *
+      \t * @return Mask indicating cleared interrupt requests, see @ref SdhcStatus
+      \t */
+      \t%returnType getAndClearInterruptStatus() {
+      \t   // register = %register
+      \t   // registerName = %registerName
+      \t
+      \t   // Capture register
+      \t   %baseType t = %register;
+      \t
+      \t   // Clear captured flags (w1c)
+      \t   %register = t;
+      \t
+      \t   // Return flags
+      \t   return  %returnType(t);
+      \t}
+      \t\n
+   ]]></variableTemplate>
+   
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Calculate clock parameters from input clock and desired clock
+      \t *
+      \t * @param sdhcClkIn     Input clock to SDHC
+      \t * @param sdhcClock     Target SD clock
+      \t * @param sdclkfs_dvs   Clock parameters
+      \t *
+      \t * @return E_ILLEGAL_PARAM if unable to find suitable parameters
+      \t */
+      \tstatic ErrorCode calculateClockParameters(uint32_t sdhcClkIn, uint32_t sdhcClock, uint32_t &sdclkfs_dvs) {
+      \t
+      \t   uint32_t bestError = uint32_t(-1);
+      \t
+      \t   for (uint32_t sdclkfs=1;sdclkfs<=128;sdclkfs<<=1) {
+      \t      uint32_t error;
+      \t      for (uint32_t dvs=0;dvs++<=15;) {
+      \t         uint32_t calcFreq = sdhcClkIn/(sdclkfs<<1)/(dvs+1);
+      \t         if (calcFreq>sdhcClock) {
+      \t            // Still too high - continue search using this sdclkfs
+      \t            continue;
+      \t         }
+      \t         // Best value using this sdclkfs
+      \t         error = sdhcClock-calcFreq;
+      \t         if (error < bestError) {
+      \t            // New best overall
+      \t            bestError = error;
+      \t            sdclkfs_dvs = SDHC_SYSCTL_SDCLKFS(sdclkfs)|SDHC_SYSCTL_DVS(dvs);
+      \t         }
+      \t         // Look no further using this sdclkfs
+      \t         break;
+      \t      }
+      \t      if (bestError == 0) {
+      \t         // Found exact match - quit looking
+      \t         break;
+      \t      }
+      \t   }
+      \t   return (bestError != uint32_t(-1))?E_NO_ERROR:E_ILLEGAL_PARAM;
+      \t}
+      \t
+      \t/**
+      \t * Set SDHC clock frequency
+      \t *
+      \t * @param frequency Requested frequency
+      \t *
+      \t * @return Error code
+      \t */
+      \t ErrorCode setSdhcFrequency(uint32_t frequency) const {
+      \t
+      \t    uint32_t sdclkfs_dvs;
+      \t    ErrorCode rc = calculateClockParameters(SimInfo::getSdhcClock(), frequency, sdclkfs_dvs);
+      \t    if (rc != E_NO_ERROR) {
+      \t       return rc;
+      \t    }
+      \t
+      \t    uint32_t sysctl = sdhc->SYSCTL &
+      \t          ~(SDHC_SYSCTL_SDCLKEN_MASK|SDHC_SYSCTL_SDCLKFS_MASK|SDHC_SYSCTL_DVS_MASK);
+      \t
+      \t    // Disable clock and clear clock fields
+      \t    sdhc->SYSCTL = sysctl;
+      \t    // Set new clock fields
+      \t    sdhc->SYSCTL = sysctl|sdclkfs_dvs;
+      \t    // Enable clock
+      \t    sdhc->SYSCTL = sysctl|sdclkfs_dvs|SDHC_SYSCTL_SDCLKEN_MASK;
+      \t
+      \t    return rc;
+      \t }
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ________ SDHC TransferInit class ____________________________ -->
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of $(_Class) transfer information
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t * Parameters available may vary with device - see $(_Class)::DefaultInitValue for relevant example.
+      \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t *
+      \t * static const $(_Class)::TransferInit $(_name)TransferInit {
+      \t *
+      \t *   // Setup values
+XXXXXXXXXXXXXXXXXXXXXX
+      \t * };
+      \t *
+      \t * // Configure $(_Class) transfer from values specified above
+      \t * $(_Class)::configure($(_name)TransferInit)
+      \t * @endcode
+      \t */
+      \tclass TransferInit {
+      \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr TransferInit(Types...) = delete;
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr TransferInit(const TransferInit &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr TransferInit() = default;
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____ TransferInit class Member variables ________ -->
+
+   <for keys=" type        : variables                                            : init    "
+       values="%baseType   : sdhc_xfertyp_command,sdhc_xfertyp_cmdtyp,
+                             sdhc_xfertyp_ac12en,sdhc_xfertyp_dmaen               :   0             ;
+               %baseType   : sdhc_cmdarg_cmdarg                                   :   %baseType(-1) ;
+               %baseType   : sdhc_blkattr_blkcnt,sdhc_blkattr_blksize             :   0             ;
+               %baseType   : sdhc_dsaddr_dsaddr                                   :   0             ;
+               %baseType   : sdhc_adsaddr_adsaddr                                 :   0
+               " >
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         variables="%(variables)"
+         linePadding="xxx"
+      ><![CDATA[
+         %multilineDescription
+         \t   %(type) %registerName = %(init);\n\n
+      ]]></variableTemplate>
+   </for>
+
+   <!-- ____ TransferInit class Constructors ____________ -->
+
+   <for keys="r"
+      values=" sdhc_xfertyp_cmdtyp;
+               sdhc_xfertyp_ac12en;sdhc_xfertyp_dmaen;
+               sdhc_cmdarg_cmdarg;
+               sdhc_blkattr_blkcnt;sdhc_blkattr_blksize;
+               sdhc_dsaddr_dsaddr;
+               sdhc_adsaddr_adsaddr" >
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         variables="%(r)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    * (%variables)
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr TransferInit(%params, Types... rest) : TransferInit(rest...) {
+         \t
+         \t      %constructorFieldAssignment;
+         \t   }
+         \t\n
+      ]]>
+      </variableTemplate>
+   </for>
+
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      variables="sdhc_xfertyp_command"
+      linePadding="xxx" >
+   <![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    * (%variables)
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr TransferInit(%params, Types... rest) : TransferInit(rest...) {
+      \t
+      \t      %registerName |= %paramExpression;
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t}; // class $(_BasicInfo)::TransferInit
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____ TransferInit class Configure method ____ -->
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tvoid configure(const TransferInit &init) const {
+      \t\n
+   ]]>
+   </template>
+
+   <for keys=
+             " vars                                                   : statement            "
+      values=" sdhc_cmdarg_cmdarg                                     : %configRegAssignment  ;
+               sdhc_blkattr_blkcnt,sdhc_blkattr_blksize               : %configRegAssignment  ;
+               sdhc_dsaddr_dsaddr                                     : %configRegAssignment  ;
+               sdhc_adsaddr_adsaddr                                   : %configRegAssignment  ;
+               sdhc_xfertyp_command,sdhc_xfertyp_cmdtyp,
+               sdhc_xfertyp_ac12en,sdhc_xfertyp_dmaen                 : %configRegAssignment  " >
+      <variableTemplate  where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      variables="%(vars)"
+      linePadding="xxx"
+      ><![CDATA[
+         \t
+         %multilineDescription
+         \t   %(statement);\n
+      ]]></variableTemplate>
+   </for>
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t
+      \t/*
+      \t * Constructor
+      \t */
+      \tSdhc0Info() : $(_BasicInfo)((volatile $(_Type) *)sdhc) {
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____  TransferInit Default Initialisation value ____ -->
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
+      separator=","
+      terminator=","
+      variables="
+            sdhc_xfertyp_command,sdhc_xfertyp_cmdtyp,
+            sdhc_xfertyp_ac12en,sdhc_xfertyp_dmaen,
+            sdhc_cmdarg_cmdarg,
+            sdhc_blkattr_blkcnt,sdhc_blkattr_blksize,
+            sdhc_dsaddr_dsaddr,
+            sdhc_adsaddr_adsaddr" >
+    <![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class) transfer information
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr TransferInit DefaultTransferInitValue = {%initExpression
+      \t};
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <!-- ________ SDHC Init class ____________________________ -->
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_Baseclass)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t * Parameters available may vary with device - see $(_Class)::DefaultInitValue for relevant example.
+      \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * ///
+      \t * /// $(_NAME) call-back
+      \t * ///
+      \t * /// @param status  Status reflecting active inputs
+      \t * ///
+      \t * void $(_name)Callback(ErrorCode ec) {
+      \t *    ....
+      \t * }
+      \t *
+      \t * static const $(_Class)::Init $(_name)Init {
+      \t *
+      \t *   // Setup values
+XXXXXXXXXXXXXXXXXXXXXX
+      \t *
+      \t *   $(_name)Callback,                 // Call-back to execute on event - call-back function name
+      \t *   NvicPriority_Low,                 // Priority for interrupt - Low
+      \t *
+      \t *   // Optional base value to start with (must be last parameter)
+      \t *   $(_Class)::DefaultInitValue   // Used as base value modified by above
+      \t * };
+      \t *
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure($(_name)Init)
+      \t * @endcode
+      \t */
+      \tclass Init {
+      \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(Types...) = delete;
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____ Init class Member variables ________ -->
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+   ><![CDATA[
+      %multilineDescription
+      \t   %params = nullptr;\n\n
+   ]]></variableTemplate>
+
+   <for keys=" type        : variables                                            : init    "
+       values="%baseType   : sdhc_proctl_wecrm,sdhc_proctl_wecins,sdhc_proctl_wecint,
+                             sdhc_proctl_iabg,sdhc_proctl_rwctl,sdhc_proctl_creq,
+                             sdhc_proctl_sabgreq,sdhc_proctl_dmas,
+                             sdhc_proctl_emode,sdhc_proctl_d3cd,
+                             sdhc_proctl_dtw                                      :   0      ;
+               %baseType   : sdhc_sysctl_dtocv,sdhc_sysctl_sdclkfs,
+                             sdhc_sysctl_dvs,sdhc_sysctl_peren,
+                             sdhc_sysctl_hcken,sdhc_sysctl_ipgen                  :   0      ;
+               %baseType   : sdhc_irqstaten                                       :   0      ;
+               %baseType   : sdhc_irqsigen                                        :   0      ;
+               %baseType   : sdhc_wml_wrwml,sdhc_wml_rdwml                        :   0      ;
+               %baseType   : sdhc_vendor_exblknu                                  :   0      ;
+               %baseType   : sdhc_mmcboot_bootblkcnt,sdhc_mmcboot_autosabgen,
+                             sdhc_mmcboot_booten,sdhc_mmcboot_bootmode,
+                             sdhc_mmcboot_bootack,sdhc_mmcboot_dtocvack           :   0      ;
+               %paramType  : /PCR/nvic_irqLevel                                   :   %defaultValue   " >
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         variables="%(variables)"
+         linePadding="xxx"
+      ><![CDATA[
+         %multilineDescription
+         \t   %(type) %registerName = %(init);\n\n
+      ]]></variableTemplate>
+   </for>
+
+   <!-- ____ Init class Constructors ____________ -->
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    * (%variables)
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      this->%paramName = %paramExpression;
+      \t   }\n\n
+   ]]></variableTemplate>
+
+   <for keys="r"
+      values="/PCR/nvic_irqLevel;
+            sdhc_proctl_wecrm;sdhc_proctl_wecins;sdhc_proctl_wecint;
+            sdhc_proctl_iabg;sdhc_proctl_rwctl;sdhc_proctl_creq;
+            sdhc_proctl_sabgreq;sdhc_proctl_dmas;
+            sdhc_proctl_emode;sdhc_proctl_d3cd;
+            sdhc_proctl_dtw;
+            sdhc_sysctl_dtocv;sdhc_sysctl_sdclkfs;
+            sdhc_sysctl_dvs;sdhc_sysctl_peren;
+            sdhc_sysctl_hcken;sdhc_sysctl_ipgen;
+            sdhc_irqstaten;
+            sdhc_irqsigen;
+            sdhc_wml_wrwml;sdhc_wml_rdwml;
+            sdhc_vendor_exblknu;
+            sdhc_mmcboot_bootblkcnt;sdhc_mmcboot_autosabgen;
+            sdhc_mmcboot_booten;sdhc_mmcboot_bootmode;
+            sdhc_mmcboot_bootack;sdhc_mmcboot_dtocvack
+            " >
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         variables="%(r)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    * (%variables)
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %constructorFieldAssignment;
+         \t   }
+         \t\n
+      ]]>
+      </variableTemplate>
+   </for>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t}; // class $(_BasicInfo)::Init
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____ Init class Configure methods ____ -->
+
+   <template codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(DefaultInitValue);
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const Init &init) {
+      \t
+      \t   // Enable peripheral
+      \t   enable();
+      \t\n
+   ]]>
+   </template>
+   <template codeGenCondition="irqHandlingMethod" condition="irqHandlingMethod" >
+   <![CDATA[
+      \t   // Configure call-backs
+      \t   setCallback(init.callbackFunction);\n
+   ]]>
+   </template>
+   <template codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t   enableNvicInterrupts(init.irqlevel);
+      \t
+      \t   $(_BasicInfo)::configure(sdhc, init);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(volatile $(_Type) *sdhc, const Init &init) {
+      \t\n
+   ]]>
+   </template>
+   <for keys=
+             " var                                                    : statement            "
+      values=" sdhc_sysctl_rsta                                       : %register = %mask0 ;
+               sdhc_sysctl_rsta                                       : while ((%register&amp;%mask)!=0) {} ;
+               sdhc_proctl_wecrm,sdhc_proctl_wecins,sdhc_proctl_wecint,
+               sdhc_proctl_iabg,sdhc_proctl_rwctl,sdhc_proctl_creq,
+               sdhc_proctl_sabgreq,sdhc_proctl_dmas,
+               sdhc_proctl_emode,sdhc_proctl_d3cd,
+               sdhc_proctl_dtw                                        : %configRegAssignment  ;
+               sdhc_sysctl_sdclken,sdhc_sysctl_dtocv,sdhc_sysctl_sdclkfs,
+               sdhc_sysctl_dvs,sdhc_sysctl_peren,
+               sdhc_sysctl_hcken,sdhc_sysctl_ipgen                    : %register = init.%registerName&amp;~%mask0 ;
+               sdhc_prsstat_sdstb                                     : while ((%register&amp;%mask)==0) {} ;
+               sdhc_sysctl_sdclken                                    : %register = init.%registerName|%mask ;
+               sdhc_irqstaten                                         : %configRegAssignment  ;
+               sdhc_irqsigen                                          : %register = %baseType(init.%registerName)  ;
+               sdhc_wml_wrwml,sdhc_wml_rdwml                          : %configRegAssignment  ;
+               sdhc_vendor_exblknu                                    : %register = init.%registerName|1  ;
+               sdhc_mmcboot_bootblkcnt,sdhc_mmcboot_autosabgen,
+               sdhc_mmcboot_booten,sdhc_mmcboot_bootmode,
+               sdhc_mmcboot_bootack,sdhc_mmcboot_dtocvack             : %configRegAssignment " 
+               >
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      variables="%(var)"
+      linePadding="xxx"
+      ><![CDATA[
+         \t
+         %multilineDescription
+         \t   %(statement);\n
+      ]]></variableTemplate>
+   </for>
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____  Default Initialisation value ____ -->
+
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
+      separator=","
+      terminator=","
+      variables="
+            sdhc_proctl_wecrm,sdhc_proctl_wecins,sdhc_proctl_wecint,
+            sdhc_proctl_iabg,sdhc_proctl_rwctl,sdhc_proctl_creq,
+            sdhc_proctl_sabgreq,sdhc_proctl_dmas,
+            sdhc_proctl_emode,sdhc_proctl_d3cd,
+            sdhc_proctl_dtw,
+            sdhc_sysctl_dtocv,sdhc_sysctl_sdclkfs,
+            sdhc_sysctl_dvs,sdhc_sysctl_peren,
+            sdhc_sysctl_hcken,sdhc_sysctl_ipgen,
+            sdhc_irqstaten,
+            sdhc_irqsigen,
+            sdhc_wml_wrwml,sdhc_wml_rdwml,
+            sdhc_vendor_exblknu,
+            sdhc_mmcboot_bootblkcnt,sdhc_mmcboot_autosabgen,
+            sdhc_mmcboot_booten,sdhc_mmcboot_bootmode,
+            sdhc_mmcboot_bootack,sdhc_mmcboot_dtocvack,
+            irqLevel" >
+    <![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <!-- ____ Common __________________ -->
 
    <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
    \t/**
    \t * Class representing $(_NAME)
    \t */
-   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
+   \tusing  $(_Class) = $(_Info);
    ]]>
    </template>
 
@@ -42,7 +2239,7 @@
       <copy source="Snippets/sdhc-example.cpp"                target="Snippets/sdhc-example.cpp"                  overwrite="true"  derived="true" />
    </projectActionList>
 
-   <!-- ************* Startup ****************** -->
+   <!-- ____ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
@@ -54,15 +2251,22 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <!-- ************* SIM configuration ****************** -->
-   <category name="Advanced" description="SIM configuration">
+   <!-- ____ SIM configuration __________________ -->
+
+   <category name="Advanced" description="SIM configuration"
+      toolTip="These settings only have effect if the SIM configuration is enabled" >
+      <title description="$(_BASENAME) Shared" />
+      <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+      <title description="$(_NAME) Specific" />
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
       <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
       </for>
    </category>
 
-   <!-- ************* Signal mapping ****************** -->
+   <!--  ____ Signal mapping __________________ -->
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 
 </peripheralPage>

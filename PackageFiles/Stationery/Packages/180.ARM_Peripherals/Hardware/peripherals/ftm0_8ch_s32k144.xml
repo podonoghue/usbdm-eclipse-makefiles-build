@@ -252,14 +252,14 @@
    \t/**
    \t * Class representing $(_NAME)
    \t */
-   \ttypedef FtmBase_T<$(_Class)Info> $(_Class);\n
+   \ttypedef FtmBase_T<$(_Info)> $(_Class);\n
    ]]></template>
 
    <template key="/FTM/quadDeclarations"  ><![CDATA[
    \t/**
    \t * Class representing $(_Class) as Quadrature decoder
    \t */
-   \ttypedef FtmQuadDecoder_T<$(_Class)Info> FtmQuadDecoder$(_instance);\n
+   \ttypedef FtmQuadDecoder_T<$(_Info)> FtmQuadDecoder$(_instance);\n
    ]]></template>
 
    <signals/>

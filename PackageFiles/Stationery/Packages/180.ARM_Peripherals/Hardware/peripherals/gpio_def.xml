@@ -791,7 +791,7 @@
 
    <for keys="right" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux" >
       <variableTemplate variables="%(right)" key="/PCR/pcr_enums" discardRepeats="true" ><![CDATA[
-         \tconstexpr inline PcrValue operator|(PcrValue op1, %paramType op2) { return static_cast<PcrValue>(static_cast<uint32_t>(op1)|static_cast<uint32_t>(op2)); }\n
+         \tconstexpr inline PcrValue operator|(PcrValue op1, %paramType op2) { return PcrValue(uint32_t(op1)|uint32_t(op2)); }\n
       ]]></variableTemplate>
    </for>
    <for keys="left" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux" >
@@ -802,7 +802,7 @@
             key="/PCR/pcr_enums"
             nonDefaultParams="2"
             discardRepeats="true" ><![CDATA[
-            \tconstexpr inline PcrValue operator|(%paramType0 op1, %paramType1 op2) { return static_cast<PcrValue>(static_cast<uint32_t>(op1)|static_cast<uint32_t>(op2)); }\n
+            \tconstexpr inline PcrValue operator|(%paramType0 op1, %paramType1 op2) { return PcrValue(uint32_t(op1)|uint32_t(op2)); }\n
          ]]></variableTemplate>
       </for>
    </for>
@@ -947,11 +947,11 @@
 
    <for keys="n" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux">
       <variableTemplate variables="%(n)" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
-         \t   constexpr operator         %paramType() const { return static_cast<%paramType>(value&%mask); }
-         \t   constexpr operator         %paramType()       { return static_cast<%paramType>(value&%mask); }
-         \t   constexpr %paramType       %paramName() const { return static_cast<%paramType>(value&%mask); }
-         \t   constexpr %paramType       %paramName()       { return static_cast<%paramType>(value&%mask); }
-         \n
+         \t   constexpr operator         %paramType() const { return %paramType(value&%mask); }
+         \t   constexpr operator         %paramType()       { return %paramType(value&%mask); }
+         \t   constexpr %paramType       %paramName() const { return %paramType(value&%mask); }
+         \t   constexpr %paramType       %paramName()       { return %paramType(value&%mask); }
+         \t\n
       ]]></variableTemplate>
    </for>
 

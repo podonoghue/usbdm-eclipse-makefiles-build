@@ -14,7 +14,7 @@
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Baseclass)BasicInfo&quot;" />
+      value="&quot;$(_Info) : public $(_Baseclass)BasicInfo&quot;" />
 
    <!-- ************* MSC ****************** -->
 
@@ -54,7 +54,7 @@
                - The modulator is not currently active and MCGEN is set\n
                - At the end of each modulation cycle while MCGEN is set\n
                Cleared by:\n
-               - Calling getStatus() followed by calling getMarkTime(), getSpaceTime() or setMarkSpaceTiming().
+               - Calling getStatus() followed by calling getMarkTime(), getSpaceTime() or setMarkSpaceTiming().\n
                - A DMA cycle"
       description="End Of Cycle Status Flag" >
       <choice name="Cycle not completed"  value="0" enum="CycleIncomplete"/>
@@ -856,7 +856,7 @@
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \tclass $(_Class) : public $(_Baseclass)_T<$(_Class)Info> {};
+      \tclass $(_Class) : public $(_Baseclass)_T<$(_Info)> {};
       \t\n
    ]]>
    </template>

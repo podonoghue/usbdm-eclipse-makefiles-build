@@ -17,8 +17,8 @@ read -d '' TOx <<EOF
       \</for\> 
 EOF
 
-FROM='External trigger (Pre-trigger 1/B (SC1\[1\]))'
-TO='External trigger using SC1[1]/R[1]'
+FROM='\$(_Class)Info'
+TO='\$(_Info)'
 
 #FROM='\"&quot;&quot;\"'
 #TO=\'\"\"\'

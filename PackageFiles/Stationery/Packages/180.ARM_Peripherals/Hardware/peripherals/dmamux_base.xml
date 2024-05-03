@@ -72,7 +72,7 @@
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Structname)BasicInfo&quot;" />
+      value="&quot;$(_Info) : public $(_BasicInfo)&quot;" />
 
    <!-- ************* CHCFG ****************** -->
 
@@ -367,7 +367,7 @@
    </for>
    <template codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
-      \t}; // $(_Class)Info::DefaultInitValue
+      \t}; // $(_Info)::DefaultInitValue
       \t\n
    ]]></template>
 
@@ -486,7 +486,7 @@
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
-      \t}; // class $(_Structname)BasicInfo::Init
+      \t}; // class $(_BasicInfo)::Init
       \t\n
    ]]>
    </template>
@@ -498,8 +498,8 @@
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \t//class $(_Class) : public $(_Baseclass)_T<$(_Class)Info> {};
-      \ttypedef $(_Baseclass)_T<$(_Class)Info> $(_Class);
+      \t//class $(_Class) : public $(_Baseclass)_T<$(_Info)> {};
+      \ttypedef $(_Baseclass)_T<$(_Info)> $(_Class);
       \t\n
    ]]>
    </template>

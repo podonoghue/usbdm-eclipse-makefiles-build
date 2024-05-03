@@ -30,7 +30,7 @@
    <title />
 
    <!-- ************* Class Declaration ****************** -->
-   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <!-- Note: second entry gets the tick irrespective of true/false value -->
    <binaryOption key="EnableFifo"
@@ -241,7 +241,7 @@
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \tusing $(_Class) = $(_Baseclass)Handler_T<$(_Class)Info>;
+      \tusing $(_Class) = $(_Baseclass)Handler_T<$(_Info)>;
    ]]>
    </template>
 

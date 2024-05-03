@@ -22,7 +22,7 @@
    <!-- ************* Class Declaration ****************** -->
 
    <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Structname)BasicInfo&quot;" />
+      value="&quot;$(_Info) : public $(_BasicInfo)&quot;" />
 
    <!-- ************* SC ****************** -->
 
@@ -76,7 +76,7 @@
       enabledBy="vref_sc_vrefen"
       typeName="VrefIcomp"
       description="Second order curvature compensation enable"
-      toolTip="Controls the second order curvature compensation\.n
+      toolTip="Controls the second order curvature compensation.\n
                This should be enabled to achieve the performance stated in the data sheet" >
       <choice value="0" name="Disabled" enum="Disabled" />
       <choice value="1" name="Enabled"  enum="Enabled" isDefault="true" />
@@ -334,7 +334,7 @@
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};
+      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Info)> {};
       \t\n
    ]]>
    </template>

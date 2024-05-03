@@ -36,7 +36,7 @@
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
-      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+      value='"$(_Info) : public $(_BasicInfo)"' />
 
    <!-- ************* CR ****************** -->
 
@@ -553,7 +553,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr $(_Structname)BasicInfo::DmaTcdCsr DefaultDmaTcdCsrValue = {%initExpression\n\t};
+      \tstatic constexpr $(_BasicInfo)::DmaTcdCsr DefaultDmaTcdCsrValue = {%initExpression\n\t};
       \t\n
    ]]></variableTemplate>
 
@@ -572,7 +572,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr $(_Structname)BasicInfo::DmaConfig DefaultDmaConfigValue = {%initExpression\n\t};
+      \tstatic constexpr $(_BasicInfo)::DmaConfig DefaultDmaConfigValue = {%initExpression\n\t};
       \t\n
    ]]>
    </variableTemplate>
@@ -584,7 +584,7 @@
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \ttypedef $(_Baseclass)Base_T<$(_Class)Info> $(_Class);
+      \ttypedef $(_Baseclass)Base_T<$(_Info)> $(_Class);
       \t\n
    ]]>
    </template>

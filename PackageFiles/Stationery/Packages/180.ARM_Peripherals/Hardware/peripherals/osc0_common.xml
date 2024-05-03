@@ -11,7 +11,7 @@
    <title />
 
    <!-- ************* Class Declaration ****************** -->
-   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <!-- ************* CR ****************** -->
 
@@ -412,7 +412,7 @@
 
    <template where="basicInfo" discardRepeats="true" codeGenCondition="enablePeripheralSupport" >
       <![CDATA[
-      \t}; // class $(_Structname)BasicInfo::Init
+      \t}; // class $(_BasicInfo)::Init
       \t\n
    ]]>
    </template>
@@ -424,7 +424,7 @@
       /**
        * Class representing $(_NAME)
        */
-      class $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};
+      class $(_Class) : public $(_Baseclass)Base_T<$(_Info)> {};
       \t\n
    ]]>
    </template>

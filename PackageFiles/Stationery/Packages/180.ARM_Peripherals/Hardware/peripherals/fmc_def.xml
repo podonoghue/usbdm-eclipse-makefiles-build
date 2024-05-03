@@ -394,7 +394,7 @@
       \t */\n
    ]]></template>
    <template key="/$(_BASENAME)/declarations" condition="irqOption_present" ><![CDATA[
-      \tclass $(_Class) : public $(_Baseclass)Base, public $(_Baseclass)Interrupt_T<$(_Class)Info> {};\n
+      \tclass $(_Class) : public $(_Baseclass)Base, public $(_Baseclass)Interrupt_T<$(_Info)> {};\n
    ]]></template>
    <template key="/$(_BASENAME)/declarations" condition="!irqOption_present" ><![CDATA[
       \tclass $(_Class) : public $(_Baseclass)Base {};\n

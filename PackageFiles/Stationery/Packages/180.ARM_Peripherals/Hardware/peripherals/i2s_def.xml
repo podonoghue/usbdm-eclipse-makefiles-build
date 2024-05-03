@@ -27,7 +27,7 @@
    <title />
 
    <!-- ************* Class Declaration ****************** -->
-   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <choiceOption key="channelNum" condition="i2s_tcsr_fr_present"
       valueFormat="%s"
@@ -95,7 +95,8 @@
       typeName="I2sTransmitBitClock"
       toolTip="Enables the transmit bit clock, separately from the TE.\n
                This field is automatically set whenever TE is set. \n
-               When software clears this field, the transmit bit clock remains enabled, and this bit remains set, until the end of the current frame"
+               When software clears this field, the transmit bit clock remains enabled,\n
+               and this bit remains set, until the end of the current frame"
       description="Bit Clock Enable" >
       <choice name="Transmit clock disabled"  value="0" enum="Disabled" />
       <choice name="Transmit clock enabled"   value="1" enum="Enabled"  />
@@ -467,7 +468,8 @@
    <binaryOption key="i2s_rcsr_re" condition="i2s_rcsr_re_present"
       enabledBy="enablePeripheralSupport"
       typeName="I2sReceiveEnable"
-      toolTip="When software clears this field, the receiver remains enabled, and this bit remains set, until the end of the current frame"
+      toolTip="When software clears this field, the receiver remains enabled, and\n
+               this bit remains set, until the end of the current frame"
       description="Receiver Enable" >
       <choice name="Receiver disabled"  value="0" enum="ReceiverDisabled" />
       <choice name="Receiver enabled"   value="1" enum="ReceiverEnabled" />
@@ -1706,7 +1708,7 @@
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
-      \t}; // class $(_Structname)BasicInfo::Init
+      \t}; // class $(_BasicInfo)::Init
       \t\n
    ]]>
    </template>
@@ -1718,7 +1720,7 @@
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \ttypedef $(_Baseclass)Base_T<$(_Class)Info> $(_Class);
+      \ttypedef $(_Baseclass)Base_T<$(_Info)> $(_Class);
       \t\n
    ]]>
    </template>

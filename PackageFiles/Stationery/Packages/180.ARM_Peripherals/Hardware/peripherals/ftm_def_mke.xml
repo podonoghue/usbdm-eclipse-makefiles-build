@@ -6,12 +6,12 @@
 
    <!-- ____ Class Declaration ________ -->
    <constant key="_basicInfo_declaration" type="String"
-      value='"class $(_Structname)BasicInfo : public $(_Baseclass)CommonInfo {\n
+      value='"class $(_BasicInfo) : public $(_Baseclass)CommonInfo {\n
       \n
       public:\n"' />
 
    <constant key="_class_declaration" type="String"
-      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+      value='"$(_Info) : public $(_BasicInfo)"' />
 
    <constant key = "disable_peripheral"      value = '"ftm->SC = FTM_SC_CLKS(0);"' type="String"  />
 
@@ -2733,7 +2733,7 @@
    ]]></variableTemplate>
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
-      \t}; // class $(_Structname)BasicInfo::Init\n\n
+      \t}; // class $(_BasicInfo)::Init\n\n
    ]]></template>
 
 <!-- ____ Init class Configure method ____ -->
@@ -2942,7 +2942,7 @@
    </for>
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
-      \t}; // class  $(_Structname)BasicInfo::ChannelInit\n\n
+      \t}; // class  $(_BasicInfo)::ChannelInit\n\n
    ]]></template>
 
    <!-- ____ ChannelInit Configure methods ____________ -->
@@ -3306,7 +3306,7 @@
    </for>
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
-      \t}; // class  $(_Structname)BasicInfo::DualChannelInit\n\n
+      \t}; // class  $(_BasicInfo)::DualChannelInit\n\n
    ]]></template>
 
    <!-- ____ DualChannelInit Configure methods ____________ -->
@@ -3472,7 +3472,7 @@
    <xi:include href="ftm_quadrature_decoder.xml"/>
    <deleteVariables variables="_code"/>
 
-<!--  ___ End of class  $(_Structname)BasicInfo ______________ -->
+<!--  ___ End of class  $(_BasicInfo) ______________ -->
 
 <!-- ___ Set interrupt handlers ___________ -->
 
@@ -3591,7 +3591,7 @@
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \ttypedef $(_Baseclass)Base_T<$(_Class)Info> $(_Class);\n
+      \ttypedef $(_Baseclass)Base_T<$(_Info)> $(_Class);\n
    ]]>
    </template>
 

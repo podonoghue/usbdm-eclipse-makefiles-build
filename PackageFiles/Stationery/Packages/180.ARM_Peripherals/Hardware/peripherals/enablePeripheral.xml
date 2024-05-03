@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
-<!-- mapPinsOption.xml -->
+<!-- enablePeripheral.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
@@ -100,7 +100,8 @@
       enabledBy="enablePeripheralSupport"
       description="Configure this peripheral"
       toolTip="Configure this peripheral in startup code before main() is entered\n
-               Even if disabled, some minimal code may still be executed" >
+               Even if disabled, some minimal code may still be executed"
+      disabledValue="false" >
       <choice value="false" name="Not Configured"              />
       <choice value="true"  name="Configured in startup code"  isDefault="=configureInStartupDefault" />
    </binaryOption>
@@ -467,7 +468,7 @@
       >
       <![CDATA[
          \ttemplate<typename T>
-         \tusing CallbackWrapper = USBDM::CallbackWrapper<T, $(_Class)Info$(wrapped_irq_dummy_parameters)>;
+         \tusing CallbackWrapper = USBDM::CallbackWrapper<T, $(_Info)$(wrapped_irq_dummy_parameters)>;
          \t
          \t/**
          \t * Function to wrap a member function as a static callback function
@@ -525,7 +526,7 @@
       <template codeGenCondition="irqHandlingMethod" condition="!irq_enum" >
       <![CDATA[
          \t/** Callback function for $(_Class) */
-         \tstatic inline CallbackFunction sCallback = $(_Class)Info::unhandledCallback; // $(_hardwareIrqNums);
+         \tstatic inline CallbackFunction sCallback = $(_Info)::unhandledCallback; // $(_hardwareIrqNums);
          \t
          \t/**
          \t * Set interrupt callback function.
@@ -578,7 +579,7 @@
       ]]></variableTemplate>
       <for keys="irqName" values="=_hardwareIrqNums" >
          <template codeGenCondition="irqHandlingMethod" condition="irq_enum" ><![CDATA[
-            \t   $(_Class)Info::unhandledCallback,  // %(irqName) \n
+            \t   $(_Info)::unhandledCallback,  // %(irqName) \n
          ]]></template>
       </for>
       <variableTemplate codeGenCondition="irqHandlingMethod" variables="irq_enum" >

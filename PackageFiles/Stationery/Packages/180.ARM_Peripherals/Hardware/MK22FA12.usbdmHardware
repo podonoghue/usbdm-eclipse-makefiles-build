@@ -2746,11 +2746,80 @@
          <param type="BooleanVariable"        name="mcm_plasc_present"              value="true"             key="/MCM/mcm_plasc_present" />
          <param type="StringVariable"         name="structName"                     value="MCM"              key="/MCM/structName" />
       </peripheral>
-      <peripheral baseName="MPU"      instance=""         instanceList=""     version="mpu_mk21f12_r12">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
+      <peripheral baseName="MPU"      instance=""         instanceList="MPU"  version="mpu_mk21f12_r12">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMpu" />
          <clock clockEnable="SIM->SCGC7 = SIM->SCGC7 | SIM_SCGC7_MPU_MASK;" clockDisable="SIM->SCGC7 = SIM->SCGC7 &amp; ~SIM_SCGC7_MPU_MASK;" />
-         <param type="StringVariable"         name="_instanceList"                  value=""                 key="/MPU/_instanceList" />
+         <param type="StringVariable"         name="_instanceList"                  value="MPU"              key="/MPU/_instanceList" />
          <param type="StringVariable"         name="_hardwareIrqNums"               value=""                 key="/MPU/_hardwareIrqNums" />
+         <param type="BooleanVariable"        name="_present"                       value="true"             key="/MPU/_present" />
+         <param type="BooleanVariable"        name="mpu_cesr_hrl_present"           value="true"             key="/MPU/mpu_cesr_hrl_present" />
+         <param type="BooleanVariable"        name="mpu_cesr_nrgd_present"          value="true"             key="/MPU/mpu_cesr_nrgd_present" />
+         <param type="BooleanVariable"        name="mpu_cesr_nsp_present"           value="true"             key="/MPU/mpu_cesr_nsp_present" />
+         <param type="BooleanVariable"        name="mpu_cesr_present"               value="true"             key="/MPU/mpu_cesr_present" />
+         <param type="BooleanVariable"        name="mpu_cesr_sperr_present"         value="true"             key="/MPU/mpu_cesr_sperr_present" />
+         <param type="BooleanVariable"        name="mpu_cesr_vld_present"           value="true"             key="/MPU/mpu_cesr_vld_present" />
+         <param type="BooleanVariable"        name="mpu_ear_eaddr_present"          value="true"             key="/MPU/mpu_ear_eaddr_present" />
+         <param type="BooleanVariable"        name="mpu_ear_present"                value="true"             key="/MPU/mpu_ear_present" />
+         <param type="BooleanVariable"        name="mpu_edr_eacd_present"           value="true"             key="/MPU/mpu_edr_eacd_present" />
+         <param type="BooleanVariable"        name="mpu_edr_eattr_present"          value="true"             key="/MPU/mpu_edr_eattr_present" />
+         <param type="BooleanVariable"        name="mpu_edr_emn_present"            value="true"             key="/MPU/mpu_edr_emn_present" />
+         <param type="BooleanVariable"        name="mpu_edr_epid_present"           value="true"             key="/MPU/mpu_edr_epid_present" />
+         <param type="BooleanVariable"        name="mpu_edr_erw_present"            value="true"             key="/MPU/mpu_edr_erw_present" />
+         <param type="BooleanVariable"        name="mpu_edr_present"                value="true"             key="/MPU/mpu_edr_present" />
+         <param type="LongVariable"           name="mpu_rgd_dim"                    value="12"               key="/MPU/mpu_rgd_dim" />
+         <param type="LongVariable"           name="mpu_rgdaac_dim"                 value="12"               key="/MPU/mpu_rgdaac_dim" />
+         <param type="BooleanVariable"        name="mpu_rgdaac_m0pe_present"        value="true"             key="/MPU/mpu_rgdaac_m0pe_present" />
+         <param type="BooleanVariable"        name="mpu_rgdaac_m0sm_present"        value="true"             key="/MPU/mpu_rgdaac_m0sm_present" />
+         <param type="BooleanVariable"        name="mpu_rgdaac_m0um_present"        value="true"             key="/MPU/mpu_rgdaac_m0um_present" />
+         <param type="BooleanVariable"        name="mpu_rgdaac_m1pe_present"        value="true"             key="/MPU/mpu_rgdaac_m1pe_present" />
+         <param type="BooleanVariable"        name="mpu_rgdaac_m1sm_present"        value="true"             key="/MPU/mpu_rgdaac_m1sm_present" />
+         <param type="BooleanVariable"        name="mpu_rgdaac_m1um_present"        value="true"             key="/MPU/mpu_rgdaac_m1um_present" />
+         <param type="BooleanVariable"        name="mpu_rgdaac_m2pe_present"        value="true"             key="/MPU/mpu_rgdaac_m2pe_present" />
+         <param type="BooleanVariable"        name="mpu_rgdaac_m2sm_present"        value="true"             key="/MPU/mpu_rgdaac_m2sm_present" />
+         <param type="BooleanVariable"        name="mpu_rgdaac_m2um_present"        value="true"             key="/MPU/mpu_rgdaac_m2um_present" />
+         <param type="BooleanVariable"        name="mpu_rgdaac_m3pe_present"        value="true"             key="/MPU/mpu_rgdaac_m3pe_present" />
+         <param type="BooleanVariable"        name="mpu_rgdaac_m3sm_present"        value="true"             key="/MPU/mpu_rgdaac_m3sm_present" />
+         <param type="BooleanVariable"        name="mpu_rgdaac_m3um_present"        value="true"             key="/MPU/mpu_rgdaac_m3um_present" />
+         <param type="BooleanVariable"        name="mpu_rgdaac_m4re_present"        value="true"             key="/MPU/mpu_rgdaac_m4re_present" />
+         <param type="BooleanVariable"        name="mpu_rgdaac_m4we_present"        value="true"             key="/MPU/mpu_rgdaac_m4we_present" />
+         <param type="BooleanVariable"        name="mpu_rgdaac_m5re_present"        value="true"             key="/MPU/mpu_rgdaac_m5re_present" />
+         <param type="BooleanVariable"        name="mpu_rgdaac_m5we_present"        value="true"             key="/MPU/mpu_rgdaac_m5we_present" />
+         <param type="BooleanVariable"        name="mpu_rgdaac_m6re_present"        value="true"             key="/MPU/mpu_rgdaac_m6re_present" />
+         <param type="BooleanVariable"        name="mpu_rgdaac_m6we_present"        value="true"             key="/MPU/mpu_rgdaac_m6we_present" />
+         <param type="BooleanVariable"        name="mpu_rgdaac_m7re_present"        value="true"             key="/MPU/mpu_rgdaac_m7re_present" />
+         <param type="BooleanVariable"        name="mpu_rgdaac_m7we_present"        value="true"             key="/MPU/mpu_rgdaac_m7we_present" />
+         <param type="BooleanVariable"        name="mpu_rgdaac_present"             value="true"             key="/MPU/mpu_rgdaac_present" />
+         <param type="LongVariable"           name="mpu_sp_dim"                     value="5"                key="/MPU/mpu_sp_dim" />
+         <param type="BooleanVariable"        name="mpu_word0_present"              value="true"             key="/MPU/mpu_word0_present" />
+         <param type="BooleanVariable"        name="mpu_word0_srtaddr_present"      value="true"             key="/MPU/mpu_word0_srtaddr_present" />
+         <param type="BooleanVariable"        name="mpu_word1_endaddr_present"      value="true"             key="/MPU/mpu_word1_endaddr_present" />
+         <param type="BooleanVariable"        name="mpu_word1_present"              value="true"             key="/MPU/mpu_word1_present" />
+         <param type="BooleanVariable"        name="mpu_word2_m0pe_present"         value="true"             key="/MPU/mpu_word2_m0pe_present" />
+         <param type="BooleanVariable"        name="mpu_word2_m0sm_present"         value="true"             key="/MPU/mpu_word2_m0sm_present" />
+         <param type="BooleanVariable"        name="mpu_word2_m0um_present"         value="true"             key="/MPU/mpu_word2_m0um_present" />
+         <param type="BooleanVariable"        name="mpu_word2_m1pe_present"         value="true"             key="/MPU/mpu_word2_m1pe_present" />
+         <param type="BooleanVariable"        name="mpu_word2_m1sm_present"         value="true"             key="/MPU/mpu_word2_m1sm_present" />
+         <param type="BooleanVariable"        name="mpu_word2_m1um_present"         value="true"             key="/MPU/mpu_word2_m1um_present" />
+         <param type="BooleanVariable"        name="mpu_word2_m2pe_present"         value="true"             key="/MPU/mpu_word2_m2pe_present" />
+         <param type="BooleanVariable"        name="mpu_word2_m2sm_present"         value="true"             key="/MPU/mpu_word2_m2sm_present" />
+         <param type="BooleanVariable"        name="mpu_word2_m2um_present"         value="true"             key="/MPU/mpu_word2_m2um_present" />
+         <param type="BooleanVariable"        name="mpu_word2_m3pe_present"         value="true"             key="/MPU/mpu_word2_m3pe_present" />
+         <param type="BooleanVariable"        name="mpu_word2_m3sm_present"         value="true"             key="/MPU/mpu_word2_m3sm_present" />
+         <param type="BooleanVariable"        name="mpu_word2_m3um_present"         value="true"             key="/MPU/mpu_word2_m3um_present" />
+         <param type="BooleanVariable"        name="mpu_word2_m4re_present"         value="true"             key="/MPU/mpu_word2_m4re_present" />
+         <param type="BooleanVariable"        name="mpu_word2_m4we_present"         value="true"             key="/MPU/mpu_word2_m4we_present" />
+         <param type="BooleanVariable"        name="mpu_word2_m5re_present"         value="true"             key="/MPU/mpu_word2_m5re_present" />
+         <param type="BooleanVariable"        name="mpu_word2_m5we_present"         value="true"             key="/MPU/mpu_word2_m5we_present" />
+         <param type="BooleanVariable"        name="mpu_word2_m6re_present"         value="true"             key="/MPU/mpu_word2_m6re_present" />
+         <param type="BooleanVariable"        name="mpu_word2_m6we_present"         value="true"             key="/MPU/mpu_word2_m6we_present" />
+         <param type="BooleanVariable"        name="mpu_word2_m7re_present"         value="true"             key="/MPU/mpu_word2_m7re_present" />
+         <param type="BooleanVariable"        name="mpu_word2_m7we_present"         value="true"             key="/MPU/mpu_word2_m7we_present" />
+         <param type="BooleanVariable"        name="mpu_word2_present"              value="true"             key="/MPU/mpu_word2_present" />
+         <param type="BooleanVariable"        name="mpu_word3_pid_present"          value="true"             key="/MPU/mpu_word3_pid_present" />
+         <param type="BooleanVariable"        name="mpu_word3_pidmask_present"      value="true"             key="/MPU/mpu_word3_pidmask_present" />
+         <param type="BooleanVariable"        name="mpu_word3_present"              value="true"             key="/MPU/mpu_word3_present" />
+         <param type="BooleanVariable"        name="mpu_word3_vld_present"          value="true"             key="/MPU/mpu_word3_vld_present" />
+         <param type="StringVariable"         name="structName"                     value="MPU"              key="/MPU/structName" />
       </peripheral>
       <peripheral baseName="OSC"      instance="0"        instanceList="OSC0" version="osc0_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />

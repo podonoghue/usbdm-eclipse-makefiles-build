@@ -48,7 +48,7 @@
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
-      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+      value='"$(_Info) : public $(_BasicInfo)"' />
 
    <!-- ************* CR ****************** -->
 
@@ -467,7 +467,7 @@
       /**
        * Class representing $(_NAME)
        */
-      class $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};
+      class $(_Class) : public $(_Baseclass)Base_T<$(_Info)> {};
       \t\n
    ]]>
    </template>

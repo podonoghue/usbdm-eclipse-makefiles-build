@@ -13,7 +13,7 @@
    <xi:include href="enablePeripheral.xml"    />
 
    <!-- ____ Class Declaration ________ -->
-   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <!-- ____ INT_CTRL ____ -->
    <binaryOption key="trng_int_ctrl_frq_ct_fail" condition="trng_int_ctrl_frq_ct_fail_present"
@@ -1218,7 +1218,7 @@
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
-      \t}; // class $(_Structname)BasicInfo::Init
+      \t}; // class $(_BasicInfo)::Init
       \t\n
    ]]>
    </template>
@@ -1504,7 +1504,7 @@
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
-      \t}; // class $(_Structname)BasicInfo::ExtendedInit
+      \t}; // class $(_BasicInfo)::ExtendedInit
       \t\n
    ]]>
    </template>
@@ -1516,7 +1516,7 @@
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};
+      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Info)> {};
       \t\n
    ]]>
    </template>

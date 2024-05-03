@@ -14,7 +14,7 @@
    <title />
 
    <!-- _____ Class Declaration _______ -->
-   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <!-- _____ CONTROL _______ -->
 
@@ -219,9 +219,10 @@
       typeName="UsbdcdDataPlusPullupDelayTime"
       baseType="uint8_t"
       description="Time Period Before Enabling D+ Pullup (in ms)"
-      toolTip="Sets the time period (ms) that the module waits after charging port detection before system software must\n
-               enable the D+ pullup to connect to the USB host. Valid values are 1–1023, but the USB Battery Charging\n
-               Specification requires a minimum value of 40 ms."
+      toolTip="Sets the time period (ms) that the module waits after charging port detection before system\n
+               software must enable the D+ pullup to connect to the USB host.\n 
+               Valid values are 1-1023, but the USB Battery Charging Specification requires a minimum\n
+               value of 40 ms."
       min="0" max="1023" value="40"
    />
 
@@ -232,7 +233,7 @@
       description="Time Before Check of D- Line (in ms)"
       toolTip="Sets the amount of time (in ms) that the module waits after the device connects to the USB bus until\n
                checking the state of the D- line to determine the type of charging port. See Charger Type Detection.\n
-               Valid values are 1–15ms."
+               Valid values are 1-15ms."
       min="1" max="15" value="1"
    />
 
@@ -244,9 +245,10 @@
       typeName="UsbdcdDataPlusPullupDelayTime"
       baseType="uint8_t"
       description="Time Period Before Enabling D+ Pullup (in ms)"
-      toolTip="Sets the time period (ms) that the module waits after charging port detection before system software must\n
-               enable the D+ pullup to connect to the USB host. Valid values are 1–1023, but the USB Battery Charging\n
-               Specification requires a minimum value of 40 ms."
+      toolTip="Sets the time period (ms) that the module waits after charging port detection before system\n
+               software must enable the D+ pullup to connect to the USB host.\n 
+               Valid values are 1-1023, but the USB Battery Charging Specification requires a minimum\n
+               value of 40 ms."
       min="0" max="1023" value="40"
    />
 
@@ -258,7 +260,7 @@
       description="Time Before Check of D- Line (in ms)"
       toolTip="Sets the amount of time (in ms) that the module waits after the device connects to the USB bus until\n
                checking the state of the D- line to determine the type of charging port. See Charger Type Detection.\n
-               Valid values are 1–15ms."
+               Valid values are 1-15ms."
       min="1" max="15" value="1"
    />
 
@@ -661,7 +663,7 @@
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
-      \t}; // class $(_Structname)BasicInfo::Init
+      \t}; // class $(_BasicInfo)::Init
       \t\n
    ]]>
    </template>
@@ -673,8 +675,8 @@
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};
-      \t//typedef $(_Baseclass)Base_T<$(_Class)Info> $(_Class);
+      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Info)> {};
+      \t//typedef $(_Baseclass)Base_T<$(_Info)> $(_Class);
       \t\n
    ]]>
    </template>

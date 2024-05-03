@@ -14,7 +14,7 @@
    <title />
 
    <!-- ____ Class Declaration ________ -->
-   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <template><![CDATA[
       \t//! Base value for PCR (excluding MUX value)
@@ -855,7 +855,7 @@
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
-      \t}; // class $(_Structname)BasicInfo::Init
+      \t}; // class $(_BasicInfo)::Init
       \t\n
    ]]>
    </template>
@@ -867,7 +867,7 @@
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \ttypedef $(_Baseclass)Base_T<$(_Class)Info> $(_Class);\n
+      \ttypedef $(_Baseclass)Base_T<$(_Info)> $(_Class);\n
    ]]></template>
 
    <validate

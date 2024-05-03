@@ -33,7 +33,7 @@
    </category>
 
    <!-- ************* Class Declaration ****************** -->
-   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <binaryOption key="rtc_cr_osce" condition="rtc_cr_osce_present&amp;&amp;!/SIM/RtcForcing"
       enabledBy="enablePeripheralSupport"
@@ -1275,7 +1275,7 @@
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
-      \t}; // class $(_Structname)BasicInfo::Init
+      \t}; // class $(_BasicInfo)::Init
       \t\n
    ]]>
    </template>
@@ -1287,8 +1287,8 @@
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};
-      \t//typedef $(_Baseclass)Base_T<$(_Class)Info> $(_Class);
+      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Info)> {};
+      \t//typedef $(_Baseclass)Base_T<$(_Info)> $(_Class);
       \t\n
    ]]>
    </template>

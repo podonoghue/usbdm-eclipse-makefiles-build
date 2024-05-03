@@ -15,7 +15,7 @@
 
    <!-- ************* Class Declaration ****************** -->
 
-   <constant key="_class_declaration" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+   <constant key="_class_declaration" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <intOption key="system_low_power_clock"
       locked="true"
@@ -151,7 +151,7 @@
       ]]></variableTemplate>
    </for>
 
-   <!--   __________ class $(_Structname)BasicInfo _______________________________ -->
+   <!--   __________ class $(_BasicInfo) _______________________________ -->
 
    <template where="definitions" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
@@ -421,7 +421,7 @@
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
       <![CDATA[
-      \t}; // class $(_Structname)BasicInfo::Init
+      \t}; // class $(_BasicInfo)::Init
       \t\n
    ]]>
    </template>

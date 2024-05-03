@@ -190,7 +190,7 @@
    \t/**
    \t * Class representing $(_NAME)
    \t */
-   \ttypedef AdcBase_T<$(_Class)Info> $(_Class);\n
+   \ttypedef AdcBase_T<$(_Info)> $(_Class);\n
    ]]></template>
       
    <signals/>

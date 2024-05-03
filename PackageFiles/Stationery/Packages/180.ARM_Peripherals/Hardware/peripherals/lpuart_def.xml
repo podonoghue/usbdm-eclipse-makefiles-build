@@ -36,7 +36,7 @@
    <xi:include href="enablePeripheral.xml"  />
 
    <!-- ____ Class Declaration ________ -->
-   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <title description="Clock Configuration"/>
    <aliasOption key="/MCG/system_mcgfllclk_clock[]"       optional="true" />
@@ -60,6 +60,7 @@
    />
 
    <choiceOption key="lpuart_baudrate"
+      valueFormat=""
       enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       derivedFrom="/Console/console_baudrate" >
    </choiceOption>
@@ -168,7 +169,7 @@
       %paramDescription
       \t */
       \tstatic void setBaudRate(
-      \t      volatile $(_STRUCTNAME)_Type *const $(_basename),
+      \t      volatile $(_Type) *const $(_basename),
       \t      uint32_t     clockFrequency, %params) {
       \t
       \t   // Disable LPUART before changing registers
@@ -203,7 +204,7 @@
       \t */
       \tstatic void setBaudRate(%params) {
       \t
-      \t   $(_Structname)BasicInfo::setBaudRate($(_basename), getInputClockFrequency(), %paramName);
+      \t   $(_BasicInfo)::setBaudRate($(_basename), getInputClockFrequency(), %paramName);
       \t}
       \t\n
    ]]>
@@ -566,7 +567,7 @@ XXXXXXXXXXXXXXXXXXXXXX
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
-      \t}; // class $(_Structname)BasicInfo::Init
+      \t}; // class $(_BasicInfo)::Init
       \t\n
    ]]>
    </template>
@@ -588,7 +589,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t *  }
       \t *  @endcode
       \t */
-      \tclass $(_Class) : public $(_Baseclass)_T<$(_Class)Info> {};
+      \tclass $(_Class) : public $(_Baseclass)_T<$(_Info)> {};
       \t\n
    ]]>
    </template>

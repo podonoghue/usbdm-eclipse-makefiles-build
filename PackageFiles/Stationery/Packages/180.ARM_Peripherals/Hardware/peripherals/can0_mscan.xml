@@ -51,7 +51,7 @@
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
-      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+      value='"$(_Info) : public $(_BasicInfo)"' />
 
    <!-- ************* CANCTL0 ****************** -->
 
@@ -702,7 +702,7 @@ flag is set"
    <template where="static" codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t/** Callback for programmatically set handler */
-      \t$(_Class)Info::CallbackFunction $(_Class)Info::sCallback = $(_Class)Info::unhandledCallback;
+      \t$(_Info)::CallbackFunction $(_Info)::sCallback = $(_Info)::unhandledCallback;
       \t\n
    ]]>
    </template>
@@ -1087,7 +1087,7 @@ flag is set"
    \t/**
    \t * Class representing $(_NAME)
    \t */
-   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
+   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Info)> {};\n
    ]]></template>
 
    <validate

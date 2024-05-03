@@ -63,7 +63,7 @@
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Structname)BasicInfo&quot;" />
+      value="&quot;$(_Info) : public $(_BasicInfo)&quot;" />
 
    <!-- ************* MCR ****************** -->
    <title description="Module Configuration Register" />
@@ -1998,32 +1998,32 @@
       \t/**
       \t * Callback function for FlexCAN - Message Buffers (Mailboxes and FIFO)
       \t */
-      \t$(_Class)Info::MessageBuffer_CallbackFunction $(_Class)Info::sCallback = (MessageBuffer_CallbackFunction)$(_Class)Info::unhandledCallback;
+      \t$(_Info)::MessageBuffer_CallbackFunction $(_Info)::sCallback = (MessageBuffer_CallbackFunction)$(_Info)::unhandledCallback;
       \t
       \t/**
       \t * Callback function for FlexCAN - Bus off
       \t */
-      \t$(_Class)Info::BusOff_CallbackFunction $(_Class)Info::sCallback = (BusOff_CallbackFunction)$(_Class)Info::unhandledCallback;
+      \t$(_Info)::BusOff_CallbackFunction $(_Info)::sCallback = (BusOff_CallbackFunction)$(_Info)::unhandledCallback;
       \t
       \t/**
       \t * Callback function for FlexCAN - Error
       \t */
-      \t$(_Class)Info::Error_CallbackFunction $(_Class)Info::sCallback = (Error_CallbackFunction)$(_Class)Info::unhandledCallback;
+      \t$(_Info)::Error_CallbackFunction $(_Info)::sCallback = (Error_CallbackFunction)$(_Info)::unhandledCallback;
       \t
       \t/**
       \t * Callback function for FlexCAN - Transmit Warning
       \t */
-      \t$(_Class)Info::TxWarning_CallbackFunction $(_Class)Info::sCallback = (TxWarning_CallbackFunction)$(_Class)Info::unhandledCallback;
+      \t$(_Info)::TxWarning_CallbackFunction $(_Info)::sCallback = (TxWarning_CallbackFunction)$(_Info)::unhandledCallback;
       \t
       \t/**
       \t * Callback function for FlexCAN - Receive Warning
       \t */
-      \t$(_Class)Info::RxWarning_CallbackFunction $(_Class)Info::sCallback = (RxWarning_CallbackFunction)$(_Class)Info::unhandledCallback;
+      \t$(_Info)::RxWarning_CallbackFunction $(_Info)::sCallback = (RxWarning_CallbackFunction)$(_Info)::unhandledCallback;
       \t
       \t/**
       \t * Callback function for FlexCAN - Wakeup
       \t */
-      \t$(_Class)Info::WakeUp_CallbackFunction $(_Class)Info::sCallback = (WakeUp_CallbackFunction)$(_Class)Info::unhandledCallback;
+      \t$(_Info)::WakeUp_CallbackFunction $(_Info)::sCallback = (WakeUp_CallbackFunction)$(_Info)::unhandledCallback;
       \t
       \t\n
    ]]>
@@ -2752,7 +2752,7 @@ XXXXXXXXXXXXXXXXXXXXXX
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
-      \t}; // class $(_Structname)BasicInfo::Init
+      \t}; // class $(_BasicInfo)::Init
       \t\n
    ]]>
    </template>
@@ -2764,8 +2764,8 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};
-      \t//typedef $(_Baseclass)Base_T<$(_Class)Info> $(_Class);
+      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Info)> {};
+      \t//typedef $(_Baseclass)Base_T<$(_Info)> $(_Class);
       \t\n
    ]]>
    </template>

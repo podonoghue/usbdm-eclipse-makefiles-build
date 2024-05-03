@@ -110,7 +110,7 @@
 
    <!-- _____________ Class Declaration __________________ -->
    <constant key="_class_declaration" type="String"
-      value='"$(_Class)Info : public $(_Baseclass)BasicInfo"' />
+      value='"$(_Info) : public $(_Baseclass)BasicInfo"' />
 
 
    <!-- _____________ USB Clock __________________ -->

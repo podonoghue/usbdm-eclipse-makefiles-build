@@ -146,7 +146,7 @@
    <xi:include href="simCommon.xml" />
 
    <!-- ____ Class Declaration __________________ -->
-   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Baseclass)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_Baseclass)BasicInfo"' />
 
    <for keys="n" dim="=numberOfClockSettings" >
       <aliasCategoryOption key="/ICS/ClockConfig[%(n)]" derived="true" locked="true" >
@@ -1192,7 +1192,7 @@
 
    <template key="/ICS/ClockStartupAfter" codeGenCondition="configurePeripheralInStartUp" >
    <![CDATA[
-      \tUSBDM::$(_Class)Info::defaultConfigure();
+      \tUSBDM::$(_Info)::defaultConfigure();
    ]]></template>
 
    <template key="DefaultInitValue" ><![CDATA[

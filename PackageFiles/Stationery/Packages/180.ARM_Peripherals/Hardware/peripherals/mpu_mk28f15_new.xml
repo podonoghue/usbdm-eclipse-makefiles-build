@@ -1,0 +1,1147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- mpu_mk28f15.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Memory protection unit" >
+
+   <equation key="irq_parameters"             value=""          />
+   <equation key="irq_dummy_parameters"       value=""          />
+   <equation key="irq_call"                   value=""          />
+   <equation key="generateDefault"            value="false"     />
+   <equation key="configureInStartupDefault"  value="false"     />
+   <xi:include href="enablePeripheral.xml"    />
+   <title />
+
+   <!-- ____ Class Declaration ________ -->
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
+
+   <!-- ____ CESR ____ -->
+   <title description="Control/Error Status Register" />
+
+   <binaryOption key="mpu_cesr_sperr" condition="mpu_cesr_sperr_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuCesrSperr"
+      baseType="uint32_t"
+      toolTip=""
+      description="Slave Port n Error" >
+      <choice name="No error has occurred for slave port n"  value="0" enum="NoErrorHasOccurredForSlavePortN" />
+      <choice name="An error has occurred for slave port n"  value="1" enum="AnErrorHasOccurredForSlavePortN" />
+   </binaryOption >
+
+   <intOption key="mpu_cesr_hrl" condition="mpu_cesr_hrl_present"
+      hidden="true"
+      derived="true"
+      typeName="uint32_t"
+      toolTip=""
+      description="Hardware Revision Level"
+   />
+
+   <intOption key="mpu_cesr_nsp" condition="mpu_cesr_nsp_present"
+      hidden="true"
+      derived="true"
+      typeName="uint32_t"
+      toolTip=""
+      description="Number Of Slave Ports"
+   />
+
+   <choiceOption key="mpu_cesr_nrgd" condition="mpu_cesr_nrgd_present"
+      hidden="true"
+      derived="true"
+      typeName="MpuCesrNrgd"
+      baseType="uint32_t"
+      toolTip=""
+      description="Number Of Region Descriptors" >
+      <choice name="8 region descriptors"   value="0" enum="8RegionDescriptors" />
+      <choice name="12 region descriptors"  value="1" enum="12RegionDescriptors" />
+      <choice name="16 region descriptors"  value="2" enum="16RegionDescriptors" />
+   </choiceOption >
+
+   <binaryOption key="mpu_cesr_vld" condition="mpu_cesr_vld_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuCesrVld"
+      baseType="uint32_t"
+      toolTip=""
+      description="Valid" >
+      <choice name="MPU is disabled. All accesses from all bus masters are allowed"  value="0" enum="MpuIsDisabledAllAccessesFromAllBusMastersAreAllowed" />
+      <choice name="MPU is enabled"                                                  value="1" enum="MpuIsEnabled" />
+   </binaryOption >
+
+   <!-- ____ EAR ____ -->
+   <title description="Error Address Register, slave port n" />
+
+   <intOption key="mpu_ear_eaddr" condition="mpu_ear_eaddr_present"
+      hidden="true"
+      derived="true"
+      typeName="uint32_t"
+      toolTip=""
+      description="Error Address"
+   />
+
+   <!-- ____ EDR ____ -->
+   <title description="Error Detail Register, slave port n" />
+
+   <intOption key="mpu_edr_eacd" condition="mpu_edr_eacd_present"
+      hidden="true"
+      derived="true"
+      typeName="uint32_t"
+      toolTip=""
+      description="Error Access Control Detail"
+   />
+
+   <intOption key="mpu_edr_epid" condition="mpu_edr_epid_present"
+      hidden="true"
+      derived="true"
+      typeName="uint32_t"
+      toolTip=""
+      description="Error Process Identification"
+   />
+
+   <intOption key="mpu_edr_emn" condition="mpu_edr_emn_present"
+      hidden="true"
+      derived="true"
+      typeName="uint32_t"
+      toolTip=""
+      description="Error Master Number"
+   />
+
+   <choiceOption key="mpu_edr_eattr" condition="mpu_edr_eattr_present"
+      hidden="true"
+      derived="true"
+      typeName="MpuEdrEattr"
+      baseType="uint32_t"
+      toolTip=""
+      description="Error Attributes" >
+      <choice name="User mode, instruction access"        value="0" enum="UserMode_InstructionAccess" />
+      <choice name="User mode, data access"               value="1" enum="UserMode_DataAccess" />
+      <choice name="Supervisor mode, instruction access"  value="2" enum="SupervisorMode_InstructionAccess" />
+      <choice name="Supervisor mode, data access"         value="3" enum="SupervisorMode_DataAccess" />
+   </choiceOption >
+
+   <binaryOption key="mpu_edr_erw" condition="mpu_edr_erw_present"
+      hidden="true"
+      derived="true"
+      typeName="MpuEdrErw"
+      baseType="uint32_t"
+      toolTip=""
+      description="Error Read/Write" >
+      <choice name="Read"        value="0" enum="Read" />
+      <choice name="Write"       value="1" enum="Write" />
+   </binaryOption >
+
+   <!-- ____ WORD0 ____ -->
+   <title description="Region Descriptor n, Word 0" />
+
+   <intOption key="mpu_word0_srtaddr" condition="mpu_word0_srtaddr_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord0Srtaddr"
+      baseType="uint32_t"
+      toolTip=""
+      description="Start Address"
+      value="0"
+      min="0" max="134217727"
+   />
+
+   <!-- ____ WORD1 ____ -->
+   <title description="Region Descriptor n, Word 1" />
+
+   <intOption key="mpu_word1_endaddr" condition="mpu_word1_endaddr_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord1Endaddr"
+      baseType="uint32_t"
+      toolTip=""
+      description="End Address"
+      value="0"
+      min="0" max="134217727"
+   />
+
+   <!-- ____ WORD2 ____ -->
+   <title description="Region Descriptor n, Word 2" />
+
+   <binaryOption key="mpu_word2_m7re" condition="mpu_word2_m7re_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord2M7re"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 7 Read Enable" >
+      <choice name="Bus master 7 reads terminate with an access error and the read is not performed"  value="0" enum="BusMaster7ReadsTerminateWithAnAccessErrorAndTheReadIsNotPerformed" />
+      <choice name="Bus master 7 reads allowed"                                                       value="1" enum="BusMaster7ReadsAllowed" />
+   </binaryOption >
+
+   <binaryOption key="mpu_word2_m7we" condition="mpu_word2_m7we_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord2M7we"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 7 Write Enable" >
+      <choice name="Bus master 7 writes terminate with an access error and the write is not performed"  value="0" enum="BusMaster7WritesTerminateWithAnAccessErrorAndTheWriteIsNotPerformed" />
+      <choice name="Bus master 7 writes allowed"                                                        value="1" enum="BusMaster7WritesAllowed" />
+   </binaryOption >
+
+   <binaryOption key="mpu_word2_m6re" condition="mpu_word2_m6re_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord2M6re"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 6 Read Enable" >
+      <choice name="Bus master 6 reads terminate with an access error and the read is not performed"  value="0" enum="BusMaster6ReadsTerminateWithAnAccessErrorAndTheReadIsNotPerformed" />
+      <choice name="Bus master 6 reads allowed"                                                       value="1" enum="BusMaster6ReadsAllowed" />
+   </binaryOption >
+
+   <binaryOption key="mpu_word2_m6we" condition="mpu_word2_m6we_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord2M6we"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 6 Write Enable" >
+      <choice name="Bus master 6 writes terminate with an access error and the write is not performed"  value="0" enum="BusMaster6WritesTerminateWithAnAccessErrorAndTheWriteIsNotPerformed" />
+      <choice name="Bus master 6 writes allowed"                                                        value="1" enum="BusMaster6WritesAllowed" />
+   </binaryOption >
+
+   <binaryOption key="mpu_word2_m5re" condition="mpu_word2_m5re_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord2M5re"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 5 Read Enable" >
+      <choice name="Bus master 5 reads terminate with an access error and the read is not performed"  value="0" enum="BusMaster5ReadsTerminateWithAnAccessErrorAndTheReadIsNotPerformed" />
+      <choice name="Bus master 5 reads allowed"                                                       value="1" enum="BusMaster5ReadsAllowed" />
+   </binaryOption >
+
+   <binaryOption key="mpu_word2_m5we" condition="mpu_word2_m5we_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord2M5we"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 5 Write Enable" >
+      <choice name="Bus master 5 writes terminate with an access error and the write is not performed"  value="0" enum="BusMaster5WritesTerminateWithAnAccessErrorAndTheWriteIsNotPerformed" />
+      <choice name="Bus master 5 writes allowed"                                                        value="1" enum="BusMaster5WritesAllowed" />
+   </binaryOption >
+
+   <binaryOption key="mpu_word2_m4re" condition="mpu_word2_m4re_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord2M4re"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 4 Read Enable" >
+      <choice name="Bus master 4 reads terminate with an access error and the read is not performed"  value="0" enum="BusMaster4ReadsTerminateWithAnAccessErrorAndTheReadIsNotPerformed" />
+      <choice name="Bus master 4 reads allowed"                                                       value="1" enum="BusMaster4ReadsAllowed" />
+   </binaryOption >
+
+   <binaryOption key="mpu_word2_m4we" condition="mpu_word2_m4we_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord2M4we"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 4 Write Enable" >
+      <choice name="Bus master 4 writes terminate with an access error and the write is not performed"  value="0" enum="BusMaster4WritesTerminateWithAnAccessErrorAndTheWriteIsNotPerformed" />
+      <choice name="Bus master 4 writes allowed"                                                        value="1" enum="BusMaster4WritesAllowed" />
+   </binaryOption >
+
+   <binaryOption key="mpu_word2_m3pe" condition="mpu_word2_m3pe_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord2M3pe"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 3 Process Identifier Enable" >
+      <choice name="Do not include the process identifier in the evaluation"                            value="0" enum="DoNotIncludeTheProcessIdentifierInTheEvaluation" />
+      <choice name="Include the process identifier and mask (RGDn_WORD3) in the region hit evaluation"  value="1" enum="IncludeTheProcessIdentifierAndMaskRgdn_word3InTheRegionHitEvaluation" />
+   </binaryOption >
+
+   <choiceOption key="mpu_word2_m3sm" condition="mpu_word2_m3sm_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord2M3sm"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 3 Supervisor Mode Access Control" >
+      <choice name="r/w/x; read, write and execute allowed"       value="0" enum="RWXRead_WriteAndExecuteAllowed" />
+      <choice name="r/x; read and execute allowed, but no write"  value="1" enum="RXReadAndExecuteAllowed_ButNoWrite" />
+      <choice name="r/w; read and write allowed, but no execute"  value="2" enum="RWReadAndWriteAllowed_ButNoExecute" />
+      <choice name="Same as User mode defined in M3UM"            value="3" enum="SameAsUserModeDefinedInM3um" />
+   </choiceOption >
+
+   <binaryOption key="mpu_word2_m3um" condition="mpu_word2_m3um_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord2M3um"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 3 User Mode Access Control" >
+      <choice name="An attempted access of that mode may be terminated with an access error (if not allowed by another descriptor) and the access not performed"  value="0" enum="AnAttemptedAccessOfThatModeMayBeTerminatedWithAnAccessErrorIfNotAllowedByAnotherDescriptorAndTheAccessNotPerformed" />
+      <choice name="Allows the given access type to occur"                                                                                                        value="1" enum="AllowsTheGivenAccessTypeToOccur" />
+   </binaryOption >
+
+   <binaryOption key="mpu_word2_m2pe" condition="mpu_word2_m2pe_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord2M2pe"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 2 Process Identifier Enable" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <choiceOption key="mpu_word2_m2sm" condition="mpu_word2_m2sm_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord2M2sm"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 2 Supervisor Mode Access Control" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="mpu_word2_m2um" condition="mpu_word2_m2um_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord2M2um"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 2 User Mode Access control" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+      <choice name="Choice 4"  value="4" enum="Choice4" />
+      <choice name="Choice 5"  value="5" enum="Choice5" />
+      <choice name="Choice 6"  value="6" enum="Choice6" />
+      <choice name="Choice 7"  value="7" enum="Choice7" />
+   </choiceOption >
+
+   <binaryOption key="mpu_word2_m1pe" condition="mpu_word2_m1pe_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord2M1pe"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 1 Process Identifier enable" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <choiceOption key="mpu_word2_m1sm" condition="mpu_word2_m1sm_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord2M1sm"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 1 Supervisor Mode Access Control" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="mpu_word2_m1um" condition="mpu_word2_m1um_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord2M1um"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 1 User Mode Access Control" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+      <choice name="Choice 4"  value="4" enum="Choice4" />
+      <choice name="Choice 5"  value="5" enum="Choice5" />
+      <choice name="Choice 6"  value="6" enum="Choice6" />
+      <choice name="Choice 7"  value="7" enum="Choice7" />
+   </choiceOption >
+
+   <binaryOption key="mpu_word2_m0pe" condition="mpu_word2_m0pe_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord2M0pe"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 0 Process Identifier enable" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <choiceOption key="mpu_word2_m0sm" condition="mpu_word2_m0sm_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord2M0sm"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 0 Supervisor Mode Access Control" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="mpu_word2_m0um" condition="mpu_word2_m0um_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord2M0um"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 0 User Mode Access Control" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+      <choice name="Choice 4"  value="4" enum="Choice4" />
+      <choice name="Choice 5"  value="5" enum="Choice5" />
+      <choice name="Choice 6"  value="6" enum="Choice6" />
+      <choice name="Choice 7"  value="7" enum="Choice7" />
+   </choiceOption >
+
+   <!-- ____ WORD3 ____ -->
+   <title description="Region Descriptor n, Word 3" />
+
+   <intOption key="mpu_word3_pid" condition="mpu_word3_pid_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord3Pid"
+      baseType="uint8_t"
+      toolTip=""
+      description="Process Identifier"
+      value="0"
+      min="0" max="255"
+   />
+
+   <intOption key="mpu_word3_pidmask" condition="mpu_word3_pidmask_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord3Pidmask"
+      baseType="uint8_t"
+      toolTip=""
+      description="Process Identifier Mask"
+      value="0"
+      min="0" max="255"
+   />
+
+   <binaryOption key="mpu_word3_vld" condition="mpu_word3_vld_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuWord3Vld"
+      baseType="uint32_t"
+      toolTip=""
+      description="Valid" >
+      <choice name="Region descriptor is invalid"  value="0" enum="RegionDescriptorIsInvalid" />
+      <choice name="Region descriptor is valid"    value="1" enum="RegionDescriptorIsValid" />
+   </binaryOption >
+
+   <!-- ____ RGDAAC ____ -->
+   <title description="Region Descriptor Alternate Access Control n" />
+
+   <binaryOption key="mpu_rgdaac_m7re" condition="mpu_rgdaac_m7re_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuRgdaacM7re"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 7 Read Enable" >
+      <choice name="Bus master 7 reads terminate with an access error and the read is not performed"  value="0" enum="BusMaster7ReadsTerminateWithAnAccessErrorAndTheReadIsNotPerformed" />
+      <choice name="Bus master 7 reads allowed"                                                       value="1" enum="BusMaster7ReadsAllowed" />
+   </binaryOption >
+
+   <binaryOption key="mpu_rgdaac_m7we" condition="mpu_rgdaac_m7we_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuRgdaacM7we"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 7 Write Enable" >
+      <choice name="Bus master 7 writes terminate with an access error and the write is not performed"  value="0" enum="BusMaster7WritesTerminateWithAnAccessErrorAndTheWriteIsNotPerformed" />
+      <choice name="Bus master 7 writes allowed"                                                        value="1" enum="BusMaster7WritesAllowed" />
+   </binaryOption >
+
+   <binaryOption key="mpu_rgdaac_m6re" condition="mpu_rgdaac_m6re_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuRgdaacM6re"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 6 Read Enable" >
+      <choice name="Bus master 6 reads terminate with an access error and the read is not performed"  value="0" enum="BusMaster6ReadsTerminateWithAnAccessErrorAndTheReadIsNotPerformed" />
+      <choice name="Bus master 6 reads allowed"                                                       value="1" enum="BusMaster6ReadsAllowed" />
+   </binaryOption >
+
+   <binaryOption key="mpu_rgdaac_m6we" condition="mpu_rgdaac_m6we_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuRgdaacM6we"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 6 Write Enable" >
+      <choice name="Bus master 6 writes terminate with an access error and the write is not performed"  value="0" enum="BusMaster6WritesTerminateWithAnAccessErrorAndTheWriteIsNotPerformed" />
+      <choice name="Bus master 6 writes allowed"                                                        value="1" enum="BusMaster6WritesAllowed" />
+   </binaryOption >
+
+   <binaryOption key="mpu_rgdaac_m5re" condition="mpu_rgdaac_m5re_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuRgdaacM5re"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 5 Read Enable" >
+      <choice name="Bus master 5 reads terminate with an access error and the read is not performed"  value="0" enum="BusMaster5ReadsTerminateWithAnAccessErrorAndTheReadIsNotPerformed" />
+      <choice name="Bus master 5 reads allowed"                                                       value="1" enum="BusMaster5ReadsAllowed" />
+   </binaryOption >
+
+   <binaryOption key="mpu_rgdaac_m5we" condition="mpu_rgdaac_m5we_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuRgdaacM5we"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 5 Write Enable" >
+      <choice name="Bus master 5 writes terminate with an access error and the write is not performed"  value="0" enum="BusMaster5WritesTerminateWithAnAccessErrorAndTheWriteIsNotPerformed" />
+      <choice name="Bus master 5 writes allowed"                                                        value="1" enum="BusMaster5WritesAllowed" />
+   </binaryOption >
+
+   <binaryOption key="mpu_rgdaac_m4re" condition="mpu_rgdaac_m4re_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuRgdaacM4re"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 4 Read Enable" >
+      <choice name="Bus master 4 reads terminate with an access error and the read is not performed"  value="0" enum="BusMaster4ReadsTerminateWithAnAccessErrorAndTheReadIsNotPerformed" />
+      <choice name="Bus master 4 reads allowed"                                                       value="1" enum="BusMaster4ReadsAllowed" />
+   </binaryOption >
+
+   <binaryOption key="mpu_rgdaac_m4we" condition="mpu_rgdaac_m4we_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuRgdaacM4we"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 4 Write Enable" >
+      <choice name="Bus master 4 writes terminate with an access error and the write is not performed"  value="0" enum="BusMaster4WritesTerminateWithAnAccessErrorAndTheWriteIsNotPerformed" />
+      <choice name="Bus master 4 writes allowed"                                                        value="1" enum="BusMaster4WritesAllowed" />
+   </binaryOption >
+
+   <binaryOption key="mpu_rgdaac_m3pe" condition="mpu_rgdaac_m3pe_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuRgdaacM3pe"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 3 Process Identifier Enable" >
+      <choice name="Do not include the process identifier in the evaluation"                             value="0" enum="DoNotIncludeTheProcessIdentifierInTheEvaluation" />
+      <choice name="Include the process identifier and mask (RGDn.RGDAAC) in the region hit evaluation"  value="1" enum="IncludeTheProcessIdentifierAndMaskRgdnRgdaacInTheRegionHitEvaluation" />
+   </binaryOption >
+
+   <choiceOption key="mpu_rgdaac_m3sm" condition="mpu_rgdaac_m3sm_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuRgdaacM3sm"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 3 Supervisor Mode Access Control" >
+      <choice name="r/w/x; read, write and execute allowed"       value="0" enum="RWXRead_WriteAndExecuteAllowed" />
+      <choice name="r/x; read and execute allowed, but no write"  value="1" enum="RXReadAndExecuteAllowed_ButNoWrite" />
+      <choice name="r/w; read and write allowed, but no execute"  value="2" enum="RWReadAndWriteAllowed_ButNoExecute" />
+      <choice name="Same as User mode defined in M3UM"            value="3" enum="SameAsUserModeDefinedInM3um" />
+   </choiceOption >
+
+   <binaryOption key="mpu_rgdaac_m3um" condition="mpu_rgdaac_m3um_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuRgdaacM3um"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 3 User Mode Access Control" >
+      <choice name="An attempted access of that mode may be terminated with an access error (if not allowed by another descriptor) and the access not performed"  value="0" enum="AnAttemptedAccessOfThatModeMayBeTerminatedWithAnAccessErrorIfNotAllowedByAnotherDescriptorAndTheAccessNotPerformed" />
+      <choice name="Allows the given access type to occur"                                                                                                        value="1" enum="AllowsTheGivenAccessTypeToOccur" />
+   </binaryOption >
+
+   <binaryOption key="mpu_rgdaac_m2pe" condition="mpu_rgdaac_m2pe_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuRgdaacM2pe"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 2 Process Identifier Enable" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <choiceOption key="mpu_rgdaac_m2sm" condition="mpu_rgdaac_m2sm_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuRgdaacM2sm"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 2 Supervisor Mode Access Control" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="mpu_rgdaac_m2um" condition="mpu_rgdaac_m2um_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuRgdaacM2um"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 2 User Mode Access Control" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+      <choice name="Choice 4"  value="4" enum="Choice4" />
+      <choice name="Choice 5"  value="5" enum="Choice5" />
+      <choice name="Choice 6"  value="6" enum="Choice6" />
+      <choice name="Choice 7"  value="7" enum="Choice7" />
+   </choiceOption >
+
+   <binaryOption key="mpu_rgdaac_m1pe" condition="mpu_rgdaac_m1pe_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuRgdaacM1pe"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 1 Process Identifier Enable" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <choiceOption key="mpu_rgdaac_m1sm" condition="mpu_rgdaac_m1sm_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuRgdaacM1sm"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 1 Supervisor Mode Access Control" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="mpu_rgdaac_m1um" condition="mpu_rgdaac_m1um_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuRgdaacM1um"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 1 User Mode Access Control" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+      <choice name="Choice 4"  value="4" enum="Choice4" />
+      <choice name="Choice 5"  value="5" enum="Choice5" />
+      <choice name="Choice 6"  value="6" enum="Choice6" />
+      <choice name="Choice 7"  value="7" enum="Choice7" />
+   </choiceOption >
+
+   <binaryOption key="mpu_rgdaac_m0pe" condition="mpu_rgdaac_m0pe_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuRgdaacM0pe"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 0 Process Identifier Enable" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+   </binaryOption >
+
+   <choiceOption key="mpu_rgdaac_m0sm" condition="mpu_rgdaac_m0sm_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuRgdaacM0sm"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 0 Supervisor Mode Access Control" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+   </choiceOption >
+
+   <choiceOption key="mpu_rgdaac_m0um" condition="mpu_rgdaac_m0um_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="MpuRgdaacM0um"
+      baseType="uint32_t"
+      toolTip=""
+      description="Bus Master 0 User Mode Access Control" >
+      <choice name="Choice 0"  value="0" enum="Choice0" />
+      <choice name="Choice 1"  value="1" enum="Choice1" />
+      <choice name="Choice 2"  value="2" enum="Choice2" />
+      <choice name="Choice 3"  value="3" enum="Choice3" />
+      <choice name="Choice 4"  value="4" enum="Choice4" />
+      <choice name="Choice 5"  value="5" enum="Choice5" />
+      <choice name="Choice 6"  value="6" enum="Choice6" />
+      <choice name="Choice 7"  value="7" enum="Choice7" />
+   </choiceOption >
+
+   <!-- ____ Getters and Setters ____________ -->
+
+   <for keys="field                     : set   : get   : clear : genCode                 : name"
+        values="
+
+         mpu_cesr_sperr                 : true  : true  : false : enableGettersAndSetters : CesrSperr;
+         mpu_cesr_hrl                   : false : true  : false : enableGettersAndSetters : CesrHrl;
+         mpu_cesr_nsp                   : false : true  : false : enableGettersAndSetters : CesrNsp;
+         mpu_cesr_nrgd                  : false : true  : false : enableGettersAndSetters : CesrNrgd;
+         mpu_cesr_vld                   : true  : true  : false : enableGettersAndSetters : CesrVld" >
+      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t * (%(field))
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(%params) {
+         \t   %fieldAssignment;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Get %description
+         \t * (%(field))
+         \t *
+         \t * @return %tooltip
+         \t */
+         \tstatic %returnType get%(name)() {
+         \t   return %fieldExtract;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+         tooltipPadding="x*x"      ><![CDATA[
+         \t/**
+         \t * Clear %description
+         \t * (%(field))
+         \t *
+         \t * %tooltip
+         \t */
+         \tstatic void clear%(name)() {
+         \t   %register = %register|%mask;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+   <choiceOption key="xxx_yyy_num"
+      valueFormat="%s"
+      hidden="true"
+      derived="true"
+      typeName="XXXPortNum"
+      baseType="uint32_t"
+      toolTip="Selects a XXXX"
+      description="XXX Number" >
+      <choiceExpansion  keys="index" dim="=ZZZ"
+         name="Slave Port %(index)" value="%(index)" enum="%(index)" />
+   </choiceOption>
+
+
+   <for keys="field                     : set   : get   : clear : genCode                 : context              : name"
+        values="
+         mpu_ear_index,mpu_ear_eaddr[]        : false : true  : false : enableGettersAndSetters : SP[%%paramName0].%s       : EarEaddr;
+
+         mpu_edr_index,mpu_edr_eacd[]         : false : true  : false : enableGettersAndSetters : SP[%%paramName0].%s       : EdrEacd;
+         mpu_edr_index,mpu_edr_epid[]         : false : true  : false : enableGettersAndSetters : SP[%%paramName0].%s       : EdrEpid;
+         mpu_edr_index,mpu_edr_emn[]          : false : true  : false : enableGettersAndSetters : SP[%%paramName0].%s       : EdrEmn;
+         mpu_edr_index,mpu_edr_eattr[]        : false : true  : false : enableGettersAndSetters : SP[%%paramName0].%s       : EdrEattr;
+         mpu_edr_index,mpu_edr_erw[]          : false : true  : false : enableGettersAndSetters : SP[%%paramName0].%s       : EdrErw;
+
+         mpu_word0_index,mpu_word0_srtaddr[]  : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word0Srtaddr;
+
+         mpu_word1_index,mpu_word1_endaddr[]  : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word1Endaddr;
+
+         mpu_word2_index,mpu_word2_m7re[]     : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word2M7re;
+         mpu_word2_index,mpu_word2_m7we[]     : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word2M7we;
+         mpu_word2_index,mpu_word2_m6re[]     : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word2M6re;
+         mpu_word2_index,mpu_word2_m6we[]     : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word2M6we;
+         mpu_word2_index,mpu_word2_m5re[]     : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word2M5re;
+         mpu_word2_index,mpu_word2_m5we[]     : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word2M5we;
+         mpu_word2_index,mpu_word2_m4re[]     : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word2M4re;
+         mpu_word2_index,mpu_word2_m4we[]     : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word2M4we;
+         mpu_word2_index,mpu_word2_m3pe[]     : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word2M3pe;
+         mpu_word2_index,mpu_word2_m3sm[]     : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word2M3sm;
+         mpu_word2_index,mpu_word2_m3um[]     : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word2M3um;
+         mpu_word2_index,mpu_word2_m2pe[]     : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word2M2pe;
+         mpu_word2_index,mpu_word2_m2sm[]     : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word2M2sm;
+         mpu_word2_index,mpu_word2_m2um[]     : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word2M2um;
+         mpu_word2_index,mpu_word2_m1pe[]     : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word2M1pe;
+         mpu_word2_index,mpu_word2_m1sm[]     : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word2M1sm;
+         mpu_word2_index,mpu_word2_m1um[]     : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word2M1um;
+         mpu_word2_index,mpu_word2_m0pe[]     : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word2M0pe;
+         mpu_word2_index,mpu_word2_m0sm[]     : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word2M0sm;
+         mpu_word2_index,mpu_word2_m0um[]     : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word2M0um;
+
+         mpu_word3_index,mpu_word3_pid[]      : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word3Pid;
+         mpu_word3_index,mpu_word3_pidmask[]  : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word3Pidmask;
+         mpu_word3_index,mpu_word3_vld[]      : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s      : Word3Vld;
+
+         mpu_rgdaac_index,mpu_rgdaac_m7re[]   : true  : true  : false : enableGettersAndSetters : %s[%%paramName0]          : RgdaacM7re;
+         mpu_rgdaac_index,mpu_rgdaac_m7we[]   : true  : true  : false : enableGettersAndSetters : %s[%%paramName0]          : RgdaacM7we;
+         mpu_rgdaac_index,mpu_rgdaac_m6re[]   : true  : true  : false : enableGettersAndSetters : %s[%%paramName0]          : RgdaacM6re;
+         mpu_rgdaac_index,mpu_rgdaac_m6we[]   : true  : true  : false : enableGettersAndSetters : %s[%%paramName0]          : RgdaacM6we;
+         mpu_rgdaac_index,mpu_rgdaac_m5re[]   : true  : true  : false : enableGettersAndSetters : %s[%%paramName0]          : RgdaacM5re;
+         mpu_rgdaac_index,mpu_rgdaac_m5we[]   : true  : true  : false : enableGettersAndSetters : %s[%%paramName0]          : RgdaacM5we;
+         mpu_rgdaac_index,mpu_rgdaac_m4re[]   : true  : true  : false : enableGettersAndSetters : %s[%%paramName0]          : RgdaacM4re;
+         mpu_rgdaac_index,mpu_rgdaac_m4we[]   : true  : true  : false : enableGettersAndSetters : %s[%%paramName0]          : RgdaacM4we;
+         mpu_rgdaac_index,mpu_rgdaac_m3pe[]   : true  : true  : false : enableGettersAndSetters : %s[%%paramName0]          : RgdaacM3pe;
+         mpu_rgdaac_index,mpu_rgdaac_m3sm[]   : true  : true  : false : enableGettersAndSetters : %s[%%paramName0]          : RgdaacM3sm;
+         mpu_rgdaac_index,mpu_rgdaac_m3um[]   : true  : true  : false : enableGettersAndSetters : %s[%%paramName0]          : RgdaacM3um;
+         mpu_rgdaac_index,mpu_rgdaac_m2pe[]   : true  : true  : false : enableGettersAndSetters : %s[%%paramName0]          : RgdaacM2pe;
+         mpu_rgdaac_index,mpu_rgdaac_m2sm[]   : true  : true  : false : enableGettersAndSetters : %s[%%paramName0]          : RgdaacM2sm;
+         mpu_rgdaac_index,mpu_rgdaac_m2um[]   : true  : true  : false : enableGettersAndSetters : %s[%%paramName0]          : RgdaacM2um;
+         mpu_rgdaac_index,mpu_rgdaac_m1pe[]   : true  : true  : false : enableGettersAndSetters : %s[%%paramName0]          : RgdaacM1pe;
+         mpu_rgdaac_index,mpu_rgdaac_m1sm[]   : true  : true  : false : enableGettersAndSetters : %s[%%paramName0]          : RgdaacM1sm;
+         mpu_rgdaac_index,mpu_rgdaac_m1um[]   : true  : true  : false : enableGettersAndSetters : %s[%%paramName0]          : RgdaacM1um;
+         mpu_rgdaac_index,mpu_rgdaac_m0pe[]   : true  : true  : false : enableGettersAndSetters : %s[%%paramName0]          : RgdaacM0pe;
+         mpu_rgdaac_index,mpu_rgdaac_m0sm[]   : true  : true  : false : enableGettersAndSetters : %s[%%paramName0]          : RgdaacM0sm;
+         mpu_rgdaac_index,mpu_rgdaac_m0um[]   : true  : true  : false : enableGettersAndSetters : %s[%%paramName0]          : RgdaacM0um" >
+      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)" context="%(context)" nonDefaultParams="2"
+      ><![CDATA[
+         \t/**
+         \t * Set %description1
+         \t * (%(field))
+         \t *
+         %paramDescription
+         \t */
+         \tstatic void set%(name)(%params) {
+         \t   %fieldAssignment1;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)" context="%(context)"
+      ><![CDATA[
+         \t/**
+         \t * Get %description1
+         \t * (%(field))
+         \t *
+         %paramDescription0
+         \t *
+         \t * @return %tooltip1
+         \t */
+         \tstatic %paramType1 get%(name)(%param0) {
+         \t   return %fieldExtract1;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)" context="%(context)"
+         tooltipPadding="x*x"      ><![CDATA[
+         \t/**
+         \t * Clear %description1
+         \t * (%(field))
+         \t *
+         \t * %tooltip
+         \t *
+         %paramDescription0
+         \t */
+         \tstatic void clear%(name)(%param0) {
+         \t   %register1 = %register1|%mask1;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <!-- ________ MPU Init class ____________________________ -->
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_Baseclass)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t * Parameters available may vary with device - see $(_Class)::DefaultInitValue for relevant example.
+      \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * ///
+      \t * /// $(_NAME) call-back
+      \t * ///
+      \t * /// @param status  Status reflecting active inputs
+      \t * ///
+      \t * void $(_name)Callback(ErrorCode ec) {
+      \t *    ....
+      \t * }
+      \t *
+      \t * static const $(_Class)::Init $(_name)Init {
+      \t *
+      \t *   // Setup values
+XXXXXXXXXXXXXXXXXXXXXX
+      \t *
+      \t *   $(_name)Callback,                 // Call-back to execute on event - call-back function name
+      \t *   NvicPriority_Low,                 // Priority for interrupt - Low
+      \t *
+      \t *   // Optional base value to start with (must be last parameter)
+      \t *   $(_Class)::DefaultInitValue   // Used as base value modified by above
+      \t * };
+      \t *
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure($(_name)Init)
+      \t * @endcode
+      \t */
+      \tclass Init {
+      \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(Types...) = delete;
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____ Init class Member variables ________ -->
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+   ><![CDATA[
+      %multilineDescription
+      \t   %params = nullptr;\n\n
+   ]]></variableTemplate>
+
+   <for keys=" type        : variables                                            : init    "
+       values="%baseType   : mpu_cesr_sperr,mpu_cesr_vld                          :   0      ;
+               %baseType   : mpu_word0_srtaddr                                    :   0      ;
+               %baseType   : mpu_word1_endaddr                                    :   0      ;
+               %baseType   : mpu_word2_m7re,mpu_word2_m7we,mpu_word2_m6re,
+                             mpu_word2_m6we,mpu_word2_m5re,mpu_word2_m5we,
+                             mpu_word2_m4re,mpu_word2_m4we,mpu_word2_m3pe,
+                             mpu_word2_m3sm,mpu_word2_m3um,mpu_word2_m2pe,
+                             mpu_word2_m2sm,mpu_word2_m2um,mpu_word2_m1pe,
+                             mpu_word2_m1sm,mpu_word2_m1um,mpu_word2_m0pe,
+                             mpu_word2_m0sm,mpu_word2_m0um                        :   0      ;
+               %baseType   : mpu_word3_pid,mpu_word3_pidmask,mpu_word3_vld        :   0      ;
+               %baseType   : mpu_rgdaac_m7re,mpu_rgdaac_m7we,mpu_rgdaac_m6re,
+                             mpu_rgdaac_m6we,mpu_rgdaac_m5re,mpu_rgdaac_m5we,
+                             mpu_rgdaac_m4re,mpu_rgdaac_m4we,mpu_rgdaac_m3pe,
+                             mpu_rgdaac_m3sm,mpu_rgdaac_m3um,mpu_rgdaac_m2pe,
+                             mpu_rgdaac_m2sm,mpu_rgdaac_m2um,mpu_rgdaac_m1pe,
+                             mpu_rgdaac_m1sm,mpu_rgdaac_m1um,mpu_rgdaac_m0pe,
+                             mpu_rgdaac_m0sm,mpu_rgdaac_m0um                      :   0      ;
+               %paramType  : /PCR/nvic_irqLevel                                   :   %defaultValue   " >
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(variables)"
+         linePadding="xxx"
+      ><![CDATA[
+         %multilineDescription
+         \t   %(type) %registerName = %(init);\n\n
+      ]]></variableTemplate>
+   </for>
+
+   <!-- ____ Init class Constructors ____________ -->
+
+   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    * (%variables)
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      this->%paramName = %paramExpression;
+      \t   }\n\n
+   ]]></variableTemplate>
+
+   <for keys="r"
+      values="/PCR/nvic_irqLevel;
+            mpu_cesr_sperr;mpu_cesr_vld;
+            mpu_word0_srtaddr;
+            mpu_word1_endaddr;
+            mpu_word2_m7re;mpu_word2_m7we;mpu_word2_m6re;
+            mpu_word2_m6we;mpu_word2_m5re;mpu_word2_m5we;
+            mpu_word2_m4re;mpu_word2_m4we;mpu_word2_m3pe;
+            mpu_word2_m3sm;mpu_word2_m3um;mpu_word2_m2pe;
+            mpu_word2_m2sm;mpu_word2_m2um;mpu_word2_m1pe;
+            mpu_word2_m1sm;mpu_word2_m1um;mpu_word2_m0pe;
+            mpu_word2_m0sm;mpu_word2_m0um;
+            mpu_word3_pid;mpu_word3_pidmask;mpu_word3_vld;
+            mpu_rgdaac_m7re;mpu_rgdaac_m7we;mpu_rgdaac_m6re;
+            mpu_rgdaac_m6we;mpu_rgdaac_m5re;mpu_rgdaac_m5we;
+            mpu_rgdaac_m4re;mpu_rgdaac_m4we;mpu_rgdaac_m3pe;
+            mpu_rgdaac_m3sm;mpu_rgdaac_m3um;mpu_rgdaac_m2pe;
+            mpu_rgdaac_m2sm;mpu_rgdaac_m2um;mpu_rgdaac_m1pe;
+            mpu_rgdaac_m1sm;mpu_rgdaac_m1um;mpu_rgdaac_m0pe;
+            mpu_rgdaac_m0sm;mpu_rgdaac_m0um
+            " >
+      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         variables="%(r)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    * (%variables)
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %constructorFieldAssignment;
+         \t   }
+         \t\n
+      ]]>
+      </variableTemplate>
+   </for>
+
+
+   <!-- ____ Init class Configure method ____ -->
+
+   <template codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(DefaultInitValue);
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const Init &init) {
+      \t
+      \t   // Enable peripheral
+      \t   enable();
+      \t\n
+   ]]>
+   </template>
+   <template codeGenCondition="irqHandlingMethod" condition="irqHandlingMethod" >
+   <![CDATA[
+      \t   // Configure call-backs
+      \t   setCallback(init.callbackFunction);\n
+   ]]>
+   </template>
+   <for keys=
+             " var                                                    : statement            "
+      values=" irqLevel                                               : enableNvicInterrupts(init.irqlevel) ;
+               mpu_cesr_sperr,mpu_cesr_vld                            : %configRegAssignment  ;
+               mpu_word0_srtaddr                                      : %configRegAssignment  ;
+               mpu_word1_endaddr                                      : %configRegAssignment  ;
+               mpu_word2_m7re,mpu_word2_m7we,mpu_word2_m6re,
+               mpu_word2_m6we,mpu_word2_m5re,mpu_word2_m5we,
+               mpu_word2_m4re,mpu_word2_m4we,mpu_word2_m3pe,
+               mpu_word2_m3sm,mpu_word2_m3um,mpu_word2_m2pe,
+               mpu_word2_m2sm,mpu_word2_m2um,mpu_word2_m1pe,
+               mpu_word2_m1sm,mpu_word2_m1um,mpu_word2_m0pe,
+               mpu_word2_m0sm,mpu_word2_m0um                          : %configRegAssignment  ;
+               mpu_word3_pid,mpu_word3_pidmask,mpu_word3_vld          : %configRegAssignment  ;
+               mpu_rgdaac_m7re,mpu_rgdaac_m7we,mpu_rgdaac_m6re,
+               mpu_rgdaac_m6we,mpu_rgdaac_m5re,mpu_rgdaac_m5we,
+               mpu_rgdaac_m4re,mpu_rgdaac_m4we,mpu_rgdaac_m3pe,
+               mpu_rgdaac_m3sm,mpu_rgdaac_m3um,mpu_rgdaac_m2pe,
+               mpu_rgdaac_m2sm,mpu_rgdaac_m2um,mpu_rgdaac_m1pe,
+               mpu_rgdaac_m1sm,mpu_rgdaac_m1um,mpu_rgdaac_m0pe,
+               mpu_rgdaac_m0sm,mpu_rgdaac_m0um                        : %configRegAssignment " >
+      <variableTemplate codeGenCondition="enablePeripheralSupport"
+      variables="%(var)"
+      linePadding="xxx"
+      ><![CDATA[
+         \t
+         %multilineDescription
+         \t   %(statement);\n
+      ]]></variableTemplate>
+   </for>
+   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____  Default Initialisation value ____ -->
+
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
+      separator=","
+      terminator=","
+      variables="
+            mpu_cesr_sperr,mpu_cesr_vld,
+            mpu_word0_srtaddr,
+            mpu_word1_endaddr,
+            mpu_word2_m7re,mpu_word2_m7we,mpu_word2_m6re,
+            mpu_word2_m6we,mpu_word2_m5re,mpu_word2_m5we,
+            mpu_word2_m4re,mpu_word2_m4we,mpu_word2_m3pe,
+            mpu_word2_m3sm,mpu_word2_m3um,mpu_word2_m2pe,
+            mpu_word2_m2sm,mpu_word2_m2um,mpu_word2_m1pe,
+            mpu_word2_m1sm,mpu_word2_m1um,mpu_word2_m0pe,
+            mpu_word2_m0sm,mpu_word2_m0um,
+            mpu_word3_pid,mpu_word3_pidmask,mpu_word3_vld,
+            mpu_rgdaac_m7re,mpu_rgdaac_m7we,mpu_rgdaac_m6re,
+            mpu_rgdaac_m6we,mpu_rgdaac_m5re,mpu_rgdaac_m5we,
+            mpu_rgdaac_m4re,mpu_rgdaac_m4we,mpu_rgdaac_m3pe,
+            mpu_rgdaac_m3sm,mpu_rgdaac_m3um,mpu_rgdaac_m2pe,
+            mpu_rgdaac_m2sm,mpu_rgdaac_m2um,mpu_rgdaac_m1pe,
+            mpu_rgdaac_m1sm,mpu_rgdaac_m1um,mpu_rgdaac_m0pe,
+            mpu_rgdaac_m0sm,mpu_rgdaac_m0um,
+            irqLevel" >
+    <![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <![CDATA[
+      \t}; // class $(_BasicInfo)::Init
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____ Common __________________ -->
+
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Class representing $(_NAME)
+      \t */
+      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Info)> {};
+      \t//typedef $(_Baseclass)Base_T<$(_Info)> $(_Class);
+      \t\n
+   ]]>
+   </template>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
+   </validate>
+
+   <projectActionList id="mpu_files" >
+      <copy source="Project_Headers/mpu-MK.h"  target="Project_Headers/mpu.h"  overwrite="true"  derived="true" />
+   </projectActionList>
+
+   <!-- ____ Startup __________________ -->
+
+   <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
+      <![CDATA[#include "$(_basename).h"\n
+   ]]></template>
+
+   <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
+   <![CDATA[
+      \t/*  Initialise $(_Class) */
+      \tUSBDM::$(_Class)::defaultConfigure();\n
+   ]]></template>
+
+   <!-- ____ SIM configuration __________________ -->
+
+   <category name="Advanced" description="SIM configuration"
+      toolTip="These settings only have effect if the SIM configuration is enabled" >
+      <title description="$(_BASENAME) Shared" />
+      <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+      <title description="$(_NAME) Specific" />
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+      <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+   </category>
+
+   <!--  ____ Signal mapping __________________ -->
+   <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
+
+</peripheralPage>

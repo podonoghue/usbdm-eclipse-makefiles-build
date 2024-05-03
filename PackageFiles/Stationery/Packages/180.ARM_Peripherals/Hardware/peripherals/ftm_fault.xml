@@ -289,7 +289,7 @@
       </if>
 
       <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
-         \t}; // class  $(_Structname)BasicInfo::FaultInit\n\n
+         \t}; // class  $(_BasicInfo)::FaultInit\n\n
       ]]></template>
 
    </if> <!-- condition="ftm_fltctrl_ffval&amp;&amp;_code" -->

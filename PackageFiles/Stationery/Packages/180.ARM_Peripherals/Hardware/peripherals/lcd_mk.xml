@@ -6,7 +6,7 @@
 
    <xi:include href="default_instance.xml"/>
    
-   <xi:include href="mapPinsOption_on.xml"/>
+   <xi:include href="mapPinsOption.xml"/>
    
    <signals/>
    

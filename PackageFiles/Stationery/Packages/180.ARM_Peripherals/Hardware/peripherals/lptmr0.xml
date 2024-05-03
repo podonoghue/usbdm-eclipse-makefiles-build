@@ -17,7 +17,7 @@
    <title />
 
    <!-- ____ Class Declaration ________ -->
-   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <!-- ____ CSR ____ -->
 
@@ -522,7 +522,7 @@
    </for>
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
-      \t}; // class $(_Structname)BasicInfo::Init\n\n
+      \t}; // class $(_BasicInfo)::Init\n\n
    ]]></template >
 
 <!--   ______ LPTMR TimeIntervalModeInit class ___________ -->
@@ -605,7 +605,7 @@
    </for>
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
-      \t}; // class $(_Structname)BasicInfo::TimeIntervalModeInit\n\n
+      \t}; // class $(_BasicInfo)::TimeIntervalModeInit\n\n
    ]]></template>
 
 <!--   ______ LPTMR PulseCountingModeInit class ___________ -->
@@ -692,7 +692,7 @@
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
-      \t}; // class $(_Structname)BasicInfo::PulseCountingModeInit
+      \t}; // class $(_BasicInfo)::PulseCountingModeInit
       \t\n
    ]]>
    </template>
@@ -804,7 +804,7 @@
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};
+      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Info)> {};
       \t\n
    ]]>
    </template>

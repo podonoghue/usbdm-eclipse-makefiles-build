@@ -16,7 +16,7 @@
 
    <!-- ____ Class Declaration __________________ -->
    <constant key="_class_declaration" type="String"
-      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+      value='"$(_Info) : public $(_BasicInfo)"' />
 
    <choiceOption key="kbi_pin_index"
       valueFormat="%s"
@@ -498,7 +498,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <!-- ___ $(_Class)Info::Init ____ -->
+   <!-- ___ $(_Info)::Init ____ -->
 
    <template codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
@@ -543,7 +543,7 @@
       \t * $(_Class)::configure($(_name)Init)
       \t * @endcode
       \t */
-      \tclass Init : public $(_Structname)BasicInfo::Init {
+      \tclass Init : public $(_BasicInfo)::Init {
       \t
       \tpublic:
       \t   /**
@@ -560,13 +560,13 @@
       \t    * Constructor
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(Types... rest) : $(_Structname)BasicInfo::Init(rest...) {
+      \t   constexpr Init(Types... rest) : $(_BasicInfo)::Init(rest...) {
       \t   }
       \t\n
    ]]>
    </template>
 
-   <!-- ____ $(_Class)Info::Init class Constructors ____________ -->
+   <!-- ____ $(_Info)::Init class Constructors ____________ -->
 
    <variableTemplate codeGenCondition="enablePeripheralSupport"
       variables="/PORT/pin_index,kbi_pe_kbipe,kbi_es_kbedg"
@@ -598,14 +598,14 @@
 
    <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
-      \t}; // class $(_Class)Info::Init
+      \t}; // class $(_Info)::Init
       \t\n
    ]]>
    </template>
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
-      \t}; // class $(_Structname)BasicInfo::Init
+      \t}; // class $(_BasicInfo)::Init
       \t\n
    ]]>
    </template>
@@ -617,7 +617,7 @@
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};
+      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Info)> {};
       \t\n
    ]]>
    </template>

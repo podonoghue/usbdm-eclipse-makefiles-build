@@ -36,7 +36,7 @@
    <xi:include href="enablePeripheral.xml"  />
 
    <!-- ____ Class Declaration ________ -->
-   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <binaryOption key="uart_c2_tcie" condition="uart_c2_tcie_present"
       enabledBy="irqHandlingMethod"
@@ -140,6 +140,7 @@
    ]]></template>
 
    <choiceOption key="uart_baudrate"
+      valueFormat=""
       enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
       derivedFrom="/Console/console_baudrate" >
    </choiceOption>
@@ -346,11 +347,11 @@
       \t * (%variables, !uart_c4_osr_present, !uart_c4_brfa_present)
       \t * (for UART with fixed /16 prescaler)
       \t *
-      \t * @param uart             Hardware instance
+      \t * @param $(_basename)     Hardware instance pointer
       \t * @param clockFrequency   Clock frequency of UART
       %paramDescription
       \t */
-      \tstatic void setBaudRate(volatile $(_STRUCTNAME)_Type *const $(_basename), uint32_t clockFrequency, %params) {
+      \tstatic void setBaudRate(volatile $(_Type) *const $(_basename), uint32_t clockFrequency, %params) {
       \t
       \t   // Disable UART before changing registers
       \t   uint8_t c2Value = uart->C2;
@@ -390,9 +391,7 @@
       \t * @param clockFrequency   Clock frequency
       %paramDescription
       \t */
-      \tstatic void setBaudRate(
-      \t      volatile $(_STRUCTNAME)_Type *const $(_basename),
-      \t      uint32_t     clockFrequency, %params) {
+      \tstatic void setBaudRate(volatile $(_Type) *const $(_basename), uint32_t clockFrequency, %params) {
       \t
       \t   // Disable UART before changing registers
       \t   uint8_t c2Value = uart->C2;
@@ -427,9 +426,11 @@
       \t * (%variables, uart_c4_brfa_present)
       \t * (for UART with fractional divider)
       \t *
+      \t * @param $(_basename)     Hardware instance pointer
+      \t * @param clockFrequency   Clock frequency
       %paramDescription
       \t */
-      \tstatic void setBaudRate(volatile $(_STRUCTNAME)_Type *const $(_basename), uint32_t clockFrequency, %params) {
+      \tstatic void setBaudRate(volatile $(_Type) *const $(_basename), uint32_t clockFrequency, %params) {
       \t   /*
       \t    * Baudrate = clockFrequency / (OSR x (SBR + BRFD))
       \t    * Fixed OSR = 16
@@ -472,7 +473,7 @@
       \t */
       \tstatic void setBaudRate(%params) {
       \t
-      \t   $(_Structname)BasicInfo::setBaudRate($(_basename), getInputClockFrequency(), %paramName);
+      \t   $(_BasicInfo)::setBaudRate($(_basename), getInputClockFrequency(), %paramName);
       \t}
       \t\n
    ]]>
@@ -948,7 +949,7 @@ XXXXXXXXXXXXXXXXXXXXXX
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
-      \t}; // class $(_Structname)BasicInfo::Init
+      \t}; // class $(_BasicInfo)::Init
       \t\n
    ]]>
    </template>
@@ -970,7 +971,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t *  }
       \t *  @endcode
       \t */
-      \tclass $(_Class) : public $(_Baseclass)_T<$(_Class)Info> {};
+      \tclass $(_Class) : public $(_Baseclass)_T<$(_Info)> {};
       \t\n
    ]]>
    </template>

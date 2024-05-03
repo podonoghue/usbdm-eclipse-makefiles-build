@@ -12,7 +12,7 @@
    <xi:include href="enablePeripheral.xml"  />
 
    <!-- _____________ Class Declaration __________________ -->
-   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Baseclass)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_Baseclass)BasicInfo"' />
 
    <template><![CDATA[
       \t//! Pin number in Info table for SCK if mapped to a pin
@@ -876,10 +876,10 @@
    \t * spi->txRxBytes(sizeof(txData), txData, rxData);
    \t * @endcode
    \t */
-   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {
+   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Info)> {
    \tpublic:
    \t
-   \t   $(_Class)(const $(_Baseclass)BasicInfo::Init &init = $(_Class)Info::DefaultInitValue) : $(_Baseclass)Base_T(init) {}
+   \t   $(_Class)(const $(_Baseclass)BasicInfo::Init &init = $(_Info)::DefaultInitValue) : $(_Baseclass)Base_T(init) {}
    \t
    \t$(/$(_NAME)/InputMapping:   // No user mappings found)
    \t};\n

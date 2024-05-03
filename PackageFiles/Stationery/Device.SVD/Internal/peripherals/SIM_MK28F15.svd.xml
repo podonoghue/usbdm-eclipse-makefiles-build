@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MK28F15
 -->
       <peripheral>
@@ -609,12 +609,13 @@ Devices using this peripheral:
                   <field derivedFrom="TPMSRC" > <name>LPUARTSRC</name> <description>LPUART clock source select</description> <bitOffset>26</bitOffset> </field>
                   <field>
                      <name>SDHCSRC</name>
-                     <description>SDHC clock source select</description>
+                     <description>SDHC clock source select\n
+Selects the clock source for the SDHC clock</description>
                      <bitOffset>28</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>Core/system clock</description>
                            <value>0b00</value>
                         </enumeratedValue>
@@ -624,12 +625,12 @@ Devices using this peripheral:
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
-                           <description>OSCERCLK clock</description>
+                           <name>0b10</name>
+                           <description>OSCERCLK</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>External bypass clock (SDHC0_CLKIN)</description>
                            <value>0b11</value>
                         </enumeratedValue>

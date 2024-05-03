@@ -14,7 +14,7 @@
 
    <!-- ____ Class Declaration ________ -->
    <constant key="_class_declaration" type="String"
-      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+      value='"$(_Info) : public $(_BasicInfo)"' />
 
    <!-- ____ GENCS ____ -->
    <title description="General Control and Status Register" />
@@ -924,7 +924,7 @@ XXXXXXXXXXXXXXXXXXXXXX
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
-      \t}; // class $(_Structname)BasicInfo::Init
+      \t}; // class $(_BasicInfo)::Init
       \t\n
    ]]>
    </template>
@@ -936,8 +936,8 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};
-      \t//typedef $(_Baseclass)Base_T<$(_Class)Info> $(_Class);
+      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Info)> {};
+      \t//typedef $(_Baseclass)Base_T<$(_Info)> $(_Class);
       \t\n
    ]]>
    </template>

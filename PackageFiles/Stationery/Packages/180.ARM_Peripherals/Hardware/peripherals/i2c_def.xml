@@ -12,7 +12,7 @@
    <xi:include href="enablePeripheral.xml"  />
 
    <!-- _____________ Class Declaration __________________ -->
-   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <title description="Clock Settings" />
    <constant key="ClockSource" value='"SystemBusClock"' condition="!ClockSource" />
@@ -1243,7 +1243,7 @@ In other cases, if the master reads data from the slave, then it is required to 
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
       <![CDATA[
-      \t}; // class $(_Structname)BasicInfo::Init
+      \t}; // class $(_BasicInfo)::Init
       \t\n
    ]]>
    </template>
@@ -1355,10 +1355,10 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t/**
       \t * Class representing $(_NAME) interface
       \t */
-      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {
+      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Info)> {
       \tpublic:
       \t
-      \t   $(_Class)(const $(_Structname)BasicInfo::Init &init = $(_Class)Info::DefaultInitValue) : $(_Baseclass)Base_T(init) {}
+      \t   $(_Class)(const $(_BasicInfo)::Init &init = $(_Info)::DefaultInitValue) : $(_Baseclass)Base_T(init) {}
       \t
       \t$(/$(_NAME)/InputMapping:   // No user mappings found)
       \t};

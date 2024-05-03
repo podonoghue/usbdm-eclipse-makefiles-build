@@ -13,7 +13,7 @@
    <title />
 
    <!-- ************* Class Declaration ****************** -->
-   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <!-- ************* SC ****************** -->
 
@@ -420,7 +420,7 @@
    \t/**
    \t * Class representing $(_NAME)
    \t */
-   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Class)Info> {};\n
+   \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Info)> {};\n
    ]]></template>
 
    <validate

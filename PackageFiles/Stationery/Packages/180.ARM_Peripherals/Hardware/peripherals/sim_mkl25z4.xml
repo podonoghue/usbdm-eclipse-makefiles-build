@@ -101,7 +101,7 @@
    <xi:include href="simCommon.xml"/>
 
    <!-- _____________ Class Declaration __________________ -->
-   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Baseclass)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_Baseclass)BasicInfo"' />
 
    <!-- _____________ USB Clock __________________ -->
 

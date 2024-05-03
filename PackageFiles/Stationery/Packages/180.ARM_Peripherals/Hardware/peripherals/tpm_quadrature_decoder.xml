@@ -360,7 +360,7 @@
       \t/**
       \t * Class representing $(_NAME) as Quadrature decoder
       \t */
-   \ttypedef $(_Baseclass)QuadDecoder_T<$(_Class)Info> $(_Baseclass)QuadDecoder$(_instance);\n
+   \ttypedef $(_Baseclass)QuadDecoder_T<$(_Info)> $(_Baseclass)QuadDecoder$(_instance);\n
    ]]></template>
 
 </fragment>

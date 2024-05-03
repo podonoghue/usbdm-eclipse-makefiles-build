@@ -805,7 +805,8 @@ $(/GPIO/set_input: // /GPIO/set_input not found)
    static bool getInterruptState() {
 
       static constexpr HardwarePtr<uint32_t> PCR = PcrBase::getPcrAddress(pinIndex);
-      return *PCR & PORT_PCR_ISF_MASK;
+      
+      return bool(*PCR & PORT_PCR_ISF_MASK);
    }
 
    /**
@@ -814,8 +815,29 @@ $(/GPIO/set_input: // /GPIO/set_input not found)
    static void clearInterruptState() {
 
       static constexpr HardwarePtr<uint32_t> PCR = PcrBase::getPcrAddress(pinIndex);
-      *PCR = *PCR | PORT_PCR_ISF_MASK;
+      
+      // Clear flag (if set)
+      *PCR = *PCR;
    }
+   
+   /**
+    * Get and clear interrupt state
+    *
+    * @return true/false reflecting original interrupt flag in PCR
+    */
+   static bool getAndClearInterruptState() {
+
+      static constexpr HardwarePtr<uint32_t> PCR = PcrBase::getPcrAddress(pinIndex);
+      
+      uint32_t pcr = *PCR;
+
+      // Clear flag if originally set
+      *PCR = pcr;
+
+      // Return original flag
+      return bool(pcr & PORT_PCR_ISF_MASK);
+   }
+
 };
 
 /**

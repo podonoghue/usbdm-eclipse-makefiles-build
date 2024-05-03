@@ -13,7 +13,7 @@
    <xi:include href="enablePeripheral.xml"    />
 
    <!-- ____ Class Declaration ________ -->
-   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <!-- ____ PLASC ____ -->
    <binaryOption key="mcm_plasc_asc" condition="mcm_plasc_asc_present"

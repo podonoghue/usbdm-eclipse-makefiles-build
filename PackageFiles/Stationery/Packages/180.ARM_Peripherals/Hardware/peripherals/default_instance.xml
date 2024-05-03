@@ -4,28 +4,6 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-<!--
-    * General substitutions
-    *  $(_NAME)         => e.g FTM2 => FTM2
-    *  $(_name)         => e.g FTM2 => ftm2
-    *  $(_BASENAME)     => e.g FTM0 => FTM, PTA => PT
-    *  $(_basename)     => e.g FTM0 => ftm, PTA => pt
-    *  $(_Class)        => e.g FTM2 => Ftm2
-    *  $(_Baseclass)    => e.g FTM0 => Ftm
-    *  $(_instance)     => e.g FTM0 => 0, PTA => A
-
-   Template Rules based on attributes  info|usbdm|class|all)  "info"
-
-   - namespace="info" (default if blank)
-     Placed in Info class in pin_mapping.h
-
-   - where="basicInfo"
-     Placed before Info class in pin_mapping.h i.e. in USBDM namespace
-
-   - key="keyValue"
-     Substituted anywhere for $(keyValue)
- -->
-
    <template><![CDATA[
       \t//! Hardware base address as uint32_t
       \tstatic constexpr uint32_t baseAddress = $(_NAME)_BasePtr;
@@ -41,6 +19,6 @@
       \t\n
    ]]></template>
 
-   <constant key="class_present" type="Boolean"  value = "true"   />
+   <constant key="class_present" type="Boolean"  value = "true" />
 
 </fragment>

@@ -80,6 +80,7 @@
       ">
       <for keys="instance" values=";0;1;2;3;4;5" >
          <for keys="scgcNum" values="1;2;3;4;5;6;7" >
+            <!-- Add default enabled peripherals -->
             <equation key="enabled" value='="%(peripheral)"=="ftf"' />
             <equation key="enabled" value='=enabled||("%(peripheral)"=="mpu")' />
             <equation key="clockEnables"

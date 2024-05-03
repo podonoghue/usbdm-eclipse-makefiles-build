@@ -198,7 +198,7 @@
    ]]></template>
    
    <template  codeGenCondition="enablePeripheralSupport" ><![CDATA[
-      \t}; // class $(_Class)Info::OutputInitialise\n\n
+      \t}; // class $(_Info)::OutputInitialise\n\n
    ]]></template>
 
 </if>

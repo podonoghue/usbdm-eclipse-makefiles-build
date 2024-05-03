@@ -6,7 +6,7 @@
 
    <!-- Default IRQ vector patterns if none specified -->
    <constant key="irq_pattern"      type="String"  value='"^$(_BASENAME)_(.*)$"'           />
-   <constant key="irq_ClassHandler" type="String"  value='"$(_Class)Info::irqHandler&lt;$(_Class)IrqNum_$1&gt;"' />
+   <constant key="irq_ClassHandler" type="String"  value='"$(_Info)::irqHandler&lt;$(_Class)IrqNum_$1&gt;"' />
 
    <equation key="irq_parameters"              value=""  />
    <equation key="irq_dummy_parameters"        value=""  />
@@ -20,7 +20,7 @@
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
-      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+      value='"$(_Info) : public $(_BasicInfo)"' />
 
    <aliasOption key="pflash_sector_size" />
    <aliasOption key="pflash_phrase_size" />

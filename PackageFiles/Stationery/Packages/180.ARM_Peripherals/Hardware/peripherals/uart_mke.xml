@@ -36,7 +36,7 @@
    <xi:include href="enablePeripheral.xml"  />
 
    <!-- ____ Class Declaration ________ -->
-   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <title />
    <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src[]"              optional="true" locked="false" />
@@ -296,7 +296,7 @@
       \t *  }
       \t *  @endcode
       \t */
-      \ttypedef  $(/$(_NAME)/uartClass.definition:$(_Baseclass)_T)<$(_Class)Info> $(_Class);
+      \ttypedef  $(/$(_NAME)/uartClass.definition:$(_Baseclass)_T)<$(_Info)> $(_Class);
       \t\n
    ]]>
    </template>

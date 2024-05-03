@@ -14,7 +14,7 @@
 
    <!-- ____ Class Declaration ________ -->
    <constant key="_class_declaration" type="String"
-      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+      value='"$(_Info) : public $(_BasicInfo)"' />
 
    <!-- _____ Constants __________________ -->
    <intOption key="NumChannels" locked="true" derived="true"
@@ -850,7 +850,7 @@
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
-      \t}; // class $(_Structname)BasicInfo::Init
+      \t}; // class $(_BasicInfo)::Init
       \t\n
    ]]>
    </template>
@@ -862,7 +862,7 @@
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \ttypedef $(_Baseclass)_T<$(_Class)Info> $(_Class);
+      \ttypedef $(_Baseclass)_T<$(_Info)> $(_Class);
       \t\n
    ]]>
    </template>

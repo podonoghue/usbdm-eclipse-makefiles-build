@@ -11,7 +11,7 @@
 
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String"
-      value="&quot;$(_Class)Info : public $(_Structname)BasicInfo&quot;" />
+      value="&quot;$(_Info) : public $(_BasicInfo)&quot;" />
 
    <!-- ************* RPFC ****************** -->
 
@@ -266,7 +266,7 @@
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
    <![CDATA[
-      \t}; // class $(_Structname)BasicInfo::Init
+      \t}; // class $(_BasicInfo)::Init
       \t\n
    ]]>
    </template>

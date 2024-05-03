@@ -427,7 +427,7 @@
    </for>
 
    <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
-      \t}; // class $(_Structname)BasicInfo::SyncInit\n\n
+      \t}; // class $(_BasicInfo)::SyncInit\n\n
    ]]></template>
 
 <!--  SyncInit class Configure method -->

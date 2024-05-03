@@ -107,7 +107,7 @@
    <xi:include href="simCommon.xml"/>
 
    <!-- ____ Class Declaration __________________ -->
-   <constant key="_class_declaration" type="String" value='"$(_Class)Info : public $(_Baseclass)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_Baseclass)BasicInfo"' />
 
    <!-- ____ USB Clock __________________ -->
 
@@ -959,22 +959,22 @@
                description="Core &amp; System Clock Divider (OUTDIV1) - Divide by [1-16]"
                toolTip="Clocks the ARM Cortex-M4 core and bus masters\n
                         Divides MCGOUTCLK Clock to generate system_core_clock." >
-               <choice value="0"   name="/1"  enum="Direct" />
-               <choice value="1"   name="/2"  enum="DivBy2" isDefault="true" />
-               <choice value="2"   name="/3"  enum="DivBy3"/>
-               <choice value="3"   name="/4"  enum="DivBy4"/>
-               <choice value="4"   name="/5"  enum="DivBy5"/>
-               <choice value="5"   name="/6"  enum="DivBy6"/>
-               <choice value="6"   name="/7"  enum="DivBy7"/>
-               <choice value="7"   name="/8"  enum="DivBy8"/>
-               <choice value="8"   name="/9"  enum="DivBy9"/>
-               <choice value="9"   name="/10" enum="DivBy10"/>
-               <choice value="10"  name="/11" enum="DivBy11"/>
-               <choice value="11"  name="/12" enum="DivBy12"/>
-               <choice value="12"  name="/13" enum="DivBy13"/>
-               <choice value="13"  name="/14" enum="DivBy14"/>
-               <choice value="14"  name="/15" enum="DivBy15"/>
-               <choice value="15"  name="/16" enum="DivBy16"/>
+               <choice value="0"   name="/1"  enum="Direct"  />
+               <choice value="1"   name="/2"  enum="DivBy2"  isDefault="true" />
+               <choice value="2"   name="/3"  enum="DivBy3"  />
+               <choice value="3"   name="/4"  enum="DivBy4"  />
+               <choice value="4"   name="/5"  enum="DivBy5"  />
+               <choice value="5"   name="/6"  enum="DivBy6"  />
+               <choice value="6"   name="/7"  enum="DivBy7"  />
+               <choice value="7"   name="/8"  enum="DivBy8"  />
+               <choice value="8"   name="/9"  enum="DivBy9"  />
+               <choice value="9"   name="/10" enum="DivBy10" />
+               <choice value="10"  name="/11" enum="DivBy11" />
+               <choice value="11"  name="/12" enum="DivBy12" />
+               <choice value="12"  name="/13" enum="DivBy13" />
+               <choice value="13"  name="/14" enum="DivBy14" />
+               <choice value="14"  name="/15" enum="DivBy15" />
+               <choice value="15"  name="/16" enum="DivBy16" />
             </choiceOption>
 
             <choiceOption key="sim_clkdiv1_outdiv2[%(n)]"  condition="sim_clkdiv1_outdiv2_present"

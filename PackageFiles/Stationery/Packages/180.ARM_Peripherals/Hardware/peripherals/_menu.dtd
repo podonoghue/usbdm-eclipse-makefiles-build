@@ -10,7 +10,7 @@
 <!ENTITY % graphic_items    "graphicGroup|graphicBox|graphicItem|equation|for|if" >
 
 <!-- ____  Dialogue elements -->
-<!ENTITY % dialogue_items    "timeOption|intOption|floatOption|stringOption|binaryOption|choiceOption|bitmaskOption" >
+<!ENTITY % dialogue_items    "timeOption|intOption|floatOption|stringOption|binaryOption|choiceOption|bitmaskOption|bitfieldOption" >
 
 <!-- ____  Simple items that don't recurse -->
 <!ENTITY % simple_items     "xi:include|printVar|print|
@@ -22,6 +22,8 @@
                   
 <!ENTITY % general_items    "dynamicSignalMapping|dialogue|graphic|category|categoryOption|aliasCategoryOption|if|for|%simple_items;" >
 
+ <!ENTITY % where_items     "(all|usbdm|definitions|commonInfo|basicInfo|info|static)" >
+  
 <!-- ____  dialogue -->
 <!ELEMENT dialogue (%dialogue_items;)*>
    <!-- Condition evaluated during parsing that enables processing of this option -->
@@ -417,6 +419,8 @@
    <!ATTLIST bitmaskOption value          CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption disabledValue  CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption derivedFrom    CDATA        #IMPLIED>
+   <!-- Use 'enum class' for enums and generate operator|() -->
+   <!ATTLIST bitmaskOption enumClass     (true)       #IMPLIED>
    <!-- Type for bitmask -->
    <!ATTLIST bitmaskOption typeName       CDATA        #IMPLIED>
    <!-- Type for generated enum e.g. uint16_t - Also forces enum generation for ints, bitmasks -->
@@ -660,8 +664,104 @@
    <!-- Log changes to associated variable -->
    <!ATTLIST clockSelectionOption logging             (true)       #IMPLIED>
    
+<!-- ____  bitfieldOption -->
+<!ELEMENT bitfieldOption ((choice|choiceExpansion)*) >
+   <!-- Where to place generated code -->
+   <!ATTLIST choiceOption where        %where_items;  #IMPLIED >
+   <!-- Visible name of option - also used for key if not provided -->
+   <!ATTLIST bitfieldOption name                CDATA        #IMPLIED>
+   <!-- Key for option - also used as visible name if not provided -->
+   <!ATTLIST bitfieldOption key                 CDATA        #REQUIRED>
+   <!-- Origin displayed as part of tool-tip -->
+   <!ATTLIST bitfieldOption origin              CDATA        #IMPLIED>
+   <!-- Description  of variable -->
+   <!ATTLIST bitfieldOption description         CDATA        #IMPLIED>
+   <!-- Tool-tip to display in GUI and used for documentation in C++ code -->
+   <!ATTLIST bitfieldOption toolTip             CDATA        #IMPLIED>
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST bitfieldOption condition           CDATA        #IMPLIED>
+   <!-- Locks option in GUI -->
+   <!ATTLIST bitfieldOption locked              (false|true) #IMPLIED>
+   <!-- Hides option in GUI -->
+   <!ATTLIST bitfieldOption hidden              CDATA        #IMPLIED>
+   <!-- Value is derived and should not be saved -->
+   <!ATTLIST bitfieldOption derived             (true)       #IMPLIED>
+   <!-- Expression enables this option- 'expression#primaryVar#message' -->
+   <!ATTLIST bitfieldOption enabledBy           CDATA        #IMPLIED>
+   <!-- Initial value (and default) for option -->
+   <!ATTLIST bitfieldOption  value              CDATA        #IMPLIED>
+   
+   <!--Used with enum generation to give explicit template name to enum template -->
+   <!ATTLIST bitfieldOption templateKey         CDATA        #IMPLIED>
+   <!-- Dynamic expression that disables and hides this option -->
+   <!ATTLIST bitfieldOption hiddenBy            CDATA        #IMPLIED>
+   <!-- Unit to use for numeric value -->
+   <!ATTLIST bitfieldOption units               (None|Hz|s)  #IMPLIED>
+   <!-- Variable defined earlier to inherit values from -->
+   <!ATTLIST bitfieldOption derivedFrom         CDATA        #IMPLIED>
+   
+   <!-- Name for table associated with this choice -->
+   <!ATTLIST bitfieldOption tableName            CDATA        #IMPLIED>
+   <!-- Type for elements of table associated with this choice -->
+   <!ATTLIST bitfieldOption tableType            CDATA        #IMPLIED>
+   <!-- Structure for elements of the table associated with this choice -->
+   <!ATTLIST bitfieldOption tableDefinition      CDATA        #IMPLIED>
+   <!-- 
+   Where to place generated code<br>
+      info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
+      definitions - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
+      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
+      all   - Explicitly available anywhere controlled by key substitution<br>
+      forceInfo - forces Info namespace and clears key and discardRepeats
+      baseClass - In base class for peripheral (causes discard repeats using StructName as key)
+   -->
+   <!ATTLIST bitfieldOption namespace           CDATA        #IMPLIED >
+   <!-- Use 'enum class' for enums and generate operator|() -->
+   <!ATTLIST bitfieldOption enumClass           (true)       #IMPLIED>
+   <!-- Name for enum and first part of enum values -->
+   <!ATTLIST bitfieldOption typeName            CDATA        #IMPLIED>
+   <!-- Type for generated enum e.g. uint16_t - Also forces enum generation for ints, bitmasks -->
+   <!ATTLIST bitfieldOption baseType            CDATA        #IMPLIED>
+   <!-- C #if expression to guard enum declaration -->
+   <!ATTLIST bitfieldOption enumGuard           CDATA        #IMPLIED>
+   <!-- Name of register. If not provided it is derived from variable -->
+   <!ATTLIST bitfieldOption register            CDATA        #IMPLIED>
+   <!-- How to format a raw value e.g. 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)' or '%s_s' -->
+   <!ATTLIST bitfieldOption valueFormat         CDATA        #IMPLIED>
+   <!-- Text to add to enum body generated from choices -->
+   <!ATTLIST bitfieldOption enumText            CDATA        #IMPLIED>
+   <!-- Value to take when disabled --> 
+   <!ATTLIST bitfieldOption disabledValue       CDATA        #IMPLIED>
+   <!-- Set as error based on expression -->
+   <!ATTLIST bitfieldOption errorIf             CDATA        #IMPLIED>
+   <!-- Unlocked by an expression -->
+   <!ATTLIST bitfieldOption unlockedBy          CDATA        #IMPLIED>
+    <!-- Equation that controls this variable -->
+   <!ATTLIST bitfieldOption ref                 CDATA        #IMPLIED>
+   <!-- Target variable dependent on this variable -->
+   <!ATTLIST bitfieldOption target              CDATA        #IMPLIED>
+   <!-- Allows this option to modify previous option with the same key 
+        The variable behind this option is shared -->
+   <!ATTLIST bitfieldOption modify              CDATA        #IMPLIED>
+   <!-- Allow variable to be replaced by later variable of same name -->
+   <!ATTLIST bitfieldOption replace             CDATA        #IMPLIED>
+   <!-- Comma separated list of accumulation variables to which this variable's name will be added -->
+   <!ATTLIST bitfieldOption addToVar            CDATA        #IMPLIED>
+   
+   <!-- List of pin mappings applied if option disabled#Expression to enable use of any pin map -->
+   <!ATTLIST bitfieldOption disabledPinMap      CDATA        #IMPLIED>
+   <!-- Log changes to associated variable -->
+   <!ATTLIST bitfieldOption logging             (true)       #IMPLIED>
+   <!-- Generate choice values as constants rather than as an enum -->
+   <!ATTLIST bitfieldOption generateAsConstants (true)       #IMPLIED>
+   <!-- Name of associate signal -->
+   <!ATTLIST bitfieldOption signal              CDATA        #IMPLIED>
+   
+   
 <!-- ____  choiceOption -->
 <!ELEMENT choiceOption ((choice|choiceExpansion)*) >
+   <!-- Where to place generated code -->
+   <!ATTLIST choiceOption where        %where_items;  #IMPLIED >
    <!-- Visible name of option - also used for key if not provided -->
    <!ATTLIST choiceOption name                CDATA        #IMPLIED>
    <!-- Key for option - also used as visible name if not provided -->
@@ -708,6 +808,8 @@
       baseClass - In base class for peripheral (causes discard repeats using StructName as key)
    -->
    <!ATTLIST choiceOption namespace           CDATA        #IMPLIED >
+   <!-- Use 'enum class' for enums and generate operator|() -->
+   <!ATTLIST choiceOption enumClass          (true)       #IMPLIED>
    <!-- Name for enum and first part of enum values -->
    <!ATTLIST choiceOption typeName            CDATA        #IMPLIED>
    <!-- Type for generated enum e.g. uint16_t - Also forces enum generation for ints, bitmasks -->
@@ -785,9 +887,11 @@
    <!ATTLIST choiceExpansion enum                 CDATA        #IMPLIED>
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST choiceExpansion condition            CDATA        #IMPLIED>
+   <!-- This choice is default -->
+   <!ATTLIST choiceExpansion isDefault            CDATA        #IMPLIED>
+
    <!-- Name of symbol to use for iteration - available as $(<name>) -->
    <!ATTLIST choiceExpansion iterationVar         CDATA       #IMPLIED>
-
    <!-- Substitution keys separated by ':'' e.g 'ch' => '%(ch)' -->
    <!ATTLIST choiceExpansion keys                 CDATA        #REQUIRED>
    <!-- Values for each key separated by ':'', each iteration separated by ';' -->
@@ -801,6 +905,8 @@
    
 <!-- ____  binaryOption -->
 <!ELEMENT binaryOption (choice?, choice?) >
+   <!-- Where to place generated code -->
+   <!ATTLIST choiceOption where        %where_items;  #IMPLIED >
    <!-- Visible name of option - also used for key if not provided -->
    <!ATTLIST binaryOption name                CDATA        #IMPLIED>
    <!-- Key for option - also used as visible name if not provided -->
@@ -850,6 +956,8 @@
       baseClass - In base class for peripheral (causes discard repeats using StructName as key)
    -->
    <!ATTLIST binaryOption namespace           CDATA                   #IMPLIED >
+   <!-- Use 'enum class' for enums and generate operator|() -->
+   <!ATTLIST binaryOption enumClass          (true)       #IMPLIED>
    <!-- Name for enum and first part of enum values -->
    <!ATTLIST binaryOption typeName            CDATA        #IMPLIED>
    <!-- Type for generated enum e.g. uint16_t - Also forces enum generation for ints, bitmasks -->
@@ -1007,7 +1115,7 @@
 <!-- ____  template -->
 <!ELEMENT template (#PCDATA)* >
    <!-- Where to place generated code -->
-   <!ATTLIST template where                     (all|usbdm|definitions|commonInfo|basicInfo|info|static) #IMPLIED >
+   <!ATTLIST template where        %where_items;  #IMPLIED >
    <!-- 
    Where to place generated code<br>
       info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
@@ -1035,7 +1143,7 @@
 <!-- ____  variableTemplate -->
 <!ELEMENT variableTemplate (#PCDATA)* >
    <!-- Where to place generated code -->
-   <!ATTLIST variableTemplate where                     (all|usbdm|definitions|commonInfo|basicInfo|info|static) #IMPLIED >
+   <!ATTLIST variableTemplate where        %where_items;  #IMPLIED >
    <!-- 
    Where to place generated code<br>
       info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
@@ -1072,18 +1180,20 @@
    <!-- Comma separates list of parameter names normally deduced from variables. Items may be blank -->
    <!ATTLIST variableTemplate params                    CDATA                   #IMPLIED>
    <!-- Comma separates list of parameter types normally deduced from variables. Items may be blank -->
-   <!ATTLIST variableTemplate paramTypes                    CDATA                   #IMPLIED>
+   <!ATTLIST variableTemplate paramTypes                CDATA                   #IMPLIED>
    <!-- %symbolicExpression will use the primitive value rather than symbolic e.g. FTM_OUTINIT_CHOI(0x0) -->
    <!ATTLIST variableTemplate useDefinitions            CDATA                   #IMPLIED>
    <!-- Variables that will be available for immediate substitution -->
-   <!ATTLIST variableTemplate immediateVariables       CDATA                   #IMPLIED>
+   <!ATTLIST variableTemplate immediateVariables        CDATA                   #IMPLIED>
    <!-- Indicates parameters should start on a new line if there are multiple -->
    <!ATTLIST variableTemplate multipleParamsOnNewline  (true)                   #IMPLIED >
+   <!-- Context for register e.g. register prefix e.g. SP[mpuSlavePortNum]. -->
+   <!ATTLIST variableTemplate context                  CDATA                    #IMPLIED >
 
 <!-- ____ clockCodeTemplate -->
 <!ELEMENT clockCodeTemplate (#PCDATA)* >
    <!-- Where to place generated code -->
-   <!ATTLIST clockCodeTemplate where                     (all|usbdm|definitions|commonInfo|basicInfo|info|static)  #IMPLIED >
+   <!ATTLIST clockCodeTemplate where        %where_items;  #IMPLIED >
    <!-- 
    Where to place generated code<br>
       info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
