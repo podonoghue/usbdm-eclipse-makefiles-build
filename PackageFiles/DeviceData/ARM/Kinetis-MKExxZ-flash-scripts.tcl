@@ -19,6 +19,7 @@
 #####################################################################################
 #  History
 #
+#  V4.12.1.340 - resetAndConnectTarget() & massEraseTarget() now ignore power cycle fail
 #  V4.12.1.330 - Added updated return code handling
 #  V4.12.1.320 - Added resetAndConnectTarget()
 #  V4.12.1.320 - Added clock trim
@@ -246,11 +247,14 @@ proc resetAndConnectTarget { args } {
    
    # Cycle power if feature available   
    if [expr ( [getcap] & $::BDM_CAP_VDDCONTROL) != 0] {
-      settargetvdd off
-      pinSet rst=0
-      after $::RESET_DURATION
-      settargetvdd on
-      after $::POWER_ON_RECOVERY
+      if { [catch {settargetvdd off} rc] } {
+         puts "Error ([getLastErrorMessage]) - Skipping power cycle"
+      } else {
+         pinSet rst=0
+         after $::RESET_DURATION
+         settargetvdd on
+         after $::POWER_ON_RECOVERY
+      }
    }
    reset sh 
    
@@ -299,10 +303,13 @@ proc massEraseTarget { } {
    # May upset things on MK devices ??
    if [expr ( [getcap] & $::BDM_CAP_VDDCONTROL) != 0] {
       puts "massEraseTarget{} - Cycling Vdd (with rst=0)"
-      settargetvdd off
-      after $::RESET_DURATION
-      settargetvdd on
-      after $::POWER_ON_RECOVERY
+      if { [catch {settargetvdd off} rc] } {
+         puts "Error ([getLastErrorMessage]) - Skipping power cycle"
+      } else {
+         after $::RESET_DURATION
+         settargetvdd on
+         after $::POWER_ON_RECOVERY
+      }
    }
 
    # Connect with reset asserted, ignore errors as may be secured
