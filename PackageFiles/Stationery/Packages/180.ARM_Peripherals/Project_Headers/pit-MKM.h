@@ -2,9 +2,6 @@
  * @file      pit.h  (180.ARM_Peripherals/Project_Headers/pit-MKM.h)
  *
  * @brief    Programmable Interrupt Timer interface
- *
- * @version  V4.12.1.80
- * @date     13 April 2016
  */
 
 #ifndef INCLUDE_USBDM_PIT_H_
@@ -28,7 +25,7 @@ namespace USBDM {
  * @brief Abstraction for Programmable Interrupt Timer
  * @{
  */
-
+$(/PIT/peripheral_h_definition:// $/PIT/peripheral_h_definition not found)
 //-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
 
 //===================================

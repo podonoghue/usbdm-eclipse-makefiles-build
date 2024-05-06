@@ -42,7 +42,7 @@
 
    <!-- ************* SPMSC1 & SPMSC2 ****************** -->
    <binaryOption key="pmc_spmsc1_lvde" condition="pmc_spmsc1_lvde_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       typeName="PmcLowVoltageDetect"
       description="Low-Voltage Detect Enable"
       toolTip="This write-once bit enables low-voltage detect logic" >
@@ -153,7 +153,7 @@
 
    <!--   __________ class $(_BasicInfo) _______________________________ -->
 
-   <template where="definitions" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="definitions" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
    \t/**
    \t * Indicates reason for execution of PMC call-back
@@ -187,7 +187,7 @@
 
 <!--   __________ PMC Init class _______________________________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -247,7 +247,7 @@
 
 <!--   Member variables -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -255,7 +255,7 @@
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="pmc_spmsc1_lvwack,pmc_spmsc1_lvwie,pmc_spmsc1_lvdre,pmc_spmsc1_lvdse,pmc_spmsc1_lvde,pmc_spmsc1_bgbe"
       linePadding="xxx"
    ><![CDATA[
@@ -263,7 +263,7 @@
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="pmc_spmsc2_lvdv,pmc_spmsc2_lvwv"
       linePadding="xxx"
    ><![CDATA[
@@ -271,7 +271,7 @@
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="/PCR/nvic_irqLevel,irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -331,7 +331,7 @@
             pmc_spmsc2_lvdv;
             pmc_spmsc2_lvwv
             " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -380,7 +380,7 @@
 
 <!--   Configure methods -->
 
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Configure with default settings.
@@ -400,8 +400,8 @@
       \tstatic void configure(const Init &init) {
       \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
-             condition="/$(_STRUCTNAME)/generateSharedIrqInfo" >   <![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="$(_BasicInfoIrqGuard)"
+             condition="$(_BasicInfoIrqGuard)" >   <![CDATA[
       \t   if constexpr (irqHandlerInstalled) {
       \t      // Only set call-backs if feature enabled
       \t      setCallback(init.callbackFunction);
@@ -410,7 +410,7 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t   pmc->SPMSC1    = init.spmsc1;
       \t   pmc->SPMSC2    = init.spmsc2;
@@ -419,7 +419,7 @@
    ]]>
    </template>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
       <![CDATA[
       \t}; // class $(_BasicInfo)::Init
       \t\n

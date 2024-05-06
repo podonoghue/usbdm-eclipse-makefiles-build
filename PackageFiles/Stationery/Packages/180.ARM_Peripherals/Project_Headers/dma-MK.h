@@ -1,17 +1,10 @@
 /**
  * @file    dma.h  (180.ARM_Peripherals/Project_Headers/dma-MK.h)
  * @brief   Direct Memory Controller
- *
- * @version  V4.12.1.210
- * @date     30 September 2017
  */
 
 #ifndef INCLUDE_USBDM_DMA_H_
 #define INCLUDE_USBDM_DMA_H_
-
-#include "pin_mapping.h"
-#include "dmamux.h"
-#include "cstring"
 
 /*
  * *****************************
@@ -21,18 +14,19 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
+#include "pin_mapping.h"
+
 namespace USBDM {
 
 #if $(/DMA/enablePeripheralSupport) // /DMA/enablePeripheralSupport
-
-typedef DmaBasicInfo::DmaTcdCsr DmaTcdCsr;
-typedef DmaBasicInfo::DmaConfig DmaConfig;
 
 /**
  * @addtogroup DMA_Group DMA, Direct Memory Access (DMA)
  * @brief Support for DMA operations
  * @{
  */
+$(/DMA/peripheral_h_definition:// $/PIT/peripheral_h_definition not found)
+$(/DMAMUX/peripheral_h_definition:// $/PIT/peripheral_h_definition not found)
 
 /**
  * DMA transfer sizes.
@@ -614,7 +608,7 @@ $(/DMA/Setters:#error "/DMA/Setters not found" )
 
       unsigned channelNum;
 
-#if $(/PIT/_present:false)
+#if $(/LPIT/_present:false) || $(/PIT/_present:false)
       // Try non-PIT channel first
       channelNum = __builtin_ffs(allocatedChannels&~0xF);
       if (channelNum == 0) {
@@ -630,29 +624,7 @@ $(/DMA/Setters:#error "/DMA/Setters not found" )
       return (DmaChannelNum) channelNum;
    }
 
-   /**
-    * Allocate Periodic DMA channel associated with given PIT channel.
-    * This is a channel that may be throttled by the associated PIT channel.
-    *
-    * @param pitChannelNum PIT channel being used.
-    * @return DmaChannelNum_None - No suitable channel available.  Error code set.
-    * @return Channel number     - Number of allocated channel
-    */
-   static DmaChannelNum allocatePitAssociatedChannel(PitChannelNum pitChannelNum) {
-      const uint32_t channelMask = (1<<pitChannelNum);
-      usbdm_assert(pitChannelNum<Info::NumChannels,        "No DMA channel associated with PIT channel");
-      usbdm_assert((allocatedChannels & channelMask) != 0, "DMA channel already allocated");
-
-      CriticalSection cs;
-      if ((allocatedChannels & channelMask) == 0) {
-         setErrorCode(E_NO_RESOURCE);
-         return DmaChannelNum_None;
-      }
-      allocatedChannels &= ~channelMask;
-      return (DmaChannelNum) pitChannelNum;
-   }
-
-#if $(/LPIT/_present:false)
+#if $(/LPIT/_present:false) || $(/PIT/_present:false)
    /**
     * Allocate Periodic DMA channel.
     * This is a channel that may be throttled by an associated LPIT channel.
@@ -663,27 +635,7 @@ $(/DMA/Setters:#error "/DMA/Setters not found" )
    static DmaChannelNum allocatePeriodicChannel() {
       CriticalSection cs;
       unsigned channelNum = __builtin_ffs(allocatedChannels);
-      if ((channelNum == 0)||(--channelNum>=Info::NumChannels)||(channelNum>=USBDM::Lpit0Info::NumChannels)) {
-         setErrorCode(E_NO_RESOURCE);
-         return DmaChannelNum_None;
-      }
-      allocatedChannels &= ~(1<<channelNum);
-      return (DmaChannelNum) channelNum;
-   }
-#endif
-
-#if $(/PIT/_present:false)
-   /**
-    * Allocate Periodic DMA channel.
-    * This is a channel that may be throttled by an associated PIT channel.
-    *
-    * @return Error DmaChannelNum_None - No suitable channel available.  Error code set.
-    * @return Channel number           - Number of allocated channel
-    */
-   static DmaChannelNum allocatePeriodicChannel() {
-      CriticalSection cs;
-      unsigned channelNum = __builtin_ffs(allocatedChannels);
-      if ((channelNum == 0)||(--channelNum>=Info::NumChannels)||(channelNum>=USBDM::PitInfo::NumChannels)) {
+      if ((channelNum == 0)||(--channelNum>=Info::NumChannels)||(channelNum>=Info::NumPitChannels)) {
          setErrorCode(E_NO_RESOURCE);
          return DmaChannelNum_None;
       }
@@ -982,16 +934,42 @@ $(/DMA/Setters:#error "/DMA/Setters not found" )
 
 };
 
+/**
+ * Calculate a DMA slot number using an offset from an existing number
+ *
+ * @param slot    Base slot to use
+ * @param offset  Offset from base slot
+ *
+ * @return  DMA slot number calculated from slot+offset
+ */
+constexpr DmaSlot inline operator+(DmaSlot slot, unsigned offset) {
+   return (DmaSlot)((unsigned)slot + offset);
+}
+
+/**
+ * Calculate a DMA slot number using an offset from an existing number
+ *
+ * @param slot    Base slot to use
+ * @param offset  Offset from base slot
+ *
+ * @return  DMA slot number calculated from slot+offset
+ */
+constexpr DmaSlot inline operator+(DmaSlot slot, int offset) {
+   return slot + (unsigned)offset;
+}
+
+
 /** Bit-mask of allocated channels */
 template<class Info> uint32_t DmaBase_T<Info>::allocatedChannels = (1<<Info::NumChannels)-1;
 
 $(/DMA/declarations: // No declaractions found)
+$(/DMAMUX/declarations: // No declaractions found)
 
 /**
  * End DMA_Group
  * @}
  */
-#endif
+#endif  // /DMA/enablePeripheralSupport
 } // End namespace USBDM
 
 #endif /* INCLUDE_USBDM_DMA_H_ */

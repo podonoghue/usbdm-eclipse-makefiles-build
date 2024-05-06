@@ -211,7 +211,7 @@
 
    <!-- ____ Setters and Getters ____________ -->
 
-   <variableTemplate variables="acmp_c2_acipe" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate variables="acmp_c2_acipe" codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
       \t/**
       \t * Allocate %description
@@ -290,7 +290,7 @@
 
    <!-- ________ ACMP Init class ____________________________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -359,7 +359,7 @@
 
    <!-- ____ Init class Member variables ________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
    ><![CDATA[
       \t   /// %description
@@ -372,7 +372,7 @@
                %baseType   : acmp_c0_acpsel,acmp_c0_acnsel                        :   0      ;
                %baseType   : acmp_c1_dacen,acmp_c1_dacref,acmp_c1_dacval          :   0      ;
                %baseType   : acmp_c2_acipe                                        :   0      " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
       ><![CDATA[
@@ -381,7 +381,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -391,7 +391,7 @@
 
    <!-- ____ Init class Constructors ____________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -410,7 +410,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -429,7 +429,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="acmp_c2_acipe"
       linePadding="xxx" >
    <![CDATA[
@@ -456,7 +456,7 @@
             acmp_cs_acope;acmp_cs_acmod;
             acmp_c0_acpsel;acmp_c0_acnsel;
             acmp_c1_dacen;acmp_c1_dacref;acmp_c1_dacval" >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[

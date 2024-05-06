@@ -11,13 +11,14 @@
    <equation key="generateDefault"           value="false" />
    <equation key="configureInStartupDefault" value="false" />
    <xi:include href="enablePeripheral.xml"  />
-   <title />
 
-   <!-- ************* Class Declaration ****************** -->
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
 
-   <constant key="_class_declaration" value='"$(_Info) : public $(_BasicInfo)"' />
+   <!-- ____ Class Declaration ________ -->
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <intOption key="system_low_power_clock"
+      hidden="true"
       locked="true"
       derived="true"
       origin="LPO Clock"
@@ -39,6 +40,8 @@
       \t   return system_low_power_clock;
       \t}\n\n
    ]]></template>
+
+   <title description="Low Voltage Detect" />
 
    <!-- ************* LVDSC1 ****************** -->
 
@@ -67,7 +70,9 @@
 
    <binaryOption key="pmc_lvdsc1_lvdf" condition="pmc_lvdsc1_lvdf_present"
       hidden="true"
-      typeName="PmcLowVoltageDetect"
+      derived="true"
+      typeName="PmcLowVoltageEventFlag"
+      baseType="uint8_t"
       toolTip="This read-only status bit indicates a low-voltage detect event"
       description="Low-Voltage Detect Flag" >
       <choice name="NotDetected"  value="0" enum="NotDetected" />
@@ -76,10 +81,13 @@
 
    <binaryOption key="pmc_lvdsc1_lvdack" condition="pmc_lvdsc1_lvdack_present"
       hidden="true"
-      typeName="PmcLowVoltageAck"
+      derived="true"
+      typeName="PmcLowVoltageEventClear"
+      baseType="uint8_t"
       toolTip="Clears low voltage warning error detection flag"
       description="Acknowledge Low-Voltage Detect" >
-      <choice value="1" name="Disabled" enum="Ack" isDefault="true" />
+      <choice value="0" name="NoAction"   enum="NoAction"   />
+      <choice value="1" name="EventClear" enum="EventClear" />
    </binaryOption>
 
    <!-- ************* LVDSC2 ****************** -->
@@ -109,16 +117,21 @@
 
    <binaryOption key="pmc_lvdsc2_lvwack" condition="pmc_lvdsc2_lvwack_present"
       hidden="true"
-      typeName="PmcLowVoltageWarningAck"
+      derived="true"
+      typeName="PmcLowVoltageWarningEventClear"
+      baseType="uint8_t"
       toolTip="Clears low voltage warning detection flag"
       description="Acknowledge Low-Voltage Warning" >
-      <choice value="0" name="Disabled" enum="Ack" isDefault="true" />
+      <choice value="0" name="NoAction"   enum="NoAction"   />
+      <choice value="1" name="EventClear" enum="EventClear" />
    </binaryOption>
 
    <binaryOption key="pmc_lvdsc2_lvwf" condition="pmc_lvdsc2_lvwf_present"
       hidden="true"
+      derived="true"
       enabledBy="enablePeripheralSupport"
-      typeName="PmcLvdsc2Lvwf"
+      typeName="PmcLowVoltageWarningEventFlag"
+      baseType="uint8_t"
       toolTip="This bit indicates a low-voltage warning event.\n
                LVWF is set when VSupply transitions below the trip point"
       description="Low-Voltage Warning Flag" >
@@ -166,6 +179,7 @@
    <binaryOption key="pmc_regsc_ackiso" condition="pmc_regsc_ackiso_present"
       hidden="true"
       typeName="PmcPinStatus"
+      baseType="uint8_t"
       description="Acknowledge Isolation"
       toolTip="Reading indicates whether certain peripherals and I/O pads are in a latched state\n
                as a result of having been in a VLLS mode. \n
@@ -178,13 +192,98 @@
    <binaryOption key="pmc_regsc_regons" condition="pmc_regsc_regons_present"
       hidden="true"
       typeName="PmcRegulator"
+      baseType="uint8_t"
       description="Regulation Status"
       toolTip="Indicates the current status of the internal voltage regulator.">
       <choice value="0" name="Stop mode" enum="InStopMode" />
       <choice value="1" name="Run mode"  enum="InRunMode"  />
    </binaryOption>
 
-<!-- Setters and getters -->
+   <!-- ____ HVDSC1 ____ -->
+   <title description="High Voltage Detect" />
+
+   <binaryOption key="pmc_hvdsc1_hvdf" condition="pmc_hvdsc1_hvdf_present"
+      hidden="true"
+      derived="true"
+      typeName="PmcHighVoltageEventFlag"
+      baseType="uint8_t"
+      toolTip="This read-only status field indicates a high-voltage detect event."
+      description="High-Voltage Detect Flag" >
+      <choice name="Event not detected"  value="0" enum="NotDetected" />
+      <choice name="Event detected"      value="1" enum="Detected" />
+   </binaryOption >
+
+   <binaryOption key="pmc_hvdsc1_hvdack" condition="pmc_hvdsc1_hvdack_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="PmcHighVoltageEventClear"
+      baseType="uint8_t"
+      toolTip="This write-only field is used to acknowledge high voltage detection errors.\n
+               Write 1 to clear HVDF. Reads always return 0."
+      description="High-Voltage Detect Acknowledge" >
+      <choice name="Choice 0"  value="0" enum="NoAction" />
+      <choice name="Choice 1"  value="1" enum="ClearFlag" />
+   </binaryOption >
+
+   <choiceOption key="pmc_hvdsc1_action" condition="pmc_hvdsc1_hvdie_present&amp;&amp;pmc_hvdsc1_hvdre_present"
+      valueFormat="PMC_HVDSC1_HVDIE(%s),PMC_HVDSC1_HVDRE(%s)"
+      enabledBy="enablePeripheralSupport"
+      typeName="PmcHighVoltageAction"
+      baseType="uint8_t"
+      toolTip="Controls action on High Voltage detect.\n
+               Note: The reset action is write-once"
+      description="High-Voltage Detect Action" >
+      <choice name="Hardware interrupt disabled"      value="0,0" enum="NoAction" />
+      <choice name="Request a hardware interrupt"     value="1,0" enum="Interrupt" />
+      <choice name="Force an MCU reset (write once)"  value="0,1" enum="Reset" />
+   </choiceOption >
+
+   <binaryOption key="pmc_hvdsc1_hvdv" condition="pmc_hvdsc1_hvdv_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="PmcHighVoltageDetectLevel"
+      baseType="uint8_t"
+      toolTip="Selects the HVD trip point voltage (V HVD )."
+      description="High-Voltage Detect Voltage Select" >
+      <choice name="Low trip point"   value="0" enum="Low" />
+      <choice name="High trip point"  value="1" enum="High" />
+   </binaryOption >
+
+   <!-- ____ SRAMCTL ____ -->
+   <title description="SRAM Power-down in VLLS" />
+   <bitfieldOption key="pmc_sramctl_vlls2pd" condition="pmc_sramctl_vlls2pd_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="PmcSramOffInLowPower"
+      baseType="uint8_t"
+      toolTip="Configures whether an array is powered during LLS2 mode and VLLS2 mode."
+      description="SRAM VLLS2 Power-down" 
+      value="0xFF"
+      >
+      <choice name="SRAM2 [1FFF_8000-1FFF_FFFF] 32KB not retained"  value="=ToString(1&lt;&lt;0)" enum="SRAM2" />
+      <choice name="SRAM3 [1FFF_0000-1FFF_7FFF] 32KB not retained"  value="=ToString(1&lt;&lt;1)" enum="SRAM3" />
+      <choice name="SRAM4 [2000_8000-2000_FFFF] 32KB not retained"  value="=ToString(1&lt;&lt;2)" enum="SRAM4" />
+      <choice name="SRAM5 [2001_0000-2002_7FFF] 128KB not retained" value="=ToString(1&lt;&lt;3)" enum="SRAM5" />
+      <choice name="SRAM6 [2003_0000-2003_7FFF] 64KB not retained"  value="=ToString(1&lt;&lt;4)" enum="SRAM6" />
+      <choice name="SRAM7 [1FFC_0000-1FFE_FFFF] 192KB not retained" value="=ToString(1&lt;&lt;5)" enum="SRAM7" />
+      <choice name="SRAM8 [3400_FFFF-3403_7FFF] 256KB not retained" value="=ToString(1&lt;&lt;6)" enum="SRAM8" />
+      <choice name="SRAM9 [3404_FFFF-3407_7FFF] 256KB not retained" value="=ToString(1&lt;&lt;7)" enum="SRAM9" />
+   </bitfieldOption >
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+   ><![CDATA[
+      \t// Pointer to $(_BASENAME) hardware instance
+      \tvolatile $(_Type) *$(_basename);
+      \t
+      \t/**
+      \t * Constructor
+      \t *
+      \t * @param $(_basename) $(_BASENAME) hardware instance
+      \t */
+      \t$(_BasicInfo)(volatile $(_Type) * $(_basename)) : $(_basename)($(_basename)) {
+      \t}
+      \t\n
+   ]]></template>
+
+
+   <!-- ____ Getters and Setters ____________ -->
 
    <variableTemplate variables="pmc_regsc_ackiso"
    ><![CDATA[
@@ -198,24 +297,35 @@
       \t\n
    ]]></variableTemplate>
 
-   <for keys="field           : get   : set   : clear : genCode                 : name"
+   <for keys="field           : set   : get   : clear : genCode                 : name"
         values="
-         pmc_lvdsc1_lvdf      : true  : false : false : enableGettersAndSetters : LowVoltageDetectFlag;
+
+         pmc_lvdsc1_lvdf      : false : true  : false : enableGettersAndSetters : LowVoltageDetectFlag;
          pmc_lvdsc1_lvdack    : false : false : true  : enableGettersAndSetters : LowVoltageDetect;
          pmc_lvdsc1_action    : true  : true  : false : enableGettersAndSetters : LowVoltageAction;
          pmc_lvdsc1_lvdv      : true  : true  : false : enableGettersAndSetters : LowVoltageResetLevel;
-         pmc_lvdsc2_lvwf      : true  : false : false : enableGettersAndSetters : LowVoltageWarningFlag;
+
+         pmc_lvdsc2_lvwf      : false : true  : false : enableGettersAndSetters : LowVoltageWarningFlag;
          pmc_lvdsc2_lvwack    : false : false : true  : enableGettersAndSetters : LowVoltageWarning;
          pmc_lvdsc2_lvwie     : true  : true  : false : enableGettersAndSetters : LowVoltageWarningAction;
          pmc_lvdsc2_lvwv      : true  : true  : false : enableGettersAndSetters : LowVoltageWarningLevel;
+
          pmc_regsc_bgen       : true  : true  : false : enableGettersAndSetters : BandgapEnable;
-         pmc_regsc_ackiso     : true  : false : true  : enableGettersAndSetters : PinIsolation;
-         pmc_regsc_regons     : true  : false : false : enableGettersAndSetters : RegulatorStatus;
-         pmc_regsc_bgbe       : true  : true  : false : enableGettersAndSetters : BandgapBuffer" >
+         pmc_regsc_ackiso     : false : true  : true  : enableGettersAndSetters : PinIsolation;
+         pmc_regsc_regons     : false : true  : false : enableGettersAndSetters : RegulatorStatus;
+         pmc_regsc_bgbe       : true  : true  : false : enableGettersAndSetters : BandgapBuffer;
+
+         pmc_hvdsc1_hvdf      : false : true  : false : enableGettersAndSetters : HighVoltageDetectFlag;
+         pmc_hvdsc1_hvdack    : false : false : true  : enableGettersAndSetters : HighVoltageDetect;
+         pmc_hvdsc1_action    : true  : true  : false : enableGettersAndSetters : HighVoltageAction;
+         pmc_hvdsc1_hvdv      : true  : true  : false : enableGettersAndSetters : HighVoltageResetLevel;
+
+         pmc_sramctl_vlls2pd  : true  : true  : false : $(_InfoGuard) : SramRetention" >
       <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
       ><![CDATA[
          \t/**
          \t * Set %description
+         \t * (%(field))
          \t *
          %paramDescription
          \t */
@@ -228,18 +338,22 @@
       ><![CDATA[
          \t/**
          \t * Get %description
+         \t * (%(field))
          \t *
          \t * @return %tooltip
          \t */
-         \tstatic %paramType get%(name)() {
-         \t   return %paramType(%register&%mask);
+         \tstatic %returnType get%(name)() {
+         \t   return %fieldExtract;
          \t}
          \t\n
       ]]></variableTemplate>
       <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
-      ><![CDATA[
+         tooltipPadding="x*x"      ><![CDATA[
          \t/**
-         \t * Set %description
+         \t * Clear %description
+         \t * (%(field))
+         \t *
+         \t * %tooltip
          \t */
          \tstatic void clear%(name)() {
          \t   %register = %register|%mask;
@@ -250,7 +364,7 @@
 
    <!--   __________ class $(_BasicInfo) _______________________________ -->
 
-   <template where="definitions" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="definitions" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
    \t/**
    \t * Indicates reason for execution of PMC call-back
@@ -268,7 +382,8 @@
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t/**
-      \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
+      \t * $(_Class) interrupt handler
+      \t * Passes control to call-back function
       \t */
       \tstatic void irqHandler() {
       \t   if ((pmc->LVDSC1 & (PMC_LVDSC1_LVDF_MASK|PMC_LVDSC1_LVDIE_MASK)) ==
@@ -292,9 +407,9 @@
    ]]>
    </template>
 
-<!--   __________ PMC Init class _______________________________ -->
+   <!-- ________ PMC Init class ____________________________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -313,11 +428,10 @@
       \t * /// @param status  Status reflecting active inputs
       \t * ///
       \t * void $(_name)Callback(uint32_t status) {
-      \t *    (void) status;
+      \t *    ....
       \t * }
       \t *
-      \t * @code
-      \t * static const $(_Class)::Init init {
+      \t * static const $(_Class)::Init $(_name)Init {
       \t *
       \t *   // Setup values
       \t *   PmcLowVoltageAction_Interrupt ,           // Low-voltage detect action - Interrupt
@@ -329,8 +443,11 @@
       \t *   NvicPriority_VeryLow,                     // IRQ level for this peripheral - VeryLow
       \t *   pmcCallback,                              // Call-back function
       \t *
-      \t *   $(_name)Callback,                     // Call-back to execute on event - call-back function name
-      \t *   NvicPriority_Low,                // Priority for interrupt - Low
+      \t *   $(_name)Callback,                 // Call-back to execute on event - call-back function name
+      \t *   NvicPriority_Low,                 // Priority for interrupt - Low
+      \t *
+      \t *   // Optional base value to start with (must be last parameter)
+      \t *   $(_Class)::DefaultInitValue   // Used as base value modified by above
       \t * };
       \t *
       \t * // Initialise $(_Class) from values specified above
@@ -338,6 +455,13 @@
       \t * @endcode
       \t */
       \tclass Init {
+      \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(Types...) = delete;
       \t
       \tpublic:
       \t   /**
@@ -353,52 +477,42 @@
    ]]>
    </template>
 
-<!--   Member variables -->
+   <!-- ____ Init class Member variables ________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
-    ><![CDATA[
+      linePadding="xxx"
+   ><![CDATA[
       %multilineDescription
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="pmc_lvdsc1_lvdack,pmc_lvdsc1_action,pmc_lvdsc1_lvdv"
-   ><![CDATA[
-      %multilineDescription
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
+   <for keys=" type        : variables                                            : init    "
+       values="%baseType   : pmc_lvdsc1_action,pmc_lvdsc1_lvdv                    :   0      ;
+               %baseType   : pmc_lvdsc2_lvwack,pmc_lvdsc2_lvwie,pmc_lvdsc2_lvwv   :   0      ;
+               %baseType   : pmc_regsc_bgen,pmc_regsc_ackiso,pmc_regsc_bgbe       :   0      ;
+               %baseType   : pmc_hvdsc1_hvdack,pmc_hvdsc1_hvdie,pmc_hvdsc1_hvdre,
+                             pmc_hvdsc1_hvdv                                      :   0      ;
+               %baseType   : pmc_sramctl_vlls2pd                                  :   0      ;
+               %paramType  : /PCR/nvic_irqLevel                                   :   %defaultValue   " >
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         variables="%(variables)"
+         linePadding="xxx"
+      ><![CDATA[
+         %multilineDescription
+         \t   %(type) %registerName = %(init);\n\n
+      ]]></variableTemplate>
+   </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="pmc_lvdsc2_lvwack,pmc_lvdsc2_lvwie,pmc_lvdsc2_lvwv"
-   ><![CDATA[
-      %multilineDescription
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
+   <!-- ____ Init class Constructors ____________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-      variables="pmc_regsc_bgen,pmc_regsc_ackiso,pmc_regsc_bgbe"
-   ><![CDATA[
-      %multilineDescription
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
-      variables="/PCR/nvic_irqLevel,irqLevel"
-   ><![CDATA[
-      %multilineDescription
-      \t   %paramType %registerName0 = %defaultValue;
-      \t\n
-   ]]></variableTemplate>
-
-<!--   Constructors -->
-
-   <variableTemplate where="basicInfo" codeGenCondition="irqHandlingMethod"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
-    ><![CDATA[
+   ><![CDATA[
       \t   /**
       \t    * Constructor for %description
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -408,44 +522,26 @@
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t      this->%paramName0 = %paramExpression;
-      \t   }\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="irqHandlingMethod"
-      variables="/PCR/nvic_irqLevel"
-      linePadding="xxx"
-    ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      %registerName = %paramExpression;
+      \t      this->%paramName = %paramExpression;
       \t   }\n\n
    ]]></variableTemplate>
 
    <for keys="r"
-      values="
+      values="/PCR/nvic_irqLevel;
             pmc_lvdsc1_action;
             pmc_lvdsc1_lvdv;
-            pmc_lvdsc2_lvwie;
-            pmc_lvdsc2_lvwv;
-            pmc_regsc_bgen;
-            pmc_regsc_bgbe
+            pmc_lvdsc2_lvwie;pmc_lvdsc2_lvwv;
+            pmc_regsc_bgen;pmc_regsc_bgbe;
+            pmc_hvdsc1_action;pmc_hvdsc1_hvdv;
+            pmc_sramctl_vlls2pd
             " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
          \t   /**
          \t    * Constructor for %description
+         \t    * (%variables)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -455,39 +551,23 @@
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t
-         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t      %constructorFieldAssignment;
          \t   }
          \t\n
       ]]>
       </variableTemplate>
    </for>
 
-<!--   Default Initialisation value -->
-
-   <variableTemplate codeGenCondition="enablePeripheralSupport"
-      separator=","
-      terminator=","
-      variables="
-            pmc_lvdsc1_action,
-            pmc_lvdsc1_lvdv,
-            pmc_lvdsc2_lvwie,
-            pmc_lvdsc2_lvwv,
-            pmc_regsc_bgen,
-            pmc_regsc_bgbe
-         "
-   ><![CDATA[
-      \t/**
-      \t * Default initialisation value for $(_Class)
-      \t * This value is created from Configure.usbdmProject settings
-      \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression
-      \t};
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t}; // class $(_BasicInfo)::Init
       \t\n
-   ]]></variableTemplate>
+   ]]>
+   </template>
 
-<!--   Configure methods -->
+   <!-- ____ Init class Configure methods ____ -->
 
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t/**
       \t * Configure with default settings.
@@ -506,34 +586,68 @@
       \t */
       \tstatic void configure(const Init &init) {
       \t\n
-   ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
-             condition="/$(_STRUCTNAME)/generateSharedIrqInfo" >   <![CDATA[
-      \t   if constexpr (irqHandlerInstalled) {
-      \t      // Only set call-backs if feature enabled
-      \t      setCallback(init.callbackFunction);
-      \t      enableNvicInterrupts(init.irqlevel);
-      \t   }
-      \t\n
-   ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   ]]>
+   </template>
+   <template codeGenCondition="irqHandlingMethod" condition="irqHandlingMethod" >
    <![CDATA[
-      \t   pmc->LVDSC1  = init.lvdsc1;
-      \t   pmc->LVDSC2  = init.lvdsc2;
-      \t   pmc->REGSC   = init.regsc;
+      \t   // Configure call-backs
+      \t   setCallback(init.callbackFunction);\n
+   ]]>
+   </template>
+   <template codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t   enableNvicInterrupts(init.irqlevel);
+      \t
+   ]]>
+   </template>
+   <for keys=
+             " var                                                   : statement            "
+      values=" pmc_lvdsc1_action, pmc_lvdsc1_lvdv                    : %configRegAssignment  ;
+               pmc_lvdsc2_lvwie,pmc_lvdsc2_lvwv                      : %configRegAssignment  ;
+               pmc_regsc_bgen,pmc_regsc_bgbe                         : %configRegAssignment  ;
+               pmc_hvdsc1_action, pmc_hvdsc1_hvdv                    : %configRegAssignment  ;
+               pmc_sramctl_vlls2pd                                   : %configRegAssignment " >
+      <variableTemplate codeGenCondition="enablePeripheralSupport"
+      variables="%(var)"
+      linePadding="xxx"
+      ><![CDATA[
+         \t
+         %multilineDescription
+         \t   %(statement);\n
+      ]]></variableTemplate>
+   </for>
+   <template codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
       \t}
       \t\n
    ]]>
    </template>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
-      <![CDATA[
-      \t}; // class $(_BasicInfo)::Init
+   <!-- ____  Default Initialisation value ____ -->
+
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
+      separator=","
+      terminator=","
+      variables="
+            pmc_lvdsc1_action,
+            pmc_lvdsc1_lvdv,
+            pmc_lvdsc2_lvwie,pmc_lvdsc2_lvwv,
+            pmc_regsc_bgen,pmc_regsc_bgbe,
+            pmc_hvdsc1_action,pmc_hvdsc1_hvdv,
+            pmc_sramctl_vlls2pd,
+            irqLevel" >
+   <![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};
       \t\n
    ]]>
-   </template>
+   </variableTemplate>
 
-   <!-- ************* Common ****************** -->
+   <!-- ____ Common __________________ -->
 
    <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
@@ -554,7 +668,7 @@
       <copy source="Snippets/pmc-example.cpp"  target="Snippets/pmc-example.cpp"  overwrite="true" derived="true" />
    </projectActionList>
 
-   <!-- ************* Startup ****************** -->
+   <!-- ____ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n

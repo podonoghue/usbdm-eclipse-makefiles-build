@@ -12,10 +12,12 @@
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
    <!-- ____ Class Declaration ________ -->
    <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
-   <!-- ************* GPOLY ****************** -->
+   <!-- _____________ GPOLY __________________ -->
 
    <intOption key="crc_gpoly_gpoly" condition="crc_gpoly_gpoly_present"
       enabledBy="enablePeripheralSupport"
@@ -143,7 +145,7 @@
 
    <!-- ________ CRC Init class ____________________________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -194,7 +196,7 @@
                %baseType   : crc_data_data                         :   0      ;
                %baseType   : crc_ctrl_tot,crc_ctrl_totr,
                              crc_ctrl_fxor,crc_ctrl_tcrc           :   0      " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
       ><![CDATA[
@@ -211,7 +213,7 @@
             crc_gpoly_gpoly;
             crc_data_data
             " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -275,7 +277,7 @@
          \t   %(statement);\n
       ]]></variableTemplate>
    </for>
-   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}
       \t\n
@@ -305,7 +307,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}; // class $(_BasicInfo)::Init
       \t\n

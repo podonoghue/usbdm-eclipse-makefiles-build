@@ -12,6 +12,8 @@
    <xi:include href="enablePeripheral.xml"    />
    <title />
 
+   <constant key="definitionsInHeader" value="false" type="Boolean" />
+
    <!-- Clock mode as indicated by mcgClockMode[%(n)] choice index -->
    <constant key="LIRC_2MHz"   value="0" type="Long" />
    <constant key="LIRC_8MHz"   value="1" type="Long" />

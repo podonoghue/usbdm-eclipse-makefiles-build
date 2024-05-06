@@ -163,7 +163,7 @@
       \t\n
    ]]></template>
 
-      <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+      <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
          \t/**
          \t * Class used to do initialisation of Ftm QuadDecoder
          \t *
@@ -213,7 +213,7 @@
 
       <!-- ____ QUAD Init class Member variables ____ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
          variables="irqHandlingMethod"
        ><![CDATA[
          %multilineDescription
@@ -225,7 +225,7 @@
                   %baseType   : ftm_qdctrl_quadmode              : 0       ;
                   %baseType   : ftm_sc_action,ftm_sc_ps          : 0       ;
                   %baseType   : ftm_mod_mod                      : 0       ">
-         <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
             variables="%(variables)"
             linePadding="xxx" 
          ><![CDATA[
@@ -234,7 +234,7 @@
          ]]></variableTemplate>
       </for>
 
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
          variables="/PCR/nvic_irqLevel"
       ><![CDATA[
          %multilineDescription
@@ -243,7 +243,7 @@
 
       <!-- ____ QUAD Init class Constructors ____ -->
 
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
          variables="irqHandlingMethod"
          linePadding="xxx"
        ><![CDATA[
@@ -261,7 +261,7 @@
          \t   }\n\n
       ]]></variableTemplate>
 
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
          variables="/PCR/nvic_irqLevel"
          linePadding="xxx"
        ><![CDATA[
@@ -283,7 +283,7 @@
          ftm_qdctrl_quadmode;ftm_qdctrl_phapol;ftm_qdctrl_phbpol;
          ftm_sc_action;ftm_sc_ps;
          ftm_mod_mod" >
-         <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
             variables="%(r)"
             linePadding="xxx"
          ><![CDATA[
@@ -304,7 +304,7 @@
          ]]></variableTemplate>
       </for>
 
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="ftm_filter_qd_a"
          linePadding="xxx"
       ><![CDATA[
@@ -325,7 +325,7 @@
          \t\n
       ]]></variableTemplate>
 
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="ftm_filter_qd_b"
          linePadding="xxx"
       ><![CDATA[
@@ -346,7 +346,7 @@
          \t\n
       ]]></variableTemplate>
 
-      <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+      <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
          \t};
          \t\n
       ]]></template>

@@ -15,6 +15,8 @@
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
    <!-- ____ Class Declaration ________ -->
    <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
@@ -591,7 +593,7 @@
 
    <!-- ________ CMP Init class ____________________________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -678,7 +680,7 @@
 
    <!-- ____ Init class Member variables ________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -697,7 +699,7 @@
                %baseType   : cmp_muxcr_psel,cmp_muxcr_msel                        :   0      ;
                %baseType   : cmp_filterPeriod                                     :   0_s    ;
                %paramType  : /PCR/nvic_irqLevel                                   :   %defaultValue   " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
       ><![CDATA[
@@ -708,7 +710,7 @@
 
    <!-- ____ Init class Constructors ____________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -738,7 +740,7 @@
             cmp_cr0_filter;cmp_fpr_filt_per;cmp_filterPeriod;
             cmp_daccr_dacen;cmp_daccr_vrsel;cmp_daccr_vosel
             " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -937,7 +939,7 @@
    ]]>
    </variableTemplate>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}; // class $(_BasicInfo)::Init
       \t\n

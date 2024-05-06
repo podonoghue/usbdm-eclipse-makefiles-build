@@ -4,7 +4,10 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Enhanced direct memory access controller" >
 
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
    <equation key="suppressIrqHandler"        value="" />
+
    <equation key="irq_parameters"            value="DmaChannelNum channel" />
    <equation key="irq_dummy_parameters"      value="DmaChannelNum"         />
    <equation key="irq_call"                  value="dmaChannel"            />
@@ -226,7 +229,7 @@
       valueFormat="DMA_DCR_ERQ(%s),DMA_DCR_START(%s)"
       typeName="DmaMode"
       baseType="uint32_t"
-      description="Channel Mode" 
+      description="Channel Mode"
       toolTip="Enables and selects the mode of operation of the channel.\n
                - Peripheral request = Transfers are initiated by an associated peripheral.\n
                - Immediate = Transfers start immediately (software start)">
@@ -239,7 +242,7 @@
       enabledBy="enablePeripheralSupport&amp;&amp;(dma_dcr_erq_start==1)"
       typeName="DmaModeOnComplete"
       baseType="uint32_t"
-      description="Disable peripheral request on completion" 
+      description="Disable peripheral request on completion"
       toolTip="Control whether the Peripheral requests are disabled when the BCR is exhausted">
       <choice name="Request not affected"           value="0" enum="Unchanged" />
       <choice name="Request disabled on completion" value="1" enum="Disabled"  />
@@ -511,7 +514,7 @@
 
    <!-- ________ DMA Init class ____________________________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of a $(_Baseclass) channel
@@ -606,7 +609,7 @@
 
    <!-- ____ Init class Member variables ________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="DmaChannelNum"
       linePadding="xxx"
    ><![CDATA[
@@ -614,7 +617,7 @@
       \t   %paramType %paramName = DmaChannelNum_None;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -631,7 +634,7 @@
                              dma_dcr_dinc,dma_dcr_dsize,dma_dcr_start,
                              dma_dcr_smod,dma_dcr_dmod,dma_dcr_d_req,dma_dcr_linkcc,
                              dma_dcr_lch1,dma_dcr_lch2                            :   0      " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
       ><![CDATA[
@@ -640,7 +643,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="/PCR/nvic_irqLevel,irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -651,7 +654,7 @@
 
    <!-- ____ Init class Constructors ____________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -670,7 +673,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -689,7 +692,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="DmaChannelNum"
       linePadding="xxx" >
    <![CDATA[
@@ -734,7 +737,7 @@
             dma_dcr_linkcc;
             dma_dcr_lch1;
             dma_dcr_lch2" >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -799,7 +802,7 @@
          \t   %(statement);\n
       ]]></variableTemplate>
    </for>
-   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}
       \t\n
@@ -848,7 +851,7 @@
    ]]>
    </variableTemplate>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}; // class $(_BasicInfo)::Init
       \t\n

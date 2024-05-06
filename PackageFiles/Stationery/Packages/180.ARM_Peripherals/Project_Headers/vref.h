@@ -1,10 +1,6 @@
 /**
  * @file     vref.h (180.ARM_Peripherals/Project_Headers/vref.h)
  * @brief    Voltage Reference
- *
- * @version  V4.12.1.210
- * @date     13 April 2016
- *      Author: podonoghue
  */
 
 #ifndef HEADER_VREF_H
@@ -27,7 +23,7 @@ namespace USBDM {
  * @brief C++ Class allowing access to Voltage Reference
  * @{
  */
-
+$(/VREF/peripheral_h_definition:// $/VREF/peripheral_h_definition not found)
 /**
  * Template class representing a Voltage Reference
  *

@@ -4,8 +4,10 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="DMA channel multiplexor" >
 
-   <equation key="generateDefault"           type="Boolean" value="false"         />
-   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
+   <equation key="generateDefault"           value="false"         />
+   <equation key="configureInStartupDefault" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
@@ -152,11 +154,54 @@
       ]]></variableTemplate>
    </for>
 
-   <!--   ========== Interrupt handling =============================== -->
-
    <!--   ========== DMAMUX Init class =============================== -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Configures the hardware requests on a channel.
+      \t *
+      \t * @param[in] dmaChannelNum   The DMA channel being enabled
+      \t * @param[in] dmaSlot         The DMA slot (source) to connect to this channel
+      \t * @param[in] DmamuxMode      The mode for the channel
+      \t */
+      \tstatic void configure(DmaChannelNum dmaChannelNum, DmaSlot dmaSlot, DmamuxMode DmamuxMode=DmamuxMode_Continuous) {
+      \t
+      \t   // Throttled DMA channels limited by PIT channels available
+      \t   usbdm_assert((DmamuxMode != DmamuxMode_Continuous) || (dmaChannelNum<=NumPeriodicChannels),
+      \t         "Illegal PIT throttled channel");
+      \t
+      \t   // DmaSlots 0-63 must associate with DMA channels 0-15
+      \t   // DmaSlots 64-128 must associate with DMA channels 15-31
+      \t   usbdm_assert(((dmaChannelNum<16)||(dmaSlot>=64))&&((dmaChannelNum>=16)||(dmaSlot<64)),
+      \t         "Illegal LPIT channel");
+      \t
+      \t   // Enable clock to peripheral
+      \t   enableClock();
+      \t
+      \t   // Configure channel - must be disabled to change
+      \t   dmamux->CHCFG[dmaChannelNum] = 0;
+      \t   dmamux->CHCFG[dmaChannelNum] = DmamuxMode|DMAMUX_CHCFG_SOURCE(dmaSlot);
+      \t}
+      \t
+      \t/**
+      \t * Disable hardware requests on channel
+      \t *
+      \t * @param dmaChannelNum Channel to modify
+      \t */
+      \tstatic void disable(DmaChannelNum dmaChannelNum) {
+      \t
+      \t   // Enable clock to peripheral
+      \t   enableClock();
+      \t
+      \t   // Disable channel
+      \t   dmamux->CHCFG[dmaChannelNum] = 0;
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of a $(_Baseclass) channel (slot)
@@ -204,13 +249,13 @@
 
    <!--   Member variables -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
    ><![CDATA[
       \t   /// Channel number for this configuration
       \t   DmaChannelNum channelNum = DmaChannelNum_None;\n\n
    ]]></template>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="dmamux_chcfg_mode[],dmamux_chcfg_source[],dmamux_chcfg_low_source[],dmamux_chcfg_high_source[16]"
    ><![CDATA[
       \t   /// Channel Configuration Register
@@ -219,7 +264,7 @@
 
    <!--   Constructors -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       condition="!dma_low_channel_num"
       linePadding="xxx" >
    <![CDATA[
@@ -240,7 +285,7 @@
    ]]>
    </template>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="dma_low_channel_num,dmamux_chcfg_low_source[]"
       nonDefaultParams="2"
       linePadding="xxx" >
@@ -265,7 +310,7 @@
    ]]>
    </variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="dma_high_channel_num,dmamux_chcfg_high_source[16]"
       nonDefaultParams="2"
       linePadding="xxx" >
@@ -295,7 +340,7 @@
             dmamux_chcfg_mode[];
             dmamux_chcfg_source[]
             " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -484,7 +529,7 @@
    ]]>
    </template>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}; // class $(_BasicInfo)::Init
       \t\n
@@ -498,8 +543,7 @@
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \t//class $(_Class) : public $(_Baseclass)_T<$(_Info)> {};
-      \ttypedef $(_Baseclass)_T<$(_Info)> $(_Class);
+      \tusing $(_Class) = $(_Class)Info;
       \t\n
    ]]>
    </template>
@@ -507,10 +551,6 @@
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
    </validate>
-
-   <projectActionList id="dmamux_files" >
-      <copy source="Project_Headers/dmamux.h"  target="Project_Headers/dmamux.h"  overwrite="true"  derived="true" />
-   </projectActionList>
 
    <!-- ************* Startup ****************** -->
 

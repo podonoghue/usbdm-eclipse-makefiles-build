@@ -4,6 +4,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Direct memory access controller" >
 
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
    <equation key="irq_parameters"            value="" />
    <equation key="irq_dummy_parameters"      value=""        />
    <equation key="irq_call"                  value=""      />
@@ -303,7 +305,7 @@
 
 <!--   ========== DMA DmaTcdCsr class - start =============================== -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="definitions" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Union used to do initialisation of a TCD CSR in $(_Class)
@@ -348,7 +350,7 @@
 
 <!-- DmaTcdCsr Member variables -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="definitions" codeGenCondition="$(_BasicInfoGuard)"
       variables="
          dma_csr_bwc,
          dma_csr_majorelink,
@@ -389,7 +391,7 @@
          dma_csr_inthalf;
          dma_csr_intmajor;
          dma_csr_start" >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="definitions" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -412,13 +414,13 @@
 
 <!--  ========== DmaTcdCsr class - end =============================== -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
-      \t};\n\n
+   <template where="definitions" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
+      \t}; // DmaTcdCsr\n\n
    ]]></template>
 
 <!--   ========== DMA DmaConfig class - start =============================== -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="definitions" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of $(_Class)
       \t *
@@ -463,7 +465,7 @@
 
 <!-- DmaConfig Member variables -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="definitions" codeGenCondition="$(_BasicInfoGuard)"
       variables="
          dma_cr_hoe,
          dma_cr_clm,
@@ -486,7 +488,7 @@
          dma_cr_GroupArb;
          dma_cr_erca;
          dma_cr_edbg" >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" variables="%(r)"
+      <variableTemplate where="definitions" codeGenCondition="$(_BasicInfoGuard)" variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
          \t   /**
@@ -529,10 +531,10 @@
       ]]></variableTemplate>
    </for>
 
-<!--   ========== DmaTcdCsr class - end =============================== -->
+<!--   ========== DmaConfig class - end =============================== -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
-      \t};\n\n
+   <template where="definitions" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
+      \t}; // DmaConfig\n\n
    ]]></template>
 
 <!--    Default Initialisation values -->
@@ -553,7 +555,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr $(_BasicInfo)::DmaTcdCsr DefaultDmaTcdCsrValue = {%initExpression\n\t};
+      \tstatic constexpr DmaTcdCsr DefaultDmaTcdCsrValue = {%initExpression\n\t};
       \t\n
    ]]></variableTemplate>
 
@@ -572,7 +574,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr $(_BasicInfo)::DmaConfig DefaultDmaConfigValue = {%initExpression\n\t};
+      \tstatic constexpr DmaConfig DefaultDmaConfigValue = {%initExpression\n\t};
       \t\n
    ]]>
    </variableTemplate>

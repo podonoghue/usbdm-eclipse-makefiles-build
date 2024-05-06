@@ -1751,7 +1751,7 @@
 
    <!--   ========== Interrupt handling =============================== -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="irqHandlingMethod"
    ><![CDATA[
        \t//! Common class based callback code has been generated for this class of peripheral
@@ -1759,7 +1759,7 @@
        \t\n
    ]]></variableTemplate>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)" >
    <![CDATA[
       \t/**
       \t * Type for FlexCAN - Message Buffers (Mailboxes and FIFO) call back function.
@@ -2031,7 +2031,7 @@
 
    <!--   ========== CAN Init class =============================== -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -2087,211 +2087,211 @@ XXXXXXXXXXXXXXXXXXXXXX
 
    <!--   Member variables -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)" >
    <![CDATA[
       \t   /// FlexCAN - Message Buffers (Mailboxes and FIFO)
       \t   MessageBuffer_CallbackFunction sCallback = nullptr;\n\n
    ]]></template>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)" >
    <![CDATA[
       \t   /// FlexCAN - Bus off
       \t   BusOff_CallbackFunction sCallback = nullptr;\n\n
    ]]></template>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)" >
    <![CDATA[
       \t   /// FlexCAN - Error
       \t   Error_CallbackFunction sCallback = nullptr;\n\n
    ]]></template>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)" >
    <![CDATA[
       \t   /// FlexCAN - Transmit Warning
       \t   TxWarning_CallbackFunction sCallback = nullptr;\n\n
    ]]></template>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)" >
    <![CDATA[
       \t   /// FlexCAN - Receive Warning
       \t   RxWarning_CallbackFunction sCallback = nullptr;\n\n
    ]]></template>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)" >
    <![CDATA[
       \t   /// FlexCAN - Wakeup
       \t   WakeUp_CallbackFunction sCallback = nullptr;\n\n
    ]]></template>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="can_mcr_mdis,can_mcr_frz,can_mcr_rfen,can_mcr_halt,can_mcr_wakmsk,can_mcr_softrst,can_mcr_supv,can_mcr_slfwak,can_mcr_wrnen,can_mcr_waksrc,can_mcr_srxdis,can_mcr_irmq,can_mcr_lprioen,can_mcr_aen,can_mcr_idam,can_mcr_maxmb"
    ><![CDATA[
       \t   /// Module Configuration Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="can_ctrl1_presdiv,can_ctrl1_rjw,can_ctrl1_pseg1,can_ctrl1_pseg2,can_ctrl1_boffmsk,can_ctrl1_errmsk,can_ctrl1_clksrc,can_ctrl1_lpb,can_ctrl1_twrnmsk,can_ctrl1_rwrnmsk,can_ctrl1_smp,can_ctrl1_boffrec,can_ctrl1_tsyn,can_ctrl1_lbuf,can_ctrl1_lom,can_ctrl1_propseg"
    ><![CDATA[
       \t   /// Control 1 Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="can_timer_timer"
    ><![CDATA[
       \t   /// Free Running Timer
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="can_rxmgmask_mg"
    ><![CDATA[
       \t   /// Rx Mailboxes Global Mask Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="can_rx14mask_rx14m"
    ><![CDATA[
       \t   /// Rx 14 Mask register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="can_rx15mask_rx15m"
    ><![CDATA[
       \t   /// Rx 15 Mask register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="can_ecr_rxerrcnt,can_ecr_txerrcnt"
    ><![CDATA[
       \t   /// Error Counter
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="can_esr1_twrnint,can_esr1_rwrnint,can_esr1_boffint,can_esr1_errint,can_esr1_wakint"
    ><![CDATA[
       \t   /// Error and Status 1 register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="can_imask1_buflm"
    ><![CDATA[
       \t   /// Interrupt Masks 1 register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="can_iflag1_buf31to8i,can_iflag1_buf7i,can_iflag1_buf6i,can_iflag1_buf5i,can_iflag1_buf4to0i"
    ><![CDATA[
       \t   /// Interrupt Flags 1 register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="can_ctrl2_wrmfrz,can_ctrl2_rffn,can_ctrl2_tasd,can_ctrl2_mrp,can_ctrl2_rrs,can_ctrl2_eacen"
    ><![CDATA[
       \t   /// Control 2 Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="can_rxfgmask_fgm"
    ><![CDATA[
       \t   /// Rx FIFO Global Mask register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="can_rxfgmask_a_rtra,can_rxfgmask_a_idea,can_rxfgmask_a_rxida_std,can_rxfgmask_a_rxida_ext"
    ><![CDATA[
       \t   /// Rx FIFO Global Mask register (format A)
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="can_rxfgmask_b_rtrb_0,can_rxfgmask_b_ideb_0,can_rxfgmask_b_rxidb_std_0,can_rxfgmask_b_rxidb_ext_0,can_rxfgmask_b_rtrb_1,can_rxfgmask_b_ideb_1,can_rxfgmask_b_rxidb_std_1,can_rxfgmask_b_rxidb_ext_1"
    ><![CDATA[
       \t   /// Rx FIFO Global Mask register (format B)
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="can_rxfgmask_c_rxidc_0,can_rxfgmask_c_rxidc_1,can_rxfgmask_c_rxidc_2,can_rxfgmask_c_rxidc_3"
    ><![CDATA[
       \t   /// Rx FIFO Global Mask register (format C)
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="can_cs_idhit,can_cs_srr,can_cs_ide,can_cs_rtr,can_cs_dlc,can_cs_time_stamp"
    ><![CDATA[
       \t   /// FIFO Message Buffer CS Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="can_id_prio,can_id_std,can_id_ext"
    ><![CDATA[
       \t   /// FIFO Message Buffer ID Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="can_word0_data_byte_0,can_word0_data_byte_1,can_word0_data_byte_2,can_word0_data_byte_3"
    ><![CDATA[
       \t   /// FIFO Message Buffer WORD0 Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="can_word1_data_byte_4,can_word1_data_byte_5,can_word1_data_byte_6,can_word1_data_byte_7"
    ><![CDATA[
       \t   /// FIFO Message Buffer WORD1 Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="can_filter_id_a_rtra,can_filter_id_a_idea,can_filter_id_a_rxida_std,can_filter_id_a_rxida_ext"
    ><![CDATA[
       \t   /// FIFO Message Filter ID (format A)
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="can_filter_id_b_rtrb_0,can_filter_id_b_ideb_0,can_filter_id_b_rxidb_std_0,can_filter_id_b_rxidb_ext_0,can_filter_id_b_rtrb_1,can_filter_id_b_ideb_1,can_filter_id_b_rxidb_std_1,can_filter_id_b_rxidb_ext_1"
    ><![CDATA[
       \t   /// FIFO Message Filter ID (format B)
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="can_filter_id_c_rxidc_0,can_filter_id_c_rxidc_1,can_filter_id_c_rxidc_2,can_filter_id_c_rxidc_3"
    ><![CDATA[
       \t   /// FIFO Message Filter ID (format C)
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="can_cs_code"
    ><![CDATA[
       \t   /// Message Buffer 0 CS Register
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="can_rximr_mi"
    ><![CDATA[
       \t   /// Rx Individual Mask
       \t   uint32_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -2301,7 +2301,7 @@ XXXXXXXXXXXXXXXXXXXXXX
 
    <!-- Init Constructors -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -2319,7 +2319,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t   }\n\n
    ]]></template>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -2337,7 +2337,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t   }\n\n
    ]]></template>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -2355,7 +2355,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t   }\n\n
    ]]></template>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -2373,7 +2373,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t   }\n\n
    ]]></template>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -2391,7 +2391,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t   }\n\n
    ]]></template>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -2409,7 +2409,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t   }\n\n
    ]]></template>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -2538,7 +2538,7 @@ XXXXXXXXXXXXXXXXXXXXXX
             can_cs_code;
             can_rximr_mi
             " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -2686,7 +2686,7 @@ XXXXXXXXXXXXXXXXXXXXXX
 
 <!--   Configure methods -->
 
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Configure with default settings.
@@ -2709,8 +2709,8 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t   Info::enableClock();
       \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
-             condition="/$(_STRUCTNAME)/generateSharedIrqInfo" >   <![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="$(_BasicInfoIrqGuard)"
+             condition="$(_BasicInfoIrqGuard)" >   <![CDATA[
       \t   if constexpr (Info::irqHandlerInstalled) {
       \t      // Only set call-backs if feature enabled
       \t      Info::setCallback(init.sCallback);
@@ -2718,7 +2718,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t   }
       \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t   // ..........  Regs to init .......... ;
       \t   can->MCR                  = init.mcr;
@@ -2750,7 +2750,7 @@ XXXXXXXXXXXXXXXXXXXXXX
    ]]>
    </template>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}; // class $(_BasicInfo)::Init
       \t\n

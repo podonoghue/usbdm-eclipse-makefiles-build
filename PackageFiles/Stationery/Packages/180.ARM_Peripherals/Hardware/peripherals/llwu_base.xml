@@ -4,19 +4,20 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
    <equation key="irq_parameters"            value=""  />
    <equation key="irq_dummy_parameters"      value=""  />
    <equation key="irq_call"                  value=""  />
    <equation key="generateDefault"           value="false"         />
    <equation key="configureInStartupDefault" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
-   <title description="------------------------------------------" />
+   <title />
 
-   <!-- ************* Class Declaration ****************** -->
-   <constant key="_class_declaration" type="String"
-      value="&quot;$(_Info) : public $(_Baseclass)BasicInfo&quot;" />
+   <!-- ________ Class Declaration ________ -->
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
-   <!-- ******************************** ME ******************************** -->
+   <!-- ______ ME ______ -->
 
    <equation key="index" value="=0" />
    <for keys="p" values="=/LLWU/llwu_device_list" condition="llwu_device_list" >
@@ -120,7 +121,7 @@
       \t}\n\n
    ]]></variableTemplate>
 
-   <!-- ******************************** RST ******************************** -->
+   <!-- ______ RST ______ -->
 
    <binaryOption key="llwu_rst_llrste" condition="llwu_rst_llrste_present"
       enabledBy="enablePeripheralSupport"
@@ -170,7 +171,7 @@
 
    <category name="Pin sources" description="Wakeups from pins">
 
-      <!-- ******************************** PEx ******************************** -->
+      <!-- ______ PEx ______ -->
 
       <for keys="pin" dim="32" >
          <choiceOption key='="llwu_pe"+ToString((%(pin)/4)+1)+"_wupe"+ToString(%(pin))' condition='=SignalExists("LLWU_P%(pin)")'
@@ -187,7 +188,7 @@
          </choiceOption>
       </for>
 
-   <!-- ******************************** FILTx ******************************** -->
+   <!-- ______ FILTx ______ -->
 
       <choiceOption key="pin_filter_numbers" condition="llwu_filt1_filte_present"
          hidden="true"
@@ -223,7 +224,7 @@
                           condition='=SignalExists("LLWU_P%(i)")'
                           keys="i" dim="32" />
       </choiceOption>
-      
+
       <title description="Filtered pins" />
       <choiceOption key="llwu_filt_filte"  condition="llwu_filt1_filte_present"
          hidden="true"
@@ -254,7 +255,7 @@
 
 <!--   ========== LLWU Init class =============================== -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Class)
@@ -647,13 +648,13 @@
       \t};\n\n
    ]]></template >
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
       <![CDATA[
       \t}; // $(_Class)BasicInfo::Init\n\n
    ]]>
    </template>
 
-   <!-- ************* Common ****************** -->
+   <!-- ________ Common ________ -->
 
    <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
@@ -671,7 +672,7 @@
       <copy source="Snippets/llwu-simple-example.cpp"  target="Snippets/llwu-simple-example.cpp"  overwrite="true" derived="true" />
    </projectActionList>
 
-   <!-- ************* Startup ****************** -->
+   <!-- ________ Startup ________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
@@ -683,7 +684,7 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <!-- ************* Signal mapping ****************** -->
+   <!-- ________ Signal mapping ________ -->
 
    <signals enabledBy="enablePeripheralSupport" />
 

@@ -4,13 +4,15 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <equation key="irq_parameters"            value=""  />
-   <equation key="irq_dummy_parameters"      value=""  />
-   <equation key="irq_call"                  value=""  />
-   <equation key="generateDefault"           value="false"         />
-   <equation key="configureInStartupDefault" value="false"         />
-   <xi:include href="enablePeripheral.xml" />
+   <equation key="irq_parameters"             value=""          />
+   <equation key="irq_dummy_parameters"       value=""          />
+   <equation key="irq_call"                   value=""          />
+   <equation key="generateDefault"            value="false"     />
+   <equation key="configureInStartupDefault"  value="false"     />
+   <xi:include href="enablePeripheral.xml"    />
    <title />
+
+   <constant key="definitionsInHeader" value="false" type="Boolean" />
 
    <!-- Clock mode as indicated by mcgClockMode[%(n)] choice index -->
    <constant key="FEI"  value="0" type="Long" />
@@ -25,9 +27,8 @@
    <constant key="VLPR"    value="1" type="Long" />
    <constant key="HSRUN"   value="2" type="Long" />
 
-   <!-- ************* Class Declaration ****************** -->
-   <constant key="_class_declaration" type="String"
-      value='"$(_Info) : public $(_BasicInfo)"' />
+   <!-- _____________ Class Declaration __________________ -->
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <clockSelectionOption key="currentClockConfig"
       derived="true"
@@ -1627,7 +1628,7 @@
       ]]></variableTemplate>
    </for>
 
-   <!-- ************* Common ****************** -->
+   <!-- _____________ Common __________________ -->
 
    <template key="/MCG/Includes"  ><![CDATA[
    #include "osc.h"\n

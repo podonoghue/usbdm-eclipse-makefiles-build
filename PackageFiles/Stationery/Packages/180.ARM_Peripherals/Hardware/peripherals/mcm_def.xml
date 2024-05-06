@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
 <!-- mcm_def.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
+
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
 
    <equation key="irq_parameters"             value=""          />
    <equation key="irq_dummy_parameters"       value=""          />
@@ -750,7 +751,7 @@
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \tclass $(_Class) : public $(_Baseclass)Base{};\n
+      \tusing $(_Class) = $(_Baseclass)Base;\n
    ]]></template>
 
    <validate

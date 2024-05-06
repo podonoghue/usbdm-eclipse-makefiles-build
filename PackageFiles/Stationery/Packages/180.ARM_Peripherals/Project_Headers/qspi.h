@@ -1,9 +1,6 @@
 /**alse,
  * @file     qspi.h (180.ARM_Peripherals/Project_Headers/qspi.h)
  * @brief    Quad Serial Peripheral Interface
- *
- * @version  V4.12.1.240
- * @date     14 November 2021
  */
 
 #ifndef HEADER_QSPI_H
@@ -30,6 +27,7 @@ namespace USBDM {
  * @brief Abstraction for Quad Serial Peripheral Interface
  * @{
  */
+$(/QSPI/peripheral_h_definition:// $/QSPI/peripheral_h_definition not found)
 #if $(/QSPI/enablePeripheralSupport:false) // /QSPI/enablePeripheralSupport
 
 /**

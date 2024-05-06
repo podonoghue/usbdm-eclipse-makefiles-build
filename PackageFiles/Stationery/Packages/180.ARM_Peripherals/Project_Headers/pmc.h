@@ -19,14 +19,14 @@
 #include "pin_mapping.h"
 
 namespace USBDM {
-
 /**
  * @addtogroup PMC_Group PMC, Power Management Controller
  * @brief Peripheral information for Power Management Controller
  * @{
  */
 
-#if $(/PMC/enablePeripheralSupport) // /PMC/enablePeripheralSupport
+$(/PMC/peripheral_h_definition:// $/PMC/peripheral_h_definition not found)
+
 /**
  * Template class providing interface to Power Management Controller
  *
@@ -42,96 +42,11 @@ class PmcBase : public PmcInfo {
 protected:
 $(/PMC/protectedMethods: // No protected methods found)
 
-public:
-
-#if $(/PMC/irqHandlingMethod:false) // /PMC/irqHandlingMethod
-   /**
-    * Wrapper to allow the use of a class member as a callback function
-    * @note Only usable with static objects.
-    *
-    * @tparam T         Type of the object containing the callback member function
-    * @tparam callback  Member function pointer
-    * @tparam object    Object containing the member function
-    *
-    * @return  Pointer to a function suitable for the use as a callback
-    *
-    * @code
-    * class AClass {
-    * public:
-    *    int y;
-    *
-    *    // Member function used as callback
-    *    // This function must match PmcCallbackFunction
-    *    void callback() {
-    *       ...;
-    *    }
-    * };
-    * ...
-    * // Instance of class containing callback member function
-    * static AClass aClass;
-    * ...
-    * // Wrap member function
-    * auto fn = Cmp0::wrapCallback<AClass, &AClass::callback, aClass>();
-    * // Use as callback
-    * Cmp0::setCallback(fn);
-    * @endcode
-    */
-   template<class T, void(T::*callback)(PmcInterruptReason reason), T &object>
-   static CallbackFunction wrapCallback() {
-      static CallbackFunction fn = [](PmcInterruptReason reason) {
-         (object.*callback)(reason);
-      };
-      return fn;
-   }
-
-   /**
-    * Wrapper to allow the use of a class member as a callback function
-    * @note There is a considerable space and time overhead to using this method
-    *
-    * @tparam T         Type of the object containing the callback member function
-    * @tparam callback  Member function pointer
-    * @tparam object    Object containing the member function
-    *
-    * @return  Pointer to a function suitable for the use as a callback
-    *
-    * @code
-    * class AClass {
-    * public:
-    *    int y;
-    *
-    *    // Member function used as callback
-    *    // This function must match PmcCallbackFunction
-    *    void callback() {
-    *       ...;
-    *    }
-    * };
-    * ...
-    * // Instance of class containing callback member function
-    * AClass aClass;
-    * ...
-    * // Wrap member function
-    * auto fn = Cmp0::wrapCallback<AClass, &AClass::callback>(aClass);
-    * // Use as callback
-    * Cmp0::setCallback(fn);
-    * @endcode
-    */
-   template<class T, void(T::*callback)(PmcInterruptReason reason)>
-   static CallbackFunction wrapCallback(T &object) {
-      static T &obj = object;
-      static CallbackFunction fn = [](PmcInterruptReason reason) {
-         (obj.*callback)(reason);
-      };
-      return fn;
-   }
-#endif
-
 protected:
    /** Hardware instance */
    static constexpr HardwarePtr<PMC_Type> pmc = baseAddress;
 
 public:
-$(/PMC/publicMethods:// /PMC/publicMethods not found)
-$(/PMC/InitMethod:// /PMC/InitMethod not found)
    /**
     * Enable clock to the PMC
     */
@@ -243,21 +158,9 @@ $(/PMC/InitMethod:// /PMC/InitMethod not found)
    }
 #endif
 
-#ifdef PMC_SRAMCTL_VLLS2PD_MASK
-   /**
-    * Sets which SRAM blocks are powered during LLS2 mode and VLLS2 modes.
-    *
-    * @param blocks Bit mask for the 8 SRAM blocks, 1=> retain, 0=> not powered during LLS2 mode and VLLS2 modes.
-    */
-   static void setVlpRamRetention(uint8_t blocks) {
-      pmc->SRAMCTL = (uint8_t)~blocks;
-   }
-#endif
 };
 
-$(/PMC/staticDefinitions: // No static declarations found)
 $(/PMC/declarations: // No declarations found)
-#endif // /PMC/enablePeripheralSupport
 
 /**
  * End PMC_Group

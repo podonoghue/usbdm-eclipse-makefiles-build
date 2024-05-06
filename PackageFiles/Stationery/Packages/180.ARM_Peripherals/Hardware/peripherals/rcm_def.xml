@@ -9,11 +9,13 @@
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
-   <!-- ************* Class Declaration ****************** -->
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
+   <!-- ____ Class Declaration ________ -->
    <constant key="_class_declaration" type="String"
       value="&quot;$(_Info) : public $(_BasicInfo)&quot;" />
 
-   <!-- ************* RPFC ****************** -->
+   <!-- ____ RPFC _________ -->
 
    <binaryOption key="rcm_rpfc_rstfltss" condition="rcm_rpfc_rstfltss_present"
       enabledBy="enablePeripheralSupport"
@@ -35,7 +37,7 @@
       <choice value="2" enum="LowPowerOscillator" name="LPO clock based filter" />
    </choiceOption>
 
-   <!-- ************* RPFW ****************** -->
+   <!-- ____ RPFW _________ -->
 
    <choiceOption key="rcm_rpfw_rstfltsel" condition="rcm_rpfw_rstfltsel_present"
       enabledBy="rcm_rpfc_rstfltsrw==1"
@@ -55,7 +57,7 @@
       description="Reset pin filter "
    />
 
-   <!-- ************* MR ****************** -->
+   <!-- ____ MR _________ -->
 
    <binaryOption key="rcm_mr_ezp_ms" condition="rcm_mr_ezp_ms_present"
       enabledBy="enablePeripheralSupport"
@@ -68,7 +70,7 @@
    </binaryOption >
 
 
-<!-- Setters and getters -->
+   <!-- ____ Getters and Setters ____________ -->
 
    <for keys="field           : get   : set   : clear : genCode                 : name"
         values="
@@ -79,6 +81,7 @@
       ><![CDATA[
          \t/**
          \t * Set %description
+         \t * (%(field))
          \t *
          %paramDescription
          \t */
@@ -91,33 +94,34 @@
       ><![CDATA[
          \t/**
          \t * Get %description
+         \t * (%(field))
          \t *
          \t * @return %tooltip
          \t */
-         \tstatic %paramType get%(name)() {
-         \t   return %paramType(%register&%mask);
+         \tstatic %returnType get%(name)() {
+         \t   return %fieldExtract;
          \t}
          \t\n
       ]]></variableTemplate>
       <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+         tooltipPadding="x*x"
       ><![CDATA[
          \t/**
-         \t * Set %description
+         \t * Clear %description
+         \t * (%(field))
          \t *
-         %paramDescription
+         \t * %tooltip
          \t */
          \tstatic void clear%(name)() {
-         \t   %register = %register|%mask
+         \t   %register = %register|%mask;
          \t}
          \t\n
       ]]></variableTemplate>
    </for>
 
-   <!--   ========== Interrupt handling =============================== -->
+   <!-- ________ RCM Init class _____ -->
 
-   <!--   ========== RCM Init class =============================== -->
-
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -170,23 +174,23 @@
    ]]>
    </template>
 
-   <!--   Member variables -->
+   <!-- ____ Init class Member variables ________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="rcm_rpfc_rstfltss,rcm_rpfc_rstfltsrw"
    ><![CDATA[
       \t   /// Reset Pin Filter Control Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="rcm_rpfw_rstfltsel"
    ><![CDATA[
       \t   /// Reset Pin Filter Width Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <!--   Constructors -->
+   <!-- ____ Init class Constructors ____________ -->
 
    <for keys="r"
       values="
@@ -194,12 +198,13 @@
             rcm_rpfc_rstfltsrw;
             rcm_rpfw_rstfltsel
             " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
          \t   /**
          \t    * Constructor for %description
+         \t    * (%variables)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -209,7 +214,7 @@
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t
-         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t      %constructorFieldAssignment;
          \t   }
          \t\n
       ]]>
@@ -218,7 +223,7 @@
 
 <!--   Default Initialisation value -->
 
-   <variableTemplate codeGenCondition="enablePeripheralSupport"
+   <variableTemplate codeGenCondition="$(_InfoGuard)"
       separator=","
       terminator=","
       variables="
@@ -236,9 +241,9 @@
       \t\n
    ]]></variableTemplate>
 
-<!--   Configure methods -->
+   <!-- ____ Init class Configure methods ____ -->
 
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Configure with default settings.
@@ -264,16 +269,16 @@
    ]]>
    </template>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}; // class $(_BasicInfo)::Init
       \t\n
    ]]>
    </template>
 
-   <!-- ************* Common ****************** -->
+   <!-- ____ Common ____ -->
 
-   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class representing $(_NAME)
@@ -292,7 +297,7 @@
       <copy source="Snippets/rcm-example.cpp"  target="Snippets/rcm-example.cpp"       overwrite="true" derived="true" />
    </projectActionList>
 
-   <!-- ************* Startup ****************** -->
+   <!-- ____ Startup ____ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
@@ -304,6 +309,7 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
+   <!--  ____ Signal mapping ____ -->
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 
 </peripheralPage>

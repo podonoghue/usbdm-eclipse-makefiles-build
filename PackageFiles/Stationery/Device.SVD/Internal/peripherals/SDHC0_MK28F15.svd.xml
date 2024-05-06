@@ -241,8 +241,8 @@ Devices using this peripheral:
                <access>read-only</access>
                <fields>
                   <field>
-                     <name>CMDRSP0</name>
-                     <description>Command Response 0</description>
+                     <name>CMDRSP</name>
+                     <description>Command Response</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -1644,6 +1644,42 @@ This bit is self-clearing on completion of 80 clocks to SD card</description>
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>3.3 V supported</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>VS30</name>
+                     <description>Voltage Support 3.0 V</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>3.0 V not supported</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>3.0 V supported</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>VS18</name>
+                     <description>Voltage Support 1.8 V</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>1.8 V not supported</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>1.8 V supported</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

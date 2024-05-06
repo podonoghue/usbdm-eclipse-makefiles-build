@@ -14,7 +14,9 @@
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
-   <!-- ************* Class Declaration ****************** -->
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
+   <!-- _____________ Class Declaration __________________ -->
    <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <template><![CDATA[
@@ -22,7 +24,7 @@
       \tstatic constexpr int outputPin  = 0;\n\n
    ]]></template>
 
-   <!-- ************* C0 ****************** -->
+   <!-- _____________ C0 __________________ -->
 
    <binaryOption key="dac_c0_dacen" condition="dac_c0_dacen_present"
       enabledBy="enablePeripheralSupport"
@@ -108,7 +110,7 @@
       <choice value="1" name="Interrupt" enum="Interrupt" />
    </binaryOption>
 
-   <!-- ************* C1 ****************** -->
+   <!-- _____________ C1 __________________ -->
 
    <binaryOption key="dac_c1_dmaen" condition="dac_c1_dmaen_present"
       enabledBy="dac_c0_dacen"
@@ -164,7 +166,7 @@
       <choice value="3" name="FIFO threshold: &lt;= Max-2 full entries" enum="FifoMaxMinus2" condition="dac_c1_dacbfmd_fifo_present" />
    </choiceOption>
 
-   <!-- ************* C2 ****************** -->
+   <!-- _____________ C2 __________________ -->
 
    <choiceOption key="dac_c2_dacbfrp" condition="dac_c2_dacbfrp_present"
       locked="true"
@@ -193,7 +195,7 @@
       <choice value="15" name="max entries" enum="Max" isDefault="true" />
    </choiceOption>
 
-   <!-- ************* SR ****************** -->
+   <!-- _____________ SR __________________ -->
 
    <binaryOption key="dac_sr_dacbfwmf" condition="dac_sr_dacbfwmf_present"
       enabledBy="dac_c0_dacen"
@@ -323,7 +325,7 @@
 
    <!--   ========== DAC Init class =============================== -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -397,14 +399,14 @@
 
    <!--   Member variables -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -419,7 +421,7 @@
                %baseType   : dac_c1_dmaen,dac_c1_dacbfwm,dac_c1_dacbfmd,
                              dac_c1_dacbfen                                    : 0       ;
                %baseType   : dac_c2_dacbfrp,dac_c2_dacbfup                     : 0       ">
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
       ><![CDATA[
@@ -430,7 +432,7 @@
 
    <!--   Constructors -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -449,7 +451,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -483,7 +485,7 @@
             dac_c2_dacbfrp;
             dac_c2_dacbfup
             " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -589,14 +591,14 @@
    ]]></template>
 
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}; // class $(_BasicInfo)::Init
       \t\n
    ]]>
    </template>
 
-   <!-- ************* Common ****************** -->
+   <!-- _____________ Common __________________ -->
 
    <template><![CDATA[
       \t/// Number of Data output registers
@@ -628,7 +630,7 @@
       <copy source="Snippets/dac-softwareTrigger-example.cpp"      target="Snippets/dac-softwareTrigger-example.cpp"      overwrite="true" derived="true" />
    </projectActionList>
 
-   <!-- ************* Startup ****************** -->
+   <!-- _____________ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
@@ -640,7 +642,7 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <!-- ************* SIM configuration ****************** -->
+   <!-- _____________ SIM configuration __________________ -->
 
    <category name="Advanced" description="SIM configuration">
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />

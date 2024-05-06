@@ -17,8 +17,8 @@ read -d '' TOx <<EOF
       \</for\> 
 EOF
 
-FROM='\$(_Class)Info'
-TO='\$(_Info)'
+FROM='PmcInfo::getLpoClock()'
+TO='SimInfo::getLpoClock()'
 
 #FROM='\"&quot;&quot;\"'
 #TO=\'\"\"\'

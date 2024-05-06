@@ -28,6 +28,7 @@
 
 namespace USBDM {
 
+$(/LCD/peripheral_h_definition:// $/LCD/peripheral_h_definition not found)
 class SegmentLcd : public LcdInfo {
 
 public:

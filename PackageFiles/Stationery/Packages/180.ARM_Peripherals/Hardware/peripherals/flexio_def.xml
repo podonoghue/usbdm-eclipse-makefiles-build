@@ -12,6 +12,8 @@
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
    <!-- ************* Class Declaration ****************** -->
    <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 

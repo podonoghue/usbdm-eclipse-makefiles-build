@@ -200,7 +200,7 @@ struct __attribute__((packed, aligned(4))) SdhcR1Response {
    //                                          3322'2222'2222'1111'1111'11
    //                                          1098'7654'3210'9876'5432'1098'7654'3210
    static constexpr uint32_t AllErrorsMask = 0b1111'1111'1111'1001'0010'0000'0000'1000;
-   //                                                        100'0000'0000'1110'0000'0000
+
    constexpr SdhcR1Response(uint32_t value) : value(value) {
    }
 };
@@ -526,7 +526,7 @@ private:
    DRESULT SD_Write(const uint8_t *buffer, uint32_t blockNumber, uint16_t blockCount);
 
    /**
-    * Default initialisation value for Sdhc0
+    * Initialisation value for Sdhc
     * This value is created from Configure.usbdmProject settings
     */
    static constexpr SdhcBasicInfo::Init initValue = {
@@ -580,19 +580,28 @@ private:
          SdhcInterruptEnable::DmaError |
          SdhcInterruptEnable::DmaComplete,
 
-         SdhcWriteWaterLevel(128) ,                     // (sdhc_wml_wrwml) Write Watermark Level
-         SdhcReadWaterLevel(128) ,                      // (sdhc_wml_rdwml) Read Watermark Level
-         SdhcExactBlockNumberForSdioCmd53_Disabled,     // (sdhc_vendor_exblknu) SDIO CMD53 Exact Block Number Block Read Enable For SDIO CMD53 - Exact block read for SDIO CMD53
-         NvicPriority_Disabled,                         // (irqLevel) IRQ priority level - Normal
+         SdhcWriteWaterLevel(128) ,                 // (sdhc_wml_wrwml) Write Watermark Level
+         SdhcReadWaterLevel(128) ,                  // (sdhc_wml_rdwml) Read Watermark Level
+         SdhcExactBlockNumberForCmd53_Disabled,     // (sdhc_vendor_exblknu) SDIO CMD53 Exact Block Number Block Read Enable For SDIO CMD53 - Exact block read for SDIO CMD53
+         NvicPriority_Disabled,                     // (irqLevel) IRQ priority level - Normal
    };
 
 public:
 
+   /**
+    * Create SDHC Interface for SD card
+    *
+    * @tparam T      Type of SDHC (Inferred)
+    * @param sdhc    SDHC Interface to use
+    */
    template<typename T>
    SdhcInterface(const T &sdhc) : sdhc(sdhc) {
       sdhc.configure(initValue);
    }
 
+   /**
+    * Destructor
+    */
    virtual ~SdhcInterface() = default;
 
    /**

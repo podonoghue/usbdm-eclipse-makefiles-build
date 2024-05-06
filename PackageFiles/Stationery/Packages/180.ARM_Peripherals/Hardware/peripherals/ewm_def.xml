@@ -12,6 +12,8 @@
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
    <!-- Constants -->
    <constant key = "disable_peripheral"      value = "&quot;ewm->CTRL = EWM_CTRL_EWMEN(0);&quot;"  type="String" />
 
@@ -228,7 +230,7 @@
 
    <!--   ========== EWM Init class =============================== -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -287,42 +289,42 @@
 
    <!--   Member variables -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="ewm_ctrl_inten,ewm_ctrl_input,ewm_ctrl_ewmen"
    ><![CDATA[
       \t   /// Control Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="ewm_cmpl_comparel"
    ><![CDATA[
       \t   /// Compare Low Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="ewm_cmph_compareh"
    ><![CDATA[
       \t   /// Compare High Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="ewm_clkprescaler_clk_div"
    ><![CDATA[
       \t   /// Clock Prescaler Register
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -332,7 +334,7 @@
 
    <!--   Constructors -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -351,7 +353,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -376,7 +378,7 @@
             ewm_ctrl_input;
             ewm_ctrl_ewmen
             " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -398,7 +400,7 @@
       </variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)"
       variables="ewm_clkprescaler_clk_div"
       linePadding="xxx" >
    <![CDATA[
@@ -419,7 +421,7 @@
    ]]>
    </variableTemplate>
 
-   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)"
       variables="ewm_cmpl_comparel,ewm_cmph_compareh"
       linePadding="xxx" >
    <![CDATA[
@@ -485,7 +487,7 @@
 
 <!--   Configure methods -->
 
-   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Configure with default settings.
@@ -516,11 +518,11 @@
       \t
       \t   // Initialise registers\n
    ]]></template>
-   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" condition="ewm_clkprescaler_clk_div" >
+   <template codeGenCondition="$(_BasicInfoGuard)" condition="ewm_clkprescaler_clk_div" >
    <![CDATA[
       \t   ewm->CLKPRESCALER    = init.clkprescaler;\n
    ]]></template>
-   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t   ewm->CMPL    = init.cmpl;
       \t   ewm->CMPH    = init.cmph;
@@ -530,7 +532,7 @@
    ]]>
    </template>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}; // class $(_BasicInfo)::Init
       \t\n

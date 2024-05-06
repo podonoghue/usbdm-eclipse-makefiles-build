@@ -8,13 +8,15 @@
 
    <equation key="irq_pattern"                value='="^.*%b%i.*$"'       />
    <equation key="irq_ClassHandler"           value='="%c%i::irqHandler"' />
-   <equation key="irq_parameters"             value=""        />
-   <equation key="irq_dummy_parameters"       value=""        />
-   <equation key="irq_call"                   value=""        />
+   <equation key="irq_parameters"             value=""          />
+   <equation key="irq_dummy_parameters"       value=""          />
+   <equation key="irq_call"                   value=""          />
    <equation key="generateDefault"            value="false"     />
    <equation key="configureInStartupDefault"  value="false"     />
-   <xi:include href="enablePeripheral.xml"  />
+   <xi:include href="enablePeripheral.xml"    />
    <title />
+
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
 
    <!-- ____ Class Declaration ________ -->
    <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
@@ -100,7 +102,7 @@
       toolTip="Selects the clock source for LPTMR\n
                Should only be altered when timer is disabled." >
       <choice value="0" name="MCG Internal Reference Clock (MCGIRCLK)"        enum="Mcgirclk" ref="/MCG/system_mcgirclk_clock[0]" code="McgInfo::getMcgIrClock()"  />
-      <choice value="1" name="Low power oscillator (LPO - 1kHz)"              enum="Lpoclk"   ref="/PMC/system_low_power_clock"   code="PmcInfo::getLpoClock()"    isDefault="true" />
+      <choice value="1" name="Low power oscillator (LPO - 1kHz)"              enum="Lpoclk"   ref="/PMC/system_low_power_clock"   code="SimInfo::getLpoClock()"    isDefault="true" />
       <choice value="2" name="32kHz Clock Source (ERCLK32)"                   enum="Erclk32"  ref="/SIM/system_erclk32k_clock"    code="SimInfo::getErc32kClock()" />
       <choice value="3" name="Oscillator External Reference Clock (OSCERCLK)" enum="Oscerclk" ref="/OSC0/oscer_clock"             code="Osc0Info::getOscerClock()" />
    </choiceOption>
@@ -410,7 +412,7 @@
 
    <!--   ______ LPTMR Init class ___________ -->
 
-   <clockCodeTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <clockCodeTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variable="lptmr_psr_pcs"
       returnFormat="%s"
    ><![CDATA[
@@ -431,7 +433,7 @@
       \t\n
    ]]></clockCodeTemplate>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Calculate timing information based on desired duration and selected clock (from psr.pcs)
@@ -468,7 +470,7 @@
 
    <!--   ______ LPTMR Init class ___________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of LPTMR
@@ -498,7 +500,7 @@
 
    <!-- ____ Init class Member variables ________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -512,7 +514,7 @@
                %baseType   : lptmr_psr_prescaler,lptmr_psr_pcs                    : 0              ;
                %baseType   : lptmr_csr_tie,lptmr_csr_tfc                          : 0              ;
                %paramType  : /PCR/nvic_irqLevel                                   : %defaultValue  " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
       ><![CDATA[
@@ -521,13 +523,13 @@
       ]]></variableTemplate>
    </for>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t}; // class $(_BasicInfo)::Init\n\n
    ]]></template >
 
 <!--   ______ LPTMR TimeIntervalModeInit class ___________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of LPTMR in Time Interval Mode
       \t *
@@ -573,14 +575,14 @@
 
    <for keys="variable           : condition"
      values="
-             /PCR/nvic_irqLevel  : /$(_STRUCTNAME)/generateSharedInfo ;
-             irqHandlingMethod   : /$(_STRUCTNAME)/generateSharedIrqInfo ;
-             lptmr_csr_tie       : /$(_STRUCTNAME)/generateSharedInfo ;
-             lptmr_csr_tfc       : /$(_STRUCTNAME)/generateSharedInfo ;
-             lptmr_psr_prescaler : /$(_STRUCTNAME)/generateSharedInfo ;
-             lptmr_psr_pcs       : /$(_STRUCTNAME)/generateSharedInfo ;
-             lptmr_cmr_compare   : /$(_STRUCTNAME)/generateSharedInfo ;
-             lptmr_cmrPeriod     : /$(_STRUCTNAME)/generateSharedInfo ">
+             /PCR/nvic_irqLevel  : $(_BasicInfoGuard) ;
+             irqHandlingMethod   : $(_BasicInfoIrqGuard) ;
+             lptmr_csr_tie       : $(_BasicInfoGuard) ;
+             lptmr_csr_tfc       : $(_BasicInfoGuard) ;
+             lptmr_psr_prescaler : $(_BasicInfoGuard) ;
+             lptmr_psr_pcs       : $(_BasicInfoGuard) ;
+             lptmr_cmr_compare   : $(_BasicInfoGuard) ;
+             lptmr_cmrPeriod     : $(_BasicInfoGuard) ">
       <variableTemplate where="basicInfo" codeGenCondition="%(condition)"
          variables="%(variable)"
          linePadding="xxx" >
@@ -604,13 +606,13 @@
       </variableTemplate>
    </for>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t}; // class $(_BasicInfo)::TimeIntervalModeInit\n\n
    ]]></template>
 
 <!--   ______ LPTMR PulseCountingModeInit class ___________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of LPTMR in Pulse Counting Mode
       \t *
@@ -658,15 +660,15 @@
 
    <for keys="variable              : condition"
      values="
-             /PCR/nvic_irqLevel     : /$(_STRUCTNAME)/generateSharedInfo ;
-             irqHandlingMethod      : /$(_STRUCTNAME)/generateSharedIrqInfo ;
-             lptmr_csr_tie          : /$(_STRUCTNAME)/generateSharedInfo ;
-             lptmr_csr_tfc          : /$(_STRUCTNAME)/generateSharedInfo ;
-             lptmr_psr_pcs          : /$(_STRUCTNAME)/generateSharedInfo ;
-             lptmr_cmr_compare      : /$(_STRUCTNAME)/generateSharedInfo ;
-             lptmr_csr_tps          : /$(_STRUCTNAME)/generateSharedInfo ;
-             lptmr_csr_tpp          : /$(_STRUCTNAME)/generateSharedInfo ;
-             lptmr_psr_glitchFilter : /$(_STRUCTNAME)/generateSharedInfo ">
+             /PCR/nvic_irqLevel     : $(_BasicInfoGuard) ;
+             irqHandlingMethod      : $(_BasicInfoIrqGuard) ;
+             lptmr_csr_tie          : $(_BasicInfoGuard) ;
+             lptmr_csr_tfc          : $(_BasicInfoGuard) ;
+             lptmr_psr_pcs          : $(_BasicInfoGuard) ;
+             lptmr_cmr_compare      : $(_BasicInfoGuard) ;
+             lptmr_csr_tps          : $(_BasicInfoGuard) ;
+             lptmr_csr_tpp          : $(_BasicInfoGuard) ;
+             lptmr_psr_glitchFilter : $(_BasicInfoGuard) ">
       <variableTemplate where="basicInfo" codeGenCondition="%(condition)"
          variables="%(variable)"
          linePadding="xxx" >
@@ -690,7 +692,7 @@
       </variableTemplate>
    </for>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}; // class $(_BasicInfo)::PulseCountingModeInit
       \t\n

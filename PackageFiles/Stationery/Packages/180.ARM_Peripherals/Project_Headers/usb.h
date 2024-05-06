@@ -128,6 +128,7 @@ namespace USBDM {
  * @brief Abstraction for USB OTG Controller
  * @{
  */
+$(/USB/peripheral_h_definition:// $/USB/peripheral_h_definition not found)
 
 /**
  * Base class representing an USB Interface.\n

@@ -12,6 +12,8 @@
    <xi:include href="enablePeripheral.xml"    />
    <title />
 
+   <constant key="definitionsInHeader" value="false" type="Boolean" />
+
    <!-- Clock mode as indicated by mcgClockMode[%(n)] choice index -->
    <constant key="FEI"  value="0" type="Long" />
    <constant key="FEE"  value="1" type="Long" />
@@ -28,8 +30,7 @@
    <constant key="HSRUN"   value="2" type="Long" />
 
    <!-- _____________ Class Declaration __________________ -->
-   <constant key="_class_declaration" type="String"
-      value='"$(_Info) : public $(_BasicInfo)"' />
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <clockSelectionOption key="currentClockConfig"
       derived="true"
@@ -936,7 +937,7 @@
             </binaryOption>
 
             <binaryOption key="mcg_c6_lolie0[%(n)]" condition="mcg_c6_lolie0_present"
-               typeName="PllLossOfClockInterrupt"
+               typeName="McgPllLossOfClockInterrupt"
                description="PLL Loss of Lock Interrupt Enable"
                toolTip="Determines if an interrupt request is made following a PLL loss of lock indication.\n
                         This bit has effect when S.LOLS0 is set" >
@@ -945,7 +946,7 @@
             </binaryOption>
 
             <binaryOption key="mcg_c8_lolre[%(n)]" condition="mcg_c8_lolre_present"
-               typeName="PllLossOfClockReset"
+               typeName="McgPllLossOfClockReset"
                enabledBy="mcg_c6_lolie0[%(n)]"
                description="PLL Loss of Lock Reset Enable"
                toolTip="Determines if an interrupt or a reset request is made following a PLL loss of lock.\n

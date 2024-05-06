@@ -4,6 +4,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Serial Peripheral Interface" >
 
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
    <equation key="irq_parameters"            value="ErrorCode errorcode"  />
    <equation key="irq_dummy_parameters"      value="ErrorCode"            />
    <equation key="irq_call"                  value="E_NO_ERROR"           />
@@ -29,7 +31,7 @@
 
    <title description="Clocking" />
    <binaryOption key="/$(_BASENAME)/baudSupport"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       modify="true"
       description="Enable specifying speed in Hertz"
       toolTip="If not selected, the communication speed must be specified using the\n
@@ -39,7 +41,7 @@
    </binaryOption>
 
    <choiceOption key="spiClockConfig" condition="/MCG/_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       target="spiInputClock"
       description="Clock configuration"
       toolTip="Selects the clock configuration used for calculations involving the bus clock" >
@@ -50,7 +52,7 @@
    </choiceOption>
 
    <choiceOption key="spiClockConfig" condition="/ICS/_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       target="spiInputClock"
       description="Clock configuration"
       toolTip="Selects the clock configuration used for calculations involving the bus clock" >
@@ -61,7 +63,7 @@
    </choiceOption>
 
    <intOption key="spiInputClock"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       locked="true"
       derived="true"
       description="SPI input clock"
@@ -74,7 +76,7 @@
    <!-- _____________ C1 and C2__________________ -->
 
    <binaryOption key="spi_c1_spe" condition="spi_c1_spe_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       typeName="SpiEnable"
       description="System enable" >
       <choice name="Disabled"    value="0" enum="Disabled" />
@@ -285,7 +287,7 @@
       \t}\n\n
    ]]></variableTemplate>
 
-   <variableTemplate variables="spi_c1_mode,spi_c1_lsbfe" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate variables="spi_c1_mode,spi_c1_lsbfe" codeGenCondition="$(_BasicInfoGuard)"
       nonDefaultParams="2"
    ><![CDATA[
       \t/**
@@ -335,7 +337,7 @@
 
 <!--   ========== SPI Init class =============================== -->
 
-   <template key="init_description" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template key="init_description" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_BASENAME)
@@ -511,7 +513,7 @@
    ]]>
    </template>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" discardRepeats="true" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -555,28 +557,28 @@
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" discardRepeats="true"
       variables="spi_c1_mstr,spi_c1_mode,spi_pinuse,spi_c1_lsbfe"
    ><![CDATA[
       \t   /// Control register 1
       \t   uint8_t %registerName = %mask0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" discardRepeats="true"
       variables="spi_c2_spmie,spi_pinuse,spi_c2_spiswai,spi_c2_bidirectional"
    ><![CDATA[
       \t   /// Control register 2
       \t   uint8_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" discardRepeats="true"
       variables="spi_br_sppr,spi_br_spr"
    ><![CDATA[
       \t   /// Baud rate register
       \t   uint8_t %registerName = 0xFFU;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" discardRepeats="true"
       variables="spi_m_bits"
    ><![CDATA[
       \t   /// Match register:
@@ -593,7 +595,7 @@
 
 <!--   Configure methods -->
 
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
@@ -606,7 +608,7 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/private" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template key="/$(_BASENAME)/private" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t/**
       \t * Configure $(_BASENAME) from a subset of values specified in init
       \t * This does not include interrupt or clock settings.
@@ -624,7 +626,7 @@
       \t      br = calculateBr(getClockFrequency(), init.speed);
       \t   }\n
    ]]></template>
-   <template key="/$(_BASENAME)/private" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template key="/$(_BASENAME)/private" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t   // ..........  Regs to init .......... ;
       \t   spi->C1   = 0;
       \t   spi->C2   = init.c2;
@@ -635,7 +637,7 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t/**
       \t * Configure $(_BASENAME) from values specified in init
       \t *
@@ -655,7 +657,7 @@
       \t   }
       \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t   configureBasic(init);
       \t}
       \t\n
@@ -699,7 +701,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" discardRepeats="true"
       variables="spi_br_sppr,spi_br_spr"
       linePadding="xxx"
       nonDefaultParams="2"
@@ -746,7 +748,7 @@
    ]]>
    </variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" discardRepeats="true"
       variables="spi_pinuse"
       linePadding="xxx"
    >
@@ -769,7 +771,7 @@
    ]]>
    </variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" discardRepeats="true"
       variables="spi_c2_spmie,spi_m_bits"
       nonDefaultParams="2"
       linePadding="xxx" >
@@ -801,7 +803,7 @@
             spi_c2_spiswai;
             spi_c2_bidirectional
             " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" discardRepeats="true"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -825,7 +827,7 @@
 
 <!--   Default Initialisation value -->
 
-   <variableTemplate codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate codeGenCondition="$(_BasicInfoGuard)"
       separator=","
       terminator=","
       variables="
@@ -856,7 +858,7 @@
       \t\n
    ]]></template>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" discardRepeats="true" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" discardRepeats="true" >
       <![CDATA[
       \t}; // $(_Baseclass)BasicInfo::Init\n\n
    ]]>

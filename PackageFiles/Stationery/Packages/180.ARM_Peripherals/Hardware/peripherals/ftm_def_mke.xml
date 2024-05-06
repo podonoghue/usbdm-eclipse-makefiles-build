@@ -4,6 +4,8 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
    <!-- ____ Class Declaration ________ -->
    <constant key="_basicInfo_declaration" type="String"
       value='"class $(_BasicInfo) : public $(_Baseclass)CommonInfo {\n
@@ -276,7 +278,10 @@
       toolTip="In left-aligned or centre-aligned this is the period of the timer\n
                In free-running mode it is the minimum interval"
       derived="true"
-      units="s" />
+      units="s"
+      min="0"
+      max="clockPeriod*(ftm_sc_cpwms?(2*(65535)):(65535+1))"
+      />
 
    <choiceOption key="ftm_sc_action" condition="ftm_sc_toie_present&amp;&amp;ftm_sc_dma_present"
       hiddenBy="mode==(None)"
@@ -376,7 +381,7 @@
          hiddenBy="!(ftm_cnsc_mode_independent[%(ch)]!=0)"
          enabledBy="(ftm_cnsc_mode_independent[%(ch)]!=0)"
          valueFormat="FTM_CnSC_CHIE(%s),FTM_CnSC_DMA(%s)"
-         baseType="uint8_t"
+         baseType="uint16_t"
          typeName="FtmChannelAction"
          description="Action on Channel Event"
          toolTip="Enable interrupt or DMA on channel event" >
@@ -389,7 +394,7 @@
          hiddenBy="!(ftm_cnsc_mode_independent[%(ch)]!=0)"
          enabledBy="(ftm_cnsc_mode_independent[%(ch)]!=0)&amp;&amp;irqHandlingMethod"
          valueFormat="FTM_CnSC_CHIE(%s)"
-         baseType="uint8_t"
+         baseType="uint16_t"
          typeName="FtmChannelAction"
          description="Action on Channel Event"
          toolTip="Enable interrupt on channel event" >
@@ -426,7 +431,7 @@
          enabledBy="(ftm_cnsc_mode_independent[%(ch)]==(1,2,3))"
          valueFormat="FTM_CnSC_ICRST(%s)"
          typeName="FtmChannelReset"
-         baseType="uint8_t"
+         baseType="uint16_t"
          description="Reset counter on channel IC event"
          toolTip="FTM counter reset is driven by the selected event of the channel\n
                   in the Input Capture mode.\n
@@ -475,7 +480,7 @@
          ref="ftm_cnvHighTime_independent[%(ch)]/ftm_modPeriod"
          valueFormat="%s"
          units="percent"
-         description="Output duty cycle as pecentage"
+         description="Output duty cycle as percentage"
          toolTip="Calculated duty cycle" />
    </for>
 
@@ -493,6 +498,7 @@
       valueFormat="FTM_CnSC_ELS(%s)"
       description="Odd channel mode"
       typeName="FtmOddChannelMode"
+      baseType="uint16_t"
       disabledValue="0b00"
       toolTip="Behaviour of second channel when channels are paired"
       >
@@ -649,7 +655,7 @@
          baseType="uint8_t"
          description="Action on Odd channel (Ch%(oddCh)) event"
          toolTip="Enables the capture of the FTM counter value on odd channel events.\n
-                  In dual edge capture one-shot mode, this bit is cleared automatically
+                  In dual edge capture one-shot mode, this bit is cleared automatically\n
                   by hardware when the capture occurs." >
          <choice value="0" name="NoCapture"          enum="NoCapture"                  />
          <choice value="1" name="Capture 2nd event"  enum="CaptureOnEvent"   />
@@ -2485,7 +2491,7 @@
 
 <!--  ___ Init class ______________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
       \t *
@@ -2557,7 +2563,7 @@
 
 <!-- ____ Init class Member variables ________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
     ><![CDATA[
       %multilineDescription
@@ -2574,7 +2580,7 @@
                %baseType   : ftm_sc_action,ftm_sc_cpwms,ftm_sc_clks,ftm_sc_ps  : 0       ;
                %baseType   : ftm_conf_gtbeout,ftm_conf_gtbeen,
                              ftm_conf_bdmmode,ftm_conf_numtof,                 : 0       ">
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
       ><![CDATA[
@@ -2583,7 +2589,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   // %description
@@ -2592,7 +2598,7 @@
 
 <!-- ____ Init class Constructors ____________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -2611,7 +2617,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -2635,7 +2641,7 @@
       ftm_pol_pol;
       ftm_outinit_choi;
       ftm_exttrig_trig" >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -2663,7 +2669,7 @@
                          ftm_mode_pwmsync;ftm_mode_wpdis;ftm_mode_ftmen;
                          ftm_conf_gtbeout;ftm_conf_gtbeen;ftm_conf_bdmmode;ftm_conf_numtof;
                          ftm_deadtime_dtps, ftm_deadtime_dtval" >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx"
          multipleParamsOnNewline="true"
@@ -2687,7 +2693,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="ftm_sc_ps, ftm_mod_mod"
       params=",mod_ticks"
       linePadding="xxx"
@@ -2710,7 +2716,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       nonDefaultParams="2"
       variables="ftm_modPeriod"
       linePadding="xxx"
@@ -2732,7 +2738,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t}; // class $(_BasicInfo)::Init\n\n
    ]]></template>
 
@@ -2843,7 +2849,7 @@
 
 <!-- ___ ChannelInit class ______________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of $(_Baseclass)Channel
       \t *
@@ -2896,12 +2902,12 @@
 
    <for keys=" type        : variables                         : init                 "
        values="%baseType   : ftm_cnv_independent[]             : 0                    ;
-               uint8_t     : ftm_cnsc_mode_independent[],
+               %baseType   : ftm_cnsc_mode_independent[],
                              ftm_cnsc_action_independent[],
                              ftm_cnsc_icrst_independent[]      : 0                    ;
                %paramType  : ftm_channel_number                : %paramType_None      ;
                %baseType   : ftm_filter_fval_independent[]     : %paramType_Disabled  " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
       ><![CDATA[
@@ -2919,7 +2925,7 @@
                ftm_cnsc_icrst_independent[];
                ftm_filter_fval_independent[];
                ftm_cnv_independent[]" >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -2941,7 +2947,29 @@
       ]]></variableTemplate>
    </for>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      variables="ftm_cnvDutyCycle_independent[]"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    * (%(variables))
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr ChannelInit(%params, Types... rest) : ChannelInit(rest...) {
+      \t
+      \t      cnv   = roundf(10000*%paramExpression);
+      \t      cnsc |= 1<<15;
+      \t   }
+      \t\n
+   ]]></variableTemplate>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t}; // class  $(_BasicInfo)::ChannelInit\n\n
    ]]></template>
 
@@ -3056,7 +3084,7 @@
 <if condition="ftm_combine_present" >
 <!--   ___ DualChannelInit class ______________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of a pair of $(_Baseclass)Channels operating in Paired mode
       \t *
@@ -3124,7 +3152,7 @@
                uint8_t     : ftm_cnsc_mode_even[0],
                              ftm_cnsc_secondEdge[1],
                              ftm_cnsc_secondOutput[1]            : {0,0}                    " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
       ><![CDATA[
@@ -3139,7 +3167,7 @@
                %paramType  : ftm_channel_number                      : %paramType_None      ;
                %baseType   : ftm_filter_fval_paired[0],
                              ftm_filter_fval_paired[1]               : %paramType_Disabled  " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
       ><![CDATA[
@@ -3150,7 +3178,7 @@
 
    <!-- ____ DualChannelInit Constructors ____________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="ftm_cnsc_mode_even[0]"
       linePadding="xxx"
    ><![CDATA[
@@ -3177,7 +3205,7 @@
    <for keys="    r                       : index "
       values="    ftm_channel_number      :       ;
                   ftm_cnsc_mode_odd[1]    : [1]   "    >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -3201,7 +3229,7 @@
 
    <for keys="   reg                                                  : param  "
       values=" ftm_cnsc_action_paired[0],ftm_cnsc_action_paired[1]    : action " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          params="%(param)Even, %(param)Odd"
          variables="%(reg)"
          nonDefaultParams="2"
@@ -3228,7 +3256,7 @@
 
    <for keys="   reg                               : param  "
       values=" ftm_cnv_paired[0],ftm_cnv_paired[1] : eventTime  " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          params="%(param)Even, %(param)Odd"
          variables="%(reg)"
          nonDefaultParams="2"
@@ -3253,7 +3281,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       params="filterEven, filterOdd"
       variables="ftm_filter_fval_paired[0],ftm_filter_fval_paired[1]"
       nonDefaultParams="2"
@@ -3283,7 +3311,7 @@
                ftm_combine_dten0          :       ;
                ftm_combine_syncen0        :       ;
                ftm_cnsc_icrst_paired[1]   : [1]   " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(var)"
          linePadding="xxx"
    ><![CDATA[
@@ -3305,7 +3333,7 @@
       ]]></variableTemplate>
    </for>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t}; // class  $(_BasicInfo)::DualChannelInit\n\n
    ]]></template>
 

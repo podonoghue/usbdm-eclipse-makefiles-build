@@ -20,7 +20,7 @@
 
    <choiceOption key="osc_cr_oscMode" condition="osc_cr_oscos_present"
       valueFormat="OSC_CR_OSCOS(%s),OSC_CR_HGO(%s)"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       typeName="OscMode"
       description="OSC0 mode"
       toolTip="Determines oscillator power mode and\n
@@ -100,7 +100,7 @@
    </binaryOption>
 
    <binaryOption key="osc_cr_hgo" condition="osc_cr_hgo_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       ref="osc_cr_oscMode&gt;=/OscMode_HighGainOsc"
       derived="true"
       locked="true"
@@ -185,7 +185,7 @@
 
 <!--   __________ OSC Init class _______________________________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -236,7 +236,7 @@
 
    <!-- ____ Init class Member variables ________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="osc_cr_oscen,osc_cr_oscsten,osc_cr_oscos,osc_cr_range,osc_cr_hgo"
          linePadding="xxx"
    ><![CDATA[
@@ -253,7 +253,7 @@
             osc_cr_oscMode;
             osc_cr_range
             " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -290,7 +290,7 @@
    ]]>
    </template>
 
-   <template discardRepeats="true" key="/$(_BASENAME)/InitMethod" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template discardRepeats="true" key="/$(_BASENAME)/InitMethod" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t
       \t/**
       \t * Default initialisation for $(_BASENAME)
@@ -356,7 +356,7 @@
       \t}\n\n
    ]]></template>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}; // class $(_BasicInfo)::Init
       \t\n

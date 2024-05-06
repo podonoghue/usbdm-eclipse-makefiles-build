@@ -68,81 +68,12 @@ Devices using this peripheral:
                      <description>Transfer Block Size</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>13</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>No data transfer</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>1 Byte</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10</name>
-                           <description>2 Bytes</description>
-                           <value>0b10</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11</name>
-                           <description>3 Bytes</description>
-                           <value>0b11</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b100</name>
-                           <description>4 Bytes</description>
-                           <value>0b100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b111111111</name>
-                           <description>511 Bytes</description>
-                           <value>0b111111111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1000000000</name>
-                           <description>512 Bytes</description>
-                           <value>0b1000000000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b100000000000</name>
-                           <description>2048 Bytes</description>
-                           <value>0b100000000000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1000000000000</name>
-                           <description>4096 Bytes</description>
-                           <value>0b1000000000000</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
                   </field>
                   <field>
                      <name>BLKCNT</name>
                      <description>Blocks Count For Current Transfer</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>16</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Stop count</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>1 block</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10</name>
-                           <description>2 blocks</description>
-                           <value>0b10</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1111111111111111</name>
-                           <description>65535 blocks</description>
-                           <value>0b1111111111111111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
                   </field>
                </fields>
             </register>
@@ -313,8 +244,8 @@ Devices using this peripheral:
                <access>read-only</access>
                <fields>
                   <field>
-                     <name>CMDRSP0</name>
-                     <description>Command Response 0</description>
+                     <name>CMDRSP</name>
+                     <description>Command Response</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -559,6 +490,18 @@ Devices using this peripheral:
                      <description>CMD Line Signal Level</description>
                      <bitOffset>23</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Low</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>High</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>DLSL</name>
@@ -628,12 +571,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>DAT3 does not monitor card Insertion</description>
+                           <description>DAT3 ignored</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>DAT3 as card detection pin</description>
+                           <description>DAT3 card detection</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -667,7 +610,33 @@ Devices using this peripheral:
                      </enumeratedValues>
                   </field>
                   <field>
+                     <name>CDET</name>
+                     <?ignoreOverlap?>
+                     <description>Test Card Detection\n
+This may be used to test card detection by controlling detection levels</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0X</name>
+                           <description>Normal card detection</description>
+                           <value>0b0X</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Forced no card inserted</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Forced card inserted</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
                      <name>CDTL</name>
+                     <?hide?>
                      <description>Card Detect Test Level</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -686,6 +655,7 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>CDSS</name>
+                     <?hide?>
                      <description>Card Detect Signal Selection</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -710,17 +680,17 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>No DMA or simple DMA is selected</description>
+                           <description>No DMA or simple DMA</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>ADMA1 is selected</description>
+                           <description>ADMA1</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>ADMA2 is selected</description>
+                           <description>ADMA2</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -774,12 +744,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Disable read wait control, and stop SD clock at block gap when SABGREQ is set</description>
+                           <description>Disabled \tStop SD clock at block gap when SABGREQ is set</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Enable read wait control, and assert read wait without stopping SD clock at block gap when SABGREQ bit is set</description>
+                           <description>Enabled \tAssert read wait without stopping SD clock at block gap when SABGREQ bit is set</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -802,9 +772,26 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="IABG" > <name>WECINT</name> <description>Wakeup Event Enable On Card Interrupt</description> <bitOffset>24</bitOffset> </field>
-                  <field derivedFrom="IABG" > <name>WECINS</name> <description>Wakeup Event Enable On SD Card Insertion</description> <bitOffset>25</bitOffset> </field>
-                  <field derivedFrom="IABG" > <name>WECRM</name> <description>Wakeup Event Enable On SD Card Removal</description> <bitOffset>26</bitOffset> </field>
+                  <field>
+                     <name>WECINT</name>
+                     <description>Wakeup Event On Card Interrupt</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No Event</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Generate Event</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="WECINT" > <name>WECINS</name> <description>Wakeup Event On SD Card Insertion</description> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="WECINT" > <name>WECRM</name> <description>Wakeup Event On SD Card Removal</description> <bitOffset>26</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -851,7 +838,8 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>PEREN</name>
-                     <description>Peripheral Clock Enable</description>
+                     <description>Peripheral (SDHC) Clock Enable\n
+This bit is only a feature enabling bit so it does not stop SDCLK immediately</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -872,6 +860,18 @@ Devices using this peripheral:
                      <description>SD Clock Enable</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>SD clock disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>SD clock enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>DVS</name>
@@ -1060,9 +1060,22 @@ Devices using this peripheral:
                   <field derivedFrom="RSTA" > <name>RSTD</name> <description>Software Reset For DAT Line</description> <bitOffset>26</bitOffset> </field>
                   <field>
                      <name>INITA</name>
-                     <description>Initialization Active</description>
+                     <description>Initialization Active\t
+This bit is self-clearing on completion of 80 clocks to SD card</description>
                      <bitOffset>27</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Idle</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Generating SD clocks</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
@@ -1079,7 +1092,7 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Command not complete</description>
+                           <description>Command incomplete</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -1097,7 +1110,7 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Transfer not complete</description>
+                           <description>Transfer incomplete</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -1133,12 +1146,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No DMA Interrupt</description>
+                           <description>No Interrupt</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>DMA Interrupt is generated</description>
+                           <description>Interrupt</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1151,12 +1164,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Not ready to write buffer</description>
+                           <description>Not ready</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Ready to write buffer</description>
+                           <description>Ready</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1169,12 +1182,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Not ready to read buffer</description>
+                           <description>Not ready</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Ready to read buffer</description>
+                           <description>Ready</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1187,7 +1200,7 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Card state unstable or removed</description>
+                           <description>Card unstable or removed</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -1205,7 +1218,7 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Card state unstable or inserted</description>
+                           <description>Card unstable or inserted</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -1228,7 +1241,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Generate Card Interrupt</description>
+                           <description>Card Interrupt</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1638,6 +1651,42 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
+                  <field>
+                     <name>VS30</name>
+                     <description>Voltage Support 3.0 V</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>3.0 V not supported</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>3.0 V supported</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>VS18</name>
+                     <description>Voltage Support 1.8 V</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>1.8 V not supported</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>1.8 V supported</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
                </fields>
             </register>
             <register>
@@ -1772,9 +1821,32 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>ADMAES</name>
-                     <description>ADMA Error State (when ADMA Error has occurred.)</description>
+                     <description>ADMA Error State\n
+Indicates the state of the ADMA when an error has occurred during a data transfer.</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Stop DMA \tADSADDR = next executable descriptor</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Fetch descriptor \tADSADDR = current valid descriptor</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Change address \tNo ADMA error is generated</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Transfer Data \tADSADDR = next executable descriptor</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>ADMALME</name>

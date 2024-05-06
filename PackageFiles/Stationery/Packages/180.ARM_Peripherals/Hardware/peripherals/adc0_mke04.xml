@@ -527,7 +527,7 @@
 
    <!-- ________ ADC Init class ____________________________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -600,7 +600,7 @@
 
    <!-- ____ Init class Member variables ________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
    ><![CDATA[
       \t   /// %description
@@ -618,7 +618,7 @@
                %baseType   : adc_cv_cv                                            :   0      ;
                %baseType   : adc_apctl1_adpc                                      :   0      ;
                %baseType   : adc_sc5_htrigger                                     :   0      " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
       ><![CDATA[
@@ -627,7 +627,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -637,7 +637,7 @@
 
    <!-- ____ Init class Constructors ____________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -656,7 +656,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -685,7 +685,7 @@
             adc_sc4_htrgme;adc_sc4_ascane;adc_sc4_acfsel;
             adc_sc4_afdep;
             adc_sc5_htrigger" >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -708,7 +708,7 @@
       </variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" multipleParamsOnNewline="true"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" multipleParamsOnNewline="true"
       variables="adc_sc2_compare,adc_cv_cv"
       linePadding="xxx"
       nonDefaultParams="3" >
@@ -731,7 +731,7 @@
    ]]>
    </variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="adc_apctl1_adpc"
       linePadding="xxx" >
    <![CDATA[
@@ -752,7 +752,7 @@
    ]]>
    </variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="adc_sc1_adch, adc_apctl1_adpc"
       linePadding="xxx" >
    <![CDATA[
@@ -830,7 +830,7 @@
          \t   %(statement);\n
       ]]></variableTemplate>
    </for>
-   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t}
       \t\n
@@ -869,7 +869,7 @@
 
 <!--  ==========  ADC MISC =============================== -->
 
-   <clockCodeTemplate variable="adc_sc3_adiclk" returnFormat="%s" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <clockCodeTemplate variable="adc_sc3_adiclk" returnFormat="%s" codeGenCondition="$(_BasicInfoGuard)"
    ><![CDATA[
       \t/** Internal ADC clock */
       \tstatic constexpr unsigned adiclk = $(adc_internal_clock);
@@ -906,7 +906,7 @@
       \t}; \n\n
    ]]></clockCodeTemplate>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}; // class $(_BasicInfo)::Init
       \t\n

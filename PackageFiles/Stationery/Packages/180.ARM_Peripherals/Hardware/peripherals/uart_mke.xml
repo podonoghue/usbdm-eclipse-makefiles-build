@@ -44,7 +44,7 @@
    <aliasOption key="/SIM/system_uart$(_instance)_clock[]"              optional="true" />
 
    <intOption key="oversampleRatio"  condition="uart_c4_osr_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       description="Number of samples per bit"
       toolTip="This value determines the number of times an Rx bit is sampled.\n
                This also affects the clock divider and hence the range of baud rates available"
@@ -57,7 +57,7 @@
    ]]></template>
 
    <choiceOption key="defaultBaudRate"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       valueFormat="%s"
       typeName="UartBaudRate"
       description="UART default baud rate"
@@ -101,7 +101,7 @@
    ]]></variableTemplate>
 
    <choiceOption key="uart_c2_ilie" condition="uart_c2_ilie_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       hidden="true"
       typeName="UartIdleLineDetectAction"
       description="Idle line detect sction"
@@ -123,7 +123,7 @@
    ]]></variableTemplate>
 
    <choiceOption key="uartTxEmptyAction" condition="!uart_c5_tdmas_present&amp;&amp;uart_c2_tie_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       hidden="true"
       valueFormat="UART_C2_TIE(%s)"
       typeName="UartTxEmptyAction"
@@ -134,7 +134,7 @@
    </choiceOption>
 
    <choiceOption key="uartTxEmptyAction" condition="uart_c5_tdmas_present&amp;&amp;uart_c2_tie_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       hidden="true"
       valueFormat="(UART_C5_TDMAS(%s)&lt;&lt;8),UART_C2_TIE(%s)"
       typeName="UartTxEmptyAction"
@@ -166,7 +166,7 @@
    ]]></variableTemplate>
 
    <choiceOption key="uartRxFullAction" condition="!uart_c5_rdmas_present&amp;&amp;uart_c2_rie_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       hidden="true"
       valueFormat="UART_C2_RIE(%s)"
       typeName="UartRxFullAction"
@@ -177,7 +177,7 @@
    </choiceOption>
 
    <choiceOption key="uartRxFullAction" condition="uart_c5_rdmas_present&amp;&amp;uart_c2_rie_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       hidden="true"
       valueFormat="(UART_C5_RDMAS(%s)&lt;&lt;8),UART_C2_RIE(%s)"
       typeName="UartRxFullAction"

@@ -1,11 +1,8 @@
 /**
  * @file     ftm.h (180.ARM_Peripherals/Project_Headers/ftm.h)
  * @brief    Flexitimer Timer Module
- *
- * @version  V4.12.1.80
- * @date     13 April 2016
- *      Author: podonoghue
  */
+
 #ifndef HEADER_FTM_H
 #define HEADER_FTM_H
 
@@ -23,11 +20,14 @@
 #include "gpio.h"
 
 #if $(/FTM/enablePeripheralSupport) // /FTM/enablePeripheralSupport
-
-/*
- * Default port information
- */
 namespace USBDM {
+/**
+ * @addtogroup FTM_Group FTM, PWM, Input capture and Output compare
+ * @brief Pins used for PWM, Input capture and Output compare
+ * @{
+ */
+
+$(/FTM/peripheral_h_definition:// $/FTM/peripheral_h_definition not found)
 
 /**
  * Calculate a FTM channel number using an offset from an existing number
@@ -52,12 +52,6 @@ constexpr FtmChannelNum inline operator+(FtmChannelNum pitChannelNum, unsigned o
 constexpr FtmChannelNum inline operator+(FtmChannelNum pitChannelNum, int offset) {
    return FtmChannelNum(unsigned(pitChannelNum) + unsigned(offset));
 }
-
-/**
- * @addtogroup FTM_Group FTM, PWM, Input capture and Output compare
- * @brief Pins used for PWM, Input capture and Output compare
- * @{
- */
 
 /**
  * Controls value forced to pin by forceChannelOutputs()

@@ -4,6 +4,8 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
    <equation key="irq_parameters"            value=""  />
    <equation key="irq_dummy_parameters"      value=""  />
    <equation key="irq_call"                  value=""  />

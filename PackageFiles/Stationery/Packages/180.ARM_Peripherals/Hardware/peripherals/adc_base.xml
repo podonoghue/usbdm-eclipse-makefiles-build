@@ -4,7 +4,6 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <equation key="" value=""/>
    <constant key="disable_peripheral" value='"adc->SC1[0] = ADC_SC1_ADCH(-1);"'  type="String" />
 
    <equation key="suppressIrqHandler"        value="" />
@@ -15,6 +14,8 @@
    <equation key="configureInStartupDefault" value="false"  />
    <xi:include href="enablePeripheral.xml"  />
    <title />
+
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
 
    <!-- ____ Class Declaration ________ -->
    <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
@@ -859,7 +860,7 @@
 
    <!-- ________ ADC Init class ____________________________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -944,7 +945,7 @@
 
    <!-- ____ Init class Member variables ________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -963,7 +964,7 @@
                              adc_sc2_adtrg                                        :   0      ;
                %baseType   : adc_sc3_avg,adc_sc3_adco                             :   0      ;
                %paramType  : /PCR/nvic_irqLevel                                   :   %defaultValue   " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
       ><![CDATA[
@@ -972,7 +973,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" condition="adc_sc2_adtrg"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" condition="adc_sc2_adtrg"
       variables="adc_sc1_adch,adc_sc1_aien"
       linePadding="xxx"
    ><![CDATA[
@@ -980,17 +981,17 @@
       \t   uint8_t %registerName[$(_STRUCTNAME)_SC1_COUNT] = {\n
    ]]></variableTemplate>
    <for keys="i" dim="=adc_sc1_dim">
-      <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" condition="adc_sc2_adtrg" ><![CDATA[
+      <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" condition="adc_sc2_adtrg" ><![CDATA[
          \t      AdcChannelNum_Disabled,\n
       ]]></template>
    </for>
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" condition="adc_sc2_adtrg" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" condition="adc_sc2_adtrg" ><![CDATA[
       \t   };\n\n
    ]]></template>
 
    <!-- ____ Init class Constructors ____________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -1010,7 +1011,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" condition="adc_sc2_adtrg"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" condition="adc_sc2_adtrg"
       variables="adc_pretrigger,adc_sc1_adch,adc_sc1_aien"
       linePadding="xxx"
       nonDefaultParams="3" >
@@ -1045,7 +1046,7 @@
              adc_cfg2_adhsc;adc_cfg2_adacken;adc_cfg2_muxsel;
              adc_sc2_refsel;adc_sc2_dmaen;adc_sc2_adtrg;
              adc_sc3_avg;adc_sc3_adco">
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -1068,7 +1069,7 @@
       </variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="adc_sample"
       linePadding="xxx" >
    <![CDATA[
@@ -1091,7 +1092,7 @@
    ]]>
    </variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="adc_sc2_compare,adc_cv1,adc_cv2"
       linePadding="xxx"
       nonDefaultParams="3" >
@@ -1192,7 +1193,7 @@
          \t   %(statement);\n
       ]]></variableTemplate>
    </for>
-   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t   calibrate(adc);
       \t\n
@@ -1320,7 +1321,7 @@
    \t}\t\n
    ]]></template>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}; // class $(_BasicInfo)::Init
       \t\n

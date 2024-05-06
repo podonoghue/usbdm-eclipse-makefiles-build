@@ -658,7 +658,7 @@
    </template>
    <!-- ________ TSI Init class ____________________________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -714,7 +714,7 @@ XXXXXXXXXXXXXXXXXXXXXX
 
    <!-- ____ Init class Member variables ________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
    ><![CDATA[
       \t   /// %description
@@ -735,7 +735,7 @@ XXXXXXXXXXXXXXXXXXXXXX
                              tsi_pen_pen6,tsi_pen_pen5,tsi_pen_pen4,tsi_pen_pen3,
                              tsi_pen_pen2,tsi_pen_pen1,tsi_pen_pen0,tsi_pen_pen   :   0      ;
                %baseType   : tsi_threshold_lthh,tsi_threshold_hthh                :   0      " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
       ><![CDATA[
@@ -744,7 +744,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -754,7 +754,7 @@ XXXXXXXXXXXXXXXXXXXXXX
 
    <!-- ____ Init class Constructors ____________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -773,7 +773,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -807,7 +807,7 @@ XXXXXXXXXXXXXXXXXXXXXX
             tsi_pen_pen6;tsi_pen_pen5;tsi_pen_pen4;tsi_pen_pen3;
             tsi_pen_pen2;tsi_pen_pen1;tsi_pen_pen0;tsi_pen_pen;
             tsi_threshold_lthh;tsi_threshold_hthh" >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -886,7 +886,7 @@ XXXXXXXXXXXXXXXXXXXXXX
          \t   %(statement);\n
       ]]></variableTemplate>
    </for>
-   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}
       \t\n
@@ -922,7 +922,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t\n
    ]]></variableTemplate>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}; // class $(_BasicInfo)::Init
       \t\n

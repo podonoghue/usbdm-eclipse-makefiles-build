@@ -4,6 +4,8 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
    <!-- ____ Class Declaration ________ -->
    <constant key="_basicInfo_declaration" type="String"
       value='"class $(_BasicInfo) : public $(_Baseclass)CommonInfo {\n
@@ -2118,7 +2120,7 @@
 
 <!--  ___ Init class ______________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
       \t *
@@ -2206,7 +2208,7 @@
 
 <!-- ____ Init class Member variables ________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
     ><![CDATA[
       %multilineDescription
@@ -2224,7 +2226,7 @@
                              tpm_conf_crot,tpm_conf_cpot,
                              tpm_conf_trgpol,
                              tpm_conf_trgsel_int,tpm_conf_trgsel_ext,          : 0       ">
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
       ><![CDATA[
@@ -2233,7 +2235,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="/PCR/nvic_irqLevel"
    ><![CDATA[
       \t   // %description
@@ -2242,7 +2244,7 @@
 
 <!-- ____ Init class Constructors ____________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -2261,7 +2263,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -2283,7 +2285,7 @@
    <!-- Bit set/clear in Field -->
    <for keys="r" values="
       tpm_pol_pol" >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -2309,7 +2311,7 @@
    <!-- Bit set in Field -->
    <for keys="r" values="
       tpm_conf_trgsel_int" >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -2337,7 +2339,7 @@
                          tpm_conf_dozeen;tpm_conf_dbgmode;tpm_conf_gtbsync;tpm_conf_gtbeen;
                          tpm_conf_csot;tpm_conf_csoo;tpm_conf_crot;tpm_conf_cpot;
                          tpm_conf_trgpol;tpm_conf_trgsel_ext" >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx"
          multipleParamsOnNewline="true"
@@ -2361,7 +2363,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="tpm_sc_ps, tpm_mod_mod"
       params=",mod_ticks"
       linePadding="xxx"
@@ -2384,7 +2386,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       nonDefaultParams="2"
       variables="tpm_modPeriod"
       linePadding="xxx"
@@ -2406,7 +2408,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t}; // class $(_BasicInfo)::Init\n\n
    ]]></template>
 
@@ -2516,7 +2518,7 @@
 
 <!-- ___ ChannelInit class ______________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of $(_Baseclass)Channel
       \t *
@@ -2574,7 +2576,7 @@
                              tpm_cnsc_icrst_independent[]      : 0                    ;
                %paramType  : tpm_channel_number                : %paramType_None      ;
                %baseType   : tpm_filter_fval_independent[]     : %paramType_Disabled  " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
       ><![CDATA[
@@ -2592,7 +2594,7 @@
                tpm_cnsc_icrst_independent[];
                tpm_filter_fval_independent[];
                tpm_cnv_independent[]" >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -2614,7 +2616,7 @@
       ]]></variableTemplate>
    </for>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t}; // class  $(_BasicInfo)::ChannelInit\n\n
    ]]></template>
 
@@ -2728,7 +2730,7 @@
 <if condition="tpm_combine_present" >
 <!--   ___ DualChannelInit class ______________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of a pair of $(_Baseclass)Channels operating in Paired mode
       \t *
@@ -2788,7 +2790,7 @@
        values="%baseType   : tpm_cnv_paired[0],tpm_cnv_paired[1]     : {0,0}                    ;
                uint8_t     : tpm_cnsc_mode_even[],
                              tpm_cnsc_mode_odd[1]                    : {0,0}                    " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
       ><![CDATA[
          %multilineDescription
@@ -2800,7 +2802,7 @@
        values="%baseType   : tpm_combine_comswap                     : 0                    ;
                %paramType  : tpm_channel_number                      : %paramType_None      ;
                %baseType   : tpm_filter_fval_paired[]                : %paramType_Disabled  " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
       ><![CDATA[
          %multilineDescription
@@ -2810,7 +2812,7 @@
 
    <!-- ____ DualChannelInit Constructors ____________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="tpm_cnsc_mode_even[0]"
       linePadding="xxx"
    ><![CDATA[
@@ -2837,7 +2839,7 @@
    <for keys="    r                       : index "
       values="    tpm_channel_number      :       ;
                   tpm_cnsc_mode_odd[1]    : [1]   "    >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -2861,7 +2863,7 @@
 
    <for keys="   reg                                                  : param  "
       values=" tpm_cnsc_action_paired[0],tpm_cnsc_action_paired[1]    : action " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          params="%(param)Even, %(param)Odd"
          variables="%(reg)"
          nonDefaultParams="2"
@@ -2888,7 +2890,7 @@
 
    <for keys="   reg                               : param  "
       values=" tpm_cnv_paired[0],tpm_cnv_paired[1] : eventTime  " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          params="%(param)Even, %(param)Odd"
          variables="%(reg)"
          nonDefaultParams="2"
@@ -2913,7 +2915,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       params="filterEven, filterOdd"
       variables="tpm_filter_fval_paired[0],tpm_filter_fval_paired[1]"
       nonDefaultParams="2"
@@ -2939,7 +2941,7 @@
    <for keys="   var                      : index "
       values=" tpm_combine_comswap        :       ;
                tpm_cnsc_icrst_paired[1]   : [1]   " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(var)"
          linePadding="xxx"
    ><![CDATA[
@@ -2961,7 +2963,7 @@
       ]]></variableTemplate>
    </for>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t}; // class  $(_BasicInfo)::DualChannelInit\n\n
    ]]></template>
 

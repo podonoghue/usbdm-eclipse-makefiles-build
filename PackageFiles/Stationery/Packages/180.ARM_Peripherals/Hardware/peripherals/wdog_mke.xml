@@ -139,7 +139,7 @@
       description="Watchdog clock source"
       toolTip="This write-once field indicates the clock source that feeds the watchdog counter" >
       <choice name="System Bus clock"                        value="0" enum="SystemBusClk" code="SystemBusClock"                       ref="/SIM/system_bus_clock[0]"     />
-      <choice name="1 kHz low-power oscillator (LPOCLK)"     value="1" enum="LpoClk"       code="PmcInfo::getLpoClock()"               ref="/PMC/system_low_power_clock"  isDefault="true" />
+      <choice name="1 kHz low-power oscillator (LPOCLK)"     value="1" enum="LpoClk"       code="SimInfo::getLpoClock()"               ref="/PMC/system_low_power_clock"  isDefault="true" />
       <choice name="ICS internal reference clock (ICSIRCLK)" value="2" enum="Icsirclk"     code="IcsInfo::getInternalReferenceClock()" ref="/ICS/system_icsirclk_clock[0]" />
       <choice name="External clock source (OSCERCLK)"        value="3" enum="ExternalClk"  code="Osc0Info::getOscClock()"              ref="/OSC0/oscer_clock"            />
    </choiceOption>
@@ -320,7 +320,7 @@
 
    <!--   ========== WDOG Init class =============================== -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -392,7 +392,7 @@
 
 <!--   Member variables -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
     ><![CDATA[
       \t   /// %description
@@ -436,7 +436,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -446,7 +446,7 @@
 
    <!--   Constructors -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -465,7 +465,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -689,7 +689,7 @@
       \t}\n\n
    ]]></template>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}; // class $(_BasicInfo)::Init
       \t\n

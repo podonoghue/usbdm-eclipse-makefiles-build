@@ -273,7 +273,7 @@
 
    <category name="Control Signals" description="Control Signal Mapping" >
       <binaryOption key="sim_scgc_swd" condition="sim_scgc_swd_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          disabledValue="1"
          typeName="SimScgcSwd"
          description="SWD Clock Gate Control" >
@@ -283,7 +283,7 @@
 
       <binaryOption key="sim_sopt0_swde" condition="sim_sopt0_swde_present"
          ref="sim_scgc_swd"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          locked="true"
          derived="true"
          disabledValue="1"
@@ -298,7 +298,7 @@
       </binaryOption>
 
       <binaryOption key="sim_sopt0_rstpe" condition="sim_sopt0_rstpe_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          disabledValue="1"
          typeName="SimResetEnable"
          toolTip="This field can only be written once after any reset"
@@ -308,7 +308,7 @@
       </binaryOption>
 
       <binaryOption key="sim_sopt0_nmie" condition="sim_sopt0_nmie_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          disabledValue="1"
          typeName="SimNmiEnable"
          toolTip="This field can only be written once after any reset"
@@ -318,7 +318,7 @@
       </binaryOption>
 
       <choiceOption key="sim_sopt0_busref" condition="sim_sopt0_busref_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          valueFormat="SIM_SOPT0_CLKOE(%s),SIM_SOPT0_BUSREF(%s)"
          typeName="SimSoptRefClock"
          toolTip="Enable bus reference clock output on PTH2 with prescaler"
@@ -337,7 +337,7 @@
 
    <category name="ACMP" description="ACMP Options" >
       <binaryOption key="sim_scgc_acmp0" condition="sim_scgc_acmp0_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimScgcAcmp0"
          description="ACMP0 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
@@ -345,7 +345,7 @@
       </binaryOption>
 
       <binaryOption key="sim_scgc_acmp1" condition="sim_scgc_acmp1_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimScgcAcmp1"
          description="ACMP1 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
@@ -357,7 +357,7 @@
 
    <category name="ADC" description="ADC Options" >
       <binaryOption key="sim_scgc_adc0" condition="sim_scgc_adc0_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimScgcAdc"
          description="ADC Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
@@ -365,7 +365,7 @@
       </binaryOption>
 
       <choiceOption key="sim_sopt0_adhwt" condition="sim_sopt0_adhwt_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          addToVar="Adc0ExternalItems"
          typeName="SimSoptAdhwt"
          toolTip="Selects the ADC hardware trigger source. All trigger sources start ADC conversion on rising-edge"
@@ -382,7 +382,7 @@
 
       <intOption key="sim_sopt0_delay" condition="sim_sopt0_delay_present"
          addToVar="Adc0ExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          units="ticks"
          description="FTM2 Trigger Delay"
          toolTip="Specifies the delay from FTM2 initial or match trigger to ADC hardware trigger when 1 is written to ADHWT.\n
@@ -394,7 +394,7 @@
 
    <category name="CAN" description="CAN Options" >
       <binaryOption key="sim_scgc_mscan" condition="sim_scgc_mscan_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimScgcMscan"
          description="CAN Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
@@ -402,7 +402,7 @@
       </binaryOption>
 
       <binaryOption key="sim_pinsel1_mscanps" condition="sim_pinsel1_mscanps_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          disabledPinMap="#/CAN0/enablePeripheralSupport"
          typeName="SimPinselMscanps"
          toolTip="Selects the pins used by CAN"
@@ -414,7 +414,7 @@
 
    <category name="CRC" description="CRC Options" >
       <binaryOption key="sim_scgc_crc" condition="sim_scgc_crc_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimScgcCrc"
          description="CRC Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
@@ -424,7 +424,7 @@
 
    <category name="FLASH" description="FLASH Options" >
       <binaryOption key="sim_scgc_flash" condition="sim_scgc_flash_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          disabledValue="1"
          typeName="SimScgcFlash"
          description="FLASH Clock Gate Control" >
@@ -457,7 +457,7 @@
          <aliasOption key="Tclk%(n)" locked="false" />
       </for>
       <binaryOption key="sim_sopt0_ftmsync" condition="sim_sopt0_ftmsync_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimSoptFtmsync"
          derived="true"
          locked="true"
@@ -473,7 +473,7 @@
 
          <binaryOption key="sim_scgc_ftm%(ftmNum)" condition="sim_scgc_ftm%(ftmNum)_present"
             addToVar="Ftm%(ftmNum)ExternalItems"
-            enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+            enabledBy="$(_BasicInfoGuard)"
             typeName="SimScgcFtm%(ftmNum)"
             description="FTM%(ftmNum) Clock Gate Control" >
             <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
@@ -483,7 +483,7 @@
          <choiceOption key="sim_pinsel0_ftm%(ftmNum)clkps" condition="sim_pinsel0_ftm%(ftmNum)clkps_present"
             target="ftm%(ftmNum)ExternalClock"
             addToVar="Ftm%(ftmNum)ExternalItems"
-            enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+            enabledBy="$(_BasicInfoGuard)"
             typeName="SimPinselFtm%(ftmNum)clkps"
             description="FTM%(ftmNum) TCLK Pin Select" >
             <choice name="Selects TCLK0 for FTM%(ftmNum) module"  value="0" enum="Tclk0" ref="Tclk0" code="Tclk0" />
@@ -518,7 +518,7 @@
 
          <binaryOption key="sim_pinsel0_ftm0ps0" condition="sim_pinsel0_ftm0ps0_present&amp;&amp;(%(ftmNum)==0)"
             addToVar="Ftm0ExternalItems"
-            enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+            enabledBy="$(_BasicInfoGuard)"
             typeName="SimPinselFtm0ps0"
             description="FTM0 channel 0 Pin Select" >
             <choice name="PTA0"        value="0" enum="Pta0" />
@@ -527,7 +527,7 @@
 
          <binaryOption key="sim_pinsel0_ftm0ps1" condition="sim_pinsel0_ftm0ps1_present&amp;&amp;(%(ftmNum)==0)"
             addToVar="Ftm0ExternalItems"
-            enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+            enabledBy="$(_BasicInfoGuard)"
             typeName="SimPinselFtm0ps1"
             description="FTM0 channel 1 Pin Select" >
             <choice name="PTA1"        value="0" enum="Pta1" />
@@ -536,7 +536,7 @@
 
          <binaryOption key="sim_sopt0_rxdce" condition="sim_sopt0_rxdce_present&amp;&amp;(%(ftmNum)==0)"
             addToVar="Ftm0ExternalItems,Uart0ExternalItems"
-            enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+            enabledBy="$(_BasicInfoGuard)"
             typeName="SimSoptRxdce"
             toolTip="Enables the UART0_RX to be captured by FTM0 channel 1"
             description="UART0_RX Capture on FTM0 channel 1" >
@@ -546,7 +546,7 @@
 
          <binaryOption key="sim_sopt0_acic" condition="sim_sopt0_acic_present&amp;&amp;(%(ftmNum)==1)"
             addToVar="Ftm1ExternalItems,Acmp0ExternalItems"
-            enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+            enabledBy="$(_BasicInfoGuard)"
             typeName="SimSoptAcic"
             toolTip="Connects the output of ACMP0 to FTM1 input channel 0"
             description="Analog Comparator on FTM1 input channel 0" >
@@ -556,7 +556,7 @@
 
          <binaryOption key="sim_sopt0_rtcc" condition="sim_sopt0_rtcc_present&amp;&amp;(%(ftmNum)==1)"
             addToVar="Ftm1ExternalItems,RtcExternalItems"
-            enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+            enabledBy="$(_BasicInfoGuard)"
             typeName="SimSoptRtcc"
             toolTip="Allows the Real-time Counter (RTC) overflow to be captured by FTM1 channel 1"
             description="Real-Time Counter on FTM1 input channel 1" >
@@ -566,7 +566,7 @@
 
          <binaryOption key="sim_pinsel0_ftm1ps0" condition="sim_pinsel0_ftm1ps0_present&amp;&amp;(%(ftmNum)==1)"
             addToVar="Ftm1ExternalItems"
-            enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+            enabledBy="$(_BasicInfoGuard)"
             disabledPinMap="#/FTM1/enablePeripheralSupport&amp;&amp;/FTM1/Ch0PinInUse"
             typeName="SimPinselFtm1ps0"
             description="FTM1 channel 0 Pin Select" >
@@ -576,7 +576,7 @@
 
          <binaryOption key="sim_pinsel0_ftm1ps1" condition="sim_pinsel0_ftm1ps1_present&amp;&amp;(%(ftmNum)==1)"
             addToVar="Ftm1ExternalItems"
-            enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+            enabledBy="$(_BasicInfoGuard)"
             disabledPinMap="#/FTM1/enablePeripheralSupport&amp;&amp;/FTM1/Ch1PinInUse"
             typeName="SimPinselFtm1ps1"
             description="FTM1 channel 1 Pin Select" >
@@ -586,7 +586,7 @@
 
          <binaryOption key="sim_sopt0_actrg" condition="sim_sopt0_actrg_present&amp;&amp;(%(ftmNum)==2)"
             addToVar="Ftm2ExternalItems,AcmpExternalItems"
-            enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+            enabledBy="$(_BasicInfoGuard)"
             typeName="SimSoptActrg"
             toolTip="Selects ACMP output to use as the trigger0 input of FTM2"
             description="ACMP Trigger FTM2 selection"
@@ -599,7 +599,7 @@
 
          <choiceOption key="sim_pinsel1_ftm2ps0" condition="sim_pinsel1_ftm2ps0_present&amp;&amp;(%(ftmNum)==2)"
             addToVar="Ftm2ExternalItems"
-            enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+            enabledBy="$(_BasicInfoGuard)"
             typeName="SimPinselFtm2ps0"
             description="FTM2 Channel 0 Pin Select" >
             <choice name="PTC0"        value="0" enum="Ptc0" />
@@ -609,7 +609,7 @@
 
          <choiceOption key="sim_pinsel1_ftm2ps1" condition="sim_pinsel1_ftm2ps1_present&amp;&amp;(%(ftmNum)==2)"
             addToVar="Ftm2ExternalItems"
-            enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+            enabledBy="$(_BasicInfoGuard)"
             typeName="SimPinselFtm2ps1"
             description="FTM2 Channel 1 Pin Select" >
             <choice name="PTC1"        value="0" enum="Ptc1" />
@@ -619,7 +619,7 @@
 
          <choiceOption key="sim_pinsel1_ftm2ps2" condition="sim_pinsel1_ftm2ps2_present&amp;&amp;(%(ftmNum)==2)"
             addToVar="Ftm2ExternalItems"
-            enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+            enabledBy="$(_BasicInfoGuard)"
             typeName="SimPinselFtm2ps2"
             description="FTM2 Channel 2 Pin Select" >
             <choice name="PTC2"        value="0" enum="Ptc2" />
@@ -629,7 +629,7 @@
 
          <choiceOption key="sim_pinsel1_ftm2ps3" condition="sim_pinsel1_ftm2ps3_present&amp;&amp;(%(ftmNum)==2)"
             addToVar="Ftm2ExternalItems"
-            enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+            enabledBy="$(_BasicInfoGuard)"
             typeName="SimPinselFtm2ps3"
             description="FTM2 Channel 3 Pin Select" >
             <choice name="PTC3"        value="0" enum="Ptc3" />
@@ -639,7 +639,7 @@
 
          <binaryOption key="sim_pinsel1_ftm2ps4" condition="sim_pinsel1_ftm2ps4_present&amp;&amp;(%(ftmNum)==2)"
             addToVar="Ftm2ExternalItems"
-            enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+            enabledBy="$(_BasicInfoGuard)"
             typeName="SimPinselFtm2ps4"
             description="FTM2 Channel 4 Pin Select" >
             <choice name="PTB4"        value="0" enum="Ptb4" />
@@ -648,7 +648,7 @@
 
          <binaryOption key="sim_pinsel1_ftm2ps5" condition="sim_pinsel1_ftm2ps5_present&amp;&amp;(%(ftmNum)==2)"
             addToVar="Ftm2ExternalItems"
-            enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+            enabledBy="$(_BasicInfoGuard)"
             typeName="SimPinselFtm2ps5"
 
             description="FTM2 Channel 5 Pin Select" >
@@ -663,7 +663,7 @@
       <title description="I2C 0"/>
 
       <binaryOption key="sim_scgc_i2c0" condition="sim_scgc_i2c0_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimScgcI2c0"
          description="I2C0 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
@@ -672,7 +672,7 @@
 
       <binaryOption key="sim_pinsel0_i2c0ps" condition="sim_pinsel0_i2c0ps_present"
          addToVar="I2c0ExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimPinselI2c0ps"
          disabledPinMap="#/I2C0/enablePeripheralSupport"
          description="I2C0 Pin Select" >
@@ -682,7 +682,7 @@
 
       <binaryOption key="sim_sopt1_i2c0oinv" condition="sim_sopt1_i2c0oinv_present"
          addToVar="I2c0ExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimSoptI2c0oinv"
          toolTip="This field controls inversion of the I2C0 SDA_OUT and SCL_OUT in 4-wire mode"
          description="I2C0 Output Invert in 4-wire mode" >
@@ -692,7 +692,7 @@
 
       <binaryOption key="sim_sopt1_i2c04wen" condition="sim_sopt1_i2c04wen_present"
          addToVar="I2c0ExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimSoptI2c04wen"
          toolTip="This field controls I2C0 4-wire interface configuration.\n
                   NOTE: This field works only when SIM_PINSEL0[I2C0PS] is 0"
@@ -705,7 +705,7 @@
 
       <binaryOption key="sim_scgc_i2c1" condition="sim_scgc_i2c1_present"
          addToVar="I2c1ExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimScgcI2c1"
          description="I2C1 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
@@ -714,7 +714,7 @@
 
       <binaryOption key="sim_pinsel1_i2c1ps" condition="sim_pinsel1_i2c1ps_present"
          addToVar="I2c1ExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          disabledPinMap="#/I2C1/enablePeripheralSupport"
          typeName="SimPinselI2c1ps"
          description="I2C1 Pin Select" >
@@ -725,7 +725,7 @@
 
    <category name="IRQ" description="IRQ Options" >
       <binaryOption key="sim_scgc_irq" condition="sim_scgc_irq_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimScgcIrq"
          description="IRQ Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
@@ -734,7 +734,7 @@
 
       <choiceOption key="sim_pinsel0_irqps" condition="sim_pinsel0_irqps_present"
          addToVar="IrqExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          disabledPinMap="#/IRQ/enablePeripheralSupport"
          typeName="SimPinselIrqps"
          toolTip="Selects the IRQ port pins"
@@ -752,7 +752,7 @@
 
    <category name="KBI" description="KBI Options" >
       <binaryOption key="sim_scgc_kbi0" condition="sim_scgc_kbi0_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimScgcKbi0"
          description="KBI0 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
@@ -760,7 +760,7 @@
       </binaryOption>
 
       <binaryOption key="sim_scgc_kbi1" condition="sim_scgc_kbi1_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimScgcKbi1"
          description="KBI1 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
@@ -770,7 +770,7 @@
 
    <category name="PIT" description="PIT Options" >
       <binaryOption key="sim_scgc_pit" condition="sim_scgc_pit_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimScgcPit"
          description="PIT Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
@@ -783,7 +783,7 @@
          <aliasOption key="Tclk%(n)" locked="false" />
       </for>
       <binaryOption key="sim_scgc_pwt" condition="sim_scgc_pwt_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimScgcPwt"
          description="PWT Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
@@ -792,7 +792,7 @@
 
       <binaryOption key="sim_sopt1_acpwts" condition="sim_sopt1_acpwts_present"
          addToVar="PwtExternalItems,AcmpExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimSoptAcpwts"
          toolTip="This field selects PWTIN2 input signal"
          description="PWT ACMP_OUT select"
@@ -803,7 +803,7 @@
 
       <choiceOption key="sim_sopt1_uartpwts" condition="sim_sopt1_uartpwts_present"
          addToVar="PwtExternalItems,UartExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimSoptUartpwts"
          toolTip="This field select PWTIN3 input signal"
          description="PWT UART RX select"
@@ -815,7 +815,7 @@
 
       <binaryOption key="sim_pinsel1_pwtin0ps" condition="sim_pinsel1_pwtin0ps_present"
          addToVar="PwtExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          disabledPinMap="#/PWT/enablePeripheralSupport"
          typeName="SimPinselPwtin0ps"
          description="PWTIN0 Pin Select" >
@@ -825,7 +825,7 @@
 
       <binaryOption key="sim_pinsel1_pwtin1ps" condition="sim_pinsel1_pwtin1ps_present"
          addToVar="PwtExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          disabledPinMap="#/PWT/enablePeripheralSupport"
          typeName="SimPinselPwtin1ps"
          description="PWTIN1 Pin Select" >
@@ -836,7 +836,7 @@
       <choiceOption key="sim_pinsel0_pwtclkps" condition="sim_pinsel0_pwtclkps_present"
          addToVar="PwtExternalItems"
          target="pwtExternalClock"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimPinselPwtclkps"
          description="PWT TCLK Pin Select" >
          <choice name="Selects TCLK0 for PWT module"  value="0" enum="Tclk0" ref="Tclk0" code="Tclk0" />
@@ -873,7 +873,7 @@
 
    <category name="RTC" description="RTC Options" >
       <binaryOption key="sim_scgc_rtc" condition="sim_scgc_rtc_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimScgcRtc"
          description="RTC Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
@@ -882,7 +882,7 @@
 
       <binaryOption key="sim_pinsel0_rtcps" condition="sim_pinsel0_rtcps_present"
          addToVar="RtcExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          disabledPinMap="#/RTC/enablePeripheralSupport&amp;&amp;/RTC/rtc_sc_rtco"
          typeName="SimPinselRtcps"
          toolTip="Selects the RTC_CLKOUT port pins"
@@ -897,7 +897,7 @@
       <title description="SPI 0"/>
 
       <binaryOption key="sim_scgc_spi0" condition="sim_scgc_spi0_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimScgcSpi0"
          description="SPI0 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
@@ -906,7 +906,7 @@
 
       <binaryOption key="sim_pinsel0_spi0ps" condition="sim_pinsel0_spi0ps_present"
          addToVar="Spi0ExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimPinselSpi0ps"
          toolTip="Selects the SPI0 Pinouts"
          disabledPinMap="#/SPI0/enablePeripheralSupport"
@@ -918,7 +918,7 @@
       <title description="SPI 1"/>
 
       <binaryOption key="sim_scgc_spi1" condition="sim_scgc_spi1_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimScgcSpi1"
          description="SPI1 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
@@ -927,7 +927,7 @@
 
       <binaryOption key="sim_pinsel1_spi1ps" condition="sim_pinsel1_spi1ps_present"
          addToVar="Spi1ExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          disabledPinMap="#/SPI1/enablePeripheralSupport"
          typeName="SimPinselSpi1ps"
          description="SPI1 Pin Select" >
@@ -940,7 +940,7 @@
       <title description="UART 0"/>
 
       <binaryOption key="sim_scgc_uart0" condition="sim_scgc_uart0_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimScgcUart0"
          description="UART0 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
@@ -949,7 +949,7 @@
 
       <binaryOption key="sim_pinsel0_uart0ps" condition="sim_pinsel0_uart0ps_present"
          addToVar="Uart0ExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimPinselUart0ps"
          disabledPinMap="#/UART0/enablePeripheralSupport"
          description="UART0 Pin Select" >
@@ -959,7 +959,7 @@
 
       <binaryOption key="sim_sopt0_txdme" condition="sim_sopt0_txdme_present"
          addToVar="Uart0ExternalItems,Ftm0ExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimSoptTxdme"
          toolTip="Enables the UART0_TX output modulated by FTM0 channel 0"
          description="UART0_TX Modulation Select" >
@@ -969,7 +969,7 @@
 
       <choiceOption key="sim_sopt0_rxdfe" condition="sim_sopt0_rxdfe_present"
          addToVar="Uart0ExternalItems,AcmpExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimSoptRxdfe"
          toolTip="Enables the UART0_RX input to be filtered by ACMP.\n
                   When this function is enabled, any signal tagged with ACMP inputs can be regarded as UART0"
@@ -982,7 +982,7 @@
       <title description="UART 1"/>
 
       <binaryOption key="sim_scgc_uart1" condition="sim_scgc_uart1_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimScgcUart1"
          description="UART1 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
@@ -991,7 +991,7 @@
 
       <binaryOption key="sim_pinsel1_uart1ps" condition="sim_pinsel1_uart1ps_present"
          addToVar="Uart1ExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          disabledPinMap="#/UART1/enablePeripheralSupport"
          typeName="SimPinselUart1ps"
          description="UART1 Pin Select" >
@@ -1003,7 +1003,7 @@
 
       <binaryOption key="sim_scgc_uart2" condition="sim_scgc_uart2_present"
          addToVar="Uart2ExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          typeName="SimScgcUart2"
          description="UART2 Clock Gate Control" >
          <choice name="Clock disabled"  value="0" enum="ClockDisabled" />
@@ -1012,7 +1012,7 @@
 
       <binaryOption key="sim_pinsel1_uart2ps" condition="sim_pinsel1_uart2ps_present"
          addToVar="Uart2ExternalItems"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          disabledPinMap="#/UART2/enablePeripheralSupport"
          typeName="SimPinselUart2ps"
          description="UART2 Pin Select" >

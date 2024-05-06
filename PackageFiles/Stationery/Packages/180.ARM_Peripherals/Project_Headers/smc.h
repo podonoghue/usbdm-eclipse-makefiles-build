@@ -1,9 +1,6 @@
 /**
  * @file     smc.h (180.ARM_Peripherals/Project_Headers/smc.h)
  * @brief    System Management Controller
- *
- * @version  V4.12.1.210
- * @date     13 April 2016
  */
 
 #ifndef HEADER_SMC_H
@@ -17,8 +14,9 @@
  * Any manual changes will be lost.
  */
 #include "string.h"
-#include "pin_mapping.h"
 #include "mcg.h"
+#include "pin_mapping.h"
+#include "fmc.h"
 
 namespace USBDM {
 
@@ -27,6 +25,7 @@ namespace USBDM {
  * @brief Abstraction for System Mode Controller
  * @{
  */
+$(/SMC/peripheral_h_definition:// $/SMC/peripheral_h_definition not found)
 
 #if $(/SMC/enablePeripheralSupport) // /SMC/enablePeripheralSupport
 /**

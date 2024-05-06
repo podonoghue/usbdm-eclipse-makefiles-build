@@ -8,19 +8,20 @@
    <constant key="irq_pattern"      type="String"  value='"^$(_BASENAME)_(.*)$"'           />
    <constant key="irq_ClassHandler" type="String"  value='"$(_Info)::irqHandler&lt;$(_Class)IrqNum_$1&gt;"' />
 
-   <equation key="irq_parameters"              value=""  />
-   <equation key="irq_dummy_parameters"        value=""  />
-   <equation key="irq_call"                    value=""  />
-   <equation key="generateDefault"             value="false"         />
-   <equation key="configureInStartupDefault"   value="false"         />
+   <equation key="irq_parameters"            value=""  />
+   <equation key="irq_dummy_parameters"      value=""  />
+   <equation key="irq_call"                  value=""  />
+   <equation key="generateDefault"           value="false"         />
+   <equation key="configureInStartupDefault" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
    <stringOption name="FlashType" description="Flash Type" key="/Flash/FlashType" value="$(_basename)" derived="true" locked="true" />
 
-   <!-- ************* Class Declaration ****************** -->
-   <constant key="_class_declaration" type="String"
-      value='"$(_Info) : public $(_BasicInfo)"' />
+   <!-- _______ Class Declaration __________ -->
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <aliasOption key="pflash_sector_size" />
    <aliasOption key="pflash_phrase_size" />
@@ -96,7 +97,8 @@
       \tstatic constexpr unsigned dataFlashSectorSize = $(dflash_sector_size);
 
       \t// Phrase size for data flash (minimum programming element)
-      \tstatic constexpr unsigned dataFlashPhraseSize = $(dflash_phrase_size);\n\n
+      \tstatic constexpr unsigned dataFlashPhraseSize = $(dflash_phrase_size);
+      \t\n
    ]]></template>
 
    <variableTemplate variables="eeprom_split" ><![CDATA[
@@ -129,7 +131,7 @@
       <copy source="Snippets/flash-programming-example.cpp"  target="Snippets/flash-programming-example.cpp"  overwrite="true"  derived="true" />
    </projectActionList>
 
-   <!-- ************* Startup ****************** -->
+   <!-- _____________ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n

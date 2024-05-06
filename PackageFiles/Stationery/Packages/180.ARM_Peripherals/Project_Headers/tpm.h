@@ -1,11 +1,8 @@
 /**
  * @file     tpm.h (180.ARM_Peripherals/Project_Headers/tpm.h)
  * @brief    Flexitimer Timer Module
- *
- * @version  V4.12.1.80
- * @date     13 April 2016
- *      Author: podonoghue
  */
+
 #ifndef HEADER_TPM_H
 #define HEADER_TPM_H
 
@@ -29,6 +26,7 @@
  */
 namespace USBDM {
 
+$(/TPM/peripheral_h_definition:// $/TPM/peripheral_h_definition not found)
 /**
  * Calculate a TPM channel number using an offset from an existing number
  *

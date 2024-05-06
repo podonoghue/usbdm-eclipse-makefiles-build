@@ -3410,7 +3410,7 @@
          <param type="BooleanVariable"        name="sdhc_blkattr_present"           value="true"             key="/SDHC0/sdhc_blkattr_present" />
          <param type="BooleanVariable"        name="sdhc_cmdarg_cmdarg_present"     value="true"             key="/SDHC0/sdhc_cmdarg_cmdarg_present" />
          <param type="BooleanVariable"        name="sdhc_cmdarg_present"            value="true"             key="/SDHC0/sdhc_cmdarg_present" />
-         <param type="BooleanVariable"        name="sdhc_cmdrsp_cmdrsp0_present"    value="true"             key="/SDHC0/sdhc_cmdrsp_cmdrsp0_present" />
+         <param type="BooleanVariable"        name="sdhc_cmdrsp_cmdrsp_present"     value="true"             key="/SDHC0/sdhc_cmdrsp_cmdrsp_present" />
          <param type="LongVariable"           name="sdhc_cmdrsp_dim"                value="4"                key="/SDHC0/sdhc_cmdrsp_dim" />
          <param type="BooleanVariable"        name="sdhc_cmdrsp_present"            value="true"             key="/SDHC0/sdhc_cmdrsp_present" />
          <param type="BooleanVariable"        name="sdhc_datport_datcont_present"   value="true"             key="/SDHC0/sdhc_datport_datcont_present" />
@@ -3443,6 +3443,8 @@
          <param type="BooleanVariable"        name="sdhc_htcapblt_mbl_present"      value="true"             key="/SDHC0/sdhc_htcapblt_mbl_present" />
          <param type="BooleanVariable"        name="sdhc_htcapblt_present"          value="true"             key="/SDHC0/sdhc_htcapblt_present" />
          <param type="BooleanVariable"        name="sdhc_htcapblt_srs_present"      value="true"             key="/SDHC0/sdhc_htcapblt_srs_present" />
+         <param type="BooleanVariable"        name="sdhc_htcapblt_vs18_present"     value="true"             key="/SDHC0/sdhc_htcapblt_vs18_present" />
+         <param type="BooleanVariable"        name="sdhc_htcapblt_vs30_present"     value="true"             key="/SDHC0/sdhc_htcapblt_vs30_present" />
          <param type="BooleanVariable"        name="sdhc_htcapblt_vs33_present"     value="true"             key="/SDHC0/sdhc_htcapblt_vs33_present" />
          <param type="BooleanVariable"        name="sdhc_irqsigen_ac12eien_present" value="true"             key="/SDHC0/sdhc_irqsigen_ac12eien_present" />
          <param type="BooleanVariable"        name="sdhc_irqsigen_bgeien_present"   value="true"             key="/SDHC0/sdhc_irqsigen_bgeien_present" />
@@ -3508,6 +3510,7 @@
          <param type="BooleanVariable"        name="sdhc_mmcboot_bootmode_present"  value="true"             key="/SDHC0/sdhc_mmcboot_bootmode_present" />
          <param type="BooleanVariable"        name="sdhc_mmcboot_dtocvack_present"  value="true"             key="/SDHC0/sdhc_mmcboot_dtocvack_present" />
          <param type="BooleanVariable"        name="sdhc_mmcboot_present"           value="true"             key="/SDHC0/sdhc_mmcboot_present" />
+         <param type="BooleanVariable"        name="sdhc_proctl_cdet_present"       value="true"             key="/SDHC0/sdhc_proctl_cdet_present" />
          <param type="BooleanVariable"        name="sdhc_proctl_cdss_present"       value="true"             key="/SDHC0/sdhc_proctl_cdss_present" />
          <param type="BooleanVariable"        name="sdhc_proctl_cdtl_present"       value="true"             key="/SDHC0/sdhc_proctl_cdtl_present" />
          <param type="BooleanVariable"        name="sdhc_proctl_creq_present"       value="true"             key="/SDHC0/sdhc_proctl_creq_present" />

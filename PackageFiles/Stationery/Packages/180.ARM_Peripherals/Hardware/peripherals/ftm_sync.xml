@@ -285,7 +285,7 @@
       <choice name="Counter register synched"   value="1" enum="OnHardwareTrigger"/>
    </binaryOption >
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass) Trigger settings
       \t *
@@ -361,7 +361,7 @@
                              ftm_synconf_invc, ftm_synconf_swinvc, ftm_synconf_hwinvc,
                              ftm_synconf_swoc, ftm_synconf_hwsoc
                              ftm_synconf_swrstcnt, ftm_synconf_hwrstcnt                : 0       ">
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
       ><![CDATA[
@@ -381,7 +381,7 @@
                          ftm_synconf_invc;ftm_synconf_swinvc;ftm_synconf_hwinvc;
                          ftm_synconf_swoc;ftm_synconf_hwsoc;
                          ftm_synconf_swrstcnt;ftm_synconf_hwrstcnt" >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -404,7 +404,7 @@
    </for>
 
    <for keys="r" values="ftm_sync_trig" >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -426,7 +426,7 @@
       ]]></variableTemplate>
    </for>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t}; // class $(_BasicInfo)::SyncInit\n\n
    ]]></template>
 

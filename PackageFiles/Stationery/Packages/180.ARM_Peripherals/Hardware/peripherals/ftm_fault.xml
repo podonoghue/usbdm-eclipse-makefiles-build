@@ -112,7 +112,7 @@
 
    <if condition="ftm_fltctrl_ffval&amp;&amp;_code" >
 
-      <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       ><![CDATA[
          \t/**
          \t * Class used to do initialisation of $(_Baseclass) Fault handling
@@ -170,7 +170,7 @@
                                 ftm_fltctrl_fault2en,ftm_fltctrl_fault3en                 : 0       ;
                   %baseType   : ftm_fltpol_flt0pol,ftm_fltpol_flt1pol,
                                 ftm_fltpol_flt2pol,ftm_fltpol_flt3pol                     : 0       ">
-         <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
             variables="%(variables)"
             linePadding="xxx"
          ><![CDATA[
@@ -187,7 +187,7 @@
                             ftm_fltctrl_fault2en;ftm_fltctrl_fault3en;
                             ftm_fltpol_flt0pol;ftm_fltpol_flt1pol;
                             ftm_fltpol_flt2pol;ftm_fltpol_flt3pol" >
-         <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
             variables="%(r)"
             linePadding="xxx"
          ><![CDATA[
@@ -288,7 +288,7 @@
          </template>
       </if>
 
-      <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+      <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
          \t}; // class  $(_BasicInfo)::FaultInit\n\n
       ]]></template>
 

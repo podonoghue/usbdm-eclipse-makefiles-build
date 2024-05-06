@@ -4,7 +4,6 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Interface" >
 
-
    <!-- Default IRQ vector patterns if none specified -->
    <constant key="irq_pattern"      type="String"  value='"^$(_BASENAME)_(.*)$"'           />
    <constant key="irq_ClassHandler" type="String"  value='"$(_Info)::irqHandler&lt;$(_Class)IrqNum_$1&gt;"' />
@@ -16,6 +15,8 @@
    <equation key="configureInStartupDefault" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
+
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
 
    <stringOption name="FlashType" description="Flash Type" key="/Flash/FlashType" value="$(_basename)" derived="true" locked="true" />
 
@@ -141,7 +142,7 @@
       <copy source="Snippets/flash-programming-example.cpp"  target="Snippets/flash-programming-example.cpp"  overwrite="true"  derived="true" />
    </projectActionList>
 
-   <!-- ************* Startup ****************** -->
+   <!-- _____________ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n

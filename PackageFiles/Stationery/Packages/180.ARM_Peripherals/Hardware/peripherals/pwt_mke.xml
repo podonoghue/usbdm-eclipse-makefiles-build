@@ -28,7 +28,7 @@
    />
 
    <binaryOption key="pwt_r1_pwten" condition="pwt_r1_pwten_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       typeName="PwtEnable"
       baseType="uint16_t"
       toolTip="Enables/disables the PWT module.\n
@@ -229,7 +229,7 @@
    />
 
 
-   <variableTemplate variables="pwt_r1_pwtsr" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate variables="pwt_r1_pwtsr" codeGenCondition="$(_BasicInfoGuard)"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -244,7 +244,7 @@
         values="
       pwt_r1_pwtrdy:isPulseWidthValid;
       pwt_r1_pwtov:isOverflowed" >
-      <variableTemplate variables="%(field)" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate variables="%(field)" codeGenCondition="$(_BasicInfoGuard)"
       ><![CDATA[
          \t/**
          \t * Get %description
@@ -321,7 +321,7 @@
 
    <!-- ________ PWT Init class ____________________________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -385,7 +385,7 @@
 
    <!-- ____ Init class Member variables ________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
    ><![CDATA[
       \t   /// %description
@@ -396,7 +396,7 @@
        values="%baseType   : pwt_r1_pclks,pwt_r1_pinsel,pwt_r1_edge,
                              pwt_r1_pre,pwt_r1_pwten,pwt_r1_pwtie,pwt_r1_prdyie,
                              pwt_r1_povie,pwt_r1_pwtrdy,pwt_r1_pwtov :   0      " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
       ><![CDATA[
@@ -405,7 +405,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -415,7 +415,7 @@
 
    <!-- ____ Init class Constructors ____________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -434,7 +434,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -458,7 +458,7 @@
             pwt_r1_pclks;pwt_r1_pinsel;pwt_r1_edge;
             pwt_r1_pre;pwt_r1_pwten;pwt_r1_pwtie;pwt_r1_prdyie;
             pwt_r1_povie" >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -531,7 +531,7 @@
          \t   %(statement);\n
       ]]></variableTemplate>
    </for>
-   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}
       \t\n
@@ -557,7 +557,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}; // class $(_BasicInfo)::Init
       \t\n

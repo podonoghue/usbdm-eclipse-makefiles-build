@@ -886,7 +886,7 @@
 
 <!--  ___ Init class ______________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -979,7 +979,7 @@
 
 <!-- ____ Init class Member variables ________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)" >
    <![CDATA[
       \t   /// Real Time Clock Alarm
       \t   CallbackFunction callbackFunctions[2] = {nullptr,nullptr,};\n\n
@@ -1002,7 +1002,7 @@
                %baseType   : rtc_rar_ierr,rtc_rar_lrr,rtc_rar_srr,
                              rtc_rar_crr,rtc_rar_tcrr,rtc_rar_tarr,
                              rtc_rar_tprr,rtc_rar_tsrr                         : 0       ">
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
       ><![CDATA[
@@ -1011,7 +1011,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -1021,7 +1021,7 @@
 
 <!-- ____ Init class Constructors ____________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -1039,7 +1039,7 @@
       \t   }\n\n
    ]]></template>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -1074,7 +1074,7 @@
             rtc_tar_tar;
             rtc_tcr_cir;
             rtc_cr_scp " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -1273,7 +1273,7 @@
 
 
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}; // class $(_BasicInfo)::Init
       \t\n

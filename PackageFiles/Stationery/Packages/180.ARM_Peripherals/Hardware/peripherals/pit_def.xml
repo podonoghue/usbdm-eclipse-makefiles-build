@@ -4,6 +4,8 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
    <if condition="=(_hardwareIrqCount==pit_channel_dim)">
       <for keys="irqNum" values="=_hardwareIrqNums" iterationVar="ch" >
          <choiceOption key="irqLevel_Ch%(ch)"
@@ -94,7 +96,7 @@
       value="&quot;$(_Info) : public $(_BasicInfo)&quot;" />
 
    <binaryOption key="/$(_BASENAME)/secondsSupport"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       modify="true"
       description="Enable use of Seconds for time"
       toolTip="Use of floating point libraries is necessary to support routines using seconds in runtime code.\n
@@ -287,7 +289,7 @@
    <for keys="static : const : chan    : location"
       values="static :       : CHANNEL : /$(_BASENAME)/staticFunctions ;
                      : const : chan    : /$(_BASENAME)/memberFunctions" >
-      <template key="%(location)" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+      <template key="%(location)" codeGenCondition="$(_BasicInfoGuard)" >
       <![CDATA[
          \t   /**
          \t    * Configure PIT channel from values specified in init.
@@ -618,7 +620,7 @@
 
    <!-- ______ Common Initialisation class _______________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/** Bit-mask of allocated channels */
       \tstatic inline uint32_t allocatedChannels = 0;
@@ -669,7 +671,7 @@
 
 <!--  Common Initialisation class member variables -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" condition="=(_hardwareIrqCount==1)"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)" condition="=(_hardwareIrqCount==1)"
       variables="/PCR/nvic_irqLevel,irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -678,7 +680,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="pit_mcr_mdis,pit_mcr_frz"
       linePadding="xxx"
    ><![CDATA[
@@ -689,7 +691,7 @@
 <!--  Common Initialisation class constructors -->
 
    <!-- Per-channel IRQ handler always -->
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"  condition="false"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"  condition="false"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -708,7 +710,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo" condition="=(_hardwareIrqCount==1)"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)" condition="=(_hardwareIrqCount==1)"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -728,7 +730,7 @@
    ]]></variableTemplate>
 
    <for keys="v" values="pit_mcr_mdis; pit_mcr_frz">
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(v)"
          linePadding="xxx"
        ><![CDATA[
@@ -749,7 +751,7 @@
    </for>
 
 <!-- End of Common Initialisation class -->
-   <variableTemplate where="basicInfo" variables="irqHandlingMethod" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" variables="irqHandlingMethod" codeGenCondition="$(_BasicInfoGuard)"
    ><![CDATA[
       \t};// class $(_BasicInfo)::Init
       \t\n
@@ -858,7 +860,7 @@
 
 <!--   ____ PIT ChannelInit class ________________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of a $(_Baseclass) channel
@@ -914,7 +916,7 @@
 
 <!-- Channel Initialisation class member variables -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -922,7 +924,7 @@
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="pit_ldval_tsv[]"
       linePadding="xxx"
    ><![CDATA[
@@ -938,7 +940,7 @@
       \t   %returnType %registerName = 0_s;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="pit_tctrl_ten[],pit_tctrl_chn[],pit_tctrl_tie[]"
       linePadding="xxx"
    ><![CDATA[
@@ -946,7 +948,7 @@
       \t   %baseType %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" condition="=(_hardwareIrqCount>1)"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" condition="=(_hardwareIrqCount>1)"
       variables="/PCR/nvic_irqLevel,irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -955,7 +957,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="pit_channelNumber"
       linePadding="xxx"
    ><![CDATA[
@@ -965,7 +967,7 @@
 
 <!-- Channel Initialisation class Constructors -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
     ><![CDATA[
@@ -984,7 +986,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" condition="=(_hardwareIrqCount>1)"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" condition="=(_hardwareIrqCount>1)"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
     ><![CDATA[
@@ -1004,7 +1006,7 @@
    ]]></variableTemplate>
 
    <for keys="r" values="pit_channelNumber;pit_ldval_tsv[]" >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx"
        ><![CDATA[
@@ -1025,7 +1027,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo&amp;&amp;secondsSupport"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)&amp;&amp;secondsSupport"
       variables="pit_period[]"
       linePadding="xxx"
     ><![CDATA[
@@ -1045,7 +1047,7 @@
    ]]></variableTemplate>
 
    <for keys="r" values="pit_tctrl_ten[];pit_tctrl_tie[];pit_tctrl_chn[1]" >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx"
       ><![CDATA[
@@ -1068,7 +1070,7 @@
    </for>
 
 <!-- End of PIT ChannelInit class -->
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
    ><![CDATA[
       \t};// class $(_BasicInfo)::ChannelInit
       \t\n

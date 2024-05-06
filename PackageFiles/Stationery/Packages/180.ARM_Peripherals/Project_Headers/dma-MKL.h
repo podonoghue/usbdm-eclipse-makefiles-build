@@ -9,9 +9,7 @@
 #ifndef INCLUDE_USBDM_DMA_H_
 #define INCLUDE_USBDM_DMA_H_
 
-#include "derivative.h"
 #include "pin_mapping.h"
-#include "dmamux.h"
 
 /*
  * *****************************
@@ -23,11 +21,15 @@
  */
 namespace USBDM {
 
+#if $(/DMA/enablePeripheralSupport) // /DMA/enablePeripheralSupport
+
 /**
  * @addtogroup DMA_Group DMA, Direct Memory Access (DMA)
  * @brief Support for DMA operations
  * @{
  */
+$(/DMA/peripheral_h_definition:// $/PIT/peripheral_h_definition not found)
+$(/DMAMUX/peripheral_h_definition:// $/PIT/peripheral_h_definition not found)
 
 /**
  * Controls operation of DMA-MUX channel.
@@ -211,11 +213,14 @@ public:
    template<class Info>
    uint32_t Dma_T<Info>::allocatedChannels = 0;
 
-$(/DMA/declarations:// /DMA/declarations not found)
+$(/DMA/declarations: // No declaractions found)
+$(/DMAMUX/declarations: // No declaractions found)
+
 /**
  * End DMA_Group
  * @}
  */
+#endif
 } // End namespace USBDM
 
 #endif /* INCLUDE_USBDM_DMA_H_ */

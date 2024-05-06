@@ -133,7 +133,7 @@
 
    <!-- ________ OSC Init class ____________________________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -200,7 +200,7 @@ XXXXXXXXXXXXXXXXXXXXXX
        values="%baseType   : osc_cr_oscen,osc_cr_oscsten,osc_cr_oscos,
                              osc_cr_range,osc_cr_hgo                              :   0      ;
                %paramType  : /PCR/nvic_irqLevel                                   :   %defaultValue   " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
       ><![CDATA[
@@ -211,7 +211,7 @@ XXXXXXXXXXXXXXXXXXXXXX
 
    <!-- ____ Init class Constructors ____________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -236,7 +236,7 @@ XXXXXXXXXXXXXXXXXXXXXX
             osc_cr_oscen;osc_cr_oscsten;osc_cr_oscos;
             osc_cr_range;osc_cr_hgo;
             " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -305,7 +305,7 @@ XXXXXXXXXXXXXXXXXXXXXX
          \t   %(statement);\n
       ]]></variableTemplate>
    </for>
-   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}
       \t\n
@@ -357,7 +357,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t}\n\n
    ]]></template>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}; // class $(_BasicInfo)::Init
       \t\n

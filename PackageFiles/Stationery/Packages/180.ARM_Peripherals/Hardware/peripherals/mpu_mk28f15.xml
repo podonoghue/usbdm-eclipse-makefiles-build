@@ -12,8 +12,12 @@
    <xi:include href="enablePeripheral.xml"    />
    <title />
 
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
    <constant key="NumRegionDescriptors"   value="12" type="Long" />
    <constant key="NumSlavePorts"          value="7"  type="Long" />
+
+   <constant key="disable_peripheral"     value='"mpu->CESR = MPU_CESR_VLD(0);\n"' type="String"  />
 
    <!-- ____ Class Declaration ________ -->
    <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
@@ -27,7 +31,7 @@
       toolTip="Global enable/disable for the MPU."
       description="MPU Enable" >
       <choice name="MPU is disabled. All accesses allowed"  value="0" enum="Disabled" />
-      <choice name="MPU is enabled"                         value="1" enum="Enabled"  isDefault="true" />
+      <choice name="MPU is enabled"                         value="1" enum="Enabled"  />
    </binaryOption >
 
    <bitfieldOption key="mpu_cesr_sperr" condition="mpu_cesr_sperr_present"
@@ -157,7 +161,8 @@
          typeName="MpuRegionMode"
          baseType="uint32_t"
          toolTip=""
-         description="Valid" >
+         description="Valid"
+         disabledValue="0">
          <choice name="Region descriptor is invalid"  value="0" enum="RegionDescriptorIsInvalid" />
          <choice name="Region descriptor is valid"    value="1" enum="RegionDescriptorIsValid"   isDefault="=%(region)==0" />
       </binaryOption >
@@ -337,6 +342,20 @@
       </bitfieldOption>
    </for>
 
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+   ><![CDATA[
+      \t// Pointer to $(_BASENAME) hardware instance
+      \tvolatile $(_Type) *$(_basename);
+      \t
+      \t/**
+      \t * Constructor
+      \t *
+      \t * @param $(_basename) $(_BASENAME) hardware instance
+      \t */
+      \t$(_BasicInfo)(volatile $(_Type) * $(_basename)) : $(_basename)($(_basename)) {
+      \t}
+      \t\n
+   ]]></template>
 
    <!-- ____ Getters and Setters ____________ -->
 
@@ -348,7 +367,7 @@
          mpu_cesr_nsp                   : false : true  : false : enableGettersAndSetters : NumberOfSlavePorts;
          mpu_cesr_nrgd                  : false : true  : false : enableGettersAndSetters : NumberOfRegionDescriptors;
          mpu_cesr_vld                   : true  : true  : false : enablePeripheralSupport : Enabled" >
-      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
+      <variableTemplate where="basicInfo" variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -356,12 +375,12 @@
          \t *
          %paramDescription
          \t */
-         \tstatic void set%(name)(%params) {
+         \tvoid set%(name)(%params) const {
          \t   %fieldAssignment;
          \t}
          \t\n
       ]]></variableTemplate>
-      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      <variableTemplate where="basicInfo" variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
       ><![CDATA[
          \t/**
          \t * Get %description
@@ -369,12 +388,12 @@
          \t *
          \t * @return %tooltip
          \t */
-         \tstatic %returnType get%(name)() {
+         \t%returnType get%(name)() const {
          \t   return %fieldExtract;
          \t}
          \t\n
       ]]></variableTemplate>
-      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+      <variableTemplate where="basicInfo" variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
          tooltipPadding="x*x"      ><![CDATA[
          \t/**
          \t * Clear %description
@@ -382,7 +401,7 @@
          \t *
          \t * %tooltip
          \t */
-         \tstatic void clear%(name)() {
+         \tvoid clear%(name)() const {
          \t   %register = %register|%mask;
          \t}
          \t\n
@@ -414,9 +433,9 @@
    </choiceOption>
 
    <for keys="field                          : set   : get   : clear : genCode                 : context              : name"
-        values="                                                                                                      
+        values="
          mpu_port_num,mpu_ear_eaddr[]        : false : true  : false : enableGettersAndSetters : SP[%%paramName0].%s  : ErrorAddress;
-                                                                                                                      
+
          mpu_port_num,mpu_edr_eacd[]         : false : true  : false : enableGettersAndSetters : SP[%%paramName0].%s  : ErrorAccessControl;
          mpu_port_num,mpu_edr_epid[]         : false : true  : false : enableGettersAndSetters : SP[%%paramName0].%s  : ErrorProcessId;
          mpu_port_num,mpu_edr_emn[]          : false : true  : false : enableGettersAndSetters : SP[%%paramName0].%s  : ErrorMasterNumber;
@@ -448,23 +467,23 @@
          mpu_region_num,mpu_word3_pidmask[]  : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s : ProcessorIdMask;
          mpu_region_num,mpu_word3_vld[]      : true  : true  : false : enableGettersAndSetters : RGD[%%paramName0].%s : RegionEnable;
 
-         mpu_region_num,mpu_rgdaac_m7rwe     : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster7Access;                 
-         mpu_region_num,mpu_rgdaac_m6rwe     : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster6Access;                 
-         mpu_region_num,mpu_rgdaac_m5rwe     : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster5Access;                 
-         mpu_region_num,mpu_rgdaac_m4rwe     : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster4Access;                 
-         mpu_region_num,mpu_rgdaac_m3pe      : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster3UseProcessIdentifier;   
-         mpu_region_num,mpu_rgdaac_m3sm      : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster3SupervisorAccess;       
-         mpu_region_num,mpu_rgdaac_m3um      : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster3UserAccess;             
-         mpu_region_num,mpu_rgdaac_m2pe      : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster2UseProcessIdentifier;   
-         mpu_region_num,mpu_rgdaac_m2sm      : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster2SupervisorAccess;       
-         mpu_region_num,mpu_rgdaac_m2um      : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster2UserAccess;             
-         mpu_region_num,mpu_rgdaac_m1pe      : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster1UseProcessIdentifier;   
-         mpu_region_num,mpu_rgdaac_m1sm      : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster1SupervisorAccess;       
-         mpu_region_num,mpu_rgdaac_m1um      : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster1UserAccess;             
-         mpu_region_num,mpu_rgdaac_m0pe      : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster0UseProcessIdentifier;   
-         mpu_region_num,mpu_rgdaac_m0sm      : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster0SupervisorAccess;       
+         mpu_region_num,mpu_rgdaac_m7rwe     : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster7Access;
+         mpu_region_num,mpu_rgdaac_m6rwe     : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster6Access;
+         mpu_region_num,mpu_rgdaac_m5rwe     : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster5Access;
+         mpu_region_num,mpu_rgdaac_m4rwe     : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster4Access;
+         mpu_region_num,mpu_rgdaac_m3pe      : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster3UseProcessIdentifier;
+         mpu_region_num,mpu_rgdaac_m3sm      : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster3SupervisorAccess;
+         mpu_region_num,mpu_rgdaac_m3um      : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster3UserAccess;
+         mpu_region_num,mpu_rgdaac_m2pe      : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster2UseProcessIdentifier;
+         mpu_region_num,mpu_rgdaac_m2sm      : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster2SupervisorAccess;
+         mpu_region_num,mpu_rgdaac_m2um      : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster2UserAccess;
+         mpu_region_num,mpu_rgdaac_m1pe      : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster1UseProcessIdentifier;
+         mpu_region_num,mpu_rgdaac_m1sm      : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster1SupervisorAccess;
+         mpu_region_num,mpu_rgdaac_m1um      : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster1UserAccess;
+         mpu_region_num,mpu_rgdaac_m0pe      : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster0UseProcessIdentifier;
+         mpu_region_num,mpu_rgdaac_m0sm      : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster0SupervisorAccess;
          mpu_region_num,mpu_rgdaac_m0um      : true  : false : false : enableGettersAndSetters : %s[%%paramName0]     : AlternateMaster0UserAccess" >
-      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)" context="%(context)" nonDefaultParams="2"
+      <variableTemplate where="basicInfo" variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)" context="%(context)" nonDefaultParams="2"
       ><![CDATA[
          \t/**
          \t * Set %description1
@@ -472,12 +491,12 @@
          \t *
          %paramDescription
          \t */
-         \tstatic void set%(name)(%params) {
+         \tvoid set%(name)(%params) const {
          \t   %fieldAssignment1;
          \t}
          \t\n
       ]]></variableTemplate>
-      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)" context="%(context)"
+      <variableTemplate where="basicInfo" variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)" context="%(context)"
       ><![CDATA[
          \t/**
          \t * Get %description1
@@ -487,22 +506,23 @@
          \t *
          \t * @return %tooltip1
          \t */
-         \tstatic %paramType1 get%(name)(%param0) {
+         \t%paramType1 get%(name)(%param0) const {
          \t   return %fieldExtract1;
          \t}
          \t\n
       ]]></variableTemplate>
-      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)" context="%(context)"
-         tooltipPadding="x*x"      ><![CDATA[
+      <variableTemplate where="basicInfo" variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)" context="%(context)"
+         tooltipPadding="x*x" >
+      <![CDATA[
          \t/**
-         \t * Clear %description
+         \t * Clear %description1
          \t * (%(field))
          \t *
          \t * %tooltip
          \t *
          %paramDescription0
          \t */
-         \tstatic void clear%(name)(%param0) {
+         \tvoid clear%(name)(%param0) const {
          \t   %register1 = %register1|%mask1;
          \t}
          \t\n
@@ -511,7 +531,7 @@
 
    <!-- ________ MPU RegionInit class ____________________________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -563,7 +583,7 @@ XXXXXXXXXXXXXXXXXXXXXX
 
    <!-- ____ RegionInit class Member variables ________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -583,7 +603,7 @@ XXXXXXXXXXXXXXXXXXXXXX
                              mpu_word2_m1sm[],mpu_word2_m1um[],mpu_word2_m0pe[],
                              mpu_word2_m0sm[],mpu_word2_m0um[]                    :   0      ;
                %baseType   : mpu_word3_pid[],mpu_word3_pidmask[],mpu_word3_vld[]  :   0      " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
       ><![CDATA[
@@ -594,7 +614,7 @@ XXXXXXXXXXXXXXXXXXXXXX
 
    <!-- ____ RegionInit class Constructors ____________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -627,7 +647,7 @@ XXXXXXXXXXXXXXXXXXXXXX
             mpu_word2_m0pe[];mpu_word2_m0sm[];mpu_word2_m0um[];
             mpu_word3_pid[];mpu_word3_pidmask[];mpu_word3_vld[]
             " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -650,7 +670,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       </variableTemplate>
    </for>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}; // class $(_BasicInfo)::RegionInit
       \t\n
@@ -659,23 +679,23 @@ XXXXXXXXXXXXXXXXXXXXXX
 
    <!-- ____ RegionInit class Configure method ____ -->
 
-   <variableTemplate codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo&amp;&amp;mpu_cesr_vld" 
+   <variableTemplate where="info" codeGenCondition="$(_InfoGuard)"
       variables="mpu_region_num"
    >
    <![CDATA[
       \t/**
-      \t * Configure $(_BASENAME) from values specified in init
+      \t * Configure $(_BASENAME) Region Descriptor from values specified in init
       \t *
       \t * @param init Array of initialisation values
       \t */
       \tstatic void configure(const RegionInit init[], size_t numElements) {
       \t   for (unsigned index=0; index<numElements; index++) {
-      \t      configure(init[index].region, init[index]);
+      \t      MpuBasicInfo::configure(mpu, init[index].region, init[index]);
       \t   }
       \t}
       \t
       \t/**
-      \t * Configure $(_BASENAME) from values specified in init
+      \t * Configure $(_BASENAME) Region Descriptor from values specified in init
       \t *
       \t * @param init Array of initialisation values
       \t */
@@ -685,22 +705,70 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t}
       \t
       \t/**
-      \t * Configure $(_BASENAME) from values specified in init
+      \t * Configure $(_BASENAME) Region Descriptor from values specified in init
       \t *
       %paramDescription
       \t * @param init Class containing initialisation values
       \t */
       \tstatic void configure(const RegionInit &init) {
-      \t   configure(init.region, init);
+      \t   MpuBasicInfo::configure(mpu, init.region, init);
       \t}
       \t
       \t/**
-      \t * Configure $(_BASENAME) from values specified in init
+      \t * Configure $(_BASENAME) Region Descriptor from values specified in init
       \t *
       %paramDescription
       \t * @param init Class containing initialisation values
       \t */
       \tstatic void configure(%param0, const RegionInit &init) {
+      \t   MpuBasicInfo::configure(mpu, %paramExpression, init);
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      variables="mpu_region_num"
+   >
+   <![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) Region Descriptor from values specified in init
+      \t *
+      \t * @param init Array of initialisation values
+      \t */
+      \tvoid configure(const RegionInit init[], size_t numElements) const {
+      \t   for (unsigned index=0; index<numElements; index++) {
+      \t      configure(mpu, init[index].region, init[index]);
+      \t   }
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) Region Descriptor from values specified in init
+      \t *
+      \t * @param init Array of initialisation values
+      \t */
+      \ttemplate<size_t N>
+      \tvoid configure(const RegionInit (&init)[N]) const {
+      \t   configure(mpu, init, N);
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) Region Descriptor from values specified in init
+      \t *
+      %paramDescription
+      \t * @param init Class containing initialisation values
+      \t */
+      \tvoid configure(const RegionInit &init) const {
+      \t   configure(mpu, init.region, init);
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) Region Descriptor from values specified in init
+      \t *
+      %paramDescription
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(volatile $(_Type) *mpu, %param0, const RegionInit &init) {
       \t\n
    ]]>
    </variableTemplate>
@@ -715,7 +783,7 @@ XXXXXXXXXXXXXXXXXXXXXX
                mpu_word2_m1pe[],mpu_word2_m1sm[],mpu_word2_m1um[],
                mpu_word2_m0pe[],mpu_word2_m0sm[],mpu_word2_m0um[]     : mpu->RGD[mpuRegionNum].%registerNAME = init.%registerName  ;
                mpu_word3_pid[],mpu_word3_pidmask[],mpu_word3_vld[]    : mpu->RGD[mpuRegionNum].%registerNAME = init.%registerName  " >
-      <variableTemplate codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo&amp;&amp;mpu_cesr_vld"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="%(var)"
       linePadding="xxx"
       ><![CDATA[
@@ -724,204 +792,64 @@ XXXXXXXXXXXXXXXXXXXXXX
          \t   %(statement);\n
       ]]></variableTemplate>
    </for>
-   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo&amp;&amp;mpu_cesr_vld" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}
       \t\n
    ]]>
    </template>
 
-   <!-- ____  Default Initialisation value ____ -->
+   <!-- ____  Default RegionInitialisation values ____ -->
 
-   <variableTemplate codeGenCondition="enablePeripheralSupport"
-      separator=","
-      terminator=","
-      variables="
-            mpu_region_num,
-            mpu_word0_srtaddr[],
-            mpu_word1_endaddr[],
-            mpu_word2_m7rwe[],mpu_word2_m6rwe[],
-            mpu_word2_m5rwe[],mpu_word2_m4rwe[],
-            mpu_word2_m3pe[],mpu_word2_m3sm[],mpu_word2_m3um[],
-            mpu_word2_m2pe[],mpu_word2_m2sm[],mpu_word2_m2um[],
-            mpu_word2_m1pe[],mpu_word2_m1sm[],mpu_word2_m1um[],
-            mpu_word2_m0pe[],mpu_word2_m0sm[],mpu_word2_m0um[],
-            mpu_word3_pid[],mpu_word3_pidmask[],mpu_word3_vld[]" >
-    <![CDATA[
+   <template codeGenCondition="enablePeripheralSupport">
+   <![CDATA[
       \t/**
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr RegionInit DefaultRegionInitValue = {%initExpression
-      \t};
-      \t\n
-   ]]>
-   </variableTemplate>
-
-
-
-   <!-- ________ MPU Init class ____________________________ -->
-
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
-   <![CDATA[
-      \t/**
-      \t * Class used to do initialisation of the $(_Baseclass)
-      \t *
-      \t * This class has a templated constructor that accepts various values.
-      \t * Parameters available may vary with device - see $(_Class)::DefaultInitValue for relevant example.
-      \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.
-      \t *
-      \t * @note This constructor may be used to create a const instance in Flash
-      \t *
-      \t * Example:
-      \t * @code
-      \t * ///
-      \t * /// $(_NAME) call-back
-      \t * ///
-      \t * /// @param status  Status reflecting active inputs
-      \t * ///
-      \t * void $(_name)Callback(ErrorCode ec) {
-      \t *    ....
-      \t * }
-      \t *
-      \t * static const $(_Class)::Init $(_name)Init {
-      \t *
-      \t *   // Setup values
-XXXXXXXXXXXXXXXXXXXXXX
-      \t *
-      \t *   $(_name)Callback,                 // Call-back to execute on event - call-back function name
-      \t *   NvicPriority_Low,                 // Priority for interrupt - Low
-      \t *
-      \t *   // Optional base value to start with (must be last parameter)
-      \t *   $(_Class)::DefaultInitValue   // Used as base value modified by above
-      \t * };
-      \t *
-      \t * // Initialise $(_Class) from values specified above
-      \t * $(_Class)::configure($(_name)Init)
-      \t * @endcode
-      \t */
-      \tclass Init {
-      \t
-      \tprivate:
-      \t   /**
-      \t    * Prevent implicit parameter conversions
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(Types...) = delete;
-      \t
-      \tpublic:
-      \t   /**
-      \t    * Copy Constructor
-      \t    */
-      \t   constexpr Init(const Init &other) = default;
-      \t
-      \t   /**
-      \t    * Default Constructor
-      \t    */
-      \t   constexpr Init() = default;
-      \t\n
+      \tstatic constexpr RegionInit DefaultRegionInitValue[] = {\n
    ]]>
    </template>
-
-   <!-- ____ Init class Member variables ________ -->
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
-      variables="irqHandlingMethod"
-      linePadding="xxx"
-   ><![CDATA[
-      %multilineDescription
-      \t   %params = nullptr;\n\n
-   ]]></variableTemplate>
-
-   <for keys=" type        : variables                                            : init    "
-       values="%baseType   : mpu_cesr_vld                                         :   0      " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables="%(variables)"
-         linePadding="xxx"
-      ><![CDATA[
-         %multilineDescription
-         \t   %(type) %registerName = %(init);\n\n
-      ]]></variableTemplate>
-   </for>
-
-   <!-- ____ Init class Constructors ____________ -->
-
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
-      variables="irqHandlingMethod"
-      linePadding="xxx"
-   ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    * (%variables)
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      this->%paramName = %paramExpression;
-      \t   }\n\n
-   ]]></variableTemplate>
-
-   <for keys="r"
-      values="
-            mpu_cesr_vld
-            " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
-         variables="%(r)"
-         linePadding="xxx" >
-      <![CDATA[
-         \t   /**
-         \t    * Constructor for %description
-         \t    * (%variables)
-         \t    *
-         \t    * @tparam   Types
-         \t    * @param    rest
-         \t    *
-         %paramDescription
-         \t    */
-         \t   template <typename... Types>
-         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-         \t
-         \t      %constructorFieldAssignment;
-         \t   }
+   <for keys="region" dim="=NumRegionDescriptors" >
+      <equation key="EAnyRegionsValid" value="false" condition="!EAnyRegionsValid"/>
+      <equation key="EAnyRegionsValid" value='=EAnyRegionsValid+"||mpu_word3_vld[%(region)]"' />
+      <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;mpu_word3_vld[%(region)]"
+         separator=","
+         terminator=","
+         variables="
+               mpu_word0_srtaddr[%(region)],
+               mpu_word1_endaddr[%(region)],
+               mpu_word2_m7rwe[%(region)],mpu_word2_m6rwe[%(region)],
+               mpu_word2_m5rwe[%(region)],mpu_word2_m4rwe[%(region)],
+               mpu_word2_m3pe[%(region)],mpu_word2_m3sm[%(region)],mpu_word2_m3um[%(region)],
+               mpu_word2_m2pe[%(region)],mpu_word2_m2sm[%(region)],mpu_word2_m2um[%(region)],
+               mpu_word2_m1pe[%(region)],mpu_word2_m1sm[%(region)],mpu_word2_m1um[%(region)],
+               mpu_word2_m0pe[%(region)],mpu_word2_m0sm[%(region)],mpu_word2_m0um[%(region)],
+               mpu_word3_pid[%(region)],mpu_word3_pidmask[%(region)],mpu_word3_vld[%(region)]" >
+       <![CDATA[
+         \t{
+         \t   MpuRegionNum_%(region),
+         \t%initExpression
+         \t},
          \t\n
       ]]>
       </variableTemplate>
    </for>
-
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template codeGenCondition="enablePeripheralSupport">
    <![CDATA[
-      \t}; // class $(_BasicInfo)::Init
+      \t};
       \t\n
    ]]>
    </template>
 
-   <!-- ____ Init class Configure method ____ -->
+   <equation key="EAnyRegionsValid" value='="enablePeripheralSupport&amp;&amp;("+EAnyRegionsValid+")"' />
+   <variable key="AnyRegionsValid" type="Boolean" expression="=EAnyRegionsValid" />
 
-   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo&amp;&amp;!mpu_cesr_vld" >
-   <![CDATA[
-      \t/**
-      \t * Configure with default settings.
-      \t * This method disables the MPU
-      \t */
-      \tstatic inline void defaultConfigure() {
-      \t
-      \t   enableClock();
-      \t
-      \t   // Disable MPU
-      \t   mpu->CESR = 0;
-      \t
-      \t   disableClock();
-      \t}
-      \t\n
-   ]]>
-   </template>
+   <!-- ________ MPU Init class ____________________________ -->
 
-   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo&amp;&amp;mpu_cesr_vld" >
+   <!-- ____ Configure methods ____ -->
+
+   <variableTemplate codeGenCondition="$(_BasicInfoGuard)" variables="mpu_cesr_vld" >
    <![CDATA[
       \t/**
       \t * Configure with default settings.
@@ -929,55 +857,41 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t */
       \tstatic inline void defaultConfigure() {
       \t
-      \t   // Update settings
       \t   configure(DefaultInitValue);
       \t}
       \t
       \t/**
-      \t * Configure $(_BASENAME) from values specified in init
+      \t * Configure $(_BASENAME)
       \t *
-      \t * @param init Class containing initialisation values
+      %paramDescription
       \t */
-      \tstatic void configure(const Init &init) {
+      \tstatic void configure(%params) {
       \t
       \t   // Enable peripheral
       \t   enable();
-      \t\n
-   ]]>
-   </template>
-   <for keys=
-             " var                                                    : statement            "
-      values=" mpu_cesr_vld                                           : %configRegAssignment  " >
-      <variableTemplate codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo&amp;&amp;mpu_cesr_vld"
-      variables="%(var)"
-      linePadding="xxx"
-      ><![CDATA[
-         \t
-         %multilineDescription
-         \t   %(statement);\n
-      ]]></variableTemplate>
-   </for>
-   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo&amp;&amp;mpu_cesr_vld" >
-   <![CDATA[
+      \t
+      \t   %fieldAssignment;
+      \t
+      \t#if $(/MPU/AnyRegionsValid:false // $/MPU/AnyRegionsValid Not found)
+      \t   configure(DefaultRegionInitValue);
+      \t#endif
       \t}
       \t\n
    ]]>
-   </template>
+   </variableTemplate>
 
    <!-- ____  Default Initialisation value ____ -->
 
    <variableTemplate codeGenCondition="enablePeripheralSupport"
-      separator=","
-      terminator=","
-      variables="
-            mpu_cesr_vld" >
+      initExpressionOnSameLine="true"
+      terminator=";"
+      variables="mpu_cesr_vld" >
     <![CDATA[
       \t/**
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression
-      \t};
+      \tstatic constexpr %paramType DefaultInitValue = %initExpression
       \t\n
    ]]>
    </variableTemplate>
@@ -989,7 +903,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \tclass $(_Class) : public $(_Baseclass)Base {};
+      \tusing $(_Class) = $(_Baseclass)Info;
       \t\n
    ]]>
    </template>

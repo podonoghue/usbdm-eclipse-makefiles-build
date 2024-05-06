@@ -136,7 +136,7 @@
 
    <if condition="tpm_qdctrl_present&amp;&amp;_code" >
 
-      <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+      <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
          \t/**
          \t * Class used to do initialisation of Tpm QuadDecoder
          \t *
@@ -186,7 +186,7 @@
 
       <!-- ____ QUAD Init class Member variables ____ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
          variables="irqHandlingMethod"
        ><![CDATA[
          %multilineDescription
@@ -199,7 +199,7 @@
                   %baseType   : tpm_sc_action,tpm_sc_ps          : 0       ;
                   %baseType   : tpm_pol_pol0,tpm_pol_pol1        : 0       ;
                   %baseType   : tpm_mod_mod                      : 0       ">
-         <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
             variables="%(variables)"
          ><![CDATA[
             %multilineDescription
@@ -207,7 +207,7 @@
          ]]></variableTemplate>
       </for>
 
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
          variables="/PCR/nvic_irqLevel"
       ><![CDATA[
          %multilineDescription
@@ -216,7 +216,7 @@
 
       <!-- ____ QUAD Init class Constructors ____ -->
 
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
          variables="irqHandlingMethod"
          linePadding="xxx"
        ><![CDATA[
@@ -234,7 +234,7 @@
          \t   }\n\n
       ]]></variableTemplate>
 
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
          variables="/PCR/nvic_irqLevel"
          linePadding="xxx"
        ><![CDATA[
@@ -258,7 +258,7 @@
          tpm_pol_pol0;tpm_pol_pol1;
          tpm_filter_ch0;tpm_filter_ch1;
          tpm_mod_mod" >
-         <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+         <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
             variables="%(r)"
             linePadding="xxx"
          ><![CDATA[
@@ -279,7 +279,7 @@
          ]]></variableTemplate>
       </for>
 
-      <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+      <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
          \t};
          \t\n
       ]]></template>

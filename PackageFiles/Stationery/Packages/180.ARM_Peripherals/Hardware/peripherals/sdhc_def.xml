@@ -11,10 +11,12 @@
    <equation key="configureInStartupDefault"  value="false"     />
    <xi:include href="enablePeripheral.xml"    />
 
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
+   <constant key="disable_peripheral"     value='"sdhc->SYSCTL = SDHC_SYSCTL_SDCLKEN(0);\n"' type="String"  />
+
    <!-- ____ Class Declaration ________ -->
    <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
-
-   <constant key="definitionsInHeader" value="true" type="Boolean" />
 
    <!-- ____ SD Card Fields ____ -->
    <bitfieldOption key="sdhc_ocr_field"
@@ -83,7 +85,7 @@
       <choice value="2,1,1"  name="R7  -  48 bits R[39:8]  => CMDRSP[0]  =Card interface condition"                        enum="R7"   />
    </choiceOption>
 
-   <intOption key="sdhc_xfertyp_cmd" condition="sdhc_xfertyp_cmdinx_present" 
+   <intOption key="sdhc_xfertyp_cmd" condition="sdhc_xfertyp_cmdinx_present"
       derived="true"
       hidden="true"
       valueFormat="%s"
@@ -91,7 +93,7 @@
       description="Command register (XFERTYP)"
       toolTip="Value controlling command execution"
    />
-   
+
    <choiceOption key="sdhc_xfertyp_command" condition="sdhc_xfertyp_cmdinx_present"
       valueFormat="(%s&lt;&lt;31),SDHC_XFERTYP_CMDINX(%s),SdhcResponse_%s,(%s&lt;&lt;30),
                   SDHC_XFERTYP_DPSEL(%s),SDHC_XFERTYP_DTDSEL(%s),SDHC_XFERTYP_MSBSEL(%s),SDHC_XFERTYP_BCEN(%s)"
@@ -323,14 +325,14 @@
    />
 
    <!-- ____ CMDRSP ____ -->
-   <intOption key="sdhc_cmdrsp_cmdrsp0" condition="sdhc_cmdrsp_cmdrsp0_present"
+   <intOption key="sdhc_cmdrsp_cmdrsp[0]" condition="sdhc_cmdrsp_cmdrsp_present"
       hidden="true"
       derived="true"
       typeName="uint32_t"
       toolTip="Response for usual commands:\n
                Response type             Meaning of response        Field    Response registers\n
                R1,R1b (normal response)  Card status                R[39:8]  CMDRSP0\n
-               R1b (Auto CMD12 response) Card status for auto CMD12 R[39:8]  CMDRSP3\n
+               R1b (Auto CMD12 response) Card status for auto CMD12 R[39:8]  CMDRSP0\n
                R2 (CID, CSD register)    CID/CSD register [127:8]   R[127:8] CMDRSP3[23:0],CMDRSP2,CMDRSP1,CMDRSP0\n
                R3 (OCR register)         OCR register for memory    R[39:8]  CMDRSP0\n
                R4 (OCR register)         OCR register for I/O etc.  R[39:8]  CMDRSP0\n
@@ -1265,7 +1267,7 @@ The host driver can clear IRQSTATEN[DTOESEN] to prevent inadvertent time-out eve
 
    <binaryOption key="sdhc_vendor_exblknu" condition="sdhc_vendor_exblknu_present"
       enabledBy="enablePeripheralSupport"
-      typeName="SdhcExactBlockNumberForSdioCmd53"
+      typeName="SdhcExactBlockNumberForCmd53"
       baseType="uint32_t"
       toolTip="This bit must be set before S/W issues CMD53 multi-block read with exact block number.\n
                This bit must not be set if the CMD53 multi-block read is not exact block number."
@@ -1349,6 +1351,7 @@ The host driver can clear IRQSTATEN[DTOESEN] to prevent inadvertent time-out eve
    <!-- ____ HOSTVER ____ -->
    <choiceOption key="sdhc_hostver_vvn" condition="sdhc_hostver_vvn_present"
       hidden="true"
+      derived="true"
       typeName="SdhcSpecificationVersion"
       baseType="uint32_t"
       toolTip="These status bits are reserved for the vendor version number.\n
@@ -1362,6 +1365,7 @@ The host driver can clear IRQSTATEN[DTOESEN] to prevent inadvertent time-out eve
 
    <choiceOption key="sdhc_hostver_svn" condition="sdhc_hostver_svn_present"
       hidden="true"
+      derived="true"
       typeName="SdhcHostverSvn"
       baseType="uint32_t"
       toolTip="These status bits indicate the host controller specification version."
@@ -1371,13 +1375,13 @@ The host driver can clear IRQSTATEN[DTOESEN] to prevent inadvertent time-out eve
 
    <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
    ><![CDATA[
-      \t// Pointer to SDHC hardware instance
+      \t// Pointer to $(_BASENAME) hardware instance
       \tvolatile $(_Type) *$(_basename);
       \t
       \t/**
       \t * Constructor
       \t *
-      \t * @param sdhc SDHC hardware instance
+      \t * @param $(_basename) $(_BASENAME) hardware instance
       \t */
       \t$(_BasicInfo)(volatile $(_Type) * $(_basename)) : $(_basename)($(_basename)) {
       \t}
@@ -1536,12 +1540,12 @@ The host driver can clear IRQSTATEN[DTOESEN] to prevent inadvertent time-out eve
       ]]></variableTemplate>
    </for>
 
-   <for keys="field                     : enable : disable : clear : genCode                 : name"
+   <for keys="field                     : enable : disable : clear : genCode            : name"
         values="
-         sdhc_sysctl_reset              : true   : false   : false : $(_BasicInfoGuard)       : Reset;
-         sdhc_irqstat                   : false  : false   : true  : $(_BasicInfoGuard)       : InterruptStatus;
-         sdhc_irqstaten                 : true   : true    : false : $(_BasicInfoGuard)       : InterruptStatusFlags;
-         sdhc_irqsigen                  : true   : true    : false : $(_BasicInfoGuard)       : InterruptSource" >
+         sdhc_sysctl_reset              : true   : false   : false : $(_BasicInfoGuard) : Reset;
+         sdhc_irqstat                   : false  : false   : true  : $(_BasicInfoGuard) : InterruptStatus;
+         sdhc_irqstaten                 : true   : true    : false : $(_BasicInfoGuard) : InterruptStatusFlags;
+         sdhc_irqsigen                  : true   : true    : false : $(_BasicInfoGuard) : InterruptSource" >
       <variableTemplate where="basicInfo" variables="%(field)" condition="%(enable)" codeGenCondition="%(genCode)"
       ><![CDATA[
          \t/**
@@ -1583,45 +1587,62 @@ The host driver can clear IRQSTATEN[DTOESEN] to prevent inadvertent time-out eve
       ]]></variableTemplate>
    </for>
 
-   <for keys="   field                 : set   : get   : clear : genCode            : context              : name"
-        values=" sdhc_cmdrsp_cmdrsp0   : false : true  : false : $(_BasicInfoGuard) : CMDRSP[index]        : CommandResponse" >
-      <variableTemplate where="basicInfo" variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
+   <intOption key="sdhc_cmdrsp_index"
+      hidden="true"
+      derived="true"
+      baseType="uint8_t"
+      description="Index into response array"
+      toolTip="Selects which word of the response to access"
+      min="0" max="3"
+   />
+
+   <for keys="   field                                   : set   : get   : clear : genCode            : context       : name"
+        values="
+                 sdhc_cmdrsp_index,sdhc_cmdrsp_cmdrsp[] : false : true  : false : $(_BasicInfoGuard) : %s[%%paramName0] : CommandResponse" >
+      <variableTemplate where="basicInfo" variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)" context="%(context)"
+         nonDefaultParams="2" params="index"
       ><![CDATA[
          \t/**
-         \t * Set %description
+         \t * Set %description1
          \t * (%(field))
          \t *
          %paramDescription
          \t */
-         \tvoid set%(name)(int index, %params) const {
-         \t   $(_basename)->%(context) = ($(_basename)->%(context) & ~%mask)|%paramExpression;
+         \tvoid set%(name)(%params) const {
+         \t   %fieldAssignment1;
          \t}
          \t\n
       ]]></variableTemplate>
-      <variableTemplate where="basicInfo" variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      <variableTemplate where="basicInfo" variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)" context="%(context)"
+          nonDefaultParams="2" params="index"
       ><![CDATA[
          \t/**
-         \t * Get %description
+         \t * Get %description1
          \t * (%(field))
          \t *
-         \t * @return %tooltip
+         %paramDescription0
+         \t *
+         \t * @return %tooltip1
          \t */
-         \t%paramType get%(name)(int index) const {
-         \t   return %paramType($(_basename)->%(context)&%mask);
+         \t%paramType1 get%(name)(%param0) const {
+         \t   return %fieldExtract1;
          \t}
          \t\n
       ]]></variableTemplate>
-      <variableTemplate where="basicInfo" variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+      <variableTemplate where="basicInfo" variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)" context="%(context)"
+            nonDefaultParams="2" params="index"
          tooltipPadding="x*x" >
       <![CDATA[
          \t/**
-         \t * Clear %description
+         \t * Clear %description1
          \t * (%(field))
          \t *
          \t * %tooltip
+         \t *
+         %paramDescription0
          \t */
-         \tvoid clear%(name)(int index) const {
-         \t   $(_basename)->%(context) = $(_basename)->%(context)|%mask;
+         \tvoid clear%(name)(%param0) const {
+         \t   %register1 = %register1|%mask1;
          \t}
          \t\n
       ]]></variableTemplate>
@@ -1652,7 +1673,7 @@ The host driver can clear IRQSTATEN[DTOESEN] to prevent inadvertent time-out eve
       \t}
       \t\n
    ]]></variableTemplate>
-   
+
    <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
@@ -1779,7 +1800,7 @@ XXXXXXXXXXXXXXXXXXXXXX
    <for keys=" type        : variables                                            : init    "
        values="%baseType   : sdhc_xfertyp_command,sdhc_xfertyp_cmdtyp,
                              sdhc_xfertyp_ac12en,sdhc_xfertyp_dmaen               :   0             ;
-               %baseType   : sdhc_cmdarg_cmdarg                                   :   %baseType(-1) ;
+               %baseType   : sdhc_cmdarg_cmdarg                                   :   %baseType(0)  ;
                %baseType   : sdhc_blkattr_blkcnt,sdhc_blkattr_blksize             :   0             ;
                %baseType   : sdhc_dsaddr_dsaddr                                   :   0             ;
                %baseType   : sdhc_adsaddr_adsaddr                                 :   0
@@ -1896,9 +1917,17 @@ XXXXXXXXXXXXXXXXXXXXXX
    <![CDATA[
       \t
       \t/*
-      \t * Constructor
+      \t * Default Constructor
       \t */
       \tSdhc0Info() : $(_BasicInfo)((volatile $(_Type) *)sdhc) {
+      \t   defaultConfigure();
+      \t}
+      \t
+      \t/*
+      \t * Constructor with initialisation value
+      \t */
+      \tSdhc0Info(const Init &init) : SdhcBasicInfo((volatile SDHC_Type *)sdhc) {
+      \t   configure(init);
       \t}
       \t\n
    ]]>
@@ -1991,7 +2020,7 @@ XXXXXXXXXXXXXXXXXXXXXX
 
    <!-- ____ Init class Member variables ________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -2027,7 +2056,7 @@ XXXXXXXXXXXXXXXXXXXXXX
 
    <!-- ____ Init class Constructors ____________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -2152,14 +2181,13 @@ XXXXXXXXXXXXXXXXXXXXXX
              " var                                                    : statement            "
       values=" sdhc_sysctl_rsta                                       : %register = %mask0 ;
                sdhc_sysctl_rsta                                       : while ((%register&amp;%mask)!=0) {} ;
-               sdhc_proctl_wecrm,sdhc_proctl_wecins,sdhc_proctl_wecint,
-               sdhc_proctl_iabg,sdhc_proctl_rwctl,sdhc_proctl_creq,
-               sdhc_proctl_sabgreq,sdhc_proctl_dmas,
-               sdhc_proctl_emode,sdhc_proctl_d3cd,
-               sdhc_proctl_dtw                                        : %configRegAssignment  ;
-               sdhc_sysctl_sdclken,sdhc_sysctl_dtocv,sdhc_sysctl_sdclkfs,
-               sdhc_sysctl_dvs,sdhc_sysctl_peren,
-               sdhc_sysctl_hcken,sdhc_sysctl_ipgen                    : %register = init.%registerName&amp;~%mask0 ;
+               sdhc_proctl_wecrm,sdhc_proctl_wecins,
+               sdhc_proctl_wecint,sdhc_proctl_iabg,sdhc_proctl_rwctl,
+               sdhc_proctl_creq,sdhc_proctl_sabgreq,sdhc_proctl_dmas,
+               sdhc_proctl_emode,sdhc_proctl_d3cd,sdhc_proctl_dtw     : %configRegAssignment  ;
+               sdhc_sysctl_sdclken,sdhc_sysctl_dtocv,
+               sdhc_sysctl_sdclkfs,sdhc_sysctl_dvs,
+               sdhc_sysctl_peren,sdhc_sysctl_hcken,sdhc_sysctl_ipgen  : %register = init.%registerName&amp;~%mask0 ;
                sdhc_prsstat_sdstb                                     : while ((%register&amp;%mask)==0) {} ;
                sdhc_sysctl_sdclken                                    : %register = init.%registerName|%mask ;
                sdhc_irqstaten                                         : %configRegAssignment  ;
@@ -2168,7 +2196,7 @@ XXXXXXXXXXXXXXXXXXXXXX
                sdhc_vendor_exblknu                                    : %register = init.%registerName|1  ;
                sdhc_mmcboot_bootblkcnt,sdhc_mmcboot_autosabgen,
                sdhc_mmcboot_booten,sdhc_mmcboot_bootmode,
-               sdhc_mmcboot_bootack,sdhc_mmcboot_dtocvack             : %configRegAssignment " 
+               sdhc_mmcboot_bootack,sdhc_mmcboot_dtocvack             : %configRegAssignment "
                >
       <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="%(var)"
@@ -2235,8 +2263,8 @@ XXXXXXXXXXXXXXXXXXXXXX
    </validate>
 
    <projectActionList id="sdhc_files">
-      <copy source="Project_Headers/sdhc.h"                   target="Project_Headers/sdhc.h"                     overwrite="true"  derived="true" />
-      <copy source="Snippets/sdhc-example.cpp"                target="Snippets/sdhc-example.cpp"                  overwrite="true"  derived="true" />
+      <copy source="Project_Headers/sdhc.h"      target="Project_Headers/sdhc.h"     overwrite="true"  derived="true" />
+      <copy source="Snippets/sdhc-example.cpp"   target="Snippets/sdhc-example.cpp"  overwrite="true"  derived="true" />
    </projectActionList>
 
    <!-- ____ Startup __________________ -->

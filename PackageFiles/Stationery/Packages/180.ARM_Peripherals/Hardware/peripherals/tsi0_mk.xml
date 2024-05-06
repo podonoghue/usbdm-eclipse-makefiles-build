@@ -73,7 +73,7 @@
       enabledBy="irqHandlingMethod"
       valueFormat="TSI_GENCS_TSIIE(%s),TSI_GENCS_ESOR(%s)"
       typeName="TsiEventSource"
-      baseType="uint32_t" 
+      baseType="uint32_t"
       description="Touch Sensing Input Event Enable"
       toolTip="Enables events from Out-of-Range and End-of-Scan conditions" >
       <choice value="0,0" name="Disabled"       enum="Disabled"   />
@@ -350,7 +350,7 @@
       \t */
       \tstatic uint32_t getInputClockFrequency() {
       \t   switch(tsi->SCANC&TSI_SCANC_AMCLKS_MASK) {
-      \t      case TSI_SCANC_AMCLKS(0):  return PmcInfo::getLpoClock();
+      \t      case TSI_SCANC_AMCLKS(0):  return SimInfo::getLpoClock();
       \t      case TSI_SCANC_AMCLKS(1):  return McgInfo::getMcgIrClock();
       \t      case TSI_SCANC_AMCLKS(2):  return Osc0Info::getOscerClock();
       \t   }
@@ -364,7 +364,7 @@
       \t */
       \tstatic uint32_t getLowPowerInputClockFrequency() {
       \t   switch(tsi->GENCS&TSI_GENCS_LPCLKS_MASK) {
-      \t      case TSI_GENCS_LPCLKS(0):  return PmcInfo::getLpoClock();
+      \t      case TSI_GENCS_LPCLKS(0):  return SimInfo::getLpoClock();
       \t      case TSI_GENCS_LPCLKS(1):  return SimInfo::getErc32kClock();
       \t   }
       \t   return 0;
@@ -498,7 +498,7 @@
 
    <!--   __________ TSI Init class _______________________________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -576,7 +576,7 @@
 
    <!-- ____ Init class Member variables ________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
    ><![CDATA[
       \t   /// %description
@@ -592,7 +592,7 @@
                              tsi_scanc_amclks,tsi_scanc_ampsc                     :   0      ;
                %baseType   : tsi_pen_lpsp,tsi_pen_pen                             :   0      ;
                %baseType   : tsi_threshold_lthh,tsi_threshold_hthh                :   0      " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
       ><![CDATA[
@@ -601,7 +601,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="/PCR/nvic_irqLevel,irqLevel"
    ><![CDATA[
       \t   /// %description
@@ -611,7 +611,7 @@
 
    <!-- ____ Init class Constructors ____________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
@@ -630,7 +630,7 @@
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
    ><![CDATA[
@@ -650,7 +650,7 @@
    ]]></variableTemplate>
 
 
-   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)"
       variables="tsi_pen_num"
       linePadding="xxx" >
    <![CDATA[
@@ -689,7 +689,7 @@
             tsi_scanc_amclks;
             tsi_scanc_ampsc
             " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -719,7 +719,7 @@
             tsi_threshold_lthh;
             tsi_threshold_hthh
             " >
-      <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -798,7 +798,7 @@
          \t   %(statement);\n
       ]]></variableTemplate>
    </for>
-   <template codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}
       \t\n
@@ -853,7 +853,7 @@
       \t\n
    ]]></template>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}; // class $(_BasicInfo)::Init
       \t\n

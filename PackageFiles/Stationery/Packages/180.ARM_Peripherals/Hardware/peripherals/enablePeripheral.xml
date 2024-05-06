@@ -15,7 +15,7 @@
    <!--
       Generates:
          enablePeripheralSupport               = enable support for this instance
-         /$(_STRUCTNAME)/generateSharedInfo    = OR of enablePeripheralSupport for instances using same _STRUCTNAME
+         $(_BasicInfoGuard)    = OR of enablePeripheralSupport for instances using same _STRUCTNAME
          /$(_BASENAME)/enablePeripheralSupport = OR of enablePeripheralSupport for all instances
    -->
 
@@ -30,7 +30,7 @@
    </binaryOption>
 
    <!-- If not already generated -->
-   <if condition="!/$(_STRUCTNAME)/generateSharedInfo" >
+   <if condition="!$(_BasicInfoGuard)" >
 
       <!-- Construct equation to check if any instance sharing the same struct is enabled -->
       <equation key="_enable" value='="false"' />
@@ -44,7 +44,7 @@
       <!-- stringOption key="yyy" value="=_enable"/ -->
 
       <!-- Enable for shared code needed by all instances of peripheral -->
-      <binaryOption key="/$(_STRUCTNAME)/generateSharedInfo"
+      <binaryOption key="$(_BasicInfoGuard)"
          ref="=_enable"
          description="=_enable"
          hidden="true"
@@ -82,7 +82,7 @@
 
    <aliasOption key="enablePeripheralSupport" locked="false" />
    <aliasOption name="/$(_BASENAME)/enablePeripheralSupport" key="/$(_BASENAME)/enablePeripheralSupport" optional="true"  condition="=_debugcode" />
-   <aliasOption name="/$(_STRUCTNAME)/generateSharedInfo"    key="/$(_STRUCTNAME)/generateSharedInfo"    optional="true"  condition="=_debugcode" />
+   <aliasOption name="$(_BasicInfoGuard)"    key="$(_BasicInfoGuard)"    optional="true"  condition="=_debugcode" />
 
    <!-- _______ Getters and Setters __________  -->
 
@@ -172,7 +172,7 @@
       <!--
          Generates:
             irqHandlingMethod                     = Interrupts enabled for this instance
-            /$(_STRUCTNAME)/generateSharedIrqInfo = OR of irqHandlingMethod using same _STRUCTNAME
+            $(_BasicInfoIrqGuard) = OR of irqHandlingMethod using same _STRUCTNAME
             /$(_BASENAME)/irqHandlingMethod       = OR of all irqHandlingMethod
       -->
 
@@ -201,7 +201,7 @@
          pattern="=irq_pattern"
          classHandler="=irq_ClassHandler" />
 
-      <if condition="!/$(_STRUCTNAME)/generateSharedIrqInfo" >
+      <if condition="!$(_BasicInfoIrqGuard)" >
 
          <!-- Construct equation to check if interrupts are enabled on any instance sharing the same struct -->
          <equation key="_enable" value='="false"' />
@@ -217,7 +217,7 @@
          <!-- printVar key="_enable"/ -->
 
          <!-- Enable for shared code needed by all instances of peripheral using same _STRUCTNAME -->
-         <binaryOption key="/$(_STRUCTNAME)/generateSharedIrqInfo" name="/$(_STRUCTNAME)/generateSharedIrqInfo"
+         <binaryOption key="$(_BasicInfoIrqGuard)" name="$(_BasicInfoIrqGuard)"
             ref="=_enable"
             description="=_enable"
             hidden="true"
@@ -257,7 +257,7 @@
       <!-- Display here -->
       <aliasOption key="irqHandlingMethod" locked="false" optional="true"  />
 
-      <aliasOption key="/$(_STRUCTNAME)/generateSharedIrqInfo" optional="true"  condition="=_debugcode" />
+      <aliasOption key="$(_BasicInfoIrqGuard)" optional="true"  condition="=_debugcode" />
       <aliasOption key="/$(_BASENAME)/irqHandlingMethod"       optional="true"  condition="=_debugcode"/>
    </if>
 
@@ -331,7 +331,7 @@
       <aliasOption key="irqLevel"       locked="false" optional="true" />
       <!--  aliasOption key="irqHandlerName" locked="false" / -->
 
-      <variableTemplate codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate codeGenCondition="$(_BasicInfoGuard)"
          variables="irqHandlingMethod"
       ><![CDATA[
           \t//! Class based callback handler has been installed in vector table for this instance
@@ -339,7 +339,7 @@
           \t\n
       ]]></variableTemplate>
 
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" condition="!suppressIrqArray"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" condition="!suppressIrqArray"
          variables="irqHandlingMethod"
       ><![CDATA[
           \t//! Common class based callback code has been generated for this class of peripheral
@@ -347,7 +347,7 @@
           \t\n
       ]]></variableTemplate>
 
-      <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"  condition="!suppressIrqArray"
+      <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"  condition="!suppressIrqArray"
          immediateVariables="irq_parameters,irq_dummy_parameters" >
       <![CDATA[
          \t/**
@@ -668,6 +668,7 @@
       \t * Disables $(_Class)
       \t */
       \tstatic void disable() {
+      \t
       \t   $(disable_peripheral: )\n
    ]]></template>
    <if condition="_hardwareIrqCount&amp;&amp;!suppressIrqArray" >

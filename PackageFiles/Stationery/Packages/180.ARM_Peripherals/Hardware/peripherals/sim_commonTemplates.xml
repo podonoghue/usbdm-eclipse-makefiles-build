@@ -12,6 +12,20 @@
 
    <!-- ___ Clock Variables _______ -->
 
+   <template codeGenCondition='Exists("/PMC/system_low_power_clock")' ><![CDATA[
+      \t//! Frequency of Low Power Oscillator (LPO) Clock [~1kHz]
+      \tstatic constexpr uint32_t system_low_power_clock = $(/PMC/system_low_power_clock)UL;
+
+      \t/**
+      \t * Get LPO clock
+      \t *
+      \t * @return frequency in Hz as uint32_t
+      \t */
+      \tstatic constexpr uint32_t getLpoClock() {
+      \t   return system_low_power_clock;
+      \t}\n\n
+   ]]></template>
+
    <template where="usbdm" codeGenCondition="/MCG/enablePeripheralSupport" ><![CDATA[
       \t/*
       \t * Global clocks
@@ -143,7 +157,7 @@
          toolTip="Clock source for External 32k Reference Clock [ERCLK32K]">
          <choice value="0" name="OSC0 in low range (OSC32KCLK)"  ref="/OSC0/osc32k_clock"          enum="Osc32kClk" code="Osc0Info::getOsc32kClock()"  />
          <choice value="2" name="RTC 32kHz clock"                ref="/RTC/rtcclk_gated_clock"     enum="Rtc32kClk" code="RtcInfo::getExternalClock()" />
-         <choice value="3" name="LPO 1kHz clock"                 ref="/PMC/system_low_power_clock" enum="LpoClk"    code="PmcInfo::getLpoClock()"     isDefault="true"/>
+         <choice value="3" name="LPO 1kHz clock"                 ref="/PMC/system_low_power_clock" enum="LpoClk"    code="SimInfo::getLpoClock()"     isDefault="true"/>
       </choiceOption>
 
       <if condition="sim_sopt2_rtcclkoutsel_present" >
@@ -200,7 +214,7 @@
          toolTip="Clock source for External 32k Reference Clock [ERCLK32K]">
          <choice value="0" name="OSC32KCLK"           ref="/OSC0/osc32k_clock"          enum="Osc32kClk"  code="Osc0Info::getOscerClock()" />
          <choice value="2" name="RTC_CLKIN pin"       ref="/SIM/rtc_clkin_clock"        enum="RtcClkin"   code="rtc_clkin_clock"            />
-         <choice value="3" name="LPO 1kHz clock"      ref="/PMC/system_low_power_clock" enum="LpoClk"     code="PmcInfo::getLpoClock()"  isDefault="true"/>
+         <choice value="3" name="LPO 1kHz clock"      ref="/PMC/system_low_power_clock" enum="LpoClk"     code="SimInfo::getLpoClock()"  isDefault="true"/>
       </choiceOption>
 
       <if condition="sim_sopt2_rtcclkoutsel_present" >

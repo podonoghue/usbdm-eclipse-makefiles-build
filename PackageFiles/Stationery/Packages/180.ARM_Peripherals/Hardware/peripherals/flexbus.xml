@@ -12,6 +12,8 @@
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
    <aliasOption key="/SIM/system_bus_clock[]" />
 
    <template where="usbdm" codeGenCondition="enablePeripheralSupport" ><![CDATA[

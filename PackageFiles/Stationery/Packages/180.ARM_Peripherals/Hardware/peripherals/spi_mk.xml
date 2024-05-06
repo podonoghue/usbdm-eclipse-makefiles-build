@@ -4,6 +4,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Serial Peripheral Interface" >
 
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
    <equation key="suppressIrqHandler"        value="" />
    <equation key="irq_parameters"            value="ErrorCode errorcode"  />
    <equation key="irq_dummy_parameters"      value="ErrorCode"            />
@@ -33,7 +35,7 @@
 
    <title description="Clocking" />
    <binaryOption key="/$(_BASENAME)/baudSupport"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       modify="true"
       description="Enable specifying speed in Hertz"
       toolTip="If not selected, the communication speed must be specified using the\n
@@ -44,7 +46,7 @@
 
    <if condition='=ClockSource=="SystemBusClock"'>
       <choiceOption key="spiClockConfig" condition="/MCG/_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          target="spiInputClock"
          description="Clock configuration"
          toolTip="Selects the clock configuration used for calculations involving the bus clock" >
@@ -55,7 +57,7 @@
       </choiceOption>
 
       <choiceOption key="spiClockConfig" condition="/ICS/_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          target="spiInputClock"
          description="Clock configuration"
          toolTip="Selects the clock configuration used for calculations involving the bus clock" >
@@ -67,7 +69,7 @@
    </if>
    <if condition='=ClockSource=="SystemCoreClock"'>
       <choiceOption key="spiClockConfig" condition="/MCG/_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          target="spiInputClock"
          description="Clock configuration"
          toolTip="Selects the clock configuration used for calculations involving the bus clock" >
@@ -78,7 +80,7 @@
       </choiceOption>
 
       <choiceOption key="spiClockConfig" condition="/ICS/_present"
-         enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+         enabledBy="$(_BasicInfoGuard)"
          target="spiInputClock"
          description="Clock configuration"
          toolTip="Selects the clock configuration used for calculations involving the bus clock" >
@@ -90,7 +92,7 @@
    </if>
 
    <intOption key="spiInputClock"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       locked="true"
       derived="true"
       description="SPI input clock"
@@ -164,7 +166,7 @@
    <title description="Common Options" toolTip="Options applied to whole peripheral" />
 
    <binaryOption key="/$(_STRUCTNAME)/dmaSupport"
-      enabledBy="/$(_STRUCTNAME)/generateSharedIrqInfo"
+      enabledBy="$(_BasicInfoIrqGuard)"
       modify="true"
       description="Enable use of DMA"
       toolTip="This creates some structes to support DMA transfers using the SPI (EXPERIMENTAL)" >

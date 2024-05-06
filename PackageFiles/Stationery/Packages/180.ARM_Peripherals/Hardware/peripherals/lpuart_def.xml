@@ -35,6 +35,8 @@
    <equation key="configureInStartupDefault" value="false"  />
    <xi:include href="enablePeripheral.xml"  />
 
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
    <!-- ____ Class Declaration ________ -->
    <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
@@ -61,7 +63,7 @@
 
    <choiceOption key="lpuart_baudrate"
       valueFormat=""
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       derivedFrom="/Console/console_baudrate" >
    </choiceOption>
 
@@ -212,7 +214,7 @@
 
    <!-- ________ LPUART Init class ____________________________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -268,7 +270,7 @@ XXXXXXXXXXXXXXXXXXXXXX
 
    <!-- ____ Init class Member variables ________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       condition="false"
       variables="irqHandlingMethod"
    ><![CDATA[
@@ -300,7 +302,7 @@ XXXXXXXXXXXXXXXXXXXXXX
                              lpuart_ctrl_ilt,lpuart_ctrl_pe,lpuart_ctrl_pt        :   0      ;
                %baseType   : lpuart_data_fretsc,lpuart_data_rt                    :   0      ;
                %baseType   : lpuart_match_ma2,lpuart_match_ma1                    :   0      " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
       ><![CDATA[
@@ -309,7 +311,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       variables="/PCR/nvic_irqLevel,irqLevel"
       condition="false"
    ><![CDATA[
@@ -320,7 +322,7 @@ XXXXXXXXXXXXXXXXXXXXXX
 
    <!-- ____ Init class Constructors ____________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       condition="false"
       variables="irqHandlingMethod"
       linePadding="xxx"
@@ -340,7 +342,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedIrqInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
       condition="false"
       variables="/PCR/nvic_irqLevel"
       linePadding="xxx"
@@ -360,7 +362,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="uart_c5_tdmas"
       linePadding="xxx" >
    <![CDATA[
@@ -381,7 +383,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t\n
    ]]>
    </variableTemplate>
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="uart_c5_rdmas"
       linePadding="xxx" >
    <![CDATA[
@@ -426,7 +428,7 @@ XXXXXXXXXXXXXXXXXXXXXX
             lpuart_ctrl_ilt;lpuart_ctrl_pe;lpuart_ctrl_pt;
             lpuart_data_fretsc;lpuart_data_rt;
             lpuart_match_ma2;lpuart_match_ma1" >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -565,7 +567,7 @@ XXXXXXXXXXXXXXXXXXXXXX
 
    <!-- ____ End of Info classes __________________ -->
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}; // class $(_BasicInfo)::Init
       \t\n

@@ -1,11 +1,8 @@
 /**
  * @file     ftm.h (180.ARM_Peripherals/Project_Headers/ftm-MKE.h)
  * @brief    Flexitimer Timer Module
- *
- * @version  V4.12.1.80
- * @date     13 April 2016
- *      Author: podonoghue
  */
+
 #ifndef HEADER_FTM_H
 #define HEADER_FTM_H
 
@@ -28,6 +25,7 @@
  */
 namespace USBDM {
 
+$(/FTM/peripheral_h_definition:// $/FTM/peripheral_h_definition not found)
 /**
  * @addtogroup FTM_Group FTM, PWM, Input capture and Output compare
  * @brief Pins used for PWM, Input capture and Output compare

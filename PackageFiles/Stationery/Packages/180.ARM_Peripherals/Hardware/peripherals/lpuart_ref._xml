@@ -35,9 +35,10 @@
    <constant key="configureInStartupDefault" type="Boolean" value="false"  />
    <xi:include href="enablePeripheral.xml"  />
 
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
    <!-- ____ Class Declaration ________ -->
-   <constant key="_class_declaration" type="String"
-      value='"$(_Class)Info : public $(_Structname)BasicInfo"' />
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <title description="Clock Configuration"/>
    <aliasOption key="/MCG/system_mcgfllclk_clock[]"       optional="true" />

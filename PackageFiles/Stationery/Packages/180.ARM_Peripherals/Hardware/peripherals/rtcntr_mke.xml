@@ -30,7 +30,7 @@
    </binaryOption >
 
    <binaryOption key="rtc_sc_rtco" condition="rtc_sc_rtco_present &amp;&amp; outputPinMap"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       typeName="RtcOutput"
       toolTip="Enables the toggling of RTCO pin on overflow"
       description="Real-Time Counter Output" >
@@ -39,7 +39,7 @@
    </binaryOption >
 
    <binaryOption key="rtc_sc_rtco" condition="rtc_sc_rtco_present &amp;&amp; !outputPinMap"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       typeName="RtcOutput"
       toolTip="Enables the toggling of RTCO pin on overflow"
       description="Real-Time Counter Output" >
@@ -49,14 +49,14 @@
 
    <choiceOption key="rtc_sc_rtclks" condition="rtc_sc_rtclks_present"
       target="rtc_input_clock"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       typeName="RtcClockSource"
       toolTip="Selects the clock source for the RTC prescaler.\n
                This also determines the prescaler range. \n
                Changing the clock source clears the prescaler and RTCCNT counters."
       description="Real-Time Clock Source Select" >
       <choice name="External clock"                       value="0" enum="OscerClk" ref="/OSC0/oscer_clock"            code="Osc0Info::getOscClock()"  />
-      <choice name="Low Power Oscillator (LPOCLK)"        value="1" enum="Lpoclk"   ref="/PMC/system_low_power_clock"  code="PmcInfo::getLpoClock()"   isDefault="true" />
+      <choice name="Low Power Oscillator (LPOCLK)"        value="1" enum="Lpoclk"   ref="/PMC/system_low_power_clock"  code="SimInfo::getLpoClock()"   isDefault="true" />
       <choice name="Internal reference clock (ICSIRCLK)"  value="2" enum="Icsirclk" ref="/ICS/icsirclk" code="IcsInfo::getUngatedInternalReferenceClock()"  />
       <choice name="Bus clock"                            value="3" enum="BusClock" ref="/SIM/system_bus_clock[0]"     code="SystemBusClock"  />
    </choiceOption >
@@ -71,7 +71,7 @@
 
    <choiceOption key="rtc_sc_rtcps" condition="rtc_sc_rtcps_present"
       target="rtc_clock"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       typeName="RtcPrescaler"
       toolTip="Selects binary-based or decimal-based divide-by values for the clock source.\n
                Changing the prescaler value clears the prescaler and RTCCNT counters\n
@@ -98,7 +98,7 @@
    <!-- ************* MOD ****************** -->
 
    <intOption key="rtc_mod_mod" condition="rtc_mod_mod_present"
-      enabledBy="/$(_STRUCTNAME)/generateSharedInfo"
+      enabledBy="$(_BasicInfoGuard)"
       description="Modulo"
       units="ticks"
       toolTip="16-bit modulo value.\n
@@ -158,7 +158,7 @@
 
 <!--   ========== RTC Init class =============================== -->
 
-   <template key="init_description" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template key="init_description" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Class)
@@ -199,7 +199,7 @@
    ]]>
    </template>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       $(init_description)
       \tclass Init {
@@ -226,14 +226,14 @@
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="rtc_sc_rtclks,rtc_sc_rtcps,rtc_sc_rtie,rtc_sc_rtco"
    ><![CDATA[
       \t   /// Status and Control Register
       \t   uint16_t %registerName = 0;\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="rtc_mod_mod"
    ><![CDATA[
       \t   /// Modulo Register
@@ -250,7 +250,7 @@
 
 <!--   Configure methods -->
 
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
@@ -263,7 +263,7 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t/**
       \t * Configure $(_BASENAME) from values specified in init
       \t *
@@ -276,7 +276,7 @@
       \t   Info::enableClock();
       \t\n
    ]]></template>
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)"
              condition="irqHandlingMethod" ><![CDATA[
       \t   if constexpr (Info::irqHandlerInstalled) {
       \t      Info::setCallback(init.callbackFunction);
@@ -285,7 +285,7 @@
       \t\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template key="/$(_BASENAME)/InitMethod" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
       \t   // ..........  Regs to init .......... ;
       \t   rtc->MOD   = init.mod;
       \t   rtc->SC    = init.sc;
@@ -338,7 +338,7 @@
             rtc_sc_rtie;
             rtc_sc_rtco
             " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -364,7 +364,7 @@
       values="
             rtc_mod_mod
             " >
-      <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
@@ -389,7 +389,7 @@
 
 <!--   Default Initialisation value -->
 
-   <variableTemplate codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo"
+   <variableTemplate codeGenCondition="$(_BasicInfoGuard)"
       separator=","
       terminator=","
       variables="
@@ -408,7 +408,7 @@
       \t};\n\n
    ]]></variableTemplate>
 
-   <template where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
       <![CDATA[
       \t}; // $(_Baseclass)BasicInfo::Init\n\n
    ]]>
@@ -416,7 +416,7 @@
 
     <!-- ************* Common ****************** -->
 
-   <template key="/$(_BASENAME)/declarations" codeGenCondition="/$(_STRUCTNAME)/generateSharedInfo" ><![CDATA[
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
    \t/**
    \t * Class representing $(_NAME)
    \t */
