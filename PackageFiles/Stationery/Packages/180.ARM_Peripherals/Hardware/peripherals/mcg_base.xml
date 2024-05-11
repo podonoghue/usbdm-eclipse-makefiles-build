@@ -1160,14 +1160,14 @@
                <choice value="6" name="/64 (low)"   enum="LowDivBy64"    enabledBy="(mcg_c2_range0[%(n)] == 0)||(mcg_c7_oscsel[%(n)] == 1)" ref="mcg_erc_clock[%(n)]/64"   />
                <choice value="7" name="/128 (low)"  enum="LowDivBy128"   enabledBy="(mcg_c2_range0[%(n)] == 0)||(mcg_c7_oscsel[%(n)] == 1)" ref="mcg_erc_clock[%(n)]/128"  />
 
-               <choice value="0" name="/32 (high)"   enum="HighDivBy32"   enabledBy="!((mcg_c2_range0[%(n)] == 0)||(mcg_c7_oscsel[%(n)] == 1))" ref="mcg_erc_clock[%(n)]/32"   />
-               <choice value="1" name="/64 (high)"   enum="HighDivBy64"   enabledBy="!((mcg_c2_range0[%(n)] == 0)||(mcg_c7_oscsel[%(n)] == 1))" ref="mcg_erc_clock[%(n)]/64"   />
-               <choice value="2" name="/128 (high)"  enum="HighDivBy128"  enabledBy="!((mcg_c2_range0[%(n)] == 0)||(mcg_c7_oscsel[%(n)] == 1))" ref="mcg_erc_clock[%(n)]/128"  />
-               <choice value="3" name="/256 (high)"  enum="HighDivBy256"  enabledBy="!((mcg_c2_range0[%(n)] == 0)||(mcg_c7_oscsel[%(n)] == 1))" ref="mcg_erc_clock[%(n)]/256"  />
-               <choice value="4" name="/512 (high)"  enum="HighDivBy512"  enabledBy="!((mcg_c2_range0[%(n)] == 0)||(mcg_c7_oscsel[%(n)] == 1))" ref="mcg_erc_clock[%(n)]/512"  />
-               <choice value="5" name="/1024 (high)" enum="HighDivBy1024" enabledBy="!((mcg_c2_range0[%(n)] == 0)||(mcg_c7_oscsel[%(n)] == 1))" ref="mcg_erc_clock[%(n)]/1024" />
-               <choice value="6" name="/1280 (high)" enum="HighDivBy1280" enabledBy="!((mcg_c2_range0[%(n)] == 0)||(mcg_c7_oscsel[%(n)] == 1))" ref="mcg_erc_clock[%(n)]/1280" />
-               <choice value="7" name="/1536 (high)" enum="HighDivBy1536" enabledBy="!((mcg_c2_range0[%(n)] == 0)||(mcg_c7_oscsel[%(n)] == 1))" ref="mcg_erc_clock[%(n)]/1536" />
+               <choice value="8" name="/32 (high)"   enum="HighDivBy32"   enabledBy="!((mcg_c2_range0[%(n)] == 0)||(mcg_c7_oscsel[%(n)] == 1))" ref="mcg_erc_clock[%(n)]/32"   />
+               <choice value="9" name="/64 (high)"   enum="HighDivBy64"   enabledBy="!((mcg_c2_range0[%(n)] == 0)||(mcg_c7_oscsel[%(n)] == 1))" ref="mcg_erc_clock[%(n)]/64"   />
+               <choice value="10" name="/128 (high)"  enum="HighDivBy128"  enabledBy="!((mcg_c2_range0[%(n)] == 0)||(mcg_c7_oscsel[%(n)] == 1))" ref="mcg_erc_clock[%(n)]/128"  />
+               <choice value="11" name="/256 (high)"  enum="HighDivBy256"  enabledBy="!((mcg_c2_range0[%(n)] == 0)||(mcg_c7_oscsel[%(n)] == 1))" ref="mcg_erc_clock[%(n)]/256"  />
+               <choice value="12" name="/512 (high)"  enum="HighDivBy512"  enabledBy="!((mcg_c2_range0[%(n)] == 0)||(mcg_c7_oscsel[%(n)] == 1))" ref="mcg_erc_clock[%(n)]/512"  />
+               <choice value="13" name="/1024 (high)" enum="HighDivBy1024" enabledBy="!((mcg_c2_range0[%(n)] == 0)||(mcg_c7_oscsel[%(n)] == 1))" ref="mcg_erc_clock[%(n)]/1024" />
+               <choice value="14" name="/1280 (high)" enum="HighDivBy1280" enabledBy="!((mcg_c2_range0[%(n)] == 0)||(mcg_c7_oscsel[%(n)] == 1))" ref="mcg_erc_clock[%(n)]/1280" />
+               <choice value="15" name="/1536 (high)" enum="HighDivBy1536" enabledBy="!((mcg_c2_range0[%(n)] == 0)||(mcg_c7_oscsel[%(n)] == 1))" ref="mcg_erc_clock[%(n)]/1536" />
             </choiceOption>
 
             <!-- RTC not available as clock source -->

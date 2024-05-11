@@ -48,6 +48,8 @@
       <choice value="0" name="Enabled"  enum="Enabled"   />
    </binaryOption>
 
+   <aliasOption key="/OSC0/osc_clock" />
+
    <choiceOption key="usbphy_pll_sic_pll_div_sel"
       ref="(/OSC0/osc_clock==12_MHz)?0:((/OSC0/osc_clock==16_MHz)?1:2)"
       enabledBy="(/OSC0/osc_cr_erclken)&amp;&amp;((/OSC0/osc_clock==12_MHz)||(/OSC0/osc_clock==16_MHz)||(/OSC0/osc_clock==24_MHz))
@@ -79,7 +81,6 @@
 
          <aliasOption key="/OSC0/osc_cr_erclken" locked="false" />
          <aliasOption key="/MCG/mcg_c1_irclken[%(n)]" />
-         <aliasOption key="/OSC0/osc_clock" />
 
          <binaryOption key="usbpllPreconditionsMet[%(n)]"
             ref="(/SMC/smc_pmctrl_runm[%(n)]!=1)&amp;&amp;(/OSC0/osc_cr_erclken)&amp;&amp;(/MCG/mcg_c1_irclken[%(n)])&amp;&amp;((/OSC0/osc_clock==12_MHz)||(/OSC0/osc_clock==16_MHz)||(/OSC0/osc_clock==24_MHz))"

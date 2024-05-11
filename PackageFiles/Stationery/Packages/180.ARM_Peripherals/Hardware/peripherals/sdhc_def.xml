@@ -29,31 +29,31 @@
       enumClass="true"
       baseType="uint32_t"
       value="0" >
-      <choice name="Supports 1.6V To 1.7V"        enum="Supports_1_6V_1_7V"    value="=ToString(1&lt;&lt;4)" />
-      <choice name="Supports 1.7V To 1.8V"        enum="Supports_1_7V_1_8V"    value="=ToString(1&lt;&lt;5)" />
-      <choice name="Supports 1.8V To 1.9V"        enum="Supports_1_8V_1_9V"    value="=ToString(1&lt;&lt;6)" />
-      <choice name="Supports 1.9V To 2.0V"        enum="Supports_1_9V_2_0V"    value="=ToString(1&lt;&lt;7)" />
-      <choice name="Supports 2.0V To 2.1V"        enum="Supports_2_0V_2_1V"    value="=ToString(1&lt;&lt;8)" />
-      <choice name="Supports 2.1V To 2.2V"        enum="Supports_2_1V_2_2V"    value="=ToString(1&lt;&lt;9)" />
-      <choice name="Supports 2.2V To 2.3V"        enum="Supports_2_2V_2_3V"    value="=ToString(1&lt;&lt;10)" />
-      <choice name="Supports 2.3V To 2.4V"        enum="Supports_2_3V_2_4V"    value="=ToString(1&lt;&lt;11)" />
-      <choice name="Supports 2.4V To 2.5V"        enum="Supports_2_4V_2_5V"    value="=ToString(1&lt;&lt;12)" />
-      <choice name="Supports 2.5V To 2.6V"        enum="Supports_2_5V_2_6V"    value="=ToString(1&lt;&lt;13)" />
-      <choice name="Supports 2.6V To 2.7V"        enum="Supports_2_6V_2_7V"    value="=ToString(1&lt;&lt;14)" />
-      <choice name="Supports 2.7V To 2.8V"        enum="Supports_2_7V_2_8V"    value="=ToString(1&lt;&lt;15)" />
-      <choice name="Supports 2.8V To 2.9V"        enum="Supports_2_8V_2_9V"    value="=ToString(1&lt;&lt;16)" />
-      <choice name="Supports 2.9V To 3.0V"        enum="Supports_2_9V_3_0V"    value="=ToString(1&lt;&lt;17)" />
-      <choice name="Supports 3.0V To 3.1V"        enum="Supports_3_0V_3_1V"    value="=ToString(1&lt;&lt;18)" />
-      <choice name="Supports 3.1V To 3.2V"        enum="Supports_3_1V_3_2V"    value="=ToString(1&lt;&lt;19)" />
-      <choice name="Supports 3.2V To 3.3V"        enum="Supports_3_2V_3_3V"    value="=ToString(1&lt;&lt;20)" />
-      <choice name="Supports 3.3V To 3.4V"        enum="Supports_3_3V_3_4V"    value="=ToString(1&lt;&lt;21)" />
-      <choice name="Supports 3.4V To 3.5V"        enum="Supports_3_4V_3_5V"    value="=ToString(1&lt;&lt;22)" />
-      <choice name="Supports 3.5V To 3.6V"        enum="Supports_3_5V_3_6V"    value="=ToString(1&lt;&lt;23)" />
-      <choice name="Supports 1.8V"                enum="Supports_1_8V"         value="=ToString(1&lt;&lt;24)" />
-      <choice name="Supports 2TB"                 enum="Supports_2TB"          value="=ToString(1&lt;&lt;27)" />
-      <choice name="UHS-II Card Status"           enum="UHS_II_Status"         value="=ToString(1&lt;&lt;29)" />
-      <choice name="Card Capacity Status (ccs)"   enum="CardCapacityStatus"    value="=ToString(1&lt;&lt;30)" />
-      <choice name="Card Power-up status (ready)" enum="Ready"                 value="=ToString(1&lt;&lt;31)" />
+      <bitField description="Supports 1.6V To 1.7V"        name="Supports_1_6V_1_7V"    bit="4"  />
+      <bitField description="Supports 1.7V To 1.8V"        name="Supports_1_7V_1_8V"    bit="5"  />
+      <bitField description="Supports 1.8V To 1.9V"        name="Supports_1_8V_1_9V"    bit="6"  />
+      <bitField description="Supports 1.9V To 2.0V"        name="Supports_1_9V_2_0V"    bit="7"  />
+      <bitField description="Supports 2.0V To 2.1V"        name="Supports_2_0V_2_1V"    bit="8"  />
+      <bitField description="Supports 2.1V To 2.2V"        name="Supports_2_1V_2_2V"    bit="9"  />
+      <bitField description="Supports 2.2V To 2.3V"        name="Supports_2_2V_2_3V"    bit="10" />
+      <bitField description="Supports 2.3V To 2.4V"        name="Supports_2_3V_2_4V"    bit="11" />
+      <bitField description="Supports 2.4V To 2.5V"        name="Supports_2_4V_2_5V"    bit="12" />
+      <bitField description="Supports 2.5V To 2.6V"        name="Supports_2_5V_2_6V"    bit="13" />
+      <bitField description="Supports 2.6V To 2.7V"        name="Supports_2_6V_2_7V"    bit="14" />
+      <bitField description="Supports 2.7V To 2.8V"        name="Supports_2_7V_2_8V"    bit="15" />
+      <bitField description="Supports 2.8V To 2.9V"        name="Supports_2_8V_2_9V"    bit="16" />
+      <bitField description="Supports 2.9V To 3.0V"        name="Supports_2_9V_3_0V"    bit="17" />
+      <bitField description="Supports 3.0V To 3.1V"        name="Supports_3_0V_3_1V"    bit="18" />
+      <bitField description="Supports 3.1V To 3.2V"        name="Supports_3_1V_3_2V"    bit="19" />
+      <bitField description="Supports 3.2V To 3.3V"        name="Supports_3_2V_3_3V"    bit="20" />
+      <bitField description="Supports 3.3V To 3.4V"        name="Supports_3_3V_3_4V"    bit="21" />
+      <bitField description="Supports 3.4V To 3.5V"        name="Supports_3_4V_3_5V"    bit="22" />
+      <bitField description="Supports 3.5V To 3.6V"        name="Supports_3_5V_3_6V"    bit="23" />
+      <bitField description="Supports 1.8V"                name="Supports_1_8V"         bit="24" />
+      <bitField description="Supports 2TB"                 name="Supports_2TB"          bit="27" />
+      <bitField description="UHS-II Card Status"           name="UHS_II_Status"         bit="29" />
+      <bitField description="Card Capacity Status (ccs)"   name="CardCapacityStatus"    bit="30" />
+      <bitField description="Card Power-up status (ready)" name="Ready"                 bit="31" />
    </bitfieldOption>
 
    <!-- ____ XFERTYP ____ -->
@@ -355,32 +355,6 @@
       min="0" max="0"
    />
 
-   <bitfieldOption key="sdhc_prsstat"
-      hidden="true"
-      derived="true"
-      valueFormat="%s"
-      description="Present State"
-      toolTip="The host driver can get status of the SDHC from this 32-bit read-only register."
-      typeName="SdhcStateFlags"
-      enumClass="true"
-      baseType="uint32_t"
-      value="0" >
-      <choice name="CMD Line Signal Level"             enum="CmdSignalLevel"      value="=ToString(1&lt;&lt;23)" condition="sdhc_prsstat_clsl_present"    />
-      <choice name="Card Inserted"                     enum="CardPresent"         value="=ToString(1&lt;&lt;16)" condition="sdhc_prsstat_cins_present"    />
-      <choice name="Buffer Read Enable"                enum="BufferReadEnable"    value="=ToString(1&lt;&lt;11)" condition="sdhc_prsstat_bren_present"    />
-      <choice name="Buffer Write Enable"               enum="BufferWriteEnable"   value="=ToString(1&lt;&lt;10)" condition="sdhc_prsstat_bwen_present"    />
-      <choice name="Read Transfer Active"              enum="ReadTransferActive"  value="=ToString(1&lt;&lt;9)"  condition="sdhc_prsstat_rta_present"     />
-      <choice name="Write Transfer Active"             enum="WriteTransferActive" value="=ToString(1&lt;&lt;8)"  condition="sdhc_prsstat_wta_present"     />
-      <choice name="SD Clock Gated Off Internally"     enum="SdClockStatus"       value="=ToString(1&lt;&lt;7)"  condition="sdhc_prsstat_sdoff_present"   />
-      <choice name="SDHC clock Gated Off Internally"   enum="SdhcClockStatus"     value="=ToString(1&lt;&lt;6)"  condition="sdhc_prsstat_peroff_present"  />
-      <choice name="System Clock Gated Off Internally" enum="CardInterrupt"       value="=ToString(1&lt;&lt;5)"  condition="sdhc_prsstat_hckoff_present"  />
-      <choice name="Bus Clock Internal Gating"         enum="CardRemoval"         value="=ToString(1&lt;&lt;4)"  condition="sdhc_prsstat_ipgoff_present"  />
-      <choice name="SD Clock Stable"                   enum="CardInsertion"       value="=ToString(1&lt;&lt;3)"  condition="sdhc_prsstat_sdstb_present"   />
-      <choice name="Data Line Active"                  enum="DatLineStatus"       value="=ToString(1&lt;&lt;2)"  condition="sdhc_prsstat_dla_present"     />
-      <choice name="Command Inhibit (DAT)"             enum="DatCmdInhibit"       value="=ToString(1&lt;&lt;1)"  condition="sdhc_prsstat_cdihb_present"   />
-      <choice name="Command Inhibit (CMD)"             enum="CmdInhibit"          value="=ToString(1&lt;&lt;0)"  condition="sdhc_prsstat_cihb_present"    />
-   </bitfieldOption>
-
    <intOption key="sdhc_prsstat_dlsl" condition="sdhc_prsstat_dlsl_present"
       hidden="true"
       typeName="uint32_t"
@@ -519,7 +493,7 @@
 
    <binaryOption key="sdhc_prsstat_sdstb" condition="sdhc_prsstat_sdstb_present"
       hidden="true"
-      typeName="SdhcSdClockStatus"
+      typeName="SdhcSdClockStable"
       baseType="uint32_t"
       toolTip="Indicates that the internal card clock is stable.\n
                This bit is for the host driver to poll clock status when changing the clock frequency.\n
@@ -586,7 +560,7 @@
 
    <binaryOption key="sdhc_prsstat_cihb" condition="sdhc_prsstat_cihb_present"
       hidden="true"
-      typeName="SdhctCmdInhibit"
+      typeName="SdhcCmdInhibit"
       baseType="uint32_t"
       toolTip="If this status bit is 0, it indicates that the CMD line is not in use and the SDHC\n
                can issue a SD/MMC Command using the CMD line.\n
@@ -603,6 +577,32 @@
       <choice name="Can issue command using only CMD line"  value="0" enum="CanIssueCommandUsingOnlyCmdLine" />
       <choice name="Cannot issue command"                   value="1" enum="CannotIssueCommand" />
    </binaryOption >
+
+   <bitfieldOption key="sdhc_prsstat"
+      hidden="true"
+      derived="true"
+      valueFormat="%s"
+      description="Present State"
+      toolTip="The host driver can get status of the SDHC from this 32-bit read-only register."
+      typeName="SdhcStateFlags"
+      enumClass="true"
+      baseType="uint32_t"
+      value="0" >
+      <bitField var="sdhc_prsstat_clsl"   bit="23" condition="sdhc_prsstat_clsl_present"    />
+      <bitField var="sdhc_prsstat_cins"   bit="16" condition="sdhc_prsstat_cins_present"    />
+      <bitField var="sdhc_prsstat_bren"   bit="11" condition="sdhc_prsstat_bren_present"    />
+      <bitField var="sdhc_prsstat_bwen"   bit="10" condition="sdhc_prsstat_bwen_present"    />
+      <bitField var="sdhc_prsstat_rta"    bit="9"  condition="sdhc_prsstat_rta_present"     />
+      <bitField var="sdhc_prsstat_wta"    bit="8"  condition="sdhc_prsstat_wta_present"     />
+      <bitField var="sdhc_prsstat_sdoff"  bit="7"  condition="sdhc_prsstat_sdoff_present"   />
+      <bitField var="sdhc_prsstat_peroff" bit="6"  condition="sdhc_prsstat_peroff_present"  />
+      <bitField var="sdhc_prsstat_hckoff" bit="5"  condition="sdhc_prsstat_hckoff_present"  />
+      <bitField var="sdhc_prsstat_ipgoff" bit="4"  condition="sdhc_prsstat_ipgoff_present"  />
+      <bitField var="sdhc_prsstat_sdstb"  bit="3"  condition="sdhc_prsstat_sdstb_present"   />
+      <bitField var="sdhc_prsstat_dla"    bit="2"  condition="sdhc_prsstat_dla_present"     />
+      <bitField var="sdhc_prsstat_cdihb"  bit="1"  condition="sdhc_prsstat_cdihb_present"   />
+      <bitField var="sdhc_prsstat_cihb"   bit="0"  condition="sdhc_prsstat_cihb_present"    />
+   </bitfieldOption>
 
    <!-- ____ PROCTL ____ -->
    <title description="Protocol Control Register" />
@@ -846,9 +846,9 @@ The following registers and bits are cleared by this bit:\n
       enumClass="true"
       baseType="uint32_t"
       value="0" >
-      <choice name="DAT Line" enum="Dat" value="=ToString(1&lt;&lt;26)" condition="sdhc_sysctl_rstd_present"  />
-      <choice name="CMD Line" enum="Cmd" value="=ToString(1&lt;&lt;25)" condition="sdhc_sysctl_rstc_present"  />
-      <choice name="ALL"      enum="All" value="=ToString(1&lt;&lt;24)" condition="sdhc_sysctl_rsta_present"  />
+      <bitField description="DAT Line" name="Dat" bit="26" condition="sdhc_sysctl_rstd_present"  />
+      <bitField description="CMD Line" name="Cmd" bit="25" condition="sdhc_sysctl_rstc_present"  />
+      <bitField description="ALL"      name="All" bit="24" condition="sdhc_sysctl_rsta_present"  />
    </bitfieldOption>
 
    <binaryOption key="sdhc_sysctl_rstc" condition="sdhc_sysctl_rstc_present"
@@ -1004,10 +1004,9 @@ The host driver can clear IRQSTATEN[DTOESEN] to prevent inadvertent time-out eve
 
    <!-- ____ IRQSTAT ____ -->
 
-   <bitfieldOption key="sdhc_irqstat"
+   <bitfieldOption key="sdhc_irqstat_irqstat" condition="sdhc_irqstat_irqstat_present"
       hidden="true"
       derived="true"
-      valueFormat="%s"
       description="Interrupt Status Flags"
       toolTip="Bitmask indicating individual interrupt flags.\n
                Note: To successfully clear the Card Interrupt, it is required that the card stops \n
@@ -1015,33 +1014,32 @@ The host driver can clear IRQSTATEN[DTOESEN] to prevent inadvertent time-out eve
       typeName="SdhcStatusFlag"
       enumClass="true"
       baseType="uint32_t"
-      value="0"
-      >
-      <choice name="DMA Error"             enum="DmaError"            value="=ToString(1&lt;&lt;28)" condition="sdhc_irqstat_dmae_present"  />
-      <choice name="Auto CMD12 Error"      enum="AutoCommand12Error"  value="=ToString(1&lt;&lt;24)" condition="sdhc_irqstat_ac12e_present" />
-      <choice name="Data End Bit Error"    enum="DataEndBitError"     value="=ToString(1&lt;&lt;22)" condition="sdhc_irqstat_debe_present"  />
-      <choice name="Data CRC Error"        enum="DataCrcError"        value="=ToString(1&lt;&lt;21)" condition="sdhc_irqstat_dce_present"   />
-      <choice name="Data Timeout Error"    enum="DataTimeoutError"    value="=ToString(1&lt;&lt;20)" condition="sdhc_irqstat_dtoe_present"  />
-      <choice name="Command Index Error"   enum="CommandIndexError"   value="=ToString(1&lt;&lt;19)" condition="sdhc_irqstat_cie_present"   />
-      <choice name="Command End Bit Error" enum="CommandEndBitError"  value="=ToString(1&lt;&lt;18)" condition="sdhc_irqstat_cebe_present"  />
-      <choice name="Command CRC Error"     enum="CommandCrcError"     value="=ToString(1&lt;&lt;17)" condition="sdhc_irqstat_cce_present"   />
-      <choice name="Command Timeout Error" enum="CommandTimeoutError" value="=ToString(1&lt;&lt;16)" condition="sdhc_irqstat_ctoe_present"  />
-      <choice name="Card Interrupt"        enum="CardInterrupt"       value="=ToString(1&lt;&lt;8)"  condition="sdhc_irqstat_cint_present"  />
-      <choice name="Card Removal"          enum="CardRemoval"         value="=ToString(1&lt;&lt;7)"  condition="sdhc_irqstat_crm_present"   />
-      <choice name="Card Insertion"        enum="CardInsertion"       value="=ToString(1&lt;&lt;6)"  condition="sdhc_irqstat_cins_present"  />
-      <choice name="Buffer Read Ready"     enum="BufferReadReady"     value="=ToString(1&lt;&lt;5)"  condition="sdhc_irqstat_brr_present"   />
-      <choice name="Buffer Write Ready"    enum="BufferWriteReady"    value="=ToString(1&lt;&lt;4)"  condition="sdhc_irqstat_bwr_present"   />
-      <choice name="DMA Interrupt"         enum="DmaComplete"         value="=ToString(1&lt;&lt;3)"  condition="sdhc_irqstat_dint_present"  />
-      <choice name="Block Gap Event"       enum="BlockGapEvent"       value="=ToString(1&lt;&lt;2)"  condition="sdhc_irqstat_bge_present"   />
-      <choice name="Transfer Complete"     enum="TransferComplete"    value="=ToString(1&lt;&lt;1)"  condition="sdhc_irqstat_tc_present"    />
-      <choice name="Command Complete"      enum="CommandComplete"     value="=ToString(1&lt;&lt;0)"  condition="sdhc_irqstat_cc_present"    />
+      value="0" >
+      <bitField description="DMA Error"             name="DmaError"            bit="28" condition="sdhc_irqstat_dmae_present"  />
+      <bitField description="Auto CMD12 Error"      name="AutoCommand12Error"  bit="24" condition="sdhc_irqstat_ac12e_present" />
+      <bitField description="Data End Bit Error"    name="DataEndBitError"     bit="22" condition="sdhc_irqstat_debe_present"  />
+      <bitField description="Data CRC Error"        name="DataCrcError"        bit="21" condition="sdhc_irqstat_dce_present"   />
+      <bitField description="Data Timeout Error"    name="DataTimeoutError"    bit="20" condition="sdhc_irqstat_dtoe_present"  />
+      <bitField description="Command Index Error"   name="CommandIndexError"   bit="19" condition="sdhc_irqstat_cie_present"   />
+      <bitField description="Command End Bit Error" name="CommandEndBitError"  bit="18" condition="sdhc_irqstat_cebe_present"  />
+      <bitField description="Command CRC Error"     name="CommandCrcError"     bit="17" condition="sdhc_irqstat_cce_present"   />
+      <bitField description="Command Timeout Error" name="CommandTimeoutError" bit="16" condition="sdhc_irqstat_ctoe_present"  />
+      <bitField description="Card Interrupt"        name="CardInterrupt"       bit="8"  condition="sdhc_irqstat_cint_present"  />
+      <bitField description="Card Removal"          name="CardRemoval"         bit="7"  condition="sdhc_irqstat_crm_present"   />
+      <bitField description="Card Insertion"        name="CardInsertion"       bit="6"  condition="sdhc_irqstat_cins_present"  />
+      <bitField description="Buffer Read Ready"     name="BufferReadReady"     bit="5"  condition="sdhc_irqstat_brr_present"   />
+      <bitField description="Buffer Write Ready"    name="BufferWriteReady"    bit="4"  condition="sdhc_irqstat_bwr_present"   />
+      <bitField description="DMA Interrupt"         name="DmaComplete"         bit="3"  condition="sdhc_irqstat_dint_present"  />
+      <bitField description="Block Gap Event"       name="BlockGapEvent"       bit="2"  condition="sdhc_irqstat_bge_present"   />
+      <bitField description="Transfer Complete"     name="TransferComplete"    bit="1"  condition="sdhc_irqstat_tc_present"    />
+      <bitField description="Command Complete"      name="CommandComplete"     bit="0"  condition="sdhc_irqstat_cc_present"    />
+      <bitField description="No Flags"              name="None"                bit="none" />
    </bitfieldOption>
 
    <!-- ____ IRQSTATEN ____ -->
 
-   <bitfieldOption key="sdhc_irqstaten"
-      derivedFrom="sdhc_irqstat"
-      valueFormat="%s"
+   <bitfieldOption key="sdhc_irqstaten_irqstaten" condition="sdhc_irqstaten_irqstaten_present"
+      derivedFrom="sdhc_irqstat_irqstat"
       enabledBy="enablePeripheralSupport"
       description="Interrupt Status Flag Enables"
       toolTip="Bitmask allowing individual interrupt status events to set status flags.\n
@@ -1055,9 +1053,8 @@ The host driver can clear IRQSTATEN[DTOESEN] to prevent inadvertent time-out eve
 
    <!-- ____ IRQSIGEN ____ -->
 
-   <bitfieldOption key="sdhc_irqsigen"
-      derivedFrom="sdhc_irqstat"
-      valueFormat="%s"
+   <bitfieldOption key="sdhc_irqsigen_irqsigen" condition="sdhc_irqsigen_irqsigen_present"
+      derivedFrom="sdhc_irqstat_irqstat"
       enabledBy="enablePeripheralSupport"
       description="Interrupt Enables"
       toolTip="Bitmask selecting which interrupt status flags are enabled as interrupt sources.\n
@@ -1081,12 +1078,12 @@ The host driver can clear IRQSTATEN[DTOESEN] to prevent inadvertent time-out eve
       typeName="SdhcAc12Error"
       enumClass="true"
       baseType="uint32_t" >
-      <choice name="Auto CMD12 Cmd Not Issued Error"  enum="CmdNotIssuedError"   value="=ToString(1&lt;&lt;7)" condition="sdhc_ac12err_cnibac12e_present" />
-      <choice name="Auto CMD12 Index Error"           enum="IndexError"          value="=ToString(1&lt;&lt;4)" condition="sdhc_ac12err_ac12ie_present"    />
-      <choice name="Auto CMD12 CRC Error"             enum="CrcError"            value="=ToString(1&lt;&lt;3)" condition="sdhc_ac12err_ac12ce_present"    />
-      <choice name="Auto CMD12 End Bit Error"         enum="EndBitError"         value="=ToString(1&lt;&lt;2)" condition="sdhc_ac12err_ac12ebe_present"   />
-      <choice name="Auto CMD12 Timeout Error"         enum="TimeoutError"        value="=ToString(1&lt;&lt;1)" condition="sdhc_ac12err_ac12toe_present"   />
-      <choice name="Auto CMD12 Cmd Not Executed"      enum="CmdNotExecutedError" value="=ToString(1&lt;&lt;0)" condition="sdhc_ac12err_ac12ne_present"    />
+      <bitField description="Auto CMD12 Cmd Not Issued Error"  name="CmdNotIssuedError"   bit="7" condition="sdhc_ac12err_cnibac12e_present" />
+      <bitField description="Auto CMD12 Index Error"           name="IndexError"          bit="4" condition="sdhc_ac12err_ac12ie_present"    />
+      <bitField description="Auto CMD12 CRC Error"             name="CrcError"            bit="3" condition="sdhc_ac12err_ac12ce_present"    />
+      <bitField description="Auto CMD12 End Bit Error"         name="EndBitError"         bit="2" condition="sdhc_ac12err_ac12ebe_present"   />
+      <bitField description="Auto CMD12 Timeout Error"         name="TimeoutError"        bit="1" condition="sdhc_ac12err_ac12toe_present"   />
+      <bitField description="Auto CMD12 Cmd Not Executed"      name="CmdNotExecutedError" bit="0" condition="sdhc_ac12err_ac12ne_present"    />
    </bitfieldOption>
 
    <!-- ____ HTCAPBLT ____ -->
@@ -1200,22 +1197,22 @@ The host driver can clear IRQSTATEN[DTOESEN] to prevent inadvertent time-out eve
       typeName="SdhcForceError"
       enumClass="true"
       baseType="uint32_t" >
-      <choice name="Card Interrupt"                         enum="CardInterrupt"         value="=ToString(1&lt;&lt;31)" condition="sdhc_fevt_cint_present"  />
-      <choice name="DMA Error"                              enum="DmaError"              value="=ToString(1&lt;&lt;28)" condition="sdhc_fevt_dmae_present"  />
-      <choice name="Auto CMD12 Error"                       enum="Acmd12Error"           value="=ToString(1&lt;&lt;24)" condition="sdhc_fevt_ac12e_present" />
-      <choice name="Data End Bit Error"                     enum="DataEndBitError"       value="=ToString(1&lt;&lt;22)" condition="sdhc_fevt_debe_present"  />
-      <choice name="Data CRC Error"                         enum="DataCrcError"          value="=ToString(1&lt;&lt;21)" condition="sdhc_fevt_dce_present"   />
-      <choice name="Data Timeout Error"                     enum="DataTimeoutError"      value="=ToString(1&lt;&lt;20)" condition="sdhc_fevt_dtoe_present"  />
-      <choice name="Command Index Error"                    enum="CommandIndexError"     value="=ToString(1&lt;&lt;19)" condition="sdhc_fevt_cie_present"   />
-      <choice name="Command End Bit Error"                  enum="CommandEndBitError"    value="=ToString(1&lt;&lt;18)" condition="sdhc_fevt_cebe_present"  />
-      <choice name="Command CRC Error"                      enum="CommandCrcError"       value="=ToString(1&lt;&lt;17)" condition="sdhc_fevt_cce_present"   />
-      <choice name="Command Timeout Error"                  enum="CommandTimeoutError"   value="=ToString(1&lt;&lt;16)" condition="sdhc_fevt_ctoe_present"  />
-      <choice name="Auto CMD12 Cmd Not Issued Error"        enum="Cmd12NotIssuedError"   value="=ToString(1&lt;&lt;7)"  condition="sdhc_fevt_cnibac12e_present" />
-      <choice name="Auto CMD12 Index Error"                 enum="Cmd12IndexError"       value="=ToString(1&lt;&lt;4)"  condition="sdhc_fevt_ac12ie_present"    />
-      <choice name="Auto CMD12 CRC Error"                   enum="Cmd12CrcError"         value="=ToString(1&lt;&lt;3)"  condition="sdhc_fevt_ac12ce_present"    />
-      <choice name="Auto CMD12 End Bit Error"               enum="Cmd12EndBitError"      value="=ToString(1&lt;&lt;2)"  condition="sdhc_fevt_ac12ebe_present"   />
-      <choice name="Auto CMD12 Timeout Error"               enum="Cmd12TimeoutError"     value="=ToString(1&lt;&lt;1)"  condition="sdhc_fevt_ac12toe_present"   />
-      <choice name="Auto CMD12 Cmd Not Executed"            enum="Cmd12NotExecutedError" value="=ToString(1&lt;&lt;0)"  condition="sdhc_fevt_ac12ne_present"    />
+      <bitField description="Card Interrupt"                    name="CardInterrupt"         bit="31" condition="sdhc_fevt_cint_present"  />
+      <bitField description="DMA Error"                         name="DmaError"              bit="28" condition="sdhc_fevt_dmae_present"  />
+      <bitField description="Auto CMD12 Error"                  name="Acmd12Error"           bit="24" condition="sdhc_fevt_ac12e_present" />
+      <bitField description="Data End Bit Error"                name="DataEndBitError"       bit="22" condition="sdhc_fevt_debe_present"  />
+      <bitField description="Data CRC Error"                    name="DataCrcError"          bit="21" condition="sdhc_fevt_dce_present"   />
+      <bitField description="Data Timeout Error"                name="DataTimeoutError"      bit="20" condition="sdhc_fevt_dtoe_present"  />
+      <bitField description="Command Index Error"               name="CommandIndexError"     bit="19" condition="sdhc_fevt_cie_present"   />
+      <bitField description="Command End Bit Error"             name="CommandEndBitError"    bit="18" condition="sdhc_fevt_cebe_present"  />
+      <bitField description="Command CRC Error"                 name="CommandCrcError"       bit="17" condition="sdhc_fevt_cce_present"   />
+      <bitField description="Command Timeout Error"             name="CommandTimeoutError"   bit="16" condition="sdhc_fevt_ctoe_present"  />
+      <bitField description="Auto CMD12 Cmd Not Issued Error"   name="Cmd12NotIssuedError"   bit="7"  condition="sdhc_fevt_cnibac12e_present" />
+      <bitField description="Auto CMD12 Index Error"            name="Cmd12IndexError"       bit="4"  condition="sdhc_fevt_ac12ie_present"    />
+      <bitField description="Auto CMD12 CRC Error"              name="Cmd12CrcError"         bit="3"  condition="sdhc_fevt_ac12ce_present"    />
+      <bitField description="Auto CMD12 End Bit Error"          name="Cmd12EndBitError"      bit="2"  condition="sdhc_fevt_ac12ebe_present"   />
+      <bitField description="Auto CMD12 Timeout Error"          name="Cmd12TimeoutError"     bit="1"  condition="sdhc_fevt_ac12toe_present"   />
+      <bitField description="Auto CMD12 Cmd Not Executed"       name="Cmd12NotExecutedError" bit="0"  condition="sdhc_fevt_ac12ne_present"    />
    </bitfieldOption>
 
 
@@ -1461,11 +1458,11 @@ The host driver can clear IRQSTATEN[DTOESEN] to prevent inadvertent time-out eve
          sdhc_irqstat_tc                : false : true  : true  : enableGettersAndSetters : IrqStatusTransfer;
          sdhc_irqstat_cc                : false : true  : true  : enableGettersAndSetters : IrqStatusEndBit;
 
-         sdhc_irqstat                   : false : true  : false : $(_BasicInfoGuard)      : InterruptStatus;
+         sdhc_irqstat_irqstat           : false : true  : false : $(_BasicInfoGuard)      : InterruptStatus;
 
-         sdhc_irqstaten                 : true  : true  : false : $(_BasicInfoGuard)      : InterruptStatusEnable;
+         sdhc_irqstaten_irqstaten       : true  : true  : false : $(_BasicInfoGuard)      : InterruptStatusEnable;
 
-         sdhc_irqsigen                  : true  : true  : false : $(_BasicInfoGuard)      : InterruptEnable;
+         sdhc_irqsigen_irqsigen         : true  : true  : false : $(_BasicInfoGuard)      : InterruptEnable;
 
          sdhc_ac12err                   : false : true  : false : $(_BasicInfoGuard)      : AutoCmd12Error;
 
@@ -1543,9 +1540,9 @@ The host driver can clear IRQSTATEN[DTOESEN] to prevent inadvertent time-out eve
    <for keys="field                     : enable : disable : clear : genCode            : name"
         values="
          sdhc_sysctl_reset              : true   : false   : false : $(_BasicInfoGuard) : Reset;
-         sdhc_irqstat                   : false  : false   : true  : $(_BasicInfoGuard) : InterruptStatus;
-         sdhc_irqstaten                 : true   : true    : false : $(_BasicInfoGuard) : InterruptStatusFlags;
-         sdhc_irqsigen                  : true   : true    : false : $(_BasicInfoGuard) : InterruptSource" >
+         sdhc_irqstat_irqstat           : false  : false   : true  : $(_BasicInfoGuard) : InterruptStatus;
+         sdhc_irqstaten_irqstaten       : true   : true    : false : $(_BasicInfoGuard) : InterruptStatusFlags;
+         sdhc_irqsigen_irqsigen         : true   : true    : false : $(_BasicInfoGuard) : InterruptSource" >
       <variableTemplate where="basicInfo" variables="%(field)" condition="%(enable)" codeGenCondition="%(genCode)"
       ><![CDATA[
          \t/**
@@ -1649,12 +1646,12 @@ The host driver can clear IRQSTATEN[DTOESEN] to prevent inadvertent time-out eve
    </for>
 
    <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
-      variables="sdhc_irqstat"
+      variables="sdhc_irqstat_irqstat"
       tooltipPadding="x*x"      >
    <![CDATA[
       \t/**
       \t * Get and clear interrupt status flags
-      \t * (sdhc_irqstat)
+      \t * (%variables)
       \t *
       \t * @return Mask indicating cleared interrupt requests, see @ref SdhcStatus
       \t */
@@ -2037,8 +2034,8 @@ XXXXXXXXXXXXXXXXXXXXXX
                %baseType   : sdhc_sysctl_dtocv,sdhc_sysctl_sdclkfs,
                              sdhc_sysctl_dvs,sdhc_sysctl_peren,
                              sdhc_sysctl_hcken,sdhc_sysctl_ipgen                  :   0      ;
-               %baseType   : sdhc_irqstaten                                       :   0      ;
-               %baseType   : sdhc_irqsigen                                        :   0      ;
+               %baseType   : sdhc_irqstaten_irqstaten                             :   0      ;
+               %baseType   : sdhc_irqsigen_irqsigen                               :   0      ;
                %baseType   : sdhc_wml_wrwml,sdhc_wml_rdwml                        :   0      ;
                %baseType   : sdhc_vendor_exblknu                                  :   0      ;
                %baseType   : sdhc_mmcboot_bootblkcnt,sdhc_mmcboot_autosabgen,
@@ -2086,8 +2083,8 @@ XXXXXXXXXXXXXXXXXXXXXX
             sdhc_sysctl_dtocv;sdhc_sysctl_sdclkfs;
             sdhc_sysctl_dvs;sdhc_sysctl_peren;
             sdhc_sysctl_hcken;sdhc_sysctl_ipgen;
-            sdhc_irqstaten;
-            sdhc_irqsigen;
+            sdhc_irqstaten_irqstaten;
+            sdhc_irqsigen_irqsigen;
             sdhc_wml_wrwml;sdhc_wml_rdwml;
             sdhc_vendor_exblknu;
             sdhc_mmcboot_bootblkcnt;sdhc_mmcboot_autosabgen;
@@ -2190,8 +2187,8 @@ XXXXXXXXXXXXXXXXXXXXXX
                sdhc_sysctl_peren,sdhc_sysctl_hcken,sdhc_sysctl_ipgen  : %register = init.%registerName&amp;~%mask0 ;
                sdhc_prsstat_sdstb                                     : while ((%register&amp;%mask)==0) {} ;
                sdhc_sysctl_sdclken                                    : %register = init.%registerName|%mask ;
-               sdhc_irqstaten                                         : %configRegAssignment  ;
-               sdhc_irqsigen                                          : %register = %baseType(init.%registerName)  ;
+               sdhc_irqstaten_irqstaten                               : %configRegAssignment  ;
+               sdhc_irqsigen_irqsigen                                 : %register = %baseType(init.%registerName)  ;
                sdhc_wml_wrwml,sdhc_wml_rdwml                          : %configRegAssignment  ;
                sdhc_vendor_exblknu                                    : %register = init.%registerName|1  ;
                sdhc_mmcboot_bootblkcnt,sdhc_mmcboot_autosabgen,
@@ -2228,8 +2225,8 @@ XXXXXXXXXXXXXXXXXXXXXX
             sdhc_sysctl_dtocv,sdhc_sysctl_sdclkfs,
             sdhc_sysctl_dvs,sdhc_sysctl_peren,
             sdhc_sysctl_hcken,sdhc_sysctl_ipgen,
-            sdhc_irqstaten,
-            sdhc_irqsigen,
+            sdhc_irqstaten_irqstaten,
+            sdhc_irqsigen_irqsigen,
             sdhc_wml_wrwml,sdhc_wml_rdwml,
             sdhc_vendor_exblknu,
             sdhc_mmcboot_bootblkcnt,sdhc_mmcboot_autosabgen,

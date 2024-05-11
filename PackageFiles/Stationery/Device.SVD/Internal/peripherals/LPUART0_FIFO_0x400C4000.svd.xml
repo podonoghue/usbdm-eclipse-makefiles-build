@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MK28F15
       MK82F25615
 -->
@@ -195,6 +195,158 @@ an invalid oversampling ratio will default to an oversampling ratio of 16 (01111
 changed when the transmitter and receiver are both disabled</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>5</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00000</name>
+                           <description>Oversampling ratio of 16</description>
+                           <value>0b00000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b00011</name>
+                           <description>Oversampling ratio of 4, requires BOTHEDGE to be set</description>
+                           <value>0b00011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b00100</name>
+                           <description>Oversampling ratio of 5, requires BOTHEDGE to be set</description>
+                           <value>0b00100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b00101</name>
+                           <description>Oversampling ratio of 6, requires BOTHEDGE to be set</description>
+                           <value>0b00101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b00110</name>
+                           <description>Oversampling ratio of 7, requires BOTHEDGE to be set</description>
+                           <value>0b00110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b00111</name>
+                           <description>Oversampling ratio of 8</description>
+                           <value>0b00111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01000</name>
+                           <description>Oversampling ratio of 9</description>
+                           <value>0b01000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01001</name>
+                           <description>Oversampling ratio of 10</description>
+                           <value>0b01001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01010</name>
+                           <description>Oversampling ratio of 11</description>
+                           <value>0b01010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01011</name>
+                           <description>Oversampling ratio of 12</description>
+                           <value>0b01011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01100</name>
+                           <description>Oversampling ratio of 13</description>
+                           <value>0b01100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01101</name>
+                           <description>Oversampling ratio of 14</description>
+                           <value>0b01101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01110</name>
+                           <description>Oversampling ratio of 15</description>
+                           <value>0b01110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01111</name>
+                           <description>Oversampling ratio of 16</description>
+                           <value>0b01111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10000</name>
+                           <description>Oversampling ratio of 17</description>
+                           <value>0b10000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10001</name>
+                           <description>Oversampling ratio of 18</description>
+                           <value>0b10001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10010</name>
+                           <description>Oversampling ratio of 19</description>
+                           <value>0b10010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10011</name>
+                           <description>Oversampling ratio of 20</description>
+                           <value>0b10011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10100</name>
+                           <description>Oversampling ratio of 21</description>
+                           <value>0b10100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10101</name>
+                           <description>Oversampling ratio of 22</description>
+                           <value>0b10101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10110</name>
+                           <description>Oversampling ratio of 23</description>
+                           <value>0b10110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10111</name>
+                           <description>Oversampling ratio of 24</description>
+                           <value>0b10111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11000</name>
+                           <description>Oversampling ratio of 25</description>
+                           <value>0b11000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11001</name>
+                           <description>Oversampling ratio of 26</description>
+                           <value>0b11001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11010</name>
+                           <description>Oversampling ratio of 27</description>
+                           <value>0b11010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11011</name>
+                           <description>Oversampling ratio of 28</description>
+                           <value>0b11011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11100</name>
+                           <description>Oversampling ratio of 29</description>
+                           <value>0b11100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11101</name>
+                           <description>Oversampling ratio of 30</description>
+                           <value>0b11101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11110</name>
+                           <description>Oversampling ratio of 31</description>
+                           <value>0b11110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11111</name>
+                           <description>Oversampling ratio of 32</description>
+                           <value>0b11111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>M10</name>
@@ -260,6 +412,13 @@ the transmitter and receiver are both disabled</description>
                <addressOffset>0x4</addressOffset>
                <resetValue>0xC00000</resetValue>
                <fields>
+                  <field>
+                     <name>STAT</name>
+                     <description>Status Flags</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>32</bitWidth>
+                     <?ignoreOverlap?>
+                  </field>
                   <field>
                      <name>MA2F</name>
                      <description>Match 2 Flag\n
@@ -646,6 +805,13 @@ LBKDIF is cleared by writing a 1 to it</description>
                <addressOffset>0x8</addressOffset>
                <resetMask>0x7FFFFFFF</resetMask>
                <fields>
+                  <field>
+                     <name>CTRL</name>
+                     <description>Control features</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>32</bitWidth>
+                     <?ignoreOverlap?>
+                  </field>
                   <field>
                      <name>PT</name>
                      <description>Parity Type\n
@@ -1162,7 +1328,7 @@ receiving the current character (if any) before the receiver starts receiving da
             <register>
                <name>DATA</name>
                <description>Data Register\n
-Reads return the contents of the read-only receive data buffer and writes go to the write-only transmit data buffer. 
+Reads return the contents of the read-only receive data buffer and writes go to the write-only transmit data buffer.
 Reads and writes of this register are also involved in the automatic flag clearing mechanisms for the UART status flags</description>
                <addressOffset>0xC</addressOffset>
                <fields>
@@ -1215,14 +1381,13 @@ receive shift register</description>
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>FRETSC</name>
-                     <description>Frame Error / Transmit Special Character\n
-For reads, indicates the current received dataword contained in DATA[R9:R0] was received with a frame
-error. For writes, indicates a break or idle character is to be transmitted instead of the contents in
-DATA[T9:T0]. T9 is used to indicate a break character when 0 and a idle character when 1, he contents of
-DATA[T8:T0] should be zero</description>
+                     <name>FRAME</name>
+                     <description>Frame Error\n
+Indicates the current received dataword contained in DATA[R9:R0] was received with a frame
+error.</description>
                      <bitOffset>13</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -1232,6 +1397,29 @@ DATA[T8:T0] should be zero</description>
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>Frame error</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXSPECIAL</name>
+                     <description>Transmit Special Character\n
+Indicates a break or idle character is to be transmitted instead of the contents in DATA[T9:T0].
+T9 is used to indicate a break character when 0 and a idle character when 1, he contents of
+DATA[T8:T0] should be zero</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <?ignoreOverlap?>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal character</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Break or Idle character</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

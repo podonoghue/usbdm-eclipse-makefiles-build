@@ -444,7 +444,7 @@
    <!-- Log changes to associated variable -->
    <!ATTLIST bitmaskOption logging        (true)       #IMPLIED>
    <!-- Used to control generation of enum (default is true) -->
-   <!ATTLIST bitmaskOption generateEnum   (true)       #IMPLIED>
+   <!ATTLIST bitmaskOption generateEnum   (true|empty) #IMPLIED>
    <!-- Name of associate signal -->
    <!ATTLIST bitmaskOption signal          CDATA #IMPLIED>
 
@@ -665,7 +665,7 @@
    <!ATTLIST clockSelectionOption logging             (true)       #IMPLIED>
    
 <!-- ____  bitfieldOption -->
-<!ELEMENT bitfieldOption ((choice|choiceExpansion)*) >
+<!ELEMENT bitfieldOption ((bitField|bitFieldExpansion)*) >
    <!-- Where to place generated code -->
    <!ATTLIST choiceOption where        %where_items;  #IMPLIED >
    <!-- Visible name of option - also used for key if not provided -->
@@ -699,13 +699,15 @@
    <!ATTLIST bitfieldOption units               (None|Hz|s)  #IMPLIED>
    <!-- Variable defined earlier to inherit values from -->
    <!ATTLIST bitfieldOption derivedFrom         CDATA        #IMPLIED>
+   <!-- Variable defined earlier to inherit values from -->
+   <!ATTLIST bitfieldOption derivedFrom         CDATA        #IMPLIED>
    
    <!-- Name for table associated with this choice -->
    <!ATTLIST bitfieldOption tableName            CDATA        #IMPLIED>
    <!-- Type for elements of table associated with this choice -->
    <!ATTLIST bitfieldOption tableType            CDATA        #IMPLIED>
    <!-- Structure for elements of the table associated with this choice -->
-   <!ATTLIST bitfieldOption tableDefinition      CDATA        #IMPLIED>
+   <!ATTLIST bitfieldOption bitmask              CDATA        #IMPLIED>
    <!-- 
    Where to place generated code<br>
       info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
@@ -757,6 +759,48 @@
    <!-- Name of associate signal -->
    <!ATTLIST bitfieldOption signal              CDATA        #IMPLIED>
    
+<!ELEMENT bitField EMPTY >
+   <!-- Reference to a variable to obtain information from -->
+   <!ATTLIST bitField condition      CDATA        #IMPLIED>
+   <!-- Name of bit-field -->
+   <!ATTLIST bitField name           CDATA        #IMPLIED>
+   <!-- Mask for bits in bit-field -->
+   <!ATTLIST bitField bit            CDATA        #IMPLIED>
+   <!-- Description of bit-field purpose -->
+   <!ATTLIST bitField description    CDATA        #IMPLIED>
+   <!-- Macro for use in C code -->
+   <!ATTLIST bitField macro          CDATA        #IMPLIED>
+   <!-- Reference to a variable to obtain information from -->
+   <!ATTLIST bitField var            CDATA        #IMPLIED>
+   <!-- Name of signal associated with this bitField -->
+   <!ATTLIST bitField signal         CDATA        #IMPLIED>
+   
+<!ELEMENT bitFieldExpansion EMPTY >
+   <!-- Reference to a variable to obtain information from -->
+   <!ATTLIST bitFieldExpansion condition      CDATA        #IMPLIED>
+   <!-- Name of bit-field -->
+   <!ATTLIST bitFieldExpansion name           CDATA        #IMPLIED>
+   <!-- Mask for bits in bit-field -->
+   <!ATTLIST bitFieldExpansion bit            CDATA        #IMPLIED>
+   <!-- Description of bit-field purpose -->
+   <!ATTLIST bitFieldExpansion description    CDATA        #IMPLIED>
+   <!-- Macro for use in C code -->
+   <!ATTLIST bitFieldExpansion macro          CDATA        #IMPLIED>
+   <!-- Reference to a variable to obtain information from -->
+   <!ATTLIST bitFieldExpansion var            CDATA        #IMPLIED>
+   <!-- Name of signal associated with this bitField -->
+   <!ATTLIST bitFieldExpansion signal               CDATA        #IMPLIED>
+   
+   <!-- Substitution keys separated by ':'' e.g 'ch' => '%(ch)' -->
+   <!ATTLIST bitFieldExpansion keys                 CDATA        #REQUIRED>
+   <!-- Values for each key separated by ':'', each iteration separated by ';' -->
+   <!ATTLIST bitFieldExpansion values               CDATA        #IMPLIED>
+   <!-- Dimension for index e.g. '6' => (0..5) '1,4' => (1..4)-->
+   <!ATTLIST bitFieldExpansion dim                  CDATA        #IMPLIED>
+   <!--  Delimiter to separate multiple keys/values (default ';') -->
+   <!ATTLIST bitFieldExpansion delimiter            CDATA        #IMPLIED>
+   <!-- Name of symbol to use for iteration - available as $(<name>) -->
+   <!ATTLIST bitFieldExpansion iterationVar         CDATA       #IMPLIED>
    
 <!-- ____  choiceOption -->
 <!ELEMENT choiceOption ((choice|choiceExpansion)*) >
@@ -1189,7 +1233,8 @@
    <!ATTLIST variableTemplate multipleParamsOnNewline  (true)                   #IMPLIED >
    <!-- Context for register e.g. register prefix e.g. SP[mpuSlavePortNum]. -->
    <!ATTLIST variableTemplate context                  CDATA                    #IMPLIED >
-
+   <!-- Pad initExpressions and initNonDefaultExpressions to this width -->
+   <!ATTLIST variableTemplate padToComments            CDATA                    #IMPLIED >
 <!-- ____ clockCodeTemplate -->
 <!ELEMENT clockCodeTemplate (#PCDATA)* >
    <!-- Where to place generated code -->

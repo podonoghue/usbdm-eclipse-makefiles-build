@@ -22,6 +22,7 @@
       value="true"
       locked="true"
       derived="true"
+      disabledValue="0"
       />
 
    <equation key="irq_parameters"            value=""     />

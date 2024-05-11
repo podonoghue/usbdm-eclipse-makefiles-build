@@ -7,13 +7,9 @@
    <constant key="definitionsInHeader" value="true" type="Boolean" />
 
    <!-- ____ Class Declaration ________ -->
-   <constant key="_basicInfo_declaration" type="String"
-      value='"class $(_BasicInfo) : public $(_Baseclass)CommonInfo {\n
-      \n
-      public:\n"' />
+   <constant key="_basicInfo_declaration" type="String" value='"$(_BasicInfo) : public $(_Baseclass)CommonInfo"' />
 
-   <constant key="_class_declaration" type="String"
-      value='"$(_Info) : public $(_BasicInfo)"' />
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <constant key = "disable_peripheral"      value = '"ftm->SC = FTM_SC_CLKS(0);"' type="String"  />
 
@@ -403,7 +399,7 @@
       </binaryOption>
 
       <choiceOption key="ftm_filter_fval_independent[%(ch)]" condition="ftm_filter_ch%(ch)fval_present"
-         hiddenBy="!(ftm_cnsc_mode_independent[%(ch)]==(1,2,3))"
+         hiddenBy="false&amp;&amp;!(ftm_cnsc_mode_independent[%(ch)]==(1,2,3))"
          enabledBy="(ftm_cnsc_mode_independent[%(ch)]==(1,2,3))"
          description="Channel Input Filter"
          typeName="FtmInputFilter"
@@ -1068,10 +1064,10 @@
          description="Channel Output Polarity"
          toolTip="Bitmask defining the active-low channel outputs (1=ActiveLow).\n
                   This field is write protected. It can be written only when MODE[WPDIS] = 1." >
-         <choiceExpansion name="Ch%(ch) Active-low"  enum="Ch%(ch)_ActiveLow"  value='=Format("0x%04XU",0xFF00+(1&lt;&lt;(%(ch))))'            keys="ch" dim="8"/>
-         <choice          name="All Active-low"      enum="All_ActiveLow"      value='0xFFFFU' />
-         <choiceExpansion name="Ch%(ch) Active-high" enum="Ch%(ch)_ActiveHigh" value='=Format("0x%04XU",0xFF00^(1&lt;&lt;(%(ch)+8)))' keys="ch" dim="8"/>
-         <choice          name="All Active-high"     enum="All_ActiveHigh"     value='0x0000U' />
+         <choiceExpansion name="Ch%(ch) Active-low"  enum="Ch%(ch)ActiveLow"  value='=Format("0x%04XU",0xFF00+(1&lt;&lt;(%(ch))))'            keys="ch" dim="8"/>
+         <choice          name="All Active-low"      enum="AllActiveLow"      value='0xFFFFU' />
+         <choiceExpansion name="Ch%(ch) Active-high" enum="Ch%(ch)ActiveHigh" value='=Format("0x%04XU",0xFF00^(1&lt;&lt;(%(ch)+8)))' keys="ch" dim="8"/>
+         <choice          name="All Active-high"     enum="AllActiveHigh"     value='0x0000U' />
       </choiceOption>
 
       <bitmaskOption key="ftm_pol_pol" condition="ftm_pol_present"
@@ -1084,14 +1080,11 @@
          toolTip="Bitmask defining the active-low channel outputs (1=ActiveLow).\n
                   This field is write protected. It can be written only when MODE[WPDIS] = 1."
          value="0"
-         bitDescription="@SignalList(8)"
+         bitDescription='@SignalList("^(FTM\d_CH%i)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
          bitList="Ch%iActiveLow"
          bitmask="=(1&lt;&lt;_channelCount)-1" />
 
-      <!-- ____ MODE ______________
-         bitList="Ch%iActiveLow"
-         bitDescription="Channel %i is active-low"
-      -->
+      <!-- ____ MODE ______________ -->
 
       <binaryOption key="ftm_mode_wpdis" condition="ftm_mode_wpdis_present"
          locked="true"

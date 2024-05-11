@@ -254,17 +254,18 @@
       typeName="PmcSramOffInLowPower"
       baseType="uint8_t"
       toolTip="Configures whether an array is powered during LLS2 mode and VLLS2 mode."
-      description="SRAM VLLS2 Power-down" 
+      description="SRAM VLLS2 Power-down"
       value="0xFF"
+      enumClass="true"
       >
-      <choice name="SRAM2 [1FFF_8000-1FFF_FFFF] 32KB not retained"  value="=ToString(1&lt;&lt;0)" enum="SRAM2" />
-      <choice name="SRAM3 [1FFF_0000-1FFF_7FFF] 32KB not retained"  value="=ToString(1&lt;&lt;1)" enum="SRAM3" />
-      <choice name="SRAM4 [2000_8000-2000_FFFF] 32KB not retained"  value="=ToString(1&lt;&lt;2)" enum="SRAM4" />
-      <choice name="SRAM5 [2001_0000-2002_7FFF] 128KB not retained" value="=ToString(1&lt;&lt;3)" enum="SRAM5" />
-      <choice name="SRAM6 [2003_0000-2003_7FFF] 64KB not retained"  value="=ToString(1&lt;&lt;4)" enum="SRAM6" />
-      <choice name="SRAM7 [1FFC_0000-1FFE_FFFF] 192KB not retained" value="=ToString(1&lt;&lt;5)" enum="SRAM7" />
-      <choice name="SRAM8 [3400_FFFF-3403_7FFF] 256KB not retained" value="=ToString(1&lt;&lt;6)" enum="SRAM8" />
-      <choice name="SRAM9 [3404_FFFF-3407_7FFF] 256KB not retained" value="=ToString(1&lt;&lt;7)" enum="SRAM9" />
+      <bitField description="SRAM2 [1FFF_8000-1FFF_FFFF] 32KB not retained"  bit="0" name="SRAM2" />
+      <bitField description="SRAM3 [1FFF_0000-1FFF_7FFF] 32KB not retained"  bit="1" name="SRAM3" />
+      <bitField description="SRAM4 [2000_8000-2000_FFFF] 32KB not retained"  bit="2" name="SRAM4" />
+      <bitField description="SRAM5 [2001_0000-2002_7FFF] 128KB not retained" bit="3" name="SRAM5" />
+      <bitField description="SRAM6 [2003_0000-2003_7FFF] 64KB not retained"  bit="4" name="SRAM6" />
+      <bitField description="SRAM7 [1FFC_0000-1FFE_FFFF] 192KB not retained" bit="5" name="SRAM7" />
+      <bitField description="SRAM8 [3400_FFFF-3403_7FFF] 256KB not retained" bit="6" name="SRAM8" />
+      <bitField description="SRAM9 [3404_FFFF-3407_7FFF] 256KB not retained" bit="7" name="SRAM9" />
    </bitfieldOption >
 
    <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"

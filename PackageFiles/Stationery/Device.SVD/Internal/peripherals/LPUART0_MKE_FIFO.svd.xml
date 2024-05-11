@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKE14F16
       MKE14Z7
       MKE15Z7
@@ -542,6 +542,13 @@ the transmitter and receiver are both disabled</description>
                <resetValue>0xC00000</resetValue>
                <fields>
                   <field>
+                     <name>STAT</name>
+                     <description>Status Flags</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>32</bitWidth>
+                     <?ignoreOverlap?>
+                  </field>
+                  <field>
                      <name>MA2F</name>
                      <description>Match 2 Flag\n
 MA2F is set whenever the next character to be read from LPUART_DATA matches MA2. \n
@@ -926,6 +933,13 @@ LBKDIF is cleared by writing a 1 to it</description>
                <description>Control Register</description>
                <addressOffset>0x18</addressOffset>
                <fields>
+                  <field>
+                     <name>CTRL</name>
+                     <description>Control features</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>32</bitWidth>
+                     <?ignoreOverlap?>
+                  </field>
                   <field>
                      <name>PT</name>
                      <description>Parity Type\n
@@ -1460,7 +1474,7 @@ receiving the current character (if any) before the receiver starts receiving da
             <register>
                <name>DATA</name>
                <description>Data Register\n
-Reads return the contents of the read-only receive data buffer and writes go to the write-only transmit data buffer. 
+Reads return the contents of the read-only receive data buffer and writes go to the write-only transmit data buffer.
 Reads and writes of this register are also involved in the automatic flag clearing mechanisms for the UART status flags</description>
                <addressOffset>0x1C</addressOffset>
                <fields>
@@ -1513,14 +1527,13 @@ receive shift register</description>
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>FRETSC</name>
-                     <description>Frame Error / Transmit Special Character\n
-For reads, indicates the current received dataword contained in DATA[R9:R0] was received with a frame
-error. For writes, indicates a break or idle character is to be transmitted instead of the contents in
-DATA[T9:T0]. T9 is used to indicate a break character when 0 and a idle character when 1, he contents of
-DATA[T8:T0] should be zero</description>
+                     <name>FRAME</name>
+                     <description>Frame Error\n
+Indicates the current received dataword contained in DATA[R9:R0] was received with a frame
+error.</description>
                      <bitOffset>13</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -1530,6 +1543,29 @@ DATA[T8:T0] should be zero</description>
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>Frame error</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXSPECIAL</name>
+                     <description>Transmit Special Character\n
+Indicates a break or idle character is to be transmitted instead of the contents in DATA[T9:T0].
+T9 is used to indicate a break character when 0 and a idle character when 1, he contents of
+DATA[T8:T0] should be zero</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <?ignoreOverlap?>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Normal character</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Break or Idle character</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

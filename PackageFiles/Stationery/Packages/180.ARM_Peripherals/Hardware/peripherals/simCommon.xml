@@ -27,7 +27,7 @@
       <choice name="Interrupts Disabled"  value="(int8_t)255"                   enum="Disabled"     />
       <choice name="Very Low"             value="(1&lt;&lt;__NVIC_PRIO_BITS)-1" enum="VeryLow"      />
       <choice name="Low"                  value="(NvicPriority_VeryLow*5/6)"    enum="Low"          />
-      <choice name="Mid-low"              value="(NvicPriority_VeryLow*4/6)"    enum="Midlow"       />
+      <choice name="Mid-Low"              value="(NvicPriority_VeryLow*4/6)"    enum="MidLow"       />
       <choice name="Normal"               value="(NvicPriority_VeryLow*3/6)"    enum="Normal"       isDefault="true" />
       <choice name="Mid-High"             value="(NvicPriority_VeryLow*2/6)"    enum="MidHigh"      />
       <choice name="High"                 value="(NvicPriority_VeryLow*1/6)"    enum="High"         />

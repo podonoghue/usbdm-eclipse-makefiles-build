@@ -1095,6 +1095,13 @@ This bit is self-clearing on completion of 80 clocks to SD card</description>
                <addressOffset>0x30</addressOffset>
                <fields>
                   <field>
+                     <name>IRQSTAT</name>
+                     <description>Status Flags</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>32</bitWidth>
+                     <?ignoreOverlap?>
+                  </field>
+                  <field>
                      <name>CC</name>
                      <description>Command Complete</description>
                      <bitOffset>0</bitOffset>
@@ -1342,6 +1349,13 @@ This bit is self-clearing on completion of 80 clocks to SD card</description>
                <resetValue>0x117F013F</resetValue>
                <fields>
                   <field>
+                     <name>IRQSTATEN</name>
+                     <description>Status Flags</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>32</bitWidth>
+                     <?ignoreOverlap?>
+                  </field>
+                  <field>
                      <name>CCSEN</name>
                      <description>Command Complete Status Enable</description>
                      <bitOffset>0</bitOffset>
@@ -1383,6 +1397,13 @@ This bit is self-clearing on completion of 80 clocks to SD card</description>
                <description>Interrupt Signal Enable Register</description>
                <addressOffset>0x38</addressOffset>
                <fields>
+                  <field>
+                     <name>IRQSIGEN</name>
+                     <description>Status Flags</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>32</bitWidth>
+                     <?ignoreOverlap?>
+                  </field>
                   <field>
                      <name>CCIEN</name>
                      <description>Command Complete Interrupt Enable</description>

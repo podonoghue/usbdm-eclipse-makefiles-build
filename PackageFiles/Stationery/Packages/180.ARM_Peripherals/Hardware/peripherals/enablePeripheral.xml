@@ -331,7 +331,7 @@
       <aliasOption key="irqLevel"       locked="false" optional="true" />
       <!--  aliasOption key="irqHandlerName" locked="false" / -->
 
-      <variableTemplate codeGenCondition="$(_BasicInfoGuard)"
+      <variableTemplate codeGenCondition="$(_InfoGuard)"
          variables="irqHandlingMethod"
       ><![CDATA[
           \t//! Class based callback handler has been installed in vector table for this instance

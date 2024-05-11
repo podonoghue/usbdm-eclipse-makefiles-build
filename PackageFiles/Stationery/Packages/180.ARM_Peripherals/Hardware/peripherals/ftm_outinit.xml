@@ -9,6 +9,7 @@
    <binaryOption key="ftm_mode_init" condition="ftm_mode_init_present"
       hidden="true"
       hiddenBy="mode==Quad"
+      locked="true"
       enabledBy="enablePeripheralSupport"
       baseType="uint8_t"
       typeName="FtmInitialiseOutputs"
@@ -46,7 +47,7 @@
       toolTip="Bitmask defining the value that is forced\n
                into the channel output when initialisation occurs."
       value="0"
-      bitDescription="@SignalList(8)"
+      bitDescription='@SignalList("^(FTM\d_CH%i.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
       bitList="Ch%iInitialValue"
       
       

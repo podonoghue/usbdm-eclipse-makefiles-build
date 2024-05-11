@@ -3463,6 +3463,7 @@
          <param type="BooleanVariable"        name="sdhc_irqsigen_dintien_present"  value="true"             key="/SDHC0/sdhc_irqsigen_dintien_present" />
          <param type="BooleanVariable"        name="sdhc_irqsigen_dmaeien_present"  value="true"             key="/SDHC0/sdhc_irqsigen_dmaeien_present" />
          <param type="BooleanVariable"        name="sdhc_irqsigen_dtoeien_present"  value="true"             key="/SDHC0/sdhc_irqsigen_dtoeien_present" />
+         <param type="BooleanVariable"        name="sdhc_irqsigen_irqsigen_present" value="true"             key="/SDHC0/sdhc_irqsigen_irqsigen_present" />
          <param type="BooleanVariable"        name="sdhc_irqsigen_present"          value="true"             key="/SDHC0/sdhc_irqsigen_present" />
          <param type="BooleanVariable"        name="sdhc_irqsigen_tcien_present"    value="true"             key="/SDHC0/sdhc_irqsigen_tcien_present" />
          <param type="BooleanVariable"        name="sdhc_irqstat_ac12e_present"     value="true"             key="/SDHC0/sdhc_irqstat_ac12e_present" />
@@ -3482,6 +3483,7 @@
          <param type="BooleanVariable"        name="sdhc_irqstat_dint_present"      value="true"             key="/SDHC0/sdhc_irqstat_dint_present" />
          <param type="BooleanVariable"        name="sdhc_irqstat_dmae_present"      value="true"             key="/SDHC0/sdhc_irqstat_dmae_present" />
          <param type="BooleanVariable"        name="sdhc_irqstat_dtoe_present"      value="true"             key="/SDHC0/sdhc_irqstat_dtoe_present" />
+         <param type="BooleanVariable"        name="sdhc_irqstat_irqstat_present"   value="true"             key="/SDHC0/sdhc_irqstat_irqstat_present" />
          <param type="BooleanVariable"        name="sdhc_irqstat_present"           value="true"             key="/SDHC0/sdhc_irqstat_present" />
          <param type="BooleanVariable"        name="sdhc_irqstat_tc_present"        value="true"             key="/SDHC0/sdhc_irqstat_tc_present" />
          <param type="BooleanVariable"        name="sdhc_irqstaten_ac12esen_present" value="true"             key="/SDHC0/sdhc_irqstaten_ac12esen_present" />
@@ -3501,6 +3503,7 @@
          <param type="BooleanVariable"        name="sdhc_irqstaten_dintsen_present" value="true"             key="/SDHC0/sdhc_irqstaten_dintsen_present" />
          <param type="BooleanVariable"        name="sdhc_irqstaten_dmaesen_present" value="true"             key="/SDHC0/sdhc_irqstaten_dmaesen_present" />
          <param type="BooleanVariable"        name="sdhc_irqstaten_dtoesen_present" value="true"             key="/SDHC0/sdhc_irqstaten_dtoesen_present" />
+         <param type="BooleanVariable"        name="sdhc_irqstaten_irqstaten_present" value="true"             key="/SDHC0/sdhc_irqstaten_irqstaten_present" />
          <param type="BooleanVariable"        name="sdhc_irqstaten_present"         value="true"             key="/SDHC0/sdhc_irqstaten_present" />
          <param type="BooleanVariable"        name="sdhc_irqstaten_tcsen_present"   value="true"             key="/SDHC0/sdhc_irqstaten_tcsen_present" />
          <param type="BooleanVariable"        name="sdhc_mmcboot_autosabgen_present" value="true"             key="/SDHC0/sdhc_mmcboot_autosabgen_present" />

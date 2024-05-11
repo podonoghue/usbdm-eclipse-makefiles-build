@@ -2899,6 +2899,7 @@
          <param type="BooleanVariable"        name="lpuart_baud_sbns_present"       value="true"             key="/LPUART0/lpuart_baud_sbns_present" />
          <param type="BooleanVariable"        name="lpuart_baud_sbr_present"        value="true"             key="/LPUART0/lpuart_baud_sbr_present" />
          <param type="BooleanVariable"        name="lpuart_baud_tdmae_present"      value="true"             key="/LPUART0/lpuart_baud_tdmae_present" />
+         <param type="BooleanVariable"        name="lpuart_ctrl_ctrl_present"       value="true"             key="/LPUART0/lpuart_ctrl_ctrl_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_dozeen_present"     value="true"             key="/LPUART0/lpuart_ctrl_dozeen_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_feie_present"       value="true"             key="/LPUART0/lpuart_ctrl_feie_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_idlecfg_present"    value="true"             key="/LPUART0/lpuart_ctrl_idlecfg_present" />
@@ -2927,13 +2928,14 @@
          <param type="BooleanVariable"        name="lpuart_ctrl_txdir_present"      value="true"             key="/LPUART0/lpuart_ctrl_txdir_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_txinv_present"      value="true"             key="/LPUART0/lpuart_ctrl_txinv_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_wake_present"       value="true"             key="/LPUART0/lpuart_ctrl_wake_present" />
-         <param type="BooleanVariable"        name="lpuart_data_fretsc_present"     value="true"             key="/LPUART0/lpuart_data_fretsc_present" />
+         <param type="BooleanVariable"        name="lpuart_data_frame_present"      value="true"             key="/LPUART0/lpuart_data_frame_present" />
          <param type="BooleanVariable"        name="lpuart_data_idline_present"     value="true"             key="/LPUART0/lpuart_data_idline_present" />
          <param type="BooleanVariable"        name="lpuart_data_noisy_present"      value="true"             key="/LPUART0/lpuart_data_noisy_present" />
          <param type="BooleanVariable"        name="lpuart_data_paritye_present"    value="true"             key="/LPUART0/lpuart_data_paritye_present" />
          <param type="BooleanVariable"        name="lpuart_data_present"            value="true"             key="/LPUART0/lpuart_data_present" />
          <param type="BooleanVariable"        name="lpuart_data_rt_present"         value="true"             key="/LPUART0/lpuart_data_rt_present" />
          <param type="BooleanVariable"        name="lpuart_data_rxempt_present"     value="true"             key="/LPUART0/lpuart_data_rxempt_present" />
+         <param type="BooleanVariable"        name="lpuart_data_txspecial_present"  value="true"             key="/LPUART0/lpuart_data_txspecial_present" />
          <param type="BooleanVariable"        name="lpuart_fifo_present"            value="true"             key="/LPUART0/lpuart_fifo_present" />
          <param type="BooleanVariable"        name="lpuart_fifo_rxempt_present"     value="true"             key="/LPUART0/lpuart_fifo_rxempt_present" />
          <param type="BooleanVariable"        name="lpuart_fifo_rxfe_present"       value="true"             key="/LPUART0/lpuart_fifo_rxfe_present" />
@@ -2978,6 +2980,7 @@
          <param type="BooleanVariable"        name="lpuart_stat_rwuid_present"      value="true"             key="/LPUART0/lpuart_stat_rwuid_present" />
          <param type="BooleanVariable"        name="lpuart_stat_rxedgif_present"    value="true"             key="/LPUART0/lpuart_stat_rxedgif_present" />
          <param type="BooleanVariable"        name="lpuart_stat_rxinv_present"      value="true"             key="/LPUART0/lpuart_stat_rxinv_present" />
+         <param type="BooleanVariable"        name="lpuart_stat_stat_present"       value="true"             key="/LPUART0/lpuart_stat_stat_present" />
          <param type="BooleanVariable"        name="lpuart_stat_tc_present"         value="true"             key="/LPUART0/lpuart_stat_tc_present" />
          <param type="BooleanVariable"        name="lpuart_stat_tdre_present"       value="true"             key="/LPUART0/lpuart_stat_tdre_present" />
          <param type="BooleanVariable"        name="lpuart_water_present"           value="true"             key="/LPUART0/lpuart_water_present" />
@@ -3009,6 +3012,7 @@
          <param type="BooleanVariable"        name="lpuart_baud_sbns_present"       value="true"             key="/LPUART1/lpuart_baud_sbns_present" />
          <param type="BooleanVariable"        name="lpuart_baud_sbr_present"        value="true"             key="/LPUART1/lpuart_baud_sbr_present" />
          <param type="BooleanVariable"        name="lpuart_baud_tdmae_present"      value="true"             key="/LPUART1/lpuart_baud_tdmae_present" />
+         <param type="BooleanVariable"        name="lpuart_ctrl_ctrl_present"       value="true"             key="/LPUART1/lpuart_ctrl_ctrl_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_dozeen_present"     value="true"             key="/LPUART1/lpuart_ctrl_dozeen_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_feie_present"       value="true"             key="/LPUART1/lpuart_ctrl_feie_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_idlecfg_present"    value="true"             key="/LPUART1/lpuart_ctrl_idlecfg_present" />
@@ -3037,13 +3041,14 @@
          <param type="BooleanVariable"        name="lpuart_ctrl_txdir_present"      value="true"             key="/LPUART1/lpuart_ctrl_txdir_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_txinv_present"      value="true"             key="/LPUART1/lpuart_ctrl_txinv_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_wake_present"       value="true"             key="/LPUART1/lpuart_ctrl_wake_present" />
-         <param type="BooleanVariable"        name="lpuart_data_fretsc_present"     value="true"             key="/LPUART1/lpuart_data_fretsc_present" />
+         <param type="BooleanVariable"        name="lpuart_data_frame_present"      value="true"             key="/LPUART1/lpuart_data_frame_present" />
          <param type="BooleanVariable"        name="lpuart_data_idline_present"     value="true"             key="/LPUART1/lpuart_data_idline_present" />
          <param type="BooleanVariable"        name="lpuart_data_noisy_present"      value="true"             key="/LPUART1/lpuart_data_noisy_present" />
          <param type="BooleanVariable"        name="lpuart_data_paritye_present"    value="true"             key="/LPUART1/lpuart_data_paritye_present" />
          <param type="BooleanVariable"        name="lpuart_data_present"            value="true"             key="/LPUART1/lpuart_data_present" />
          <param type="BooleanVariable"        name="lpuart_data_rt_present"         value="true"             key="/LPUART1/lpuart_data_rt_present" />
          <param type="BooleanVariable"        name="lpuart_data_rxempt_present"     value="true"             key="/LPUART1/lpuart_data_rxempt_present" />
+         <param type="BooleanVariable"        name="lpuart_data_txspecial_present"  value="true"             key="/LPUART1/lpuart_data_txspecial_present" />
          <param type="BooleanVariable"        name="lpuart_fifo_present"            value="true"             key="/LPUART1/lpuart_fifo_present" />
          <param type="BooleanVariable"        name="lpuart_fifo_rxempt_present"     value="true"             key="/LPUART1/lpuart_fifo_rxempt_present" />
          <param type="BooleanVariable"        name="lpuart_fifo_rxfe_present"       value="true"             key="/LPUART1/lpuart_fifo_rxfe_present" />
@@ -3088,6 +3093,7 @@
          <param type="BooleanVariable"        name="lpuart_stat_rwuid_present"      value="true"             key="/LPUART1/lpuart_stat_rwuid_present" />
          <param type="BooleanVariable"        name="lpuart_stat_rxedgif_present"    value="true"             key="/LPUART1/lpuart_stat_rxedgif_present" />
          <param type="BooleanVariable"        name="lpuart_stat_rxinv_present"      value="true"             key="/LPUART1/lpuart_stat_rxinv_present" />
+         <param type="BooleanVariable"        name="lpuart_stat_stat_present"       value="true"             key="/LPUART1/lpuart_stat_stat_present" />
          <param type="BooleanVariable"        name="lpuart_stat_tc_present"         value="true"             key="/LPUART1/lpuart_stat_tc_present" />
          <param type="BooleanVariable"        name="lpuart_stat_tdre_present"       value="true"             key="/LPUART1/lpuart_stat_tdre_present" />
          <param type="BooleanVariable"        name="lpuart_water_present"           value="true"             key="/LPUART1/lpuart_water_present" />
@@ -3119,6 +3125,7 @@
          <param type="BooleanVariable"        name="lpuart_baud_sbns_present"       value="true"             key="/LPUART2/lpuart_baud_sbns_present" />
          <param type="BooleanVariable"        name="lpuart_baud_sbr_present"        value="true"             key="/LPUART2/lpuart_baud_sbr_present" />
          <param type="BooleanVariable"        name="lpuart_baud_tdmae_present"      value="true"             key="/LPUART2/lpuart_baud_tdmae_present" />
+         <param type="BooleanVariable"        name="lpuart_ctrl_ctrl_present"       value="true"             key="/LPUART2/lpuart_ctrl_ctrl_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_dozeen_present"     value="true"             key="/LPUART2/lpuart_ctrl_dozeen_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_feie_present"       value="true"             key="/LPUART2/lpuart_ctrl_feie_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_idlecfg_present"    value="true"             key="/LPUART2/lpuart_ctrl_idlecfg_present" />
@@ -3147,13 +3154,14 @@
          <param type="BooleanVariable"        name="lpuart_ctrl_txdir_present"      value="true"             key="/LPUART2/lpuart_ctrl_txdir_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_txinv_present"      value="true"             key="/LPUART2/lpuart_ctrl_txinv_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_wake_present"       value="true"             key="/LPUART2/lpuart_ctrl_wake_present" />
-         <param type="BooleanVariable"        name="lpuart_data_fretsc_present"     value="true"             key="/LPUART2/lpuart_data_fretsc_present" />
+         <param type="BooleanVariable"        name="lpuart_data_frame_present"      value="true"             key="/LPUART2/lpuart_data_frame_present" />
          <param type="BooleanVariable"        name="lpuart_data_idline_present"     value="true"             key="/LPUART2/lpuart_data_idline_present" />
          <param type="BooleanVariable"        name="lpuart_data_noisy_present"      value="true"             key="/LPUART2/lpuart_data_noisy_present" />
          <param type="BooleanVariable"        name="lpuart_data_paritye_present"    value="true"             key="/LPUART2/lpuart_data_paritye_present" />
          <param type="BooleanVariable"        name="lpuart_data_present"            value="true"             key="/LPUART2/lpuart_data_present" />
          <param type="BooleanVariable"        name="lpuart_data_rt_present"         value="true"             key="/LPUART2/lpuart_data_rt_present" />
          <param type="BooleanVariable"        name="lpuart_data_rxempt_present"     value="true"             key="/LPUART2/lpuart_data_rxempt_present" />
+         <param type="BooleanVariable"        name="lpuart_data_txspecial_present"  value="true"             key="/LPUART2/lpuart_data_txspecial_present" />
          <param type="BooleanVariable"        name="lpuart_fifo_present"            value="true"             key="/LPUART2/lpuart_fifo_present" />
          <param type="BooleanVariable"        name="lpuart_fifo_rxempt_present"     value="true"             key="/LPUART2/lpuart_fifo_rxempt_present" />
          <param type="BooleanVariable"        name="lpuart_fifo_rxfe_present"       value="true"             key="/LPUART2/lpuart_fifo_rxfe_present" />
@@ -3198,6 +3206,7 @@
          <param type="BooleanVariable"        name="lpuart_stat_rwuid_present"      value="true"             key="/LPUART2/lpuart_stat_rwuid_present" />
          <param type="BooleanVariable"        name="lpuart_stat_rxedgif_present"    value="true"             key="/LPUART2/lpuart_stat_rxedgif_present" />
          <param type="BooleanVariable"        name="lpuart_stat_rxinv_present"      value="true"             key="/LPUART2/lpuart_stat_rxinv_present" />
+         <param type="BooleanVariable"        name="lpuart_stat_stat_present"       value="true"             key="/LPUART2/lpuart_stat_stat_present" />
          <param type="BooleanVariable"        name="lpuart_stat_tc_present"         value="true"             key="/LPUART2/lpuart_stat_tc_present" />
          <param type="BooleanVariable"        name="lpuart_stat_tdre_present"       value="true"             key="/LPUART2/lpuart_stat_tdre_present" />
          <param type="BooleanVariable"        name="lpuart_water_present"           value="true"             key="/LPUART2/lpuart_water_present" />
@@ -3229,6 +3238,7 @@
          <param type="BooleanVariable"        name="lpuart_baud_sbns_present"       value="true"             key="/LPUART3/lpuart_baud_sbns_present" />
          <param type="BooleanVariable"        name="lpuart_baud_sbr_present"        value="true"             key="/LPUART3/lpuart_baud_sbr_present" />
          <param type="BooleanVariable"        name="lpuart_baud_tdmae_present"      value="true"             key="/LPUART3/lpuart_baud_tdmae_present" />
+         <param type="BooleanVariable"        name="lpuart_ctrl_ctrl_present"       value="true"             key="/LPUART3/lpuart_ctrl_ctrl_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_dozeen_present"     value="true"             key="/LPUART3/lpuart_ctrl_dozeen_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_feie_present"       value="true"             key="/LPUART3/lpuart_ctrl_feie_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_idlecfg_present"    value="true"             key="/LPUART3/lpuart_ctrl_idlecfg_present" />
@@ -3257,13 +3267,14 @@
          <param type="BooleanVariable"        name="lpuart_ctrl_txdir_present"      value="true"             key="/LPUART3/lpuart_ctrl_txdir_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_txinv_present"      value="true"             key="/LPUART3/lpuart_ctrl_txinv_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_wake_present"       value="true"             key="/LPUART3/lpuart_ctrl_wake_present" />
-         <param type="BooleanVariable"        name="lpuart_data_fretsc_present"     value="true"             key="/LPUART3/lpuart_data_fretsc_present" />
+         <param type="BooleanVariable"        name="lpuart_data_frame_present"      value="true"             key="/LPUART3/lpuart_data_frame_present" />
          <param type="BooleanVariable"        name="lpuart_data_idline_present"     value="true"             key="/LPUART3/lpuart_data_idline_present" />
          <param type="BooleanVariable"        name="lpuart_data_noisy_present"      value="true"             key="/LPUART3/lpuart_data_noisy_present" />
          <param type="BooleanVariable"        name="lpuart_data_paritye_present"    value="true"             key="/LPUART3/lpuart_data_paritye_present" />
          <param type="BooleanVariable"        name="lpuart_data_present"            value="true"             key="/LPUART3/lpuart_data_present" />
          <param type="BooleanVariable"        name="lpuart_data_rt_present"         value="true"             key="/LPUART3/lpuart_data_rt_present" />
          <param type="BooleanVariable"        name="lpuart_data_rxempt_present"     value="true"             key="/LPUART3/lpuart_data_rxempt_present" />
+         <param type="BooleanVariable"        name="lpuart_data_txspecial_present"  value="true"             key="/LPUART3/lpuart_data_txspecial_present" />
          <param type="BooleanVariable"        name="lpuart_fifo_present"            value="true"             key="/LPUART3/lpuart_fifo_present" />
          <param type="BooleanVariable"        name="lpuart_fifo_rxempt_present"     value="true"             key="/LPUART3/lpuart_fifo_rxempt_present" />
          <param type="BooleanVariable"        name="lpuart_fifo_rxfe_present"       value="true"             key="/LPUART3/lpuart_fifo_rxfe_present" />
@@ -3308,6 +3319,7 @@
          <param type="BooleanVariable"        name="lpuart_stat_rwuid_present"      value="true"             key="/LPUART3/lpuart_stat_rwuid_present" />
          <param type="BooleanVariable"        name="lpuart_stat_rxedgif_present"    value="true"             key="/LPUART3/lpuart_stat_rxedgif_present" />
          <param type="BooleanVariable"        name="lpuart_stat_rxinv_present"      value="true"             key="/LPUART3/lpuart_stat_rxinv_present" />
+         <param type="BooleanVariable"        name="lpuart_stat_stat_present"       value="true"             key="/LPUART3/lpuart_stat_stat_present" />
          <param type="BooleanVariable"        name="lpuart_stat_tc_present"         value="true"             key="/LPUART3/lpuart_stat_tc_present" />
          <param type="BooleanVariable"        name="lpuart_stat_tdre_present"       value="true"             key="/LPUART3/lpuart_stat_tdre_present" />
          <param type="BooleanVariable"        name="lpuart_water_present"           value="true"             key="/LPUART3/lpuart_water_present" />
@@ -3339,6 +3351,7 @@
          <param type="BooleanVariable"        name="lpuart_baud_sbns_present"       value="true"             key="/LPUART4/lpuart_baud_sbns_present" />
          <param type="BooleanVariable"        name="lpuart_baud_sbr_present"        value="true"             key="/LPUART4/lpuart_baud_sbr_present" />
          <param type="BooleanVariable"        name="lpuart_baud_tdmae_present"      value="true"             key="/LPUART4/lpuart_baud_tdmae_present" />
+         <param type="BooleanVariable"        name="lpuart_ctrl_ctrl_present"       value="true"             key="/LPUART4/lpuart_ctrl_ctrl_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_dozeen_present"     value="true"             key="/LPUART4/lpuart_ctrl_dozeen_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_feie_present"       value="true"             key="/LPUART4/lpuart_ctrl_feie_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_idlecfg_present"    value="true"             key="/LPUART4/lpuart_ctrl_idlecfg_present" />
@@ -3367,13 +3380,14 @@
          <param type="BooleanVariable"        name="lpuart_ctrl_txdir_present"      value="true"             key="/LPUART4/lpuart_ctrl_txdir_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_txinv_present"      value="true"             key="/LPUART4/lpuart_ctrl_txinv_present" />
          <param type="BooleanVariable"        name="lpuart_ctrl_wake_present"       value="true"             key="/LPUART4/lpuart_ctrl_wake_present" />
-         <param type="BooleanVariable"        name="lpuart_data_fretsc_present"     value="true"             key="/LPUART4/lpuart_data_fretsc_present" />
+         <param type="BooleanVariable"        name="lpuart_data_frame_present"      value="true"             key="/LPUART4/lpuart_data_frame_present" />
          <param type="BooleanVariable"        name="lpuart_data_idline_present"     value="true"             key="/LPUART4/lpuart_data_idline_present" />
          <param type="BooleanVariable"        name="lpuart_data_noisy_present"      value="true"             key="/LPUART4/lpuart_data_noisy_present" />
          <param type="BooleanVariable"        name="lpuart_data_paritye_present"    value="true"             key="/LPUART4/lpuart_data_paritye_present" />
          <param type="BooleanVariable"        name="lpuart_data_present"            value="true"             key="/LPUART4/lpuart_data_present" />
          <param type="BooleanVariable"        name="lpuart_data_rt_present"         value="true"             key="/LPUART4/lpuart_data_rt_present" />
          <param type="BooleanVariable"        name="lpuart_data_rxempt_present"     value="true"             key="/LPUART4/lpuart_data_rxempt_present" />
+         <param type="BooleanVariable"        name="lpuart_data_txspecial_present"  value="true"             key="/LPUART4/lpuart_data_txspecial_present" />
          <param type="BooleanVariable"        name="lpuart_fifo_present"            value="true"             key="/LPUART4/lpuart_fifo_present" />
          <param type="BooleanVariable"        name="lpuart_fifo_rxempt_present"     value="true"             key="/LPUART4/lpuart_fifo_rxempt_present" />
          <param type="BooleanVariable"        name="lpuart_fifo_rxfe_present"       value="true"             key="/LPUART4/lpuart_fifo_rxfe_present" />
@@ -3418,6 +3432,7 @@
          <param type="BooleanVariable"        name="lpuart_stat_rwuid_present"      value="true"             key="/LPUART4/lpuart_stat_rwuid_present" />
          <param type="BooleanVariable"        name="lpuart_stat_rxedgif_present"    value="true"             key="/LPUART4/lpuart_stat_rxedgif_present" />
          <param type="BooleanVariable"        name="lpuart_stat_rxinv_present"      value="true"             key="/LPUART4/lpuart_stat_rxinv_present" />
+         <param type="BooleanVariable"        name="lpuart_stat_stat_present"       value="true"             key="/LPUART4/lpuart_stat_stat_present" />
          <param type="BooleanVariable"        name="lpuart_stat_tc_present"         value="true"             key="/LPUART4/lpuart_stat_tc_present" />
          <param type="BooleanVariable"        name="lpuart_stat_tdre_present"       value="true"             key="/LPUART4/lpuart_stat_tdre_present" />
          <param type="BooleanVariable"        name="lpuart_water_present"           value="true"             key="/LPUART4/lpuart_water_present" />
@@ -4133,6 +4148,7 @@
          <param type="BooleanVariable"        name="sdhc_irqsigen_dintien_present"  value="true"             key="/SDHC0/sdhc_irqsigen_dintien_present" />
          <param type="BooleanVariable"        name="sdhc_irqsigen_dmaeien_present"  value="true"             key="/SDHC0/sdhc_irqsigen_dmaeien_present" />
          <param type="BooleanVariable"        name="sdhc_irqsigen_dtoeien_present"  value="true"             key="/SDHC0/sdhc_irqsigen_dtoeien_present" />
+         <param type="BooleanVariable"        name="sdhc_irqsigen_irqsigen_present" value="true"             key="/SDHC0/sdhc_irqsigen_irqsigen_present" />
          <param type="BooleanVariable"        name="sdhc_irqsigen_present"          value="true"             key="/SDHC0/sdhc_irqsigen_present" />
          <param type="BooleanVariable"        name="sdhc_irqsigen_tcien_present"    value="true"             key="/SDHC0/sdhc_irqsigen_tcien_present" />
          <param type="BooleanVariable"        name="sdhc_irqstat_ac12e_present"     value="true"             key="/SDHC0/sdhc_irqstat_ac12e_present" />
@@ -4152,6 +4168,7 @@
          <param type="BooleanVariable"        name="sdhc_irqstat_dint_present"      value="true"             key="/SDHC0/sdhc_irqstat_dint_present" />
          <param type="BooleanVariable"        name="sdhc_irqstat_dmae_present"      value="true"             key="/SDHC0/sdhc_irqstat_dmae_present" />
          <param type="BooleanVariable"        name="sdhc_irqstat_dtoe_present"      value="true"             key="/SDHC0/sdhc_irqstat_dtoe_present" />
+         <param type="BooleanVariable"        name="sdhc_irqstat_irqstat_present"   value="true"             key="/SDHC0/sdhc_irqstat_irqstat_present" />
          <param type="BooleanVariable"        name="sdhc_irqstat_present"           value="true"             key="/SDHC0/sdhc_irqstat_present" />
          <param type="BooleanVariable"        name="sdhc_irqstat_tc_present"        value="true"             key="/SDHC0/sdhc_irqstat_tc_present" />
          <param type="BooleanVariable"        name="sdhc_irqstaten_ac12esen_present" value="true"             key="/SDHC0/sdhc_irqstaten_ac12esen_present" />
@@ -4171,6 +4188,7 @@
          <param type="BooleanVariable"        name="sdhc_irqstaten_dintsen_present" value="true"             key="/SDHC0/sdhc_irqstaten_dintsen_present" />
          <param type="BooleanVariable"        name="sdhc_irqstaten_dmaesen_present" value="true"             key="/SDHC0/sdhc_irqstaten_dmaesen_present" />
          <param type="BooleanVariable"        name="sdhc_irqstaten_dtoesen_present" value="true"             key="/SDHC0/sdhc_irqstaten_dtoesen_present" />
+         <param type="BooleanVariable"        name="sdhc_irqstaten_irqstaten_present" value="true"             key="/SDHC0/sdhc_irqstaten_irqstaten_present" />
          <param type="BooleanVariable"        name="sdhc_irqstaten_present"         value="true"             key="/SDHC0/sdhc_irqstaten_present" />
          <param type="BooleanVariable"        name="sdhc_irqstaten_tcsen_present"   value="true"             key="/SDHC0/sdhc_irqstaten_tcsen_present" />
          <param type="BooleanVariable"        name="sdhc_mmcboot_autosabgen_present" value="true"             key="/SDHC0/sdhc_mmcboot_autosabgen_present" />

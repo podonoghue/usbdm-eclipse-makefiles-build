@@ -4,6 +4,9 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
+   <equation key="FifoTxSize" value='=8' />
+   <equation key="FifoRxSize" value='=8' />
+
    <!-- Enable for this peripheral -->
    <binaryOption key="usedAsConsole"
       description="usedAsConsole"
@@ -26,19 +29,20 @@
       <choice value="true"  name="Generate code for $(_NAME)"/>
    </binaryOption>
 
-   <equation key="irq_pattern"               value="^$(_BASENAME)%i((_)((RxTx|Error|Lon)|.*))?$" />
-   <equation key="irq_ClassHandler"          value="%c%i::$3$2irqHandler"                        />
-   <equation key="irq_parameters"            value=""     />
-   <equation key="irq_dummy_parameters"      value=""     />
-   <equation key="irq_call"                  value=""     />
-   <equation key="generateDefault"           value="false"  />
-   <equation key="configureInStartupDefault" value="false"  />
-   <xi:include href="enablePeripheral.xml"  />
+   <!-- ____ Class Declaration ________ -->
+   <constant key="_basicInfo_declaration" type="String" value='"$(_BasicInfo) : public FormattedIO"' />
+
+   <!-- ____ Class Declaration _____ -->
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <constant key="definitionsInHeader" value="true" type="Boolean" />
 
-   <!-- ____ Class Declaration ________ -->
-   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
+   <equation key="irq_parameters"             value=""          />
+   <equation key="irq_dummy_parameters"       value=""          />
+   <equation key="irq_call"                   value=""          />
+   <equation key="generateDefault"            value="false"     />
+   <equation key="configureInStartupDefault"  value="false"     />
+   <xi:include href="enablePeripheral.xml"    />
 
    <title description="Clock Configuration"/>
    <aliasOption key="/MCG/system_mcgfllclk_clock[]"       optional="true" />
@@ -51,15 +55,44 @@
    <aliasOption key="/SIM/sim_clkdiv3_pllfll[]"           optional="true"/>
 
    <title description="Configuration"/>
-   <intOption key="lpuart_baud_osr" condition="lpuart_baud_osr_present"
+
+   <binaryOption key="lpuart_ctrl_te" condition="lpuart_ctrl_te_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartTransmitterEnable"
+      baseType="uint32_t"
+      toolTip="Enables the LPUART transmitter.\n
+               TE can also be used to queue an idle preamble by clearing and then setting TE.\n
+               When TE is cleared, this register bit will read as 1 until the transmitter has\n
+               completed the current character and the LPUART_TX pin is tristated"
+      description="Transmitter Enable"
+      disabledValue="0" >
+      <choice name="Transmitter disabled"  value="0" enum="TransmitterDisabled" />
+      <choice name="Transmitter enabled"   value="1" enum="TransmitterEnabled"  isDefault="true" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_ctrl_re" condition="lpuart_ctrl_re_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartReceiverEnable"
+      baseType="uint32_t"
+      toolTip="Enables the LPUART receiver.\n
+               When RE is written to 0, this register bit will read as 1 until the receiver \n
+               finishes receiving the current character (if any)"
+      description="Receiver Enable"
+      disabledValue="0" >
+      <choice name="Receiver disabled"  value="0" enum="ReceiverDisabled" />
+      <choice name="Receiver enabled"   value="1" enum="ReceiverEnabled"  isDefault="true"/>
+   </binaryOption >
+
+   <choiceOption key="lpuart_baud_osr" condition="lpuart_baud_osr_present"
       enabledBy="enablePeripheralSupport"
       typeName="LpuartBaudOsr"
-      baseType="uint8_t"
+      baseType="uint32_t"
       description="Over Sampling Ratio"
-      toolTip="This field configures the oversampling ratio for the receiver.\n
-      This field should only be changed when the transmitter and receiver are both disabled"
-      value="8" min="4" max="32"
-   />
+      toolTip="Configures the oversampling ratio for the receiver.\n
+               This field should only be changed when the transmitter and receiver are both disabled">
+      <choiceExpansion keys="index" dim="4,32"
+            name="Oversample %(index)x" value='=ToString(%(index)-1)' enum="%(index)x" isDefault="=%(index)==16" />
+   </choiceOption>
 
    <choiceOption key="lpuart_baudrate"
       valueFormat=""
@@ -67,95 +100,1179 @@
       derivedFrom="/Console/console_baudrate" >
    </choiceOption>
 
-   <!-- ____ Interrupt handling _____________ -->
+   <!-- ____ BAUD ____ -->
+   <title description="Baud Rate Register" />
 
-   <!--
-   <for keys="irqName" values="=_hardwareIrqNums" >
+   <binaryOption key="lpuart_baud_maen1" condition="lpuart_baud_maen1_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartMatchAddressModeEnable1"
+      baseType="uint32_t"
+      toolTip=""
+      description="Match Address Mode Enable 1" >
+      <choice name="Normal operation"                          value="0" enum="NormalOperation" />
+      <choice name="Enables address/data matching MATCH[MA1]"  value="1" enum="MatchingMode" />
+   </binaryOption >
 
-      <constant key="prettyIrqName" value='Prettify(ReplaceAll("%(irqName)", "$(_NAME)_([a-z|A-Z|0-9]+)_IRQn", "$1"))' type="String"/>
+   <binaryOption key="lpuart_baud_maen2" condition="lpuart_baud_maen2_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartMatchAddressModeEnable2"
+      baseType="uint32_t"
+      toolTip=""
+      description="Match Address Mode Enable 2" >
+      <choice name="Normal operation"                          value="0" enum="NormalOperation" />
+      <choice name="Enables address/data matching MATCH[MA1]"  value="1" enum="MatchingMode" />
+   </binaryOption >
 
-      <variableTemplate codeGenCondition="irqHandlingMethod"
-         variables="irq_enum"
-         immediateVariables="prettyIrqName"
-         >
-      <![CDATA[
-         \t/**
-         \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
-         \t *
-         \t * @tparam channel Channel number
-         \t */
-         \tstatic void $(prettyIrqName)_irqHandler() {
-         \t
-         \t   // Execute call-back
-         \t   sCallbacks[$(_Class)IrqNum_$(prettyIrqName)]($(irq_call));
-         \t}
-         \t\n
-      ]]>
-      </variableTemplate>
-      <deleteVariables variables="prettyIrqName" />
-   </for>
-    -->
+   <binaryOption key="lpuart_baud_m10" condition="lpuart_baud_m10_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="Lpuart10BitModeSelect"
+      baseType="uint32_t"
+      toolTip="The M10 bit causes a tenth bit to be part of the serial transmission.\n
+               This bit should only be changed when the transmitter and receiver are both disabled"
+      description="10-bit Mode select" >
+      <choice name="8-bit or 9-bit data characters"  value="0" enum="8_9bit" />
+      <choice name="10-bit data characters"          value="1" enum="10bit" />
+   </binaryOption >
 
-   <template condition="@status_is_w1c" ><![CDATA[
-      \t/**
-      \t * Clear UART status \n
-      \t * This includes:
-      \t * - Idle detect flag
-      \t * - Overrun flag
-      \t * - Noise flag
-      \t * - Framing error flag
-      \t * - Parity error flag
-      \t */
-      \tstatic void clearError() {
-      \t
-      \t   // Flags are w1c
-      \t      lpuart->STAT = lpuart->STAT |LPUART_STAT_FE_MASK|LPUART_STAT_NF_MASK|LPUART_STAT_PF_MASK|LPUART_STAT_OR_MASK;
-      \t}
-      \t\n
-   ]]></template>
+   <binaryOption key="lpuart_baud_tdmae" condition="lpuart_baud_tdmae_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartTransmitterDma"
+      baseType="uint32_t"
+      toolTip="TDMAE configures the transmit data register empty flag, LPUART_STAT[TDRE],\n
+               to generate a DMA request"
+      description="Transmitter DMA Enable" >
+      <choice name="DMA request disabled"  value="0" enum="DmaRequestDisabled" />
+      <choice name="DMA request enabled"   value="1" enum="DmaRequestEnabled" />
+   </binaryOption >
 
-   <template condition="!@status_is_w1c" ><![CDATA[
-      \t/**
-      \t * Clear UART status \n
-      \t * This includes:
-      \t * - Idle detect flag
-      \t * - Overrun flag
-      \t * - Noise flag
-      \t * - Framing error flag
-      \t * - Parity error flag
-      \t */
-      \tstatic void clearError() {
-      \t
-      \t   // Flags are cleared by reading status and then data
-      \t   (void)lpuart->STAT;
-      \t   (void)uart->DATA;
-      \t}
-      \t\n
-   ]]></template>
+   <binaryOption key="lpuart_baud_rdmae" condition="lpuart_baud_rdmae_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartReceiverDma"
+      baseType="uint32_t"
+      toolTip="RDMAE configures the receiver data register full flag, LPUART_STAT[RDRF],\n
+               to generate a DMA request"
+      description="Receiver Full DMA Enable" >
+      <choice name="DMA request disabled"  value="0" enum="DmaRequestDisabled" />
+      <choice name="DMA request enabled"   value="1" enum="DmaRequestEnabled" />
+   </binaryOption >
 
-   <!-- Individual clock selection -->
-   <template condition="/SIM/$(_name)_src_available"> <![CDATA[
-      \t/**
-      \t * Get input clock frequency
-      \t *
-      \t * @return Input clock frequency as a uint32_t in Hz
-      \t */
-      \tstatic inline uint32_t getInputClockFrequency() {
-      \t   return SimInfo::get$(_Class)Clock();
-      \t}\n\n
-   ]]></template>
+   <choiceOption key="lpuart_baud_matcfg" condition="lpuart_baud_matcfg_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartMatchConfiguration"
+      baseType="uint32_t"
+      toolTip="Configures the match addressing mode used"
+      description="Match Configuration" >
+      <choice name="Address Match Wakeup"                                                  value="0" enum="AddressMatchWakeup" />
+      <choice name="Idle Match Wakeup"                                                     value="1" enum="IdleMatchWakeup" />
+      <choice name="Match On and Match Off"                                                value="2" enum="MatchOnMatchOff" />
+      <choice name="Enables RWU on Data Match and Match On/Off for transmitter CTS input"  value="3" enum="RwuAndCtsOnOffMatching" />
+   </choiceOption >
 
-   <!-- Shared clock selection -->
-   <template condition="/SIM/$(_basename)_src_available"> <![CDATA[
-      \t/**
-      \t * Get input clock frequency
-      \t *
-      \t * @return Input clock frequency as a uint32_t in Hz
-      \t */
-      \tstatic inline uint32_t getInputClockFrequency() {
-      \t   return SimInfo::get$(_Baseclass)Clock();
-      \t}\n\n
-   ]]></template>
+   <binaryOption key="lpuart_baud_bothedge" condition="lpuart_baud_bothedge_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartBothEdgeSampling"
+      baseType="uint32_t"
+      toolTip="Enables sampling of the received data on both edges of the baud rate clock, effectively\n
+               doubling the number of times the receiver samples the input data for a given oversampling ratio.\n
+               This bit must be set for oversampling ratios between x4 and x7 and is optional for higher\n
+               oversampling ratios. \n
+               This bit should only be changed when the receiver is disabled"
+      description="Both Edge Sampling" >
+      <choice name="Rising edge sampling"              value="0" enum="RisingEdge" />
+      <choice name="Rising and falling edge sampling"  value="1" enum="BothEdges" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_baud_resyncdis" condition="lpuart_baud_resyncdis_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartResynchronizationDisable"
+      baseType="uint32_t"
+      toolTip="When set, disables the resynchronization of the received data word when a data one followed by data\n
+               zero transition is detected.\n
+               This bit should only be changed when the receiver is disabled"
+      description="Resynchronization Disable" >
+      <choice name="Resynchronization during data enabled"   value="0" enum="Enabled" />
+      <choice name="Resynchronization during data disabled"  value="1" enum="Disabled" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_baud_lbkdie" condition="lpuart_baud_lbkdie_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartLinBreakDetectAction"
+      baseType="uint32_t"
+      toolTip="LBKDIE enables the LIN break detect flag, LBKDIF, to generate interrupt requests"
+      description="LIN Break Detect Action" >
+      <choice name="No Action"  value="0" enum="NoAction" />
+      <choice name="Interrupt"  value="1" enum="Interrupt" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_baud_rxedgie" condition="lpuart_baud_rxedgie_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartRxInputActiveEdgeAction"
+      baseType="uint32_t"
+      toolTip="Enables the receive input active edge, RXEDGIF, to generate interrupt requests.\n
+               Changing CTRL[LOOP] or CTRL[RSRC] when RXEDGIE is set can cause the RXEDGIF to set"
+      description="RX Input Active Edge Action" >
+      <choice name="No Action"  value="0" enum="NoAction" />
+      <choice name="Interrupt"  value="1" enum="Interrupt" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_baud_sbns" condition="lpuart_baud_sbns_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartStopBitNumberSelect"
+      baseType="uint32_t"
+      toolTip="SBNS determines whether data characters are one or two stop bits.\n
+               This bit should only be changed when the transmitter and receiver are both disabled"
+      description="Stop Bit Number Select" >
+      <choice name="One stop bit"   value="0" enum="OneStopBit" />
+      <choice name="Two stop bits"  value="1" enum="TwoStopBits" />
+   </binaryOption >
+
+   <intOption key="lpuart_baud_sbr" condition="lpuart_baud_sbr_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartBaudRateModuloDivisor"
+      baseType="uint16_t"
+      toolTip="The 13 bits in SBR[12:0] set the modulo divide rate for the baud rate generator.\n
+               When SBR is 1 - 8191, the baud rate equals &quot;baud clock / ((OSR+1) x SBR)&quot;.\n
+               The 13-bit baud rate setting [SBR12:SBR0] must only be updated when the transmitter and\n
+               receiver are both disabled (LPUART_CTRL[RE] and LPUART_CTRL[TE] are both 0)"
+      description="Baud Rate Modulo Divisor."
+      value="0"
+      min="0" max="8191"
+   />
+
+   <!-- ____ STAT ____ -->
+   <title description="Status Register" />
+
+   <binaryOption key="lpuart_stat_lbkdif" condition="lpuart_stat_lbkdif_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartLinBreakDetectFlag"
+      baseType="uint32_t"
+      toolTip="Set when the LIN break detect circuitry is enabled and a LIN break character is detected.\n
+               Cleared by writing a 1 to it"
+      description="LIN Break Detect Interrupt Flag" >
+      <choice name="No LIN break character has been detected"  value="0" enum="InActive" />
+      <choice name="LIN break character has been detected"     value="1" enum="Active" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_stat_rxedgif" condition="lpuart_stat_rxedgif_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartReceiverPinActiveEdgeFlag"
+      baseType="uint32_t"
+      toolTip="Set when an active edge on the LPUART_RX pin occurs.\n
+               Cleared by writing a 1 to it"
+      description="Receive Pin Active Edge Interrupt Flag" >
+      <choice name="No active edge on the receive pin has occurred"  value="0" enum="InActive" />
+      <choice name="An active edge on the receive pin has occurred"  value="1" enum="Active" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_stat_idle" condition="lpuart_stat_idle_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartIdleLineFlag"
+      baseType="uint32_t"
+      toolTip="Set when the LPUART receive line becomes idle for a full character time after a period of activity.\n
+               When cleared, the receiver starts counting idle bit times after the start bit.\n
+               To clear IDLE, write logic 1 to the IDLE flag"
+      description="Idle Line Flag" >
+      <choice name="No idle line detected"  value="0" enum="InActive" />
+      <choice name="Idle line detected"     value="1" enum="Active" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_stat_or" condition="lpuart_stat_or_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartReceiverOverrunFlag"
+      baseType="uint32_t"
+      toolTip="Set when software fails to prevent the receive data register from overflowing with data.\n
+               Set immediately after the stop bit has been completely received for the dataword that overflows\n
+               the buffer and all the other error flags (FE, NF, and PF) are prevented from setting.\n
+               The data in the shift register is lost, but the data already in the LPUART data registers\n
+               is not affected.\n
+               If LBKDE is enabled and a LIN Break is detected, the OR field asserts if LBKDIF is not\n
+               cleared before the next data character is received.
+               While the OR flag is set, no additional data is stored in the data buffer even if sufficient room exists. \n
+               To clear OR, write logic 1 to the OR flag"
+      description="Receiver Overrun Flag" >
+      <choice name="No overrun"       value="0" enum="InActive" />
+      <choice name="Receive overrun"  value="1" enum="Active" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_stat_nf" condition="lpuart_stat_nf_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartNoiseFlag"
+      baseType="uint32_t"
+      toolTip="The advanced sampling technique used in the receiver takes three samples in each of the received bits.\n
+               If any of these samples disagrees with the rest of the samples within any bit time in the frame then\n
+               noise is detected for that character.\n
+               NF is set whenever the next character to be read from DATA was received with noise detected within the character. \n
+               To clear NF, write logic one to the NF"
+      description="Noise Flag" >
+      <choice name="No noise detected"          value="0" enum="InActive" />
+      <choice name="Noise detected in Rx DATA"  value="1" enum="Active" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_stat_fe" condition="lpuart_stat_fe_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartFramingErrorFlag"
+      baseType="uint32_t"
+      toolTip="FE is set whenever the next character to be read from LPUART_DATA was received with logic 0\n
+               detected where a stop bit was expected. \n
+               To clear NF, write logic one to the NF"
+      description="Framing Error Flag" >
+      <choice name="No framing error detected"  value="0" enum="InActive" />
+      <choice name="Framing error"              value="1" enum="Active" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_stat_pf" condition="lpuart_stat_pf_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartParityErrorFlag"
+      baseType="uint32_t"
+      toolTip="PF is set whenever the next character to be read from LPUART_DATA was received when parity is\n
+               enabled (PE = 1) and the parity bit in the received character does not agree with the expected\n
+               parity value. \n
+               To clear PF, write a logic one to the PF"
+      description="Parity Error Flag" >
+      <choice name="No parity error"  value="0" enum="InActive" />
+      <choice name="Parity error"     value="1" enum="Active" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_stat_ma1f" condition="lpuart_stat_ma1f_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartMatch1Flag"
+      baseType="uint32_t"
+      toolTip="MA1F is set whenever the next character to be read from LPUART_DATA matches MA1. \n
+               To clear MA1F, write a logic one to the MA1F"
+      description="Match 1 Flag" >
+      <choice name="Received data is not equal to MA1"  value="0" enum="InActive" />
+      <choice name="Received data is equal to MA1"      value="1" enum="Active" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_stat_ma2f" condition="lpuart_stat_ma2f_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartMatch2Flag"
+      baseType="uint32_t"
+      toolTip="MA2F is set whenever the next character to be read from LPUART_DATA matches MA2. \n
+               To clear MA2F, write a logic one to the MA2F"
+      description="Match 2 Flag" >
+      <choice name="Received data is not equal to MA2"  value="0" enum="InActive" />
+      <choice name="Received data is equal to MA2"      value="1" enum="Active" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_stat_msbf" condition="lpuart_stat_msbf_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartMsbFirst"
+      baseType="uint32_t"
+      toolTip="Controls the order of the data bits that are transmitted and received on the wire.\n
+               This does not affect the polarity of the bits, the location of the parity bit or the location\n
+               of the start or stop bits.\n
+               This should only be changed when the transmitter and receiver are both disabled"
+      description="MSB First" >
+      <choice name="LSB is the first data bit"  value="0" enum="LsbFirst" />
+      <choice name="MSB is the first data bit"  value="1" enum="MsbFirst" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_stat_rxinv" condition="lpuart_stat_rxinv_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartReceiveDataInversion"
+      baseType="uint32_t"
+      toolTip="Reverses the polarity of the received data input\n
+               This bit should only be changed when the receiver is disabled"
+      description="Receive Data Inversion" >
+      <choice name="Receive data not inverted"  value="0" enum="ReceiveDataNotInverted" />
+      <choice name="Receive data inverted"      value="1" enum="ReceiveDataInverted" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_stat_rwuid" condition="lpuart_stat_rwuid_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartIdleDetectOnWakeup"
+      baseType="uint32_t"
+      toolTip="For RWU on idle character, RWUID controls whether the idle character that wakes up the receiver sets the IDLE bit.\n
+               For address match wakeup, RWUID controls if the IDLE bit is set when the address does not match.\n
+               This bit should only be changed when the receiver is disabled"
+      description="Receive Wake Up Idle Detect" >
+      <choice name="IDLE bit is not set on wakeup char" value="0" enum="IdleWillNotBeSet" />
+      <choice name="IDLE bit is set on wakeup char"     value="1" enum="IdleWillBeSet"    />
+   </binaryOption >
+
+   <binaryOption key="lpuart_stat_brk13" condition="lpuart_stat_brk13_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartBreakCharacterGenerationLength"
+      baseType="uint32_t"
+      toolTip="Selects a longer transmitted break character length. Detection of a framing error is not\n
+               affected by the state of this bit. This bit should only be changed when the transmitter is disabled"
+      description="Break Character Generation Length" >
+      <choice name="Short break"  value="0" enum="ShortBreak" />
+      <choice name="Long break"   value="1" enum="LongBreak" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_stat_lbkde" condition="lpuart_stat_lbkde_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartBreakDetectMode"
+      baseType="uint32_t"
+      toolTip="Selects a longer break character detection length.\n
+               While LBKDE is set, receive data is not stored in the receive data buffer"
+      description="LIN Break Detection Enable" >
+      <choice name="Normal break character detection"  value="0" enum="NormalCharacterDetect" />
+      <choice name="LIN break detection is enabled"    value="1" enum="LinBreakDetect" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_stat_raf" condition="lpuart_stat_raf_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartReceiverActiveFlag"
+      baseType="uint32_t"
+      toolTip="Set when the receiver detects the beginning of a valid start bit, and is cleared\n
+               automatically when the receiver detects an idle line"
+      description="Receiver Active Flag" >
+      <choice name="Receiver idle waiting for a start bit"  value="0" enum="ReceiverIdle" />
+      <choice name="receiver active (RXD input not idle)"   value="1" enum="ReceiverActive" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_stat_tdre" condition="lpuart_stat_tdre_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartTransmitDataRegisterEmptyFlag"
+      baseType="uint32_t"
+      toolTip="Set when the transmit data register (LPUART_DATA) is empty.\n
+               To clear TDRE, write to the LPUART data register (LPUART_DATA)"
+      description="Transmit Data Register Empty Flag" >
+      <choice name="Transmit data buffer full"   value="0" enum="TxDataBufferFull" />
+      <choice name="Transmit data buffer empty"  value="1" enum="TxDataBufferEmpty" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_stat_tc" condition="lpuart_stat_tc_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartTransmissionCompleteFlag"
+      baseType="uint32_t"
+      toolTip="Cleared when there is a transmission in progress or when a preamble or break character is loaded.\n
+               Set when the transmit buffer is empty and no data, preamble, or break character is being transmitted"
+      description="Transmission Complete Flag" >
+      <choice name="Transmitter active"  value="0" enum="TransmitterActive" />
+      <choice name="Transmitter idle"    value="1" enum="TransmitterIdle" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_stat_rdrf" condition="lpuart_stat_rdrf_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartReceiveDataRegisterFullFlag"
+      baseType="uint32_t"
+      toolTip="Set when the receive buffer (LPUART_DATA) is full. \n
+               To clear RDRF, read the LPUART_DATA register"
+      description="Receive Data Register Full Flag" >
+      <choice name="Receive data buffer empty"  value="0" enum="ReceiveDataBufferEmpty" />
+      <choice name="Receive data buffer full"   value="1" enum="ReceiveDataBufferFull" />
+   </binaryOption >
+
+   <bitfieldOption key="lpuart_stat_stat"
+      valueFormat="(%s)"
+      bitmask="0xC1FFC000"
+      derived="true"
+      typeName="LpuartStatusFlag"
+      baseType="uint32_t"
+      enumClass="true"
+      toolTip="These masks may be used to test or modify the status flags"
+      description="Status Flags" >
+      <bitField var="lpuart_stat_ma2f"    condition="lpuart_stat_ma2f_present"    />
+      <bitField var="lpuart_stat_ma1f"    condition="lpuart_stat_ma1f_present"    />
+      <bitField var="lpuart_stat_pf"      condition="lpuart_stat_pf_present"      />
+      <bitField var="lpuart_stat_fe"      condition="lpuart_stat_fe_present"      />
+      <bitField var="lpuart_stat_nf"      condition="lpuart_stat_nf_present"      />
+      <bitField var="lpuart_stat_or"      condition="lpuart_stat_or_present"      />
+      <bitField var="lpuart_stat_idle"    condition="lpuart_stat_idle_present"    />
+      <bitField var="lpuart_stat_rdrf"    condition="lpuart_stat_rdrf_present"    />
+      <bitField var="lpuart_stat_tc"      condition="lpuart_stat_tc_present"      />
+      <bitField var="lpuart_stat_tdre"    condition="lpuart_stat_tdre_present"    />
+      <bitField var="lpuart_stat_raf"     condition="lpuart_stat_raf_present"     />
+      <bitField var="lpuart_stat_rxedgif" condition="lpuart_stat_rxedgif_present" />
+      <bitField var="lpuart_stat_lbkdif"  condition="lpuart_stat_lbkdif_present"  />
+      <bitField name="NoFlags"     bit="none"  description="No flags"  />
+      <bitField name="AllFlags"    bit="all"   description="All flags" />
+   </bitfieldOption>
+
+   <!-- ____ CTRL ____ -->
+   <title description="Control Register" />
+
+   <binaryOption key="lpuart_ctrl_r8t9" condition="lpuart_ctrl_r8t9_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartR8T9"
+      baseType="uint32_t"
+      toolTip="R8 is the ninth data bit received when the LPUART is configured for 9-bit or 10-bit data formats.\n
+               When reading 9-bit or 10-bit data, read R8 before reading LPUART_DATA.\n
+               T9 is the tenth data bit received when the LPUART is configured for 10-bit data formats.\n
+               When writing 10-bit data, write T9 before writing LPUART_DATA. If T9 does not need to change\n
+               from its previous value, such as when it is used to generate address mark or parity, then it\n
+               need not be written each time LPUART_DATA is written."
+      description="Receive Bit 8 / Transmit Bit 9" >
+      <choice name="0"   value="0" enum="0" />
+      <choice name="1"  value="1" enum="1" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_ctrl_r9t8" condition="lpuart_ctrl_r9t8_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartR9T8"
+      baseType="uint32_t"
+      toolTip="R9 is the tenth data bit received when the LPUART is configured for 10-bit data formats.\n
+               When reading 10-bit data, read R9 before reading LPUART_DATA\n
+               T8 is the ninth data bit received when the LPUART is configured for 9-bit or 10-bit data formats.\n
+               When writing 9-bit or 10-bit data, write T8 before writing LPUART_DATA. If T8 does not need to change\n
+               from its previous value, such as when it is used to generate address mark or parity, they it need\n
+               not be written each time LPUART_DATA is written."
+      description="Receive Bit 9 / Transmit Bit 8" >
+      <choice name="0"   value="0" enum="0" />
+      <choice name="1"  value="1" enum="1" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_ctrl_txinv" condition="lpuart_ctrl_txinv_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartTransmitDataPolarity"
+      baseType="uint32_t"
+      toolTip="Setting this bit reverses the polarity of the transmitted data output"
+      description="Transmit Data Inversion" >
+      <choice name="Transmit data is not inverted"  value="0" enum="Normal" />
+      <choice name="Transmit data is inverted"      value="1" enum="Inverted" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_ctrl_orie" condition="lpuart_ctrl_orie_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartOverrunErrorAction"
+      baseType="uint32_t"
+      toolTip="This bit enables the overrun flag to generate hardware interrupt requests"
+      description="Overrun Error Interrupt Enable" >
+      <choice name="No Action"   value="0" enum="NoAction"   />
+      <choice name="Interrupt"   value="1" enum="Interrupt"  />
+   </binaryOption >
+
+   <binaryOption key="lpuart_ctrl_neie" condition="lpuart_ctrl_neie_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartNoiseErrorAction"
+      baseType="uint32_t"
+      toolTip="This bit enables the noise flag to generate hardware interrupt requests"
+      description="Noise Error Interrupt Enable" >
+      <choice name="No Action"   value="0" enum="NoAction"   />
+      <choice name="Interrupt"   value="1" enum="Interrupt"  />
+   </binaryOption >
+
+   <binaryOption key="lpuart_ctrl_feie" condition="lpuart_ctrl_feie_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartFramingErrorAction"
+      baseType="uint32_t"
+      toolTip="This bit enables the framing error flag to generate hardware interrupt requests"
+      description="Framing Error Interrupt Enable" >
+      <choice name="No Action"   value="0" enum="NoAction"   />
+      <choice name="Interrupt"   value="1" enum="Interrupt"  />
+   </binaryOption >
+
+   <binaryOption key="lpuart_ctrl_peie" condition="lpuart_ctrl_peie_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartParityErrorAction"
+      baseType="uint32_t"
+      toolTip="This bit enables the parity error flag to generate hardware interrupt requests"
+      description="Parity Error Interrupt Enable" >
+      <choice name="No Action"   value="0" enum="NoAction"   />
+      <choice name="Interrupt"   value="1" enum="Interrupt"  />
+   </binaryOption >
+
+   <binaryOption key="lpuart_ctrl_tie" condition="lpuart_ctrl_tie_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartTransmitEmptyAction"
+      baseType="uint32_t"
+      toolTip="Enables Transmit Data Register Empty Flag to generate interrupt requests"
+      description="Transmit Interrupt Enable for TDRE" >
+      <choice name="No Action"   value="0" enum="NoAction"   />
+      <choice name="Interrupt"   value="1" enum="Interrupt"  />
+   </binaryOption >
+
+   <binaryOption key="lpuart_ctrl_tcie" condition="lpuart_ctrl_tcie_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartTransmissionCompleteAction"
+      baseType="uint32_t"
+      toolTip="Enables the transmission complete flag to generate interrupt requests"
+      description="Transmission Complete Interrupt Enable" >
+      <choice name="No Action"   value="0" enum="NoAction"   />
+      <choice name="Interrupt"   value="1" enum="Interrupt"  />
+   </binaryOption >
+
+   <binaryOption key="lpuart_ctrl_rie" condition="lpuart_ctrl_rie_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartReceiveDataAction"
+      baseType="uint32_t"
+      toolTip="Enables Receive Data Register Full Flag to generate interrupt requests."
+      description="Receiver Interrupt Enable for RDRF" >
+      <choice name="No Action"   value="0" enum="NoAction"   />
+      <choice name="Interrupt"   value="1" enum="Interrupt"  />
+   </binaryOption >
+
+   <binaryOption key="lpuart_ctrl_ilie" condition="lpuart_ctrl_ilie_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartIdleLineAction"
+      baseType="uint32_t"
+      toolTip="Enables the idle line flag to generate interrupt requests"
+      description="Idle Line Interrupt Enable" >
+      <choice name="No Action"   value="0" enum="NoAction"   />
+      <choice name="Interrupt"   value="1" enum="Interrupt"  />
+   </binaryOption >
+
+   <binaryOption key="lpuart_ctrl_rwu" condition="lpuart_ctrl_rwu_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartReceiverWakeupControl"
+      baseType="uint32_t"
+      toolTip="This field can be set to place the LPUART receiver in a standby state.\n
+               RWU automatically clears when an RWU event occurs, that is, an IDLE, event when\n
+               CTRL[WAKE] is clear or an address match when CTRL[WAKE] is set with STAT[RWUID] is clear"
+      description="Receiver Wakeup Control" >
+      <choice name="Normal receiver operation"          value="0" enum="NormalOperation" />
+      <choice name="Receiver in standby waiting wakeup" value="1" enum="StandbyWaitingForWakeupCondition" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_ctrl_sbk" condition="lpuart_ctrl_sbk_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartSendBreak"
+      baseType="uint32_t"
+      toolTip="Writing a 1 and then a 0 to SBK queues a break character in the transmit data stream"
+      description="Send Break" >
+      <choice name="Normal transmitter operation"         value="0" enum="NormalTransmitterOperation" />
+      <choice name="Queue break character(s) to be sent"  value="1" enum="QueueBreakCharacterSToBeSent" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_ctrl_ma1ie" condition="lpuart_ctrl_ma1ie_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartMatch1Action"
+      baseType="uint32_t"
+      toolTip="Enables interrupts on Match 1 occurence"
+      description="Match 1 Interrupt Enable" >
+      <choice name="No Action"   value="0" enum="NoAction"   />
+      <choice name="Interrupt"   value="1" enum="Interrupt"  />
+   </binaryOption >
+
+   <binaryOption key="lpuart_ctrl_ma2ie" condition="lpuart_ctrl_ma2ie_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartMatch2Action"
+      baseType="uint32_t"
+      toolTip="Enables interrupts on Match 2 occurence"
+      description="Match 2 Interrupt Enable" >
+      <choice name="No Action"   value="0" enum="NoAction"   />
+      <choice name="Interrupt"   value="1" enum="Interrupt"  />
+   </binaryOption >
+
+   <choiceOption key="lpuart_ctrl_idlecfg" condition="lpuart_ctrl_idlecfg_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartIdleConfiguration"
+      baseType="uint32_t"
+      toolTip="Configures the number of idle characters that must be received before the IDLE flag is set."
+      description="Idle Configuration" >
+      <choice name="1 idle character"     value="0" enum="1IdleCharacter" />
+      <choice name="2 idle characters"    value="1" enum="2IdleCharacters" />
+      <choice name="4 idle characters"    value="2" enum="4IdleCharacters" />
+      <choice name="8 idle characters"    value="3" enum="8IdleCharacters" />
+      <choice name="16 idle characters"   value="4" enum="16IdleCharacters" />
+      <choice name="32 idle characters"   value="5" enum="32IdleCharacters" />
+      <choice name="64 idle characters"   value="6" enum="64IdleCharacters" />
+      <choice name="128 idle characters"  value="7" enum="128IdleCharacters" />
+   </choiceOption >
+
+   <binaryOption key="lpuart_ctrl_dozeen" condition="lpuart_ctrl_dozeen_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartStopsInDozeMode"
+      baseType="uint32_t"
+      toolTip="Controls operation in WAIT modes"
+      description="Stops in Doze Mode" >
+      <choice name="Enabled in Doze mode"   value="0" enum="EnabledInDozeMode" />
+      <choice name="Disabled in Doze mode"  value="1" enum="DisabledInDozeMode" />
+   </binaryOption >
+
+   <choiceOption key="lpuart_ctrl_pinmode" condition="lpuart_ctrl_loops_present&amp;&amp;lpuart_ctrl_rsrc_present"
+      valueFormat="LPUART_CTRL_LOOPS(%s),LPUART_CTRL_RSRC(%s)"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartPinMode"
+      baseType="uint32_t"
+      toolTip="When not in normal mode, the Rx pin is disconnected from the LPUART and the \n
+               transmitter output is internally connected to the receiver input. \n
+               The transmitter and the receiver must be enabled to use the loop function"
+      description="Loop Mode Select" >
+      <choice name="Normal operation"                           value="0,0" enum="Normal" />
+      <choice name="Internal loop back (TxD->RxD)"              value="1,0" enum="InternalLoopBack" />
+      <choice name="Single-wire (Tx pin used for TxD and RxD)"  value="1,1" enum="SingleWireUart" />
+   </choiceOption >
+
+   <binaryOption key="lpuart_ctrl_txdir" condition="lpuart_ctrl_txdir_present"
+      enabledBy="lpuart_ctrl_pinmode==2"
+      typeName="LpuartTxDataDirection"
+      baseType="uint32_t"
+      toolTip="When the LPUART is configured for single-wire half-duplex operation (LOOPS = RSRC = 1),\n
+               this bit determines the direction of data at the LPUART_TX pin.\n
+               When clearing TXDIR, the transmitter will finish receiving the current character (if any)\n
+               before the receiver starts receiving data from the LPUART_TX pin"
+      description="Transmitter Pin Data Direction in Single-Wire mode" >
+      <choice name="TxD pin is an input"   value="0" enum="Input"  />
+      <choice name="TxD pin is an output"  value="1" enum="Output" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_ctrl_m" condition="lpuart_ctrl_m_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartDataMode"
+      baseType="uint32_t"
+      toolTip=""
+      description="9-Bit or 8-Bit Mode Select" >
+      <choice name="8-bit data characters"  value="0" enum="8bit" />
+      <choice name="9-bit data characters"  value="1" enum="9bit" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_ctrl_wake" condition="lpuart_ctrl_wake_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartReceiverWakeupMethod"
+      baseType="uint32_t"
+      toolTip="Determines which condition wakes the LPUART when RWU=1:\n
+               - Address mark in the most significant bit position of a received data character, or\n
+               - An idle condition on the receive pin input signal"
+      description="Receiver Wakeup Method Select" >
+      <choice name="Idle-line wakeup"     value="0" enum="IdleLine"    />
+      <choice name="Address-mark wakeup"  value="1" enum="AddressMark" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_ctrl_ilt" condition="lpuart_ctrl_ilt_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartIdleLineTypeSelect"
+      baseType="uint32_t"
+      toolTip="Determines when the receiver starts counting logic 1s as idle character bits.\n
+               The count begins either after a valid start bit or after the stop bit.\n
+               If the count begins after the start bit, then a string of logic 1s preceding\n
+               the stop bit can cause false recognition of an idle character.\n
+               Beginning the count after the stop bit avoids false idle character recognition,\n
+               but requires properly synchronized transmissions"
+      description="Idle Line Type Select" >
+      <choice name="Idle count starts after start bit"  value="0" enum="StartBit" />
+      <choice name="Idle count starts after stop bit"   value="1" enum="StopBit"  />
+   </binaryOption >
+
+   <choiceOption key="lpuart_ctrl_parity" condition="lpuart_ctrl_pe_present&amp;&amp;lpuart_ctrl_pt_present"
+      valueFormat="LPUART_CTRL_PE(%s),LPUART_CTRL_PT(%s)"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartParity"
+      baseType="uint32_t"
+      toolTip="Enables hardware parity generation and checking.\n
+               When parity is enabled, the bit immediately before the stop bit is treated as the parity bit\n
+               Odd parity means the total number of 1s in the data character, including the parity bit, is odd.\n
+               Even parity means the total number of 1s in the data character, including the parity bit, is even"
+      description="Parity Enable">
+      <choice name="Parity disabled"  value="0,0" enum="None" />
+      <choice name="Even parity"      value="1,0" enum="Even" />
+      <choice name="Odd parity"       value="1,1" enum="Odd"  />
+   </choiceOption>
+
+   <bitfieldOption key="lpuart_ctrl_interrupt"
+      valueFormat="(%s)"
+      bitmask="0x0FF0C000"
+      value="0"
+      typeName="LpuartEvent"
+      baseType="uint32_t"
+      enumClass="true"
+      toolTip="These masks may be used to enable events (interrupts)"
+      description="Event enables" >
+      <bitField var="lpuart_ctrl_ma2ie" condition="lpuart_ctrl_ma2ie"  />
+      <bitField var="lpuart_ctrl_ma1ie" condition="lpuart_ctrl_ma1ie"  />
+      <bitField var="lpuart_ctrl_ilie"  condition="lpuart_ctrl_ilie"   />
+      <bitField var="lpuart_ctrl_rie"   condition="lpuart_ctrl_rie"    />
+      <bitField var="lpuart_ctrl_tcie"  condition="lpuart_ctrl_tcie"   />
+      <bitField var="lpuart_ctrl_tie"   condition="lpuart_ctrl_tie"    />
+      <bitField var="lpuart_ctrl_peie"  condition="lpuart_ctrl_peie"   />
+      <bitField var="lpuart_ctrl_feie"  condition="lpuart_ctrl_feie"   />
+      <bitField var="lpuart_ctrl_neie"  condition="lpuart_ctrl_neie"   />
+      <bitField var="lpuart_ctrl_orie"  condition="lpuart_ctrl_orie"   />
+      <bitField name="NoEvents"     bit="none"  description="No events"  />
+      <bitField name="AllEvents"    bit="all"   description="All events" />
+   </bitfieldOption>
+
+   <!-- ____ DATA ____ -->
+   <title description="Data Register"
+      toolTip="Reads return the contents of the read-only receive data buffer\n
+               and writes go to the write-only transmit data buffer.\n
+               Reads and writes of this register are also involved in the\n
+               automatic flag clearing mechanisms for the UART status flags" />
+
+   <binaryOption key="lpuart_data_noisy" condition="lpuart_data_noisy_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartNoiseError"
+      baseType="uint32_t"
+      toolTip="The current received dataword contained in DATA[R9:R0] was received with noise"
+      description="Noise Error" >
+      <choice name="No noise"     value="0" enum="NoNoise" />
+      <choice name="Noise error"  value="1" enum="NoiseError" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_data_paritye" condition="lpuart_data_paritye_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartParityError"
+      baseType="uint32_t"
+      toolTip="The current received dataword contained in DATA[R9:R0] was received with a parity error"
+      description="Parity Error" >
+      <choice name="No parity error"  value="0" enum="NoParityError" />
+      <choice name="Parity error"     value="1" enum="ParityError" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_data_frame" condition="lpuart_data_frame_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartFrameError"
+      baseType="uint32_t"
+      toolTip="Indicates the current received dataword contained in DATA[R9:R0] was\n
+               received with a frame error"
+      description="Frame Error" >
+      <choice name="No frame error"  value="0" enum="NoFrameError" />
+      <choice name="Frame error"     value="1" enum="FrameError" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_data_txspecial" condition="lpuart_data_txspecial_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartTransmitSpecialCharacter"
+      baseType="uint32_t"
+      toolTip="Indicates a break or idle character is to be transmitted instead of the\n
+               contents in DATA[T9:T0].\n
+               T9 is used to indicate a break character when 0 and an idle character when 1,\n
+               the contents of DATA[T8:T0] should be zero"
+      description="Frame Error / Transmit Special Character" >
+      <choice name="Normal character"        value="0" enum="NormalChar" />
+      <choice name="Break or Idle character" value="1" enum="BreakOrIdle" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_data_rxempt" condition="lpuart_data_rxempt_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartReceiveBufferEmpty"
+      baseType="uint32_t"
+      toolTip="Asserts when there is no data in the receive buffer.\n
+               This field does not take into account data that is in the receive shift register"
+      description="Receive Buffer Empty" >
+      <choice name="Not empty"   value="0" enum="NotEmpty" />
+      <choice name="Empty"       value="1" enum="Empty" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_data_idline" condition="lpuart_data_idline_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartIdleLine"
+      baseType="uint32_t"
+      toolTip="Indicates the receiver line was idle before receiving the character in DATA[9:0].\n
+               Unlike the IDLE flag, this bit can set for the first character received when\n
+               the receiver is first enabled"
+      description="Idle Line" >
+      <choice name="Not idle before"  value="0" enum="NotIdleBefore" />
+      <choice name="Idle before"      value="1" enum="IdleBefore" />
+   </binaryOption >
+
+   <intOption key="lpuart_data_rt" condition="lpuart_data_rt_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="uint16_t"
+      baseType="uint16_t"
+      toolTip=""
+      description="Read receive data buffer or write transmit data buffer"
+      value="0"
+      min="0" max="1023"
+   />
+
+   <!-- ____ MATCH ____ -->
+   <title description="Match Address Register"
+      toolTip="The MA1 and MA2 registers are compared to input data addresses when the most significant bit is set and
+               the associated BAUD[MAEN] bit is set. \n
+               If a match occurs, the following data is transferred to the data register. \n
+               If a match fails, the following data is discarded. \n
+               Software should only write a MA register when the associated BAUD[MAEN] bit is clear" />
+
+   <intOption key="lpuart_match_ma1" condition="lpuart_match_ma1_present"
+      enabledBy="lpuart_baud_maen1"
+      typeName="LpuartMatchAddress1"
+      baseType="uint16_t"
+      toolTip="Compared to input data addresses when the most significant bit is set and the\n
+               associated BAUD[MAEN] bit is set. \n
+               If a match occurs, the following data is transferred to the data register. \n
+               If a match fails, the following data is discarded. \n
+               Software should only write a MA register when the associated BAUD[MAEN] bit is clear"
+      description="Match Address 1"
+      value="0"
+      min="0" max="1023"
+   />
+
+   <intOption key="lpuart_match_ma2" condition="lpuart_match_ma2_present"
+      enabledBy="lpuart_baud_maen2"
+      typeName="LpuartMatchAddress2"
+      baseType="uint16_t"
+      toolTip="Compared to input data addresses when the most significant bit is set and the\n
+               associated BAUD[MAEN] bit is set. \n
+               If a match occurs, the following data is transferred to the data register. \n
+               If a match fails, the following data is discarded. \n
+               Software should only write a MA register when the associated BAUD[MAEN] bit is clear"
+      description="Match Address 2"
+      value="0"
+      min="0" max="1023"
+   />
+
+   <!-- ____ MODIR ____ -->
+   <title description="MODEM IrDA register"
+          toolTip="The MODEM register controls options for setting the modem configuration" />
+
+   <binaryOption key="lpuart_modir_iren" condition="lpuart_modir_iren_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartInfraredEnable"
+      baseType="uint32_t"
+      toolTip="Controls the infrared modulation/demodulation."
+      description="Infrared enable" >
+      <choice name="IR disabled"  value="0" enum="Disabled" />
+      <choice name="IR enabled"   value="1" enum="Enabled" />
+   </binaryOption >
+
+   <choiceOption key="lpuart_modir_tnp" condition="lpuart_modir_tnp_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartTransmitterNarrowPulse"
+      baseType="uint32_t"
+      toolTip="Enables whether the LPUART transmits a 1/OSR, 2/OSR, 3/OSR or 4/OSR narrow pulse."
+      description="Transmitter narrow pulse" >
+      <choice name="1/OSR"       value="0" enum="1Osr" />
+      <choice name="2/OSR"       value="1" enum="2Osr" />
+      <choice name="3/OSR"       value="2" enum="3Osr" />
+      <choice name="4/OSR"       value="3" enum="4Osr" />
+   </choiceOption >
+
+   <intOption key="lpuart_modir_rtswater" condition="lpuart_modir_rtswater_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartReceiveRtsConfiguration"
+      baseType="uint32_t"
+      toolTip="Configures the point at which the RX RTS output negates based on the number\n
+               of additional characters that can be stored in the Receive FIFO.\n
+               When configured to 0, RTS negates when the the start bit is detected for\n
+               the character that will cause the FIFO to become full."
+      description="Receive RTS Configuration"
+      value="0"
+      min="0" max="=FifoRxSize-1"
+   />
+
+   <binaryOption key="lpuart_modir_txctssrc" condition="lpuart_modir_txctssrc_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartTransmitCtsSource"
+      baseType="uint32_t"
+      toolTip="Configures the source of the CTS input."
+      description="Transmit CTS Source" >
+      <choice name="CTS input is the CTS pin"                   value="0" enum="CtsPin"                      />
+      <choice name="CTS input is the inverted Rx Match result"  value="1" enum="InvertedRxMatchResult" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_modir_txctsc" condition="lpuart_modir_txctsc_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartTransmitCtsConfiguration"
+      baseType="uint32_t"
+      toolTip="Configures if the CTS state is checked at the start of each character or only when the transmitter is idle."
+      description="Transmit CTS Configuration" >
+      <choice name="Sampled at the start of each character"  value="0" enum="EachCharacter" />
+      <choice name="Sampled when the transmitter is idle"    value="1" enum="WhenTxIdle" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_modir_rxrtse" condition="lpuart_modir_rxrtse_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartReceiverRequestToSendEnable"
+      baseType="uint32_t"
+      toolTip="Allows the RTS output to control the CTS input of the transmitting device to prevent receiver overrun.\n
+               NOTE: Do not set both RXRTSE and TXRTSE."
+      description="Receiver request-to-send enable" >
+      <choice name="Receiver has no effect on RTS"   value="0" enum="Disabled" />
+      <choice name="RTSWATER controls RTS assertion" value="1" enum="Enabled"  />
+   </binaryOption >
+
+   <binaryOption key="lpuart_modir_txrtspol" condition="lpuart_modir_txrtspol_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartTransmitterRequestToSendPolarity"
+      baseType="uint32_t"
+      toolTip="Controls the polarity of the transmitter RTS.\n
+               TXRTSPOL does not affect the polarity of the receiver RTS. RTS will remain negated\n
+               in the active low state unless TXRTSE is set."
+      description="Transmitter request-to-send polarity" >
+      <choice name="Transmitter RTS is active low"   value="0" enum="ActiveLow" />
+      <choice name="Transmitter RTS is active high"  value="1" enum="ActiveHigh" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_modir_txrtse" condition="lpuart_modir_txrtse_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartTransmitterRequestToSendEnable"
+      baseType="uint32_t"
+      toolTip="Controls RTS before and after a transmission.\n
+               If enabled, RTS asserts one bit time before the start bit is transmitted and \n
+               deasserts one bit time after all characters in the transmitter data buffer\n
+               and shift register are completely sent, including the last stop bit."
+      description="Transmitter request-to-send enable" >
+      <choice name="Transmitter has no affect on RTS"  value="0" enum="Disabled" />
+      <choice name="RTS asserts during transmission"  value="1" enum="Enabled" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_modir_txctse" condition="lpuart_modir_txctse_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartTransmitterClearToSendEnable"
+      baseType="uint32_t"
+      toolTip="Controls the operation of the transmitter.\n
+               The transmitter checks the state of CTS each time it is ready to send a character.\n
+               If CTS is asserted, the character is sent. If CTS is deasserted, the signal TXD remains\n
+               in the mark state and transmission is delayed until CTS is asserted.\n
+               Changes in CTS as a character is being sent do not affect its transmission.\n
+               TXCTSE can be set independently from the state of TXRTSE and RXRTSE."
+      description="Transmitter clear-to-send enable" >
+      <choice name="CTS has no effect on transmitter" value="0" enum="Disabled" />
+      <choice name="CTS controls transmitter"         value="1" enum="Enabled" />
+   </binaryOption >
+
+   <!-- ____ FIFO ____ -->
+   <title description="FIFO Register" />
+
+   <binaryOption key="lpuart_fifo_txempt" condition="lpuart_fifo_txempt_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartTxFifoEmpty"
+      baseType="uint32_t"
+      toolTip="Asserts when there is no data in the Transmit FIFO/buffer.\n
+               This field does not take into account data that is in the transmit shift register."
+      description="Transmit Buffer/FIFO Empty" >
+      <choice name="Transmit buffer is not empty"  value="0" enum="TransmitBufferIsNotEmpty" />
+      <choice name="Transmit buffer is empty"      value="1" enum="TransmitBufferIsEmpty" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_fifo_rxempt" condition="lpuart_fifo_rxempt_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartRxFifoEmpty"
+      baseType="uint32_t"
+      toolTip="Asserts when there is no data in the receive FIFO/Buffer.\n
+               This field does not take into account data that is in the receive shift register."
+      description="Receive Buffer/FIFO Empty" >
+      <choice name="Receive buffer is not empty"  value="0" enum="ReceiveBufferIsNotEmpty" />
+      <choice name="Receive buffer is empty"      value="1" enum="ReceiveBufferIsEmpty" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_fifo_txof" condition="lpuart_fifo_txof_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartTxrBufferOverflowFlag"
+      baseType="uint32_t"
+      toolTip="Indicates that more data has been written to the transmit buffer than it can hold.\n
+               This field will assert regardless of the value of TXOFE. However, an interrupt will\n
+               be issued to the host only if TXOFE is set.\n
+               This flag is cleared by writing a 1."
+      description="Transmitter Buffer Overflow Flag" >
+      <choice name="No Tx buffer overflow"        value="0" enum="NoOverflow" />
+      <choice name="Tx buffer overflow occurred"  value="1" enum="Overflowed" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_fifo_rxuf" condition="lpuart_fifo_rxuf_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartRxBufferUnderflowFlag"
+      baseType="uint32_t"
+      toolTip="Indicates that more data has been read from the receive buffer than was present.\n
+               This field will assert regardless of the value of RXUFE. However, an interrupt will\n
+               be issued to the host only if RXUFE is set.\n
+               This flag is cleared by writing a 1."
+      description="Receiver Buffer Underflow Flag" >
+      <choice name="No Rx buffer underflow" value="0" enum="NoUnderflow" />
+      <choice name="Rx buffer undeflow"     value="1" enum="Underflowed" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_fifo_txflush" condition="lpuart_fifo_txflush_present"
+      hidden="true"
+      derived="true"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartTxFifoFlush"
+      baseType="uint32_t"
+      toolTip="Writing to this field causes all data that is stored in the transmit FIFO/buffer to be flushed.\n
+               This does not affect data that is in the transmit shift register."
+      description="Transmit FIFO/Buffer Flush" >
+      <choice name="No flush operation occurs"  value="0" enum="NoAction"  />
+      <choice name="Flush Tx FIFO"              value="1" enum="FlushFifo" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_fifo_rxflush" condition="lpuart_fifo_rxflush_present"
+      hidden="true"
+      derived="true"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartRxFifoFlush"
+      baseType="uint32_t"
+      toolTip="Writing to this field causes all data that is stored in the receive FIFO/buffer to be flushed.\n
+               This does not affect data that is in the receive shift register."
+      description="Receive FIFO/Buffer Flush" >
+      <choice name="No flush operation occurs"  value="0" enum="NoAction"  />
+      <choice name="Flush Rx FIFO"              value="1" enum="FlushFifo" />
+   </binaryOption >
+
+   <choiceOption key="lpuart_fifo_rxiden" condition="lpuart_fifo_rxiden_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartxIdleEmptyEnable"
+      baseType="uint32_t"
+      toolTip="Enables the assertion of RDRF when the receiver is idle for a number of idle characters\n
+               and the FIFO is not empty."
+      description="Receiver Idle Empty Enable" >
+      <choice name="Disabled"                              value="0" enum="Disabled"           />
+      <choice name="Data available and idle for 1 char"    value="1" enum="WhenIdleFor_1_Char" />
+      <choice name="Data available and idle for 2 chars"   value="2" enum="WhenIdleFor_2_Char" />
+      <choice name="Data available and idle for 4 chars"   value="3" enum="WhenIdleFor_3_Char" />
+      <choice name="Data available and idle for 8 chars"   value="4" enum="WhenIdleFor_4_Char" />
+      <choice name="Data available and idle for 16 chars"  value="5" enum="WhenIdleFor_5_Char" />
+      <choice name="Data available and idle for 32 chars"  value="6" enum="WhenIdleFor_6_Char" />
+      <choice name="Data available and idle for 64 chars"  value="7" enum="WhenIdleFor_7_Char" />
+   </choiceOption >
+
+   <binaryOption key="lpuart_fifo_txofe" condition="lpuart_fifo_txofe_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartTxFifoOverflowAction"
+      baseType="uint32_t"
+      toolTip="When this field is set, the TXOF flag generates an interrupt to the host."
+      description="Transmit FIFO Overflow Interrupt Enable" >
+      <choice name="NoAction"  value="0" enum="None"      />
+      <choice name="Interrupt" value="1" enum="Interrupt" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_fifo_rxufe" condition="lpuart_fifo_rxufe_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartRxFifoUnderflowAction"
+      baseType="uint32_t"
+      toolTip="When this field is set, the RXUF flag generates an interrupt to the host."
+      description="Receive FIFO Underflow Interrupt Enable" >
+      <choice name="NoAction"  value="0" enum="None"      />
+      <choice name="Interrupt" value="1" enum="Interrupt" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_fifo_txfe" condition="lpuart_fifo_txfe_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartTxFifoEnable"
+      baseType="uint32_t"
+      toolTip="When this field is set, the built in FIFO structure for the transmit buffer is enabled.\n
+               The size of the FIFO structure is indicated by TXFIFOSIZE.\n
+               If this field is not set, the transmit buffer operates as a FIFO of depth one dataword\n
+               regardless of the value in TXFIFOSIZE.\n
+               Both CTRL[TE] and CTRL[RE] must be cleared prior to changing this field."
+      description="Transmit FIFO Enable" >
+      <choice name="Transmit FIFO disabled" value="0" enum="Disabled" />
+      <choice name="Transmit FIFO enabled"  value="1" enum="Enabled" />
+   </binaryOption >
+
+   <binaryOption key="lpuart_fifo_rxfe" condition="lpuart_fifo_rxfe_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="LpuartRxFifoEnable"
+      baseType="uint32_t"
+      toolTip="When this field is set, the built in FIFO structure for the receive buffer is enabled.\n
+               The size of the FIFO structure is indicated by the RXFIFOSIZE field.\n
+               If this field is not set, the receive buffer operates as a FIFO of depth one dataword\n
+               regardless of the value in RXFIFOSIZE.\n
+               Both CTRL[TE] and CTRL[RE] must be cleared prior to changing this field."
+      description="Receive FIFO Enable" >
+      <choice name="Receive FIFO disabled" value="0" enum="Disabled" />
+      <choice name="Receive FIFO enabled"  value="1" enum="Enabled" />
+   </binaryOption >
+
+   <choiceOption key="lpuart_fifo_txfifosize" condition="lpuart_fifo_txfifosize_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartTransmitFifo"
+      baseType="uint32_t"
+      toolTip="The maximum number of transmit datawords that can be stored in the transmit buffer.\n
+               This field is read only."
+      description="Transmit FIFO Buffer Depth" >
+      <choice name="1 dataword"     value="0" enum="1_Dataword" />
+      <choice name="4 datawords"    value="1" enum="4_Datawords" />
+      <choice name="8 datawords"    value="2" enum="8_Datawords" />
+      <choice name="16 datawords"   value="3" enum="16_Datawords" />
+      <choice name="32 datawords"   value="4" enum="32_Datawords" />
+      <choice name="64 datawords"   value="5" enum="64_Datawords" />
+      <choice name="128 datawords"  value="6" enum="128_Datawords" />
+      <choice name="256 datawords"  value="7" enum="256_Datawords" />
+   </choiceOption >
+
+   <choiceOption key="lpuart_fifo_rxfifosize" condition="lpuart_fifo_rxfifosize_present"
+      hidden="true"
+      derived="true"
+      typeName="LpuartReceiveFifo"
+      baseType="uint32_t"
+      toolTip="The maximum number of receive datawords that can be stored in the receive buffer before an overrun occurs.\n
+               This field is read only."
+      description="Receive FIFO Buffer Depth" >
+      <choice name="1 dataword"     value="0" enum="1_Dataword" />
+      <choice name="4 datawords"    value="1" enum="4_Datawords" />
+      <choice name="8 datawords"    value="2" enum="8_Datawords" />
+      <choice name="16 datawords"   value="3" enum="16_Datawords" />
+      <choice name="32 datawords"   value="4" enum="32_Datawords" />
+      <choice name="64 datawords"   value="5" enum="64_Datawords" />
+      <choice name="128 datawords"  value="6" enum="128_Datawords" />
+      <choice name="256 datawords"  value="7" enum="256_Datawords" />
+   </choiceOption >
+
+   <!-- ____ WATER ____ -->
+   <title description="Watermark Register" />
+
+   <intOption key="lpuart_water_txwater" condition="lpuart_water_txwater_present"
+      enabledBy="lpuart_fifo_txfe"
+      typeName="LpuartTransmitWatermark"
+      baseType="uint8_t"
+      toolTip="When the number of datawords in the transmit FIFO/buffer is equal to or less than the\n
+               value in this register field, an interrupt or a DMA request is generated.\n
+               For proper operation, the value in TXWATER must be set to be less than the size\n
+               of the transmit buffer/FIFO size as indicated by FIFO[TXFIFOSIZE] and FIFO[TXFE]."
+      description="Transmit Watermark"
+      value="0"
+      min="0" max="=FifoTxSize-1"
+   />
+
+   <intOption key="lpuart_water_rxwater" condition="lpuart_water_rxwater_present"
+      enabledBy="lpuart_fifo_rxfe"
+      typeName="LpuartReceiveWatermark"
+      baseType="uint8_t"
+      toolTip="When the number of datawords in the receive FIFO/buffer is greater than the\n
+               value in this register field, an interrupt or a DMA request is generated.\n
+               For proper operation, the value in RXWATER must be set to be less than the\n
+               receive FIFO/buffer size as indicated by FIFO[RXFIFOSIZE] and FIFO[RXFE]\n
+               and must be greater than 0."
+      description="Receive Watermark"
+      value="0"
+      min="0" max="=FifoRxSize-1"
+   />
+
+   <intOption key="lpuart_water_txcount" condition="lpuart_water_txcount_present"
+      hidden="true"
+      derived="true"
+      typeName="uint32_t"
+      toolTip="The value in this register indicates the number of datawords that are in the transmit FIFO/buffer.\n
+               If a dataword is being transmitted, that is, in the transmit shift register, it is not included\n
+               in the count.\n
+               This value may be used in conjunction with FIFO[TXFIFOSIZE] to calculate how much room is left\n
+               in the transmit FIFO/buffer."
+      description="Transmit Counter"
+   />
+
+   <intOption key="lpuart_water_rxcount" condition="lpuart_water_rxcount_present"
+      hidden="true"
+      derived="true"
+      typeName="uint32_t"
+      toolTip="The value in this register indicates the number of datawords that are in the receive FIFO/buffer.\n
+               If a dataword is being received, that is, in the receive shift register, it is not included\n
+               in the count. This value may be used in conjunction with FIFO[RXFIFOSIZE] to calculate how much\n
+               room is left in the receive FIFO/buffer."
+      description="Receive Counter"
+   />
+
+   <!-- ____ General member functions ____ -->
 
    <!-- ____  BAUD rate calculations ____________________ -->
 
@@ -171,24 +1288,25 @@
       %paramDescription
       \t */
       \tstatic void setBaudRate(
-      \t      volatile $(_Type) *const $(_basename),
-      \t      uint32_t     clockFrequency, %params) {
+      \t      volatile $(_Type) *$(_basename),
+      \t      uint32_t      clockFrequency, %params) {
       \t
       \t   // Disable LPUART before changing registers
       \t   uint32_t ctrl = lpuart->CTRL;
       \t   lpuart->CTRL = 0;
       \t
+      \t   uint32_t overSampleRate = (%paramName1>>%macro1_SHIFT)+1;
       \t   /*
-      \t    * Baudrate = ClockFrequency / (OverSample x Divider)
-      \t    * Divider  = ClockFrequency / (OverSample x Baudrate)
+      \t    * Baudrate = ClockFrequency / (overSampleRate x Divider)
+      \t    * Divider  = ClockFrequency / (overSampleRate x Baudrate)
       \t    */
       \t   // Calculate LPUART divisor with rounding
-      \t   uint32_t divisor = (clockFrequency<<1)/(%paramName0 * %paramName1);
+      \t   uint32_t divisor = (clockFrequency<<1)/(%paramName0 * overSampleRate);
       \t   divisor = (divisor>>1)|(divisor&0b1);
       \t
       \t   // Set Baud rate register
       \t   lpuart->BAUD = (lpuart->BAUD&~(LPUART_BAUD_SBR_MASK|LPUART_BAUD_OSR_MASK))|
-      \t         LPUART_BAUD_SBR(divisor)|LPUART_BAUD_OSR(%paramName1-1);
+      \t         LPUART_BAUD_SBR(divisor)|%paramName1;
       \t
       \t   // Restore LPUART settings
       \t   lpuart->CTRL = ctrl;
@@ -197,10 +1315,21 @@
    ]]>
    </variableTemplate>
 
-   <variableTemplate where="info" variables="lpuart_baudrate" >
-   <![CDATA[
+   <!-- Individual clock selection -->
+   <variableTemplate variables="lpuart_baudrate" condition="/SIM/$(_name)_src_available"> <![CDATA[
+      \t/**
+      \t * Get input clock frequency
+      \t * (Individual to each LPUART)
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic inline uint32_t getInputClockFrequency() {
+      \t   return SimInfo::get$(_Class)Clock();
+      \t}
+      \t
       \t/**
       \t * Set baud rate
+      \t * (Individual to each LPUART)
       \t *
       %paramDescription
       \t */
@@ -209,10 +1338,336 @@
       \t   $(_BasicInfo)::setBaudRate($(_basename), getInputClockFrequency(), %paramName);
       \t}
       \t\n
-   ]]>
-   </variableTemplate>
+   ]]></variableTemplate>
 
-   <!-- ________ LPUART Init class ____________________________ -->
+   <!-- Shared clock selection -->
+   <variableTemplate where="basicInfo" variables="lpuart_baudrate" condition="/SIM/$(_basename)_src_available"> <![CDATA[
+      \t/**
+      \t * Get input clock frequency
+      \t * (Shared by all LPUARTs)
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic inline uint32_t getInputClockFrequency() {
+      \t   return SimInfo::get$(_Baseclass)Clock();
+      \t}
+      \t
+      \t/**
+      \t * Set baud rate
+      \t * (Shared by all LPUARTs)
+      \t *
+      %paramDescription
+      \t */
+      \tvoid setBaudRate(%params) const {
+      \t
+      \t   setBaudRate($(_basename), getInputClockFrequency(), %paramName);
+      \t}
+      \t\n
+   ]]></variableTemplate>
+
+   <!-- Formatted IO virtual functions -->
+
+   <template where="basicInfo" >
+   <![CDATA[
+      \t/**
+      \t * Check if character is available
+      \t *
+      \t * @return true  Character available i.e. _readChar() will not block
+      \t * @return false No character available
+      \t */
+      \tvirtual bool _isCharAvailable() override {
+      \t   return (lpuart->STAT & LPUART_STAT_RDRF_MASK);
+      \t}
+      \t
+      \t/**
+      \t * Receives a single character (blocking)
+      \t *
+      \t * @return Character received
+      \t */
+      \tvirtual int _readChar() override {
+      \t
+      \t   // Get status from LPUART
+      \t   uint32_t status;
+      \t   constexpr uint32_t ErrorFlags = LPUART_STAT_FE_MASK|LPUART_STAT_OR_MASK|LPUART_STAT_PF_MASK|LPUART_STAT_NF_MASK;
+      \t   do {
+      \t      // Get status from LPUART
+      \t      status = lpuart->STAT;
+      \t      // Clear & ignore pending errors
+      \t      if ((status & (ErrorFlags)) != 0) {
+      \t         lpuart->STAT = lpuart->STAT|ErrorFlags;
+      \t      }
+      \t      // Check for Rx buffer full
+      \t   } while ((status & LPUART_STAT_RDRF_MASK) == 0);
+      \t   return uint8_t(lpuart->DATA);
+      \t}
+      \t
+      \t/**
+      \t * Writes a character (blocking)
+      \t *
+      \t * @param[in]  ch - character to send
+      \t */
+      \tvirtual void _writeChar(char ch) override {
+      \t   while ((lpuart->STAT & LPUART_STAT_TDRE_MASK) == 0) {
+      \t      // Wait for Tx buffer empty
+      \t      __asm__("nop");
+      \t   }
+      \t   lpuart->DATA = ch;
+      \t   if (ch=='\n') {
+      \t      _writeChar('\r');
+      \t   }
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+   ><![CDATA[
+      \t// Pointer to $(_BASENAME) hardware instance
+      \tvolatile $(_Type) *$(_basename);
+      \t
+      \t/**
+      \t * Constructor
+      \t *
+      \t * @param $(_basename) $(_BASENAME) hardware instance
+      \t */
+      \t$(_BasicInfo)(volatile $(_Type) * $(_basename)) : $(_basename)($(_basename)) {
+      \t}
+      \t\n
+   ]]></template>
+
+   <!-- ____ Getters and Setters ____________ -->
+
+   <for keys="field                     : set   : get   : clear : genCode                 : name"
+        values="
+
+         lpuart_baud_maen1              : true  : true  : false : enableGettersAndSetters : MatchAddressModeEnable1;
+         lpuart_baud_maen2              : true  : true  : false : enableGettersAndSetters : MatchAddressModeEnable2;
+         lpuart_baud_m10                : true  : true  : false : enableGettersAndSetters : 10BitModeSelect;
+         lpuart_baud_tdmae              : true  : true  : false : enableGettersAndSetters : TransmitDmaEnable;
+         lpuart_baud_rdmae              : true  : true  : false : enableGettersAndSetters : ReceiveDmaEnable;
+         lpuart_baud_matcfg             : true  : true  : false : enableGettersAndSetters : MatchConfiguration;
+         lpuart_baud_bothedge           : true  : true  : false : enableGettersAndSetters : BothEdgeSampling;
+         lpuart_baud_resyncdis          : true  : true  : false : enableGettersAndSetters : ResynchronizationDisable;
+         lpuart_baud_lbkdie             : true  : true  : false : enableGettersAndSetters : LinBreakDetectInterruptEnable;
+         lpuart_baud_rxedgie            : true  : true  : false : enableGettersAndSetters : RxInputActiveEdgeInterruptEnable;
+         lpuart_baud_sbns               : true  : true  : false : enableGettersAndSetters : StopBitNumberSelect;
+         lpuart_baud_sbr                : true  : true  : false : enableGettersAndSetters : BaudRateModuloDivisor;
+
+         lpuart_stat_lbkdif             : true  : true  : false : enableGettersAndSetters : LinBreakDetectFlag;
+         lpuart_stat_rxedgif            : true  : true  : false : enableGettersAndSetters : LpuartRxPinActiveEdgeFlag;
+         lpuart_stat_msbf               : true  : true  : false : enableGettersAndSetters : MsbFirst;
+         lpuart_stat_rxinv              : true  : true  : false : enableGettersAndSetters : ReceiveDataInversion;
+         lpuart_stat_rwuid              : true  : true  : false : enableGettersAndSetters : ReceiveWakeUpIdleDetect;
+         lpuart_stat_brk13              : true  : true  : false : enableGettersAndSetters : BreakCharacterGenerationLength;
+         lpuart_stat_lbkde              : true  : true  : false : enableGettersAndSetters : LinBreakDetectionEnable;
+         lpuart_stat_raf                : false : true  : false : enableGettersAndSetters : ReceiverActiveFlag;
+         lpuart_stat_tdre               : false : true  : false : enableGettersAndSetters : TransmitDataRegisterEmptyFlag;
+         lpuart_stat_tc                 : false : true  : false : enableGettersAndSetters : TransmissionCompleteFlag;
+         lpuart_stat_rdrf               : false : true  : false : enableGettersAndSetters : ReceiveDataRegisterFullFlag;
+         lpuart_stat_idle               : true  : true  : false : enableGettersAndSetters : IdleLineFlag;
+         lpuart_stat_or                 : true  : true  : false : enableGettersAndSetters : ReceiverOverrunFlag;
+         lpuart_stat_nf                 : true  : true  : false : enableGettersAndSetters : NoiseFlag;
+         lpuart_stat_fe                 : true  : true  : false : enableGettersAndSetters : FramingErrorFlag;
+         lpuart_stat_pf                 : true  : true  : false : enableGettersAndSetters : ParityErrorFlag;
+         lpuart_stat_ma1f               : true  : true  : false : enableGettersAndSetters : Match1Flag;
+         lpuart_stat_ma2f               : true  : true  : false : enableGettersAndSetters : Match2Flag;
+
+         lpuart_ctrl_r8t9               : true  : true  : false : enableGettersAndSetters : ReceiveBit8_TransmitBit9;
+         lpuart_ctrl_r9t8               : true  : true  : false : enableGettersAndSetters : ReceiveBit9_TransmitBit8;
+         lpuart_ctrl_txdir              : true  : true  : false : enableGettersAndSetters : TransmitterPinDataDirectionInSingle;
+         lpuart_ctrl_txinv              : true  : true  : false : enableGettersAndSetters : TransmitDataInversion;
+         lpuart_ctrl_orie               : true  : true  : false : enableGettersAndSetters : OverrunErrorInterruptEnable;
+         lpuart_ctrl_neie               : true  : true  : false : enableGettersAndSetters : NoiseErrorInterruptEnable;
+         lpuart_ctrl_feie               : true  : true  : false : enableGettersAndSetters : FramingErrorInterruptEnable;
+         lpuart_ctrl_peie               : true  : true  : false : enableGettersAndSetters : ParityErrorInterruptEnable;
+         lpuart_ctrl_tie                : true  : true  : false : enableGettersAndSetters : TransmitInterruptEnableForTdre;
+         lpuart_ctrl_tcie               : true  : true  : false : enableGettersAndSetters : TransmissionCompleteInterruptEnable;
+         lpuart_ctrl_rie                : true  : true  : false : enableGettersAndSetters : ReceiverInterruptEnableForRdrf;
+         lpuart_ctrl_ilie               : true  : true  : false : enableGettersAndSetters : IdleLineInterruptEnable;
+         lpuart_ctrl_te                 : true  : true  : false : enableGettersAndSetters : TransmitterEnable;
+         lpuart_ctrl_re                 : true  : true  : false : enableGettersAndSetters : ReceiverEnable;
+         lpuart_ctrl_rwu                : true  : true  : false : enableGettersAndSetters : ReceiverWakeupControl;
+         lpuart_ctrl_sbk                : true  : true  : false : enableGettersAndSetters : SendBreak;
+         lpuart_ctrl_ma1ie              : true  : true  : false : enableGettersAndSetters : Match1InterruptEnable;
+         lpuart_ctrl_ma2ie              : true  : true  : false : enableGettersAndSetters : Match2InterruptEnable;
+         lpuart_ctrl_idlecfg            : true  : true  : false : enableGettersAndSetters : IdleConfiguration;
+         lpuart_ctrl_pinmode            : true  : true  : false : enableGettersAndSetters : LoopModeSelect;
+         lpuart_ctrl_dozeen             : true  : true  : false : enableGettersAndSetters : StopsInDozeMode;
+         lpuart_ctrl_m                  : true  : true  : false : enableGettersAndSetters : 9BitOr8BitModeSelect;
+         lpuart_ctrl_wake               : true  : true  : false : enableGettersAndSetters : ReceiverWakeupMethodSelect;
+         lpuart_ctrl_ilt                : true  : true  : false : enableGettersAndSetters : IdleLineTypeSelect;
+         lpuart_ctrl_parity             : true  : true  : false : enableGettersAndSetters : ParityEnable;
+
+         lpuart_data_noisy              : false : true  : false : enableGettersAndSetters : NoiseError;
+         lpuart_data_paritye            : false : true  : false : enableGettersAndSetters : ParityError;
+         lpuart_data_fretsc             : true  : true  : false : enableGettersAndSetters : FrameError_TransmitSpecialCharacter;
+         lpuart_data_rxempt             : false : true  : false : enableGettersAndSetters : ReceiveBufferEmpty;
+         lpuart_data_idline             : false : true  : false : enableGettersAndSetters : IdleLine;
+         lpuart_data_rt                 : true  : false : false : $(_BasicInfoGuard)      : TransmitData;
+         lpuart_data_rt                 : false : true  : false : $(_BasicInfoGuard)      : ReceiveData;
+
+         lpuart_match_ma2               : true  : true  : false : enableGettersAndSetters : MatchAddress2;
+         lpuart_match_ma1               : true  : true  : false : enableGettersAndSetters : MatchAddress1;
+
+         lpuart_modir_iren              : true  : true  : false : enableGettersAndSetters : InfraredEnable;
+         lpuart_modir_tnp               : true  : true  : false : enableGettersAndSetters : TransmitterNarrowPulse;
+         lpuart_modir_rtswater          : true  : true  : false : enableGettersAndSetters : ReceiveRtsConfiguration;
+         lpuart_modir_txctssrc          : true  : true  : false : enableGettersAndSetters : TransmitCtsSource;
+         lpuart_modir_txctsc            : true  : true  : false : enableGettersAndSetters : TransmitCtsConfiguration;
+         lpuart_modir_rxrtse            : true  : true  : false : enableGettersAndSetters : ReceiverRequestToSendEnable;
+         lpuart_modir_txrtspol          : true  : true  : false : enableGettersAndSetters : TransmitterRequestToSendPolarity;
+         lpuart_modir_txrtse            : true  : true  : false : enableGettersAndSetters : TransmitterRequestToSendEnable;
+         lpuart_modir_txctse            : true  : true  : false : enableGettersAndSetters : TransmitterClearToSendEnable;
+
+         lpuart_fifo_txempt             : false : true  : false : enableGettersAndSetters : TransmitBuffer_FifoEmpty;
+         lpuart_fifo_rxempt             : false : true  : false : enableGettersAndSetters : ReceiveBuffer_FifoEmpty;
+         lpuart_fifo_txof               : true  : true  : false : enableGettersAndSetters : TransmitterBufferOverflowFlag;
+         lpuart_fifo_rxuf               : true  : true  : false : enableGettersAndSetters : ReceiverBufferUnderflowFlag;
+         lpuart_fifo_txflush            : true  : true  : false : enableGettersAndSetters : TransmitFifo_BufferFlush;
+         lpuart_fifo_rxflush            : true  : true  : false : enableGettersAndSetters : ReceiveFifo_BufferFlush;
+         lpuart_fifo_rxiden             : true  : true  : false : enableGettersAndSetters : ReceiverIdleEmptyEnable;
+         lpuart_fifo_txofe              : true  : true  : false : enableGettersAndSetters : TransmitFifoOverflowInterruptEnable;
+         lpuart_fifo_rxufe              : true  : true  : false : enableGettersAndSetters : ReceiveFifoUnderflowInterruptEnable;
+         lpuart_fifo_txfe               : true  : true  : false : enableGettersAndSetters : TransmitFifoEnable;
+         lpuart_fifo_txfifosize         : false : true  : false : enableGettersAndSetters : TransmitFifo;
+         lpuart_fifo_rxfe               : true  : true  : false : enableGettersAndSetters : ReceiveFifoEnable;
+         lpuart_fifo_rxfifosize         : false : true  : false : enableGettersAndSetters : ReceiveFifo;
+
+         lpuart_water_rxcount           : false : true  : false : enableGettersAndSetters : ReceiveCounter;
+         lpuart_water_rxwater           : true  : true  : false : enableGettersAndSetters : ReceiveWatermark;
+         lpuart_water_txcount           : false : true  : false : enableGettersAndSetters : TransmitCounter;
+         lpuart_water_txwater           : true  : true  : false : enableGettersAndSetters : TransmitWatermark" >
+      <variableTemplate where="basicInfo" variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t * (%(field))
+         \t *
+         %paramDescription
+         \t */
+         \tvoid set%(name)(%params) const {
+         \t   %fieldAssignment;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate where="basicInfo" variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
+      ><![CDATA[
+         \t/**
+         \t * Get %description
+         \t * (%(field))
+         \t *
+         \t * @return %tooltip
+         \t */
+         \t%returnType get%(name)() const {
+         \t   return %fieldExtract;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+      <variableTemplate where="basicInfo" variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
+         tooltipPadding="x*x"
+      ><![CDATA[
+         \t/**
+         \t * Clear %description
+         \t * (%(field))
+         \t *
+         %paramDescription
+         \t */
+         \tvoid clear%(name)(%params) const {
+         \t   %register = %paramExpression;
+         \t}
+         \t\n
+         \t\n
+      ]]></variableTemplate>
+   </for>
+
+   <variableTemplate where="basicInfo"
+      variables="lpuart_stat_stat"
+   ><![CDATA[
+      \t/**
+      \t * Clear %description
+      \t * This includes all flags
+      \t * (%variables)
+      \t */
+      \tvoid clearStatusFlags() const {
+      \t
+      \t   // Flags are w1c
+      \t   %register = %register|uint32_t(%returnType::AllFlags);
+      \t}
+      \t
+      \t/**
+      \t * Clear selected %description
+      \t * (%variables)
+      \t *
+      %paramDescription
+      \t */
+      \tvoid clearStatusFlags(%params) const {
+      \t   // Flags are w1c
+      \t   %register = %register|%paramExpression;
+      \t}
+      \t
+      \t/**
+      \t * Get %description
+      \t * (%variables)
+      \t *
+      \t * @return %tooltip
+      \t */
+      \t%returnType getStatusFlags() const {
+      \t   return %returnType(%register&uint32_t(%returnType::AllFlags));
+      \t}
+      \t\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo"
+      variables="lpuart_ctrl_interrupt"
+   ><![CDATA[
+      \t/**
+      \t * Enable %description
+      \t * (%variables)
+      \t *
+      %paramDescription
+      \t */
+      \tvoid enableEvents(%params) const {
+      \t   %register = %register|%paramExpression;
+      \t}
+      \t
+      \t/**
+      \t * Disable %description
+      \t * (%variables)
+      \t *
+      %paramDescription
+      \t */
+      \tvoid disableEvents(%params) const {
+      \t   %register = %register&~%paramExpression;
+      \t}
+      \t
+      \t/**
+      \t * Get %description
+      \t * (%variables)
+      \t *
+      \t * @return %tooltip
+      \t */
+      \t%returnType getEventEnables() const {
+      \t   return %returnType(%register&uint32_t(%returnType::AllEvents));
+      \t}
+      \t\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" condition="false"
+      variables="lpuart_stat_fe,lpuart_data_rt"
+   ><![CDATA[
+      \t/**
+      \t * Clear %description
+      \t */
+      \tvoid clearStatusFlags() const {
+      \t
+      \t   // Flags are cleared by reading status and then data
+      \t   (void)%register0;
+      \t   (void)%register1;
+      \t}
+      \t\n
+   ]]></variableTemplate>
+
+   <!-- _____ LPUART Init class _____ -->
 
    <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
@@ -254,6 +1709,13 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t */
       \tclass Init {
       \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(Types...) = delete;
+      \t
       \tpublic:
       \t   /**
       \t    * Copy Constructor
@@ -271,37 +1733,37 @@ XXXXXXXXXXXXXXXXXXXXXX
    <!-- ____ Init class Member variables ________ -->
 
    <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
-      condition="false"
       variables="irqHandlingMethod"
+      linePadding="xxx"
    ><![CDATA[
-      \t   /// %description
+      %multilineDescription
       \t   %params = nullptr;\n\n
    ]]></variableTemplate>
 
    <for keys=" type        : variables                                            : init    "
-       values="%returnType : lpuart_baudrate                                      :   UartBaudRate(0)      ;
-
-               %baseType   : lpuart_baud_maen1,lpuart_baud_maen2,lpuart_baud_m10,
-                             lpuart_baud_osr,lpuart_baud_tdmae,lpuart_baud_rdmae,
+       values="%baseType   : lpuart_baudrate                                      : 0        ;
+               %baseType   : lpuart_baud_osr,lpuart_baud_maen1,lpuart_baud_maen2,
+                             lpuart_baud_m10,lpuart_baud_tdmae,lpuart_baud_rdmae,
                              lpuart_baud_matcfg,lpuart_baud_bothedge,lpuart_baud_resyncdis,
                              lpuart_baud_lbkdie,lpuart_baud_rxedgie,lpuart_baud_sbns,
                              lpuart_baud_sbr                                      :   0      ;
-               %baseType   : lpuart_stat_lbkdif,lpuart_stat_rxedgif,lpuart_stat_msbf,
-                             lpuart_stat_rxinv,lpuart_stat_rwuid,lpuart_stat_brk13,
-                             lpuart_stat_lbkde,lpuart_stat_idle,lpuart_stat_or,
-                             lpuart_stat_nf,lpuart_stat_fe,lpuart_stat_pf,
-                             lpuart_stat_ma1f,lpuart_stat_ma2f                    :   0      ;
+               %baseType   : lpuart_stat_msbf,lpuart_stat_rxinv,lpuart_stat_rwuid,
+                             lpuart_stat_brk13,lpuart_stat_lbkde                  :   0      ;
                %baseType   : lpuart_ctrl_r8t9,lpuart_ctrl_r9t8,lpuart_ctrl_txdir,
-                             lpuart_ctrl_txinv,lpuart_ctrl_orie,lpuart_ctrl_neie,
-                             lpuart_ctrl_feie,lpuart_ctrl_peie,lpuart_ctrl_tie,
-                             lpuart_ctrl_tcie,lpuart_ctrl_rie,lpuart_ctrl_ilie,
-                             lpuart_ctrl_te,lpuart_ctrl_re,lpuart_ctrl_rwu,
-                             lpuart_ctrl_sbk,lpuart_ctrl_ma1ie,lpuart_ctrl_ma2ie,
-                             lpuart_ctrl_idlecfg,lpuart_ctrl_loops,lpuart_ctrl_dozeen,
-                             lpuart_ctrl_rsrc,lpuart_ctrl_m,lpuart_ctrl_wake,
-                             lpuart_ctrl_ilt,lpuart_ctrl_pe,lpuart_ctrl_pt        :   0      ;
-               %baseType   : lpuart_data_fretsc,lpuart_data_rt                    :   0      ;
-               %baseType   : lpuart_match_ma2,lpuart_match_ma1                    :   0      " >
+                             lpuart_ctrl_txinv,lpuart_ctrl_te,lpuart_ctrl_re,
+                             lpuart_ctrl_rwu,lpuart_ctrl_sbk,lpuart_ctrl_idlecfg,
+                             lpuart_ctrl_pinmode,lpuart_ctrl_dozeen,
+                             lpuart_ctrl_m,lpuart_ctrl_wake,lpuart_ctrl_ilt,
+                             lpuart_ctrl_parity,lpuart_ctrl_interrupt             :   0      ;
+               %baseType   : lpuart_match_ma2,lpuart_match_ma1                    :   0      ;
+               %baseType   : lpuart_modir_iren,lpuart_modir_tnp,lpuart_modir_rtswater,
+                             lpuart_modir_txctssrc,lpuart_modir_txctsc,
+                             lpuart_modir_rxrtse,lpuart_modir_txrtspol,
+                             lpuart_modir_txrtse,lpuart_modir_txctse              :   0      ;
+               %baseType   : lpuart_fifo_rxiden,lpuart_fifo_txofe,
+                             lpuart_fifo_rxufe,lpuart_fifo_txfe,lpuart_fifo_rxfe  :   0      ;
+               %baseType   : lpuart_water_rxwater,lpuart_water_txwater            :   0      ;
+               %paramType  : /PCR/nvic_irqLevel                                   :   %defaultValue   " >
       <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
@@ -311,24 +1773,15 @@ XXXXXXXXXXXXXXXXXXXXXX
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
-      variables="/PCR/nvic_irqLevel,irqLevel"
-      condition="false"
-   ><![CDATA[
-      \t   /// %description
-      \t   %paramType %registerName0 = %defaultValue;
-      \t\n
-   ]]></variableTemplate>
-
    <!-- ____ Init class Constructors ____________ -->
 
    <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
-      condition="false"
       variables="irqHandlingMethod"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
       \t    * Constructor for %description
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -338,103 +1791,42 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t      this->%paramName0 = %paramExpression;
+      \t      this->%paramName = %paramExpression;
       \t   }\n\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
-      condition="false"
-      variables="/PCR/nvic_irqLevel"
-      linePadding="xxx"
-   ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      %registerName = %paramExpression;
-      \t   }\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
-      variables="uart_c5_tdmas"
-      linePadding="xxx" >
-   <![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    * (uart_c5_tdmas)
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t   c2 = (c2 & ~UART_C2_TIE_MASK)   | %paramExpression;
-      \t   c5 = (c5 & ~UART_C5_TDMAS_MASK) | (%paramExpression>>8);
-      \t   }
-      \t\n
-   ]]>
-   </variableTemplate>
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
-      variables="uart_c5_rdmas"
-      linePadding="xxx" >
-   <![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    * (uart_c5_rdmas)
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t   c2 = (c2 & ~UART_C2_RIE_MASK)   | %paramExpression;
-      \t   c5 = (c5 & ~UART_C5_RDMAS_MASK) | (%paramExpression>>8);
-      \t   }
-      \t\n
-   ]]>
-   </variableTemplate>
    <for keys="r"
-      values="
+      values="/PCR/nvic_irqLevel;
             lpuart_baudrate;
             lpuart_baud_maen1;lpuart_baud_maen2;lpuart_baud_m10;
             lpuart_baud_osr;lpuart_baud_tdmae;lpuart_baud_rdmae;
             lpuart_baud_matcfg;lpuart_baud_bothedge;lpuart_baud_resyncdis;
             lpuart_baud_lbkdie;lpuart_baud_rxedgie;lpuart_baud_sbns;
             lpuart_baud_sbr;
-            lpuart_stat_lbkdif;lpuart_stat_rxedgif;lpuart_stat_msbf;
-            lpuart_stat_rxinv;lpuart_stat_rwuid;lpuart_stat_brk13;
-            lpuart_stat_lbkde;lpuart_stat_idle;lpuart_stat_or;
-            lpuart_stat_nf;lpuart_stat_fe;lpuart_stat_pf;
-            lpuart_stat_ma1f;lpuart_stat_ma2f;
+            lpuart_stat_msbf;lpuart_stat_rxinv;lpuart_stat_rwuid;
+            lpuart_stat_brk13;lpuart_stat_lbkde;
             lpuart_ctrl_r8t9;lpuart_ctrl_r9t8;lpuart_ctrl_txdir;
-            lpuart_ctrl_txinv;lpuart_ctrl_orie;lpuart_ctrl_neie;
-            lpuart_ctrl_feie;lpuart_ctrl_peie;lpuart_ctrl_tie;
-            lpuart_ctrl_tcie;lpuart_ctrl_rie;lpuart_ctrl_ilie;
-            lpuart_ctrl_te;lpuart_ctrl_re;lpuart_ctrl_rwu;
-            lpuart_ctrl_sbk;lpuart_ctrl_ma1ie;lpuart_ctrl_ma2ie;
-            lpuart_ctrl_idlecfg;lpuart_ctrl_loops;lpuart_ctrl_dozeen;
-            lpuart_ctrl_rsrc;lpuart_ctrl_m;lpuart_ctrl_wake;
-            lpuart_ctrl_ilt;lpuart_ctrl_pe;lpuart_ctrl_pt;
-            lpuart_data_fretsc;lpuart_data_rt;
-            lpuart_match_ma2;lpuart_match_ma1" >
+            lpuart_ctrl_txinv;lpuart_ctrl_te;lpuart_ctrl_re;
+            lpuart_ctrl_rwu;lpuart_ctrl_sbk;lpuart_ctrl_idlecfg;
+            lpuart_ctrl_pinmode;lpuart_ctrl_dozeen;
+            lpuart_ctrl_m;lpuart_ctrl_wake;
+            lpuart_ctrl_ilt;lpuart_ctrl_parity;
+            lpuart_match_ma2;lpuart_match_ma1;
+            lpuart_modir_iren;lpuart_modir_tnp;lpuart_modir_rtswater;
+            lpuart_modir_txctssrc;lpuart_modir_txctsc;
+            lpuart_modir_rxrtse;lpuart_modir_txrtspol;
+            lpuart_modir_txrtse;lpuart_modir_txctse;
+            lpuart_fifo_rxiden;lpuart_fifo_txofe;
+            lpuart_fifo_rxufe;lpuart_fifo_txfe;lpuart_fifo_rxfe;
+            lpuart_water_rxwater;lpuart_water_txwater
+            " >
       <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
          \t   /**
          \t    * Constructor for %description
-         \t    * (%(r))
+         \t    * (%variables)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -451,17 +1843,75 @@ XXXXXXXXXXXXXXXXXXXXXX
       </variableTemplate>
    </for>
 
-   <!-- ____ Init class Configure method ____ -->
-
-   <template codeGenCondition="enablePeripheralSupport" >
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      variables="lpuart_ctrl_interrupt"
+      linePadding="xxx" >
    <![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    * (%variables)
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName = (%registerName&~uint32_t(%returnType::AllEvents)) | %paramExpression;
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t}; // class $(_BasicInfo)::Init
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____ Lpuart0Info Constructor ____ -->
+
+   <template codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/*
+      \t *   Default Constructor
+      \t */
+      \t$(_Info)() : $(_BasicInfo)($(_basename)) {
+      \t   defaultConfigure();
+      \t}
+      \t
+      \t/*
+      \t *   Constructor
+      \t */
+      \t$(_Info)(const Init &init) : $(_BasicInfo)($(_basename)) {
+      \t   configure(init);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____ Init class Configure methods ____ -->
+
+   <template codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void initialise() {
+      \t
+      \t   defaultConfigure();
+      \t}
+      \t
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
       \t */
       \tstatic inline void defaultConfigure() {
       \t
-      \t   // Update settings
       \t   configure(DefaultInitValue);
       \t}
       \t
@@ -472,46 +1922,66 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t */
       \tstatic void configure(const Init &init) {
       \t
-      \t   // Enable peripheral clock
+      \t   // Enable peripheral
       \t   enable();
       \t\n
-   ]]></template>
-
-   <!-- Don't include IRQ handler in init -->
-   <template codeGenCondition="irqHandlingMethod"
-      condition="false" >
+   ]]>
+   </template>
+   <template codeGenCondition="irqHandlingMethod" condition="irqHandlingMethod" >
    <![CDATA[
-      \t   // Set call-backs
-      \t   setCallback(init.callbackFunction);
+      \t   // Configure call-backs
+      \t   setCallback(init.callbackFunction);\n
+   ]]>
+   </template>
+   <template codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
       \t   enableNvicInterrupts(init.irqlevel);
+      \t
+      \t   $(_BasicInfo)::configure($(_basename), init);
+      \t}
       \t\n
-   ]]></template>
+   ]]>
+   </template>
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      variables="lpuart_baudrate,lpuart_baud_osr"
+      linePadding="xxx" >
+   <![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(volatile $(_Type) *$(_basename), const Init &init) {
+      \t\n
+   ]]>
+   </variableTemplate>
    <for keys=
              " var                                                    : statement            "
-      values=" lpuart_baud_maen1,lpuart_baud_maen2,lpuart_baud_m10,
+      values=" lpuart_ctrl_te,lpuart_ctrl_re                          : %register = 0  ;
+               lpuart_baud_maen1,lpuart_baud_maen2,lpuart_baud_m10,
                lpuart_baud_osr,lpuart_baud_tdmae,lpuart_baud_rdmae,
                lpuart_baud_matcfg,lpuart_baud_bothedge,lpuart_baud_resyncdis,
                lpuart_baud_lbkdie,lpuart_baud_rxedgie,lpuart_baud_sbns,
-               lpuart_baud_sbr                                        : %configRegAssignment ;
-               lpuart_stat_lbkdif,lpuart_stat_rxedgif,lpuart_stat_msbf,
-               lpuart_stat_rxinv,lpuart_stat_rwuid,lpuart_stat_brk13,
-               lpuart_stat_lbkde,lpuart_stat_idle,lpuart_stat_or,
-               lpuart_stat_nf,lpuart_stat_fe,lpuart_stat_pf,
-               lpuart_stat_ma1f,lpuart_stat_ma2f                      : %configRegAssignment ;
+               lpuart_baud_sbr                                        : %configRegAssignment  ;
+               lpuart_baudrate,lpuart_baud_osr                        :
+         setBaudRate($(_basename), getInputClockFrequency(), %returnType0(init.%registerName0), %returnType1(init.%registerName1&amp;%mask1)) ;               lpuart_stat_msbf,lpuart_stat_rxinv,lpuart_stat_rwuid,
+               lpuart_stat_brk13,lpuart_stat_lbkde,                   : %configRegAssignment  ;
+               lpuart_match_ma2,lpuart_match_ma1                      : %configRegAssignment  ;
+               lpuart_modir_iren,lpuart_modir_tnp,lpuart_modir_rtswater,
+               lpuart_modir_txctssrc,lpuart_modir_txctsc,
+               lpuart_modir_rxrtse,lpuart_modir_txrtspol,
+               lpuart_modir_txrtse,lpuart_modir_txctse                : %configRegAssignment  ;
+               lpuart_fifo_rxiden,lpuart_fifo_txofe,
+               lpuart_fifo_rxufe,lpuart_fifo_txfe,lpuart_fifo_rxfe    : %configRegAssignment  ;
+               lpuart_water_rxwater,lpuart_water_txwater              : %configRegAssignment  ;
                lpuart_ctrl_r8t9,lpuart_ctrl_r9t8,lpuart_ctrl_txdir,
-               lpuart_ctrl_txinv,lpuart_ctrl_orie,lpuart_ctrl_neie,
-               lpuart_ctrl_feie,lpuart_ctrl_peie,lpuart_ctrl_tie,
-               lpuart_ctrl_tcie,lpuart_ctrl_rie,lpuart_ctrl_ilie,
-               lpuart_ctrl_te,lpuart_ctrl_re,lpuart_ctrl_rwu,
-               lpuart_ctrl_sbk,lpuart_ctrl_ma1ie,lpuart_ctrl_ma2ie,
-               lpuart_ctrl_idlecfg,lpuart_ctrl_loops,lpuart_ctrl_dozeen,
-               lpuart_ctrl_rsrc,lpuart_ctrl_m,lpuart_ctrl_wake,
-               lpuart_ctrl_ilt,lpuart_ctrl_pe,lpuart_ctrl_pt          : %configRegAssignment ;
-               lpuart_data_fretsc,lpuart_data_rt                      : %configRegAssignment ;
-               lpuart_match_ma2,lpuart_match_ma1                      : %configRegAssignment ;
-
-               lpuart_baudrate                                       : setBaudRate(init.baudrate)" >
-      <variableTemplate codeGenCondition="enablePeripheralSupport"
+               lpuart_ctrl_txinv,lpuart_ctrl_te,lpuart_ctrl_re,
+               lpuart_ctrl_rwu,lpuart_ctrl_sbk,
+               lpuart_ctrl_idlecfg,lpuart_ctrl_pinmode,lpuart_ctrl_dozeen,
+               lpuart_ctrl_m,lpuart_ctrl_wake,
+               lpuart_ctrl_ilt,lpuart_ctrl_parity,
+               lpuart_ctrl_interrupt                                 : %configRegAssignment  " >
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="%(var)"
       linePadding="xxx"
       ><![CDATA[
@@ -520,7 +1990,7 @@ XXXXXXXXXXXXXXXXXXXXXX
          \t   %(statement);\n
       ]]></variableTemplate>
    </for>
-   <template codeGenCondition="enablePeripheralSupport" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}
       \t\n
@@ -529,32 +1999,36 @@ XXXXXXXXXXXXXXXXXXXXXX
 
    <!-- ____  Default Initialisation value ____ -->
 
-   <variableTemplate codeGenCondition="enablePeripheralSupport"
+   <variableTemplate codeGenCondition="$(_InfoGuard)"
       separator=","
+      padToComments="50"
       terminator=","
       variables="
             lpuart_baudrate,
+            lpuart_baud_osr,
             lpuart_baud_maen1,lpuart_baud_maen2,lpuart_baud_m10,
-            lpuart_baud_osr,lpuart_baud_tdmae,lpuart_baud_rdmae,
+            lpuart_baud_tdmae,lpuart_baud_rdmae,
             lpuart_baud_matcfg,lpuart_baud_bothedge,lpuart_baud_resyncdis,
             lpuart_baud_lbkdie,lpuart_baud_rxedgie,lpuart_baud_sbns,
             lpuart_baud_sbr,
-            lpuart_stat_lbkdif,lpuart_stat_rxedgif,lpuart_stat_msbf,
-            lpuart_stat_rxinv,lpuart_stat_rwuid,lpuart_stat_brk13,
-            lpuart_stat_lbkde,lpuart_stat_idle,lpuart_stat_or,
-            lpuart_stat_nf,lpuart_stat_fe,lpuart_stat_pf,
-            lpuart_stat_ma1f,lpuart_stat_ma2f,
+            lpuart_stat_msbf,lpuart_stat_rxinv,lpuart_stat_rwuid,
+            lpuart_stat_brk13,lpuart_stat_lbkde,
             lpuart_ctrl_r8t9,lpuart_ctrl_r9t8,lpuart_ctrl_txdir,
-            lpuart_ctrl_txinv,lpuart_ctrl_orie,lpuart_ctrl_neie,
-            lpuart_ctrl_feie,lpuart_ctrl_peie,lpuart_ctrl_tie,
-            lpuart_ctrl_tcie,lpuart_ctrl_rie,lpuart_ctrl_ilie,
-            lpuart_ctrl_te,lpuart_ctrl_re,lpuart_ctrl_rwu,
-            lpuart_ctrl_sbk,lpuart_ctrl_ma1ie,lpuart_ctrl_ma2ie,
-            lpuart_ctrl_idlecfg,lpuart_ctrl_loops,lpuart_ctrl_dozeen,
-            lpuart_ctrl_rsrc,lpuart_ctrl_m,lpuart_ctrl_wake,
-            lpuart_ctrl_ilt,lpuart_ctrl_pe,lpuart_ctrl_pt,
-            lpuart_data_fretsc,lpuart_data_rt,
-            lpuart_match_ma2,lpuart_match_ma1" >
+            lpuart_ctrl_txinv,lpuart_ctrl_te,lpuart_ctrl_re,
+            lpuart_ctrl_rwu,lpuart_ctrl_sbk,
+            lpuart_ctrl_idlecfg,lpuart_ctrl_pinmode,lpuart_ctrl_dozeen,
+            lpuart_ctrl_m,lpuart_ctrl_wake,
+            lpuart_ctrl_ilt,lpuart_ctrl_parity,
+            lpuart_ctrl_interrupt,
+            lpuart_match_ma2,lpuart_match_ma1,
+            lpuart_modir_iren,lpuart_modir_tnp,lpuart_modir_rtswater,
+            lpuart_modir_txctssrc,lpuart_modir_txctsc,
+            lpuart_modir_rxrtse,lpuart_modir_txrtspol,
+            lpuart_modir_txrtse,lpuart_modir_txctse,
+            lpuart_fifo_rxiden,lpuart_fifo_txofe,
+            lpuart_fifo_rxufe,lpuart_fifo_txfe,lpuart_fifo_rxfe,
+            lpuart_water_rxwater,lpuart_water_txwater,
+            irqLevel" >
    <![CDATA[
       \t/**
       \t * Default initialisation value for $(_Class)
@@ -563,49 +2037,30 @@ XXXXXXXXXXXXXXXXXXXXXX
       \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};
       \t\n
-   ]]></variableTemplate>
-
-   <!-- ____ End of Info classes __________________ -->
-
-   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
-   <![CDATA[
-      \t}; // class $(_BasicInfo)::Init
-      \t\n
    ]]>
-   </template>
+   </variableTemplate>
 
-   <!-- ____ Common __________________ -->
+   <!-- ____ Common ____ -->
 
-   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
       \t/**
-      \t * Class representing $(_NAME) interface
-      \t *
-      \t * <b>Example</b>
-      \t * @code
-      \t *  // Instantiate interface
-      \t *  USBDM::$(_Class) $(_basename);
-      \t *
-      \t *  for(int i=0; i++;) {
-      \t *     $(_basename).writeln("Hello world ", i);
-      \t *  }
-      \t *  @endcode
+      \t * Class representing $(_NAME)
       \t */
-      \tclass $(_Class) : public $(_Baseclass)_T<$(_Info)> {};
+      \tusing $(_Class) = $(_Class)Info;
       \t\n
    ]]>
    </template>
 
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.LpuartValidate">
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
    </validate>
 
    <projectActionList id="lpuart_files" >
-      <copy source="Project_Headers/lpuart.h"        target="Project_Headers/lpuart.h"      overwrite="true"  derived="true" macroReplace="true" />
-      <copy source="Project_Headers/uart_queue.h"    target="Project_Headers/uart_queue.h"  overwrite="true"  derived="true" />
+      <copy source="Project_Headers/lpuart.h"  target="Project_Headers/lpuart.h"  overwrite="true"  derived="true" />
    </projectActionList>
 
-   <!-- ____ Startup __________________ -->
+   <!-- ____ Startup ____ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
@@ -617,7 +2072,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <!-- ____ SIM configuration __________________ -->
+   <!-- ____ SIM configuration ____ -->
 
    <category name="Advanced" description="SIM configuration"
       toolTip="These settings only have effect if the SIM configuration is enabled" >
@@ -632,7 +2087,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       </for>
    </category>
 
-   <!--  ____ Signal mapping __________________ -->
+   <!--  ____ Signal mapping ____ -->
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 
 </fragment>

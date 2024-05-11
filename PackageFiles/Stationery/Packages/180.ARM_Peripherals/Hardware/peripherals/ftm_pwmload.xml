@@ -22,21 +22,22 @@
       <choice name="Loading enabled"   value="1" enum="Enabled"/>
    </binaryOption >
 
-   <bitmaskOption key="ftm_pwmload_chsel" condition="ftm_pwmload_present"
+   <bitfieldOption  key="ftm_pwmload_chsel" condition="ftm_pwmload_present"
       hidden="true"
-      derived="true"
+      derived="true" 
       baseType="uint16_t"
       enabledBy="enablePeripheralSupport"
       typeName="FtmLoadPoint"
       description="Load on Channel Match enable"
       toolTip="Selects which channels trigger loading of MOD/CNTIN/CnV from buffers. \n
                If enabled, the loading occurs when the counter reaches CnV"
-      bitmask="0xFF"
-      bitList="Ch%i"
-      bitDescription="Load on channel %i match"
-      enumText="\t   %(typeName)_NoChannels = 0"
-   />
-
+      bitmask="0xFF" >
+      <bitField name="NoChannels" description="No Channels" bit="none" />
+      <bitFieldExpansion keys="ch" dim="8"
+         name="Ch%(ch)" description="Load on channel %(ch) match" bit="%(ch)"
+      />
+   </bitfieldOption>
+   
 <!--  ___ PwmLoad class ______________ -->
 
 <if condition="ftm_pwmload_present">

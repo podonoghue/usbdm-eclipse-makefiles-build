@@ -45,8 +45,9 @@
          the flag remains set."
       description="Slave Port Error Flags"
       >
-      <choiceExpansion keys="port" dim="=NumSlavePorts"
-         name="Slave Port %(port) Error" value='=ToString(1&lt;&lt;(NumSlavePorts-1-%(port)))' enum="%(port)" />
+      <bitFieldExpansion keys="port" dim="=NumSlavePorts"
+         description="Slave Port %(port) Error" bit='=ToString(NumSlavePorts-1-%(port))' name="%(port)" />
+      <bitField name="NoErrors" description="No Errors" bit="none" />
    </bitfieldOption>
 
    <intOption key="mpu_cesr_hrl" condition="mpu_cesr_hrl_present"
@@ -102,8 +103,9 @@
             - Two or more EACD bits are set, protection error was caused by an overlapping set of region descriptors."
          description="Error Access Control Detail for Slave Port"
          >
-         <choiceExpansion keys="region" dim="=NumRegionDescriptors"
-            name="Region %(region)" value='=ToString(1&lt;&lt;%(region))' enum="%(region)" />
+         <bitFieldExpansion keys="region" dim="=NumRegionDescriptors"
+            description="Region %(region)" bit='%(region)' name="%(region)" />
+         <bitField name="NoRegions" description="No Regions" bit="none" />
       </bitfieldOption>
 
       <intOption key="mpu_edr_epid[%(port)]" condition="mpu_edr_epid_present"
@@ -336,9 +338,10 @@
          description="Bus Master %(master) User Mode Access Control for Region"
          value="0"
          >
-         <choice name="Read Access Allowed"    value="=ToString(0b100)" enum="Read"    />
-         <choice name="Write Access Allowed"   value="=ToString(0b010)" enum="Write"   />
-         <choice name="Execute Access Allowed" value="=ToString(0b001)" enum="Execute" />
+         <bitField description="Read Access Allowed"    bit="2"    name="Read"     />
+         <bitField description="Write Access Allowed"   bit="1"    name="Write"    />
+         <bitField description="Execute Access Allowed" bit="0"    name="Execute"  />
+         <bitField description="No Access Allowed"      bit="none" name="NoAccess" />
       </bitfieldOption>
    </for>
 

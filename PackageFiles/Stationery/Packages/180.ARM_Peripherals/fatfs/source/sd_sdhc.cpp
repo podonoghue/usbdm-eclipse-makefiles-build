@@ -70,7 +70,7 @@ ErrorCode SdhcInterface::executeCommand(const SdhcCommand sdhcCommand, const uin
     */
    const SdhcStateFlags checkFlag = (sdhcCommand&SDHC_XFERTYP_BUSYCHK_MASK)?
          SdhcStateFlags::CmdInhibit:
-         SdhcStateFlags::CmdInhibit|SdhcStateFlags::DatCmdInhibit;
+         SdhcStateFlags::CmdInhibit|SdhcStateFlags::DataCmdInhibit;
    while (sdhc.getState()&checkFlag) {
       __asm__("nop");
    }
@@ -160,7 +160,7 @@ ErrorCode SdhcInterface::executeCommand(
     */
    const SdhcStateFlags checkFlag = (sdhcCommand&SDHC_XFERTYP_BUSYCHK_MASK)?
          SdhcStateFlags::CmdInhibit:
-         SdhcStateFlags::CmdInhibit|SdhcStateFlags::DatCmdInhibit;
+         SdhcStateFlags::CmdInhibit|SdhcStateFlags::DataCmdInhibit;
    while (sdhc.getState()&checkFlag) {
       __asm__("nop");
    }

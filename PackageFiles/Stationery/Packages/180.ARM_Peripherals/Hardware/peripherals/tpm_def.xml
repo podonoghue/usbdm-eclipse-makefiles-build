@@ -7,13 +7,9 @@
    <constant key="definitionsInHeader" value="true" type="Boolean" />
 
    <!-- ____ Class Declaration ________ -->
-   <constant key="_basicInfo_declaration" type="String"
-      value='"class $(_BasicInfo) : public $(_Baseclass)CommonInfo {\n
-      \n
-      public:\n"' />
+   <constant key="_basicInfo_declaration" type="String" value='"$(_BasicInfo) : public $(_Baseclass)CommonInfo"' />
 
-   <constant key="_class_declaration" type="String"
-      value='"$(_Info) : public $(_BasicInfo)"' />
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <constant key = "disable_peripheral"      value = '"tpm->SC = TPM_SC_CMOD(0);"' type="String"  />
 
@@ -939,10 +935,10 @@
          baseType="uint16_t"
          description="Channel Polarity"
          toolTip="Selects the polarity of channels inputs/outputs" >
-         <choiceExpansion name="Ch%(ch) Active-low"  enum="Ch%(ch)_ActiveLow"  value='=Format("0x%04XU",0xFF00+(1&lt;&lt;(%(ch))))'            keys="ch" dim="8"/>
-         <choice          name="All Active-low"      enum="All_ActiveLow"      value='0xFFFFU' />
-         <choiceExpansion name="Ch%(ch) Active-high" enum="Ch%(ch)_ActiveHigh" value='=Format("0x%04XU",0xFF00^(1&lt;&lt;(%(ch)+8)))' keys="ch" dim="8"/>
-         <choice          name="All Active-high"     enum="All_ActiveHigh"     value='0x0000U' />
+         <choiceExpansion name="Ch%(ch) Active-low"  enum="Ch%(ch)ActiveLow"  value='=Format("0x%04XU",0xFF00+(1&lt;&lt;(%(ch))))'            keys="ch" dim="8"/>
+         <choice          name="All Active-low"      enum="AllActiveLow"      value='0xFFFFU' />
+         <choiceExpansion name="Ch%(ch) Active-high" enum="Ch%(ch)ActiveHigh" value='=Format("0x%04XU",0xFF00^(1&lt;&lt;(%(ch)+8)))' keys="ch" dim="8"/>
+         <choice          name="All Active-high"     enum="AllActiveHigh"     value='0x0000U' />
       </choiceOption>
 
       <bitmaskOption key="tpm_pol_pol" condition="tpm_pol_present"
@@ -954,7 +950,7 @@
          description="Channel Polarity"
          toolTip="Bitmask defining the polarity of channels inputs/outputs"
          value="0"
-         bitDescription="@SignalList(8)"
+         bitDescription='@SignalList("^(TPM\d_CH%i)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
          bitList="Ch%iActiveLow"
          bitmask="=(1&lt;&lt;_channelCount)-1" />
 

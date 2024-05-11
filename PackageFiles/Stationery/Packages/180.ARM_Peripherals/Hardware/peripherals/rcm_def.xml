@@ -4,8 +4,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="RCM" description="Reset Control Module" >
 
-   <equation key="generateDefault"           type="Boolean" value="false"         />
-   <equation key="configureInStartupDefault" type="Boolean" value="false"         />
+   <equation key="generateDefault"           value="false"         />
+   <equation key="configureInStartupDefault" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
