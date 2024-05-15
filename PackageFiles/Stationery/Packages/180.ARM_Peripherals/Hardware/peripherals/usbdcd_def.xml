@@ -578,6 +578,7 @@
    <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
+      padToComments="35"
       variables="
             usbdcd_control_sr,
             usbdcd_control_start,
@@ -601,7 +602,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues
       \t};
       \t\n
    ]]></variableTemplate>

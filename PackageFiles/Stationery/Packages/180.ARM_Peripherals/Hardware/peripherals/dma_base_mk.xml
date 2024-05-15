@@ -542,6 +542,7 @@
    <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
+      padToComments="30"
       variables="
          dma_csr_bwc,
          dma_csr_majorelink,
@@ -562,6 +563,7 @@
    <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
+      padToComments="30"
       variables="
          dma_cr_hoe,
          dma_cr_clm,

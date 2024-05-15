@@ -920,6 +920,7 @@
    <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
+      padToComments="30"
       variables="
             cmp_cr1_en,cmp_cr1_mode,cmp_cr1_trigm,cmp_cr1_pmode,cmp_cr1_inv,cmp_cr1_output,
             cmp_cr0_hystctr,
@@ -933,7 +934,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues
       \t};
       \t\n
    ]]>

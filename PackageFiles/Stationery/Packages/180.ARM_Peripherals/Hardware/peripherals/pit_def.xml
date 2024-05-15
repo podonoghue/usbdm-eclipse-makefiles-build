@@ -843,6 +843,7 @@
    <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
+      padToComments="35"
       variables="
             pit_mcr_mdis,
             pit_mcr_frz,
@@ -853,7 +854,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues
       \t};\n\n
    ]]>
    </variableTemplate>
@@ -1164,6 +1165,7 @@
       <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;pit_tctrl_ten[%(ch)]"
          separator=","
          terminator=","
+         padToComments="35"
          variables="
             pit_tctrl_ten[%(ch)],
             pit_tctrl_chn[%(ch)],

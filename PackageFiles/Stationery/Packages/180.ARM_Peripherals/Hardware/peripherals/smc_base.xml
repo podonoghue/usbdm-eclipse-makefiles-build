@@ -916,6 +916,7 @@
    <variableTemplate key="/$(_BASENAME)/DefaultInitValue" where="all" codeGenCondition="$(_InfoGuard)"
       separator=","
       terminator=","
+      padToComments="35"
       variables="
             smc_pmprot_ahsrun,smc_pmprot_avlp,smc_pmprot_alls,
             smc_pmprot_avlls,
@@ -930,7 +931,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues
       \t};
       \t\n
    ]]>

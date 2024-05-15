@@ -17,8 +17,8 @@ read -d '' TOx <<EOF
       \</for\> 
 EOF
 
-FROM='_infoclass_declaration'
-TO='_class_declaration'
+FROM='{%initExpression'
+TO='{%initNonZeroValues'
 
 #FROM='\"&quot;&quot;\"'
 #TO=\'\"\"\'
@@ -35,3 +35,4 @@ for filename in *.xml; do
    sed  "s#${FROM}#${TO}#g" "${filename}" >"new/${filename}"
 done
 
+diff -q . new|grep Files

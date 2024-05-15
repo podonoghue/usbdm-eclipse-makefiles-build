@@ -1580,7 +1580,7 @@
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="lpuart_stat_stat"
    ><![CDATA[
       \t/**
@@ -1617,7 +1617,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="lpuart_ctrl_interrupt"
    ><![CDATA[
       \t/**
@@ -2001,8 +2001,8 @@ XXXXXXXXXXXXXXXXXXXXXX
 
    <variableTemplate codeGenCondition="$(_InfoGuard)"
       separator=","
-      padToComments="50"
       terminator=","
+      padToComments="35"
       variables="
             lpuart_baudrate,
             lpuart_baud_osr,
@@ -2034,7 +2034,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues
       \t};
       \t\n
    ]]>
@@ -2057,7 +2057,8 @@ XXXXXXXXXXXXXXXXXXXXXX
    </validate>
 
    <projectActionList id="lpuart_files" >
-      <copy source="Project_Headers/lpuart.h"  target="Project_Headers/lpuart.h"  overwrite="true"  derived="true" />
+      <copy source="Project_Headers/lpuart.h"      target="Project_Headers/lpuart.h"      overwrite="true"  derived="true" macroReplace="true" />
+      <copy source="Project_Headers/uart_queue.h"  target="Project_Headers/uart_queue.h"  overwrite="true"  derived="true" />
    </projectActionList>
 
    <!-- ____ Startup ____ -->

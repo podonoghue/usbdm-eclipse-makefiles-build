@@ -484,6 +484,7 @@
    <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
+      padToComments="50"
       variables="
             kbi_pe_kbipe,
             kbi_es_kbedg,
@@ -493,7 +494,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr KbiBasicInfo::Init DefaultInitValue = {%initExpression
+      \tstatic constexpr KbiBasicInfo::Init DefaultInitValue = {%initNonZeroValues
       \t};
       \t\n
    ]]></variableTemplate>

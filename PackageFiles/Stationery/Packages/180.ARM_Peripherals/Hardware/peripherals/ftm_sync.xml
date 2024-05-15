@@ -474,6 +474,7 @@
    <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;(mode!=Quad)"
       separator=","
       terminator=","
+      padToComments="50"
       variables="ftm_sync_cntmin,ftm_sync_cntmax,ftm_sync_reinit,ftm_sync_trig,ftm_sync_synchom,
                  ftm_synconf_syncmode,
                  ftm_synconf_hwtrigmode,
@@ -488,7 +489,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr SyncInit DefaultSyncInitValue = {%initExpression\n
+      \tstatic constexpr SyncInit DefaultSyncInitValue = {%initNonZeroValues\n
       \t};
       \t\n
    ]]>

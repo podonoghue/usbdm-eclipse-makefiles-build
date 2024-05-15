@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKL04Z4
       MKL05Z4
       MKL14Z4
@@ -202,7 +202,8 @@ Determines if idle character bit count starts after start bit or stop bit</descr
                   </field>
                   <field>
                      <name>RSRC</name>
-                     <description>Receiver Source Select\nSelect between loop-back and single-wire mode</description>
+                     <description>Receiver Source Select\n
+Select between loop-back and single-wire mode</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -285,7 +286,7 @@ Controls loop mode where transmitter output is internally connected to receiver 
                   <field>
                      <name>RWU</name>
                      <description>Receiver Wakeup Control\n
-Setting RWU enables the wakeup function and inhibits further receiver interrupt requests.\n 
+Setting RWU enables the wakeup function and inhibits further receiver interrupt requests.\n
 Normally, hardware wakes the receiver by automatically clearing RWU</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -324,9 +325,9 @@ Normally, hardware wakes the receiver by automatically clearing RWU</description
                   <field derivedFrom="RE" > <name>ILIE</name> <description>Idle Line Interrupt Enable\n
 		  Enables the idle line flag, S1[IDLE], to generate interrupt requests , based on the state of C5[ILDMAS]</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="RE" > <name>RIE</name> <description>Receiver Full Interrupt/DMA requests\n
-		  Allows interrupt or DMA requests triggered by RDRF</description> <bitOffset>5</bitOffset> </field>
+                  Allows interrupt or DMA requests triggered by RDRF</description> <bitOffset>5</bitOffset> </field>
                   <field derivedFrom="RE" > <name>TCIE</name> <description>Transmission Complete Interrupt/DMA requests\n
-		  Allows interrupt or DMA requests triggered by TDRE</description> <bitOffset>6</bitOffset> </field>
+                  Allows interrupt or DMA requests triggered by TDRE</description> <bitOffset>6</bitOffset> </field>
                   <field derivedFrom="RE" > <name>TIE</name> <description>Transmitter Interrupt/DMA Transfer Enable</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
@@ -717,18 +718,29 @@ Reads and writes of this register are also involved in the automatic flag cleari
                </fields>
             </register>
             <register>
-               <dim>2</dim>
-               <dimIncrement>1</dimIncrement>
-               <dimIndex>1,2</dimIndex>
-               <name>MA%s</name>
-               <description>Match Address Registers %s</description>
+               <name>MA1</name>
+               <description>Match Address Register 1</description>
                <addressOffset>0x8</addressOffset>
                <size>8</size>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
-                     <name>MA</name>
-                     <description>Match Address</description>
+                     <name>MA1</name>
+                     <description>Match Address 1</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MA2</name>
+               <description>Match Address Register 2</description>
+               <addressOffset>0x9</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>MA2</name>
+                     <description>Match Address 2</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -779,9 +791,9 @@ This field configures the oversampling ratio for the receiver between 4x (00011)
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>All data received with the most significant bit cleared, is discarded. 
-All data received with the most significant bit set, is compared with contents of MA2 register. 
-If no match occurs, the data is discarded. 
+                           <description>All data received with the most significant bit cleared, is discarded.
+All data received with the most significant bit set, is compared with contents of MA2 register.
+If no match occurs, the data is discarded.
 If match occurs, data is transferred to the data buffer</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -800,9 +812,9 @@ If match occurs, data is transferred to the data buffer</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>All data received with the most significant bit cleared, is discarded. 
-All data received with the most significant bit set, is compared with contents of MA1 register. 
-If no match occurs, the data is discarded. 
+                           <description>All data received with the most significant bit cleared, is discarded.
+All data received with the most significant bit set, is compared with contents of MA1 register.
+If no match occurs, the data is discarded.
 If match occurs, data is transferred to the data buffer</description>
                            <value>0b1</value>
                         </enumeratedValue>

@@ -1,5 +1,6 @@
 /**
  * FATFS Example
+ * Uses FATFS_NS::Directory, FATFS_NS::Volume, FATFS_NS::File C++ wrapper classes
  */
 #include <time.h>
 #include "hardware.h"

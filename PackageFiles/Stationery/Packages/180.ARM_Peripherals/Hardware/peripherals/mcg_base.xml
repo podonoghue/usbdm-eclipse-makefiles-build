@@ -1686,6 +1686,7 @@
 
       <variableTemplate key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
+         padToComments="40"
          variables="
             /SIM/sim_clkdiv1_outdiv4[%(n)],
             /SIM/sim_clkdiv1_outdiv3[%(n)],
@@ -1695,6 +1696,7 @@
 
       <variableTemplate key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
+         padToComments="40"
          variables=
             "/SIM/sim_clkdiv3_pllfll[%(n)]"
       ><![CDATA[\t   /// SIM CLKDIV3 System Clock Divider Register 3 %initExpression\n\n ]]></variableTemplate>
@@ -1705,18 +1707,21 @@
 
       <variableTemplate key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
+         padToComments="40"
          variables="
             mcgClockMode[%(n)]"
       ><![CDATA[\t   /// Clock Mode %initExpression\n\n ]]></variableTemplate>
 
       <variableTemplate key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
+         padToComments="40"
          variables=
             "/SMC/smc_pmctrl_runm[%(n)]"
       ><![CDATA[\t   /// Run Mode %initExpression\n\n ]]></variableTemplate>
 
       <variableTemplate key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
+         padToComments="40"
          variables="
             mcg_c1_frdiv[%(n)],
             mcg_c1_irclken[%(n)],
@@ -1725,6 +1730,7 @@
 
       <variableTemplate key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
+         padToComments="40"
          variables=
             "mcg_c2_locre0[%(n)],
              mcg_c2_range0[%(n)],
@@ -1734,6 +1740,7 @@
 
       <variableTemplate key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
+         padToComments="40"
          variables=
             "mcg_c4_dmx32[%(n)],
              mcg_c4_drst_drs[%(n)]"
@@ -1741,6 +1748,7 @@
 
       <variableTemplate key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
+         padToComments="40"
          variables="
             mcg_c5_pllclken0[%(n)],
             mcg_c5_pllsten0[%(n)],
@@ -1749,6 +1757,7 @@
 
       <variableTemplate key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
+         padToComments="40"
          variables="
             mcg_c6_lolie0[%(n)],
             mcg_c6_plls[%(n)],
@@ -1758,18 +1767,21 @@
 
       <variableTemplate key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
+         padToComments="40"
          variables=
             "mcg_sc_fcrdiv[%(n)]"
       ><![CDATA[\t   /// Status and Control Register %initExpression\n\n ]]></variableTemplate>
 
       <variableTemplate key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
+         padToComments="40"
          variables=
             "mcg_c7_oscsel[%(n)]"
       ><![CDATA[\t   /// Control Register 7 %initExpression\n\n ]]></variableTemplate>
 
       <variableTemplate key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
+         padToComments="40"
          variables=
             "mcg_c8_locre1[%(n)],
              mcg_c8_cme1[%(n)],
@@ -1778,6 +1790,7 @@
 
       <variableTemplate key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
+         padToComments="40"
          variables=
             "mcg_c9_pll_cme[%(n)],
              mcg_c9_pll_locre[%(n)]"
@@ -1785,6 +1798,7 @@
 
       <variableTemplate key="McgClockInfoEntries" codeGenCondition="enableClockConfiguration[%(n)]"
          terminator=","
+         padToComments="40"
          variables=
             "mcg_c11_pllcs[%(n)]"
       ><![CDATA[\t   /// Control Register 11 %initExpression\n\n ]]></variableTemplate>

@@ -2818,6 +2818,7 @@
    <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;(mode!=Quad)"
       separator=","
       terminator=","
+      padToComments="50"
       variables="
          ftm_sc_action,ftm_sc_cpwms,ftm_sc_clks,ftm_sc_ps,
          ftm_mod_mod,
@@ -2833,7 +2834,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression\n
+      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues\n
       \t//  $(irqHandlerName)
       \t};
       \t\n

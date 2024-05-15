@@ -1,0 +1,1020 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!-- uart_def.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
+
+   <!-- Enable for this peripheral -->
+   <binaryOption key="usedAsConsole"
+      description="usedAsConsole"
+      toolTip="Indicates if this device is allocated as the Console for I/O"
+      ref='(/Console/consoleEnable)&amp;&amp;(/Console/consoleDevice.name=="$(_Baseclass) $(_instance)")'
+      locked="true"
+      derived="true" >
+      <choice value="0" name="Not used as console" />
+      <choice value="1" name="Used as console" />
+   </binaryOption>
+
+   <binaryOption key="enablePeripheralSupport"
+      enabledBy="!usedAsConsole"
+      hidden="true"
+      description="Enable peripheral support"
+      toolTip="Code will also be generated if this UART is used as the console"
+      disabledValue="true"
+      >
+      <choice value="false" name="Minimal code for $(_NAME)"  />
+      <choice value="true"  name="Generate code for $(_NAME)"/>
+   </binaryOption>
+
+   <equation key="irq_pattern"               value="^$(_NAME)_(.+)$;^$(_NAME)_$"  />
+   <equation key="irq_ClassHandler"          value="$(_Class)::irqHandler&lt;$(_Class)IrqNum_$1&gt;;$(_Class)::irqHandler" />
+   <equation key="irq_parameters"            value=""     />
+   <equation key="irq_dummy_parameters"      value=""     />
+   <equation key="irq_call"                  value=""     />
+   <equation key="generateDefault"           value="false"  />
+   <equation key="configureInStartupDefault" value="false"  />
+   <xi:include href="enablePeripheral.xml"  />
+
+   <!-- ____ Class Declaration ________ -->
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
+
+   <binaryOption key="uart_c2_tcie" condition="uart_c2_tcie_present"
+      enabledBy="irqHandlingMethod"
+      typeName="UartTxCompleteAction"
+      baseType="uint8_t"
+      description="Transmit complete action"
+      toolTip="Enable interrupt on transmission complete">
+      <choice value="0"   name="None"      enum="None"      />
+      <choice value="1"   name="Interrupt" enum="Interrupt" />
+   </binaryOption>
+
+   <binaryOption key="uart_c2_ilie" condition="uart_c2_ilie_present"
+      enabledBy="irqHandlingMethod"
+      typeName="UartIdleLineDetectAction"
+      baseType="uint8_t"
+      description="Idle line detect action"
+      toolTip="Enable interrupt on tidele line detect">
+      <choice value="0"   name="None"      enum="None"      />
+      <choice value="1"   name="Interrupt" enum="Interrupt" />
+   </binaryOption>
+
+   <binaryOption key="uart_c2_tie" condition="uart_c2_tie_present&amp;&amp;!uart_c5_tdmas_present"
+      enabledBy="irqHandlingMethod"
+      valueFormat="UART_C2_TIE(%s)"
+      typeName="UartTxEmptyAction"
+      baseType="uint8_t"
+      description="Transmit empty DMA/Interrupt action"
+      toolTip="Enable transmit holding register empty DMA/Interrupt action">
+      <choice value="0"   name="None"      enum="None"      />
+      <choice value="1"   name="Interrupt" enum="Interrupt" />
+   </binaryOption>
+
+   <choiceOption key="uart_c5_tdmas" condition="uart_c2_tie_present&amp;&amp;uart_c5_tdmas_present"
+      enabledBy="irqHandlingMethod"
+      valueFormat="(UART_C5_TDMAS(%s)&lt;&lt;8),UART_C2_TIE(%s)"
+      typeName="UartTxEmptyAction"
+      baseType="uint16_t"
+      description="Transmit empty DMA/Interrupt action"
+      toolTip="Enable transmit holding register empty DMA/Interrupt action">
+      <choice value="0,0"   name="None"      enum="None"      />
+      <choice value="0,1"   name="Interrupt" enum="Interrupt" />
+      <choice value="1,1"   name="DMA"       enum="Dma"       />
+   </choiceOption>
+
+   <binaryOption key="uart_c2_rie" condition="uart_c2_rie_present&amp;&amp;!uart_c5_rdmas_present"
+      enabledBy="irqHandlingMethod"
+      valueFormat="UART_C2_RIE(%s)"
+      typeName="UartRxFullAction"
+      baseType="uint8_t"
+      description="Receive full action"
+      toolTip="Enable receive buffer full interrupt action">
+      <choice value="0"   name="None"      enum="None"      />
+      <choice value="1"   name="Interrupt" enum="Interrupt" />
+   </binaryOption>
+
+   <choiceOption key="uart_c5_rdmas" condition="uart_c2_rie_present&amp;&amp;uart_c5_rdmas_present"
+      enabledBy="irqHandlingMethod"
+      valueFormat="(UART_C5_RDMAS(%s)&lt;&lt;8),UART_C2_RIE(%s)"
+      typeName="UartRxFullAction"
+      baseType="uint16_t"
+      description="Receive full DMA/interrupt action"
+      toolTip="Enable receive buffer full DMA/interrupt action">
+      <choice value="0,0"   name="None"      enum="None"      />
+      <choice value="0,1"   name="Interrupt" enum="Interrupt" />
+      <choice value="1,1"   name="DMA"       enum="Dma"       />
+   </choiceOption>
+
+   <binaryOption key="uart_bdh_lbkdie" condition="uart_bdh_lbkdie_present"
+      enabledBy="irqHandlingMethod"
+      typeName="UartLinBreakAction"
+      baseType="uint8_t"
+      description="LIN break detect action"
+      toolTip="" >
+      <choice name="None"        value="0" enum="None" />
+      <choice name="Interrupt"   value="1" enum="Interrupt" />
+   </binaryOption >
+
+   <binaryOption key="uart_bdh_rxedgie" condition="uart_bdh_rxedgie_present"
+      enabledBy="irqHandlingMethod"
+      typeName="UartRxdActiveEdgeAction"
+      baseType="uint8_t"
+      description="RxD input active edge action"
+      toolTip="" >
+      <choice name="None"        value="0" enum="None" />
+      <choice name="Interrupt"   value="1" enum="Interrupt" />
+   </binaryOption >
+
+   <title />
+
+   <intOption key="uart_c4_osr"  condition="uart_c4_osr_present"
+      baseType="uint8_t"
+      description="Number of samples per bit"
+      toolTip="This value determines the number of times an Rx bit is sampled.\n
+               This also affects the clock divider and hence the range of baud rates available"
+       value="8" min="4" max="32"
+      />
+
+   <template  condition="uart_c4_osr" ><![CDATA[
+   \t//! Number of samples per bit
+   \tstatic constexpr uint32_t oversampleRatio = $(uart_c4_osr);\n\n
+   ]]></template>
+
+   <choiceOption key="uart_baudrate"
+      valueFormat=""
+      enabledBy="$(_BasicInfoGuard)"
+      derivedFrom="/Console/console_baudrate" >
+   </choiceOption>
+
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
+      variables="uart_c2_tcie" ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      %paramDescription
+      \t */
+      \tvoid setTransmitCompleteAction(%params) const {
+      \t   %register = (%register & ~%mask) | %paramExpression;
+      \t}\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
+      variables="uart_c2_ilie" ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      %paramDescription
+      \t */
+      \tvoid setIdleLineDetectAction(%params) const {
+      \t   %register = (%register & ~%mask) | %paramExpression;
+      \t}\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
+       variables="uart_c2_tie" ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      %paramDescription
+      \t */
+      \tvoid setTransmitEmptyAction(%params) const {
+      \t   uart->C2 = (uart->C2 & ~UART_C2_TIE_MASK)   | %paramExpression; \n
+   ]]></variableTemplate>
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
+      variables="uart_c2_tie"
+      condition="uart_c5_tdmas_present" ><![CDATA[
+      \t   uart->C5 = (uart->C5 & ~UART_C5_TDMAS_MASK) | %paramExpression>>8; \n
+   ]]></variableTemplate>
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
+       variables="uart_c2_tie" ><![CDATA[
+      \t}\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
+      variables="uart_c2_rie" ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      %paramDescription
+      \t */
+      \tvoid setReceiveFullAction(%params) const {
+      \t   uart->C2 = (uart->C2 & ~UART_C2_RIE_MASK)   | %paramExpression;\n
+   ]]></variableTemplate>
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
+      variables="uart_c2_rie"
+      condition="uart_c5_rdmas_present" ><![CDATA[
+      \t   uart->C5 = (uart->C5 & ~UART_C5_RDMAS_MASK) | %paramExpression>>8;\n
+   ]]></variableTemplate>
+   <variableTemplate key="/$(_BASENAME)/commonMethods" discardRepeats="true"
+      variables="uart_c2_rie" ><![CDATA[
+      \t}\n\n
+   ]]></variableTemplate>
+<!--
+   <if condition="uart_c4_brfa_present">
+      <binaryOption key="uartClass"
+         description="Input buffering"
+         toolTip="This option determines whether an interrupt-driven driver\n
+                  incorporating a queue is used to buffer input data" >
+         <choice name="Unbuffered" value="Uart_brfa_T" />
+         <choice name="Buffered"   value="UartBuffered_brfa_T" />
+      </binaryOption>
+   <else_if condition="uart_c4_osr_present" />
+      <binaryOption key="uartClass"
+         description="Input buffering"
+         toolTip="This option determines whether an interrupt-driven driver\n
+                  incorporating a queue is used to buffer input data" >
+         <choice name="Unbuffered" value="Uart_osr_T" />
+         <choice name="Buffered"   value="UartBuffered_osr_T" />
+      </binaryOption>
+   <else />
+      <binaryOption key="uartClass"
+         description="Input buffering"
+         toolTip="This option determines whether an interrupt-driven driver\n
+                  incorporating a queue is used to buffer input data" >
+         <choice name="Unbuffered" value="Uart_basic_T" />
+         <choice name="Buffered"   value="UartBuffered_basic_T" />
+      </binaryOption>
+   </if>
+   <intOption key="receiveBufferSize" description="Size of input buffer"
+      toolTip="This value determines the size of the receive buffer\n
+               for the interrupt driven driver version  "
+       value="50" min="1" max="1000"
+      />
+
+   <intOption key="transmitBufferSize" description="Size of output buffer"
+      toolTip="This value determines the size of the transmit buffer\n
+               for the interrupt driven driver version  "
+       value="50" min="1" max="1000"
+      />
+ -->
+
+   <!-- ____ Setters and Getters ____________ -->
+
+   <!-- ____ Interrupt handling _____________ -->
+
+   <!--
+   <for keys="irqName" values="=_hardwareIrqNums" >
+
+      <constant key="prettyIrqName" value='Prettify(ReplaceAll("%(irqName)", "$(_NAME)_([a-z|A-Z|0-9]+)_IRQn", "$1"))' type="String"/>
+
+      <variableTemplate codeGenCondition="irqHandlingMethod"
+         variables="irq_enum"
+         immediateVariables="prettyIrqName"
+         >
+      <![CDATA[
+         \t/**
+         \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
+         \t *
+         \t * @tparam channel Channel number
+         \t */
+         \tstatic void $(prettyIrqName)_irqHandler() {
+         \t
+         \t   // Execute call-back
+         \t   sCallbacks[$(_Class)IrqNum_$(prettyIrqName)]($(irq_call));
+         \t}
+         \t\n
+      ]]>
+      </variableTemplate>
+      <deleteVariables variables="prettyIrqName" />
+   </for>
+    -->
+
+   <template condition="false" ><![CDATA[
+      \t//! Default Baud rate used if not explicitly given
+      \tstatic constexpr UartBaudRate defaultBaudRate = UartBaudRate($(uart_baudrate));
+      \t
+      \t//! Default buffer size for receive queue when interrupt driven
+      \tstatic constexpr unsigned receiveBufferSize = $(receiveBufferSize);
+      \t
+      \t//! Default buffer size for transmit queue when interrupt driven
+      \tstatic constexpr unsigned transmitBufferSize = $(transmitBufferSize);
+      \t\n
+   ]]></template>
+
+   <template condition="@status_is_w1c" ><![CDATA[
+      \t/**
+      \t * Clear UART status \n
+      \t * This includes:
+      \t * - Idle detect flag
+      \t * - Overrun flag
+      \t * - Noise flag
+      \t * - Framing error flag
+      \t * - Parity error flag
+      \t */
+      \tstatic void clearError() {
+      \t
+      \t   // Flags are w1c
+      \t   uart->S1 = uart->S1 | (UART_S1_IDLE_MASK|UART_S1_OR_MASK|UART_S1_NF_MASK|UART_S1_FE_MASK|UART_S1_PF_MASK);
+      \t}
+      \t\n
+   ]]></template>
+
+   <template condition="!@status_is_w1c" ><![CDATA[
+      \t/**
+      \t * Clear UART status \n
+      \t * This includes:
+      \t * - Idle detect flag
+      \t * - Overrun flag
+      \t * - Noise flag
+      \t * - Framing error flag
+      \t * - Parity error flag
+      \t */
+      \tstatic void clearError() {
+      \t
+      \t   // Flags are cleared by reading status and then data
+      \t   (void)uart->S1;
+      \t   (void)uart->D;
+      \t}
+      \t\n
+   ]]></template>
+
+   <template><![CDATA[
+      \t/**
+      \t * Get input clock frequency
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic inline uint32_t getInputClockFrequency() {
+      \t   return SimInfo::get$(_Class)Clock();
+      \t}\n\n
+   ]]></template>
+
+   <!-- ____  BAUD rate calculations ______ -->
+
+   <variableTemplate where="basicInfo" variables="uart_baudrate" condition="!uart_c4_osr_present&amp;&amp;!uart_c4_brfa_present" >
+   <![CDATA[
+      \t/**
+      \t * Set baud rate
+      \t * (%variables, !uart_c4_osr_present, !uart_c4_brfa_present)
+      \t * (for UART with fixed /16 prescaler)
+      \t *
+      \t * @param $(_basename)     Hardware instance pointer
+      \t * @param clockFrequency   Clock frequency of UART
+      %paramDescription
+      \t */
+      \tstatic void setBaudRate(volatile $(_Type) *const $(_basename), uint32_t clockFrequency, %params) {
+      \t
+      \t   // Disable UART before changing registers
+      \t   uint8_t c2Value = uart->C2;
+      \t   uart->C2 = 0;
+      \t
+      \t   // Fixed over-sample ratio
+      \t   constexpr unsigned overSample=16;
+      \t
+      \t   /*
+      \t    * Baudrate = ClockFrequency / (OverSample x Divider)
+      \t    * Divider  = ClockFrequency / (OverSample x Baudrate)
+      \t    */
+      \t   // Calculate UART divisor with rounding
+      \t   uint32_t divisor = (clockFrequency<<1)/(overSample * %paramName0);
+      \t   divisor = (divisor>>1)|(divisor&0b1);
+      \t
+      \t   // Set Baud rate register
+      \t   uart->BDH = (uart->BDH&~UART_BDH_SBR_MASK) | UART_BDH_SBR((divisor>>8));
+      \t   uart->BDL = UART_BDL_SBR(divisor);
+      \t
+      \t   // Restore UART settings
+      \t   uart->C2 = c2Value;
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <variableTemplate where="basicInfo" variables="uart_baudrate, uart_c4_osr" condition="uart_c4_osr_present"
+   params=", overSample" >
+   <![CDATA[
+      \t/**
+      \t * Set baud rate
+      \t * (%variables, uart_c4_osr_present)
+      \t * (for $(_BASENAME) with variable prescaler)
+      \t *
+      \t * @param $(_basename)     Hardware instance pointer
+      \t * @param clockFrequency   Clock frequency
+      %paramDescription
+      \t */
+      \tstatic void setBaudRate(volatile $(_Type) *const $(_basename), uint32_t clockFrequency, %params) {
+      \t
+      \t   // Disable UART before changing registers
+      \t   uint8_t c2Value = uart->C2;
+      \t   uart->C2 = 0;
+      \t
+      \t   // Set over-sample ratio
+      \t   uart->C4 = (uart->C4&~UART_C4_OSR_MASK)|UART_C4_OSR(%paramName1-1);
+      \t
+      \t   /*
+      \t    * Baudrate = ClockFrequency / (OverSample x Divider)
+      \t    * Divider  = ClockFrequency / (OverSample x Baudrate)
+      \t    */
+      \t   // Calculate UART divisor with rounding
+      \t   uint32_t divisor = (clockFrequency<<1)/(%paramName0 * %paramName1);
+      \t   divisor = (divisor>>1)|(divisor&0b1);
+      \t
+      \t   // Set Baud rate register
+      \t   uart->BDH = (uart->BDH&~UART_BDH_SBR_MASK) | UART_BDH_SBR((divisor>>8));
+      \t   uart->BDL = UART_BDL_SBR(divisor);
+      \t
+      \t   // Restore UART settings
+      \t   uart->C2 = c2Value;
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <variableTemplate where="basicInfo" variables="uart_baudrate" condition="uart_c4_brfa_present" >
+   <![CDATA[
+      \t/**
+      \t * Set baud rate
+      \t * (%variables, uart_c4_brfa_present)
+      \t * (for UART with fractional divider)
+      \t *
+      \t * @param $(_basename)     Hardware instance pointer
+      \t * @param clockFrequency   Clock frequency
+      %paramDescription
+      \t */
+      \tstatic void setBaudRate(volatile $(_Type) *const $(_basename), uint32_t clockFrequency, %params) {
+      \t   /*
+      \t    * Baudrate = clockFrequency / (OSR x (SBR + BRFD))
+      \t    * Fixed OSR = 16
+      \t    *
+      \t    * (OSR x (SBR + BRFA/32)) = clockFrequency/Baudrate
+      \t    * (SBR + BRFA/32) = clockFrequency/(Baudrate*OSR)
+      \t    * divisor = 32*SBR + BRFA = 2*clockFrequency/Baudrate
+      \t    * SBR  = divisor>>5
+      \t    * BRFA = divisor&0b11111
+      \t    */
+      \t   // Disable UART before changing registers
+      \t   uint8_t c2Value = uart->C2;
+      \t   uart->C2 = 0;
+      \t
+      \t   // Rounded divider with 32-bit fraction
+      \t   uint32_t divisor = (2*clockFrequency+(uartBaudRate/2))/uartBaudRate;
+      \t   // Whole divider
+      \t   uint32_t sbr = divisor>>5;
+      \t   // Fractional (/32) divider to get closer to the baud rate
+      \t   uint32_t brfa = divisor&0b11111;
+      \t
+      \t   // Set Baud rate register
+      \t   uart->BDH = (uart->BDH&~UART_BDH_SBR_MASK) | UART_BDH_SBR((sbr>>8));
+      \t   uart->BDL = UART_BDL_SBR(sbr);
+      \t   uart->C4  = (uart->C4&~UART_C4_BRFA_MASK) | UART_C4_BRFA(brfa);
+      \t
+      \t   // Restore UART settings
+      \t   uart->C2 = c2Value;
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <variableTemplate where="info" variables="uart_baudrate" >
+   <![CDATA[
+      \t/**
+      \t * Set baud rate
+      \t *
+      %paramDescription
+      \t */
+      \tstatic void setBaudRate(%params) {
+      \t
+      \t   $(_BasicInfo)::setBaudRate($(_basename), getInputClockFrequency(), %paramName);
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <!-- ________ UART Init class ______________ -->
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Class used to do initialisation of the $(_Baseclass)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t * Parameters available may vary with device - see $(_Class)::DefaultInitValue for relevant example.
+      \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * ///
+      \t * /// $(_NAME) call-back
+      \t * ///
+      \t * /// @param status  Status reflecting active inputs
+      \t * ///
+      \t * void $(_name)Callback(ErrorCode ec) {
+      \t *    ....
+      \t * }
+      \t *
+      \t * static const $(_Class)::Init $(_name)Init {
+      \t *
+      \t *   // Setup values
+XXXXXXXXXXXXXXXXXXXXXX
+      \t *
+      \t *   $(_name)Callback,                 // Call-back to execute on event - call-back function name
+      \t *   NvicPriority_Low,                 // Priority for interrupt - Low
+      \t *
+      \t *   // Optional base value to start with (must be last parameter)
+      \t *   $(_Class)::DefaultInitValue   // Used as base value modified by above
+      \t * };
+      \t *
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure($(_name)Init)
+      \t * @endcode
+      \t */
+      \tclass Init {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____ Init class Member variables ________ -->
+
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
+      condition="false"
+      variables="irqHandlingMethod"
+   ><![CDATA[
+      \t   /// %description
+      \t   %params = nullptr;\n\n
+   ]]></variableTemplate>
+
+   <for keys=" type        : variables                                            : init    "
+       values="%returnType : uart_baudrate                                        :   UartBaudRate(0)      ;
+               %baseType   : uart_bdh_lbkdie,uart_bdh_rxedgie                     :   0      ;
+               %baseType   : uart_c1_loops,uart_c1_uartswai,uart_c1_rsrc,
+                             uart_c1_m,uart_c1_wake,uart_c1_ilt,uart_c1_pe,
+                             uart_c1_pt                                           :   0      ;
+               %baseType   : uart_c2_tie,uart_c2_tcie,uart_c2_rie,uart_c2_ilie,
+                             uart_c2_te,uart_c2_re,uart_c2_rwu,uart_c2_sbk        :   0      ;
+               %baseType   : uart_s2_lbkdif,uart_s2_rxedgif,uart_s2_msbf,
+                             uart_s2_rxinv,uart_s2_rwuid,uart_s2_brk13,
+                             uart_s2_lbkde                                        :   0      ;
+               %baseType   : uart_c3_t8,uart_c3_txdir,uart_c3_txinv,uart_c3_orie,
+                             uart_c3_neie,uart_c3_feie,uart_c3_peie               :   0      ;
+               %baseType   : uart_d_rt                                            :   0      ;
+               %baseType   : uart_ma_ma                                           :   0      ;
+               %baseType   : uart_c4_maen1,uart_c4_maen2,uart_c4_m10,uart_c4_brfa,
+                             uart_c4_osr                                          :   0      ;
+               uint8_t     : uart_c5_tdmas,uart_c5_rdmas                          :   0      ;
+
+               %baseType   : uart_c7816_onack,uart_c7816_anack,uart_c7816_init,
+                             uart_c7816_ttype,uart_c7816_iso_7816e                :   0      ;
+               %baseType   : uart_ie7816_wte,uart_ie7816_cwte,uart_ie7816_bwte,
+                             uart_ie7816_initde,uart_ie7816_adte,uart_ie7816_gtve,
+                             uart_ie7816_txte,uart_ie7816_rxte                    :   0      ;
+               %baseType   : uart_is7816_wt,uart_is7816_cwt,uart_is7816_bwt,
+                             uart_is7816_initd,uart_is7816_adt,uart_is7816_gtv,
+                             uart_is7816_txt,uart_is7816_rxt                      :   0      ;
+               %baseType   : uart_wp7816_wtx                                      :   0      ;
+               %baseType   : uart_wn7816_gtn                                      :   0      ;
+               %baseType   : uart_wf7816_gtfd                                     :   0      ;
+               %baseType   : uart_et7816_txthreshold,uart_et7816_rxthreshold      :   0      ;
+               %baseType   : uart_tl7816_tlen                                     :   0      ;
+
+               %baseType   : uart_ap7816a_t0_adti_h                               :   0      ;
+               %baseType   : uart_ap7816b_t0_adti_l                               :   0      ;
+               %baseType   : uart_wp7816a_t0_wi_h                                 :   0      ;
+               %baseType   : uart_wp7816a_t1_bwi_h                                :   0      ;
+               %baseType   : uart_wp7816b_t0_wi_l                                 :   0      ;
+               %baseType   : uart_wp7816b_t1_bwi_l                                :   0      ;
+               %baseType   : uart_wgp7816_t1_cwi1,uart_wgp7816_t1_bgi             :   0      ;
+               %baseType   : uart_wp7816c_t1_cwi2                                 :   0      ;
+
+               %baseType   : uart_modem_rxrtse,uart_modem_txrtspol,uart_modem_txrtse,
+                             uart_modem_txctse                                    :   0      ;
+               %baseType   : uart_ir_iren,uart_ir_tnp                             :   0      ;
+               %baseType   : uart_pfifo_txfe,uart_pfifo_rxfe                      :   0      ;
+               %baseType   : uart_cfifo_txflush,uart_cfifo_rxflush,uart_cfifo_rxofe,
+                             uart_cfifo_txofe,uart_cfifo_rxufe                    :   0      ;
+               %baseType   : uart_sfifo_rxof,uart_sfifo_txof,uart_sfifo_rxuf      :   0      ;
+               %baseType   : uart_twfifo_txwater                                  :   0      ;
+               %baseType   : uart_rwfifo_rxwater                                  :   0      " >
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         variables="%(variables)"
+         linePadding="xxx"
+      ><![CDATA[
+         %multilineDescription
+         \t   %(type) %registerName = %(init);\n\n
+      ]]></variableTemplate>
+   </for>
+
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
+      variables="/PCR/nvic_irqLevel,irqLevel"
+      condition="false"
+   ><![CDATA[
+      \t   /// %description
+      \t   %paramType %registerName0 = %defaultValue;
+      \t\n
+   ]]></variableTemplate>
+
+   <!-- ____ Init class Constructors ____________ -->
+
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
+      condition="false"
+      variables="irqHandlingMethod"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      this->%paramName0 = %paramExpression;
+      \t   }\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
+      condition="false"
+      variables="/PCR/nvic_irqLevel"
+      linePadding="xxx"
+   ><![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      %registerName = %paramExpression;
+      \t   }\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      variables="uart_c5_tdmas"
+      linePadding="xxx" >
+   <![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    * (uart_c5_tdmas)
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t   c2 = (c2 & ~UART_C2_TIE_MASK)   | %paramExpression;
+      \t   c5 = (c5 & ~UART_C5_TDMAS_MASK) | (%paramExpression>>8);
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      variables="uart_c5_rdmas"
+      linePadding="xxx" >
+   <![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    * (uart_c5_rdmas)
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t   c2 = (c2 & ~UART_C2_RIE_MASK)   | %paramExpression;
+      \t   c5 = (c5 & ~UART_C5_RDMAS_MASK) | (%paramExpression>>8);
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
+   <for keys="r"
+      values="
+            uart_baudrate;
+            uart_bdh_lbkdie;uart_bdh_rxedgie;
+            uart_c1_loops;uart_c1_uartswai;uart_c1_rsrc;
+            uart_c1_m;uart_c1_wake;uart_c1_ilt;uart_c1_pe;
+            uart_c1_pt;
+            uart_c2_tie;uart_c2_tcie;uart_c2_rie;uart_c2_ilie;
+            uart_c2_te;uart_c2_re;uart_c2_rwu;uart_c2_sbk;
+            uart_s2_lbkdif;uart_s2_rxedgif;uart_s2_msbf;
+            uart_s2_rxinv;uart_s2_rwuid;uart_s2_brk13;
+            uart_s2_lbkde;
+            uart_c3_t8;uart_c3_txdir;uart_c3_txinv;uart_c3_orie;
+            uart_c3_neie;uart_c3_feie;uart_c3_peie;
+            uart_d_rt;
+            uart_ma_ma;
+            uart_c4_maen1;uart_c4_maen2;uart_c4_m10;
+            uart_c4_brfa;uart_c4_osr;
+            uart_c7816_onack;uart_c7816_anack;uart_c7816_init;
+            uart_c7816_ttype;uart_c7816_iso_7816e;
+            uart_ie7816_wte;uart_ie7816_cwte;uart_ie7816_bwte;
+            uart_ie7816_initde;uart_ie7816_adte;uart_ie7816_gtve;
+            uart_ie7816_txte;uart_ie7816_rxte;
+            uart_is7816_wt;uart_is7816_cwt;uart_is7816_bwt;
+            uart_is7816_initd;uart_is7816_adt;uart_is7816_gtv;
+            uart_is7816_txt;uart_is7816_rxt;
+            uart_wp7816_wtx;
+            uart_wn7816_gtn;
+            uart_wf7816_gtfd;
+            uart_et7816_txthreshold;uart_et7816_rxthreshold;
+            uart_tl7816_tlen;
+
+            uart_ap7816a_t0_adti_h;
+            uart_ap7816b_t0_adti_l;
+            uart_wp7816a_t0_wi_h;
+            uart_wp7816a_t1_bwi_h;
+            uart_wp7816b_t0_wi_l;
+            uart_wp7816b_t1_bwi_l;
+            uart_wgp7816_t1_cwi1;uart_wgp7816_t1_bgi;
+            uart_wp7816c_t1_cwi2;
+
+            uart_modem_rxrtse;uart_modem_txrtspol;uart_modem_txrtse;
+            uart_modem_txctse;
+            uart_ir_iren;uart_ir_tnp;
+            uart_pfifo_txfe;uart_pfifo_rxfe;
+            uart_cfifo_txflush;uart_cfifo_rxflush;uart_cfifo_rxofe;
+            uart_cfifo_txofe;uart_cfifo_rxufe;
+            uart_sfifo_rxof;uart_sfifo_txof;uart_sfifo_rxuf;
+            uart_twfifo_txwater;
+            uart_rwfifo_rxwater" >
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         variables="%(r)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    * (%(r))
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %constructorFieldAssignment;
+         \t   }
+         \t\n
+      ]]>
+      </variableTemplate>
+   </for>
+
+   <!-- ____ Init class Configure method ____ -->
+
+   <template codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic inline void defaultConfigure() {
+      \t
+      \t   // Update settings
+      \t   configure(DefaultInitValue);
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const Init &init) {
+      \t
+      \t   // Enable peripheral clock
+      \t   enable();
+      \t\n
+   ]]></template>
+
+   <!-- Don't include IRQ handler in init -->
+   <template codeGenCondition="irqHandlingMethod"
+      condition="false" >
+   <![CDATA[
+      \t   // Set call-backs
+      \t   setCallback(init.callbackFunction);
+      \t   enableNvicInterrupts(init.irqlevel);
+      \t\n
+   ]]></template>
+   <for keys=
+             " var                                                    : statement            "
+      values=" uart_bdh_lbkdie,uart_bdh_rxedgie,uart_bdh_sbr          : %configRegAssignment ;
+               uart_c1_loops,uart_c1_uartswai,uart_c1_rsrc,
+               uart_c1_m,uart_c1_wake,uart_c1_ilt,uart_c1_pe,
+               uart_c1_pt                                             : %configRegAssignment ;
+               uart_c2_tie,uart_c2_tcie,uart_c2_rie,uart_c2_ilie,
+               uart_c2_te,uart_c2_re,uart_c2_rwu,uart_c2_sbk          : %configRegAssignment ;
+               uart_s2_lbkdif,uart_s2_rxedgif,uart_s2_msbf,
+               uart_s2_rxinv,uart_s2_rwuid,uart_s2_brk13,
+               uart_s2_lbkde                                          : %configRegAssignment ;
+               uart_c3_t8,uart_c3_txdir,uart_c3_txinv,uart_c3_orie,
+               uart_c3_neie,uart_c3_feie,uart_c3_peie                 : %configRegAssignment ;
+               uart_d_rt                                              : %configRegAssignment ;
+               uart_ma_ma                                             : %configRegAssignment ;
+               uart_c4_maen1,uart_c4_maen2,uart_c4_m10,uart_c4_brfa,
+               uart_c4_osr                                            : %configRegAssignment ;
+               uart_c5_tdmas,uart_c5_rdmas                            : %configRegAssignment ;
+
+               uart_c7816_onack,uart_c7816_anack,uart_c7816_init,
+               uart_c7816_ttype,uart_c7816_iso_7816e                  : %configRegAssignment ;
+               uart_ie7816_wte,uart_ie7816_cwte,uart_ie7816_bwte,
+               uart_ie7816_initde,uart_ie7816_adte,uart_ie7816_gtve,
+               uart_ie7816_txte,uart_ie7816_rxte                      : %configRegAssignment ;
+               uart_is7816_wt,uart_is7816_cwt,uart_is7816_bwt,
+               uart_is7816_initd,uart_is7816_adt,uart_is7816_gtv,
+               uart_is7816_txt,uart_is7816_rxt                        : %configRegAssignment ;
+               uart_wp7816_wtx                                        : %configRegAssignment ;
+               uart_wn7816_gtn                                        : %configRegAssignment ;
+               uart_wf7816_gtfd                                       : %configRegAssignment ;
+               uart_et7816_txthreshold,uart_et7816_rxthreshold        : %configRegAssignment ;
+               uart_tl7816_tlen                                       : %configRegAssignment ;
+
+               uart_ap7816a_t0_adti_h                                 : %configRegAssignment ;
+               uart_ap7816b_t0_adti_l                                 : %configRegAssignment ;
+               uart_wp7816a_t0_wi_h                                   : %configRegAssignment ;
+               uart_wp7816a_t1_bwi_h                                  : %configRegAssignment ;
+               uart_wp7816b_t0_wi_l                                   : %configRegAssignment ;
+               uart_wp7816b_t1_bwi_l                                  : %configRegAssignment ;
+               uart_wgp7816_t1_cwi1,uart_wgp7816_t1_bgi               : %configRegAssignment ;
+               uart_wp7816c_t1_cwi2                                   : %configRegAssignment ;
+
+               uart_modem_rxrtse,uart_modem_txrtspol,uart_modem_txrtse,
+               uart_modem_txctse                                      : %configRegAssignment ;
+
+               uart_ir_iren,uart_ir_tnp                               : %configRegAssignment ;
+               uart_pfifo_txfe,uart_pfifo_rxfe                        : %configRegAssignment ;
+               uart_cfifo_txflush,uart_cfifo_rxflush,uart_cfifo_rxofe,
+               uart_cfifo_txofe,uart_cfifo_rxufe                      : %configRegAssignment ;
+               uart_sfifo_rxof,uart_sfifo_txof,uart_sfifo_rxuf        : %configRegAssignment ;
+               uart_twfifo_txwater                                    : %configRegAssignment ;
+               uart_rwfifo_rxwater                                    : %configRegAssignment ;
+
+               uart_baudrate                                          : setBaudRate(init.baudrate) " >
+      <variableTemplate codeGenCondition="enablePeripheralSupport"
+      variables="%(var)"
+      linePadding="xxx"
+      ><![CDATA[
+         \t
+         %multilineDescription
+         \t   %(statement);\n
+      ]]></variableTemplate>
+   </for>
+   <template codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____  Default Initialisation value ____ -->
+
+   <variableTemplate codeGenCondition="enablePeripheralSupport"
+      separator=","
+      terminator=","
+      padToComments="35"
+      variables="
+            uart_baudrate,
+
+            uart_bdh_lbkdie,uart_bdh_rxedgie,
+            uart_c1_loops,uart_c1_uartswai,uart_c1_rsrc,
+            uart_c1_m,uart_c1_wake,uart_c1_ilt,uart_c1_pe,
+            uart_c1_pt,
+            uart_c2_tie,uart_c2_tcie,uart_c2_rie,uart_c2_ilie,
+            uart_c2_te,uart_c2_re,uart_c2_rwu,uart_c2_sbk,
+            uart_s2_lbkdif,uart_s2_rxedgif,uart_s2_msbf,
+            uart_s2_rxinv,uart_s2_rwuid,uart_s2_brk13,
+            uart_s2_lbkde,
+            uart_c3_t8,uart_c3_txdir,uart_c3_txinv,uart_c3_orie,
+            uart_c3_neie,uart_c3_feie,uart_c3_peie,
+            uart_d_rt,
+            uart_ma_ma,
+            uart_c4_maen1,uart_c4_maen2,uart_c4_m10,
+            uart_c4_brfa,uart_c4_osr,
+            uart_c5_tdmas,uart_c5_rdmas,
+
+            uart_c7816_onack,uart_c7816_anack,uart_c7816_init,
+            uart_c7816_ttype,uart_c7816_iso_7816e,
+            uart_ie7816_wte,uart_ie7816_cwte,uart_ie7816_bwte,
+            uart_ie7816_initde,uart_ie7816_adte,uart_ie7816_gtve,
+            uart_ie7816_txte,uart_ie7816_rxte,
+            uart_is7816_wt,uart_is7816_cwt,uart_is7816_bwt,
+            uart_is7816_initd,uart_is7816_adt,uart_is7816_gtv,
+            uart_is7816_txt,uart_is7816_rxt,
+            uart_wp7816_wtx,
+            uart_wn7816_gtn,
+            uart_wf7816_gtfd,
+            uart_et7816_txthreshold,uart_et7816_rxthreshold,
+            uart_tl7816_tlen,
+
+            uart_ap7816a_t0_adti_h,
+            uart_ap7816b_t0_adti_l,
+            uart_wp7816a_t0_wi_h,
+            uart_wp7816a_t1_bwi_h,
+            uart_wp7816b_t0_wi_l,
+            uart_wp7816b_t1_bwi_l,
+            uart_wgp7816_t1_cwi1,uart_wgp7816_t1_bgi,
+            uart_wp7816c_t1_cwi2,
+
+            uart_modem_rxrtse,uart_modem_txrtspol,uart_modem_txrtse,
+            uart_modem_txctse,
+
+            uart_ir_iren,uart_ir_tnp,
+
+            uart_pfifo_txfe,uart_pfifo_rxfe,
+            uart_cfifo_txflush,uart_cfifo_rxflush,uart_cfifo_rxofe,
+            uart_cfifo_txofe,uart_cfifo_rxufe,
+            uart_sfifo_rxof,uart_sfifo_txof,uart_sfifo_rxuf,
+            uart_twfifo_txwater,
+            uart_rwfifo_rxwater" >
+   <![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \t};
+      \t\n
+   ]]></variableTemplate>
+
+   <!-- ____ End of Info classes ____ -->
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t}; // class $(_BasicInfo)::Init
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____ Common ____ -->
+
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
+   <![CDATA[
+      \t/**
+      \t * Class representing $(_NAME) interface
+      \t *
+      \t * <b>Example</b>
+      \t * @code
+      \t *  // Instantiate interface
+      \t *  USBDM::$(_Class) $(_basename);
+      \t *
+      \t *  for(int i=0; i++;) {
+      \t *     $(_basename).writeln("Hello world ", i);
+      \t *  }
+      \t *  @endcode
+      \t */
+      \tclass $(_Class) : public $(_Baseclass)_T<$(_Info)> {};
+      \t\n
+   ]]>
+   </template>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.UartValidate">
+   </validate>
+
+   <projectActionList id="uart_files">
+      <copy source="Snippets/uart-example.cpp"     target="Snippets/uart-example.cpp"     overwrite="true"  derived="true" />
+      <copy source="Project_Headers/uart.h"        target="Project_Headers/uart.h"        overwrite="true"  derived="true" macroReplace="true" />
+      <copy source="Project_Headers/uart_queue.h"  target="Project_Headers/uart_queue.h"  overwrite="true"  derived="true" />
+   </projectActionList>
+
+   <!-- ____ Startup ____ -->
+
+   <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
+      <![CDATA[#include "$(_basename).h"\n
+   ]]></template>
+
+   <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
+   <![CDATA[
+      \t/*  Initialise $(_Class) */
+      \tUSBDM::$(_Class)::defaultConfigure();\n
+   ]]></template>
+
+   <!-- ____ SIM configuration ____ -->
+
+   <category name="Advanced" description="SIM configuration"
+      toolTip="These settings only have effect if the SIM configuration is enabled" >
+      <title description="$(_BASENAME) Shared" />
+      <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+      <title description="$(_NAME) Specific" />
+      <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
+      <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+   </category>
+
+   <!--  ____ Signal mapping ____ -->
+   <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
+
+</fragment>

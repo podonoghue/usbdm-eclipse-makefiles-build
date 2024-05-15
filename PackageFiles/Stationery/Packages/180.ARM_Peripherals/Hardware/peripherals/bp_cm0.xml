@@ -45,7 +45,7 @@
       <choice name="Comparator enabled"   value="1" enum="ComparatorEnabled"/>
    </binaryOption>
 
-<!-- Grahic here -->  
+<!-- Grahic here -->
 
    <for keys="field:name"
         values="
@@ -231,6 +231,7 @@
    <variableTemplate
       separator=","
       terminator=","
+      padToComments="50"
       variables="
             bp_ctrl_enable,
             bp_comp_bp_match,
@@ -244,7 +245,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues
       \t};\n\n
    ]]></variableTemplate>
 

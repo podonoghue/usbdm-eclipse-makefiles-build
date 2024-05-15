@@ -14,9 +14,9 @@
 
    <!--
       Generates:
-         enablePeripheralSupport               = enable support for this instance
-         $(_BasicInfoGuard)    = OR of enablePeripheralSupport for instances using same _STRUCTNAME
-         /$(_BASENAME)/enablePeripheralSupport = OR of enablePeripheralSupport for all instances
+         $(_InfoGuard)       = enablePeripheralSupport           = enable support for this instance
+         $(_BasicInfoGuard)  = /STRUCTNAME/generateSharedInfo    = OR of enablePeripheralSupport for instances using same STRUCTNAME
+         $(_CommonInfoGuard) = /BASENAME/enablePeripheralSupport = OR of enablePeripheralSupport for all instances of peripheral
    -->
 
    <!-- Enable for this peripheral -->
@@ -267,7 +267,6 @@
 
       <for keys="irqNum" values="=_hardwareIrqNums" iterationVar="ch" condition='=(_hardwareIrqCount>1)' >
          <equation key="irqmodifier" value='=ReplaceAll("%(irqNum)","^(.+)_(.+)_IRQn$","$2")' />
-
          <equation key="handlerName"  value='="handler_template_"+irqmodifier' />
          <clipboard key='=handlerName' condition='=!Exists(handlerName)'
             hiddenBy="irqHandlingMethod||!enablePeripheralSupport"
@@ -277,7 +276,7 @@
                \t/**
                \t * Handler for $(_NAME) "+irqmodifier+" interrupt
                \t */
-               \tstatic void "+irqmodifier+"_IRQHandler() {
+               \tvoid "+"$(_NAME)_"+irqmodifier+"_IRQHandler() {
                \t   ...
                \t};
                \t"
@@ -286,7 +285,7 @@
 
          <equation key="irqLevelName" value='="irqLevel_"+irqmodifier'         />
          <choiceOption key='=irqLevelName' condition='=!Exists(irqLevelName)'
-            enabledBy="enablePeripheralSupport"
+            hiddenBy="!irqHandlingMethod||!enablePeripheralSupport"
             description='="IRQ priority level for "+irqmodifier'
             toolTip='="Priority level used to configure the NVIC for "+irqmodifier+"\n
                      Selecting -Interrupts Disabled- will disable interrupts in the NVIC when configured"'
@@ -302,12 +301,12 @@
          <clipboard key='="handler_template"' condition="!handler_template"
             hiddenBy="irqHandlingMethod||!enablePeripheralSupport"
             description="Interrupt handler template"
-            toolTip='Interrupt handler example'>
+            toolTip='Interrupt handler example' >
             <![CDATA[="
                \t/**
                \t * Handler for $(_NAME) interrupt
                \t */
-               \tstatic void "+irqmodifier+"_IRQHandler() {
+               \tvoid "+irqmodifier+"_IRQHandler() {
                \t   ...
                \t};
                \t"
@@ -523,7 +522,7 @@
       </template>
 
       <!--  Set callback -->
-      <template codeGenCondition="irqHandlingMethod" condition="!irq_enum" >
+      <template codeGenCondition="irqHandlingMethod" condition="!irq_enum||irq_single_handler" >
       <![CDATA[
          \t/** Callback function for $(_Class) */
          \tstatic inline CallbackFunction sCallback = $(_Info)::unhandledCallback; // $(_hardwareIrqNums);
@@ -553,10 +552,11 @@
       <!-- ____ Multiple user/hardware handlers _____________ -->
 
       <!--  Interrupt handler -->
-      <variableTemplate codeGenCondition="irqHandlingMethod" variables="irq_enum" condition="!suppressIrqHandler" >
+      <variableTemplate codeGenCondition="irqHandlingMethod" variables="irq_enum" condition="!suppressIrqHandler&amp;&amp;!irq_single_handler" >
       <![CDATA[
          \t/**
          \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
+         \t * (Multiple handlers)
          \t *
          \t * @tparam %paramName0 %tooltip
          \t */
@@ -570,19 +570,37 @@
       ]]>
       </variableTemplate>
 
+      <variableTemplate codeGenCondition="irqHandlingMethod" variables="irq_enum" condition="!suppressIrqHandler&amp;&amp;irq_single_handler" >
+      <![CDATA[
+         \t/**
+         \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
+         \t * (Multiple vectors mapped to single handler)
+         \t *
+         \t * @tparam %paramName0 %tooltip
+         \t */
+         \ttemplate<%params>
+         \tstatic void irqHandler() {
+         \t
+         \t   // Execute call-back
+         \t   sCallback($(irq_call));
+         \t}
+         \t\n
+      ]]>
+      </variableTemplate>
+
       <!--  Set callback -->
-      <variableTemplate codeGenCondition="irqHandlingMethod" variables="irq_enum"
+      <variableTemplate codeGenCondition="irqHandlingMethod" variables="irq_enum" condition="!irq_single_handler"
          immediateVariables="_userIrqCount" >
       <![CDATA[
          \t/** Callback function for $(_Class) */
          \tstatic inline CallbackFunction sCallbacks[$(_userIrqCount)] = {\n
       ]]></variableTemplate>
       <for keys="irqName" values="=_hardwareIrqNums" >
-         <template codeGenCondition="irqHandlingMethod" condition="irq_enum" ><![CDATA[
+         <template codeGenCondition="irqHandlingMethod" condition="irq_enum&amp;&amp;!irq_single_handler" ><![CDATA[
             \t   $(_Info)::unhandledCallback,  // %(irqName) \n
          ]]></template>
       </for>
-      <variableTemplate codeGenCondition="irqHandlingMethod" variables="irq_enum" >
+      <variableTemplate codeGenCondition="irqHandlingMethod" variables="irq_enum" condition="!irq_single_handler" >
       <![CDATA[
          \t};
          \t

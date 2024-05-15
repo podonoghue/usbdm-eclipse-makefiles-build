@@ -48,7 +48,7 @@
       toolTip="Current value at the time the register is accessed"
    />
 
-<!-- Grahic here -->  
+<!-- Grahic here -->
 
    <for keys="field:name"
         values="
@@ -245,6 +245,7 @@
    <variableTemplate
       separator=","
       terminator=","
+      padToComments="35"
       variables="
             syst_csr_countflag,
             syst_csr_clksource,
@@ -259,7 +260,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues
       \t};\n\n
    ]]></variableTemplate>
 

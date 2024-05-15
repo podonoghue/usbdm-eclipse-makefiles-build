@@ -1280,11 +1280,12 @@ In other cases, if the master reads data from the slave, then it is required to 
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression\n
+      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues\n
    ]]></variableTemplate>
    <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;/$(_BASENAME)/smbOptionsAvailable"
       separator=","
       terminator=","
+      padToComments="50"
       variables="
             i2c_smb_fack,
             i2c_smb_alerten,

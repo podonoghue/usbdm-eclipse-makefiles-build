@@ -830,6 +830,7 @@
    <variableTemplate codeGenCondition="$(_BasicInfoGuard)"
       separator=","
       terminator=","
+      padToComments="35"
       variables="
             spi_c1_mstr,
             spi_c1_mode,
@@ -847,7 +848,7 @@
       \t * Default initialisation value for $(_Baseclass)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr $(_Baseclass)BasicInfo::Init DefaultInitValue = {%initExpression
+      \tstatic constexpr $(_Baseclass)BasicInfo::Init DefaultInitValue = {%initNonZeroValues
       \t};\n\n
    ]]></variableTemplate>
 

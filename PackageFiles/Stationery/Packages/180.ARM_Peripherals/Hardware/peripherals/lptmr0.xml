@@ -702,19 +702,20 @@
 <!--   ______ Default Values ___________ -->
 
    <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;!lptmr_csr_tms"
+      terminator=","
+      separator=","
+      padToComments="35"
       variables="
          lptmr_csr_tfc,lptmr_csr_tie,
          lptmr_psr_pcs,lptmr_psr_prescaler,
          lptmr_cmr_compare,
          irqLevel"
-      terminator=","
-      separator=","
    ><![CDATA[
       \t/**
       \t * Default value for Lptmr in Time Interval Mode
       \t * This value is created from Configure.usbdmProject settings (Peripheral Parameters->LPTMR)
       \t */
-      \tstatic constexpr TimeIntervalModeInit DefaultInitValue {%initExpression
+      \tstatic constexpr TimeIntervalModeInit DefaultInitValue {%initNonZeroValues
       \t};
       \t\n
    ]]></variableTemplate>
@@ -732,7 +733,7 @@
       \t * Default value for Lptmr in Pulse Counting Mode
       \t * This value is created from Configure.usbdmProject settings (Peripheral Parameters->LPTMR)
       \t */
-      \tstatic constexpr PulseCountingModeInit DefaultInitValue {%initExpression
+      \tstatic constexpr PulseCountingModeInit DefaultInitValue {%initNonZeroValues
       \t};
       \t\n
    ]]></variableTemplate>

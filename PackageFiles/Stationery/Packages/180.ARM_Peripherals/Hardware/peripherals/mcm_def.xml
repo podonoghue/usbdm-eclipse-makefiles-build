@@ -269,6 +269,7 @@
 
    <variableTemplate key="/MCM/DefaultFlashInitValue" where="all"
       variables="mcm_placr_flash_speculation, mcm_placr_flash_cache"
+      padToComments="35"
       terminator=","
       separator=","
    ><![CDATA[
@@ -276,7 +277,7 @@
       \t * Default value for MCM::FlashInit
       \t * This value is created from Configure.usbdmProject settings (Peripheral Parameters->MCM)
       \t */
-      \tstatic constexpr McmInfo::FlashInit DefaultFlashInitValue {%initExpression
+      \tstatic constexpr McmInfo::FlashInit DefaultFlashInitValue {%initNonZeroValues
       \t};
       \t
       \tusing McmInfo::configureFlashController;
@@ -586,13 +587,15 @@
    <variableTemplate key="/MCM/DefaultFloatingPointIrqInitValue" where="all"
       variables="mcm_iscr_fidce,mcm_iscr_fixce,mcm_iscr_fufce,mcm_iscr_fofce,mcm_iscr_fdzce,mcm_iscr_fioce"
       terminator=","
-      separator="," >
+      separator=","
+      padToComments="35"
+   >
    <![CDATA[
       \t/**
       \t * Default value for Mcm::FloatingPointIrqInit
       \t * This value is created from Configure.usbdmProject settings (Peripheral Parameters->MCM)
       \t */
-      \tstatic constexpr McmInfo::FloatingPointIrqInit DefaultFloatingPointIrqInitValue {%initExpression
+      \tstatic constexpr McmInfo::FloatingPointIrqInit DefaultFloatingPointIrqInitValue {%initNonZeroValues
       \t};\n
    ]]>
    </variableTemplate>
@@ -736,12 +739,13 @@
       variables="mcm_cr_sramlwp,mcm_cr_sramlap,mcm_cr_sramuwp,mcm_cr_sramuap"
       terminator=","
       separator=","
+      padToComments="35"
    ><![CDATA[
       \t/**
       \t * Default value for Mcm::FloatingPointIrqInit
       \t * This value is created from Configure.usbdmProject settings (Peripheral Parameters->MCM)
       \t */
-      \tstatic constexpr McmInfo::SramAccessInit DefaultSramAccessInitValue {%initExpression
+      \tstatic constexpr McmInfo::SramAccessInit DefaultSramAccessInitValue {%initNonZeroValues
       \t};
    ]]></variableTemplate>
 

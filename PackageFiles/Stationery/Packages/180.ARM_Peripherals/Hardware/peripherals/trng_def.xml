@@ -1197,6 +1197,7 @@
    <variableTemplate codeGenCondition="$(_InfoGuard)"
       separator=","
       terminator=","
+      padToComments="35"
       variables="
             trng_mctl_prgm,trng_mctl_for_sclk,
             trng_mctl_rst_def,trng_mctl_trng_acc,
@@ -1211,7 +1212,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues
       \t};
       \t\n
    ]]>
@@ -1470,6 +1471,7 @@
    <variableTemplate codeGenCondition="$(_InfoGuard)"
       separator=","
       terminator=","
+      padToComments="35"
       variables="
             trng_mctl_prgm,trng_mctl_for_sclk,
             trng_mctl_rst_def,trng_mctl_trng_acc,
@@ -1497,7 +1499,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr ExtendedInit DefaultExtendedInitValue = {%initExpression
+      \tstatic constexpr ExtendedInit DefaultExtendedInitValue = {%initNonZeroValues
       \t};
       \t\n
    ]]>

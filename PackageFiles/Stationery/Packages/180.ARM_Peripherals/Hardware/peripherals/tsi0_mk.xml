@@ -810,6 +810,7 @@
    <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
+      padToComments="35"
       variables="
             tsi_gencs_scanmode,
             tsi_gencs_stpe,
@@ -833,7 +834,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression\n
+      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues\n
    ]]></variableTemplate>
    <for keys="i" dim="16" >
       <equation key="pin"         value='=Prettify(OnlyMappablePinOfSignal("TSI0_CH%(i)"))' />

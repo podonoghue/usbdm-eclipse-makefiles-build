@@ -14,8 +14,11 @@
    <item key="$peripheral$QSPI0_codeIdentifier"            value="MyQSPI" />
    <item key="$peripheral$QSPI0_userDescription"           value="MT25QU256ABA1EW7-0SIT QSPI Flash" />
    <item key="$peripheral$SDHC0_codeIdentifier"            value="Sdhc" />
+   <item key="$peripheral$SDHC0_createInstance"            value="true" />
    <item key="$peripheral$SDRAMC_codeIdentifier"           value="MySDRamController" />
    <item key="$peripheral$SDRAMC_userDescription"          value="IS42SM16800H-6BLI SDRAM" />
+   <item key="$peripheral$SPI2_codeIdentifier"             value="UserSpi" />
+   <item key="$peripheral$SPI2_createInstance"             value="true" />
    <item key="$pin$PTA10_pcrSetting_5"                     value="500" />
    <item key="$pin$PTA11_pcrSetting_5"                     value="500" />
    <item key="$pin$PTA12_pcrSetting_5"                     value="500" />
@@ -34,13 +37,13 @@
    <item key="$pin$PTA22_pcrSetting_5"                     value="500" />
    <item key="$pin$PTA23_pcrSetting_5"                     value="500" />
    <item key="$pin$PTA24_pcrSetting_1"                     value="100" />
-   <item key="$pin$PTA24_pcrSetting_4"                     value="400" />
+   <item key="$pin$PTA24_pcrSetting_4"                     value="8403" />
    <item key="$pin$PTA25_pcrSetting_1"                     value="100" />
-   <item key="$pin$PTA25_pcrSetting_4"                     value="400" />
-   <item key="$pin$PTA26_pcrSetting_4"                     value="400" />
-   <item key="$pin$PTA27_pcrSetting_4"                     value="400" />
-   <item key="$pin$PTA28_pcrSetting_4"                     value="400" />
-   <item key="$pin$PTA29_pcrSetting_4"                     value="400" />
+   <item key="$pin$PTA25_pcrSetting_4"                     value="8403" />
+   <item key="$pin$PTA26_pcrSetting_4"                     value="8403" />
+   <item key="$pin$PTA27_pcrSetting_4"                     value="8403" />
+   <item key="$pin$PTA28_pcrSetting_4"                     value="8403" />
+   <item key="$pin$PTA29_pcrSetting_4"                     value="8403" />
    <item key="$pin$PTA2_pcrSetting_5"                      value="500" />
    <item key="$pin$PTA31_pcrSetting_1"                     value="100" />
    <item key="$pin$PTA3_pcrSetting_7"                      value="700" />
@@ -95,6 +98,7 @@
    <item key="$pin$PTC27_pcrSetting_1"                     value="100" />
    <item key="$pin$PTC28_pcrSetting_2"                     value="220" />
    <item key="$pin$PTC29_pcrSetting_2"                     value="220" />
+   <item key="$pin$PTC2_pcrSetting_4"                      value="400" />
    <item key="$pin$PTC2_pcrSetting_5"                      value="500" />
    <item key="$pin$PTC3_pcrSetting_5"                      value="500" />
    <item key="$pin$PTC4_pcrSetting_5"                      value="500" />
@@ -108,15 +112,19 @@
    <item key="$pin$PTD10_pcrSetting_7"                     value="700" />
    <item key="$pin$PTD11_pcrSetting_7"                     value="700" />
    <item key="$pin$PTD12_pcrSetting_1"                     value="100" />
+   <item key="$pin$PTD12_pcrSetting_2"                     value="200" />
    <item key="$pin$PTD12_pcrSetting_7"                     value="700" />
    <item key="$pin$PTD13_pcrSetting_1"                     value="100" />
+   <item key="$pin$PTD13_pcrSetting_2"                     value="200" />
    <item key="$pin$PTD13_pcrSetting_7"                     value="700" />
    <item key="$pin$PTD14_pcrSetting_1"                     value="100" />
+   <item key="$pin$PTD14_pcrSetting_2"                     value="200" />
    <item key="$pin$PTD14_pcrSetting_7"                     value="700" />
    <item key="$pin$PTD15_pcrSetting_1"                     value="100" />
    <item key="$pin$PTD15_pcrSetting_7"                     value="700" />
    <item key="$pin$PTD1_pcrSetting_0"                      value="0" />
    <item key="$pin$PTD1_pcrSetting_1"                      value="100" />
+   <item key="$pin$PTD1_pcrSetting_2"                      value="200" />
    <item key="$pin$PTD2_pcrSetting_5"                      value="500" />
    <item key="$pin$PTD3_pcrSetting_5"                      value="500" />
    <item key="$pin$PTD4_pcrSetting_5"                      value="500" />
@@ -222,7 +230,8 @@
    <item key="$signal$GPIOD_12_codeIdentifier"             value="Digital_D13" />
    <item key="$signal$GPIOD_13_codeIdentifier"             value="Digital_D11" />
    <item key="$signal$GPIOD_14_codeIdentifier"             value="Digital_D12" />
-   <item key="$signal$GPIOD_15_codeIdentifier"             value="Digital_D10" />
+   <item key="$signal$GPIOD_15_codeIdentifier"             value="Digital_D10/sdCardCS" />
+   <item key="$signal$GPIOD_15_createInstance"             value="true" />
    <item key="$signal$GPIOD_1_codeIdentifier"              value="Digital_A2" />
    <item key="$signal$GPIOD_6_codeIdentifier"              value="Digital_A3" />
    <item key="$signal$GPIOE_6_codeIdentifier"              value="RGB_Red/Leds" />

@@ -6,7 +6,7 @@
 
    <!--  ____ FTM Fault Controls ____= -->
 
-   <categoryOption key="faultControl" description="Fault Input Configuration" 
+   <categoryOption key="faultControl" description="Fault Input Configuration"
      condition='_control&amp;&amp;
          (SignalExists("$(_NAME)_FLT0")||SignalExists("$(_NAME)_FLT1")||
           SignalExists("$(_NAME)_FLT2")||SignalExists("$(_NAME)_FLT2"))'
@@ -14,7 +14,7 @@
    >
       <!-- ************* MODE ****************** -->
 
-      <choiceOption key="ftm_mode_faultm" condition="ftm_mode_faultm_present"      
+      <choiceOption key="ftm_mode_faultm" condition="ftm_mode_faultm_present"
          enabledBy="ftm_mode_ftmen"
          typeName="FtmFaultMode"
          baseType="uint8_t"
@@ -25,7 +25,7 @@
          <choice name="All channels with manual fault clearing"     value="2" enum="AllChannelsManualFaultClearing"/>
          <choice name="All channels with automatic fault clearing"  value="3" enum="AllChannelsAutomaticFaultClearing"/>
       </choiceOption >
-      
+
       <binaryOption key="ftm_mode_faultie" condition="ftm_mode_faultie_present"
          enabledBy="ftm_mode_faultm>0"
          typeName="FtmFaultAction"
@@ -73,10 +73,10 @@
 
       <for keys="inp" dim="4" >
          <if condition='SignalExists("$(_NAME)_FLT%(inp)")' >
-         
+
             <!--  Default mapping to FLT pins -->
             <constant key="faultPinMap[%(inp)]" value='"$(_NAME)_FLT%(inp)"' type="String" condition="!faultPinMap[%(inp)]"/>
-            
+
             <title description="Fault Input %(inp)" />
             <choiceOption key="ftm_fltctrl_fault%(inp)en" condition="ftm_fltctrl_fault%(inp)en_present"
                valueFormat="FTM_FLTCTRL_FAULT%(inp)EN(%s),FTM_FLTCTRL_FFLTR%(inp)EN(%s)"
@@ -90,9 +90,9 @@
                <choice value="1,0" name="Fault input enabled"              enum="Direct"    />
                <choice value="1,1" name="Fault input enabled with filter"  enum="Filtered"  />
             </choiceOption>
-   
+
          <!-- ************* FLTPOL ****************** -->
-   
+
             <binaryOption key="ftm_fltpol_flt%(inp)pol" condition="ftm_fltpol_flt%(inp)pol_present"
                enabledBy="ftm_fltctrl_fault%(inp)en>0"
                description="Fault Input %(inp) Polarity"
@@ -162,7 +162,7 @@
       ]]></template>
 
       <!-- ____ InitFault Member variables ____ -->
-   
+
       <for keys=" type        : variables                                                 : init    "
           values="%baseType   : ftm_mode_faultm,ftm_mode_faultie                          : 0       ;
                   %baseType   : ftm_fltctrl_ffval,
@@ -178,7 +178,7 @@
             \t   %(type) %registerName = %(init);\n\n
          ]]></variableTemplate>
       </for>
-   
+
       <!-- ____ InitFault Constructors ____ -->
 
       <for keys="r" values="ftm_mode_faultm;ftm_mode_faultie;
@@ -221,15 +221,15 @@
          \t
       ]]></template>
       <for keys=
-             " var                                        : statement               " 
+             " var                                        : statement               "
       values=" ftm_fltctrl_ffval,
                ftm_fltctrl_fault0en,ftm_fltctrl_fault1en,
                ftm_fltctrl_fault2en,ftm_fltctrl_fault3en  : %configRegAssignment    ;
                ftm_fltpol_flt0pol,ftm_fltpol_flt1pol,
-               ftm_fltpol_flt2pol,ftm_fltpol_flt3pol      : %configRegAssignment    ;  
+               ftm_fltpol_flt2pol,ftm_fltpol_flt3pol      : %configRegAssignment    ;
                ftm_mode_faultm,ftm_mode_faultie           : %configFieldAssignment  " >
          <variableTemplate codeGenCondition="enablePeripheralSupport"
-            variables="%(var)" 
+            variables="%(var)"
             linePadding="xxx"
           ><![CDATA[
             \t
@@ -244,7 +244,7 @@
       ]]></template>
 
       <!-- ____ DefaultFaultInitValue value ____ -->
-      
+
       <if condition='SignalExists("$(_NAME)_FLT0")||
                      SignalExists("$(_NAME)_FLT1")||
                      SignalExists("$(_NAME)_FLT2")||
@@ -252,6 +252,7 @@
          <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;(mode!=Quad)"
             separator=","
             terminator=","
+            padToComments="50"
             variables=",
                ftm_mode_faultm,
                ftm_mode_faultie,
@@ -262,9 +263,9 @@
             \t * Default initialisation value for $(_Class)
             \t * This value is created from Configure.usbdmProject settings
             \t */
-            \tstatic constexpr FaultInit DefaultFaultInitValue = {%initExpression\n
+            \tstatic constexpr FaultInit DefaultFaultInitValue = {%initNonZeroValues\n
          ]]></variableTemplate>
-   
+
          <for keys="inp" dim="4" >
             <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;(mode!=Quad)"
                condition='SignalExists("$(_NAME)_FLT%(inp)")'
@@ -278,7 +279,7 @@
                \t   // ------ Fault Input %(inp) ------- %initExpression\n
             ]]></variableTemplate>
          </for>
-   
+
          <template codeGenCondition="enablePeripheralSupport&amp;&amp;(mode!=Quad)"
          >
          <![CDATA[

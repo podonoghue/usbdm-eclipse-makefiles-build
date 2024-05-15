@@ -1216,6 +1216,7 @@
    <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
+      padToComments="30"
       variables="
          adc_cfg1_adiclk,
          adc_cfg1_mode,
@@ -1235,12 +1236,13 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression\n
+      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues\n
    ]]></variableTemplate>
 
    <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;(adc_sc2_compare!=0)"
       separator=","
       terminator=","
+      padToComments="30"
       variables="
          adc_sc2_compare,
          adc_cv1,
@@ -1253,11 +1255,12 @@
       <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;((%(pretrigger)==0)||adc_sc2_adtrg)"
          separator=","
          terminator=","
+         padToComments="30"
          variables="
             adc_sc1[%(pretrigger)]_adch,
             adc_sc1[%(pretrigger)]_aien"
       ><![CDATA[
-         \t   AdcPretrigger_%(pretrigger), // sc1[%(pretrigger)]/r[%(pretrigger)] ,%initExpression\n
+         \t   AdcPretrigger_%(pretrigger),                 // sc1[%(pretrigger)]/r[%(pretrigger)] ,%initExpression\n
       ]]></variableTemplate>
    </for>
 

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd" >
+
+<root
+   version="1.0"
+   xmlns:xi="http://www.w3.org/2001/XInclude"
+   >
+   <projectActionList id="FATFS-CortexM4-support">
+      <applyWhen>
+         <and>
+            <or>
+               <deviceFamilyIs>CortexM4F</deviceFamilyIs>
+               <deviceFamilyIs>CortexM4</deviceFamilyIs>
+               <deviceFamilyIs>CortexM0plus</deviceFamilyIs>
+            </or>
+            <variableRef idRef="hasCCNature" condition="isTrue" />
+            <variableRef idRef="outputType"  condition="matches"     value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+
+      <variable id="projectOptionValue.FATFS-support"
+         name="FATFS - FAT File System"
+         description="Adds support for FAT File System"
+         checkGroup="group-additional-options" />
+
+      <projectActionList >
+         <applyWhen >
+            <variableRef idRef="projectOptionValue.FATFS-support" condition="isTrue" />
+         </applyWhen>
+
+         <!-- C Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+            <value>&quot;../fatfs/source&quot;</value>
+         </projectOption>
+
+         <!-- C++ Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+            <value>&quot;../fatfs/source&quot;</value>
+         </projectOption>
+
+         <!-- Additional project files -->
+         <copy source="fatfs"                        target="fatfs"    macroReplace="false" />
+         <excludeSourceFolder                        target="fatfs/documents" />
+
+         <copy source="Snippets/fatfs_example1.cpp"  target="Snippets/fatfs_example1.cpp" overwrite="true" />
+         <copy source="Snippets/fatfs_example2.cpp"  target="Snippets/fatfs_example2.cpp" overwrite="true" />
+
+      </projectActionList>
+   </projectActionList>
+</root>

@@ -543,6 +543,7 @@
    <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
+      padToComments="50"
       variables="
             pwt_r1_pclks,pwt_r1_pinsel,pwt_r1_edge,
             pwt_r1_pre,pwt_r1_pwten,pwt_r1_pwtie,pwt_r1_prdyie,
@@ -552,7 +553,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues
       \t};
       \t\n
    ]]></variableTemplate>

@@ -399,7 +399,7 @@
       </binaryOption>
 
       <choiceOption key="ftm_filter_fval_independent[%(ch)]" condition="ftm_filter_ch%(ch)fval_present"
-         hiddenBy="false&amp;&amp;!(ftm_cnsc_mode_independent[%(ch)]==(1,2,3))"
+         hiddenBy="!(ftm_cnsc_mode_independent[%(ch)]==(1,2,3))"
          enabledBy="(ftm_cnsc_mode_independent[%(ch)]==(1,2,3))"
          description="Channel Input Filter"
          typeName="FtmInputFilter"
@@ -2818,6 +2818,7 @@
    <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;(mode!=Quad)"
       separator=","
       terminator=","
+      padToComments="50"
       variables="
          ftm_sc_action,ftm_sc_cpwms,ftm_sc_clks,ftm_sc_ps,
          ftm_mod_mod,
@@ -2830,7 +2831,7 @@
          "
    ><![CDATA[
       \t/**
-      \t * Default initialisation value for $(_Class)
+      \t * initExpression $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression\n

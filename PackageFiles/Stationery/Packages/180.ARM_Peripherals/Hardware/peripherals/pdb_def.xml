@@ -1149,6 +1149,7 @@
          pdb_sc_action, pdb_idly"
       separator=","
       terminator=","
+      padToComments="35"
     ><![CDATA[
       \t/**
       \t * Default initialisation values for PDB
@@ -1164,6 +1165,7 @@
          <variableTemplate variables="pdb_ch%(n)_c1_pt%(m), pdb_ch%(n)_dly%(m)" codeGenCondition="enablePeripheralSupport"
             separator=","
             terminator=","
+            padToComments="35"
           ><![CDATA[
                \t
                \t   // Pre-trigger %(n) configuration
@@ -1177,6 +1179,7 @@
       <variableTemplate variables="pdb_intc%(x)_triggerMode, pdb_int%(x)" codeGenCondition="enablePeripheralSupport"
          separator=","
          terminator=","
+         padToComments="35"
          initExpressionOnSameLine="true"
        ><![CDATA[
          \t
@@ -1190,6 +1193,7 @@
       <variableTemplate variables="pdb_poen_en%(y), pdb_po%(y)_dly1, pdb_po%(y)_dly2" codeGenCondition="enablePeripheralSupport"
          separator=","
          terminator=","
+         padToComments="35"
          initExpressionOnSameLine="true"
        ><![CDATA[
          \t

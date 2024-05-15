@@ -4,41 +4,6 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-<!--
-    * General substitutions
-    *  $(_NAME)         => e.g TPM2 => TPM2
-    *  $(_name)         => e.g TPM2 => tpm2
-    *  $(_BASENAME)     => e.g TPM0 => TPM, PTA => PT
-    *  $(_basename)     => e.g TPM0 => tpm, PTA => pt
-    *  $(_Class)        => e.g TPM2 => Tpm2
-    *  $(_Baseclass)    => e.g TPM0 => Tpm
-    *  $(_instance)     => e.g TPM0 => 0, PTA => A
--->
-
-<!--
-    * Template substitutions
-    *
-    * <li>%paramExpression            Parameters ORed together e.g. adcPretrigger|adcRefSel
-    * <li>%valueExpression            Numeric variable value e.g. 0x3
-    * <li>%symbolicExpression[index]  Symbolic formatted value e.g. AdcCompare_Disabled
-    * <li>%variable[index]            Variable name /ADC0/adc_sc2_acfe
-    * <li>%macro[index](value)        C register macro e.g. ADC_SC2_ACFGT(value)
-    * <li>%description[index]         Description from controlVar e.g. Compare Function Enable
-    * <li>%shortDescription[index]    Short description from controlVar e.g. Compare Function Enable
-    * <li>%tooltip[index]             Tool-tip from controlVar e.g. Each bit disables the GPIO function
-    * <li>%params                     Formatted parameter list for function
-    * <li>%paramDescription[index]    Tool-tip from controlVar formatted as param description @param ...
-    * <li>%paramType[index]           Based on typeName e.g. AdcCompare (or uint32_t)
-    * <li>%paramName[index]           Based on typeName with lower-case first letter adcCompare
-    * <li>%fieldAssignment            Expression of form '%register <= (%register & ~%mask)|%paramExpression
-    * <li>%maskingExpression          Based on variable etc. Similar to (%register&%mask)
-    * <li>%variable[index]            Variable name
-    * <li>%mask[index]                From &lt;mask&gt; or deduced from &lt;controlVarName&gt; e.g. "SIM_SOPT_REG_MASK" (_MASK is added)
-    * <li>%register[index]            Register associated with variable e.g. adc->APCTL1
-    * <li>%registerName[index]        Name of corresponding register (lowercase for Init()) e.g. apctl1
-    * <li>%registerNAME[index]        Name of corresponding register (uppercase for Init()) e.g. APCTL1 <br><br>
--->
-
 <!--  ____ TPM QUAD Controls ____________________________ -->
 
    <list key="quadDecoder" condition="tpm_qdctrl_quadmode_present&amp;&amp;_control"
@@ -332,6 +297,7 @@
       <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;(mode==Quad)"
          separator=","
          terminator=","
+         padToComments="40"
          variables="
             tpm_qdctrl_quadmode,
             tpm_sc_action,
@@ -346,7 +312,7 @@
          \t * Default initialisation value for $(_Class)QuadDecoder
          \t * This value is created from Configure.usbdmProject settings
          \t */
-         \tstatic constexpr QuadInit DefaultQuadInitValue = {%initExpression
+         \tstatic constexpr QuadInit DefaultQuadInitValue = {%initNonZeroValues
          \t};\n\n
       ]]></variableTemplate>
 

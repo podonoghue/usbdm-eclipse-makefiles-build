@@ -1,6 +1,8 @@
 /**
  * FATFS Example
+ * Basic example using FATFS routines directly
  */
+#include <string.h>
 #include <time.h>
 #include "ff.h"      /* Declarations of Fat_fs API */
 
@@ -9,6 +11,9 @@ using namespace USBDM;
 
 FATFS FatFs;      /* FatFs work area needed for each volume */
 FIL   Fil;        /* File object needed for each open file */
+
+// Change as needed
+using Led = RGB_Blue;
 
 /**
  * Create a file with given contents

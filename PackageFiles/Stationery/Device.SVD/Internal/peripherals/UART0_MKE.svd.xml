@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKE02Z2
       MKE02Z4
       MKE04Z4
@@ -579,9 +579,26 @@ RXEDGIF is cleared by writing a 1 to it</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="RXEDGIF" > <name>LBKDIF</name> <description>LIN Break Detect Interrupt Flag\n
+                  <field>
+                     <name>LBKDIF</name>
+                     <description>LIN Break Detect Interrupt Flag\n
 LBKDIF is set when LBKDE is set and a LIN break character is detected on the receiver input.\n
-LBKDIF is cleared by writing a 1 to it</description> <bitOffset>7</bitOffset> </field>
+LBKDIF is cleared by writing a 1 to it</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No Interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
                </fields>
             </register>
             <register>

@@ -1413,7 +1413,7 @@
       \t * Default initialisation value for ADC hardware triggers
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr AdcHardwareTriggerInit DefaultAdcHardwareTriggerInitValue = {%initExpression
+      \tstatic constexpr AdcHardwareTriggerInit DefaultAdcHardwareTriggerInitValue = {%initNonZeroValues
       \t};
       \t\n
    ]]></variableTemplate>

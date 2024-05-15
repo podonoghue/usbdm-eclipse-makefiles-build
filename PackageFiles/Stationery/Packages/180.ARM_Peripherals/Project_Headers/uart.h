@@ -25,12 +25,12 @@
 
 namespace USBDM {
 
-$(/UART/peripheral_h_definition:// $/UART/peripheral_h_definition not found)
 /**
  * @addtogroup UART_Group UART, Universal Asynchronous Receiver/Transmitter
  * @brief C++ Class allowing access to UART interface
  * @{
  */
+$(/UART/peripheral_h_definition:// $/UART/peripheral_h_definition not found)
 #if $(/UART/enablePeripheralSupport) // /UART/enablePeripheralSupport
 
 /**

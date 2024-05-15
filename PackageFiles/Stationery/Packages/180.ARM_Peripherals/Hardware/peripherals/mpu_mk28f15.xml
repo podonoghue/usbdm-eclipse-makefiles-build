@@ -819,6 +819,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;mpu_word3_vld[%(region)]"
          separator=","
          terminator=","
+         padToComments="25"
          variables="
                mpu_word0_srtaddr[%(region)],
                mpu_word1_endaddr[%(region)],

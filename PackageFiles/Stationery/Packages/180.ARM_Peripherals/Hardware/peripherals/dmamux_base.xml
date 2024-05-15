@@ -379,6 +379,7 @@
          variables="dmamux_chcfg_source[%(ch)],dmamux_chcfg_mode[%(ch)]"
          terminator=","
          separator=","
+         padToComments="35"
       ><![CDATA[
          \t   {\n
          \t   DmaChannelNum_%(ch),
@@ -390,6 +391,7 @@
          variables="dmamux_chcfg_low_source[%(ch)],dmamux_chcfg_mode[%(ch)]"
          terminator=","
          separator=","
+         padToComments="35"
       ><![CDATA[
          \t   {\n
          \t   // Low source
@@ -402,6 +404,7 @@
          variables="dmamux_chcfg_high_source[%(ch)],dmamux_chcfg_mode[%(ch)]"
          terminator=","
          separator=","
+         padToComments="35"
       ><![CDATA[
          \t   {\n
          \t   // High source

@@ -301,6 +301,7 @@
    <variableTemplate codeGenCondition="$(_BasicInfoGuard)"
       separator=","
       terminator=","
+      padToComments="50"
       variables="
             irq_sc_irqpe,
             irq_sc_irqmod,
@@ -311,7 +312,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues
       \t};\n\n
    ]]></variableTemplate>
 

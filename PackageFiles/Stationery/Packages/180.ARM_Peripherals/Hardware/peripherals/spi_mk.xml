@@ -1102,6 +1102,7 @@
       <variableTemplate
          separator=","
          terminator=","
+         padToComments="35"
          variables="
             speed[%(c)],
             spi_ctar_mode[%(c)],
@@ -1122,6 +1123,7 @@
    <variableTemplate
       separator=","
       terminator=","
+      padToComments="35"
       variables="
          spi_mcr_mtfe,
          spi_mcr_pcsse,
@@ -1137,7 +1139,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr SpiBasicInfo::Config DefaultConfigValue = {%initExpression
+      \tstatic constexpr SpiBasicInfo::Config DefaultConfigValue = {%initNonZeroValues
       \t\n
    ]]></variableTemplate>
    <for keys="pcs" dim="6" >

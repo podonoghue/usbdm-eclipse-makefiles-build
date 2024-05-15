@@ -538,6 +538,7 @@
    <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
+      padToComments="50"
       variables="
             acmp_cs_ace,acmp_cs_hyst,acmp_cs_acie,
             acmp_cs_acope,acmp_cs_acmod,
@@ -549,7 +550,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues
       \t};
       \t\n
    ]]></variableTemplate>

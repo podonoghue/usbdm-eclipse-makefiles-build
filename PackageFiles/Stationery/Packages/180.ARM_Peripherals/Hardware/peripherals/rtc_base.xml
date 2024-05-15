@@ -415,6 +415,7 @@
       <variableTemplate
          separator="|"
          terminator=";"
+         padToComments="35"
          variables="
             rtc_rar_ierr,
             rtc_rar_lrr,
@@ -1223,6 +1224,7 @@
    <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
+      padToComments="35"
       variables="
             rtc_tsr_tsr,
             rtc_tar_tar,
@@ -1266,7 +1268,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues
       \t};
       \t\n
    ]]></variableTemplate>

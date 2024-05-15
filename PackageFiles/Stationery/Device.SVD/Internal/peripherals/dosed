@@ -6,14 +6,14 @@ cd ${HOME_DIR}
 
 #exit
 
-FROM="<name>I2S<"
-TO="<name>I2S0<"
+FROM="<addressOffset>0xC"
+TO="<addressOffset>0x9"
 
 echo starting
 rm -r new
 mkdir new
 
-for filename in SIM*.svd.xml; do
+for filename in UART*.svd.xml; do
    echo sed  "s/${FROM}/${TO}/g" "${filename}" "new/${filename}"
    sed  "s/${FROM}/${TO}/g" "${filename}" >"new/${filename}"
 done

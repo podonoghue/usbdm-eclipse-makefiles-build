@@ -1580,9 +1580,10 @@
          <param type="BooleanVariable"        name="uart_c5_tdmae_present"          value="true"             key="/UART0/uart_c5_tdmae_present" />
          <param type="BooleanVariable"        name="uart_d_present"                 value="true"             key="/UART0/uart_d_present" />
          <param type="BooleanVariable"        name="uart_d_rt_present"              value="true"             key="/UART0/uart_d_rt_present" />
-         <param type="LongVariable"           name="uart_ma_dim"                    value="2"                key="/UART0/uart_ma_dim" />
-         <param type="BooleanVariable"        name="uart_ma_ma_present"             value="true"             key="/UART0/uart_ma_ma_present" />
-         <param type="BooleanVariable"        name="uart_ma_present"                value="true"             key="/UART0/uart_ma_present" />
+         <param type="BooleanVariable"        name="uart_ma1_ma1_present"           value="true"             key="/UART0/uart_ma1_ma1_present" />
+         <param type="BooleanVariable"        name="uart_ma1_present"               value="true"             key="/UART0/uart_ma1_present" />
+         <param type="BooleanVariable"        name="uart_ma2_ma2_present"           value="true"             key="/UART0/uart_ma2_ma2_present" />
+         <param type="BooleanVariable"        name="uart_ma2_present"               value="true"             key="/UART0/uart_ma2_present" />
          <param type="BooleanVariable"        name="uart_s1_fe_present"             value="true"             key="/UART0/uart_s1_fe_present" />
          <param type="BooleanVariable"        name="uart_s1_idle_present"           value="true"             key="/UART0/uart_s1_idle_present" />
          <param type="BooleanVariable"        name="uart_s1_nf_present"             value="true"             key="/UART0/uart_s1_nf_present" />

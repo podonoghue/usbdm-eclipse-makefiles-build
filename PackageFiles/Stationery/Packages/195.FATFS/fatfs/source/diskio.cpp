@@ -10,8 +10,19 @@
 
 #include "hardware.h"
 
-#define SDCARD_SPI   // Enable SD-CARD interface using SPI
-#define SDCARD_SDHC  // Enable SD-CARD interface using SDHC
+// Uncomment following lines to enable different interfaces
+// It will also be necessary to configure appropriate interfaces in
+// 'Configure.usbdmProject' to connect to the actual SDCARD interface:
+// - userSpi          SPI interface (as instance)
+// - sdhc             SDHC interface (as instance, PUPs on pins)
+// - sdhcCardDetect   GPIO for SDCARD detect (as instance)
+// - _gettimeofday()  RTC (or provide dummy routine) 
+//#define SDCARD_SPI   // Enable SD-CARD interface using SPI
+//#define SDCARD_SDHC  // Enable SD-CARD interface using SDHC
+
+#if !defined SDCARD_SPI && !defined SDCARD_SDHC
+#error "Enable the appropriate interfaces above"
+#endif
 
 #ifdef SDCARD_SPI
 #include "sd_spi.h"     // SD-CARD interface using SPI

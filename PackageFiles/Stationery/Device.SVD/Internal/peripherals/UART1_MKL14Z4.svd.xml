@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MKL14Z4
       MKL15Z4
       MKL16Z4
@@ -95,7 +95,7 @@ SBNS selects the number of stop bits present in a data frame</description>
                <fields>
                   <field>
                      <name>SBR</name>
-                     <description>Baud Rate Modulo Divisor</description>
+                     <description>Baud Rate Bits</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -133,12 +133,12 @@ SBNS selects the number of stop bits present in a data frame</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Parity disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Parity enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -200,7 +200,8 @@ Determines if idle character bit count starts after start bit or stop bit</descr
                   </field>
                   <field>
                      <name>RSRC</name>
-                     <description>Receiver Source Select\nSelect between loop-back and single-wire mode</description>
+                     <description>Receiver Source Select\n
+Select between loop-back and single-wire mode</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -218,13 +219,14 @@ Determines if idle character bit count starts after start bit or stop bit</descr
                   </field>
                   <field>
                      <name>UARTSWAI</name>
-                     <description>Stops in Wait Mode\nControls action in Wait Mode</description>
+                     <description>Stops in Wait Mode\n
+Controls action in Wait Mode</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Enabled in Wait mode</description>
+                           <description>Enable in Wait mode</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -248,7 +250,7 @@ Controls loop mode where transmitter output is internally connected to receiver 
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Loop mode\t output internally connected to input</description>
+                           <description>Loop mode\t where output internally connected to input</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -283,7 +285,7 @@ Controls loop mode where transmitter output is internally connected to receiver 
                   <field>
                      <name>RWU</name>
                      <description>Receiver Wakeup Control\n
-Setting RWU enables the wakeup function and inhibits further receiver interrupt requests.\n 
+Setting RWU enables the wakeup function and inhibits further receiver interrupt requests.\n
 Normally, hardware wakes the receiver by automatically clearing RWU</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -562,7 +564,7 @@ RXEDGIF is cleared by writing a 1 to it</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No interrupt</description>
+                           <description>No Interrupt</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -582,12 +584,12 @@ LBKDIF is cleared by writing a 1 to it</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No LIN break</description>
+                           <description>No Interrupt</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>LIN break detected</description>
+                           <description>Interrupt pending</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -642,7 +644,7 @@ LBKDIF is cleared by writing a 1 to it</description>
                   </field>
                   <field>
                      <name>TXDIR</name>
-                     <description>TxD Pin Direction in Single-Wire Mode</description>
+                     <description>Transmitter Pin Direction in Single-Wire mode</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>

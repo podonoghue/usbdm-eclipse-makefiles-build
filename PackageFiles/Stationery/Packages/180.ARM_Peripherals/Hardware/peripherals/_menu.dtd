@@ -17,7 +17,7 @@
                               deleteVariables|projectActionList|
                               title|constant|signals|variable|
                               rtcTimeOption|timeOption|intOption|floatOption|stringOption|binaryOption|choiceOption|bitmaskOption|irqOption|pinListOption|aliasOption|pinMapOption|
-                              clockSelectionOption|validate|equation|signal|clipboard|
+                              clockSelectionOption|validate|equation|signal|clipboard|bitfieldOption|
                               %template_items;" >
                   
 <!ENTITY % general_items    "dynamicSignalMapping|dialogue|graphic|category|categoryOption|aliasCategoryOption|if|for|%simple_items;" >
@@ -77,6 +77,12 @@
    <!-- Name of symbol to use for iteration - available as $(<name>) -->
    <!ATTLIST for iterationVar         CDATA       #IMPLIED>
 
+<!ELEMENT option EMPTY >
+   <!-- Identifies the option -->
+   <!ATTLIST option key     CDATA        #REQUIRED>
+   <!-- Value for the option -->
+   <!ATTLIST option value   CDATA        #IMPLIED>
+
 <!-- ____  printVar -->
 <!ELEMENT printVar EMPTY >
    <!-- Condition evaluated during parsing that enables processing of this option -->
@@ -100,6 +106,7 @@
 
 <!-- ____  continue -->
 <!ELEMENT continue EMPTY >
+   <!ATTLIST continue condition        CDATA        #IMPLIED>
 
 <!-- ____  if_clause_items -->
 <!ENTITY % if_clause_items "%general_items;|%structure_items;|break" >
@@ -1188,6 +1195,8 @@
 <!ELEMENT variableTemplate (#PCDATA)* >
    <!-- Where to place generated code -->
    <!ATTLIST variableTemplate where        %where_items;  #IMPLIED >
+   <!-- Where to place generated code -->
+   <!ATTLIST variableTemplate location     CDATA  #IMPLIED >
    <!-- 
    Where to place generated code<br>
       info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
@@ -1239,6 +1248,8 @@
 <!ELEMENT clockCodeTemplate (#PCDATA)* >
    <!-- Where to place generated code -->
    <!ATTLIST clockCodeTemplate where        %where_items;  #IMPLIED >
+   <!-- Where to place generated code -->
+   <!ATTLIST variableTemplate location     CDATA  #IMPLIED >
    <!-- 
    Where to place generated code<br>
       info  - Within peripheral info class in pinmapping.h (default if not provided)<br>

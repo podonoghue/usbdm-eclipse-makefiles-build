@@ -850,6 +850,7 @@
    <variableTemplate codeGenCondition="fullCodeSupport"
       separator=","
       terminator=","
+      padToComments="35"
       variables="
             wdog_stctrlh_wdogen,
             wdog_stctrlh_distestwdog,

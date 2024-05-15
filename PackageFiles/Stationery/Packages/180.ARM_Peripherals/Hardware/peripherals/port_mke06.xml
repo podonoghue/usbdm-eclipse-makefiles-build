@@ -489,6 +489,7 @@
             " >
       <variableTemplate codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
+         padToComments="50"
          linePadding="xxx" >
       <![CDATA[
          \t   /** Default value for %description */
@@ -505,6 +506,7 @@
             " >
       <variableTemplate codeGenCondition="enablePeripheralSupport"
          variables="%(r)"
+         padToComments="50"
          linePadding="xxx" >
       <![CDATA[
          \t   /** Default value for %description */
@@ -519,6 +521,7 @@
    <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
+      padToComments="50"
       variables="
             port_ioflt0_fltdiv1,
             port_ioflt0_fltdiv2,
@@ -551,7 +554,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues
       \t};\n\n
    ]]></variableTemplate>
 

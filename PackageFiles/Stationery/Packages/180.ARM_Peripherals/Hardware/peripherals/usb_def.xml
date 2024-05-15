@@ -254,6 +254,7 @@
    <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
+      padToComments="35"
       variables="
             usb_clk_recover_ctrl_tracking_mode,
             usb_clk_recover_ctrl_restart_ifrtrim_en,
@@ -264,7 +265,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr ClockRecoveryInit DefaultClockRecovery = {%initExpression
+      \tstatic constexpr ClockRecoveryInit DefaultClockRecovery = {%initNonZeroValues
       \t};
       \t\n
    ]]></variableTemplate>

@@ -1934,6 +1934,7 @@ XXXXXXXXXXXXXXXXXXXXXX
    <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
+      padToComments="40"
       variables="
             sdhc_xfertyp_command,sdhc_xfertyp_cmdtyp,
             sdhc_xfertyp_ac12en,sdhc_xfertyp_dmaen,
@@ -1946,7 +1947,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t * Default initialisation value for $(_Class) transfer information
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr TransferInit DefaultTransferInitValue = {%initExpression
+      \tstatic constexpr TransferInit DefaultTransferInitValue = {%initNonZeroValues
       \t};
       \t\n
    ]]>
@@ -2216,6 +2217,7 @@ XXXXXXXXXXXXXXXXXXXXXX
    <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
+      padToComments="40"
       variables="
             sdhc_proctl_wecrm,sdhc_proctl_wecins,sdhc_proctl_wecint,
             sdhc_proctl_iabg,sdhc_proctl_rwctl,sdhc_proctl_creq,
@@ -2238,7 +2240,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr Init DefaultInitValue = {%initExpression
+      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues
       \t};
       \t\n
    ]]>
