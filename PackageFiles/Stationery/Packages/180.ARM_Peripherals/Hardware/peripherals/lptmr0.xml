@@ -6,8 +6,7 @@
 
    <constant key="input_pins" condition="!input_pins" value='"CMP0;$(_NAME)_ALT1;$(_NAME)_ALT2"' />
 
-   <equation key="irq_pattern"                value='="^.*%b%i.*$"'       />
-   <equation key="irq_ClassHandler"           value='="%c%i::irqHandler"' />
+   <equation key="no_initvectors"             value="true"      />
    <equation key="irq_parameters"             value=""          />
    <equation key="irq_dummy_parameters"       value=""          />
    <equation key="irq_call"                   value=""          />

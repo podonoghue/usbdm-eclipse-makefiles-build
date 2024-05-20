@@ -449,7 +449,7 @@
          \t    * Enable interrupts in NVIC
          \t    */
          \t   %(static) void enableNvicInterrupts() %(const) {
-         \t      Info::enableNvicInterrupts(PitIrqNum(%(chan)));
+         \t      Info::enableNvicInterrupts(IrqNum(%(chan)));
          \t   }
          \t
          \t   /**
@@ -459,14 +459,14 @@
          \t    * @param[in]  nvicPriority   Interrupt priority
          \t    */
          \t   %(static) void enableNvicInterrupts(NvicPriority nvicPriority) %(const) {
-         \t      Info::enableNvicInterrupts(PitIrqNum(%(chan)), nvicPriority);
+         \t      Info::enableNvicInterrupts(IrqNum(%(chan)), nvicPriority);
          \t   }
          \t
          \t   /**
          \t    * Disable interrupts in NVIC
          \t    */
          \t   %(static) void disableNvicInterrupts() %(const) {
-         \t      Info::disableNvicInterrupts(PitIrqNum(%(chan)));
+         \t      Info::disableNvicInterrupts(IrqNum(%(chan)));
          \t   }
          \t\n
       ]]>
@@ -596,7 +596,7 @@
       \t *
       \t *  @tparam pitChannelNum Channel number
       \t */
-      \ttemplate<PitIrqNum pitIrqNum>
+      \ttemplate<IrqNum pitIrqNum>
       \tstatic void irqHandler() {
       \t
       \t   auto &channel = pit->CHANNEL[pitIrqNum];
@@ -1113,11 +1113,11 @@
       \t\n
    ]]></template>
    <template codeGenCondition="irqHandlingMethod" ><![CDATA[
-      \t   setCallback(PitIrqNum(channelNum), init.callbackFunction);
+      \t   setCallback(IrqNum(channelNum), init.callbackFunction);
       \t\n
    ]]></template>
    <template codeGenCondition="enablePeripheralSupport" condition="@_hardwareIrqCount>1" ><![CDATA[
-      \t   enableNvicInterrupts(PitIrqNum(channelNum), init.irqlevel);
+      \t   enableNvicInterrupts(IrqNum(channelNum), init.irqlevel);
       \t\n
    ]]></template>
    <template codeGenCondition="enablePeripheralSupport" ><![CDATA[

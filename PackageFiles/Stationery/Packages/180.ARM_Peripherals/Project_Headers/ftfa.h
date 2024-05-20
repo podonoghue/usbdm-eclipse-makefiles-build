@@ -23,6 +23,7 @@
 #define SOURCES_FLASH_H_
 
 #include "pin_mapping.h"
+#include "smc.h"
 
 namespace USBDM {
 /**

@@ -13,6 +13,7 @@
 
    <constant key = "disable_peripheral"      value = '"ftm->SC = FTM_SC_CLKS(0);"' type="String"  />
 
+   <equation key="no_initvectors"             value="true"      />
    <equation key="irq_parameters"             value=""  />
    <equation key="irq_dummy_parameters"       value=""  />
    <equation key="irq_call"                   value=""  />

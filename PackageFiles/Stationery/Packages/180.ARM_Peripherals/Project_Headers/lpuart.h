@@ -55,12 +55,13 @@ private:
    static constexpr Init initValue = {
       (LpuartEvent::ReceiveDataAction|
        LpuartEvent::TransmitEmptyAction) , // (lpuart_ctrl_interrupt) Event enables
+#ifdef LPUART_FIFO_TXFE      
       LpuartxIdleEmptyEnable_WhenIdleFor_3_Char , // (lpuart_fifo_rxiden) Receiver Idle Empty Enable - Data available and idle for 4 chars
       LpuartTxFifoEnable_Enabled , // (lpuart_fifo_txfe) Transmit FIFO Enable - Transmit FIFO enabled
       LpuartRxFifoEnable_Enabled , // (lpuart_fifo_rxfe) Receive FIFO Enable - Receive FIFO enabled
       LpuartReceiveWatermark(7) , // (lpuart_water_rxwater) Receive Watermark
       LpuartTransmitWatermark(7) , // (lpuart_water_txwater) Transmit Watermark
-      NvicPriority_Normal,  // (irqLevel) IRQ priority level - Normal
+#endif
    };
 
 public:

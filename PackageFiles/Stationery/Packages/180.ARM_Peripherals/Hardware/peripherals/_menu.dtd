@@ -76,6 +76,8 @@
    <!ATTLIST for stripSemicolon       (true)       #IMPLIED>
    <!-- Name of symbol to use for iteration - available as $(<name>) -->
    <!ATTLIST for iterationVar         CDATA       #IMPLIED>
+   <!-- Condition evaluated during iterations that enables processing of this iteration -->
+   <!ATTLIST for iterCondition        CDATA        #IMPLIED>
 
 <!ELEMENT option EMPTY >
    <!-- Identifies the option -->
@@ -185,6 +187,8 @@
 <!-- ____  category -->
 <!-- Expandable grouping -->
 <!ELEMENT category ((%general_items;)*) >
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST category condition     CDATA        #IMPLIED>
    <!-- Locks option in GUI -->
    <!ATTLIST category  locked       (false|true) #IMPLIED>
    <!ATTLIST category  xmlns:xi     CDATA        #IMPLIED>
@@ -1165,6 +1169,8 @@
    
 <!-- ____  template -->
 <!ELEMENT template (#PCDATA)* >
+   <!-- Where to place generated code -->
+   <!ATTLIST template location     CDATA  #IMPLIED >
    <!-- Where to place generated code -->
    <!ATTLIST template where        %where_items;  #IMPLIED >
    <!-- 

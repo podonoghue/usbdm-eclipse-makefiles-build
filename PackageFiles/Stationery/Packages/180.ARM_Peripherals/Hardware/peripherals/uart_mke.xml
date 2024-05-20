@@ -26,8 +26,6 @@
       <choice value="true"  name="Generate code for $(_NAME)"/>
    </binaryOption>
 
-   <equation key="irq_pattern"               value="^$(_NAME)_(.+)$;^$(_NAME)_$"  />
-   <equation key="irq_ClassHandler"          value="$(_Class)::irqHandler&lt;$(_Class)IrqNum_$1&gt;;$(_Class)::irqHandler" />
    <equation key="irq_parameters"            value=""     />
    <equation key="irq_dummy_parameters"      value=""     />
    <equation key="irq_call"                  value=""     />

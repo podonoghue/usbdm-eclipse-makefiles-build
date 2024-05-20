@@ -6,13 +6,14 @@
 
    <constant key="definitionsInHeader" value="true" type="Boolean" />
 
-   <equation key="suppressIrqHandler"        value="" />
-   <equation key="irq_parameters"            value="ErrorCode errorcode"  />
-   <equation key="irq_dummy_parameters"      value="ErrorCode"            />
-   <equation key="irq_call"                  value="E_NO_ERROR"           />
-   <equation key="generateDefault"           value="false"         />
-   <equation key="configureInStartupDefault" value="false"         />
-   <xi:include href="enablePeripheral.xml"  />
+   <equation key="no_initvectors"             value="true"      />
+   <equation key="suppressIrqHandler"         value="" />
+   <equation key="irq_parameters"             value="ErrorCode errorcode"  />
+   <equation key="irq_dummy_parameters"       value="ErrorCode"            />
+   <equation key="irq_call"                   value="E_NO_ERROR"           />
+   <equation key="generateDefault"            value="false"         />
+   <equation key="configureInStartupDefault"  value="false"         />
+   <xi:include href="enablePeripheral.xml"    />
 
    <!-- _____________ Class Declaration __________________ -->
    <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_Baseclass)BasicInfo"' />

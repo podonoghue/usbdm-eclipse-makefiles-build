@@ -4,24 +4,15 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <choiceOption key="irq_enum" condition="=_hardwareIrqCount>1"
-      valueFormat="%s"
-      hidden="true"
-      derived="true"
-      typeName="$(_Class)IrqNum"
-      description="$(_Class) Interrupt indices"
-      toolTip="Used to identify peripheral interrupt" >
-      <choice value="0"  enum="Alarm"    name="Real Time Clock Alarm" />
-      <choice value="1"  enum="Seconds"  name="Real Time Clock Seconds" />
-   </choiceOption>
-
-   <equation key="suppressIrqHandler"        value="" />
-   <equation key="irq_parameters"            value='uint32_t timeSinceEpoch'  />
-   <equation key="irq_dummy_parameters"      value='uint32_t'         />
-   <equation key="irq_call"                  value='timeSinceEpoch'   />
-   <equation key="generateDefault"           value="false"            />
-   <equation key="configureInStartupDefault" value="false"            />
-   <xi:include href="enablePeripheral.xml"  />
+   <!-- ____ Class Declaration ________ -->
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
+   <equation key="suppressIrqHandler"         value="" />
+   <equation key="irq_parameters"             value='uint32_t timeSinceEpoch'  />
+   <equation key="irq_dummy_parameters"       value='uint32_t'         />
+   <equation key="irq_call"                   value='timeSinceEpoch'   />
+   <equation key="generateDefault"            value="false"     />
+   <equation key="configureInStartupDefault"  value="false"     />
+   <xi:include href="enablePeripheral.xml"    />
 
    <title description="RTC Clocks"/>
 
@@ -32,8 +23,6 @@
       <aliasOption key="/SIM/system_erclk32k_clock"   optional="true" />
    </category>
 
-   <!-- ************* Class Declaration ****************** -->
-   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <binaryOption key="rtc_cr_osce" condition="rtc_cr_osce_present&amp;&amp;!/SIM/RtcForcing"
       enabledBy="enablePeripheralSupport"
@@ -51,8 +40,8 @@
       typeName="RtcOscEnable"
       baseType="uint16_t"
       locked="true"
-      derived="true"
       hidden="true"
+      derived="true"
       description="Enable RTC oscillator"
       toolTip="Enable OSC0 as 32kHz RTC oscillator">
       <choice value="0" enum="Disabled" name="Disabled" />
@@ -163,7 +152,7 @@
    <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" optional="true" locked="false" />
    <aliasOption key="/SIM/rtc_clkout"             optional="true" />
 
-   <!-- ************* ACCESS ****************** -->
+   <!-- ____ ACCESS ____ -->
 
    <title description="Access" />
 
@@ -448,11 +437,11 @@
       toolTip="This value is only used if the RTC is doing a full configuration" />
 
    <intOption key="rtc_tsr_tsr" condition="rtc_tsr_tsr_present"
-      hidden="true"
       ref="rtc_time_value+60*60*rtc_timezone"
+      hidden="true"
       derived="true"
       locked="true"
-      typeName="Time"
+      typeName="RtcTime"
       baseType="uint32_t"
       description="Time in Seconds"
       toolTip="When the time counter is enabled, the TSR is read only and increments once a second\n
@@ -472,10 +461,10 @@
       toolTip="This value is only used if the RTC is doing a full configuration" />
 
    <intOption key="rtc_tar_tar" condition="rtc_tar_tar_present"
-      hidden="true"
       ref="rtc_alarm_value+60*60*rtc_timezone"
+      hidden="true"
       derived="true"
-      typeName="Alarm"
+      typeName="RtcAlarm"
       baseType="uint32_t"
       description="Alarm time in seconds"
       toolTip="When the time counter is enabled, the SR[TAF] is set whenever the TAR[TAR]\n
@@ -504,7 +493,8 @@
 
    <intOption key="rtc_tpr_tpr" condition="rtc_tpr_tpr_present"
       hidden="true"
-      typeName="Prescale"
+      derived="true"
+      typeName="RtcPrescale"
       baseType="uint16_t"
       description="Time Prescaler Register"
       toolTip="When the time counter is enabled, the TPR is read only and increments every 32.768 kHz clock cycle.\n
@@ -516,7 +506,8 @@
 
    <intOption key="rtc_tcr_cic" condition="rtc_tcr_cic_present"
       hidden="true"
-      typeName="Compensation"
+      derived="true"
+      typeName="RtcCompensation"
       baseType="uint32_t"
       description="Compensation Interval Counter"
       toolTip="Current value of the compensation interval counter"
@@ -525,6 +516,7 @@
 
    <intOption key="rtc_tcr_tcv" condition="rtc_tcr_tcv_present"
       hidden="true"
+      derived="true"
       typeName="uint32_t"
       description="Time Compensation Value"
       toolTip="Current value used by the compensation logic for the present second interval.\n
@@ -538,6 +530,7 @@
 
    <binaryOption key="rtc_cr_swr" condition="rtc_cr_swr_present"
       hidden="true"
+      derived="true"
       typeName="RtcSoftwareReset"
       baseType="uint16_t"
       toolTip="Resets all RTC registers except for the SWR bit and the RTC_WAR and RTC_RAR registers.\n
@@ -547,10 +540,11 @@
       <choice name="Reset RTC apart from (SWR, WAR, RAR)"  value="1" enum="Assert" />
    </binaryOption >
 
-   <!-- ************* SR ****************** -->
+   <!-- ____ SR ____ -->
 
    <binaryOption key="rtc_sr_tce" condition="rtc_sr_tce_present"
       hidden="true"
+      derived="true"
       typeName="RtcCounterEnable"
       baseType="uint8_t"
       toolTip="When disabled the TSR register and TPR register are writeable, but do not increment.\n
@@ -562,7 +556,8 @@
 
    <binaryOption key="rtc_sr_taf" condition="rtc_sr_taf_present"
       hidden="true"
-      typeName="RtcTimeAlarmFLag"
+      derived="true"
+      typeName="RtcTimeAlarmFlag"
       baseType="uint8_t"
       toolTip="Set when alarm time reached"
       description="Time Alarm Flag" >
@@ -572,6 +567,7 @@
 
    <binaryOption key="rtc_sr_tof" condition="rtc_sr_tof_present"
       hidden="true"
+      derived="true"
       typeName="RtcTimerOverflowFlag"
       baseType="uint8_t"
       toolTip="Indicates time overflow has occurred"
@@ -582,6 +578,7 @@
 
    <binaryOption key="rtc_sr_tif" condition="rtc_sr_tif_present"
       hidden="true"
+      derived="true"
       typeName="RtcTimeInvalidFlag"
       baseType="uint8_t"
       toolTip="Indicates if the time is valid"
@@ -590,7 +587,7 @@
       <choice name="Invalid"     value="1" enum="Invalid" />
    </binaryOption >
 
-   <!-- ************* IER ****************** -->
+   <!-- ____ IER ____ -->
 
    <binaryOption key="rtc_ier_tsie" condition="rtc_ier_tsie_present"
       enabledBy="enablePeripheralSupport"
@@ -713,13 +710,11 @@
       </category>
    </category>
 
-   <template key="/MCG/Includes"  ><![CDATA[
-      #include "rtc.h"\n
-   ]]></template>
-
-   <template key="/MCG/Initialisation"  ><![CDATA[
-      \tUSBDM::$(_Class)::initialise();\n
-   ]]></template>
+<!--
+======================================================================================================
+     START BasicInfo Class
+======================================================================================================
+ -->
 
 
    <template condition="/SIM/rtc_independent || /SIM/rtc_mkw41z4" ><![CDATA[
@@ -747,7 +742,28 @@
       \t\n
    ]]></template>
 
-<!-- Setters and getters -->
+   <!-- BasicInfo Constructors  -->
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t// Pointer to $(_BASENAME) hardware instance
+      \tvolatile $(_Type) * const $(_basename);
+      \t\n
+   ]]></template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Constructor
+      \t *
+      \t * @param $(_basename) $(_BASENAME) hardware instance
+      \t */
+      \t$(_BasicInfo)(volatile $(_Type) * $(_basename)) : $(_basename)($(_basename)) {
+      \t}
+      \t\n
+   ]]></template>
+
+   <!-- ____ Getters and Setters ____________ -->
 
    <for keys="field           : set   : get   : clear : genCode                 : name"
         values="
@@ -793,10 +809,11 @@
          rtc_rar_tarr         : true  : true  : false : enableGettersAndSetters : AlarmRegRead;
          rtc_rar_tprr         : true  : true  : false : enableGettersAndSetters : PrescalerRegRead;
          rtc_rar_tsrr         : true  : true  : false : enableGettersAndSetters : SecondsRegRead" >
-      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
-      ><![CDATA[
+      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)" >
+      <![CDATA[
          \t/**
          \t * Set %description
+         \t * (%(field))
          \t *
          %paramDescription
          \t */
@@ -809,10 +826,11 @@
       ><![CDATA[
          \t/**
          \t * Get %description
+         \t * (%(field))
          \t *
          \t * @return %tooltip
          \t */
-         \tstatic %paramType get%(name)() {
+         \tstatic %returnType get%(name)() {
          \t   return %fieldExtract;
          \t}
          \t\n
@@ -863,30 +881,33 @@
    <!--   ____ Interrupt handling __________ -->
 
    <template codeGenCondition="irqHandlingMethod" >
-      <![CDATA[
+   <![CDATA[
       \t/**
-      \t * RTC interrupt handler -  Calls RTC callback
+      \t * $(_Class) interrupt handler
+      \t * Passes control to call-back function
       \t */
-      \ttemplate<RtcIrqNum rtcIrqNum>
+      \ttemplate<IrqNum rtcIrqNum>
       \tstatic void irqHandler() {
       \t
-      \t   if constexpr(rtcIrqNum == RtcIrqNum_Alarm) {
+      \t   if constexpr(rtcIrqNum == IrqNum_Alarm) {
       \t
       \t      // Execute call-back with alarm time
-      \t      sCallbacks[RtcIrqNum_Alarm](rtc->TAR);
+      \t      sCallbacks[IrqNum_Alarm](rtc->TAR);
       \t   }
-      \t   if constexpr(rtcIrqNum == RtcIrqNum_Seconds) {
+      \t   if constexpr(rtcIrqNum == IrqNum_Seconds) {
       \t
       \t      // Execute call-back with current time
-      \t      sCallbacks[RtcIrqNum_Alarm](rtc->TSR);
+      \t      sCallbacks[IrqNum_Alarm](rtc->TSR);
       \t   }
       \t}
       \t\n
    ]]>
    </template>
-
-<!--  ___ Init class ______________ -->
-
+<!--
+======================================================================================================
+     START BasicInfo::Init class
+======================================================================================================
+ -->
    <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
@@ -950,8 +971,8 @@
       \t *   RtcRarTprr_ReadsAllowed ,             // Time Prescaler Register Read - Reads Allowed
       \t *   RtcRarTsrr_ReadsAllowed,              // Time Seconds Register Read - Reads Allowed
       \t *
-      \t *   RtcIrqNum_Seconds, rtcSecondsCallback,// Call-back to execute on seconds event
-      \t *   RtcIrqNum_Alarm,   rtcAlarmCallback,  // Call-back to execute on alarm event
+      \t *   Rtc::IrqNum_Seconds, rtcSecondsCallback,// Call-back to execute on seconds event
+      \t *   Rtc::IrqNum_Alarm,   rtcAlarmCallback,  // Call-back to execute on alarm event
       \t *   NvicPriority_Low,                     // Priority for interrupt - Low
       \t *
       \t *   // Optional base value to start with (must be last parameter)
@@ -963,6 +984,13 @@
       \t * @endcode
       \t */
       \tclass Init {
+      \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(Types...) = delete;
       \t
       \tpublic:
       \t   /**
@@ -978,7 +1006,7 @@
    ]]>
    </template>
 
-<!-- ____ Init class Member variables ________ -->
+   <!-- ____ BasicInfo::Init class Member variables ________ -->
 
    <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)" >
    <![CDATA[
@@ -1005,59 +1033,14 @@
                              rtc_rar_tprr,rtc_rar_tsrr                         : 0       ">
       <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
-         linePadding="xxx"
-      ><![CDATA[
+         linePadding="xxx" >
+      <![CDATA[
          %multilineDescription
          \t   %(type) %registerName = %(init);\n\n
       ]]></variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
-      variables="/PCR/nvic_irqLevel,irqLevel"
-   ><![CDATA[
-      \t   /// %description
-      \t   %paramType %registerName0 = %defaultValue;
-      \t\n
-   ]]></variableTemplate>
-
-<!-- ____ Init class Constructors ____________ -->
-
-   <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
-      linePadding="xxx"
-   ><![CDATA[
-      \t   /**
-      \t    * Constructor for Clock call-back (alarm or tick)
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      \t    * @param alarm_CallbackFunction   Real Time Clock Alarm call-back
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(RtcIrqNum rtcIrqNum, CallbackFunction callbackFunction, Types... rest) : Init(rest...) {
-      \t
-      \t      callbackFunctions[rtcIrqNum] = callbackFunction;
-      \t   }\n\n
-   ]]></template>
-
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
-      variables="/PCR/nvic_irqLevel"
-      linePadding="xxx"
-   ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      %registerName = %paramExpression;
-      \t   }\n\n
-   ]]></variableTemplate>
+   <!-- ____ BasicInfo::Init class Constructors ____________ -->
 
    <for keys="r"
       values="
@@ -1081,7 +1064,7 @@
       <![CDATA[
          \t   /**
          \t    * Constructor for %description
-         \t    * (%(r))
+         \t    * (%variables)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -1098,45 +1081,103 @@
       </variableTemplate>
    </for>
 
-<!-- ____ Init class Configure method ____ -->
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t}; // class $(_BasicInfo)::Init
+      \t\n
+   ]]>
+   </template>
 
-   <template codeGenCondition="enablePeripheralSupport" >
+<!--
+======================================================================================================
+     END BasicInfo::Init class
+======================================================================================================
+ -->
+<!--
+======================================================================================================
+     START BasicInfo::InitVectors class
+======================================================================================================
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)" >
    <![CDATA[
       \t/**
-      \t * Configure with default settings.
-      \t * Configuration determined from Configure.usbdmProject
+      \t * Class used to do initialisation of the $(_Baseclass)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t * Parameters available may vary with device - see $(_Class)::DefaultInitValue for relevant example.
+      \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
       \t */
-      \tstatic void defaultConfigure() {
+      \ttemplate <typename EnumType, size_t NumVectors>
+      \tclass InitVectors : public Init {
       \t
-      \t   // Update settings if needed
-      \t   configure(DefaultInitValue, false);
-      \t}
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr InitVectors(const InitVectors &other) = default;
       \t
+      \t   /**
+      \t    * Other constructors are inherited
+      \t    *
+      \t    * @tparam Types
+      \t    * @param rest
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr InitVectors(Types... rest) : Init(rest...) {
+      \t   }
+      \t
+      \t   /**
+      \t    * Initialise Interrupt callbacks
+      \t    *
+      \t    * @tparam Types
+      \t    * @param rest         Remaining parameters
+      \t
+      \t    * @param irqNum       Interrupt number
+      \t    * @param nvicPriority Priority for the handler
+      \t    * @param callback     Callback function to use
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr InitVectors(EnumType irqNum, NvicPriority nvicPriority, CallbackFunction callback, Types... rest) : InitVectors(rest...) {
+      \t      priorities[irqNum]  = nvicPriority;
+      \t      callbacks[irqNum]   = callback;
+      \t   }
+      \t
+      \t   /**
+      \t    * Information describing the priority and callback function for each interrupt
+      \t    */
+      \t    CallbackFunction callbacks[NumVectors]  = {};
+      \t    NvicPriority     priorities[NumVectors] = {};
+      \t
+      \t}; // class $(_BasicInfo)::InitVectors
+      \t\n
+   ]]>
+   </template>
+
+======================================================================================================
+     END BasicInfo::InitVectors class
+======================================================================================================
+ -->
+
+   <!-- ____ BasicInfo class Configure methods ____ -->
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      linePadding="xxx" >
+   <![CDATA[
       \t/**
       \t * Configure $(_BASENAME) from values specified in init
+      \t * This routine does not configure pins or interrupt handlers
       \t *
-      \t * @param init        Class containing initialisation values
+      \t * @param $(_basename)           Hardware instance pointer
+      \t * @param init Class containing initialisation values
       \t * @param fullConfig  Whether to do full configuration
       \t */
-      \tstatic void configure(const Init &init, bool fullConfig) {
+      \tstatic void configure(
+      \t               volatile $(_Type) *$(_basename),
+      \t               const Init &init,
+      \t               bool fullConfig) {
       \t
-      \t   // Enable peripheral clock
-      \t   enableClock();
-      \t
-      \t   configureAllPins();
-      \t\n
-   ]]></template>
-   <template codeGenCondition="irqHandlingMethod" >
-   <![CDATA[
-      \t   // Set call-backs
-      \t   setCallback(RtcIrqNum_Alarm, init.callbackFunctions[RtcIrqNum_Alarm]);
-      \t   enableNvicInterrupts(RtcIrqNum_Alarm, init.irqlevel);
-      \t   setCallback(RtcIrqNum_Seconds, init.callbackFunctions[RtcIrqNum_Seconds]);
-      \t   enableNvicInterrupts(RtcIrqNum_Seconds, init.irqlevel);
-      \t\n
-   ]]></template>
-   <template codeGenCondition="enablePeripheralSupport" >
-   <![CDATA[
       \t   if (fullConfig || ((rtc->SR&RTC_SR_TIF_MASK) != 0)) {
       \t      // RTC not running yet or invalid - re-initialise
       \t\n
@@ -1148,15 +1189,16 @@
             rtc_cr_scp,rtc_cr_clko,rtc_cr_osce,
             rtc_cr_wps,rtc_cr_um,rtc_cr_sup,
             rtc_cr_wpe                            : %configRegAssignment               " >
-      <variableTemplate variables="%(var)" codeGenCondition="enablePeripheralSupport"
-      linePadding="xxxxxx"
-      ><![CDATA[
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      variables="%(var)"
+      linePadding="xxxxxx" >
+      <![CDATA[
          \t
          \t%multilineDescription
          \t      %(statement);\n
       ]]></variableTemplate>
    </for>
-   <template codeGenCondition="enablePeripheralSupport" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t
       \t      // Wait startup time
@@ -1182,109 +1224,236 @@
             rtc_ier_tiie                          : %configRegAssignment               ;
             rtc_lr_lrl,rtc_lr_srl,rtc_lr_crl,
             rtc_lr_tcl                            : %configRegAssignment               " >
-      <variableTemplate variables="%(var)" codeGenCondition="enablePeripheralSupport"
-      linePadding="xxxxxx"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         variables="%(var)"
+         linePadding="xxxxxx"
       ><![CDATA[
          \t
          \t%multilineDescription
          \t      %(statement);\n
       ]]></variableTemplate>
    </for>
-   <template codeGenCondition="enablePeripheralSupport" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t   }
       \t}
-      \t
+      \t\n
+   ]]>
+   </template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
       \t/**
       \t * Configure $(_BASENAME) from values specified in init
+      \t * This routine does not configure pins or interrupt handlers
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tvoid configure(const Init &init, bool fullConfig) const {
+      \t
+      \t   configure($(_basename), init, fullConfig);
+      \t}
+      \t\n
+   ]]>
+   </template>
+<!--
+======================================================================================================
+     END BasicInfo class
+======================================================================================================
+ -->
+<!--
+======================================================================================================
+     START Info class
+======================================================================================================
+ -->
+ <!-- 
+   <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)"
+      variables="irq_enum"
+      immediateVariables="_hardwareIrqCount"
+      linePadding="xxx" >
+   <![CDATA[
+      \t/**
+      \t * Information describing the priority and callback function for each interrupt
+      \t */
+      \tusing Init = $(_BasicInfo)::InitVectors<%returnType0, $(_hardwareIrqCount)>;
+      \t\n
+   ]]></variableTemplate>
+
+   <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)"
+      linePadding="xxx" >
+   <![CDATA[
+      \t/**
+      \t * Information describing the priority and callback function for each interrupt
+      \t */
+      \tusing Init = $(_BasicInfo)::InitVectors<int, 1>;
+      \t\n
+   ]]></template>
+  -->
+
+   <!-- ____ Info constructors ________ -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/*
+      \t *   Default Constructor
+      \t */
+      \t$(_Info)() : $(_BasicInfo)($(_basename)) {
+      \t   defaultConfigure();
+      \t}
+      \t
+      \t/*
+      \t *   Constructor
+      \t */
+      \t$(_Info)(const Init &init) : $(_BasicInfo)($(_basename)) {
+      \t   configure(init);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <!-- Init configure methods -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic void defaultConfigure() {
+      \t
+      \t   // Only update settings if needed
+      \t   configure(DefaultInitValue, false);
+      \t}
+      \t
+      \t/**
+      \t * Configure RTC from values specified in init
       \t * Full configuration is only done if RTC is not already running
       \t *
       \t * @param init Class containing initialisation values
       \t */
-      \tstatic void configureIfNeeded(const Init &init) {
+      \tinline void configureIfNeeded(const Init &init) const {
       \t
+      \t   // Only update settings if needed
       \t   configure(init, false);
       \t}
       \t
       \t/**
-      \t * Configure $(_BASENAME) from values specified in init
+      \t * Configure RTC from values specified in init
       \t *
       \t * @param init Class containing initialisation values
       \t */
       \tstatic void configure(const Init &init) {
       \t
+      \t   // Update settings
       \t   configure(init, true);
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init        Class containing initialisation values
+      \t * @param fullConfig  Whether to do full configuration
+      \t */
+      \tstatic void configure(const Init &init, bool fullConfig) {
+      \t
+      \t   // Enable peripheral
+      \t   enable();
+      \t\n
+   ]]>
+   </template>
+   <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)" >
+   <![CDATA[
+      \t   // Configure call-back
+      \t   if (init.callbacks[0] != nullptr) {
+      \t      setCallback(init.callbacks[0]);
+      \t      enableNvicInterrupts(init.priorities[0]);
+      \t   }
+      \t\n
+   ]]>
+   </template>
+   <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount>1)"
+      variables="irq_enum"
+      immediateVariables="_hardwareIrqCount">
+   <![CDATA[
+      \t   for(int index=0; index<$(_hardwareIrqCount); index++) {
+      \t      if (init.callbacks[index] != nullptr) {
+      \t         // Configure call-back
+      \t         setCallback(%returnType0(index), init.callbacks[index]);
+      \t         enableNvicInterrupts(%returnType0(index), init.priorities[index]);
+      \t      }
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t   $(_BasicInfo)::configure($(_basename), init, fullConfig);
       \t}
       \t\n
    ]]>
    </template>
 
-<!--   Default Initialisation value -->
+   <!-- ____  Default Initialisation value ____ -->
 
-   <variableTemplate codeGenCondition="enablePeripheralSupport"
-      separator=","
-      terminator=","
-      padToComments="35"
-      variables="
-            rtc_tsr_tsr,
-            rtc_tar_tar,
-            rtc_tcr_cir,
-            rtc_tcr_tcr,
-            rtc_cr_scp,
-            rtc_cr_clko,
-            rtc_cr_osce,
-            rtc_cr_wps,
-            rtc_cr_um,
-            rtc_cr_sup,
-            rtc_cr_wpe,
-            rtc_lr_lrl,
-            rtc_lr_srl,
-            rtc_lr_crl,
-            rtc_lr_tcl,
-            rtc_ier_wpon,
-            rtc_ier_tsie,
-            rtc_ier_taie,
-            rtc_ier_toie,
-            rtc_ier_tiie,
-            rtc_war_ierw,
-            rtc_war_lrw,
-            rtc_war_srw,
-            rtc_war_crw,
-            rtc_war_tcrw,
-            rtc_war_tarw,
-            rtc_war_tprw,
-            rtc_war_tsrw,
-            rtc_rar_ierr,
-            rtc_rar_lrr,
-            rtc_rar_srr,
-            rtc_rar_crr,
-            rtc_rar_tcrr,
-            rtc_rar_tarr,
-            rtc_rar_tprr,
-            rtc_rar_tsrr
-         "
-   ><![CDATA[
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
       \t/**
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues
+      \tstatic constexpr $(_BasicInfo)::Init DefaultInitValue = {\n
+   ]]>
+   <!-- Interrupt information -->
+   </template>
+   <!-- for keys="irqName" values="=_hardwareIrqNums">
+      <equation key="irqEnum" value='=ReplaceAll("%(irqName)","^(.*?)_(.*)_IRQn$","IrqNum_$2")' />
+      <equation key="var"     value='=ReplaceAll("%(irqName)","^(.*?)_(.*)_IRQn$","irqLevel_$2")' />
+      <print text="(irqName) = %(irqName)"/>
+      <printVar key="irqEnum" />
+      <printVar key="var" />
+      <variableTemplate where="info" codeGenCondition='$(_InfoIrqGuard)&amp;&amp;!IsZero(@var)'
+         variables='=var'
+         separator=","
+         terminator=","
+         padToComments="40"
+         immediateVariables="irqEnum" >
+      <![CDATA[
+         \t   $(irqEnum), %initExpression,
+         \t   unhandledCallback,\n
+      ]]></variableTemplate>
+   </for -->
+   <variableTemplate where="info" codeGenCondition="$(_InfoGuard)"
+      separator=","
+      terminator=","
+      padToComments="40"
+      variables="
+            rtc_tsr_tsr,
+            rtc_tar_tar,
+            rtc_tcr_cir,rtc_tcr_tcr,
+            rtc_cr_scp,rtc_cr_clko,rtc_cr_osce,rtc_cr_wps,rtc_cr_um,rtc_cr_sup,rtc_cr_wpe,
+            rtc_lr_lrl,rtc_lr_srl,rtc_lr_crl,rtc_lr_tcl,
+            rtc_ier_wpon,rtc_ier_tsie,rtc_ier_taie,rtc_ier_toie,rtc_ier_tiie,
+            rtc_war_ierw,rtc_war_lrw,rtc_war_srw,rtc_war_crw,rtc_war_tcrw,rtc_war_tarw,rtc_war_tprw,rtc_war_tsrw,
+            rtc_rar_ierr,rtc_rar_lrr,rtc_rar_srr,rtc_rar_crr,rtc_rar_tcrr,rtc_rar_tarr,rtc_rar_tprr,rtc_rar_tsrr
+         " >
+   <![CDATA[
+      \t%initNonZeroValues
       \t};
       \t\n
-   ]]></variableTemplate>
-
-
-
-   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
-   <![CDATA[
-      \t}; // class $(_BasicInfo)::Init
-      \t\n
    ]]>
-   </template>
+   </variableTemplate>
+<!--
+======================================================================================================
+     END Info class
+======================================================================================================
+ -->
+<!--
+======================================================================================================
+     Common
+======================================================================================================
+ -->
 
-   <!-- ************* Common ****************** -->
-
-   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class representing $(_NAME)
@@ -1305,7 +1474,15 @@
       <copy source="Snippets/rtc-example.cpp"    target="Snippets/rtc-example.cpp"   overwrite="true"  derived="true" />
    </projectActionList>
 
-   <!-- ************* Startup ****************** -->
+   <!-- ____ Startup ____ -->
+
+   <template key="/MCG/Includes"  >
+      <![CDATA[#include "$(_basename).h"\n
+   ]]></template>
+
+   <template key="/MCG/Initialisation"  ><![CDATA[
+      \tUSBDM::$(_Class)::defaultConfigure();\n
+   ]]></template>
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
@@ -1317,7 +1494,7 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <!-- ************* SIM configuration ****************** -->
+   <!-- ____ SIM configuration ____ -->
    <category name="Advanced" description="SIM configuration">
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
       <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
@@ -1325,6 +1502,7 @@
       </for>
    </category>
 
+   <!--  ____ Signal mapping ____ -->
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 
 </fragment>

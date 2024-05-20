@@ -333,7 +333,7 @@
          \t * Default value for FMC::FlashBank%(n)Init
          \t * This value is created from Configure.usbdmProject settings (Peripheral Parameters->FMC)
          \t */
-         \tstatic constexpr FmcInfo::FlashBank%(n)Init DefaultFlashBank%(n)InitValue {%initNonZeroValues
+         \tstatic constexpr FmcInfo::FlashBank%(n)Init DefaultFlashBank%(n)InitValue {%initExpression
          \t};
          \t\n
       ]]></variableTemplate>

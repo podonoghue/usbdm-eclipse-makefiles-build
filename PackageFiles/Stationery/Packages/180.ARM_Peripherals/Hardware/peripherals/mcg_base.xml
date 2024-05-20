@@ -4,6 +4,7 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
+   <equation key="no_initvectors"             value="true"      />
    <equation key="irq_parameters"             value=""          />
    <equation key="irq_dummy_parameters"       value=""          />
    <equation key="irq_call"                   value=""          />

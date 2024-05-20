@@ -4,24 +4,37 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Power Timer">
 
-   <xi:include href="default_instance.xml"/>
-   
+   <constant key="input_pins" condition="!input_pins" value='"CMP0;$(_NAME)_ALT1;$(_NAME)_ALT2"' />
+
+   <equation key="irq_parameters"             value=""          />
+   <equation key="irq_dummy_parameters"       value=""          />
+   <equation key="irq_call"                   value=""          />
+   <equation key="generateDefault"            value="false"     />
+   <equation key="configureInStartupDefault"  value="false"     />
+   <xi:include href="enablePeripheral.xml"    />
+   <title />
+
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
+   <!-- ____ Class Declaration ________ -->
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
+
    <aliasOption key="/PCC/pcc_lptmr$(_instance)" locked="false" />
 
    <xi:include href="mapPinsOption.xml"/>
 
-   <intOption key="minimumResolution" 
+   <intOption key="minimumResolution"
       description="Minimum resolution for time interval setting"
       toolTip="This value is used as a minimum value check when setting the time interval.\n
                This is to prevent setting intervals with low resolution"
-      value="100" min="1" 
+      value="100" min="1"
    />
 
    <template><![CDATA[
       \t//! Minimum resolution for time interval setting
       \tstatic constexpr uint32_t minimumResolution = $(minimumResolution);\n\n
    ]]></template>
-   
+
    <choiceOption key="lptmr_psr_pcs" description="Clock Source"
       typeName="LptmrClockSel"
       toolTip="Low Power Timer clock source">
@@ -31,8 +44,8 @@
       <choice value="3" name="Clock from PCC_LPTMR0 mux (PCC)"                     enum="PccClk"     />
    </choiceOption>
 
-   <choiceOption key="lptmr_psr_prescaler" 
-      description="Prescaler Value" 
+   <choiceOption key="lptmr_psr_prescaler"
+      description="Prescaler Value"
       valueFormat="LPTMR_PSR_PBYP(%s),LPTMR_PSR_PRESCALE(%s)"
       typeName="LptmrPrescale"
       toolTip="Configures the size of the Prescaler in Time Counter mode or\n
@@ -55,52 +68,52 @@
       <choice value="0,14" name="Prescaler = 32768, 16384 clock glitch filter" enum="DivBy32768"         />
       <choice value="0,15" name="Prescaler = 65536, 32768 clock glitch filter" enum="DivBy65536"         />
    </choiceOption>
-   
-   <floatOption key="clockFrequency" 
+
+   <floatOption key="clockFrequency"
       locked="true"
       description="Frequency of timer clock"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
       units="Hz"/>
-      
-   <floatOption key="clockPeriod" 
+
+   <floatOption key="clockPeriod"
       locked="true"
       description="Period of timer clock"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
       units="s"/>
-      
-   <floatOption key="maximumPeriod" 
+
+   <floatOption key="maximumPeriod"
       locked="true"
       description="Maximum period of timer"
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
       units="s"/>
-    
+
    <template><![CDATA[
       \t//! Default Timer Compare value
       \tstatic constexpr uint32_t cmr = $(lptmr_cmr);\n\n
    ]]></template>
-   
-   <variableTemplate 
-      variables="lptmr_psr_pcs,lptmr_psr_prescaler"     
+
+   <variableTemplate
+      variables="lptmr_psr_pcs,lptmr_psr_prescaler"
    ><![CDATA[
       \t//! Default PSR value
       \tstatic constexpr uint32_t psr = %initExpression\n\n
    ]]></variableTemplate>
-   
+
    <binaryOption key="lptmr_csr_tms" description="Timer Mode Select"
       toolTip="Configures the mode of the LPTMR">
       <choice value="0" name="Time Counter mode" />
       <choice value="1" name="Pulse Counter mode" />
    </binaryOption>
-   
+
    <binaryOption key="lptmr_csr_tie" description="Timer interrupt enable"
       toolTip="Enables interrupts">
       <choice value="0" name="Interrupt disabled" />
       <choice value="1" name="Interrupt enabled" />
    </binaryOption>
-   
+
    <choiceOption key="lptmr_csr_tps" description="Timer Pin Select for Pulse Counter mode"
       toolTip="Configures the input source to be used in Pulse Counter mode.\n
       The input connections vary by device">
@@ -109,7 +122,7 @@
       <choice value="2" name="LPTMR_ALT2 pin" />
       <choice value="2" name="LPTMR_ALT3 pin" />
    </choiceOption>
-   
+
    <binaryOption key="lptmr_csr_tpp" description="Timer Pin Polarity for Pulse Counter mode"
       toolTip="Configures the polarity of the input source in Pulse Counter mode">
       <choice value="0" name="Active-high source, rising-edge increments lptmr_cnr" />
@@ -122,39 +135,36 @@
       <choice value="0" name="lptmr_cnr is reset whenever lptmr_csr_tcf is set" />
       <choice value="1" name="lptmr_cnr is reset on overflow" />
    </binaryOption>
-   
+
    <template><![CDATA[
       \t//! Default CSR value
-      \tstatic constexpr uint32_t csr = 
+      \tstatic constexpr uint32_t csr =
       \t   LPTMR_CSR_TIE($(lptmr_csr_tie))|
       \t   LPTMR_CSR_TMS($(lptmr_csr_tms))|
       \t   LPTMR_CSR_TFC($(lptmr_csr_tfc))|
       \t   LPTMR_CSR_TPP($(lptmr_csr_tpp))|
       \t   LPTMR_CSR_TPS($(lptmr_csr_tps));\n\n
    ]]></template>
-   
+
    <intOption key="lptmr_cmr" description="Timer Compare Register"
       toolTip="Default value for comparison\n
       lptmr_csr_tcf flag is set when lptmr_cnr equals the value in the lptmr_cmr and lptmr_cnr increments. \n
       The hardware trigger will assert until the next time the lptmr_cnr increments. \n
-      If lptmr_csr_tfc=0 the lptmr_cnr will roll-over to zero" 
+      If lptmr_csr_tfc=0 the lptmr_cnr will roll-over to zero"
       value="65535" min="1" max="65535" />
-      
+
    <floatOption key="lptmr_cmrPeriod"     description="Timer Compare Interval"
       toolTip="This is determined from lptmr_cmr register and clock frequency.\n
       When lptmr_csr_tfc=0 this is the lptmr_cnr roll-over period"
       derived="true"
       min="0" units="s"/>
-    
+
    <floatOption key="lptmr_cmrFrequency"  description="Timer Compare Frequency"
       toolTip="This is determined from lptmr_cmr register and clock frequency.\n
       When lptmr_csr_tfc=0 this is the lptmr_cnr roll-over frequency"
       derived="true"
       min="0" units="Hz"/>
-  
-   <stringOption key="irq_pattern"        locked="true" value="^.*%b%i.*$" hidden="true" />
-   <stringOption key="irq_ClassHandler"   locked="true" value="%c%i::irqHandler" hidden="true" />
-   <xi:include href="irqOptionSubstituted.xml"/>
+
 
    <!-- validate
       class="net.sourceforge.usbdm.deviceEditor.validators.LptmrValidate">
@@ -166,7 +176,7 @@
       <copy source="Snippets/lptmr-reaction-time.cpp"          target="Snippets/lptmr-reaction-time.cpp"             overwrite="true" derived="true" />
       <copy source="Snippets/timer-inline-handler-example.cpp" target="Snippets/timer-inline-handler-example.cpp"   overwrite="true" derived="true" />
    </projectActionList>
-      
+
    <template><![CDATA[
       \t/**
       \t * Get input clock frequency
@@ -183,7 +193,7 @@
       \t   case LPTMR_PSR_PCS(3): return PccInfo::getLptmr0Frequency();
       \t   }
       \t}
-      
+
       \t/**
       \t * Get clock frequency
       \t *
@@ -197,7 +207,7 @@
       \t   }
       \t   return freq/(1<<(((lptmr->PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
       \t}
-      
+
       \t/**
       \t * Get clock frequency
       \t *
@@ -212,7 +222,7 @@
       \t   return freq/(1<<(((lptmr->PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
       \t}\n\n
    ]]></template>
-   
+
    <template key="/LPTMR/declarations"  ><![CDATA[
       \t/**
       \t * Class representing LPTMR1
@@ -241,7 +251,7 @@
       \t * @endcode
       \t */
       \tusing $(_Class) = $(_Baseclass)Base_T<$(_Info)>;
-      
+
       \t/**
       \t * MACRO defining the start of a interrupt handler for a LPTMR
       \t * This will override the handler incorporated within the LPTMR class.
@@ -255,9 +265,9 @@
       \t */
       \t#define LPTMR$(_instance)_HANDLER() template<> void $(_Class)::irqHandler()\n\n
    ]]></template>
-      
+
    <xi:include href="clockOption.xml"/>
 
    <signals/>
-   
+
 </peripheralPage>

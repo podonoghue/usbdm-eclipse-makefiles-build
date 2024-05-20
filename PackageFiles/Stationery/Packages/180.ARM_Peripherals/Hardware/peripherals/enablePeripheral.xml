@@ -4,7 +4,13 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
+<!--====================================================================================================== -->
 <!-- GENERAL SETTINGS -->
+<!-- Generates: -->
+<!--  $(_InfoGuard)       = enablePeripheralSupport           = enable support for this instance -->
+<!--  $(_BasicInfoGuard)  = /STRUCTNAME/generateSharedInfo    = OR of enablePeripheralSupport for instances using same STRUCTNAME -->
+<!--  $(_CommonInfoGuard) = /BASENAME/enablePeripheralSupport = OR of enablePeripheralSupport for all instances of peripheral -->
+<!--====================================================================================================== -->
 
    <equation key="_debugcode" value="false" />
 
@@ -12,12 +18,6 @@
 
    <!-- _________ Peripheral support _________________  -->
 
-   <!--
-      Generates:
-         $(_InfoGuard)       = enablePeripheralSupport           = enable support for this instance
-         $(_BasicInfoGuard)  = /STRUCTNAME/generateSharedInfo    = OR of enablePeripheralSupport for instances using same STRUCTNAME
-         $(_CommonInfoGuard) = /BASENAME/enablePeripheralSupport = OR of enablePeripheralSupport for all instances of peripheral
-   -->
 
    <!-- Enable for this peripheral -->
    <binaryOption key="enablePeripheralSupport" condition="!enablePeripheralSupport"
@@ -41,7 +41,6 @@
             value='=_enable+"||/%(instance)/enablePeripheralSupport"'
          />
       </for>
-      <!-- stringOption key="yyy" value="=_enable"/ -->
 
       <!-- Enable for shared code needed by all instances of peripheral -->
       <binaryOption key="$(_BasicInfoGuard)"
@@ -155,7 +154,9 @@
       ]]></template>
    </if>
 
-<!-- ___________ INTERRUPTS ____________________ -->
+<!--====================================================================================================== -->
+<!--  INTERRUPTS -->
+<!--====================================================================================================== -->
 
    <!-- Only create if device has interrupts -->
    <if condition="_hardwareIrqCount" >
@@ -183,9 +184,32 @@
       <!-- If not explicitly controlled, IRQ options are always enabled -->
       <constant key="irqEnable"        type="Boolean" value="true"  condition="!irqEnable"/>
 
-      <!-- Default IRQ vector patterns if none specified -->
-      <equation key="irq_pattern"       value="^$(_NAME)_(.+)$;^$(_NAME)$"                                            condition="!irq_pattern" />
-      <equation key="irq_ClassHandler"  value="$(_Class)::irqHandler&lt;$(_Class)IrqNum_$1&gt;;$(_Class)::irqHandler" condition="!irq_ClassHandler" />
+      <if condition='!irq_pattern' >
+         <if condition='=(_hardwareIrqCount==1)' >
+            <equation key="irq_pattern"       value='=ReplaceAll(_hardwareIrqNums, "^(.*)_IRQn$", "$1")'      />
+            <equation key="irq_ClassHandler"  value='=ReplaceAll(_hardwareIrqNums, "^(.*)_IRQn$", "$(_Class)::irqHandler")'  />
+         <else/>
+            <for keys="irqName" values="=_hardwareIrqNums" delimiter=";" >
+               <equation key="irq_p" value='=ReplaceAll("%(irqName)", "^(.*)_IRQn$", "$1")'  />
+               <if condition="!irq_pattern" >
+                  <equation key="irq_pattern"  value='=irq_p'                 />
+               <else/>
+                  <equation key="irq_pattern"  value='=irq_pattern+";"+irq_p' />
+               </if>
+
+               <equation key="irq_c" value='=ReplaceAll("%(irqName)", "^(.*?)_(.*)_IRQn$", "$(_Class)::irqHandler&lt;$(_Class)::IrqNum_$2&gt;")' />
+               <if condition="!irq_ClassHandler" >
+                  <equation key="irq_ClassHandler"  value='=irq_c'                  />
+               <else/>
+                  <equation key="irq_ClassHandler"  value='=irq_ClassHandler+";"+irq_c' />
+               </if>
+            </for>
+         </if>
+      </if>
+      <!--
+      <printVar key="irq_pattern" />
+      <printVar key="irq_ClassHandler" />
+      -->
 
       <!-- Interrupt control for this peripheral -->
       <irqOption key="irqHandlingMethod" condition="!irqHandlingMethod"
@@ -285,7 +309,8 @@
 
          <equation key="irqLevelName" value='="irqLevel_"+irqmodifier'         />
          <choiceOption key='=irqLevelName' condition='=!Exists(irqLevelName)'
-            hiddenBy="!irqHandlingMethod||!enablePeripheralSupport"
+            hidden="true"
+            derived="true"
             description='="IRQ priority level for "+irqmodifier'
             toolTip='="Priority level used to configure the NVIC for "+irqmodifier+"\n
                      Selecting -Interrupts Disabled- will disable interrupts in the NVIC when configured"'
@@ -315,6 +340,7 @@
          <equation key="irqLevelName" value='="irqLevel_"+irqmodifier'         />
          <choiceOption key="irqLevel" condition="!irqLevel"
             hidden="true"
+            derived="true"
             enabledBy="enablePeripheralSupport"
             description="IRQ priority level"
             toolTip="Priority level used to configure the NVIC.\n
@@ -327,7 +353,7 @@
       </for>
 
       <!-- Display here (wherever the original) -->
-      <aliasOption key="irqLevel"       locked="false" optional="true" />
+      <!-- aliasOption key="irqLevel"       locked="false" optional="true" / -->
       <!--  aliasOption key="irqHandlerName" locked="false" / -->
 
       <variableTemplate codeGenCondition="$(_InfoGuard)"
@@ -375,24 +401,28 @@
          \t\n
       ]]></variableTemplate>
 
+<!-- 
       <variableTemplate variables="irqLevel" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
          \t//! Default IRQ level
          \tstatic constexpr NvicPriority irqLevel =  %symbolicExpression;
          \t\n
       ]]></variableTemplate>
+ -->
 
       <!-- enum for IRQ indices into irqNums[]  -->
-      <choiceOption key="irq_enum" condition="!irq_enum&amp;&amp;(@_userIrqCount>1)"
-         hidden="true"
+      <choiceOption  where="basicInfo" key="irq_enum" condition="!irq_enum&amp;&amp;(@_userIrqCount>1)"
+         hidden="false"
          description="IRQ entry"
          toolTip="Select amongst interrupts associated with the peripheral"
-         typeName="$(_Class)IrqNum"
+         typeName="IrqNum"
          valueFormat="%s"
          >
          <choiceExpansion keys="irq" values="=_hardwareIrqNums"
             value="%(i)" name="Maps to %(irq)" enum='=Prettify(ReplaceAll("%(irq)", "$(_NAME)_([a-z|A-Z|0-9_]+)_IRQn", "$1"))' />
       </choiceOption>
+
+      <!-- printVar key="irq_enum" / -->
 
       <!-- IRQ enable/disable when single hardware IRQ is available  -->
       <template condition="=(_hardwareIrqCount==1)" ><![CDATA[
@@ -630,7 +660,9 @@
 
    </if> <!-- condition="_hardwareIrqCount&amp;&amp;!suppressHardwareIrq" -->
 
-<!-- ___________ Peripheral clock ____________________ -->
+<!--====================================================================================================== -->
+<!--  Peripheral clock  -->
+<!--====================================================================================================== -->
 
    <!-- Try both e.g. /CMP/_clockMask and /CMP1/_clockMask - prefer latter -->
    <equation key="clock_data"  value="=/$(_BASENAME)/_clockInfo" condition="/$(_BASENAME)/_clockInfo" />
@@ -664,7 +696,9 @@
       \t\n
    ]]></template>
 
-   <!-- _____________ enable/disable __________________ -->
+<!--====================================================================================================== -->
+<!--     START enable/disable methods -->
+<!--====================================================================================================== -->
 
    <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
@@ -700,7 +734,7 @@
          <template codeGenCondition="enablePeripheralSupport"
             immediateVariables="prettyIrqNum" >
          <![CDATA[
-            \t   disableNvicInterrupts($(_Class)IrqNum_$(prettyIrqNum));\n
+            \t   disableNvicInterrupts(IrqNum_$(prettyIrqNum));\n
          ]]></template>
       </for>
 
@@ -719,92 +753,6 @@
       \t}
       \t\n
    ]]></template>
-
-   <!-- template key="/$(_BASENAME)/publicMethods" condition="/$(_BASENAME)/irqHandlingMethod" codeGenCondition="/$(_BASENAME)/irqHandlingMethod" discardRepeats="true" >
-   <![CDATA[
-      \t/**
-      \t * Wrapper to allow the use of a class member as a callback function
-      \t * @note Only usable with static objects.
-      \t *
-      \t * @tparam T         Type of the object containing the callback member function
-      \t * @tparam callback  Member function pointer
-      \t * @tparam object    Object containing the member function
-      \t *
-      \t * @return  Pointer to a function suitable for the use as a callback
-      \t *
-      \t * @code
-      \t * class $(_Baseclass)CallbackClass {
-      \t * public:
-      \t *    int y;
-      \t *
-      \t *    // Member function used as callback
-      \t *    // This function must match $(_Baseclass)::CallbackFunction
-      \t *    void callback($(irq_parameters)) {
-      \t *       ...;
-      \t *    }
-      \t * };
-      \t * ...
-      \t * // Instance of class containing callback member function
-      \t * static $(_Baseclass)CallbackClass $(_Baseclass)CallbackClassInstance;
-      \t * ...
-      \t * // Wrap member function
-      \t * auto $(_Baseclass)cbfn = $(_Baseclass)::wrapCallback<$(_Baseclass)CallbackClass, &$(_Baseclass)CallbackClass::callback, $(_Baseclass)CallbackClassInstance>();
-      \t *
-      \t * // Use as callback
-      \t * $(_Baseclass)::Channel<0>::setCallback($(_Baseclass)cbfn);
-      \t * @endcode
-      \t */
-      \ttemplate<class T, void(T::*callback)($(irq_parameters)), T &object>
-      \tstatic CallbackFunction wrapCallback() {
-      \t   static CallbackFunction fn = []($(irq_parameters)) {
-      \t      (object.*callback)($(irq_call));
-      \t   };
-      \t   return fn;
-      \t}
-      \t
-      \t/**
-      \t * Wrapper to allow the use of a class member as a callback function
-      \t * @note There is a considerable space and time overhead to using this method
-      \t *
-      \t * @tparam T         Type of the object containing the callback member function
-      \t * @tparam callback  Member function pointer
-      \t * @tparam object    Object containing the member function
-      \t *
-      \t * @return  Pointer to a function suitable for the use as a callback
-      \t *
-      \t * @code
-      \t * class $(_Baseclass)CallbackClass {
-      \t * public:
-      \t *    int y;
-      \t *
-      \t *    // Member function used as callback
-      \t *    // This function must match $(_Baseclass)::CallbackFunction
-      \t *    void callback($(irq_parameters)) {
-      \t *       ...;
-      \t *    }
-      \t * };
-      \t * ...
-      \t * // Instance of class containing callback member function
-      \t * $(_Baseclass)CallbackClass $(_Baseclass)CallbackClassInstance;
-      \t * ...
-      \t * // Wrap member function
-      \t * auto $(_Baseclass)cbfn = $(_Baseclass)::wrapCallback<$(_Baseclass)CallbackClass, &$(_Baseclass)CallbackClass::callback>($(_Baseclass)CallbackClassInstance);
-      \t *
-      \t * // Use as callback
-      \t * $(_Baseclass)::Channel<0>::setCallback($(_Baseclass)cbfn);
-      \t * @endcode
-      \t */
-      \ttemplate<class T, void(T::*callback)($(irq_parameters))>
-      \tstatic CallbackFunction wrapCallback(T &object) {
-      \t   static T &obj = object;
-      \t   static CallbackFunction fn = []($(irq_parameters)) {
-      \t      (obj.*callback)($(irq_call));
-      \t   };
-      \t   return fn;
-      \t}
-      \t\n
-   ]]>
-   </template -->
 
    <template><![CDATA[
       \t//! Hardware base address as uint32_t
@@ -840,5 +788,107 @@
       derived="true" >
       <choice name="Pin mapping" value="0" pinMap="=pinMap" />
    </binaryOption>
+
+<!--====================================================================================================== -->
+<!--     START BasicInfo::InitVectors class and Init typedef -->
+<!--====================================================================================================== -->
+   <if condition="_hardwareIrqCount&amp;&amp;!suppressIrqArray&amp;&amp;!no_initvectors" >
+      <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)" >
+      <![CDATA[
+         \t/**
+         \t * Class used to do vector initialisation for $(_Baseclass)
+         \t *
+         \t * This class has a templated constructor that accepts various values.
+         \t * Parameters available may vary with device - see $(_Class)::DefaultInitValue for relevant example.
+         \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.
+         \t *
+         \t * @note This constructor may be used to create a const instance in Flash
+         \t *
+         \t */
+         \ttemplate <typename Init, typename EnumType, size_t NumVectors>
+         \tclass InitVectors : public Init {
+         \t
+         \tpublic:
+         \t   /**
+         \t    * Copy Constructor
+         \t    */
+         \t   constexpr InitVectors(const InitVectors &other) = default;
+         \t
+         \t   /**
+         \t    * Other constructors are inherited
+         \t    *
+         \t    * @tparam Types
+         \t    * @param rest
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr InitVectors(Types... rest) : Init(rest...) {
+         \t   }
+         \t
+         \t   /**
+         \t    * Initialise Interrupt callbacks
+         \t    * (Used when only a single vector)
+         \t    *
+         \t    * @tparam Types
+         \t    * @param rest         Remaining parameters
+         \t
+         \t    * @param nvicPriority Priority for the handler
+         \t    * @param callback     Callback function to use
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr InitVectors(NvicPriority nvicPriority, CallbackFunction callback, Types... rest) : InitVectors(rest...) {
+         \t      priorities[0]  = nvicPriority;
+         \t      callbacks[0]   = callback;
+         \t   }
+         \t
+         \t   /**
+         \t    * Initialise Interrupt callbacks
+         \t    * (Multiple vectors)
+         \t    *
+         \t    * @tparam Types
+         \t    * @param rest         Remaining parameters
+         \t
+         \t    * @param irqNum       Interrupt number
+         \t    * @param nvicPriority Priority for the handler
+         \t    * @param callback     Callback function to use
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr InitVectors(EnumType irqNum, NvicPriority nvicPriority, CallbackFunction callback, Types... rest) : InitVectors(rest...) {
+         \t      priorities[irqNum]  = nvicPriority;
+         \t      callbacks[irqNum]   = callback;
+         \t   }
+         \t
+         \t   /**
+         \t    * Information describing the priority and callback function for each interrupt
+         \t    */
+         \t    CallbackFunction callbacks[NumVectors]  = {};
+         \t    NvicPriority     priorities[NumVectors] = {};
+         \t
+         \t}; // class $(_BasicInfo)::InitVectors
+         \t\n
+      ]]>
+      </template>
+
+      <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount>1)"
+         variables="irq_enum"
+         immediateVariables="_hardwareIrqCount"
+         linePadding="xxx" >
+      <![CDATA[
+         \t/**
+         \t * Information describing the priority and callback function for each interrupt
+         \t */
+         \ttypedef $(_BasicInfo)::InitVectors<Init, %returnType0, $(_hardwareIrqCount)> Init;
+         \t\n
+      ]]></variableTemplate>
+   
+      <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t/**
+         \t * Information describing the priority and callback function for each interrupt
+         \t */
+         \ttypedef $(_BasicInfo)::InitVectors<Init, int, 1> Init;
+         \t\n
+      ]]></template>
+   </if>
 
 </fragment>

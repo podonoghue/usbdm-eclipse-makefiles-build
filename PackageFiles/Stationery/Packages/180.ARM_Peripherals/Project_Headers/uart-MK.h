@@ -27,9 +27,6 @@ namespace USBDM {
  * @{
  */
 $(/UART/peripheral_h_definition:// $/UART/peripheral_h_definition not found)
-
-
-
 /**
  * @brief Template class representing an UART interface with buffered reception
  *
@@ -45,39 +42,36 @@ $(/UART/peripheral_h_definition:// $/UART/peripheral_h_definition not found)
  *
  * @tparam Info   Class describing UART hardware
  */
-template<int rxSize=100, int txSize=100>
-class UartBuffered_T : public UartBasicInfo {
+template<typename T, int rxSize=100, int txSize=100>
+class UartBuffered_T : public T {
 
 private:
    UartBuffered_T(const UartBuffered_T&) = delete;
    UartBuffered_T(UartBuffered_T&&) = delete;
 
-   static constexpr Init initValue = {
+   static constexpr typename T::Init initValue = {
          UartBaudRate_115200,
          UartTxEmptyAction_Interrupt ,    // (uart_txempty_action)      Transmit empty DMA/Interrupt action - Interrupt
          UartRxFullAction_Interrupt ,     // (uart_rxfull_action)       Receive full DMA/interrupt action - Interrupt
          UartTransmitFifoEnable_Enabled ,  // (uart_pfifo_txfe)          Transmit FIFO Enable - Enabled
          UartReceiveFifoEnable_Enabled ,   // (uart_pfifo_rxfe)          Receive FIFO Enable - Enabled
-//         NvicPriority_Normal,              // (irqLevel) IRQ priority level - Normal
    };
 
 public:
 
-   template<typename T>
-   UartBuffered_T(const T &uart) : UartBasicInfo(uart) {
-      T::setCallback(Uart0IrqNum_RxTx,  T::wrapCallback(this, &USBDM::UartBuffered_T<rxSize, txSize>::callback));
+   UartBuffered_T(const T &uart) : T(uart) {
+      T::setCallback(T::IrqNum_RxTx,  T::wrapCallback(this, &USBDM::UartBuffered_T<T, rxSize, txSize>::callback));
       T::configure(initValue);
    }
 
-   template<typename T>
    UartBuffered_T(const T &uart, typename T::Init init) : UartBasicInfo(uart) {
-      T::setCallback(Uart0IrqNum_RxTx,  T::wrapCallback(this, &USBDM::UartBuffered_T<rxSize, txSize>::callback));
+      T::setCallback(T::IrqNum_RxTx,  T::wrapCallback(this, &USBDM::UartBuffered_T<T, rxSize, txSize>::callback));
       T::configure(init);
    }
 
    virtual ~UartBuffered_T() {
-      setTransmitCompleteAction(UartTxCompleteAction_None);
-      setReceiveFullAction(UartRxFullAction_None);
+      T::setTransmitCompleteAction(UartTxCompleteAction_None);
+      T::setReceiveFullAction(UartRxFullAction_None);
    }
 
 protected:
@@ -96,13 +90,13 @@ protected:
     * @param[in]  ch - character to send
     */
    virtual void _writeChar(char ch) override {
-      lock();
+      T::lock();
       // Add character to buffer
       while (!txQueue.enQueueDiscardOnFull(ch)) {
          __asm__("nop");
       }
-      setTransmitCompleteAction(UartTxCompleteAction_Interrupt);
-      unlock();
+      T::setTransmitCompleteAction(UartTxCompleteAction_Interrupt);
+      T::unlock();
       if (ch=='\n') {
         _writeChar('\r');
       }
@@ -114,12 +108,12 @@ protected:
     * @return Character received
     */
    virtual int _readChar() override {
-      lock();
+      T::lock();
       while (rxQueue.isEmpty()) {
          __asm__("nop");
       }
       char t = rxQueue.deQueue();
-      unlock();
+      T::unlock();
       return t;
    }
 
@@ -138,27 +132,27 @@ public:
     * Receive/Transmit/Error IRQ handler call-back
     */
    void callback()  {
-      UartStatusFlag status = getStatusFlags();
+      UartStatusFlag status = T::getStatusFlags();
 
       // Empty UART Rx FIFO
       while(status&UartStatusFlag::ReceiveDataRegisterFullFlag) {
          // Receive data register full - save data
-         rxQueue.enQueueDiscardOnFull(getReceiveData());
-         status = getStatusFlags();
+         rxQueue.enQueueDiscardOnFull(T::getReceiveData());
+         status = T::getStatusFlags();
       }
       // Fill UART Tx FIFO
       while(status&UartStatusFlag::TransmitDataRegisterEmptyFlag) {
          // Transmitter ready
          if (txQueue.isEmpty()) {
             // No data available - disable further transmit interrupts
-            setTransmitCompleteAction(UartTxCompleteAction_None);
+            T::setTransmitCompleteAction(UartTxCompleteAction_None);
             break;
          }
          else {
             // Transmit next byte
-            setTransmitData(txQueue.deQueue());
+            T::setTransmitData(txQueue.deQueue());
          }
-         status = getStatusFlags();
+         status = T::getStatusFlags();
       }
    }
 
@@ -170,7 +164,7 @@ public:
       while (!txQueue.isEmpty()) {
          // Wait until queue empty
       }
-      while ((uart->S1 & UART_S1_TC_MASK) == 0) {
+      while ((T::uart->S1 & UART_S1_TC_MASK) == 0) {
          // Wait until transmission of last character is complete
       }
       return *this;

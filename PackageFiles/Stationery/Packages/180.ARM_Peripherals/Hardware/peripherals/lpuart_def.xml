@@ -7,6 +7,17 @@
    <equation key="FifoTxSize" value='=8' />
    <equation key="FifoRxSize" value='=8' />
 
+   <option key="debugGuards" value="true" />
+
+   <equation key="individual_clock_source" value='=Exists("/SIM/system_$(_name)_clock[]")'     />
+   <equation key="shared_clock_source"     value='=Exists("/SIM/system_$(_basename)_clock[]")' />
+   <!--
+   <print text="Opps, two clock sources found" condition="=individual_clock_source&amp;&amp;shared_clock_source" />
+   <print text="Opps, no clock source found"   condition="=!individual_clock_source&amp;&amp;!shared_clock_source" />
+   <printVar key="individual_clock_source" />
+   <printVar key="shared_clock_source" />
+    -->
+
    <!-- Enable for this peripheral -->
    <binaryOption key="usedAsConsole"
       description="usedAsConsole"
@@ -32,7 +43,7 @@
    <!-- ____ Class Declaration ________ -->
    <constant key="_basicInfo_declaration" type="String" value='"$(_BasicInfo) : public FormattedIO"' />
 
-   <!-- ____ Class Declaration _____ -->
+   <!-- ____ Class Declaration ________ -->
    <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <constant key="definitionsInHeader" value="true" type="Boolean" />
@@ -99,6 +110,8 @@
       enabledBy="$(_BasicInfoGuard)"
       derivedFrom="/Console/console_baudrate" >
    </choiceOption>
+
+<category description="Advanced settings" toolTip="These are not things you should play with">
 
    <!-- ____ BAUD ____ -->
    <title description="Baud Rate Register" />
@@ -807,7 +820,7 @@
       toolTip="Reads return the contents of the read-only receive data buffer\n
                and writes go to the write-only transmit data buffer.\n
                Reads and writes of this register are also involved in the\n
-               automatic flag clearing mechanisms for the UART status flags" />
+               automatic flag clearing mechanisms for the LPUART status flags" />
 
    <binaryOption key="lpuart_data_noisy" condition="lpuart_data_noisy_present"
       hidden="true"
@@ -883,7 +896,6 @@
 
    <intOption key="lpuart_data_rt" condition="lpuart_data_rt_present"
       enabledBy="enablePeripheralSupport"
-      typeName="uint16_t"
       baseType="uint16_t"
       toolTip=""
       description="Read receive data buffer or write transmit data buffer"
@@ -1120,7 +1132,7 @@
 
    <choiceOption key="lpuart_fifo_rxiden" condition="lpuart_fifo_rxiden_present"
       enabledBy="enablePeripheralSupport"
-      typeName="LpuartxIdleEmptyEnable"
+      typeName="LpuartIdleEmptyEnable"
       baseType="uint32_t"
       toolTip="Enables the assertion of RDRF when the receiver is idle for a number of idle characters\n
                and the FIFO is not empty."
@@ -1272,102 +1284,17 @@
       description="Receive Counter"
    />
 
-   <!-- ____ General member functions ____ -->
+</category>
 
-   <!-- ____  BAUD rate calculations ____________________ -->
-
-   <variableTemplate where="basicInfo" variables="lpuart_baudrate, lpuart_baud_osr" condition="lpuart_baud_osr"
-   params=", overSample" >
-   <![CDATA[
-      \t/**
-      \t * Set baud rate
-      \t * (for $(_BASENAME) with variable prescaler)
-      \t *
-      \t * @param $(_basename)     Hardware instance pointer
-      \t * @param clockFrequency   Clock frequency
-      %paramDescription
-      \t */
-      \tstatic void setBaudRate(
-      \t      volatile $(_Type) *$(_basename),
-      \t      uint32_t      clockFrequency, %params) {
-      \t
-      \t   // Disable LPUART before changing registers
-      \t   uint32_t ctrl = lpuart->CTRL;
-      \t   lpuart->CTRL = 0;
-      \t
-      \t   uint32_t overSampleRate = (%paramName1>>%macro1_SHIFT)+1;
-      \t   /*
-      \t    * Baudrate = ClockFrequency / (overSampleRate x Divider)
-      \t    * Divider  = ClockFrequency / (overSampleRate x Baudrate)
-      \t    */
-      \t   // Calculate LPUART divisor with rounding
-      \t   uint32_t divisor = (clockFrequency<<1)/(%paramName0 * overSampleRate);
-      \t   divisor = (divisor>>1)|(divisor&0b1);
-      \t
-      \t   // Set Baud rate register
-      \t   lpuart->BAUD = (lpuart->BAUD&~(LPUART_BAUD_SBR_MASK|LPUART_BAUD_OSR_MASK))|
-      \t         LPUART_BAUD_SBR(divisor)|%paramName1;
-      \t
-      \t   // Restore LPUART settings
-      \t   lpuart->CTRL = ctrl;
-      \t}
-      \t\n
-   ]]>
-   </variableTemplate>
-
-   <!-- Individual clock selection -->
-   <variableTemplate variables="lpuart_baudrate" condition="/SIM/$(_name)_src_available"> <![CDATA[
-      \t/**
-      \t * Get input clock frequency
-      \t * (Individual to each LPUART)
-      \t *
-      \t * @return Input clock frequency as a uint32_t in Hz
-      \t */
-      \tstatic inline uint32_t getInputClockFrequency() {
-      \t   return SimInfo::get$(_Class)Clock();
-      \t}
-      \t
-      \t/**
-      \t * Set baud rate
-      \t * (Individual to each LPUART)
-      \t *
-      %paramDescription
-      \t */
-      \tstatic void setBaudRate(%params) {
-      \t
-      \t   $(_BasicInfo)::setBaudRate($(_basename), getInputClockFrequency(), %paramName);
-      \t}
-      \t\n
-   ]]></variableTemplate>
-
-   <!-- Shared clock selection -->
-   <variableTemplate where="basicInfo" variables="lpuart_baudrate" condition="/SIM/$(_basename)_src_available"> <![CDATA[
-      \t/**
-      \t * Get input clock frequency
-      \t * (Shared by all LPUARTs)
-      \t *
-      \t * @return Input clock frequency as a uint32_t in Hz
-      \t */
-      \tstatic inline uint32_t getInputClockFrequency() {
-      \t   return SimInfo::get$(_Baseclass)Clock();
-      \t}
-      \t
-      \t/**
-      \t * Set baud rate
-      \t * (Shared by all LPUARTs)
-      \t *
-      %paramDescription
-      \t */
-      \tvoid setBaudRate(%params) const {
-      \t
-      \t   setBaudRate($(_basename), getInputClockFrequency(), %paramName);
-      \t}
-      \t\n
-   ]]></variableTemplate>
+<!--
+======================================================================================================
+     START BasicInfo Class
+======================================================================================================
+ -->
 
    <!-- Formatted IO virtual functions -->
 
-   <template where="basicInfo" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Check if character is available
@@ -1420,11 +1347,121 @@
    ]]>
    </template>
 
-   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
-   ><![CDATA[
-      \t// Pointer to $(_BASENAME) hardware instance
-      \tvolatile $(_Type) *$(_basename);
+   <!-- ____  Input clock ______ -->
+   <!-- Individual clock selection -->
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" condition="=individual_clock_source">
+   <![CDATA[
+      \t/**
+      \t * Get input clock frequency
+      \t * (Individual to each peripheral)
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tuint32_t (*getInputClockFrequency)();
+      \t\n
+   ]]></template>
+
+   <!-- Shared clock selection -->
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" condition="=shared_clock_source">
+   <![CDATA[
+      \t/**
+      \t * Get input clock frequency
+      \t * (Shared by all peripherals)
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic inline uint32_t getInputClockFrequency() {
+      \t   return SimInfo::get$(_Baseclass)Clock();
+      \t}
+      \t\n
+   ]]></template>
+
+   <!-- ____  BAUD rate calculations ______ -->
+
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" condition="lpuart_baud_osr"
+      variables="lpuart_baudrate, lpuart_baud_osr"
+      params=", overSample" >
+   <![CDATA[
+      \t/**
+      \t * Set baud rate
+      \t * (%variables)
+      \t * (for $(_BASENAME) with variable prescaler)
+      \t *
+      \t * @param $(_basename)           Hardware instance pointer
+      \t * @param clockFrequency Clock frequency
+      %paramDescription
+      \t */
+      \tstatic void setBaudRate(
+      \t      volatile $(_Type) *$(_basename),
+      \t      uint32_t      clockFrequency,
+      \t      %params) {
       \t
+      \t   // Disable LPUART before changing registers
+      \t   uint32_t ctrl = lpuart->CTRL;
+      \t   lpuart->CTRL = 0;
+      \t
+      \t   uint32_t overSampleRate = (%paramName1>>%macro1_SHIFT)+1;
+      \t
+      \t   /*
+      \t    * Baudrate = ClockFrequency / (overSampleRate x Divider)
+      \t    * Divider  = ClockFrequency / (overSampleRate x Baudrate)
+      \t    */
+      \t   // Calculate divisor with rounding
+      \t   uint32_t divisor = (clockFrequency<<1)/(%paramName0 * overSampleRate);
+      \t   divisor = (divisor>>1)|(divisor&0b1);
+      \t
+      \t   // Set Baud rate register
+      \t   lpuart->BAUD = (lpuart->BAUD&~(LPUART_BAUD_SBR_MASK|LPUART_BAUD_OSR_MASK))|
+      \t         LPUART_BAUD_SBR(divisor)|%paramName1;
+      \t
+      \t   // Restore LPUART settings
+      \t   lpuart->CTRL = ctrl;
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+
+
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      variables="lpuart_baudrate" >
+   <![CDATA[
+      \t/**
+      \t * Set baud rate
+      \t *
+      %paramDescription
+      \t */
+      \tvoid setBaudRate(%params) {
+      \t
+      \t   setBaudRate($(_basename), getInputClockFrequency(), %paramName);
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <!-- BasicInfo Constructors  -->
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t// Pointer to $(_BASENAME) hardware instance
+      \tvolatile $(_Type) * const $(_basename);
+      \t\n
+   ]]></template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" condition="=individual_clock_source" >
+   <![CDATA[
+      \t/**
+      \t * Constructor
+      \t *
+      \t * @param $(_basename) $(_BASENAME) hardware instance
+      \t */
+      \t$(_BasicInfo)(volatile $(_Type) * $(_basename), uint32_t (*getInputClockFrequency)()) :
+      \t               getInputClockFrequency(getInputClockFrequency), $(_basename)($(_basename)) {
+      \t}
+      \t\n
+   ]]></template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" condition="=shared_clock_source">
+   <![CDATA[
       \t/**
       \t * Constructor
       \t *
@@ -1436,6 +1473,44 @@
    ]]></template>
 
    <!-- ____ Getters and Setters ____________ -->
+
+
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      variables="lpuart_stat_stat"
+   ><![CDATA[
+      \t/**
+      \t * Clear %description
+      \t * This includes all flags
+      \t * (%variables)
+      \t */
+      \tvoid clearStatusFlags() const {
+      \t
+      \t   // Flags are w1c
+      \t   %register = %register|uint32_t(%returnType::AllFlags);
+      \t}
+      \t
+      \t/**
+      \t * Clear selected %description
+      \t * (%variables)
+      \t *
+      %paramDescription
+      \t */
+      \tvoid clearStatusFlags(%params) const {
+      \t   // Flags are w1c
+      \t   %register = %register|%paramExpression;
+      \t}
+      \t
+      \t/**
+      \t * Get %description
+      \t * (%variables)
+      \t *
+      \t * @return %tooltip
+      \t */
+      \t%returnType getStatusFlags() const {
+      \t   return %returnType(%register&uint32_t(%returnType::AllFlags));
+      \t}
+      \t\n
+   ]]></variableTemplate>
 
    <for keys="field                     : set   : get   : clear : genCode                 : name"
         values="
@@ -1537,8 +1612,8 @@
          lpuart_water_rxwater           : true  : true  : false : enableGettersAndSetters : ReceiveWatermark;
          lpuart_water_txcount           : false : true  : false : enableGettersAndSetters : TransmitCounter;
          lpuart_water_txwater           : true  : true  : false : enableGettersAndSetters : TransmitWatermark" >
-      <variableTemplate where="basicInfo" variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
-      ><![CDATA[
+      <variableTemplate where="basicInfo" variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)" >
+      <![CDATA[
          \t/**
          \t * Set %description
          \t * (%(field))
@@ -1550,8 +1625,8 @@
          \t}
          \t\n
       ]]></variableTemplate>
-      <variableTemplate where="basicInfo" variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
-      ><![CDATA[
+      <variableTemplate where="basicInfo" variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)" >
+      <![CDATA[
          \t/**
          \t * Get %description
          \t * (%(field))
@@ -1564,8 +1639,8 @@
          \t\n
       ]]></variableTemplate>
       <variableTemplate where="basicInfo" variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
-         tooltipPadding="x*x"
-      ><![CDATA[
+         tooltipPadding="x*x" >
+      <![CDATA[
          \t/**
          \t * Clear %description
          \t * (%(field))
@@ -1573,50 +1648,12 @@
          %paramDescription
          \t */
          \tvoid clear%(name)(%params) const {
+         \t   // w1c
          \t   %register = %paramExpression;
          \t}
          \t\n
-         \t\n
       ]]></variableTemplate>
    </for>
-
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
-      variables="lpuart_stat_stat"
-   ><![CDATA[
-      \t/**
-      \t * Clear %description
-      \t * This includes all flags
-      \t * (%variables)
-      \t */
-      \tvoid clearStatusFlags() const {
-      \t
-      \t   // Flags are w1c
-      \t   %register = %register|uint32_t(%returnType::AllFlags);
-      \t}
-      \t
-      \t/**
-      \t * Clear selected %description
-      \t * (%variables)
-      \t *
-      %paramDescription
-      \t */
-      \tvoid clearStatusFlags(%params) const {
-      \t   // Flags are w1c
-      \t   %register = %register|%paramExpression;
-      \t}
-      \t
-      \t/**
-      \t * Get %description
-      \t * (%variables)
-      \t *
-      \t * @return %tooltip
-      \t */
-      \t%returnType getStatusFlags() const {
-      \t   return %returnType(%register&uint32_t(%returnType::AllFlags));
-      \t}
-      \t\n
-   ]]></variableTemplate>
-
    <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="lpuart_ctrl_interrupt"
    ><![CDATA[
@@ -1666,9 +1703,11 @@
       \t}
       \t\n
    ]]></variableTemplate>
-
-   <!-- _____ LPUART Init class _____ -->
-
+<!--
+======================================================================================================
+     START BasicInfo::Init class
+======================================================================================================
+ -->
    <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
@@ -1682,22 +1721,10 @@
       \t *
       \t * Example:
       \t * @code
-      \t * ///
-      \t * /// $(_NAME) call-back
-      \t * ///
-      \t * /// @param status  Status reflecting active inputs
-      \t * ///
-      \t * void $(_name)Callback(ErrorCode ec) {
-      \t *    ....
-      \t * }
-      \t *
       \t * static const $(_Class)::Init $(_name)Init {
       \t *
       \t *   // Setup values
 XXXXXXXXXXXXXXXXXXXXXX
-      \t *
-      \t *   $(_name)Callback,                 // Call-back to execute on event - call-back function name
-      \t *   NvicPriority_Low,                 // Priority for interrupt - Low
       \t *
       \t *   // Optional base value to start with (must be last parameter)
       \t *   $(_Class)::DefaultInitValue   // Used as base value modified by above
@@ -1730,18 +1757,10 @@ XXXXXXXXXXXXXXXXXXXXXX
    ]]>
    </template>
 
-   <!-- ____ Init class Member variables ________ -->
-
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
-      variables="irqHandlingMethod"
-      linePadding="xxx"
-   ><![CDATA[
-      %multilineDescription
-      \t   %params = nullptr;\n\n
-   ]]></variableTemplate>
+   <!-- ____ BasicInfo::Init class Member variables ________ -->
 
    <for keys=" type        : variables                                            : init    "
-       values="%baseType   : lpuart_baudrate                                      : 0        ;
+       values="%returnType : lpuart_baudrate                                      : %returnType(0)       ;
                %baseType   : lpuart_baud_osr,lpuart_baud_maen1,lpuart_baud_maen2,
                              lpuart_baud_m10,lpuart_baud_tdmae,lpuart_baud_rdmae,
                              lpuart_baud_matcfg,lpuart_baud_bothedge,lpuart_baud_resyncdis,
@@ -1766,19 +1785,19 @@ XXXXXXXXXXXXXXXXXXXXXX
                %paramType  : /PCR/nvic_irqLevel                                   :   %defaultValue   " >
       <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
-         linePadding="xxx"
-      ><![CDATA[
+         linePadding="xxx" >
+      <![CDATA[
          %multilineDescription
          \t   %(type) %registerName = %(init);\n\n
       ]]></variableTemplate>
    </for>
 
-   <!-- ____ Init class Constructors ____________ -->
+   <!-- ____ BasicInfo::Init class Constructors ____________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
-      variables="irqHandlingMethod"
-      linePadding="xxx"
-   ><![CDATA[
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      variables="lpuart_ctrl_interrupt"
+      linePadding="xxx" >
+   <![CDATA[
       \t   /**
       \t    * Constructor for %description
       \t    * (%variables)
@@ -1791,9 +1810,11 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t      this->%paramName = %paramExpression;
-      \t   }\n\n
-   ]]></variableTemplate>
+      \t      %registerName = (%registerName&~uint32_t(%returnType::AllEvents)) | %paramExpression;
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
 
    <for keys="r"
       values="/PCR/nvic_irqLevel;
@@ -1843,28 +1864,6 @@ XXXXXXXXXXXXXXXXXXXXXX
       </variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
-      variables="lpuart_ctrl_interrupt"
-      linePadding="xxx" >
-   <![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    * (%variables)
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      %registerName = (%registerName&~uint32_t(%returnType::AllEvents)) | %paramExpression;
-      \t   }
-      \t\n
-   ]]>
-   </variableTemplate>
-
    <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t}; // class $(_BasicInfo)::Init
@@ -1872,86 +1871,99 @@ XXXXXXXXXXXXXXXXXXXXXX
    ]]>
    </template>
 
-   <!-- ____ Lpuart0Info Constructor ____ -->
+<!--
+======================================================================================================
+     END BasicInfo::Init class
+======================================================================================================
+ -->
+<!--
+======================================================================================================
+     START BasicInfo::InitVectors class
+======================================================================================================
 
-   <template codeGenCondition="$(_InfoGuard)" >
-   <![CDATA[
-      \t/*
-      \t *   Default Constructor
-      \t */
-      \t$(_Info)() : $(_BasicInfo)($(_basename)) {
-      \t   defaultConfigure();
-      \t}
-      \t
-      \t/*
-      \t *   Constructor
-      \t */
-      \t$(_Info)(const Init &init) : $(_BasicInfo)($(_basename)) {
-      \t   configure(init);
-      \t}
-      \t\n
-   ]]>
-   </template>
-
-   <!-- ____ Init class Configure methods ____ -->
-
-   <template codeGenCondition="$(_InfoGuard)" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)" >
    <![CDATA[
       \t/**
-      \t * Configure with default settings.
-      \t * Configuration determined from Configure.usbdmProject
-      \t */
-      \tstatic inline void initialise() {
-      \t
-      \t   defaultConfigure();
-      \t}
-      \t
-      \t/**
-      \t * Configure with default settings.
-      \t * Configuration determined from Configure.usbdmProject
-      \t */
-      \tstatic inline void defaultConfigure() {
-      \t
-      \t   configure(DefaultInitValue);
-      \t}
-      \t
-      \t/**
-      \t * Configure $(_BASENAME) from values specified in init
+      \t * Class used to do initialisation of the $(_Baseclass)
       \t *
-      \t * @param init Class containing initialisation values
+      \t * This class has a templated constructor that accepts various values.
+      \t * Parameters available may vary with device - see $(_Class)::DefaultInitValue for relevant example.
+      \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
       \t */
-      \tstatic void configure(const Init &init) {
+      \ttemplate <typename EnumType, size_t NumVectors>
+      \tclass InitVectors : public Init {
       \t
-      \t   // Enable peripheral
-      \t   enable();
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr InitVectors(const InitVectors &other) = default;
+      \t
+      \t   /**
+      \t    * Other constructors are inherited
+      \t    *
+      \t    * @tparam Types
+      \t    * @param rest
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr InitVectors(Types... rest) : Init(rest...) {
+      \t   }
+      \t
+      \t   /**
+      \t    * Initialise Interrupt callbacks
+      \t    *
+      \t    * @tparam Types
+      \t    * @param rest         Remaining parameters
+      \t
+      \t    * @param irqNum       Interrupt number
+      \t    * @param nvicPriority Priority for the handler
+      \t    * @param callback     Callback function to use
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr InitVectors(EnumType irqNum, NvicPriority nvicPriority, CallbackFunction callback, Types... rest) : InitVectors(rest...) {
+      \t      priorities[irqNum]  = nvicPriority;
+      \t      callbacks[irqNum]   = callback;
+      \t   }
+      \t
+      \t   /**
+      \t    * Information describing the priority and callback function for each interrupt
+      \t    */
+      \t    CallbackFunction callbacks[NumVectors]  = {};
+      \t    NvicPriority     priorities[NumVectors] = {};
+      \t
+      \t}; // class $(_BasicInfo)::InitVectors
       \t\n
    ]]>
    </template>
-   <template codeGenCondition="irqHandlingMethod" condition="irqHandlingMethod" >
-   <![CDATA[
-      \t   // Configure call-backs
-      \t   setCallback(init.callbackFunction);\n
-   ]]>
-   </template>
-   <template codeGenCondition="$(_InfoGuard)" >
-   <![CDATA[
-      \t   enableNvicInterrupts(init.irqlevel);
-      \t
-      \t   $(_BasicInfo)::configure($(_basename), init);
-      \t}
-      \t\n
-   ]]>
-   </template>
+
+
+======================================================================================================
+     END BasicInfo::InitVectors class
+======================================================================================================
+ -->
+
+   <!-- ____ BasicInfo class Configure methods ____ -->
+
    <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
-      variables="lpuart_baudrate,lpuart_baud_osr"
+      variables="lpuart_baudrate"
       linePadding="xxx" >
    <![CDATA[
       \t/**
       \t * Configure $(_BASENAME) from values specified in init
+      \t * This routine does not configure pins or interrupt handlers
       \t *
+      \t * @param $(_basename)           Hardware instance pointer
+      \t * @param clockFrequency Clock frequency
       \t * @param init Class containing initialisation values
       \t */
-      \tstatic void configure(volatile $(_Type) *$(_basename), const Init &init) {
+      \tstatic void configure(volatile $(_Type) *$(_basename),
+      \t               uint32_t      clockFrequency,
+      \t               const Init &init) {
+      \t
+      \t   setBaudRate($(_basename), clockFrequency, init.%registerName0);
       \t\n
    ]]>
    </variableTemplate>
@@ -1983,8 +1995,8 @@ XXXXXXXXXXXXXXXXXXXXXX
                lpuart_ctrl_interrupt                                 : %configRegAssignment  " >
       <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="%(var)"
-      linePadding="xxx"
-      ><![CDATA[
+      linePadding="xxx" >
+      <![CDATA[
          \t
          %multilineDescription
          \t   %(statement);\n
@@ -1997,12 +2009,200 @@ XXXXXXXXXXXXXXXXXXXXXX
    ]]>
    </template>
 
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t * This routine does not configure pins or interrupt handlers
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tvoid configure(const Init &init) const {
+      \t
+      \t   configure($(_basename), getInputClockFrequency(), init);
+      \t}
+      \t\n
+   ]]>
+   </template>
+<!--
+======================================================================================================
+     END BasicInfo class
+======================================================================================================
+ -->
+<!--
+======================================================================================================
+     START Info class
+======================================================================================================
+ -->
+ <!-- 
+   <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)"
+      variables="irq_enum"
+      immediateVariables="_hardwareIrqCount"
+      linePadding="xxx" >
+   <![CDATA[
+      \t/**
+      \t * Information describing the priority and callback function for each interrupt
+      \t */
+      \tusing Init = $(_BasicInfo)::InitVectors<%returnType0, $(_hardwareIrqCount)>;
+      \t\n
+   ]]></variableTemplate>
+
+   <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)"
+      linePadding="xxx" >
+   <![CDATA[
+      \t/**
+      \t * Information describing the priority and callback function for each interrupt
+      \t */
+      \tusing Init = $(_BasicInfo)::InitVectors<int, 1>;
+      \t\n
+   ]]></template>
+  -->
+
+   <!-- ____ Info constructors ________ -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/*
+      \t *   Default Constructor
+      \t */
+      \t$(_Info)() : $(_BasicInfo)($(_basename)) {
+      \t   defaultConfigure();
+      \t}
+      \t
+      \t/*
+      \t *   Constructor
+      \t */
+      \t$(_Info)(const Init &init) : $(_BasicInfo)($(_basename)) {
+      \t   configure(init);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <variableTemplate where="info" codeGenCondition="$(_InfoGuard)"
+      variables="lpuart_baudrate" >
+   <![CDATA[
+      \t/**
+      \t * Set baud rate
+      \t *
+      %paramDescription
+      \t */
+      \tvoid setBaudRate(%params) {
+      \t
+      \t   $(_BasicInfo)::setBaudRate($(_basename), getInputClockFrequency(), %paramName);
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <!-- Init configure methods -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic void initialise() {
+      \t
+      \t   defaultConfigure();
+      \t}
+      \t
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic void defaultConfigure() {
+      \t
+      \t   configure(DefaultInitValue);
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const Init &init) {
+      \t
+      \t   // Enable peripheral
+      \t   enable();
+      \t\n
+   ]]>
+   </template>
+   <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)" >
+   <![CDATA[
+      \t   // Configure call-back
+      \t   if (init.callbacks[0] != nullptr) {
+      \t      setCallback(init.callbacks[0]);
+      \t      enableNvicInterrupts(init.priorities[0]);
+      \t   }
+      \t\n
+   ]]>
+   </template>
+   <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)"
+      variables="irq_enum"
+      immediateVariables="_hardwareIrqCount">
+   <![CDATA[
+      \t   for(int index=0; index<$(_hardwareIrqCount); index++) {
+      \t      if (init.callbacks[index] != nullptr) {
+      \t         // Configure call-back
+      \t         setCallback(%returnType0(index), init.callbacks[index]);
+      \t         enableNvicInterrupts(%returnType0(index), init.priorities[index]);
+      \t      }
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
+   <template where="info" codeGenCondition="$(_InfoGuard)" condition="=individual_clock_source" >
+   <![CDATA[
+      \t   $(_BasicInfo)::configure($(_basename), SimInfo::get$(_Class)Clock(), init);
+      \t}
+      \t\n
+   ]]>
+   </template>
+   <template where="info" codeGenCondition="$(_InfoGuard)" condition="=shared_clock_source" >
+   <![CDATA[
+      \t   $(_BasicInfo)::configure($(_basename), getInputClockFrequency(), init);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
    <!-- ____  Default Initialisation value ____ -->
 
-   <variableTemplate codeGenCondition="$(_InfoGuard)"
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {\n
+   ]]>
+   <!-- Interrupt information -->
+   </template>
+   <for keys="irqName" values="=_hardwareIrqNums">
+      <equation key="irqEnum" value='=ReplaceAll("%(irqName)","^(.*?)_(.*)_IRQn$","IrqNum_$2")' />
+      <equation key="var"     value='=ReplaceAll("%(irqName)","^(.*?)_(.*)_IRQn$","irqLevel_$2")' />
+      <!--
+      <print text="(irqName) = %(irqName)"/>
+      <printVar key="irqEnum" />
+      <printVar key="var" />
+      -->
+      <variableTemplate where="info" codeGenCondition='$(_InfoIrqGuard)&amp;&amp;!IsZero(@var)'
+         variables='=var'
+         separator=","
+         terminator=","
+         padToComments="40"
+         immediateVariables="irqEnum" >
+      <![CDATA[
+         \t   $(irqEnum), %initExpression,
+         \t   unhandledCallback,\n
+      ]]></variableTemplate>
+   </for>
+   <variableTemplate where="info" codeGenCondition="$(_InfoGuard)"
       separator=","
       terminator=","
-      padToComments="35"
+      padToComments="40"
       variables="
             lpuart_baudrate,
             lpuart_baud_osr,
@@ -2030,17 +2230,21 @@ XXXXXXXXXXXXXXXXXXXXXX
             lpuart_water_rxwater,lpuart_water_txwater,
             irqLevel" >
    <![CDATA[
-      \t/**
-      \t * Default initialisation value for $(_Class)
-      \t * This value is created from Configure.usbdmProject settings
-      \t */
-      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues
+      \t%initNonZeroValues
       \t};
       \t\n
    ]]>
    </variableTemplate>
-
-   <!-- ____ Common ____ -->
+<!--
+======================================================================================================
+     END Info class
+======================================================================================================
+ -->
+<!--
+======================================================================================================
+     Common
+======================================================================================================
+ -->
 
    <template key="/$(_BASENAME)/declarations" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[

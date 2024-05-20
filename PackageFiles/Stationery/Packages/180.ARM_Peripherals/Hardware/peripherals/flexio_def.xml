@@ -4,6 +4,7 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flexible I/O">
 
+   <equation key="no_initvectors"             value="true"      />
    <equation key="irq_parameters"             value=""  />
    <equation key="irq_dummy_parameters"       value=""  />
    <equation key="irq_call"                   value=""  />

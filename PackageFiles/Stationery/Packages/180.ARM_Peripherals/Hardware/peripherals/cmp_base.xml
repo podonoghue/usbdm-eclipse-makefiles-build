@@ -6,19 +6,19 @@
 
    <constant key="disable_peripheral" value='"cmp->CR1 = CMP_CR1_EN(0);"' type="String" />
 
+   <!-- ____ Class Declaration ________ -->
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
+
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
    <equation key="suppressIrqHandler"         value="" />
    <equation key="irq_parameters"             value="const CmpStatus &amp;status"  />
    <equation key="irq_dummy_parameters"       value="const CmpStatus &amp;"  />
    <equation key="irq_call"                   value="cmpStatus"      />
-   <equation key="generateDefault"            value="false"          />
-   <equation key="configureInStartupDefault"  value="false"          />
-   <xi:include href="enablePeripheral.xml"  />
+   <equation key="generateDefault"            value="false"     />
+   <equation key="configureInStartupDefault"  value="false"     />
+   <xi:include href="enablePeripheral.xml"    />
    <title />
-
-   <constant key="definitionsInHeader" value="true" type="Boolean" />
-
-   <!-- ____ Class Declaration ________ -->
-   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <template>
       <![CDATA[
@@ -580,8 +580,9 @@
       \t   // Create status from snapshot
       \t   CmpStatus cmpStatus {
       \t      // Extract status bits
-      \t      CmpEventId(status&(CMP_SCR_CFR_MASK|CMP_SCR_CFF_MASK)),
-      \t      bool(status&CMP_SCR_COUT_MASK)
+      \t      CmpEventId(
+      \t         status&(CMP_SCR_CFR_MASK|CMP_SCR_CFF_MASK)),
+      \t                 bool(status&CMP_SCR_COUT_MASK)
       \t   };
       \t
       \t   // Execute call-back
@@ -680,14 +681,6 @@
 
    <!-- ____ Init class Member variables ________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
-      variables="irqHandlingMethod"
-      linePadding="xxx"
-   ><![CDATA[
-      %multilineDescription
-      \t   %params = nullptr;\n\n
-   ]]></variableTemplate>
-
    <for keys=" type        : variables                                            : init    "
        values="%baseType   : cmp_cr0_filter_cnt,cmp_cr0_hystctr                   :   0      ;
                %baseType   : cmp_cr1_se,cmp_cr1_we,cmp_cr1_pmode,cmp_cr1_inv,
@@ -697,8 +690,7 @@
                              cmp_scr_cff                                          :   0      ;
                %baseType   : cmp_daccr_dacen,cmp_daccr_vrsel,cmp_daccr_vosel      :   0      ;
                %baseType   : cmp_muxcr_psel,cmp_muxcr_msel                        :   0      ;
-               %baseType   : cmp_filterPeriod                                     :   0_s    ;
-               %paramType  : /PCR/nvic_irqLevel                                   :   %defaultValue   " >
+               %baseType   : cmp_filterPeriod                                     :   0_s       " >
       <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
@@ -710,28 +702,8 @@
 
    <!-- ____ Init class Constructors ____________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
-      variables="irqHandlingMethod"
-      linePadding="xxx"
-   ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    * (%variables)
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      this->%paramName = %paramExpression;
-      \t   }\n\n
-   ]]></variableTemplate>
-
    <for keys="r"
-      values="/PCR/nvic_irqLevel;
+      values="
             cmp_cr1_en;cmp_cr1_mode;cmp_cr1_trigm;
             cmp_cr1_pmode;cmp_cr1_inv;cmp_cr1_output;
             cmp_cr0_hystctr;
@@ -862,16 +834,33 @@
       \t\n
    ]]>
    </template>
-   <template codeGenCondition="irqHandlingMethod" condition="irqHandlingMethod" >
+   <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)" >
    <![CDATA[
-      \t   // Configure call-backs
-      \t   setCallback(init.callbackFunction);\n
+      \t   // Configure call-back
+      \t   if (init.callbacks[0] != nullptr) {
+      \t      setCallback(init.callbacks[0]);
+      \t      enableNvicInterrupts(init.priorities[0]);
+      \t   }
+      \t\n
    ]]>
    </template>
+   <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)"
+      variables="irq_enum"
+      immediateVariables="_hardwareIrqCount">
+   <![CDATA[
+      \t   for(int index=0; index<$(_hardwareIrqCount); index++) {
+      \t      if (init.callbacks[index] != nullptr) {
+      \t         // Configure call-back
+      \t         setCallback(%returnType0(index), init.callbacks[index]);
+      \t         enableNvicInterrupts(%returnType0(index), init.priorities[index]);
+      \t      }
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
    <for keys=
              " var                                                    : statement            "
-      values=" irqLevel                                               : enableNvicInterrupts(init.irqlevel) ;
-               cmp_cr1_en                                             : %register = 0 ;
+      values=" cmp_cr1_en                                             : %register = 0 ;
                cmp_fpr_filt_per                                       : uint8_t %registerName = init.%registerName " >
       <variableTemplate codeGenCondition="enablePeripheralSupport"
       variables="%(var)"
@@ -917,6 +906,36 @@
 
    <!-- ____  Default Initialisation value ____ -->
 
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr $(_BasicInfo)::Init DefaultInitValue = {\n
+   ]]>
+   <!-- Interrupt information -->
+   </template>
+   <for keys="irqName" values="=_hardwareIrqNums">
+      <equation key="irqEnum" value='=ReplaceAll("%(irqName)","^(.*?)_(.*)_IRQn$","IrqNum_$2")' />
+      <equation key="var"     value='=ReplaceAll("%(irqName)","^(.*?)_(.*)_IRQn$","irqLevel_$2")' />
+      <!--
+      <print text="(irqName) = %(irqName)"/>
+      <printVar key="irqEnum" />
+      <printVar key="var" />
+      -->
+      <variableTemplate where="info" codeGenCondition='$(_InfoIrqGuard)&amp;&amp;!IsZero(@var)'
+         variables='=var'
+         separator=","
+         terminator=","
+         padToComments="40"
+         immediateVariables="irqEnum" >
+      <![CDATA[
+         \t   $(irqEnum), %initExpression,
+         \t   unhandledCallback,\n
+      ]]></variableTemplate>
+   </for>
+
    <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
@@ -927,14 +946,9 @@
             cmp_scr_dmaen,cmp_scr_interrupt,
             cmp_cr0_filter,cmp_fpr_filt_per,
             cmp_daccr_dacen,cmp_daccr_vrsel,cmp_daccr_vosel,
-            cmp_muxcr_psel,cmp_muxcr_msel,
-            irqLevel" >
-    <![CDATA[
-      \t/**
-      \t * Default initialisation value for $(_Class)
-      \t * This value is created from Configure.usbdmProject settings
-      \t */
-      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues
+            cmp_muxcr_psel,cmp_muxcr_msel" >
+   <![CDATA[
+      \t%initNonZeroValues
       \t};
       \t\n
    ]]>
@@ -947,7 +961,11 @@
    ]]>
    </template>
 
-   <!-- ____ Common __________________ -->
+<!--
+======================================================================================================
+     Common
+======================================================================================================
+ -->
 
    <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
@@ -963,12 +981,12 @@
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
    </validate>
 
-   <projectActionList id="cmp_files">
+   <projectActionList id="cmp_files" >
       <copy source="Project_Headers/cmp.h"    target="Project_Headers/cmp.h"    overwrite="true" derived="true"/>
       <copy source="Snippets/cmp-example.cpp" target="Snippets/cmp-example.cpp" overwrite="true" derived="true"/>
    </projectActionList>
 
-   <!-- ____ Startup __________________ -->
+   <!-- ____ Startup ____ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
@@ -980,7 +998,7 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <!-- ____ SIM configuration __________________ -->
+   <!-- ____ SIM configuration ____ -->
 
    <category name="Advanced" description="SIM configuration"
       toolTip="These settings only have effect if the SIM configuration is enabled" >
@@ -995,7 +1013,7 @@
       </for>
    </category>
 
-   <!--  ____ Signal mapping __________________ -->
+   <!--  ____ Signal mapping ____ -->
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 
 </fragment>

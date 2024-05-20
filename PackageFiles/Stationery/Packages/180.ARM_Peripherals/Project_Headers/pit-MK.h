@@ -84,6 +84,9 @@ protected:
 
 $(/PIT/protectedMethods: // /PIT/protectedMethods not found)
 public:
+
+   using IrqNum = PitBasicInfo::IrqNum;
+
    /// Defaulted constructor
    constexpr PitBase_T() = default;
 
@@ -452,7 +455,7 @@ public:
     *                         Use nullptr to remove callback.
     */
    static void setCallback(PitChannelNum pitChannelNum, CallbackFunction callback) {
-      Info::setCallback(PitIrqNum(pitChannelNum), callback);
+      Info::setCallback(IrqNum(pitChannelNum), callback);
    }
 
    /**
@@ -462,7 +465,7 @@ public:
     * @param callback  Callback function to execute on interrupt
     *                  Use nullptr to remove callback.
     */
-   static void setCallback(PitIrqNum pitIrqNum, CallbackFunction callback) {
+   static void setCallback(PitBasicInfo::IrqNum pitIrqNum, CallbackFunction callback) {
       Info::setCallback(pitIrqNum, callback);
    }
 
@@ -476,7 +479,7 @@ public:
     *  @param[in]  microseconds      Interval in milliseconds
     */
    static void oneShotInMicroseconds(PitChannelNum pitChannelNum, CallbackFunction callback, uint32_t microseconds) {
-      Info::setCallback(PitIrqNum(pitChannelNum), callback);
+      Info::setCallback(IrqNum(pitChannelNum), callback);
       configureChannelInMicroseconds(pitChannelNum, microseconds, PitChannelAction_Interrupt);
       CriticalSection cs;
       Info::clearOnEvent |= (1<<pitChannelNum);
@@ -492,7 +495,7 @@ public:
     *  @param[in]  milliseconds      Interval in milliseconds
     */
    static void oneShotInMilliseconds(PitChannelNum pitChannelNum, CallbackFunction callback, uint32_t milliseconds) {
-      Info::setCallback(PitIrqNum(pitChannelNum), callback);
+      Info::setCallback(IrqNum(pitChannelNum), callback);
       configureChannelInMilliseconds(pitChannelNum, milliseconds, PitChannelAction_Interrupt);
       CriticalSection cs;
       Info::clearOnEvent |= (1<<pitChannelNum);
@@ -508,7 +511,7 @@ public:
     *  @param[in]  tickInterval      Interval in timer ticks (usually bus clock period)
     */
    static void oneShot(PitChannelNum pitChannelNum, CallbackFunction callback, Ticks tickInterval) {
-      Info::setCallback(PitIrqNum(pitChannelNum), callback);
+      Info::setCallback(IrqNum(pitChannelNum), callback);
       CriticalSection cs;
       configureChannel(pitChannelNum, tickInterval, PitChannelAction_Interrupt);
       Info::clearOnEvent |= (1<<pitChannelNum);

@@ -6,21 +6,6 @@
 
    <constant key="definitionsInHeader" value="true" type="Boolean" />
 
-   <choiceOption key="irq_enum" condition="=(_hardwareIrqCount>1)"
-      hidden="true"
-      derived="true"
-      description="IRQ entry"
-      toolTip="Select amongst interrupts associated with the peripheral"
-      typeName="$(_Class)IrqNum"
-      valueFormat="%s"
-      >
-      <choice name="Transmit" value="0" enum="Tx" />
-      <choice name="Receive"  value="1" enum="Rx" />
-   </choiceOption>
-
-   <stringOption key="irq_pattern"        locked="true" value="^I2S%i_?(Rx|Tx)?$" hidden="true" />
-   <stringOption key="irq_ClassHandler"   locked="true" value="$(_Class)::irqHandler&lt;$(_Class)IrqNum_$1&gt;" hidden="true" />
-
    <equation key="irq_parameters"             value=""  />
    <equation key="irq_dummy_parameters"       value=""  />
    <equation key="irq_call"                   value=""  />
@@ -1681,10 +1666,10 @@
    <template codeGenCondition="irqHandlingMethod"
              condition="$(_BasicInfoIrqGuard)" >   <![CDATA[
       \t   // Only set call-backs if feature enabled
-      \t   setCallback($(_Class)IrqNum_Tx, init.callbackFunction);
-      \t   setCallback($(_Class)IrqNum_Rx,  init.callbackFunction);
-      \t   enableNvicInterrupts($(_Class)IrqNum_Tx, init.irqlevel);
-      \t   enableNvicInterrupts($(_Class)IrqNum_Rx,  init.irqlevel);
+      \t   setCallback(IrqNum_Tx, init.callbackFunction);
+      \t   setCallback(IrqNum_Rx,  init.callbackFunction);
+      \t   enableNvicInterrupts(IrqNum_Tx, init.irqlevel);
+      \t   enableNvicInterrupts(IrqNum_Rx,  init.irqlevel);
       \t\n
    ]]></template>
    <template codeGenCondition="enablePeripheralSupport" >
