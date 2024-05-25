@@ -4,27 +4,42 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Carrier Modulator Transmitter" >
 
-   <equation key="irq_parameters"             value=""  />
-   <equation key="irq_dummy_parameters"       value=""  />
-   <equation key="irq_call"                   value=""  />
-   <equation key="generateDefault"            value="false"         />
-   <equation key="configureInStartupDefault"  value="false"         />
-   <xi:include href="enablePeripheral.xml"  />
-   <title />
+   <!-- ____ Class Declarations ________ -->
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <constant key="definitionsInHeader" value="true" type="Boolean" />
 
-   <!-- ____ Class Declaration ________ -->
-   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
+   <!-- ____ Instance control ________ -->
+   <constant key="_can_create_instance" value="true" type="Boolean" />
+
+   <equation key="irq_parameters"             value=""          />
+   <equation key="irq_dummy_parameters"       value=""          />
+   <equation key="irq_call"                   value=""          />
+   <equation key="generateDefault"            value="false"     />
+   <equation key="configureInStartupDefault"  value="false"     />
+   <xi:include href="enablePeripheral.xml"    />
+   <title />
 
    <!-- _____ MSC _____ -->
+   <binaryOption key="cmt_msc_mcgen" condition="cmt_msc_mcgen_present"
+      hidden="true"
+      derived="true"
+      typeName="CmtModulatorAndCarrierEnable"
+      baseType="uint8_t"
+      toolTip="Setting MCGEN will initialize the carrier generator and modulator and will enable all clocks"
+      description="Modulator and Carrier Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled" />
+      <choice name="Enabled"     value="1" enum="Enabled" />
+   </binaryOption >
+
 
    <choiceOption key="cmt_msc_mode"
       enabledBy="enablePeripheralSupport"
       valueFormat="CMT_MSC_MCGEN(%s),CMT_MSC_BASE(%s),CMT_MSC_FSK(%s)"
+      typeName="CmtMode"
+      baseType="uint8_t"
       toolTip="Selects between Time, Baseband, FSK and direct modes"
       description="Mode of operation"
-      typeName="CmtMode"
       >
       <choice name="Direct"           value="0,0,0"  enum="Direct"
       toolTip="The output is controlled by IROL"
@@ -51,6 +66,7 @@
       enabledBy="enablePeripheralSupport"
       hidden="true"
       typeName="CmtStatus"
+      baseType="uint8_t"
       toolTip="Sets when:\n
                - The modulator is not currently active and MCGEN is set\n
                - At the end of each modulation cycle while MCGEN is set\n
@@ -68,6 +84,7 @@
       enabledBy="enablePeripheralSupport"
       valueFormat="CMT_OC_IROPEN(%s),CMT_OC_CMTPOL(%s)"
       typeName="CmtOutput"
+      baseType="uint8_t"
       toolTip="Enables and controls the polarity of the IRO signal.\n
                When enabled, the the IRO signal is an output that drives out either\n
                the CMT transmitter output or the state of IROL depending on whether\n
@@ -80,11 +97,12 @@
    </choiceOption>
 
    <binaryOption  key="cmt_oc_irol" condition="cmt_oc_irol_present"
-      enabledBy="enablePeripheralSupport"
+      enabledBy="(cmt_oc_output>0)"
       typeName="CmtOutputLevel"
+      baseType="uint8_t"
       description="IRO Latch Control"
       toolTip="Reads the state of the IRO latch.\n
-               Writing to IROL changes the state of the IRO signal when MSC[MCGEN] is cleared and IROPEN is set"
+               The value written controls the state of the IRO signal when MSC[MCGEN] is cleared and IROPEN is set"
       >
       <choice value="0" name="Low"  enum="Low"  />
       <choice value="1" name="High" enum="High" />
@@ -95,12 +113,13 @@
    <choiceOption key="cmt_pps_ppsdiv" condition="cmt_pps_ppsdiv_present"
       enabledBy="enablePeripheralSupport"
       typeName="CmtClockPrescaler"
+      baseType="uint8_t"
       toolTip="Divides the CMT clock to generate the Intermediate Frequency clock\n
                to the secondary prescaler.\n
                This should be chosen to produce a nominal 8MHz frequency from the CMT input clock."
       description="Primary Prescaler Divider"
       enumText="
-      \t   CmtClockPrescaler_Auto            = 0xFF,               ///&lt; Calculate divider to generate 8MHz based on Bus clock"
+      \t   CmtClockPrescaler_Auto              = 0xFF,               ///&lt; Calculate divider to generate 8MHz based on input clock"
       >
       <choice name="Bus clock / 1"   value="0"  enum="BusClockDivBy1"  />
       <choice name="Bus clock / 2"   value="1"  enum="BusClockDivBy2"  />
@@ -129,6 +148,7 @@
    <choiceOption key="cmt_msc_cmtdiv" condition="cmt_msc_cmtdiv_present"
       enabledBy="enablePeripheralSupport"
       typeName="CmtIntermediatePrescaler"
+      baseType="uint8_t"
       toolTip="Causes the CMT to be clocked at the Intermediate frequency divided by 1, 2, 4, or 8"
       description="Intermediate frequency Prescaler"
       >
@@ -141,6 +161,7 @@
    <binaryOption key="cmt_msc_exspc" condition="cmt_msc_exspc_present"
       hidden="true"
       enabledBy="enablePeripheralSupport"
+      baseType="uint8_t"
       typeName="CmtExtendedSpace"
       toolTip="Enables the extended space operation."
       description="Extended Space Enable" >
@@ -152,6 +173,7 @@
       enabledBy="enablePeripheralSupport"
       valueFormat="CMT_MSC_EOCIE(%s),CMT_DMA_DMA(%s)"
       typeName="CmtEndOfCycleAction"
+      baseType="uint8_t"
       toolTip="Enables a Interrupt or DMA request when EOCIE is set"
       description="End of Cycle Event handling" >
       <choice value="0,0" name="No Action"             enum="None"        />
@@ -163,6 +185,7 @@
       enabledBy="enablePeripheralSupport"
       hidden="true"
       typeName="CmtInterruptEnable"
+      baseType="uint8_t"
       toolTip="Requests to enable a CPU interrupt when EOCF is set if EOCIE is high"
       description="End of Cycle Interrupt Enable" >
       <choice name="Interrupt disabled"  value="0" enum="Disabled"/>
@@ -175,6 +198,7 @@
       enabledBy="enablePeripheralSupport"
       hidden="true"
       typeName="CmtDma"
+      baseType="uint8_t"
       toolTip=""
       description="DMA Transfer Enable" >
       <choice name="DMA disabled"  value="0" enum="Disabled"/>
@@ -273,62 +297,148 @@
       value="0"
    />
 
-   <!-- ____ Setters and Getters _______ -->
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo Class      -->
+<!-- ====================================================================================================== -->
+
+   <!-- BasicInfo Instance pointer and Constructors  -->
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t// Pointer to $(_BASENAME) hardware instance
+      \tvolatile $(_Type) * const $(_basename);
+      \t\n
+   ]]></template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Constructor
+      \t *
+      \t * @param $(_basename) $(_BASENAME) hardware instance
+      \t */
+      \tconstexpr $(_BasicInfo)(volatile $(_Type) * $(_basename)) : $(_basename)($(_basename)) {
+      \t}
+      \t\n
+   ]]></template>
+
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      variables="cmt_pps_ppsdiv"
+      nonDefaultParams="0"
+      defaultParamValue="CmtClockPrescaler_Auto" >
+   <![CDATA[
+      \t/**
+      \t * Calculate %description
+      \t *
+      %paramDescription
+      \t */
+      \tstatic CmtClockPrescaler calculateClockPrescaler(%params) {
+      \t
+      \t   if (%paramName == %paramType_Auto) {
+      \t      // Calculate a prescaler an 8MHz clock based on clock available
+      \t      %paramName = CmtClockPrescaler(((SystemBusClock+4000000)/8000000)-1);
+      \t   }
+      \t   return %paramName;
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo/Info duplicated methods -->
+<!-- ====================================================================================================== -->
+
+<for
+   keys="   static    : const    : where     : guard                                      "
+   values=" ''        : 'const ' : basicInfo : $(_BasicInfoGuard)                         ;
+            'static ' : ''       : info      : $(_InfoGuard)                              "  >
+
+   <!-- ____ Getters and Setters ____________ -->
 
    <for keys="field           : get   : set   : clear : genCode                 : name"
         values="
          cmt_oc_irol          : true  : true  : false : enableGettersAndSetters : OutputState;
          cmt_msc_mode         : true  : true  : false : enableGettersAndSetters : Mode;
-         cmt_msc_eocf         : true  : false : false : true                    : EndOfCycleFlag;
+         cmt_msc_eocf         : true  : false : false : %(guard)                : EndOfCycleFlag;
          cmt_msc_cmtdiv       : true  : true  : false : enableGettersAndSetters : Prescaler;
-         cmt_msc_exspc        : true  : true  : false : true                    : ExtendedSpace;
+         cmt_msc_exspc        : true  : true  : false : %(guard)                : ExtendedSpace;
          cmt_oc_output        : false : true  : false : enableGettersAndSetters : OutputControl;
          cmt_dma_dma          : true  : true  : false : enableGettersAndSetters : DmaControl" >
-      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
-      ><![CDATA[
+      <variableTemplate location="%(where)" condition="%(set)" codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)" >
+      <![CDATA[
          \t/**
          \t * Set %description
+         \t * (%variables)
          \t *
          %paramDescription
          \t */
-         \tstatic void set%(name)(%params) {
+         \t%(static)void set%(name)(%params) %(const){
          \t   %fieldAssignment;
          \t}
          \t\n
-      ]]></variableTemplate>
-      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
-      ><![CDATA[
+      ]]>
+      </variableTemplate>
+      <variableTemplate location="%(where)" condition="%(get)" codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)" >
+      <![CDATA[
          \t/**
          \t * Get %description
+         \t * (%variables)
          \t *
          \t * @return %tooltip
          \t */
-         \tstatic %paramType get%(name)() {
+         \t%(static)%returnType get%(name)() %(const){
          \t   return %fieldExtract;
          \t}
          \t\n
-      ]]></variableTemplate>
-      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
-      ><![CDATA[
+      ]]>
+      </variableTemplate>
+      <variableTemplate location="%(where)" condition='="(%variables)"=="%(clear)"' codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)"
+         tooltipPadding="x*x" >
+      <![CDATA[
          \t/**
          \t * Clear %description
+         \t * (%variables)
          \t *
+         %paramDescription
          \t */
-         \tstatic void clear%(name)() {
+         \t%(static)void clear%(name)(%params) %(const){
+         \t   // w1c and mixed register
+         \t   %register = %register|%paramExpression;
+         \t}
+         \t\n
+      ]]>
+      </variableTemplate>
+      <variableTemplate location="%(where)" condition='="w1cIm"=="%(clear)"' codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)"
+         tooltipPadding="x*x" >
+      <![CDATA[
+         \t/**
+         \t * Clear %description
+         \t * (%variables)
+         \t *
+         \t * %tooltip
+         \t */
+         \t%(static)void clear%(name)() %(const){
+         \t   // w1c and mixed register
          \t   %register = %register|%mask;
          \t}
          \t\n
-      ]]></variableTemplate>
+      ]]>
+      </variableTemplate>
    </for>
 
-   <variableTemplate variables="cmt_dma_irq" codeGenCondition="enableGettersAndSetters"
-   ><![CDATA[
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)"
+      variables="cmt_dma_irq" >
+   <![CDATA[
       \t/**
       \t * Set %description
       \t *
       %paramDescription
       \t */
-      \tstatic void setEndOfCycleAction(%params) {
+      \t%(static)void setEndOfCycleAction(%params) %(const){
       \t
       \t   cmt->MSC = (cmt->MSC&~CMT_MSC_EOCIE_MASK)|CMT_MSC_EOCIE(%paramName);
       \t   cmt->DMA = (cmt->DMA&~CMT_DMA_DMA_MASK)  |CMT_DMA_DMA(%paramName);
@@ -339,24 +449,24 @@
       \t *
       \t * @return %tooltip
       \t */
-      \tstatic %paramType getEndOfCycleAction() {
+      \t%(static)%paramType getEndOfCycleAction() %(const){
       \t   return %paramType((cmt->MSC&~CMT_MSC_EOCIE_MASK)|(cmt->DMA&~CMT_DMA_DMA_MASK));
       \t}
       \t\n
-   ]]></variableTemplate>
+   ]]>
+   </variableTemplate>
 
-   <variableTemplate variables="cmt_pps_ppsdiv"
-   ><![CDATA[
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)"
+      variables="cmt_pps_ppsdiv" >
+   <![CDATA[
       \t/**
       \t * Set %description
       \t *
       %paramDescription
       \t */
-      \tstatic void setClockDivider(%params) {
+      \t%(static)void setClockDivider(%params) %(const){
       \t
-      \t   if (%paramName == %paramType_Auto) {
-      \t      %paramName = CmtClockPrescaler(((SystemBusClock+4000000)/8000000)-1);
-      \t   }
+      \t   %paramName = calculateClockPrescaler(%paramName);
       \t   %fieldAssignment;
       \t}
       \t
@@ -365,21 +475,23 @@
       \t *
       \t * @return %tooltip
       \t */
-      \tstatic %paramType getClockDivider() {
+      \t%(static)%paramType getClockDivider() %(const){
       \t   return %paramType(%register&%mask);
       \t}
       \t\n
-   ]]></variableTemplate>
+   ]]>
+   </variableTemplate>
 
-   <variableTemplate variables="cmt_mark" codeGenCondition="enableGettersAndSetters"
-      paramTypes="Ticks"
-   ><![CDATA[
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)"
+      variables="cmt_mark"
+      paramTypes="Ticks" >
+   <![CDATA[
       \t/**
       \t * Set %description
       \t *
       %paramDescription
       \t */
-      \tstatic void setMarkPeriod(%params) {
+      \t%(static)void setMarkPeriod(%params) %(const){
       \t   cmt->CMD1    = uint8_t(%paramExpression>>8);
       \t   cmt->CMD2    = uint8_t(%paramExpression);
       \t}
@@ -389,21 +501,23 @@
       \t *
       \t * @return %tooltip
       \t */
-      \tstatic %paramType getMarkPeriod() {
+      \t%(static)%paramType getMarkPeriod() %(const){
       \t   return %paramType((cmt->CMD1<<8)+cmt->CMD2);
       \t}
       \t\n
-   ]]></variableTemplate>
+   ]]>
+   </variableTemplate>
 
-   <variableTemplate variables="cmt_space" codeGenCondition="enableGettersAndSetters"
-      paramTypes="Ticks"
-   ><![CDATA[
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)"
+      variables="cmt_space"
+      paramTypes="Ticks" >
+   <![CDATA[
       \t/**
       \t * Set %description
       \t *
       %paramDescription
       \t */
-      \tstatic void setSpacePeriod(%params) {
+      \t%(static)void setSpacePeriod(%params) %(const){
       \t   cmt->CMD3    = uint8_t(%paramExpression>>8);
       \t   cmt->CMD4    = uint8_t(%paramExpression);
       \t}
@@ -413,68 +527,74 @@
       \t *
       \t * @return %tooltip
       \t */
-      \tstatic %paramType getSpacePeriod() {
+      \t%(static)%paramType getSpacePeriod() %(const){
       \t   return %paramType((cmt->CMD3<<8)+cmt->CMD4);
       \t}
       \t\n
-   ]]></variableTemplate>
+   ]]>
+   </variableTemplate>
 
-   <variableTemplate variables="cmt_mark,cmt_space"
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)"
+      variables="cmt_mark,cmt_space"
       nonDefaultParams="2"
-      paramTypes="Ticks,Ticks"
-   ><![CDATA[
+      paramTypes="Ticks,Ticks" >
+   <![CDATA[
       \t/**
       \t * Set %description
       \t *
       %paramDescription
       \t */
-      \tstatic void setMarkSpacePeriod(
-      %params) {
+      \t%(static)void setMarkSpacePeriod(%params) %(const){
       \t   cmt->CMD1    = uint8_t(%paramName0>>8);
       \t   cmt->CMD2    = uint8_t(%paramName0);
       \t   cmt->CMD3    = uint8_t(%paramName1>>8);
       \t   cmt->CMD4    = uint8_t(%paramName1);
       \t}
       \t\n
-   ]]></variableTemplate>
+   ]]>
+   </variableTemplate>
 
-   <variableTemplate variables="cmt_cgh1_ph,cmt_cgl1_pl" codeGenCondition="enableGettersAndSetters"
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)"
+      variables="cmt_cgh1_ph,cmt_cgl1_pl"
       nonDefaultParams="2"
-      paramTypes="Ticks,Ticks"
-   ><![CDATA[
+      paramTypes="Ticks,Ticks" >
+   <![CDATA[
       \t/**
       \t * Set %description0 and %description1
       \t *
       %paramDescription
       \t */
-      \tstatic void setPrimaryTiming(
-      %params) {
+      \t%(static)void setPrimaryTiming(%params) %(const){
       \t   %register0 = %paramName0;
       \t   %register1 = %paramName1;
       \t}
       \t\n
-   ]]></variableTemplate>
+   ]]>
+   </variableTemplate>
 
-   <variableTemplate variables="cmt_cgh2_sh,cmt_cgl2_sl" codeGenCondition="enableGettersAndSetters"
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)"
+      variables="cmt_cgh2_sh,cmt_cgl2_sl"
       nonDefaultParams="2"
-      paramTypes="Ticks,Ticks"
-   ><![CDATA[
+      paramTypes="Ticks,Ticks" >
+   <![CDATA[
       \t/**
       \t * Set %description0 and %description1
       \t *
       %paramDescription
       \t */
-      \tstatic void setSecondaryTiming(
-      %params) {
+      \t%(static)void setSecondaryTiming(%params) %(const){
       \t   %register0 = %paramName0;
       \t   %register1 = %paramName1;
       \t}
       \t\n
-   ]]></variableTemplate>
+   ]]>
+   </variableTemplate>
+</for>
 
-   <!--  ___ Init class ______ -->
-
-   <template key="/$(_BASENAME)/init_description" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)" >
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo::Init class      -->
+<!-- ====================================================================================================== -->
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
@@ -487,15 +607,6 @@
       \t *
       \t * Example:
       \t * @code
-      \t * ///
-      \t * /// $(_NAME) call-back
-      \t * ///
-      \t * /// @param status  Status reflecting active inputs
-      \t * ///
-      \t * void $(_name)Callback(ErrorCode ec) {
-      \t *    ....
-      \t * }
-      \t *
       \t * static const $(_Class)::Init $(_name)Init {
       \t *
       \t *   // Setup values
@@ -513,9 +624,7 @@
       \t *   CmtMarkPeriod(0) ,                  // Mark period
       \t *   CmtSpacePeriod(0),                  // Space period
       \t *
-      \t *   $(_name)Callback,                 // Call-back to execute on event - call-back function name
-      \t *   NvicPriority_Low,                 // Priority for interrupt - Low
-      \t *
+      \t *   // Optional base value to start with (must be last parameter)
       \t *   $(_Class)::DefaultInitValue   // Used as base value modified by above
       \t * };
       \t *
@@ -523,13 +632,14 @@
       \t * $(_Class)::configure($(_name)Init)
       \t * @endcode
       \t */
-   ]]>
-   </template>
-
-   <template where="basicInfo" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)" >
-   <![CDATA[
-      $(/$(_BASENAME)/init_description)
       \tclass Init {
+      \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(Types...) = delete;
       \t
       \tpublic:
       \t   /**
@@ -545,132 +655,35 @@
    ]]>
    </template>
 
-<!-- ____ Init class Member variables ________ -->
+   <!-- ____ BasicInfo::Init class Member variables ________ -->
 
-   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
-      variables="irqHandlingMethod"
-    ><![CDATA[
-      \t   /// %description
-      \t   %params = nullptr;\n\n
-   ]]></variableTemplate>
+   <for keys=" type        : variables                                            : init    "
+       values="%baseType   : cmt_cgh1_ph                                          :   0      ;
+               %baseType   : cmt_cgl1_pl                                          :   0      ;
+               %baseType   : cmt_cgh2_sh                                          :   0      ;
+               %baseType   : cmt_cgl2_sl                                          :   0      ;
+               %baseType   : cmt_oc_irol,cmt_oc_cmtpol,cmt_oc_iropen              :   0      ;
+               %baseType   : cmt_msc_cmtdiv,cmt_msc_exspc,cmt_msc_base,
+                             cmt_msc_fsk,cmt_msc_eocie,cmt_msc_mcgen              :   0      ;
+               %baseType   : cmt_cmd1_mb                                          :   0      ;
+               %baseType   : cmt_cmd2_mb                                          :   0      ;
+               %baseType   : cmt_cmd3_sb                                          :   0      ;
+               %baseType   : cmt_cmd4_sb                                          :   0      ;
+               %baseType   : cmt_dma_dma                                          :   0      ;
+               %returnType : cmt_pps_ppsdiv                                       :   %returnType(0) ;
+               %baseType   : cmt_mark                                             :   0      ;
+               %baseType   : cmt_space                                            :   0      " >
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         variables="%(variables)"
+         linePadding="xxx" >
+      <![CDATA[
+         %multilineDescription
+         \t   %(type) %registerName = %(init);\n\n
+      ]]>
+      </variableTemplate>
+   </for>
 
-   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)"
-      variables="cmt_cgh1_ph"
-   ><![CDATA[
-      \t   /// Carrier Generator High Data Register 1
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)"
-      variables="cmt_cgl1_pl"
-   ><![CDATA[
-      \t   /// Carrier Generator Low Data Register 1
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)"
-      variables="cmt_cgh2_sh"
-   ><![CDATA[
-      \t   /// Carrier Generator High Data Register 2
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)"
-      variables="cmt_cgl2_sl"
-   ><![CDATA[
-      \t   /// Carrier Generator Low Data Register 2
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)"
-      variables="cmt_oc_output"
-   ><![CDATA[
-      \t   /// Output Control Register
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)"
-      variables="cmt_msc_cmtdiv,cmt_msc_mode"
-   ><![CDATA[
-      \t   /// Modulator Status and Control Register
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)"
-      variables="cmt_mark"
-   ><![CDATA[
-      \t   /// Modulator Data Register Mark
-      \t   uint16_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)"
-      variables="cmt_space"
-   ><![CDATA[
-      \t   /// Modulator Data Register Space
-      \t   uint16_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)"
-      variables="cmt_pps_ppsdiv"
-   ><![CDATA[
-      \t   /// Primary Prescaler Register
-      \t   %paramType %registerName = CmtClockPrescaler_Auto;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)"
-      variables="cmt_dma_irq"
-   ><![CDATA[
-      \t   /// %description
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)"
-      variables="/PCR/nvic_irqLevel,irqLevel"
-   ><![CDATA[
-      \t   /// %description
-      \t   %paramType %registerName0 = %defaultValue;
-      \t\n
-   ]]></variableTemplate>
-
-   <!-- ____ Init class Constructors _______ -->
-
-   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="/$(_BASENAME)/irqHandlingMethod"
-      variables="irqHandlingMethod"
-      linePadding="xxx"
-   ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      this->%paramName0 = %paramExpression;
-      \t   }\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)"
-      variables="/PCR/nvic_irqLevel"
-      linePadding="xxx"
-   ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      %registerName = %paramExpression;
-      \t   }\n\n
-   ]]></variableTemplate>
+   <!-- ____ BasicInfo::Init class Constructors ____________ -->
 
    <for keys="r"
       values="
@@ -679,12 +692,13 @@
             cmt_msc_cmtdiv;
             cmt_msc_mode
             " >
-      <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)"
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx" >
       <![CDATA[
          \t   /**
          \t    * Constructor for %description
+         \t    * (%variables)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -694,35 +708,12 @@
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t
-         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t      %constructorFieldAssignment;
          \t   }
          \t\n
       ]]>
       </variableTemplate>
    </for>
-
-   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)"
-      variables="cmt_dma_irq"
-      linePadding="xxx" >
-   <![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      // Parameter contains non-overlapping bit fields from two registers
-      \t      dma = (dma & ~CMT_DMA_DMA_MASK)   | (CMT_DMA_DMA_MASK & %paramName);
-      \t      msc = (msc & ~CMT_MSC_EOCIE_MASK) | (CMT_MSC_EOCIE_MASK & %paramName);
-      \t   }
-      \t\n
-   ]]>
-   </variableTemplate>
 
    <for keys="r"
       values="
@@ -756,17 +747,156 @@
       </variableTemplate>
    </for>
 
-   <!-- ____ Init class Configure method ____ -->
+   <variableTemplate where="basicInfo" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)"
+      variables="cmt_dma_irq"
+      linePadding="xxx" >
+   <![CDATA[
+      \t   /**
+      \t    * Constructor for %description
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      %paramDescription
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t
+      \t      // Parameter contains non-overlapping bit fields from two registers
+      \t      dma = (dma & ~CMT_DMA_DMA_MASK)   | (CMT_DMA_DMA_MASK & %paramName);
+      \t      msc = (msc & ~CMT_MSC_EOCIE_MASK) | (CMT_MSC_EOCIE_MASK & %paramName);
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
 
-   <template codeGenCondition="$(_BasicInfoGuard)" >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t}; // class $(_BasicInfo)::Init
+      \t\n
+   ]]>
+   </template>
+
+<!-- ====================================================================================================== -->
+<!--     END BasicInfo::Init class      -->
+<!-- ====================================================================================================== -->
+
+   <!-- ____ BasicInfo class Configure methods ____ -->
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      linePadding="xxx" >
+   <![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t * This routine does not configure pins or interrupt handlers
+      \t *
+      \t * @param $(_basename)           Hardware instance pointer
+      \t * @param clockFrequency Clock frequency
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(
+      \t               volatile $(_Type) *$(_basename),
+      \t               const Init    &init) {
+      \t
+      \t   //clockInitialise($(_basename), clockFrequency, init.clockFrequency);
+      \t\n
+   ]]>
+   </template>
+   <for keys=
+             " var                                                    : statement            "
+      values=" cmt_msc_mcgen                                          : %register = 0;
+               cmt_cgh1_ph                                            : %configRegAssignment  ;
+               cmt_cgl1_pl                                            : %configRegAssignment  ;
+               cmt_cgh2_sh                                            : %configRegAssignment  ;
+               cmt_cgl2_sl                                            : %configRegAssignment  ;
+               cmt_oc_irol,cmt_oc_cmtpol,cmt_oc_iropen                : %configRegAssignment  ;
+               cmt_dma_dma                                            : %configRegAssignment  ;
+               cmt_mark                                               : cmt->CMD1    = uint8_t(init.%registerName>>8) ;
+               cmt_mark                                               : cmt->CMD2    = uint8_t(init.%registerName)    ;
+               cmt_space                                              : cmt->CMD3    = uint8_t(init.%registerName>>8) ;
+               cmt_space                                              : cmt->CMD4    = uint8_t(init.%registerName)    ;
+               cmt_pps_ppsdiv                                         : %register    = calculateClockPrescaler(init.%registerName)  ;
+               cmt_msc_cmtdiv,cmt_msc_exspc,cmt_msc_base,
+               cmt_msc_fsk,cmt_msc_eocie,cmt_msc_mcgen                : %configRegAssignment  " >
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         variables="%(var)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t
+         %multilineDescription
+         \t   %(statement);\n
+      ]]>
+      </variableTemplate>
+   </for>
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t * This routine does not configure pins or interrupt handlers
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tvoid configure(const Init &init) const {
+      \t
+      \t   configure($(_basename), init);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+
+<!-- ====================================================================================================== -->
+<!--     END BasicInfo class      -->
+<!-- ====================================================================================================== -->
+<!-- ====================================================================================================== -->
+<!--     START Info class      -->
+<!-- ====================================================================================================== -->
+   <!-- ____ Info constructors ________ -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t// Output pin
+      \ttypedef PcrTable_T<$(_Info), 0> OutputPin;
+      \t\n
+   ]]>
+   </template>
+   
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/*
+      \t *   Default Constructor
+      \t */
+      \t$(_Info)() : $(_BasicInfo)($(_basename)) {
+      \t   defaultConfigure();
+      \t}
+      \t
+      \t/*
+      \t *   Constructor
+      \t */
+      \t$(_Info)(const Init &init) : $(_BasicInfo)($(_basename)) {
+      \t   configure(init);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <!-- Init configure methods -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
       \t */
-      \tstatic inline void defaultConfigure() {
+      \tstatic void defaultConfigure() {
       \t
-      \t   // Update settings
       \t   configure(DefaultInitValue);
       \t}
       \t
@@ -777,43 +907,59 @@
       \t */
       \tstatic void configure(const Init &init) {
       \t
-      \t   // Enable peripheral clock
-      \t   enableClock();
+      \t   // Enable peripheral
+      \t   enable();
       \t\n
-   ]]></template>
-   <template codeGenCondition="/$(_BASENAME)/irqHandlingMethod" condition="/$(_BASENAME)/irqHandlingMethod" >   <![CDATA[
-      \t   // Set call-backs
-      \t   setCallback(init.callbackFunction);
-      \t   enableNvicInterrupt(irqNums[0], init.irqlevel);
-      \t\n
-   ]]></template>
-   <template codeGenCondition="$(_BasicInfoGuard)" >
+   ]]>
+   </template>
+   <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)" >
    <![CDATA[
-      \t   cmt->MSC     = 0;
-      \t   cmt->CGH1    = init.cgh1;
-      \t   cmt->CGL1    = init.cgl1;
-      \t   cmt->CGH2    = init.cgh2;
-      \t   cmt->CGL2    = init.cgl2;
-      \t   cmt->OC      = init.oc;
-      \t   cmt->DMA     = init.dma;
-      \t   cmt->CMD1    = uint8_t(init.mark>>8);
-      \t   cmt->CMD2    = uint8_t(init.mark);
-      \t   cmt->CMD3    = uint8_t(init.space>>8);
-      \t   cmt->CMD4    = uint8_t(init.space);
-      \t   setClockDivider(init.pps);
-      \t
-      \t   cmt->MSC     = init.msc;
+      \t   // Configure call-back
+      \t   if (init.callbacks[0] != nullptr) {
+      \t      setCallback(init.callbacks[0]);
+      \t      enableNvicInterrupts(init.priorities[0]);
+      \t   }
+      \t\n
+   ]]>
+   </template>
+   <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount>1)"
+      variables="irq_enum"
+      immediateVariables="_hardwareIrqCount">
+   <![CDATA[
+      \t   for(int index=0; index<$(_hardwareIrqCount); index++) {
+      \t      if (init.callbacks[index] != nullptr) {
+      \t         // Configure call-back
+      \t         setCallback(%returnType0(index), init.callbacks[index]);
+      \t         enableNvicInterrupts(%returnType0(index), init.priorities[index]);
+      \t      }
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t   $(_BasicInfo)::configure($(_basename), init);
       \t}
       \t\n
    ]]>
    </template>
 
-<!-- ____  Default Initialisation value ____  -->
+   <!-- ____  Default Initialisation value ____ -->
 
-   <variableTemplate codeGenCondition="enablePeripheralSupport"
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr $(_BasicInfo)::Init DefaultInitValue = {\n
+   ]]>
+   </template>
+
+   <variableTemplate where="info" codeGenCondition="$(_InfoGuard)"
       separator=","
       terminator=","
-      padToComments="35"
+      padToComments="45"
       variables="
             cmt_msc_mode,
             cmt_pps_ppsdiv,
@@ -825,40 +971,43 @@
             cmt_cgh2_sh,
             cmt_cgl2_sl,
             cmt_mark,
-            cmt_space,
-            irqLevel
-         "
-   ><![CDATA[
-      \t/**
-      \t * Default initialisation value for $(_Class)
-      \t * This value is created from Configure.usbdmProject settings
-      \t */
-      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues
+            cmt_space
+         " >
+   <![CDATA[
+      \t%initNonZeroValues
       \t};
       \t\n
-   ]]></variableTemplate>
-
-   <template where="basicInfo" discardRepeats="true" codeGenCondition="$(_BasicInfoGuard)" >
-      <![CDATA[
-      \t}; // class $(_Baseclass)BasicInfo::Init
-      \t\n
    ]]>
-   </template>
+   </variableTemplate>
 
-   <!-- _____ SIM controls _____ -->
+<!-- ====================================================================================================== -->
+<!--     END Info class      -->
+<!-- ====================================================================================================== -->
+<!-- ====================================================================================================== -->
+<!--     Common      -->
+<!-- ====================================================================================================== -->
 
-   <category name="Advanced" description="Pin mapping and clock enables" >
-    <!-- None -->
-   </category>
-
-   <!-- _____ Common _____ -->
-
-   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
       \t/**
-      \t * Class representing $(_NAME)
+      \t * Class representing a Carrier Modulator Transmitter.
+      \t *
+      \t * Typical modes of operation:
+      \t * Time mode
+      \t *    Waveform alternates between modulation frequency (mark) and idle (space).
+      \t *    Modulation waveform is controlled by setPrimaryTiming().
+      \t *    Mark/Space time is controlled by setMarkSpaceTiming().
+      \t * Baseband mode
+      \t *    Waveform alternates between high (mark) and idle (space) without use of modulation.
+      \t *    Mark/Space time is controlled by setMarkSpaceTiming().
+      \t * FSK mode
+      \t *    Waveform changes between two modulation frequencies(mark) separated by idle time (space) i.e.
+      \t *    (Primary modulation - idle - Secondary modulation - idle) repeated.
+      \t *    Modulation waveforms are controlled by setPrimaryTiming() and setSecondaryTiming().
+      \t *    Mark/Space time is controlled by setMarkSpaceTiming().
+      \t *    Space time may be set to zero to obtain simple FSK with no idle time.
       \t */
-      \tclass $(_Class) : public $(_Baseclass)_T<$(_Info)> {};
+      \ttypedef $(_Info) $(_Class);
       \t\n
    ]]>
    </template>
@@ -873,7 +1022,7 @@
       <copy source="Snippets/cmt-sirc-example.cpp"  target="Snippets/cmt-sirc-example.cpp"  overwrite="true" derived="true" />
    </projectActionList>
 
-   <!-- _____ Startup _____ -->
+   <!-- ____ Startup ____ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
@@ -885,7 +1034,7 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <!-- _____ SIM configuration _____ -->
+   <!-- ____ SIM configuration ____ -->
 
    <category name="Advanced" description="SIM configuration">
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
@@ -894,6 +1043,7 @@
       </for>
    </category>
 
+   <!--  ____ Signal mapping ____ -->
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 
 </peripheralPage>

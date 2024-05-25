@@ -258,7 +258,7 @@
       <choice value="0,0,1,1" enum="8"    name="8 samples"    />
       <choice value="0,0,1,2" enum="16"   name="16 samples"   />
       <choice value="0,0,1,3" enum="32"   name="32 samples"   />
-      <choice value="1,1,1,3" enum="Cal"  name="32 samples + clear flag + start calibration" />
+      <choice value="1,1,1,3" enum="Cal"  name="32 samples + clear flag + start calibration" hidden="true" />
    </choiceOption>
 
    <binaryOption key="adc_cfg2_adhsc" description="High-Speed Configuration"
@@ -633,19 +633,20 @@
    \t */
    \tstatic constexpr int mapChannelNumToPhysicalChannelNum(AdcChannelNum adcChannelNum) {
    \t
+   #if $(adc_sc1_diff_present:false) // adc_sc1_diff_present
+   \t   if (adcChannelNum<=AdcChannelNum_DiffLast) {
+   \t      // channels SE0-SE4,SE4a-SE7a,SE8-SE31,DIFF0-DIFF4
+   \t      return int(adcChannelNum);
+   \t   }
+   #else
    \t   if (adcChannelNum<=AdcChannelNum_Disabled) {
    \t      // channels SE0-SE4,SE4a-SE7a,SE8-SE31
    \t      return int(adcChannelNum);
    \t   }
-   #if $(adc_sc1_diff_present:false) // adc_sc1_diff_present
-   \t   if (adcChannelNum<=AdcChannelNum_DiffLast) {
-   \t      // channels DIFF0-DIFF4
-   \t      return ADC_SC1_DIFF_MASK|(int(adcChannelNum)-AdcChannelNum_DiffFirst);
-   \t   }
    #endif
    \t   if (adcChannelNum<=AdcChannelNum_BLast) {
    \t      // channels SE4b-SE7b
-   \t      return int(adcChannelNum)-AdcChannelNum_BFirst+AdcChannelNum_AFirst;
+   \t      return int(adcChannelNum)&ADC_SC1_ADCH_MASK;
    \t   }
    \t   return -1;
    \t}\t\n
@@ -840,6 +841,7 @@ protected:
    \t\n
    ]]>
    </template>
+   
    <template location="%(where)" codeGenCondition="%(guard)" >
    <![CDATA[
 public:
@@ -893,16 +895,6 @@ public:
    \t}
    \t
    \t/**
-   \t * Set averaging mode
-   \t *
-   \t * @param[in] adcAveraging Mode for averaging e.g. AdcAveraging_4 etc
-   \t *
-   \t * @note This affects all channels on the ADC
-   \t */
-   \t%(static)void setAveraging(AdcAveraging adcAveraging) %(const){
-   \t   adc->SC3 = (adc->SC3&~(ADC_SC3_AVGE_MASK|ADC_SC3_AVGS_MASK))|adcAveraging;
-   \t}
-   \t/**
    \t * Configure comparison mode.
    \t *
    \t * @param[in] adcCompare   Comparison operation to enable
@@ -937,20 +929,6 @@ public:
    \t
    \t   // Set comparison fields
    \t   adc->SC2 = adc->SC2 | (adc->SC2&~mask)|(adcCompare&mask);
-   \t}
-   \t
-   \t/**
-   \t * Enable/disable continuous conversion mode.
-   \t *
-   \t * @param[in] adcContinuous  Controls continuous conversion mode.
-   \t */
-   \t%(static)void enableContinuousConversions(AdcContinuous adcContinuous = AdcContinuous_Enabled) %(const){
-   \t   if (adcContinuous) {
-   \t      adc->SC3 = adc->SC3 | ADC_SC3_ADCO_MASK;
-   \t   }
-   \t   else {
-   \t      adc->SC3 = adc->SC3 & ~ADC_SC3_ADCO_MASK;
-   \t   }
    \t}
    \t
    \t/**
@@ -1006,16 +984,6 @@ public:
    \t};
    \t
    \t/**
-   \t * Check if ADC is current doing a conversion
-   \t *
-   \t * @return true   => ADC is busy doing a conversion
-   \t * @return false  => ADC is idle
-   \t */
-   \t%(static)bool isBusy() %(const){
-   \t   return adc->SC2&ADC_SC2_ADACT_MASK;
-   \t}
-   \t
-   \t/**
    \t * Set clock source
    \t *
    \t * @param[in] adcClockSource  Clock source e.g. AdcClockSource_Asynch
@@ -1032,26 +1000,10 @@ public:
    \t   adc->CFG1 = (adc->CFG1&~(ADC_CFG1_ADIV_MASK|ADC_CFG1_ADICLK_MASK))|adcClockSource|adcClockDivider;
    \t}
    \t
-   \t/**
-   \t * Enable ADC internal asynchronous clock source
-   \t *
-   \t * @note It is not necessary to enable the internal clock to use it as an ADC clock source.\n
-   \t *       If the internal clock is selected, it will be automatically enabled when an ADC conversion is initiated.\n
-   \t *       However, enabling it beforehand will reduce the latency of the 1st conversion in a sequence.
-   \t */
-   \t%(static)void enableAsynchronousClock() %(const){
-   \t   adc->CFG2 = adc->CFG2 | ADC_CFG2_ADACKEN_MASK;
-   \t}
-   \t
-   \t/**
-   \t * Disable ADC internal asynchronous clock source
-   \t */
-   \t%(static)void disableAsynchronousClock() %(const){
-   \t   adc->CFG2 = adc->CFG2 & ~ADC_CFG2_ADACKEN_MASK;
-   \t}
    \t\n
    ]]>
    </template>
+   
    <template location="%(where)" codeGenCondition="%(guard)" condition="adc_pga_pgaen_present&amp;&amp;adc_pga_pgachpb_present" >
    <![CDATA[
    \t/**
@@ -1113,6 +1065,7 @@ public:
    <![CDATA[
       \t/**
       \t * Set %description
+      \t * (%variables)
       \t *
       %paramDescription
       \t */
@@ -1124,6 +1077,7 @@ public:
       \t
       \t/**
       \t * Get %description
+      \t * (%variables)
       \t *
       \t * @return %tooltip
       \t */
@@ -1144,10 +1098,10 @@ public:
          adc_cfg1_adiclk      : true  : true  : false : enableGettersAndSetters : ClockSelect;
 
          adc_cfg2_muxsel      : true  : true  : false : true                    : Muxsel;
-         adc_cfg2_adacken     : true  : true  : false : true                    : AsyncClockEnable;
+         adc_cfg2_adacken     : true  : true  : false : true                    : AsynchronousClock;
          adc_cfg2_adhsc       : true  : true  : false : enableGettersAndSetters : HighSpeed;
 
-         adc_sc2_adact        : false : true  : false : enableGettersAndSetters : ConversionActive;
+         adc_sc2_adact        : false : true  : false : true                    : ConversionActive;
          adc_sc2_adtrg        : true  : true  : false : enableGettersAndSetters : Trigger;
          adc_sc2_acfe         : true  : true  : false : enableGettersAndSetters : CompareFunction;
          adc_sc2_acfgt        : true  : true  : false : enableGettersAndSetters : CompareFunctionGT;
@@ -1155,10 +1109,8 @@ public:
          adc_sc2_dmaen        : true  : true  : false : true                    : Dma;
          adc_sc2_refsel       : true  : true  : false : enableGettersAndSetters : Reference;
 
-         adc_sc3_cal          : true  : true  : false : enableGettersAndSetters : StartCalibrate;
-         adc_sc3_calf         : false : true  : w1cIm : enableGettersAndSetters : CalibrateFlag;
-         adc_sc3_adco         : true  : true  : false : true                    : Continuous;
-         adc_sc3_avg          : true  : true  : false : true                    : Average;
+         adc_sc3_adco         : true  : true  : false : true                    : ContinuousConversions;
+         adc_sc3_avg          : true  : true  : false : true                    : Averaging;
 
          adc_ofs_ofs          : true  : true  : false : enableGettersAndSetters : Offset;
 
@@ -1723,20 +1675,8 @@ public:
       \t */
       \tstatic constexpr $(_BasicInfo)::Init DefaultInitValue = {\n
    ]]>
-   <!-- Interrupt information -->
    </template>
-<!--
-   <variableTemplate where="info" codeGenCondition='$(_InfoIrqGuard)&amp;&amp;!IsZero("irqLevel")'
-      variables='irqLevel'
-      separator=","
-      terminator=","
-      padToComments="40" >
-   <![CDATA[
-      \t   %initExpression,
-      \t   unhandledCallback,\n
-   ]]>
-   </variableTemplate>
--->
+   
    <variableTemplate where="info" codeGenCondition="$(_InfoGuard)"
       separator=","
       terminator=","
@@ -1780,6 +1720,7 @@ public:
             adc_sc1[%(pretrigger)]_aien"
             >
       <![CDATA[
+         \t
          \t   AdcPretrigger_%(pretrigger),             // sc1[%(pretrigger)]/r[%(pretrigger)] ,%initExpression\n
       ]]></variableTemplate>
    </for>

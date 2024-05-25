@@ -20,68 +20,6 @@
 namespace USBDM {
 
 $(/CMT/peripheral_h_definition:// $/CMT/peripheral_h_definition not found)
-/**
- * @addtogroup CMT_Group CMT, Carrier Modulator Transmitter
- * @brief  Abstraction for Carrier Modulator Transmitter
- * @{
- */
-
-/**
- * Template class representing a Carrier Modulator Transmitter.
- *
- * Typical modes of operation:
- * Time mode
- *    Waveform alternates between modulation frequency (mark) and idle (space).
- *    Modulation waveform is controlled by setPrimaryTiming().
- *    Mark/Space time is controlled by setMarkSpaceTiming().
- * Baseband mode
- *    Waveform alternates between high (mark) and idle (space) without use of modulation.
- *    Mark/Space time is controlled by setMarkSpaceTiming().
- * FSK mode
- *    Waveform changes between two modulation frequencies(mark) separated by idle time (space) i.e.
- *    (Primary modulation - idle - Secondary modulation - idle) repeated.
- *    Modulation waveforms are controlled by setPrimaryTiming() and setSecondaryTiming().
- *    Mark/Space time is controlled by setMarkSpaceTiming().
- *    Space time may be set to zero to obtain simple FSK with no idle time.
- *
- * @tparam info      Information class for CMT
- */
-template<class Info>
-class Cmt_T : public Info, public PcrTable_T<Info, 0> {
-
-protected:
-   /** Class to static check output is mapped to a pin - Assumes existence */
-   template<unsigned index> class CheckOutputIsMapped {
-
-      // Check mapping - no need to check existence
-      static constexpr bool Test1 = (Info::info[index].pinIndex != PinIndex::UNMAPPED_PCR);
-
-      static_assert(Test1, "CMT output is not mapped to a pin - Modify Configure.usbdm");
-
-   public:
-      /** Dummy function to allow convenient in-line checking */
-      static constexpr void check() {}
-   };
-
-   // Output pin
-   using OutputPin = PcrTable_T<Info, 0>;
-
-public:
-   // Make these visible and remove ambiguity
-   using Info::configure;
-   using Info::irqHandler;
-
-   /**
-    * Hardware instance pointer.
-    *
-    * @return Reference to CMT hardware
-    */
-   static constexpr HardwarePtr<CMT_Type> cmt = Info::baseAddress;
-
-public:
-$(/CMT/classInfo: // No class Info found)
-};
-
 $(/CMT/declarations: // No declaration found)
 /**
  * End CMT_Group

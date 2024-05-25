@@ -276,7 +276,7 @@ public:
    template<AdcChannelNum channel>
    class Channel : public ChannelCommon<channel>  {
    private:
-      AdcBasicInfo::CheckPinExistsAndIsMapped<Info, channel> check;
+      static constexpr AdcBasicInfo::CheckPinExistsAndIsMapped<Info, channel> check{};
 #if $(/ADC0/adc_sc1_diff_present:false) // adc_sc1_diff_present
       static_assert(((channel<AdcChannelNum_DiffFirst)||(channel>AdcChannelNum_DiffLast)), "Illegal channel number");
 #endif
@@ -377,8 +377,8 @@ public:
       DiffChannel(const DiffChannel&) = delete;
       DiffChannel(DiffChannel&&) = delete;
 
-      AdcBasicInfo::CheckPinExistsAndIsMapped<Info, channel>   checkPos;
-      AdcBasicInfo::CheckPinExistsAndIsMapped<Info, channel+8> checkNeg;
+      static constexpr AdcBasicInfo::CheckPinExistsAndIsMapped<Info, channel>   checkPos{};
+      static constexpr AdcBasicInfo::CheckPinExistsAndIsMapped<Info, channel+8> checkNeg{};
 
    public:
       constexpr DiffChannel() : ChannelCommon<AdcChannelNum(channel)>() {}

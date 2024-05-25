@@ -162,11 +162,11 @@
    <!-- Condition evaluated during parsing that enables processing of this option -->
    <!ATTLIST graphicBox  condition        CDATA        #IMPLIED>
 
-<!-- ____  graphicItem -->
+<!-- ____  | -->
 <!ELEMENT graphicItem EMPTY >
    <!ATTLIST graphicItem  id              CDATA        #IMPLIED>
    <!ATTLIST graphicItem  name            CDATA        #IMPLIED>
-   <!ATTLIST graphicItem  type            CDATA        #REQUIRED>
+   <!ATTLIST graphicItem  type            (variableBox|box|choice|mux|connector|node|junction|label|reference|annotation|group|polygon)  #REQUIRED>
    <!ATTLIST graphicItem  params          CDATA        #REQUIRED>
    <!ATTLIST graphicItem  var             CDATA        #IMPLIED>
    <!ATTLIST graphicItem  edit            CDATA        #IMPLIED>

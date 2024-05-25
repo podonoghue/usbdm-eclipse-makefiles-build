@@ -11,6 +11,9 @@
 
    <constant key="definitionsInHeader" value="true" type="Boolean" />
 
+   <!-- ____ Instance control ________ -->
+   <constant key="_can_create_instance" value="true" type="Boolean" />
+
    <equation key="suppressIrqHandler"         value="" />
    <equation key="irq_parameters"             value="const CmpStatus &amp;status"  />
    <equation key="irq_dummy_parameters"       value="const CmpStatus &amp;"  />
@@ -20,16 +23,132 @@
    <xi:include href="enablePeripheral.xml"    />
    <title />
 
-   <template>
-      <![CDATA[
-         \t//! Pin number in Info table for comparator output if mapped to a pin
-         \tstatic constexpr int outputPin  = 8;\n\n
-      ]]>
-   </template>
+   <variable key="cmp_holder"                   type="String" expression='"Comparitor"' />
+   <!-- constant key="window_input" value='"PDB"'   description="External Window input" / -->
+   <!--  constant key="trigger"      value='"LPTMR"'      description="External Trigger input" / -->
+
+   <stringOption key="window_input" 
+      enabledBy="cmp_mode==(6,7,8)"
+      hidden="true"
+      derived="true"
+      description="External Window input"
+      value="PDB"
+   />   
+
+   <stringOption key="sample_input" 
+      enabledBy="cmp_mode==(2,4)"
+      hidden="true"
+      derived="true"
+      description="External Window input"
+      value="PDB"
+   />   
+
+   <stringOption key="trigger" 
+      hidden="true"
+      derived="true"
+      enabledBy="cmp_cr1_trigm"
+      description="External Trigger input"
+      value="LPTMR"
+   />   
+
+   <aliasOption key="cmp_mode" locked="false" />
+   
+   <graphic key="cmp_config_graphics"
+      var="cmp_holder"
+      description="Comparator Configuration"
+      toolTip="Opens a dialogue to configure the comparator" >
+      
+      <graphicBox       x="10" y="10" params="0,0, x1000, y400, x" >
+         <graphicItem id="Mode of operation"  var="cmp_mode"  type="variableBox" params="250, 25,  240, large"                          />
+
+         <!-- DAC -->         
+         <graphicItem type="polygon"     id="DAC,x+10,y+25" var="cmp_daccr_vosel"     params="120:240, y+40,i, y+40, +40:-20,i, +40:-20,o, -80:-40" />
+         <graphicItem type="node"                           var="cmp_daccr_dacen"     params="180,280"              />
+         <graphicItem type="variableBox" id="Reference"     var="cmp_daccr_vrsel"     params="120,360,  180, small, on-60"    />
+         <graphicItem type="connector"                                                params="DAC,0, Input +,0, x"            />
+         <graphicItem type="connector"                                                params="DAC,0, Input -,0, x"            />
+         <graphicItem type="connector"                                                params="Reference,0, DAC,0, y,x"        />
+
+         <!-- CMP -->
+         <graphicItem type="variableBox" id="Input +"       var="cmp_muxcr_psel"      params="130, 105,  250, large, is100, oe"    />
+         <graphicItem type="variableBox" id="Input -"       var="cmp_muxcr_msel"      params="130, 205,  250, large, is100, oe"    />
+                            
+         <graphicItem type="connector"                                                params="Input +,0, CMP,0, (x-30),y,x"            />
+         <graphicItem type="connector"                                                params="Input -,0, CMP,1, (x-30),y,x"            />
+         <graphicItem type="polygon"     id="CMP,x+20,y+30,NOVALUE"  var="cmp_cr1_en" params="300:115, y+20,i, y+40,i, y+20, +20:-10,i, +30:-15,i, +30:-15,o" />
+
+         <!-- Inversion -->
+         <graphicItem type="connector"                                                params="CMP,0, Polarity,0"     />
+         <graphicItem type="variableBox" id="Polarity"      var="cmp_cr1_inv"         params="460, 155,  90, large"    />
+                                                            
+         <!-- Window -->
+         <graphicItem type="connector"                                                params="Polarity,0,      Window,0"     />
+         <graphicItem type="variableBox" id="Window"        var="cmp_cr1_we"          params="580, 155,  90, large, iw,is-30, is+30,oe"    />
+                                                            
+         <graphicItem type="connector"                                                  params="Window,0, Filter,0, x,y"     />
+         <graphicItem type="variableBox" id="Filter"        var="cmp_cr0_filter_cnt"    params="730, 155,  150, large, iw,is+50,oe"    />
+         <graphicItem type="variableBox" id="fi,NONAME,"    var="cmp_fpr_filt_interval" params="730, 185,  150, small, is+50"    />
+                                                            
+         <graphicItem type="connector"                                                params="Filter,0, Action,0" />
+         <graphicItem type="variableBox" id="Action"        var="cmp_scr_interrupt"   params="885, 155,  100, large, oe, os"      />
+         <graphicItem type="connector"                                                params="Action,0, IRQ,0"            />
+         <graphicItem type="node"        id="IRQ,x+40,y+17" var="cmp_scr_interrupt"   params="1000, 155"                  />
+
+         <graphicItem type="connector"                      var="cmp_scr_dmaen"       params="Action,1, Dma,0"               />
+         <graphicItem type="variableBox" id="Dma"           var="cmp_scr_dmaen"       params="885,  250,  100, large, in" />
+         <graphicItem type="connector"                                                params="Dma,0, DMA,0"               />
+         <graphicItem type="node"        id="DMA,x+40,y+17" var="cmp_scr_dmaen"       params="1000, 250"                  />
+
+         <graphicItem type="variableBox" id="Hysteresis"    var="cmp_cr0_hystctr"     params="400, 235,  140, small, on"    />
+         <graphicItem type="variableBox" id="Speed"         var="cmp_cr1_pmode"       params="400, 255,  140, small"        />
+         <graphicItem type="connector"                                                params="Hysteresis,0, CMP,3, x,y"     />
+         
+         <graphicItem type="variableBox" id="Trigger In.0"      var="trigger"         params="320, 450,  140, small, on"    />
+         <graphicItem type="connector"                                                params="Trigger In.0,0, Trigger In,0, x,y"     />
+         <graphicItem type="node"        id="Trigger In,NONAME" var="trigger"         params="320, 400, is, on"                />
+         <graphicItem type="connector"                                                params="Trigger In,0, Trigger,0, (y+20),x,y"     />
+
+         <graphicItem type="variableBox" id="Trigger"       var="cmp_cr1_trigm"       params="320, 360,  140, small,on,is"  />
+         <graphicItem type="connector"                      var="trigger"             params="Trigger,0, DAC,1, y-30,d,x,y"     />
+         <graphicItem type="connector"                      var="trigger"             params="Trigger,0, CMP,2"       />
+         
+
+         <graphicItem type="connector"                                                params="Window,0, COS,1, x+10,d,y"     />
+         <graphicItem type="connector"                                                params="Filter,0, COS,2, x+10,d,y"     />
+         <graphicItem type="mux"         id="COS"            var="cmp_cr1_output"     params="860, 70, 0, normal"       />
+         <graphicItem type="connector"                                                params="COS,0, COUT,0"     />
+         <graphicItem type="node"        id="COUT,x+40,y+17" var="cmp_cr1_output"     params="1000, 70"                />
+
+
+         <graphicItem type="variableBox" id="Clock Prescaler" var="cmp_fpr_filt_per"  params="600, 270,  120, large, iw"    />
+         <graphicItem type="variableBox" id="fp,NONAME,"      var="cmp_filterPeriod"  params="600, 300,  120, small"    />
+         
+         <graphicItem type="connector"                                                  params="Clock Prescaler,0, Filter Clock,0, x+20,y,x"     />
+         <graphicItem type="mux"         id="Filter Clock,x-30,y+70"  var="cmp_cr1_se"  params="740, 280, 0"       />
+         <graphicItem type="connector"                                                  params="Filter Clock,0, fi,0, x,y"     />
+
+         <graphicItem type="variableBox" id="Clock Config"   var="cmpClockConfig"     params="600, 450, 300, small" />
+         <graphicItem type="variableBox" id="Input Clock.0"  var="input_clock"        params="600, 470, 300, small, on-100" />
+         <graphicItem type="connector"                                                params="Input Clock.0,0, Input Clock,0, x,y"     />
+         <graphicItem type="node"        id="Input Clock,NONAME" var="input_clock"    params="500, 400, is, on"                />
+         <graphicItem type="connector"                                                params="Input Clock,0, Clock Prescaler,0, y,d,x"     />
+         <graphicItem type="connector"                                                params="Input Clock,0, Window,1, (y+30),x,y"     />
+         
+         <graphicItem type="variableBox" id="Window In.0"        var="window_input"   params="830, 450,  120, small, on"    />
+         <graphicItem type="variableBox" id="Sample In.0"        var="sample_input"   params="830, 470,  120, small, on"    />
+         <graphicItem type="connector"                           var="window_input"   params="Window In.0,0, Window In,0, x,y"     />
+         <graphicItem type="connector"                           var="sample_input"   params="Sample In.0,0, Window In,0, x,y"     />
+         <graphicItem type="node"        id="Window In,NONAME"   var="window_input"   params="800, 400, is, on"                />
+         <graphicItem type="connector"                           var="sample_input"   params="Window In,0, Filter Clock,1, y-40,x-100,y,d,x"     />
+         <graphicItem type="connector"                           var="window_input"   params="Window In,0, Window,2,       y-40,x-100,(y+40),x"     />
+         
+      </graphicBox>
+      
+   </graphic>
 
    <!-- Interrupts and DMA -->
    <choiceOption key="cmp_scr_interrupt" condition="cmp_scr_ier_present || cmp_scr_ief_present"
-      enabledBy="irqHandlingMethod"
+      enabledBy="irqHandlingMethod&amp;&amp;(cmp_cr1_en)"
       typeName="CmpEvent"
       baseType="uint8_t"
       valueFormat="CMP_SCR_IER(%s),CMP_SCR_IEF(%s)"
@@ -42,6 +161,7 @@
    </choiceOption>
 
    <binaryOption key="cmp_scr_dmaen" condition="cmp_scr_dmaen_present"
+      enabledBy="cmp_scr_interrupt>0"
       typeName="CmpDma"
       baseType="uint8_t"
       description="DMA Enable Control"
@@ -65,7 +185,7 @@
    </choiceOption>
 
    <intOption key="input_clock"
-      ref="/SIM/system_bus_clock[0]"
+      enabledBy="cmp_mode==(3,5,6,7,8)"
       locked="true"
       derived="true"
       units="Hz"
@@ -75,7 +195,7 @@
    <title description="Configuration" />
 
    <choiceOption key="cmp_cr0_hystctr" condition="cmp_cr0_hystctr_present"
-      enabledBy="enablePeripheralSupport"
+      enabledBy="cmp_cr1_en"
       typeName="CmpHysteresis"
       baseType="uint8_t"
       description="Comparator hard block hysteresis control"
@@ -90,17 +210,17 @@
    <!-- ____ CR1 ________ -->
 
    <binaryOption key="cmp_cr1_pmode" condition="cmp_cr1_pmode_present"
-      enabledBy="enablePeripheralSupport"
+      enabledBy="cmp_cr1_en"
       typeName="CmpPower"
       baseType="uint8_t"
       description="Power Mode Select"
       toolTip="Selects trade-off between speed and power consumption">
-      <choice value="0" name="Low-Speed Comparison mode"  enum="LowSpeed"  />
-      <choice value="1" name="High-Speed Comparison mode" enum="HighSpeed" />
+      <choice value="0" name="Low-Speed"  enum="LowSpeed"  />
+      <choice value="1" name="High-Speed" enum="HighSpeed" />
    </binaryOption>
 
    <binaryOption key="cmp_cr1_inv" condition="cmp_cr1_inv_present"
-      enabledBy="enablePeripheralSupport"
+      enabledBy="cmp_cr1_en"
       typeName="CmpPolarity"
       baseType="uint8_t"
       description="Comparator Invert"
@@ -110,7 +230,7 @@
    </binaryOption>
 
    <binaryOption key="cmp_cr1_trigm" condition="cmp_cr1_trigm_present"
-      enabledBy="enablePeripheralSupport"
+      enabledBy="cmp_cr1_en"
       typeName="CmpTrigger"
       baseType="uint8_t"
       description="Trigger Mode Enable"
@@ -118,12 +238,12 @@
               CMP Trigger mode depends on an external timer resource to periodically enable \n
               Upon setting TRIGM, the CMP and DAC are placed in a standby state until an \n
               external timer resource trigger is received.">
-      <choice value="0" name="Trigger mode is disabled" enum="Disabled" />
-      <choice value="1" name="Trigger mode is enabled"  enum="Enabled"  />
+      <choice value="0" name="Disabled" enum="Disabled" />
+      <choice value="1" name="Enabled"  enum="Enabled"  />
    </binaryOption>
 
    <choiceOption key="cmp_cr1_output" condition="cmp_cr1_ope_present || cmp_cr1_cos_present"
-      enabledBy="enablePeripheralSupport"
+      enabledBy="cmp_cr1_en"
       typeName="CmpOutput"
       baseType="uint8_t"
       valueFormat="CMP_CR1_OPE(%s),CMP_CR1_COS(%s)"
@@ -135,6 +255,7 @@
    </choiceOption>
 
    <choiceOption key="cmp_muxcr_psel"
+      enabledBy="cmp_cr1_en"
       valueFormat="CMP_MUXCR_PSEL(%s)"
       typeName="CmpInputPlus"
       baseType="uint8_t"
@@ -146,6 +267,7 @@
    </choiceOption>
 
    <choiceOption key="cmp_muxcr_msel"
+      enabledBy="cmp_cr1_en"
       valueFormat="CMP_MUXCR_MSEL(%s)"
       typeName="CmpInputMinus"
       baseType="uint8_t"
@@ -219,62 +341,83 @@
       <choice value="true"  enum="Enabled"  name="Seconds support enabled" />
    </binaryOption>
 
-   <choiceOption key="cmp_filter"
+   <choiceOption key="cmp_mode"
       enabledBy="enablePeripheralSupport"
-      target="cmp_cr1_en;cmp_cr1_we;cmp_cr1_se;cmp_cr0_filter;cmp_fpr_filt_per"
+      target="cmp_cr1_en;cmp_cr1_we;cmp_cr1_se;cmp_cr0_filter_cnt;cmp_fpr_filt_per"
       valueFormat="%s"
       baseType="uint8_t"
       typeName="CmpFilterMode"
       description="Comparator Filtering Mode"
-      toolTip="Disabled\n
-               Comparator is non-functional and consumes no power.\n
-               CMPO is 0 in this mode.\n
-               \n
-               Mode 2a/b - Continuous mode\n
-               CMPO is not subject to sampling or filtering. \n
-               Both window control and filter blocks are completely bypassed.  \n
-               SCR[COUT] is updated continuously.  \n
-               The path from comparator input pins is operating in combinational unclocked mode. \n
-               \n
-               Mode 3a/b - Sampled, Non-Filtered mode\n
-               CMPO is not subject to sampling or filtering.  \n
-               Window control is bypassed. The filter block operates as a simple Sample &amp; Hold \n
-               3a/b selects between clock sources for the Sample &amp; Hold \n
-               In 3a the external window/sample input is used to clock the Sample &amp; Hold clock \n
-               In 3b FILT_PER acts as a prescaler for bus clock driving the Sample &amp; Hold clock \n
-               \n
-               Mode 4a/b - Sampled, Filtered mode\n
-               As for 3a/b but the filter is enabled (FILTER_CNT>1) rather than acting as a simple S&amp;H\n
-               \n
-               Mode 5a/b - Windowed mode\n
-               The comparator output is qualified by an external window signal. \n
-               When enabled, the comparator output is clocked by the bus clock and held when not enabled. \n
-               This introduces up to 1 clock delay.\n
-               \n
-               Mode 6 - Windowed/Resampled mode\n
-               The comparator output is qualified by an external window signal. \n
-               When enabled, the comparator output is clocked by the bus clock and then resampled at a \n
-               rate determined by the FILT_PER to generate COUT. \n
-               \n
-               Mode 7 - Windowed/Filtered mode\n
-               The comparator output is qualified by an external window signal. \n
-               When enabled, the comparator output is clocked by the bus clock and then filtered at a \n
-               sample rate determined by the FILT_PER to generate COUT.\n
-               FILTER_CNT determines the filter sample count (width)">
-      <!--                                                                                            cr1_en; cr1_we; cr1_se;filter_cnt;fpr_filt_per  -->
-      <choice value="0" name="1    Disabled"                         enum="Disabled"             ref="false ; false ; false ;     0    ;     0      "  />
-      <choice value="1" name="2a/b Continuous"                       enum="Continuous"           ref="true  ; false ; false ;     0    ;     0      "  />
-      <choice value="2" name="3a   Externally sampled, Non-Filtered" enum="External_NonFiltered" ref="true  ; false ; true  ;     1    ;     0      "  />
-      <choice value="3" name="3b   Internally sampled, Non-Filtered" enum="Internal_NonFiltered" ref="true  ; false ; false ;     1    ;            "  />
-      <choice value="4" name="4a   Externally sampled, Filtered"     enum="External_Filtered"    ref="true  ; false ; true  ;          ;     0      "  />
-      <choice value="5" name="4b   Internally sampled, Filtered"     enum="Internal_Filtered"    ref="true  ; false ; false ;          ;            "  />
-      <choice value="6" name="5a/b Windowed"                         enum="Windowed"             ref="true  ; true  ; false ;     0    ;     0      "  />
-      <choice value="7" name="6    Windowed, Re-sampled"             enum="Windowed_Resampled"   ref="true  ; true  ; false ;     1    ;            "  />
-      <choice value="8" name="7    Windowed, Filtered"               enum="Windowed_Filtered"    ref="true  ; true  ; false ;          ;            "  />
+      toolTip="Comparitor mode of operation">
+      <!--                                                                                            cr1_en; cr1_we; cr1_se;cr0_filter_cnt;fpr_filt_per  -->
+      <choice value="0" name="1    Disabled"                         enum="Disabled"             ref="false ; false ; false ;     0       ;     0      "  
+         toolTip="Comparator is non-functional and consumes no power.\n
+                  CMPO is 0 in this mode." />
+                  
+      <choice value="1" name="2a/b Continuous"                       enum="Continuous"           ref="true  ; false ; false ;     0       ;     0      "    
+         toolTip="Mode 2 - Continuous mode\n
+                  Both window control and filter blocks are completely bypassed.  \n
+                  COUTA,COUT are the output of the comparator, with optional inversion, but without sampling or filtering. \n
+                  SCR[COUT] is updated continuously.  \n
+                  The path from comparator input pins is operating in combinational unclocked mode." />
+                  
+      <choice value="2" name="3a   Externally sampled, Non-Filtered" enum="External_NonFiltered" ref="true  ; false ; true  ;     1       ;     0      "    
+         toolTip="Mode 3a - Externally clocked Sampling, Non-Filtered\n
+                  Window control is bypassed. The filter block operates as a simple Sample and Hold \n
+                  COUTA is the output of the comparator, with optional inversion, but without sampling or filtering. \n
+                  COUT is COUTA after sampling.  \n
+                  The external window/sample input is used to clock the Sample and Hold" />
+               
+      <choice value="3" name="3b   Internally sampled, Non-Filtered" enum="Internal_NonFiltered" ref="true  ; false ; false ;     1       ;     1      "    
+         toolTip="Mode 3a/b - Internally clock Sampling, Non-Filtered mode\n
+                  Window control is bypassed. The filter block operates as a simple Sample and Hold \n
+                  COUTA is the output of the comparator, with optional inversion, but without sampling or filtering. \n
+                  COUT is COUTA after sampling.  \n
+                  FILT_PER acts as a prescaler for the bus clock driving the Sample and Hold" />
+               
+      <choice value="4" name="4a   Externally sampled, Filtered"     enum="External_Filtered"    ref="true  ; false ; true  ;      2      ;     0      "    
+         toolTip="Mode 4a/b - Externally clocked Samping, Filtered mode\n
+                  Window control is bypassed. The filter is enabled (FILTER_CNT>1). \n
+                  COUTA is the output of the comparator, with optional inversion, but without sampling or filtering. \n
+                  COUT is COUTA after filtering.  \n
+                  The external window/sample input is used to clock the Filter.\n
+                  FILTER_CNT determines the filter sample count (width)" />
+               
+      <choice value="5" name="4b   Internally sampled, Filtered"     enum="Internal_Filtered"    ref="true  ; false ; false ;      2      ;     1      "    
+         toolTip="Mode 4a/b - Internally clocked Sampling, Filtered\n
+                  Window control is bypassed. The filter is enabled (FILTER_CNT>1). \n
+                  COUTA is the output of the comparator, with optional inversion, but without sampling or filtering. \n
+                  COUT is COUTA after filtering.  \n
+                  FILT_PER acts as a prescaler for the bus clock driving the Filter\n
+                  FILTER_CNT determines the filter sample count (width)" />
+               
+      <choice value="6" name="5a/b Windowed"                         enum="Windowed"             ref="true  ; true  ; false ;     0       ;     0      "    
+         toolTip="Mode 5a/b - Windowed mode\n
+                  The comparator output is qualified by an external window signal. \n
+                  COUTA is the windowed output of the comparator, with optional inversion. \n
+                  When enabled by the window, the comparator output is clocked by the bus clock and held otherwise. \n
+                  This introduces up to 1 clock delay. " />
+               
+      <choice value="7" name="6    Windowed, Re-sampled"             enum="Windowed_Resampled"   ref="true  ; true  ; false ;     1       ;     1      "    
+         toolTip="Mode 6 - Windowed/Resampled mode\n
+                  The comparator output is qualified by an external window signal and then resampled. \n
+                  COUTA is the windowed output of the comparator, with optional inversion. \n
+                  COUT is COUTA after sampling  \n
+                  When enabled by the window, the comparator output is clocked by the bus clock and then resampled at a \n
+                  rate determined by the bus clock*FILT_PER to generate COUT. " />
+               
+      <choice value="8" name="7    Windowed, Filtered"               enum="Windowed_Filtered"    ref="true  ; true  ; false ;     2       ;     1      "    
+         toolTip=" Mode 7 - Windowed/Filtered mode\n
+                  The comparator output is qualified by an external window signal and then filtered. \n
+                  COUTA is the windowed output of the comparator, with optional inversion. \n
+                  COUT is COUTA after filtering.  \n
+                  When enabled by the window, the comparator output is clocked by the bus clock and then filtered at a \n
+                  sample rate determined by the FILT_PER to generate COUT.\n
+                  FILTER_CNT determines the filter sample count (width)" />
    </choiceOption>
 
    <binaryOption key="cmp_cr1_en"
-      enabledBy="cmp_filter>0"
+      enabledBy="cmp_mode>0"
       typeName="CmpEnable"
       baseType="uint8_t"
       description="Comparator Enable"
@@ -287,7 +430,7 @@
    </binaryOption>
 
    <binaryOption key="cmp_cr1_we"
-      enabledBy="cmp_filter>0"
+      enabledBy="cmp_cr1_en"
       typeName="CmpWindowEnable"
       baseType="uint8_t"
       description="Windowing Enable"
@@ -298,12 +441,12 @@
       disabledValue="false"
       locked="true"
       derived="true">
-      <choice value="0" name="Disabled" enum="Disabled" />
+      <choice value="0" name="Bypassed" enum="Bypassed" />
       <choice value="1" name="Enabled"  enum="Enabled"  isDefault="true" />
    </binaryOption>
 
    <binaryOption key="cmp_cr1_se"
-      enabledBy="cmp_filter>0"
+      enabledBy="cmp_mode==(2,3,4,5,7,8)"
       typeName="CmpSampleEnable"
       baseType="uint8_t"
       description="Sample Enable"
@@ -318,7 +461,7 @@
    <!-- ____ FPR ________ -->
 
    <intOption key="cmp_fpr_filt_per"
-      enabledBy="(cmp_filter==3)||(cmp_filter==5)||(cmp_filter>=7)"
+      enabledBy="cmp_mode==(3,5,7,8)"
       description="Filter Sample Period in ticks"
       toolTip="Specifies the sampling period, in clock cycles, of the comparator output filter \n
                This has no effect if SE=1. In that case, the external SAMPLE signal is used to \n
@@ -326,10 +469,11 @@
       units="ticks"
       baseType="uint8_t"
       disabledValue="0"
-      value="1" min="1" max="255"/>
+      unlockedBy="cmp_mode==(3,5,7,8)"
+      value="1" min="(cmp_mode==(0,1,2,4,6))?0:1" max="255"/>
 
    <floatOption key="cmp_filterPeriod"
-      enabledBy="cmp_filter>0"
+      enabledBy="cmp_fpr_filt_per>0"
       ref="(1.0*cmp_fpr_filt_per)/input_clock#input_clock"
       units="s"
       valueFormat="%s"
@@ -341,42 +485,38 @@
       locked="true"
       value="1k" min="0" />
 
-   <choiceOption key="cmp_cr0_filter"
-      hidden="true"
-      ref="cmp_cr0_filter_cnt"
+   <choiceOption key="cmp_cr0_filter_cnt"
+      unlockedBy="cmp_mode==(4,5,8)"
+      enabledBy="cmp_cr1_en"
       valueFormat="CMP_CR0_FILTER_CNT(%s)"
       typeName="CmpFilterSamples"
       baseType="uint8_t"
       description="Filter Sample Count"
-      derived="true"
-      locked="true"
       toolTip="Represents the number of consecutive samples that must agree prior \n
                to the comparator output filter accepting a new output state">
-      <choice value="0" name="Disabled"             enum="Bypassed"       />
-      <choice value="1" name="Simple sampling"      enum="SimpleSampling" />
-      <choice value="2" name="2 samples must agree" enum="2"              />
-      <choice value="3" name="3 samples must agree" enum="3"              />
-      <choice value="4" name="4 samples must agree" enum="4"              />
-      <choice value="5" name="5 samples must agree" enum="5"              />
-      <choice value="6" name="6 samples must agree" enum="6"              />
-      <choice value="7" name="7 samples must agree" enum="7"              />
+      <choice value="0" name="Bypassed"             enum="Bypassed"       enabledBy="cmp_mode==(0,1,6)" />
+      <choice value="1" name="Simple sampling"      enum="SimpleSampling" enabledBy="cmp_mode==(2,3,7)" />
+      <choice value="2" name="2 samples must agree" enum="2"              enabledBy="cmp_mode==(4,5,8)" />
+      <choice value="3" name="3 samples must agree" enum="3"              enabledBy="cmp_mode==(4,5,8)" />
+      <choice value="4" name="4 samples must agree" enum="4"              enabledBy="cmp_mode==(4,5,8)" />
+      <choice value="5" name="5 samples must agree" enum="5"              enabledBy="cmp_mode==(4,5,8)" />
+      <choice value="6" name="6 samples must agree" enum="6"              enabledBy="cmp_mode==(4,5,8)" />
+      <choice value="7" name="7 samples must agree" enum="7"              enabledBy="cmp_mode==(4,5,8)" />
    </choiceOption>
 
-   <intOption key="cmp_cr0_filter_cnt"
-      unlockedBy="(cmp_filter==4)||(cmp_filter==5)||(cmp_filter==8)"
-      enabledBy="((cmp_filter>=2)&amp;&amp;(cmp_filter&lt;=5))||(cmp_filter&gt;=7)"
+   <!-- intOption key="cmp_cr0_filter_cnt"
+      unlockedBy="(cmp_mode==4)||(cmp_mode==5)||(cmp_mode==8)"
+      enabledBy="((cmp_mode>=2)&amp;&amp;(cmp_mode&lt;=5))||(cmp_mode&gt;=7)"
       disabledValue="0"
       description="Filter Sample Count"
       typeName="CmpFilterSamples"
       baseType="uint8_t"
       toolTip="Represents the number of consecutive samples that must agree prior \n
                to the comparator output filter accepting a new output state"
-      value="2" min="1" max="7"/>
-
-   <aliasOption key="cmp_cr0_filter"/>
+      value="2" min="1" max="7"/ -->
 
    <floatOption key="cmp_fpr_filt_interval"
-      enabledBy="cmp_filter>0"
+      enabledBy="cmp_mode==(2,3,4,5,7,8)"
       ref="cmp_filterPeriod*cmp_cr0_filter_cnt"
       valueFormat="%s_seconds"
       description="Filter Sample Interval in seconds"
@@ -420,12 +560,143 @@
       toolTip="Returns the current value of the Analog Comparator output,"
    />
 
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo Class      -->
+<!-- ====================================================================================================== -->
+
+   <!-- BasicInfo Instance pointer and Constructors  -->
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t// Pointer to $(_BASENAME) hardware instance
+      \tvolatile $(_Type) * const $(_basename);
+      \t\n
+   ]]></template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Constructor
+      \t *
+      \t * @param $(_basename) $(_BASENAME) hardware instance
+      \t */
+      \tconstexpr $(_BasicInfo)(volatile $(_Type) * $(_basename)) : $(_basename)($(_basename)) {
+      \t}
+      \t\n
+   ]]></template>
+
+   <!-- Shared clock selection -->
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Get input clock frequency
+      \t * (Shared by all peripherals)
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic inline uint32_t getInputClockFrequency() {
+      \t   return SystemBusClock;
+      \t}
+      \t\n
+   ]]></template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/** Class to static check output is mapped to a pin - Assumes existence */
+      \ttemplate<int cmpOutput, typename Info> class CheckOutputIsMapped {
+      \t
+      \t   // Check mapping - no need to check existence
+      \t   static constexpr bool Test1 = (Info::info[cmpOutput].pinIndex != PinIndex::UNMAPPED_PCR);
+      \t
+      \t   static_assert(Test1, "CMP output is not mapped to a pin - Modify Configure.usbdm");
+      \t
+      \tpublic:
+      \t   /** Dummy function to allow convenient in-line checking */
+      \t   static constexpr void check() {}
+      \t};
+      \t
+      \t/** Class to static check cmpInput exists and is mapped to a pin */
+      \ttemplate<int cmpInput, typename Info> class CheckPinExistsAndIsMapped {
+      \t   // Tests are chained so only a single assertion can fail so as to reduce noise
+      \t
+      \t   // Out of bounds value for function index
+      \t   static constexpr bool Test1 = (cmpInput>=0) && (cmpInput<(Info::numSignals));
+      \t   // Function is not currently mapped to a pin
+      \t   static constexpr bool Test2 = !Test1 || (Info::info[cmpInput].gpioBit != PinIndex::UNMAPPED_PCR);
+      \t   // Non-existent function and catch-all. (should be INVALID_PCR)
+      \t   static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[cmpInput].gpioBit >= PinIndex::MIN_PIN_INDEX);
+      \t
+      \t   static_assert(Test1, "Illegal CMP Input - Check Configure.usbdm for available inputs");
+      \t   static_assert(Test2, "CMP input is not mapped to a pin - Modify Configure.usbdm");
+      \t   static_assert(Test3, "CMP input doesn't exist in this device/package - Check Configure.usbdm for available input pins");
+      \t
+      \tpublic:
+      \t   /** Dummy function to allow convenient in-line checking */
+      \t   static constexpr void check() {}
+      \t};
+      \t
+      \t//! Pin number in Info table for comparator output if mapped to a pin
+      \tstatic constexpr int outputPin  = 8;
+      \t\n
+   ]]>
+   </template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Get clock frequency
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic __attribute__((always_inline)) uint32_t getClockFrequency() {
+      \t   return SystemBusClock;
+      \t}
+      \t
+      \t/**
+      \t * Converts time in ticks to time in seconds
+      \t *
+      \t * @param[in] ticks Time interval in ticks
+      \t *
+      \t * @return Time in ticks
+      \t */
+      \tstatic Seconds convertTicksToSeconds(const Ticks &ticks) {
+      \t
+      \t   return (float)ticks/getClockFrequency();
+      \t}
+      \t
+      \t/**
+      \t * Converts time in seconds to time in ticks
+      \t *
+      \t * @param[in] seconds Time interval in seconds
+      \t *
+      \t * @return Time in ticks
+      \t */
+      \tstatic Ticks convertSecondsToTicks(const Seconds &seconds) {
+      \t
+      \t   uint32_t res = roundf((float)seconds*getClockFrequency());
+      \t   if (res >= 256) {
+      \t      setErrorCode(E_TOO_LARGE);
+      \t   }
+      \t   return Ticks(res);
+      \t}
+      \t\n
+   ]]></template>
+
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo/Info duplicated methods -->
+<!-- ====================================================================================================== -->
+
+<for
+   keys="   static    : const    : where     : guard                                      "
+   values=" ''        : 'const ' : basicInfo : $(_BasicInfoGuard)                         ;
+            'static ' : ''       : info      : $(_InfoGuard)                              "  >
+
    <!-- ____ Getters and Setters ____________ -->
 
    <for keys="field           : set   : get   : clear : genCode                 : name"
         values="
 
-         cmp_cr0_filter       : true  : true  : false : enableGettersAndSetters : FilterCount;
+         cmp_cr0_filter_cnt       : true  : true  : false : enableGettersAndSetters : FilterCount;
          cmp_cr0_hystctr      : true  : true  : false : enableGettersAndSetters : Hysteresis;
 
          cmp_cr1_se           : true  : true  : false : enableGettersAndSetters : SamppleEnable;
@@ -439,161 +710,245 @@
          cmp_cr1_en           : true  : true  : false : enableGettersAndSetters : Enable;
 
          cmp_fpr_filt_per     : true  : true  : false : enableGettersAndSetters : FiltPeriod;
+
          cmp_scr_dmaen        : true  : true  : false : enableGettersAndSetters : DmaEnable;
-         cmp_scr_ier          : true  : true  : false : enableGettersAndSetters : InterruptEnable;
-         cmp_scr_ief          : true  : true  : false : enableGettersAndSetters : InterruptFlag;
-         cmp_scr_edge         : true  : true  : false : enableGettersAndSetters : Edge;
-         cmp_scr_cout         : false : true  : false : enableGettersAndSetters : OutputState;
+         cmp_scr_edge         : false : true  : w1cIm : true                    : Edge;
+         cmp_scr_cout         : false : true  : false : true                    : OutputState;
+         cmp_scr_interrupt    : true  : true  : false : true                    : InterruptFlag;
 
          cmp_daccr_dacen      : true  : true  : false : enableGettersAndSetters : DacEnable;
          cmp_daccr_vrsel      : true  : true  : false : enableGettersAndSetters : DacReferenceSelect;
-         cmp_daccr_vosel      : true  : true  : false : enableGettersAndSetters : DacVout;
+         cmp_daccr_vosel      : true  : true  : false : true                    : DacLevel;
 
          cmp_muxcr_psel       : true  : true  : false : enableGettersAndSetters : PlusSelect;
          cmp_muxcr_msel       : true  : true  : false : enableGettersAndSetters : MinusSelect" >
-      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
-      ><![CDATA[
+      <variableTemplate location="%(where)" condition="%(set)" codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)" >
+      <![CDATA[
          \t/**
          \t * Set %description
-         \t * (%(field))
+         \t * (%variables)
          \t *
          %paramDescription
          \t */
-         \tstatic void set%(name)(%params) {
+         \t%(static)void set%(name)(%params) %(const){
          \t   %fieldAssignment;
          \t}
          \t\n
-      ]]></variableTemplate>
-      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
-      ><![CDATA[
+      ]]>
+      </variableTemplate>
+      <variableTemplate location="%(where)" condition="%(get)" codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)" >
+      <![CDATA[
          \t/**
          \t * Get %description
-         \t * (%(field))
+         \t * (%variables)
          \t *
          \t * @return %tooltip
          \t */
-         \tstatic %returnType get%(name)() {
+         \t%(static)%returnType get%(name)() %(const){
          \t   return %fieldExtract;
          \t}
          \t\n
-      ]]></variableTemplate>
-      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
-         tooltipPadding="x*x"      ><![CDATA[
+      ]]>
+      </variableTemplate>
+      <variableTemplate location="%(where)" condition='="(%variables)"=="%(clear)"' codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)"
+         tooltipPadding="x*x" >
+      <![CDATA[
          \t/**
          \t * Clear %description
-         \t * (%(field))
+         \t * (%variables)
+         \t *
+         %paramDescription
+         \t */
+         \t%(static)void clear%(name)(%params) %(const){
+         \t   // w1c and mixed register
+         \t   %register = %register|%paramExpression;
+         \t}
+         \t\n
+      ]]>
+      </variableTemplate>
+      <variableTemplate location="%(where)" condition='="w1cIm"=="%(clear)"' codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)"
+         tooltipPadding="x*x" >
+      <![CDATA[
+         \t/**
+         \t * Clear %description
+         \t * (%variables)
          \t *
          \t * %tooltip
          \t */
-         \tstatic void clear%(name)() {
+         \t%(static)void clear%(name)() %(const){
+         \t   // w1c and mixed register
          \t   %register = %register|%mask;
          \t}
          \t\n
-      ]]></variableTemplate>
+      ]]>
+      </variableTemplate>
    </for>
 
-   <!--   _____ Misc __________ -->
-
-   <variableTemplate
-      variables="/GPIOA/port_pcr_dse,/GPIOA/port_pcr_ode,/GPIOA/port_pcr_sre"
-      defaultParamValue="OutputPin::defaultPcrValue"
-      key="/$(_BASENAME)/set_output" where="all"
-      discardRepeats="true" ><![CDATA[
-      \t/**
-      \t * @brief
-      \t * Enable comparator output pin as output.
-      \t * Mux value is set appropriately for the pin function being used.
-      \t * The clock to the port will be enabled before changing the PCR.
-      \t *
-      \t * @param pcrValue PCR value to use
-      \t *
-      \t */
-      \tstatic void setOutput(PcrValue pcrValue) {
-      \t   CheckOutputIsMapped<Info::outputPin>::check();
-      \t
-      \t   // Enable CMP_OUT
-      \t   cmp->CR1 = cmp->CR1 | CMP_CR1_OPE_MASK;
-      \t
-      \t   // Map CMP_OUT to pin
-      \t   OutputPin::setPCR(pcrValue);
-      \t}
-      \t
-      \t/**
-      \t * @brief
-      \t * Enable comparator output pin as output.\n
-      \t * The Pin Control Register Attributes are set to the default values determined by Configure.usbdmProject.
-      \t * The clock to the port will be enabled before changing the PCR.
-      \t */
-      \tstatic void setOutput() {
-      \t   setOutput(OutputPin::defaultPcrValue.value);
-      \t}
-      \t
-      \t/**
-      \t * @brief
-      \t * Set subset of Pin Control Register Attributes associated with output direction
-      \t *
-      \t * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
-      \t * The clock to the port will be enabled before changing the PCR.
-      \t *
-         %paramDescription
-      \t */
-      \tstatic void setOutput(%params)  {
-      \t
-      \t   setOutput(%paramExpression);
-      \t}\n
-   ]]></variableTemplate>
-
-   <template where="definitions" discardRepeats="true" >
+   <template location="%(where)" codeGenCondition="%(guard)" >
    <![CDATA[
       \t/**
-      \t * Comparator event identification
+      \t * Set Continuous input - Mode 2a/b.
+      \t * Assumes basic configuration done
+      \t *                                        CR1.EN CR1.WE CR1.SE CR0.FILTER_CNT FPR.FILT_PER
+      \t * 2a/b Continuous                          1      0      0      0              0     COUT == COUTA
       \t */
-      \t/**
-      \t * Used to represent the comparator status for interrupt handler
-      \t */
-      \tstruct CmpStatus {
-      \t   CmpEventId event:8;   //!< Event triggering handler
-      \t   bool       state:8;   //!< State of CMPO at event
+      \t%(static)void setInputContinous() %(const){
+      \t   cmp->CR0 = (cmp->CR0&~CMP_CR0_FILTER_CNT_MASK)|CMP_CR0_FILTER_CNT(0);
+      \t   cmp->CR1 = (cmp->CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|CmpMode_Direct;
+      \t   cmp->FPR = 0;
+      \t}
       \t
-      \t   constexpr CmpStatus(CmpEventId event, uint8_t  state) : event(event), state(state) {}
-      \t};
+      \t/**
+      \t * Set Sampled, Non-Filtered input - Modes 3a/3b.
+      \t *
+      \t * Assumes basic configuration done
+      \t * The TRGMUX is used as the CmpSampleEnable_External source.
+      \t *
+      \t *                                                          CmpFilterSamples cmpFilterSamplePeriod
+      \t *                                        CR1.EN CR1.WE CR1.SE CR0.FILTER_CNT FPR.FILT_PER
+      \t * 3a   Sampled, Non-Filtered, external     1      0      1      1              X     COUTA combinational, COUT sampled by external clk pin
+      \t * 3b   Sampled, Non-Filtered, internal     1      0      0      1             >=1    COUTA combinational, COUT sampled by busclk/PFR
+      \t *
+      \t * @param[in] CmpSampleEnable          Filter clock source
+      \t * @param[in] cmpFilterSamplePeriod    Period of internal sample filter (1..255). \n
+      \t *                                     Only applicable if CmpSampleEnable=CmpSampleEnable_Internal
+      \t */
+      \t%(static)void setInputSampled(
+      \t      CmpSampleEnable  CmpSampleEnable,
+      \t      int              cmpFilterSamplePeriod=1
+      \t      ) %(const){
+      \t   usbdm_assert((CmpSampleEnable == CmpSampleEnable_External) || (cmpFilterSamplePeriod>=1), "Illegal parameters");
+      \t   cmp->CR0 = (cmp->CR0&~CMP_CR0_FILTER_CNT_MASK)|CMP_CR0_FILTER_CNT(1);
+      \t   cmp->CR1 = (cmp->CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|CmpSampleEnable|CmpWindowEnable_Bypassed;
+      \t   cmp->FPR = cmpFilterSamplePeriod;
+      \t}
+      \t
+      \t/**
+      \t * Set Sampled, Filtered input - Modes 4a/4b.
+      \t *
+      \t * Assumes basic configuration done
+      \t * The TRGMUX is used as the CmpSampleEnable_External source.
+      \t *
+      \t *                                                          CmpFilterSamples cmpFilterSamplePeriod
+      \t *                                        CR1.EN CR1.WE CR1.SE CR0.FILTER_CNT FPR.FILT_PER
+      \t * 4a   Sampled, Filtered, external         1      0      1     >=2             X     COUTA combinational, COUT filtered by external clk pin
+      \t * 4b   Sampled, Filtered, internal         1      0      0     >=2            >=1    COUTA combinational, COUT filtered by busclk/PFR
+      \t *
+      \t * @param[in] cmpFilterSamples         Number samples that must agree before COUT changes (>=2)
+      \t * @param[in] cmpSampleEnable          Filter clock source
+      \t * @param[in] cmpFilterSamplePeriod    Period of internal sample filter (1..255). \n
+      \t *                                     Only applicable if CmpSampleEnable_Internal
+      \t */
+      \t%(static)void setInputFiltered(
+      \t      CmpFilterSamples      cmpFilterSamples,
+      \t      CmpSampleEnable       cmpSampleEnable=CmpSampleEnable_Internal,
+      \t      uint8_t               cmpFilterSamplePeriod=1
+      \t      ) %(const){
+      \t   usbdm_assert((cmpSampleEnable == CmpSampleEnable_External) || (cmpFilterSamplePeriod>=1), "Illegal parameters");
+      \t   usbdm_assert((cmpFilterSamples>1) , "Illegal parameter combination");
+      \t   cmp->CR0 = (cmp->CR0&~CMP_CR0_FILTER_CNT_MASK)|cmpFilterSamples;
+      \t   cmp->CR1 = (cmp->CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|cmpSampleEnable|CmpWindowEnable_Bypassed;
+      \t   cmp->FPR = cmpFilterSamplePeriod;
+      \t}
+      \t
+      \t/**
+      \t * Set Windowed input - Modes 5a/5b.
+      \t *
+      \t * Assumes basic configuration done
+      \t * The TRGMUX is used as the Window source.
+      \t *
+      \t *                                                          CmpFilterSamples cmpFilterSamplePeriod
+      \t *                                        CR1.EN CR1.WE CR1.SE CR0.FILTER_CNT FPR.FILT_PER
+      \t * 5a/b Windowed                            1      1      0      0              0     COUT == COUTA clocked by bus clock when Window=1
+      \t */
+      \t%(static)void setInputWindowed() %(const){
+      \t   cmp->CR0 = (cmp->CR0&~CMP_CR0_FILTER_CNT_MASK)|0;
+      \t   cmp->CR1 = (cmp->CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|CmpSampleEnable_Internal|CmpWindowEnable_Enabled;
+      \t   cmp->FPR = 0;
+      \t}
+      \t
+      \t/**
+      \t * Set Windowed, Re-sampled input - mode 6.
+      \t * Assumes basic configuration done.
+      \t *                                                          CmpFilterSamples cmpFilterSamplePeriod
+      \t *                                        CR1.EN CR1.WE CR1.SE CR0.FILTER_CNT FPR.FILT_PER
+      \t * 6    Windowed, Re-sampled                1      1      0      1             >=1    COUTA clocked by bus clock when Window=1, COUT re-sampled
+      \t *
+      \t * @param[in] cmpFilterSamplePeriod    Period of internal sample filter (1..255).
+      \t */
+      \t%(static)void setInputWindowedResampled(
+      \t      int  cmpFilterSamplePeriod=1
+      \t      ) %(const){
+      \t   usbdm_assert(cmpFilterSamplePeriod>=1, "Illegal parameters");
+      \t   cmp->CR0 = (cmp->CR0&~CMP_CR0_FILTER_CNT_MASK)|CMP_CR0_FILTER_CNT(1);
+      \t   cmp->CR1 = (cmp->CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|CmpSampleEnable_Internal|CmpWindowEnable_Enabled;
+      \t   cmp->FPR = cmpFilterSamplePeriod;
+      \t}
+      \t
+      \t/**
+      \t * Set Windowed, Filtered input - mode 7.
+      \t * Assumes basic configuration done.
+      \t *
+      \t *                                                          CmpFilterSamples cmpFilterSamplePeriod
+      \t *                                        CR1.EN CR1.WE CR1.SE CR0.FILTER_CNT FPR.FILT_PER
+      \t * 7    Windowed, Filtered                  1      1      0     >=2            >=1    COUTA clocked by bus clock when Window=1, COUT filtered by bus clock/PFR
+      \t *
+      \t * @param[in] cmpFilterSamples         Number samples that must agree before COUT changes (>=2).
+      \t * @param[in] cmpFilterSamplePeriod    Period of internal sample filter (1..255).
+      \t */
+      \t%(static)void setInputWindowedFiltered(
+      \t      CmpFilterSamples     cmpFilterSamples,
+      \t      int                  cmpFilterSamplePeriod=1
+      \t      ) %(const){
+      \t   usbdm_assert(cmpFilterSamplePeriod>=1, "Illegal parameters");
+      \t   cmp->CR0 = (cmp->CR0&~CMP_CR0_FILTER_CNT_MASK)|cmpFilterSamples;
+      \t   cmp->CR1 = (cmp->CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|CmpSampleEnable_Internal|CmpWindowEnable_Enabled;
+      \t   cmp->FPR = cmpFilterSamplePeriod;
+      \t}
       \t\n
    ]]>
    </template>
 
-   <!-- ____ Interrupt handling _____________ -->
-
-   <template codeGenCondition="irqHandlingMethod" >
+   <template location="%(where)" codeGenCondition="%(guard)" >
    <![CDATA[
+      \t/** Maximum DAC value corresponding to Vref) */
+      \tstatic constexpr CmpDacLevel MAXIMUM_DAC_VALUE = CmpDacLevel(CMP_DACCR_VOSEL_MASK);
+      \t
       \t/**
-      \t * $(_Class) interrupt handler
-      \t * Passes control to call-back function
+      \t * Enable and configure DAC
+      \t *
+      \t * @param[in]  level        DAC level to select (0...MAXIMUM_DAC_VALUE) => (Vref/MAXIMUM_DAC_VALUE...Vref)
+      \t * @param[in]  cmpDacSource Reference source select
       \t */
-      \tstatic void irqHandler() {
+      \t%(static)void configureDac(
+      \t      uint8_t       level,
+      \t      CmpDacrefSel  cmpDacSource) %(const){
+      \t   cmp->DACCR = CMP_DACCR_DACEN_MASK|cmpDacSource|CMP_DACCR_VOSEL(level);
+      \t}
       \t
-      \t   // Get status bits (+ current register value)
-      \t   uint8_t status = cmp->SCR;
-      \t
-      \t   // Clear interrupt flags
-      \t   cmp->SCR = status;
-      \t
-      \t   // Create status from snapshot
-      \t   CmpStatus cmpStatus {
-      \t      // Extract status bits
-      \t      CmpEventId(
-      \t         status&(CMP_SCR_CFR_MASK|CMP_SCR_CFF_MASK)),
-      \t                 bool(status&CMP_SCR_COUT_MASK)
-      \t   };
-      \t
-      \t   // Execute call-back
-      \t   sCallback($(irq_call));
+      \t/**
+      \t * Set input filtering and hysteresis
+      \t *
+      \t * @param[in] cmpFilterSamples Filtering clock pulses
+      \t * @param[in] cmpHysteresis    Hysteresis level
+      \t *
+      \t * @note Window mode may not be selected with external filter.
+      \t */
+      \t%(static)void setInputConditioning(CmpFilterSamples cmpFilterSamples, CmpHysteresis cmpHysteresis) %(const){
+      \t   cmp->CR0 = cmpFilterSamples|cmpHysteresis;
       \t}
       \t\n
    ]]>
    </template>
+</for>
 
-   <!-- ________ CMP Init class ____________________________ -->
-
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo::Init class      -->
+<!-- ====================================================================================================== -->
    <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
@@ -607,15 +962,6 @@
       \t *
       \t * Example:
       \t * @code
-      \t * ///
-      \t * /// $(_NAME) call-back
-      \t * ///
-      \t * /// @param status  Status reflecting active inputs
-      \t * ///
-      \t * void $(_name)Callback(uint32_t status) {
-      \t *    (void) status;
-      \t * }
-      \t *
       \t * static const $(_Class)::Init $(_name)Init {
       \t *
       \t *   // General setup
@@ -644,9 +990,6 @@
       \t *   // Inputs
       \t *   cmp0Input_D7.plusPin ,       // Plus Input Mux Control - D7
       \t *   Cmp0Input_D21::minusPin,     // Minus Input Mux Control - D21
-      \t *
-      \t *   $(_name)Callback,                // Call-back to execute on event - call-back function name
-      \t *   NvicPriority_Low,                // Priority for interrupt - Low
       \t *
       \t *   // Optional base value to start with (must be last parameter)
       \t *   $(_Class)::DefaultInitValue   // Used as base value modified by above
@@ -679,7 +1022,7 @@
    ]]>
    </template>
 
-   <!-- ____ Init class Member variables ________ -->
+   <!-- ____ BasicInfo::Init class Member variables ________ -->
 
    <for keys=" type        : variables                                            : init    "
        values="%baseType   : cmp_cr0_filter_cnt,cmp_cr0_hystctr                   :   0      ;
@@ -693,14 +1036,15 @@
                %baseType   : cmp_filterPeriod                                     :   0_s       " >
       <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
-         linePadding="xxx"
-      ><![CDATA[
+         linePadding="xxx" >
+      <![CDATA[
          %multilineDescription
          \t   %(type) %registerName = %(init);\n\n
-      ]]></variableTemplate>
+      ]]>
+      </variableTemplate>
    </for>
 
-   <!-- ____ Init class Constructors ____________ -->
+   <!-- ____ BasicInfo::Init class Constructors ____________ -->
 
    <for keys="r"
       values="
@@ -709,7 +1053,7 @@
             cmp_cr0_hystctr;
             cmp_scr_dmaen;cmp_scr_interrupt;
             cmp_muxcr_psel;cmp_muxcr_msel;
-            cmp_cr0_filter;cmp_fpr_filt_per;cmp_filterPeriod;
+            cmp_cr0_filter_cnt;cmp_fpr_filt_per;cmp_filterPeriod;
             cmp_daccr_dacen;cmp_daccr_vrsel;cmp_daccr_vosel
             " >
       <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
@@ -735,19 +1079,314 @@
       </variableTemplate>
    </for>
 
-   <!-- Templates -->
-   <template><![CDATA[
-      \t/**
-      \t * Get clock frequency
-      \t *
-      \t * @return Input clock frequency as a uint32_t in Hz
-      \t */
-      \tstatic __attribute__((always_inline)) uint32_t getClockFrequency() {
-      \t   return SystemBusClock;
-      \t}\n\n
-   ]]></template>
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t}; // class $(_BasicInfo)::Init
+      \t\n
+   ]]>
+   </template>
 
-   <variableTemplate
+<!-- ====================================================================================================== -->
+<!--     END BasicInfo::Init class      -->
+<!-- ====================================================================================================== -->
+
+   <!-- ____ Interrupt handling _____________ -->
+
+   <template where="definitions" discardRepeats="true" >
+   <![CDATA[
+      \t/**
+      \t * Comparator event identification
+      \t */
+      \t/**
+      \t * Used to represent the comparator status for interrupt handler
+      \t */
+      \tstruct CmpStatus {
+      \t   CmpEventId event:8;   //!< Event triggering handler
+      \t   bool       state:8;   //!< State of CMPO at event
+      \t
+      \t   constexpr CmpStatus(CmpEventId event, uint8_t  state) : event(event), state(state) {}
+      \t};
+      \t\n
+   ]]>
+   </template>
+
+   <template where="info" codeGenCondition="$(_InfoIrqGuard)" >
+   <![CDATA[
+      \t/**
+      \t * $(_Class) interrupt handler
+      \t * Passes control to call-back function
+      \t */
+      \tstatic void irqHandler() {
+      \t
+      \t   // Get status bits (+ current register value)
+      \t   uint8_t status = cmp->SCR;
+      \t
+      \t   // Clear interrupt flags
+      \t   cmp->SCR = status;
+      \t
+      \t   // Create status from snapshot
+      \t   CmpStatus cmpStatus {
+      \t      // Extract status bits
+      \t      CmpEventId(
+      \t         status&(CMP_SCR_CFR_MASK|CMP_SCR_CFF_MASK)),
+      \t                 bool(status&CMP_SCR_COUT_MASK)
+      \t   };
+      \t
+      \t   // Execute call-back
+      \t   sCallback($(irq_call));
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____ BasicInfo class Configure methods ____ -->
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/*                                                             CmpFilterSamples cmpFilterSamplePeriod
+      \t *                                        CR1.EN CR1.WE CR1.SE CR0.FILTER_CNT   FPR.FILT_PER
+      \t * 1  Disabled                              0      X      X      X                X
+      \t * 2a/b Continuous                          1      0      0     (0     or         0)    COUT == COUTA
+      \t * 3a   Sampled, Non-Filtered, external     1      0      1      1                X     COUTA combinational, COUT sampled by external clk pin
+      \t * 3b   Sampled, Non-Filtered, internal     1      0      0      1               >=1    COUTA combinational, COUT sampled by busclk/PFR
+      \t * 4a   Sampled, Filtered, external         1      0      1     >=2               X     COUTA combinational, COUT filtered by external clk pin
+      \t * 4b   Sampled, Filtered, internal         1      0      0     >=2              >=1    COUTA combinational, COUT filtered by busclk/PFR
+      \t * 5a/b Windowed                            1      1      0      0                0     COUT == COUTA clocked by bus clock when Window=1
+      \t * 6    Windowed, Re-sampled                1      1      0      1               >=1    COUTA clocked by bus clock when Window=1, COUT re-sampled
+      \t * 7    Windowed, Filtered                  1      1      0     >=2              >=1    COUTA clocked by bus clock when Window=1, COUT filtered by bus clock/PFR
+      \t */
+      \t
+      \t/**
+      \t * Base configuration - Continuous sampling: Modes 2a/2b.
+      \t * Includes enabling clock and configuring all pins if mapPinsOnEnable is selected on configuration
+      \t * DAC is initially disabled.
+      \t *                                        CR1.EN CR1.WE CR1.SE CR0.FILTER_CNT FPR.FILT_PER
+      \t * 2a/b Continuous                          1      0      0      0              0     COUT == COUTA
+      \t *
+      \t * @param cmpPower        Power level. Tradeoff between speed and power consumption
+      \t * @param cmpHysteresis   Hysteresis level for analogue comparator
+      \t * @param cmpPolarity     Allows inversion of the comparator output
+      \t */
+      \tvoid configure(
+      \t      CmpPower       cmpPower       = CmpPower_HighSpeed,
+      \t      CmpHysteresis  cmpHysteresis  = CmpHysteresis_Level_2,
+      \t      CmpPolarity    cmpPolarity    = CmpPolarity_Normal
+      \t      ) const {
+      \t
+      \t   // Initialise hardware
+      \t   cmp->CR1   = CmpEnable_Enabled|cmpPower|cmpPolarity;
+      \t   cmp->CR0   = CMP_CR0_FILTER_CNT(0)|cmpHysteresis;
+      \t   cmp->FPR   = 0;
+      \t   cmp->SCR   = CMP_SCR_IER(0)|CMP_SCR_IEF(0);
+      \t   cmp->DACCR = (CMP_DACCR_VOSEL_MASK>>1)&CMP_DACCR_VOSEL_MASK;
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      linePadding="xxx" >
+   <![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t * This routine does not configure pins or interrupt handlers
+      \t *
+      \t * @param $(_basename)           Hardware instance pointer
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(
+      \t               volatile $(_Type) *$(_basename),
+      \t               const Init    &init) {
+      \t\n
+   ]]>
+   </template>
+   <for keys=
+             " var                                                    : statement            "
+      values=" cmp_cr1_en                                             : %register = 0 ;
+               cmp_fpr_filt_per                                       : uint8_t %registerName = init.%registerName " >
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         variables="%(var)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t
+         %multilineDescription
+         \t   %(statement);\n
+      ]]></variableTemplate>
+   </for>
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)&amp;&amp;secondsSupport"
+      variables="cmp_fpr_filt_per, cmp_fpr_filt_per"  >
+   <![CDATA[
+      \t   if (init.filterperiod != 0) {
+      \t      %registerName0 = convertSecondsToTicks(init.filterperiod);
+      \t   }
+   ]]>
+   </variableTemplate>
+   <for keys=
+             " var                                                    : statement            "
+      values=" cmp_fpr_filt_per                                       : %register = %registerName ;
+               cmp_daccr_dacen,cmp_daccr_vrsel,cmp_daccr_vosel        : %configRegAssignment ;
+               cmp_muxcr_psel,cmp_muxcr_msel                          : %configRegAssignment ;
+               cmp_cr0_filter_cnt,cmp_cr0_hystctr                         : %configRegAssignment ;
+               cmp_scr_dmaen,cmp_scr_interrupt                        : %configRegAssignment ;
+               cmp_cr1_en,cmp_cr1_mode,cmp_cr1_pmode,cmp_cr1_inv,
+               cmp_cr1_output                                         : %configRegAssignment  " >
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      variables="%(var)"
+      linePadding="xxx"
+      ><![CDATA[
+         \t
+         %multilineDescription
+         \t   %(statement);\n
+      ]]></variableTemplate>
+   </for>
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t}
+      \t\n
+   ]]>
+   </template>
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t * This routine does not configure pins or interrupt handlers
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tvoid configure(const Init &init) const {
+      \t
+      \t   configure($(_basename), init);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+<!-- ====================================================================================================== -->
+<!--     END BasicInfo class      -->
+<!-- ====================================================================================================== -->
+<!-- ====================================================================================================== -->
+<!--     START Info class      -->
+<!-- ====================================================================================================== -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/*                                                             CmpFilterSamples cmpFilterSamplePeriod
+      \t *                                        CR1.EN CR1.WE CR1.SE CR0.FILTER_CNT   FPR.FILT_PER
+      \t * 1  Disabled                              0      X      X      X                X
+      \t * 2a/b Continuous                          1      0      0     (0     or         0)    COUT == COUTA
+      \t * 3a   Sampled, Non-Filtered, external     1      0      1      1                X     COUTA combinational, COUT sampled by external clk pin
+      \t * 3b   Sampled, Non-Filtered, internal     1      0      0      1               >=1    COUTA combinational, COUT sampled by busclk/PFR
+      \t * 4a   Sampled, Filtered, external         1      0      1     >=2               X     COUTA combinational, COUT filtered by external clk pin
+      \t * 4b   Sampled, Filtered, internal         1      0      0     >=2              >=1    COUTA combinational, COUT filtered by busclk/PFR
+      \t * 5a/b Windowed                            1      1      0      0                0     COUT == COUTA clocked by bus clock when Window=1
+      \t * 6    Windowed, Re-sampled                1      1      0      1               >=1    COUTA clocked by bus clock when Window=1, COUT re-sampled
+      \t * 7    Windowed, Filtered                  1      1      0     >=2              >=1    COUTA clocked by bus clock when Window=1, COUT filtered by bus clock/PFR
+      \t */
+      \t
+      \t/**
+      \t * Base configuration - Continuous sampling: Modes 2a/2b.
+      \t * Includes enabling clock and configuring all pins if mapPinsOnEnable is selected on configuration
+      \t * DAC is initially disabled.
+      \t *                                        CR1.EN CR1.WE CR1.SE CR0.FILTER_CNT FPR.FILT_PER
+      \t * 2a/b Continuous                          1      0      0      0              0     COUT == COUTA
+      \t *
+      \t * @param cmpPower        Power level. Tradeoff between speed and power consumption
+      \t * @param cmpHysteresis   Hysteresis level for analogue comparator
+      \t * @param cmpPolarity     Allows inversion of the comparator output
+      \t */
+      \tstatic void configure(
+      \t      CmpPower       cmpPower       = CmpPower_HighSpeed,
+      \t      CmpHysteresis  cmpHysteresis  = CmpHysteresis_Level_2,
+      \t      CmpPolarity    cmpPolarity    = CmpPolarity_Normal
+      \t      ) {
+      \t   enable();
+      \t
+      \t   // Initialise hardware
+      \t   cmp->CR1   = CmpEnable_Enabled|cmpPower|cmpPolarity;
+      \t   cmp->CR0   = CMP_CR0_FILTER_CNT(0)|cmpHysteresis;
+      \t   cmp->FPR   = 0;
+      \t   cmp->SCR   = CMP_SCR_IER(0)|CMP_SCR_IEF(0);
+      \t   cmp->DACCR = (CMP_DACCR_VOSEL_MASK>>1)&CMP_DACCR_VOSEL_MASK;
+      \t   cmp->MUXCR = DefaultInitValue.muxcr;
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <!--   _____ Misc __________ -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/// Pin mapped to CMP output
+      \ttypedef PcrTable_T<$(_Info), outputPin> OutputPin;
+      \t\n
+   ]]>
+   </template>
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Configure all input pins associated with this CMP
+      \t * The pins are set to analogue mode so no PCR settings are active.
+      \t * This function is of use if mapAllPins and mapAllPinsOnEnable are not selected in USBDM configuration.
+      \t */
+      \tstatic void setInputs() {
+      \t   initPCRs();
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <variableTemplate where="info" codeGenCondition="$(_InfoGuard)"
+      variables="/GPIOA/port_pcr_dse,/GPIOA/port_pcr_ode,/GPIOA/port_pcr_sre"
+      defaultParamValue="OutputPin::defaultPcrValue" >
+   <![CDATA[
+      \t/**
+      \t * @brief
+      \t * Enable comparator output pin as output.
+      \t * Mux value is set appropriately for the pin function being used.
+      \t * The clock to the port will be enabled before changing the PCR.
+      \t *
+      \t * @param pcrValue PCR value to use
+      \t *
+      \t */
+      \tstatic void setOutput(PcrValue pcrValue) {
+      \t//   CheckOutputIsMapped<outputPin, $(_Info)>::check();
+      \t
+      \t   // Enable CMP_OUT
+      \t   cmp->CR1 = cmp->CR1 | CMP_CR1_OPE_MASK;
+      \t
+      \t   // Map CMP_OUT to pin
+      \t   OutputPin::setPCR(pcrValue);
+      \t}
+      \t
+      \t/**
+      \t * @brief
+      \t * Enable comparator output pin as output.\n
+      \t * The Pin Control Register Attributes are set to the default values determined by Configure.usbdmProject.
+      \t * The clock to the port will be enabled before changing the PCR.
+      \t */
+      \tstatic void setOutput() {
+      \t   setOutput(OutputPin::defaultPcrValue.value);
+      \t}
+      \t
+      \t/**
+      \t * @brief
+      \t * Set subset of Pin Control Register Attributes associated with output direction
+      \t *
+      \t * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
+      \t * The clock to the port will be enabled before changing the PCR.
+      \t *
+         %paramDescription
+      \t */
+      \tstatic void setOutput(%params)  {
+      \t
+      \t   setOutput(%paramExpression);
+      \t}\n
+   ]]>
+   </variableTemplate>
+
+   <variableTemplate where="info" codeGenCondition="$(_InfoGuard)"
       variables="cmp_muxcr_psel,cmp_muxcr_msel"
       nonDefaultParams="2"
    ><![CDATA[
@@ -788,37 +1427,37 @@
    ]]>
    </variableTemplate>
 
-   <template codeGenCondition="enablePeripheralSupport" >
-    <![CDATA[
-      \t/**
-      \t * Converts time in seconds to time in ticks
-      \t *
-      \t * @param[in] seconds Time interval in seconds
-      \t *
-      \t * @return Time in ticks
+   <!-- ____ Info constructors ________ -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/*
+      \t *   Default Constructor
       \t */
-      \tstatic Ticks convertSecondsToTicks(const Seconds &seconds) {
+      \t$(_Info)() : $(_BasicInfo)($(_basename)) {
+      \t   defaultConfigure();
+      \t}
       \t
-      \t   uint32_t res = roundf((float)seconds*getClockFrequency());
-      \t   if (res >= 256) {
-      \t      setErrorCode(E_TOO_LARGE);
-      \t   }
-      \t   return Ticks(res);
+      \t/*
+      \t *   Constructor
+      \t */
+      \t$(_Info)(const Init &init) : $(_BasicInfo)($(_basename)) {
+      \t   configure(init);
       \t}
       \t\n
-   ]]></template>
+   ]]>
+   </template>
 
-   <!-- ____ Init class Configure method ____ -->
+   <!-- Init configure methods -->
 
-   <template codeGenCondition="enablePeripheralSupport" >
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
       \t */
-      \tstatic inline void defaultConfigure() {
+      \tstatic void defaultConfigure() {
       \t
-      \t   // Update settings
       \t   configure(DefaultInitValue);
       \t}
       \t
@@ -844,7 +1483,7 @@
       \t\n
    ]]>
    </template>
-   <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)"
+   <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount>1)"
       variables="irq_enum"
       immediateVariables="_hardwareIrqCount">
    <![CDATA[
@@ -858,47 +1497,9 @@
       \t\n
    ]]>
    </variableTemplate>
-   <for keys=
-             " var                                                    : statement            "
-      values=" cmp_cr1_en                                             : %register = 0 ;
-               cmp_fpr_filt_per                                       : uint8_t %registerName = init.%registerName " >
-      <variableTemplate codeGenCondition="enablePeripheralSupport"
-      variables="%(var)"
-      linePadding="xxx"
-      ><![CDATA[
-         \t
-         %multilineDescription
-         \t   %(statement);\n
-      ]]></variableTemplate>
-   </for>
-   <variableTemplate codeGenCondition="secondsSupport"
-      variables="cmp_fpr_filt_per, cmp_fpr_filt_per"  >
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
-      \t   if (init.filterperiod != 0) {
-      \t      %registerName0 = convertSecondsToTicks(init.filterperiod);
-      \t   }
-   ]]>
-   </variableTemplate>
-   <for keys=
-             " var                                                    : statement            "
-      values=" cmp_fpr_filt_per                                       : %register = %registerName ;
-               cmp_daccr_dacen,cmp_daccr_vrsel,cmp_daccr_vosel        : %configRegAssignment ;
-               cmp_muxcr_psel,cmp_muxcr_msel                          : %configRegAssignment ;
-               cmp_cr0_filter,cmp_cr0_hystctr                         : %configRegAssignment ;
-               cmp_scr_dmaen,cmp_scr_interrupt                        : %configRegAssignment ;
-               cmp_cr1_en,cmp_cr1_mode,cmp_cr1_pmode,cmp_cr1_inv,
-               cmp_cr1_output                                         : %configRegAssignment  " >
-      <variableTemplate codeGenCondition="enablePeripheralSupport"
-      variables="%(var)"
-      linePadding="xxx"
-      ><![CDATA[
-         \t
-         %multilineDescription
-         \t   %(statement);\n
-      ]]></variableTemplate>
-   </for>
-   <template codeGenCondition="enablePeripheralSupport" >
-   <![CDATA[
+      \t   $(_BasicInfo)::configure($(_basename), init);
       \t}
       \t\n
    ]]>
@@ -944,7 +1545,7 @@
             cmp_cr1_en,cmp_cr1_mode,cmp_cr1_trigm,cmp_cr1_pmode,cmp_cr1_inv,cmp_cr1_output,
             cmp_cr0_hystctr,
             cmp_scr_dmaen,cmp_scr_interrupt,
-            cmp_cr0_filter,cmp_fpr_filt_per,
+            cmp_cr0_filter_cnt,cmp_fpr_filt_per,
             cmp_daccr_dacen,cmp_daccr_vrsel,cmp_daccr_vosel,
             cmp_muxcr_psel,cmp_muxcr_msel" >
    <![CDATA[
@@ -953,26 +1554,19 @@
       \t\n
    ]]>
    </variableTemplate>
-
-   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
-   <![CDATA[
-      \t}; // class $(_BasicInfo)::Init
-      \t\n
-   ]]>
-   </template>
-
-<!--
-======================================================================================================
-     Common
-======================================================================================================
- -->
+<!-- ====================================================================================================== -->
+<!--     END Info class      -->
+<!-- ====================================================================================================== -->
+<!-- ====================================================================================================== -->
+<!--     Common      -->
+<!-- ====================================================================================================== -->
 
    <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Info)> {};
+      \ttypedef $(_Info) $(_Class);
       \t\n
    ]]>
    </template>
