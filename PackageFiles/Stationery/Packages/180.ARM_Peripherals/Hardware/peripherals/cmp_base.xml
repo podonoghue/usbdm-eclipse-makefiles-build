@@ -43,7 +43,7 @@
       value="PDB"
    />   
 
-   <stringOption key="trigger" 
+   <stringOption key="trigger"  condition="cmp_cr1_trigm_present"
       hidden="true"
       derived="true"
       enabledBy="cmp_cr1_trigm"
@@ -103,14 +103,16 @@
          <graphicItem type="variableBox" id="Speed"         var="cmp_cr1_pmode"       params="400, 255,  140, small"        />
          <graphicItem type="connector"                                                params="Hysteresis,0, CMP,3, x,y"     />
          
-         <graphicItem type="variableBox" id="Trigger In.0"      var="trigger"         params="320, 450,  140, small, on"    />
-         <graphicItem type="connector"                                                params="Trigger In.0,0, Trigger In,0, x,y"     />
-         <graphicItem type="node"        id="Trigger In,NONAME" var="trigger"         params="320, 400, is, on"                />
-         <graphicItem type="connector"                                                params="Trigger In,0, Trigger,0, (y+20),x,y"     />
-
-         <graphicItem type="variableBox" id="Trigger"       var="cmp_cr1_trigm"       params="320, 360,  140, small,on,is"  />
-         <graphicItem type="connector"                      var="trigger"             params="Trigger,0, DAC,1, y-30,d,x,y"     />
-         <graphicItem type="connector"                      var="trigger"             params="Trigger,0, CMP,2"       />
+         <if  condition="cmp_cr1_trigm_present" >
+            <graphicItem type="variableBox" id="Trigger In.0"      var="trigger"         params="320, 450,  140, small, on"             />
+            <graphicItem type="connector"                                                params="Trigger In.0,0, Trigger In,0, x,y"       />
+            <graphicItem type="node"        id="Trigger In,NONAME" var="trigger"         params="320, 400, is, on"                      />
+            <graphicItem type="connector"                                                params="Trigger In,0, Trigger,0, (y+20),x,y"     />
+   
+            <graphicItem type="variableBox" id="Trigger"       var="cmp_cr1_trigm"       params="320, 360,  140, small,on,is"            />
+            <graphicItem type="connector"                      var="trigger"             params="Trigger,0, DAC,1, y-30,d,x,y"            />
+            <graphicItem type="connector"                      var="trigger"             params="Trigger,0, CMP,2"                      />
+         </if>
          
 
          <graphicItem type="connector"                                                params="Window,0, COS,1, x+10,d,y"     />

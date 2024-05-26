@@ -63,14 +63,21 @@ int main() {
 
    // Configure comparator before use
    static constexpr Cmp::Init cmpInit {
-      CmpPower_HighSpeed,
-      CmpHysteresis_Level_2,
-      CmpPolarity_Normal,
-      Cmp::MAXIMUM_DAC_VALUE/2,
-      CmpEvent_OnEither,
+      NvicPriority_Normal,
+      callback,
+
+      CmpEnable_Enabled ,                     // (cmp_cr1_en)               Comparator Enable - Comparator is enabled
+      CmpMode_Direct ,                        // (cmp_cr1_mode)             Operating mode - Direct
+      CmpPower_HighSpeed ,                    // (cmp_cr1_pmode)            Power Mode Select - High-Speed
+      CmpOutput_Disabled ,                    // (cmp_cr1_output)           Comparator output pin source - Disabled
+      CmpHysteresis_Level_2 ,                 // (cmp_cr0_hystctr)          Comparator hard block hysteresis control - Level 2
+      CmpEvent_OnEither ,                     // (cmp_scr_interrupt)        Action on transition - Either edge
+      CmpDacEnable_Enabled ,                  // (cmp_daccr_dacen)          DAC Enable - Enabled
+      CmpDacrefSel_Vdd ,                      // (cmp_daccr_vrsel)          DAC Reference Voltage Select - Vin2 (Vdd)
+      CmpDacLevel(Cmp::MAXIMUM_DAC_VALUE/2),  // (cmp_daccr_vosel)          DAC level
+
       CmpPositiveInput::plusPin,
       CmpNegativeInput::minusPin,
-      callback,
    };
    Cmp::configure(cmpInit);
 

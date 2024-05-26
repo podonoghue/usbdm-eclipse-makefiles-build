@@ -44,16 +44,16 @@ using namespace USBDM;
 //using DebugLed = GpioC<3,ActiveLow>;
 
 // Constant describing transmission
-static constexpr unsigned SONY_CARRIER     = 40000;  //!< Sony SIRC carrier frequency (Hz)
-static constexpr unsigned SONY_ONE_TIME    =  1200;  //!< Sony SIRC on time (us) for '1'
-static constexpr unsigned SONY_ZERO_TIME   =   600;  //!< Sony SIRC on time (us) for '0'
-static constexpr unsigned SONY_START_TIME  =  2400;  //!< Sony SIRC on time (us) for start
-static constexpr unsigned SONY_OFF_TIME    =   600;  //!< Sony SIRC off time (us)
-static constexpr unsigned SONY_REPEAT_TIME = 45000;  //!< Sony SIRC repeat packet time (us)
-static constexpr unsigned SONY_REPEATS     =     4;  //!< How many times to repeat packet in transmission
+static constexpr unsigned SONY_CARRIER    = 40000;        //!< Sony SIRC carrier frequency (Hz)
+static constexpr Ticks SONY_ONE_TIME      =  1200_ticks;  //!< Sony SIRC on time (us) for '1'
+static constexpr Ticks SONY_ZERO_TIME     =   600_ticks;  //!< Sony SIRC on time (us) for '0'
+static constexpr Ticks SONY_START_TIME    =  2400_ticks;  //!< Sony SIRC on time (us) for start
+static constexpr Ticks SONY_OFF_TIME      =   600_ticks;  //!< Sony SIRC off time (us)
+static constexpr Ticks SONY_REPEAT_TIME   = 45000_ticks;  //!< Sony SIRC repeat packet time (us)
+static constexpr unsigned SONY_REPEATS    =     4;        //!< How many times to repeat packet in transmission
 
 /** Carrier half period in CMT clock cycles (Based on 8MHz CMT clock) */
-static constexpr uint8_t  PrimaryCarrierHalfTime = ((8000000UL/SONY_CARRIER)/2);
+static constexpr Ticks  PrimaryCarrierHalfTime = Ticks((8000000UL/SONY_CARRIER)/2);
 
 /** Command/address/extended value to transmit */
 static volatile uint32_t data;
@@ -77,16 +77,16 @@ static void cmtCallback() {
    static uint32_t shiftReg;
 
    /** Time since start of current packet */
-   static unsigned repeatTime;
+   static Ticks repeatTime;
 
 //   DebugLed::toggle();
-   if (Cmt::getStatus()) {
+   if (Cmt::getEndOfCycleFlag()) {
       if(bitNum==0) {
          if (repeatCount++ >= SONY_REPEATS) {
             // Completed entire sequence of repeats
 
             // Clear Interrupt flag
-            Cmt::getMarkTime();
+            Cmt::getMarkPeriod();
 
             // Disable entire CMT
             Cmt::disable();
@@ -94,25 +94,25 @@ static void cmtCallback() {
          }
          // Start of new packet transmission
          shiftReg   = data;
-         repeatTime = 0;
+         repeatTime = 0_ticks;
          Cmt::setExtendedSpace(CmtExtendedSpace_Disabled);
       }
       if (bitNum<packetLength) {
          // LSB first
          if (shiftReg&0b1) {
-            Cmt::setMarkTiming(SONY_ONE_TIME);
-            repeatTime += SONY_ONE_TIME+SONY_OFF_TIME;
+            Cmt::setMarkPeriod(SONY_ONE_TIME);
+            repeatTime = repeatTime + SONY_ONE_TIME+SONY_OFF_TIME;
          }
          else {
-            Cmt::setMarkTiming(SONY_ZERO_TIME);
-            repeatTime += SONY_ZERO_TIME+SONY_OFF_TIME;
+            Cmt::setMarkPeriod(SONY_ZERO_TIME);
+            repeatTime = repeatTime + SONY_ZERO_TIME+SONY_OFF_TIME;
          }
          bitNum++;
          shiftReg >>= 1;
       }
       else {
          Cmt::setExtendedSpace(CmtExtendedSpace_Enabled);
-         Cmt::setMarkTiming(SONY_REPEAT_TIME-SONY_OFF_TIME-repeatTime);
+         Cmt::setMarkPeriod(SONY_REPEAT_TIME-SONY_OFF_TIME-repeatTime);
          bitNum = 0;
       }
    }
@@ -127,21 +127,22 @@ static void configureCmtTime() {
    repeatCount  = 0;
    bitNum       = 0;
 
-   Cmt::configure(CmtMode_Direct);
-   Cmt::outputControl(CmtOutput_Enabled);
-   Cmt::setOutput(PinDriveStrength_High);
+   constexpr Cmt::Init init {
+      NvicPriority_Normal,
+      cmtCallback,
 
-   Cmt::setCallback(cmtCallback);
-   Cmt::enableInterruptDma(CmtInterruptDma_Irq);
-   Cmt::enableNvicInterrupts(NvicPriority_Normal);
-
-   // Set carrier frequency
-   Cmt::setPrimaryTiming(PrimaryCarrierHalfTime,PrimaryCarrierHalfTime);
-
-   // Set up for START bit
-   Cmt::setMarkSpaceTiming(SONY_START_TIME, SONY_OFF_TIME);
-
-   Cmt::setMode(CmtMode_Time);
+      CmtMode_Time ,                                     // (cmt_msc_mode)             Mode of operation - Time
+      CmtClockPrescaler_Auto ,                           // (cmt_pps_ppsdiv)           Primary Prescaler Divider - Auto ~8MHz
+      CmtIntermediatePrescaler_DivBy1 ,                  // (cmt_msc_cmtdiv)           Intermediate frequency Prescaler - Intermediate frequency /4
+      CmtOutput_ActiveHigh ,                             // (cmt_oc_output)            Output Control - Disabled
+      CmtEndOfCycleAction_Interrupt ,                    // (cmt_dma_irq)              End of Cycle Event handling - Interrupt Request
+      CmtPrimaryCarrierHighTime(PrimaryCarrierHalfTime), // (cmt_cgh1_ph)              Primary Carrier High Time Data Value
+      CmtPrimaryCarrierLowTime(PrimaryCarrierHalfTime),  // (cmt_cgl1_pl)              Primary Carrier Low Time Data Value
+      CmtMarkPeriod(SONY_START_TIME) ,                   // (cmt_mark)                 Mark period
+      CmtSpacePeriod(SONY_OFF_TIME),                     // (cmt_space)                Space period
+   };
+   Cmt::configure(init);
+   Cmt::OutputPin::setOutput(PinDriveStrength_High);
 }
 
 /**
@@ -288,6 +289,19 @@ void send20(CmtAddress cmtAddress, CmtCommand cmtCommand, uint8_t extended8) {
    configureCmtTime();
 }
 
+void help() {
+   const char *helpMessage = "\n\n"
+         "0-9 - Digit\n"
+         "V   - Volume Up\n"
+         "v   - Volume Down\n"
+         "C   - Channel Up\n"
+         "c   - Channel Down\n"
+         "m   - Mute/unmute\n"
+         "s   - Stand-by\n"
+         "h   - Help\n\n";
+   console.write(helpMessage);
+}
+
 int main() {
 
    // Activity LED connection - indicates command being sent
@@ -300,8 +314,8 @@ int main() {
 //         PinSlewRate_Fast);
 
    console.writeln("Starting\n");
-   console.writeln("SystemCoreClock = ", ::SystemCoreClock);
-   console.writeln("SystemBusClock  = ", ::SystemBusClock);
+   console.writeln("SystemCoreClock = ", SystemCoreClock);
+   console.writeln("SystemBusClock  = ", SystemBusClock);
 
    ActivityLed::setOutput(
          PinDriveStrength_High,
@@ -310,13 +324,11 @@ int main() {
 
    console.setEcho(EchoMode_Off);
 
-   bool failed = false;
+   bool CommandDone = true;
    for(int count = 0;;count++) {
-      if (!failed) {
-         console.write("\n0-9,v,c,m,s ? ");
-      }
+      console.write("\n0-9,v,c,m,s,h ? ");
       // Assume OK input
-      failed = false;
+      CommandDone = true;
 
       int ch = console.readChar();
 
@@ -340,12 +352,13 @@ int main() {
          case 'm': send12(CmtAddress_tv, CmtCommand_mute        );      break;
          case 'S':
          case 's': send12(CmtAddress_tv, CmtCommand_standby     );      break;
+         case 'h': help(); CommandDone = false;                         break;
          default:
             // Not recognized command
-            failed = true;
+            CommandDone = false;
             break;
       }
-      if (!failed) {
+      if (CommandDone) {
          // Pulse LED during transmission
          ActivityLed::on();
          console.write((char)ch);

@@ -4,6 +4,13 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Cyclic Redundancy Check" >
 
+   <!-- ____ Class Declaration ________ -->
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
+   <!-- ____ Instance control ________ -->
+   <constant key="_can_create_instance" value="true" type="Boolean" />
+
    <equation key="irq_parameters"            value=""        />
    <equation key="irq_dummy_parameters"      value=""        />
    <equation key="irq_call"                  value=""        />
@@ -12,10 +19,6 @@
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
-   <constant key="definitionsInHeader" value="true" type="Boolean" />
-
-   <!-- ____ Class Declaration ________ -->
-   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <!-- _____________ GPOLY __________________ -->
 
@@ -48,10 +51,10 @@
       toolTip="Define the transpose configuration for values written to the CRC data register\n
                Controls transposition of bits within the bytes and bytes within the whole value"
       description="Type of Transpose For Writes" >
-      <choice name="No transposition"           value="0" enum="NoTransposition"/>
-      <choice name="Bits transposed"            value="1" enum="BitsTransposed"/>
-      <choice name="Bits and bytes transposed"  value="2" enum="BitsAndBytesTransposed"/>
-      <choice name="Bytes transposed"           value="3" enum="BytesTransposed"/>
+      <choice name="No transposition"           value="0" enum="NoTransposition" />
+      <choice name="Bits transposed"            value="1" enum="BitsTransposed" />
+      <choice name="Bits and bytes transposed"  value="2" enum="BitsAndBytesTransposed" />
+      <choice name="Bytes transposed"           value="3" enum="BytesTransposed" />
    </choiceOption >
 
    <choiceOption key="crc_ctrl_totr" condition="crc_ctrl_totr_present"
@@ -61,10 +64,10 @@
       toolTip="Identify the transpose configuration of values read from the CRC Data register.\n
                Controls transposition of bits within the bytes and bytes within the whole value"
       description="Type of Transpose For Read" >
-      <choice name="No transposition"           value="0" enum="NoTransposition"/>
-      <choice name="Bits transposed"            value="1" enum="BitsTransposed"/>
-      <choice name="Bits and bytes transposed"  value="2" enum="BitsAndBytesTransposed"/>
-      <choice name="Bytes transposed"           value="3" enum="BytesTransposed"/>
+      <choice name="No transposition"           value="0" enum="NoTransposition" />
+      <choice name="Bits transposed"            value="1" enum="BitsTransposed" />
+      <choice name="Bits and bytes transposed"  value="2" enum="BitsAndBytesTransposed" />
+      <choice name="Bytes transposed"           value="3" enum="BytesTransposed" />
    </choiceOption >
 
    <binaryOption key="crc_ctrl_fxor" condition="crc_ctrl_fxor_present"
@@ -74,8 +77,8 @@
       toolTip="Some CRC protocols require the final checksum to be XORed with 0xFFFFFFFF or 0xFFFF.\n
                Asserting this bit enables on the fly complementing of read data"
       description="Complement Read Of CRC Data Register" >
-      <choice name="No inversion"                  value="0" enum="Normal"/>
-      <choice name="Invert read of data register"  value="1" enum="Inverted"/>
+      <choice name="No inversion"                  value="0" enum="Normal" />
+      <choice name="Invert read of data register"  value="1" enum="Inverted" />
    </binaryOption >
 
    <binaryOption key="crc_ctrl_was" condition="crc_ctrl_was_present"
@@ -84,67 +87,321 @@
       baseType="uint32_t"
       toolTip="Selects between seed or data value when a value is written to the CRC data register"
       description="Write CRC Data Register As Seed" >
-      <choice name="Writes are data values"  value="0" enum="WritesData"/>
-      <choice name="Writes are seed values"  value="1" enum="WritesSeed"/>
+      <choice name="Writes are data values"  value="0" enum="WritesData" />
+      <choice name="Writes are seed values"  value="1" enum="WritesSeed" />
    </binaryOption >
 
    <binaryOption key="crc_ctrl_tcrc" condition="crc_ctrl_tcrc_present"
       enabledBy="enablePeripheralSupport"
       typeName="CrcWidth"
       baseType="uint32_t"
-      toolTip="Width used in CC calculation"
+      toolTip="Width used in CRC calculation"
       description="Width of CRC protocol" >
-      <choice name="16-bit CRC"  value="0" enum="16BitCrc"/>
-      <choice name="32-bit CRC"  value="1" enum="32BitCrc"/>
+      <choice name="16-bit CRC"  value="0" enum="16BitCrc" />
+      <choice name="32-bit CRC"  value="1" enum="32BitCrc" />
    </binaryOption >
 
-   <!-- ____ Setters and Getters ____________ -->
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo Class      -->
+<!-- ====================================================================================================== -->
 
-   <for keys="   field         : set   : get   : clear : genCode                 : name"
-        values="crc_ctrl_tot   : true  : true  : false : enableGettersAndSetters : WriteTranspose   ;
-                crc_ctrl_totr  : true  : true  : false : enableGettersAndSetters : ReadTranspose    ;
-                crc_ctrl_fxor  : true  : true  : false : enableGettersAndSetters : ReadComplement   ;
-                crc_ctrl_was   : true  : true  : false : enableGettersAndSetters : WriteMode        ;
-                crc_ctrl_tcrc  : true  : true  : false : enableGettersAndSetters : Width            " >
-      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
-      ><![CDATA[
+   <!-- BasicInfo Instance pointer and Constructors  -->
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t// Pointer to $(_BASENAME) hardware instance
+      \tvolatile $(_Type) * const $(_basename);
+      \t\n
+   ]]></template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Constructor
+      \t *
+      \t * @param $(_basename) $(_BASENAME) hardware instance
+      \t */
+      \tconstexpr $(_BasicInfo)(volatile $(_Type) * $(_basename)) : $(_basename)($(_basename)) {
+      \t}
+      \t\n
+   ]]></template>
+
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo/Info duplicated methods -->
+<!-- ====================================================================================================== -->
+
+<for
+   keys="   static    : const    : where     : guard                                      "
+   values=" ''        : 'const ' : basicInfo : $(_BasicInfoGuard)                         ;
+            'static ' : ''       : info      : $(_InfoGuard)                              "  >
+
+   <!-- ____ Getters and Setters ____________ -->
+
+   <for keys="  field           : set   : get   : clear : genCode                 : name"
+        values="crc_ctrl_tot    : true  : true  : false : enableGettersAndSetters : WriteTranspose   ;
+                crc_ctrl_totr   : true  : true  : false : enableGettersAndSetters : ReadTranspose    ;
+                crc_ctrl_fxor   : true  : true  : false : enableGettersAndSetters : ReadComplement   ;
+                crc_ctrl_was    : true  : true  : false : enableGettersAndSetters : WriteMode        ;
+                crc_ctrl_tcrc   : true  : true  : false : enableGettersAndSetters : Width            " >
+      <variableTemplate location="%(where)" condition="%(set)" codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)" >
+      <![CDATA[
          \t/**
          \t * Set %description
+         \t * (%variables)
          \t *
          %paramDescription
          \t */
-         \tstatic void set%(name)(%params) {
+         \t%(static)void set%(name)(%params) %(const){
          \t   %fieldAssignment;
          \t}
          \t\n
-      ]]></variableTemplate>
-      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
-      ><![CDATA[
+      ]]>
+      </variableTemplate>
+      <variableTemplate location="%(where)" condition="%(get)" codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)" >
+      <![CDATA[
          \t/**
          \t * Get %description
+         \t * (%variables)
          \t *
          \t * @return %tooltip
          \t */
-         \tstatic %returnType get%(name)() {
+         \t%(static)%returnType get%(name)() %(const){
          \t   return %fieldExtract;
          \t}
          \t\n
-      ]]></variableTemplate>
-      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
-      ><![CDATA[
+      ]]>
+      </variableTemplate>
+      <variableTemplate location="%(where)" condition='="(%variables)"=="%(clear)"' codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)"
+         tooltipPadding="x*x" >
+      <![CDATA[
          \t/**
          \t * Clear %description
+         \t * (%variables)
          \t *
+         %paramDescription
          \t */
-         \tstatic void clear%(name)() {
+         \t%(static)void clear%(name)(%params) %(const){
+         \t   // w1c and mixed register
+         \t   %register = %register|%paramExpression;
+         \t}
+         \t\n
+      ]]>
+      </variableTemplate>
+      <variableTemplate location="%(where)" condition='="w1cIm"=="%(clear)"' codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)"
+         tooltipPadding="x*x" >
+      <![CDATA[
+         \t/**
+         \t * Clear %description
+         \t * (%variables)
+         \t *
+         \t * %tooltip
+         \t */
+         \t%(static)void clear%(name)() %(const){
+         \t   // w1c and mixed register
          \t   %register = %register|%mask;
          \t}
          \t\n
-      ]]></variableTemplate>
+      ]]>
+      </variableTemplate>
    </for>
 
-   <!-- ________ CRC Init class ____________________________ -->
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)"
+      variables="crc_gpoly_gpoly"
+      tooltipPadding="x*x" >
+   <![CDATA[
+      \t/**
+      \t * Write polynomial value used for CRC calculation.
+      \t * (%variables)
+      \t *
+      \t * @param polynomialValue Polynomial value used for CRC calculation
+      \t */
+      \t%(static)void writePolynomial(uint32_t polynomialValue) %(const){
+      \t   %register = polynomialValue;
+      \t}
+      \t
+      \t/**
+      \t * Get polynomial value used for CRC calculation.
+      \t * (%variables)
+      \t *
+      \t * @return Polynomial value used for CRC calculation
+      \t */
+      \t%(static)uint32_t getPolynomial() %(const){
+      \t   uint32_t data = %register;
+      \t   if ((crc->CTRL&CRC_CTRL_TCRC_MASK) == 0) {
+      \t      data &= 0xFFFF;
+      \t   }
+      \t   return data;
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
 
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)"
+      variables="crc_data_data,crc_ctrl_was,crc_ctrl_tcrc"
+      tooltipPadding="x*x" >
+   <![CDATA[
+      \t/**
+      \t * Write seed value for CRC calculation.
+      \t * (%variables)
+      \t *
+      \t * @param seedValue  Seed value to initialise CRC calculation
+      \t */
+      \t%(static)void writeSeed(uint32_t seedValue) %(const){
+      \t   %register1 = %register1 | %mask1;
+      \t   %register0 = seedValue;
+      \t   %register1 = %register1 & ~%mask1;
+      \t}
+      \t
+      \t/**
+      \t * Write data value for CRC calculation.
+      \t * (%variables)
+      \t *
+      \t * @tparam T         Type of data (inferred)
+      \t *
+      \t * @param dataValue  Data value for CRC calculation
+      \t */
+      \ttemplate<typename T>
+      \t%(static)void writeData(T dataValue) %(const){
+      \t   static_assert((sizeof(T)==1)||(sizeof(T)==2)||(sizeof(T)==4));
+      \t   %register0 = dataValue;
+      \t}
+      \t
+      \t/**
+      \t * Get calculated CRC value.
+      \t * (%variables)
+      \t *
+      \t * @return Calculated CRC value
+      \t */
+      \t%(static)uint32_t getCalculatedCrc() %(const){
+      \t   uint32_t data = %register0;
+      \t   if ((%register2&%mask2) == 0) {
+      \t      // Truncate to 16-bit value
+      \t      data &= 0xFFFF;
+      \t   }
+      \t   return data;
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+</for>
+
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Configure CRC-16/CCIT-FALSE
+      \t * See http://reveng.sourceforge.net/crc-catalogue/
+      \t */
+      \tstatic constexpr Init Crc16_ccit_false {
+      \t   CrcWidth_16BitCrc,
+      \t   CrcWriteTranspose_NoTransposition,
+      \t   CrcReadTranspose_NoTransposition,
+      \t   CrcReadComplement_Normal,
+      \t   CrcPolynomial(0x1021),
+      \t   CrcSeed(0xFFFF)
+      \t};
+      \t
+      \t/**
+      \t * Configure ARC (aka CRC-16)
+      \t * See http://reveng.sourceforge.net/crc-catalogue/
+      \t */
+      \tstatic constexpr Init Crc16 {
+      \t   CrcWidth_16BitCrc,
+      \t   CrcWriteTranspose_BitsAndBytesTransposed,
+      \t   CrcReadTranspose_BitsAndBytesTransposed,
+      \t   CrcReadComplement_Normal,
+      \t   CrcPolynomial(0x8005),
+      \t   CrcSeed(0x0000)
+      \t};
+      \t
+      \t/**
+      \t * Configure CRC-32
+      \t * See http://reveng.sourceforge.net/crc-catalogue/
+      \t */
+      \tstatic constexpr Init Crc32 {
+      \t   CrcWidth_32BitCrc,
+      \t   CrcWriteTranspose_BitsAndBytesTransposed,
+      \t   CrcReadTranspose_BitsAndBytesTransposed,
+      \t   CrcReadComplement_Inverted,
+      \t   CrcPolynomial(0x04c11db7),
+      \t   CrcSeed(0xffffffff)
+      \t};
+      \t
+      \t/**
+      \t * Configure CRC-32/BZIP
+      \t * See https://crccalc.com/
+      \t */
+      \tstatic constexpr Init Crc32_BZIP {
+      \t   CrcWidth_32BitCrc,
+      \t   CrcWriteTranspose_NoTransposition,
+      \t   CrcReadTranspose_NoTransposition,
+      \t   CrcReadComplement_Inverted,
+      \t   CrcPolynomial(0x04c11db7),
+      \t   CrcSeed(0xffffffff)
+      \t};
+      \t
+      \t/**
+      \t * Configure CRC-32-C
+      \t * See https://crccalc.com/
+      \t */
+      \tstatic constexpr Init Crc32_C {
+      \t   CrcWidth_32BitCrc,
+      \t   CrcWriteTranspose_BitsAndBytesTransposed,
+      \t   CrcReadTranspose_BitsAndBytesTransposed,
+      \t   CrcReadComplement_Inverted,
+      \t   CrcPolynomial(0x1EDC6F41),
+      \t   CrcSeed(0xffffffff)
+      \t};
+      \t
+      \t/**
+      \t * Configure CRC-32-D
+      \t * See https://crccalc.com/
+      \t */
+      \tstatic constexpr Init Crc32_D {
+      \t   CrcWidth_32BitCrc,
+      \t   CrcWriteTranspose_BitsAndBytesTransposed,
+      \t   CrcReadTranspose_BitsAndBytesTransposed,
+      \t   CrcReadComplement_Inverted,
+      \t   CrcPolynomial(0xA833982B),
+      \t   CrcSeed(0xffffffff)
+      \t};
+      \t
+      \t/**
+      \t * Configure CRC-32/MPEG-2
+      \t * See https://crccalc.com/
+      \t */
+      \tstatic constexpr Init Crc32_MPEG_2 {
+      \t   CrcWidth_32BitCrc,
+      \t   CrcWriteTranspose_NoTransposition,
+      \t   CrcReadTranspose_NoTransposition,
+      \t   CrcReadComplement_Normal,
+      \t   CrcPolynomial(0x04c11db7),
+      \t   CrcSeed(0xffffffff)
+      \t};
+      \t
+      \t/**
+      \t * Configure CRC-32/POSIX
+      \t * See https://crccalc.com/
+      \t */
+      \tstatic constexpr Init Crc32_POSIX {
+      \t   CrcWidth_32BitCrc,
+      \t   CrcWriteTranspose_NoTransposition,
+      \t   CrcReadTranspose_NoTransposition,
+      \t   CrcReadComplement_Inverted,
+      \t   CrcPolynomial(0x04c11db7),
+      \t   CrcSeed(0x00000000)
+      \t};
+      \t\n
+   ]]>
+   </template>
+
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo::Init class      -->
+<!-- ====================================================================================================== -->
    <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
@@ -175,6 +432,13 @@
       \t */
       \tclass Init {
       \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(Types...) = delete;
+      \t
       \tpublic:
       \t   /**
       \t    * Copy Constructor
@@ -189,7 +453,7 @@
    ]]>
    </template>
 
-   <!-- ____ Init class Member variables ________ -->
+   <!-- ____ BasicInfo::Init class Member variables ________ -->
 
    <for keys=" type        : variables                             : init    "
        values="%baseType   : crc_gpoly_gpoly                       :   0      ;
@@ -198,12 +462,16 @@
                              crc_ctrl_fxor,crc_ctrl_tcrc           :   0      " >
       <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
-         linePadding="xxx"
-      ><![CDATA[
+         linePadding="xxx" >
+      <![CDATA[
          %multilineDescription
          \t   %(type) %registerName = %(init);\n\n
-      ]]></variableTemplate>
+      ]]>
+      </variableTemplate>
    </for>
+
+   <!-- ____ BasicInfo::Init class Constructors ____________ -->
+
    <for keys="r"
       values="
             crc_ctrl_tot;
@@ -219,7 +487,7 @@
       <![CDATA[
          \t   /**
          \t    * Constructor for %description
-         \t    * (%(r))
+         \t    * (%variables)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -236,17 +504,135 @@
       </variableTemplate>
    </for>
 
-   <!-- ____ Init class Configure method ____ -->
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t}; // class $(_BasicInfo)::Init
+      \t\n
+   ]]>
+   </template>
 
-   <template codeGenCondition="enablePeripheralSupport" >
+<!-- ====================================================================================================== -->
+<!--     END BasicInfo::Init class      -->
+<!-- ====================================================================================================== -->
+
+   <!-- ____ BasicInfo class Configure methods ____ -->
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      linePadding="xxx" >
+   <![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param $(_basename)           Hardware instance pointer
+      \t * @param clockFrequency Clock frequency
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(
+      \t               volatile $(_Type) *$(_basename),
+      \t               const Init    &init) {
+      \t
+      \t\n
+   ]]>
+   </template>
+   <for keys=
+             " var                                                    : statement            "
+      values="
+            crc_ctrl_was,crc_ctrl_tot,crc_ctrl_totr,
+            crc_ctrl_fxor,crc_ctrl_tcrc                               : %configRegAssignment|%mask0 ;
+            crc_data_data                                             : %configRegAssignment ;
+            crc_gpoly_gpoly                                           : %configRegAssignment ;
+            crc_ctrl_tot,crc_ctrl_totr,crc_ctrl_fxor,crc_ctrl_tcrc    : %configRegAssignment " >
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         variables="%(var)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t
+         %multilineDescription
+         \t   %(statement);\n
+      ]]>
+      </variableTemplate>
+   </for>
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t * This routine does not configure pins or interrupt handlers
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tvoid configure(const Init &init) const {
+      \t
+      \t   configure($(_basename), init);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo/Info duplicated methods - Deferred -->
+<!-- ====================================================================================================== -->
+
+<for
+   keys="   static    : const    : where     : guard                                      "
+   values=" ''        : 'const ' : basicInfo : $(_BasicInfoGuard)                         ;
+            'static ' : ''       : info      : $(_InfoGuard)                              "  >
+
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)"
+      variables="crc_data_data"
+      tooltipPadding="x*x" >
+   <![CDATA[
+      \t/**
+      \t * Calculate CRC over an array
+      \t * (%variables)
+      \t *
+      \t * @tparam T         Type of data in array (inferred)
+      \t * @tparam N         Size of data array in elements (inferred)
+      \t *
+      \t * @param init       CRC initialisation information
+      \t * @param data       Data to calculate CRC over
+      \t *
+      \t * @return  Calculated CRC
+      \t */
+      \ttemplate<typename T, size_t N>
+      \t%(static)uint32_t calculateCrc(const Init &init, const T (&data)[N]) %(const){
+      \t
+      \t   configure(init);
+      \t
+      \t   // Write data to CRC unit i.e. calculate CRC
+      \t   for(unsigned index=0; index<N; index++) {
+      \t      %register = data[index];
+      \t   }
+      \t   // Return result
+      \t   return getCalculatedCrc();
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+</for>
+
+<!-- ====================================================================================================== -->
+<!--     END BasicInfo class      -->
+<!-- ====================================================================================================== -->
+<!-- ====================================================================================================== -->
+<!--     START Info class      -->
+<!-- ====================================================================================================== -->
+   <!-- Init configure methods -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
       \t */
-      \tstatic inline void defaultConfigure() {
+      \tstatic void defaultConfigure() {
       \t
-      \t   // Update settings
       \t   configure(DefaultInitValue);
       \t}
       \t
@@ -257,28 +643,31 @@
       \t */
       \tstatic void configure(const Init &init) {
       \t
-      \t   // Enable peripheral clock
+      \t   // Enable peripheral
       \t   enable();
+      \t
+      \t   $(_BasicInfo)::configure($(_basename), init);
+      \t}
       \t\n
-   ]]></template>
-   <for keys=
-             " var                                                    : statement            "
-      values="
-            crc_ctrl_tot,crc_ctrl_totr,crc_ctrl_fxor,crc_ctrl_tcrc    : %configRegAssignment|CRC_CTRL_WAS_MASK ;
-            crc_data_data                                             : %configRegAssignment ;
-            crc_gpoly_gpoly                                           : %configRegAssignment ;
-            crc_ctrl_tot,crc_ctrl_totr,crc_ctrl_fxor,crc_ctrl_tcrc    : %configRegAssignment " >
-      <variableTemplate codeGenCondition="enablePeripheralSupport"
-      variables="%(var)"
-      linePadding="xxx"
-      ><![CDATA[
-         \t
-         %multilineDescription
-         \t   %(statement);\n
-      ]]></variableTemplate>
-   </for>
-   <template codeGenCondition="$(_BasicInfoGuard)" >
+   ]]>
+   </template>
+
+   <!-- ____ Info constructors ________ -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
+      \t/*
+      \t *   Default Constructor
+      \t */
+      \t$(_Info)() : $(_BasicInfo)($(_basename)) {
+      \t   defaultConfigure();
+      \t}
+      \t
+      \t/*
+      \t *   Constructor
+      \t */
+      \t$(_Info)(const Init &init) : $(_BasicInfo)($(_basename)) {
+      \t   configure(init);
       \t}
       \t\n
    ]]>
@@ -289,7 +678,7 @@
    <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
-      padToComments="35"
+      padToComments="50"
       variables="
             crc_gpoly_gpoly,
             crc_data_data,
@@ -303,26 +692,28 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};
       \t\n
    ]]></variableTemplate>
 
-   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
-   <![CDATA[
-      \t}; // class $(_BasicInfo)::Init
-      \t\n
-   ]]>
-   </template>
+<!-- ====================================================================================================== -->
+<!--     END Info class      -->
+<!-- ====================================================================================================== -->
+<!-- ====================================================================================================== -->
+<!--     Common      -->
+<!-- ====================================================================================================== -->
 
-   <!-- ____ Common __________________ -->
-
-   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
+      \t/**
+      \t * Class representing $(_STRUCTNAME) instance
+      \t */
+      \ttypedef $(_BasicInfo) $(_Structname);
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Info)> {};
+      \ttypedef $(_Info) $(_Class);
       \t\n
    ]]>
    </template>
@@ -336,7 +727,7 @@
       <copy source="Snippets/crc-example.cpp"      target="Snippets/crc-example.cpp"       overwrite="true" derived="true" />
    </projectActionList>
 
-   <!-- ____ Startup __________________ -->
+   <!-- ____ Startup ____ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
@@ -348,13 +739,15 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <!-- ____ SIM configuration __________________ -->
+   <!-- ____ SIM configuration ____ -->
 
    <category name="Advanced" description="SIM configuration"
       toolTip="These settings only have effect if the SIM configuration is enabled" >
+      <title description="$(_BASENAME) Shared" />
       <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
       </for>
+      <title description="$(_NAME) Specific" />
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
       <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />

@@ -21,7 +21,7 @@ using Crc = Crc0;
 static constexpr uint8_t ArraySize = 100;
 
 /** Data for CRC calculation */
-static uint8_t data[ArraySize];
+static uint32_t data[ArraySize];
 
 int main(){
 
@@ -29,50 +29,30 @@ int main(){
     * Simple tests
     * Verify against https://crccalc.com
     */
-   console.setWidth(8).setPadding(Padding_LeadingZeroes);
-
-   static const uint8_t simpleData[] = "123456789";
-
-   Crc0::configure_Crc32();
-   console.writeln("Crc32(", (const char *)simpleData, "          => ", Crc0::calculateCrc(simpleData, sizeof(simpleData)-1), Radix_16);
-
-   Crc0::configure_Crc32_BZIP();
-   console.writeln("Crc32_BZIP(", (const char *)simpleData, "     => ", Crc0::calculateCrc(simpleData, sizeof(simpleData)-1), Radix_16);
-
-   Crc0::configure_Crc32_C();
-   console.writeln("Crc32_C(", (const char *)simpleData, "        => ", Crc0::calculateCrc(simpleData, sizeof(simpleData)-1), Radix_16);
-
-   Crc0::configure_Crc32_D();
-   console.writeln("Crc32_D(", (const char *)simpleData, "        => ", Crc0::calculateCrc(simpleData, sizeof(simpleData)-1), Radix_16);
-
-   Crc0::configure_Crc32_MPEG_2();
-   console.writeln("Crc32_MPEG_2(", (const char *)simpleData, "   => ", Crc0::calculateCrc(simpleData, sizeof(simpleData)-1), Radix_16);
-
-   Crc0::configure_Crc32_POSIX();
-   console.writeln("Crc32_POSIX(", (const char *)simpleData, "    => ", Crc0::calculateCrc(simpleData, sizeof(simpleData)-1), Radix_16);
-
+   static const uint32_t simpleData[] = {1,2,3,4,5,6,7,8,9,10};
+   console.setFormat(IntegerFormat(Width_8, Radix_16, Padding_LeadingZeroes));
+   console.writeln("Crc32(...)        => 0x", Crc::calculateCrc(Crc::Crc32,         simpleData));
+   console.writeln("Crc32_BZIP(...)   => 0x", Crc::calculateCrc(Crc::Crc32_BZIP,    simpleData));
+   console.writeln("Crc32_C(...)      => 0x", Crc::calculateCrc(Crc::Crc32_C,       simpleData));
+   console.writeln("Crc32_D(...)      => 0x", Crc::calculateCrc(Crc::Crc32_D,       simpleData));
+   console.writeln("Crc32_MPEG_2(...) => 0x", Crc::calculateCrc(Crc::Crc32_MPEG_2,  simpleData));
+   console.writeln("Crc32_POSIX(...)  => 0x", Crc::calculateCrc(Crc::Crc32_POSIX,   simpleData));
 
    // Fill source with random data
    srand (time(0));
-   for (unsigned index=0; index<sizeof(data); index++) {
-      data[index] = (uint8_t)rand();
+   for (unsigned index=0; index<ArraySize; index++) {
+      data[index] = (uint32_t)rand();
    }
 
    console.writeln("\nStarting");
 
    // Print data
+   console.setFormat(IntegerFormat(Width_8, Radix_16, Padding_LeadingZeroes));
    console.writeArray(data, sizeof(data)/sizeof(data[0]));
 
-   // Configure CRC-32
-   Crc::configure_Crc32();
-
-   // Write data to CRC unit i.e. calculate CRC
-   for(unsigned index=0; index<sizeof(data); index++) {
-      Crc::writeData8(data[index]);
-   }
-
    // Report result
-   console.write("Calculated CRC = 0x", Crc::getCalculatedCrc(), Radix_16);
+   console.setFormat(IntegerFormat(Width_8, Radix_16, Padding_LeadingZeroes));
+   console.write("\nCalculated CRC = 0x", Crc::calculateCrc(Crc::Crc32,  data));
 
    for(;;) {
       __asm__("nop");

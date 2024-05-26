@@ -21,10 +21,10 @@ using namespace USBDM;
 using Led         = $(/HARDWARE/Led1:GpioB<0,ActiveLow>);
 
 // ADC channel to use
-using MyAdcChannel  = $(/HARDWARE/Analogue0:Adc0\:\:Channel<10>);
+using MyAdcChannel  = Adc0::Channel<Adc0ChannelNum_Analogue_A0>;
 
 // Shared ADC to use
-using MyAdc         = MyAdcChannel::OwningAdc;
+using MyAdc         = MyAdcChannel::Owner;
 
 // Resolution to use for ADC
 constexpr AdcResolution ADC_RESOLUTION = AdcResolution_10bit_se;
@@ -40,7 +40,7 @@ constexpr int UPPER_THRESHOLD = MyAdc::getSingleEndedMaximum(ADC_RESOLUTION)*0.6
  *
  * Will toggle LED while comparison is true
  */
-void adcComparisonCallback(uint32_t result, int channel) {
+void adcComparisonCallback(uint32_t result, AdcChannelNum channel) {
    (void)result;
    (void)channel;
    Led::toggle();
@@ -55,6 +55,9 @@ int main() {
    MyAdcChannel::setInput();
 
    static constexpr MyAdc::Init adcInitValue = {
+      NvicPriority_Normal ,               // (irqLevel) IRQ priority level
+      adcComparisonCallback,              // Call-back
+
       AdcClockSource_Asynch ,             // (adc_cfg1_adiclk) ADC Clock Source
       ADC_RESOLUTION ,                    // (adc_cfg1_mode) ADC Resolution
       AdcTrigger_Software ,               // (adc_sc2_adtrg) Conversion Trigger Select
@@ -64,8 +67,6 @@ int main() {
       AdcCompare_OutsideRangeExclusive ,  // (adc_sc2_compare) Compare function
       LOWER_THRESHOLD ,                   // (adc_cv1) ADC CV low value
       UPPER_THRESHOLD ,                   // (adc_cv2) ADC CV high value
-      NvicPriority_Normal ,               // (irqLevel) IRQ priority level
-      adcComparisonCallback,              // Call-back
       // Software triggered (Pre-trigger0 = SC1A), (adc_sc1_adch) Channel to use and (adc_sc1_aien) IRQ when complete
       AdcPretrigger_0, MyAdcChannel::CHANNEL, AdcAction_Interrupt,
    };

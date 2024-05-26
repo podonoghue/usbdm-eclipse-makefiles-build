@@ -306,6 +306,22 @@ enum Ticks : unsigned {
 
 #endif
 
+   static inline constexpr Ticks operator+ (const Ticks &left, const Ticks &right) {
+      return Ticks(unsigned(left)+unsigned(right));
+   }
+
+   static inline constexpr Ticks operator- (const Ticks &left, const Ticks &right) {
+      return Ticks(unsigned(left)-unsigned(right));
+   }
+
+   static inline constexpr Ticks operator* (const Ticks &left, const int &right) {
+      return Ticks(unsigned(left)*right);
+   }
+
+   static inline constexpr Ticks operator* (const int &left, const Ticks &right) {
+      return Ticks((left)*unsigned(right));
+   }
+
    /**
     * Create a value of type `To` from the bits of `from`.
     *

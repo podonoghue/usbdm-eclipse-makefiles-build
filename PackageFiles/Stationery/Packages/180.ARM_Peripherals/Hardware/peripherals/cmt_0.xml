@@ -47,17 +47,17 @@
       <choice name="Time"             value="1,0,0"  enum="Time"
          toolTip="Waveform alternates between modulation frequency (mark) and idle (space).\n
                   Modulation waveform is controlled by setPrimaryTiming().\n
-                  Mark/Space time is controlled by setMarkSpaceTiming()."
+                  Mark/Space time is controlled by setMarkSpacePeriods()."
       />
       <choice name="Baseband"         value="1,1,0"  enum="Baseband"
          toolTip="Waveform alternates between high (mark) and idle (space) without use of modulation.\n
-                  Mark/Space time is controlled by setMarkSpaceTiming()."
+                  Mark/Space time is controlled by setMarkSpacePeriods()."
       />
       <choice name="FreqShiftKeying"  value="1,0,1"  enum="FreqShiftKeying"
          toolTip="Waveform changes between two modulation frequencies(mark) separated by idle time (space) i.e.\n
                    (Primary modulation - idle - Secondary modulation - idle) repeated.\n
                    Modulation waveforms are controlled by setPrimaryTiming() and setSecondaryTiming().\n
-                   Mark/Space time is controlled by setMarkSpaceTiming().\n
+                   Mark/Space time is controlled by setMarkSpacePeriods().\n
                    Space time may be set to zero to obtain simple FSK with no idle time."
       />
    </choiceOption>
@@ -71,7 +71,7 @@
                - The modulator is not currently active and MCGEN is set\n
                - At the end of each modulation cycle while MCGEN is set\n
                Cleared by:\n
-               - Calling getStatus() followed by calling getMarkTime(), getSpaceTime() or setMarkSpaceTiming().\n
+               - Calling getStatus() followed by calling getMarkPeriod(), setSpacePeriod() or setMarkSpacePeriods().\n
                - A DMA cycle"
       description="End Of Cycle Status Flag" >
       <choice name="Cycle not completed"  value="0" enum="CycleIncomplete"/>
@@ -544,7 +544,7 @@
       \t *
       %paramDescription
       \t */
-      \t%(static)void setMarkSpacePeriod(%params) %(const){
+      \t%(static)void setMarkSpacePeriods(%params) %(const){
       \t   cmt->CMD1    = uint8_t(%paramName0>>8);
       \t   cmt->CMD2    = uint8_t(%paramName0);
       \t   cmt->CMD3    = uint8_t(%paramName1>>8);
@@ -974,7 +974,7 @@
             cmt_space
          " >
    <![CDATA[
-      \t%initNonZeroValues
+      \t%initExpression
       \t};
       \t\n
    ]]>
@@ -996,15 +996,15 @@
       \t * Time mode
       \t *    Waveform alternates between modulation frequency (mark) and idle (space).
       \t *    Modulation waveform is controlled by setPrimaryTiming().
-      \t *    Mark/Space time is controlled by setMarkSpaceTiming().
+      \t *    Mark/Space time is controlled by setMarkSpacePeriods().
       \t * Baseband mode
       \t *    Waveform alternates between high (mark) and idle (space) without use of modulation.
-      \t *    Mark/Space time is controlled by setMarkSpaceTiming().
+      \t *    Mark/Space time is controlled by setMarkSpacePeriods().
       \t * FSK mode
       \t *    Waveform changes between two modulation frequencies(mark) separated by idle time (space) i.e.
       \t *    (Primary modulation - idle - Secondary modulation - idle) repeated.
       \t *    Modulation waveforms are controlled by setPrimaryTiming() and setSecondaryTiming().
-      \t *    Mark/Space time is controlled by setMarkSpaceTiming().
+      \t *    Mark/Space time is controlled by setMarkSpacePeriods().
       \t *    Space time may be set to zero to obtain simple FSK with no idle time.
       \t */
       \ttypedef $(_Info) $(_Class);

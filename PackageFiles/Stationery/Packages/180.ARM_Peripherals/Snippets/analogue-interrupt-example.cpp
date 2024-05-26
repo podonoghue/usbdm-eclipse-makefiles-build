@@ -18,14 +18,14 @@ using namespace USBDM;
 
 // Connection mapping - change as required
 // (ADC Ch(19) = light sensor on FRDM-K20
-using MyAdcChannel = $(/HARDWARE/Analogue0:MyAdc\:\:Channel<AdcChannelNum_19>);
-using MyAdc        = MyAdcChannel::OwningAdc;
+using MyAdcChannel = Adc0::Channel<Adc0ChannelNum_Analogue_A0>;
+using MyAdc        = MyAdcChannel::Owner;
 
 /**
  * NOTE:  This is not a sensible approach
  *        Using serial I/O in a ISR is very silly!!!!
  */
-void handler(uint32_t result, int) {
+void handler(uint32_t result, AdcChannelNum) {
    result = result/10;
    for (unsigned i=0; i<result; i++) {
       console.write('X');
@@ -40,15 +40,15 @@ int main(void) {
    MyAdcChannel::setInput();
 
    static constexpr MyAdc::Init adcInitValue = {
+         NvicPriority_Normal,                // NVIC configuration
+         handler,                            // ADC call-back
+
       AdcClockSource_Asynch ,             // (adc_cfg1_adiclk) ADC Clock Source
       AdcResolution_8bit_se ,             // (adc_cfg1_mode)   ADC Resolution
       AdcTrigger_Software ,               // (adc_sc2_adtrg)   Conversion Trigger Select
       AdcAveraging_4 ,                    // (adc_sc3_avg)     Hardware Average Select
       AdcSample_4cycles ,                 // (adc_sample)      Long Sample Time Select
       AdcContinuous_Enabled ,             // (adc_sc3_adco)    Continuous conversions
-
-      NvicPriority_Normal,                // NVIC configuration
-      handler,                            // ADC call-back
 
       // Software configuration - Trigger conversions on channel with interrupts
       AdcPretrigger_0, MyAdcChannel::CHANNEL, AdcAction_Interrupt,

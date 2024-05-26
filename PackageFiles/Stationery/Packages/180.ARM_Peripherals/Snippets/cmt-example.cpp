@@ -35,10 +35,10 @@ void cmtCallback() {
    if (Cmt::getEndOfCycleFlag()) {
       // LSB
       if (data&(1<<bitNum)) {
-         Cmt::setMarkSpacePeriod(OneMarkTime, OneSpaceTime);
+         Cmt::setMarkSpacePeriods(OneMarkTime, OneSpaceTime);
       }
       else {
-         Cmt::setMarkSpacePeriod(ZeroMarkTime, ZeroSpaceTime);
+         Cmt::setMarkSpacePeriods(ZeroMarkTime, ZeroSpaceTime);
       }
       if (bitNum == 15) {
          Cmt::setExtendedSpace(CmtExtendedSpace_Enabled);
@@ -51,13 +51,14 @@ void cmtCallback() {
 
 void configureCmtFrequencyShiftKeying() {
    // Configure CMT output and connect to pin
-   Cmt::setOutput(
+   Cmt::OutputPin::setOutput(
          PinDriveStrength_High,
          PinDriveMode_PushPull,
          PinSlewRate_Slow);
 
-#if 1
    static constexpr Cmt::Init cmtInit {
+      NvicPriority_Normal,
+      cmtCallback,
 
       CmtMode_FreqShiftKeying ,                              // Mode of operation
       CmtClockPrescaler_Auto ,                               // Primary Prescaler Divider
@@ -70,34 +71,20 @@ void configureCmtFrequencyShiftKeying() {
       CmtSecondaryCarrierLowTime(SecondaryCarrierHalfTime),  // Secondary Carrier Low Time
       CmtMarkPeriod(ZeroMarkTime) ,                          // Mark period
       CmtSpacePeriod(ZeroSpaceTime),                         // Space period
-
-      NvicPriority_Normal,
-      cmtCallback,
    };
    Cmt::configure(cmtInit);
-#else
-   Cmt::configure(CmtMode_FreqShiftKeying);
-   Cmt::setPrimaryTiming(PrimaryCarrierHalfTime,PrimaryCarrierHalfTime);
-   Cmt::setSecondaryTiming(SecondaryCarrierHalfTime,SecondaryCarrierHalfTime);
-   Cmt::setMarkSpacePeriod(ZeroMarkTime, ZeroSpaceTime);
-   Cmt::setOutputControl(CmtOutput_ActiveHigh);
-
-   Cmt::setCallback(cmtCallback);
-   Cmt::setEndOfCycleAction(CmtEndOfCycleAction_Interrupt);
-   Cmt::enableNvicInterrupts(NvicPriority_Normal);
-   Cmt::setMode(CmtMode_FreqShiftKeying);
-#endif
 }
 
 void configureCmtTime() {
    // Configure CMT output and connect to pin
-   Cmt::setOutput(
+   Cmt::OutputPin::setOutput(
          PinDriveStrength_High,
          PinDriveMode_PushPull,
          PinSlewRate_Slow);
 
-#if 1
    static constexpr Cmt::Init cmtInit {
+      NvicPriority_Normal,
+      cmtCallback,
 
       CmtMode_Time ,                                       // Mode of operation
       CmtClockPrescaler_Auto ,                             // Primary Prescaler Divider
@@ -108,23 +95,8 @@ void configureCmtTime() {
       CmtPrimaryCarrierLowTime(PrimaryCarrierHalfTime) ,   // Primary Carrier Low Time
       CmtMarkPeriod(ZeroMarkTime) ,                        // Mark period
       CmtSpacePeriod(ZeroSpaceTime),                       // Space period
-      NvicPriority_Normal,
-      cmtCallback
    };
    Cmt::configure(cmtInit);
-#else
-   Cmt::setClockDivider(CmtClockPrescaler_Auto);
-
-   Cmt::configure(CmtMode_Direct);
-   Cmt::setPrimaryTiming(PrimaryCarrierHalfTime,PrimaryCarrierHalfTime);
-   Cmt::setMarkSpacePeriod(ZeroMarkTime, ZeroSpaceTime);
-   Cmt::setOutputControl(CmtOutput_ActiveHigh);
-
-   Cmt::setCallback(cmtCallback);
-   Cmt::setEndOfCycleAction(CmtEndOfCycleAction_Interrupt);
-   Cmt::enableNvicInterrupts(NvicPriority_Normal);
-   Cmt::setMode(CmtMode_Time);
-#endif
 }
 
 int main() {

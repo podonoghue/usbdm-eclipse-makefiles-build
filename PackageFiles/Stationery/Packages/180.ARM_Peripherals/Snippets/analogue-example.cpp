@@ -24,15 +24,15 @@ using namespace USBDM;
 using MyAdc        = Adc0;
 
 // ADC channel to use
-using BandgapAdcChannel  = Adc0::Channel<AdcChannelNum_27>;  // Internal bandgap
-using MyAdcChannel       = Adc0::Channel<AdcChannelNum_26>;  // Internal chip temperature
+using BandgapAdcChannel  = Adc0::Channel<Adc0ChannelNum_Analogue_A0>;  // Internal bandgap
+using MyAdcChannel       = Adc0::Channel<Adc0ChannelNum_Analogue_A1>;  // Internal chip temperature
 
 // Resolution to use for ADC
 constexpr AdcResolution adcResolution = AdcResolution_16bit_se;
 
 void reportChipTemperature() {
-   using TemperatureChannel    = Adc0::Channel<AdcChannelNum_26>;  // Internal temp sensor
-   constexpr float VREF_H      = 3.3;                              // External Vref voltage ~ Vcc
+   using TemperatureChannel    = Adc0::Channel<Adc0ChannelNum_TEMP_SENSOR>;  // Internal temp sensor
+   constexpr float VREF_H      = 3.3;                                        // External Vref voltage ~ Vcc
 
    unsigned tMeasure        = TemperatureChannel::readAnalogue();
    float    tVoltage        = tMeasure*(VREF_H/Adc0::getSingleEndedMaximum(adcResolution));
