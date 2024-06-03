@@ -4,22 +4,25 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="External Watchdog Monitor" >
 
-   <!-- ____ Class Declaration ________ -->
+   <!-- ____ Class Declarations ________ -->
    <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <constant key="definitionsInHeader" value="true" type="Boolean" />
 
+   <!-- ____ Instance control ________ -->
+   <constant key="_can_create_instance" value="true" type="Boolean" />
+
+   <!-- Constants -->
+   <constant key = "disable_peripheral"      value = "&quot;ewm->CTRL = EWM_CTRL_EWMEN(0);&quot;"  type="String" />
+
    <equation key="irq_parameters"             value=""          />
    <equation key="irq_dummy_parameters"       value=""          />
-   <equation key="irq_call"                   value=""          />
+   <equation key="irq_call_parameters"        value=""          />
    <equation key="generateDefault"            value="false"     />
    <equation key="configureInStartupDefault"  value="false"     />
    <xi:include href="enablePeripheral.xml"    />
    <title />
 
-
-   <!-- Constants -->
-   <constant key = "disable_peripheral"      value = "&quot;ewm->CTRL = EWM_CTRL_EWMEN(0);&quot;"  type="String" />
 
    <!-- ____ CTRL ____ -->
 
@@ -78,7 +81,7 @@
       valueFormat="%s"
       enabledBy="ewm_ctrl_ewmen"
       typeName="EwmClockPrescaler"
-      baseType="uint16_t"
+      baseType="uint8_t"
       description="LPO Clock prescaler"
       toolTip="This selects a prescaler value for the LPO clock before it is used by the timer\n
                This is a write-once register."
@@ -94,7 +97,8 @@
       enabledBy="ewm_ctrl_ewmen"
       description="Input clock (after prescaler)"
       toolTip="This is the clock used by the timer.\n
-               It is generated from the LPO wth a prescaler."
+               It is generated from the LPO wth a prescaler.\n
+               This is a write-once value"
       units="Hz"
    />
 
@@ -114,8 +118,10 @@
    <intOption key="ewm_cmpl_comparel" condition="ewm_cmpl_comparel_present"
       enabledBy="ewm_ctrl_ewmen"
       units="ticks"
+      baseType="uint8_t"
       description="Minimum service time in ticks"
-      toolTip="Minimum time that must elapse before the CPU can service the EWM counter"
+      toolTip="Minimum time that must elapse before the CPU can service the EWM counter\n
+               This is a write-once value"
       value="0"
       min="0"
       max="254"
@@ -137,8 +143,10 @@
    <intOption key="ewm_cmph_compareh" condition="ewm_cmph_compareh_present"
       enabledBy="ewm_ctrl_ewmen"
       units="ticks"
+      baseType="uint8_t"
       description="Maximum service time in ticks"
-      toolTip="Maximum time that may elapse before the CPU has to service the EWM counter"
+      toolTip="Maximum time that may elapse before the CPU has to service the EWM counter\n
+               This is a write-once value"
       value="0"
       min="ewm_cmpl_comparel+1"
       max="254"
@@ -154,87 +162,256 @@
       toolTip="Maximum time that may elapse before the CPU has to service the EWM counter"
       units="s"
    />
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo Class      -->
+<!-- ====================================================================================================== -->
 
-   <!-- ____ Getters and Setters _______ -->
+   <!-- BasicInfo Instance pointer and Constructors  -->
 
-   <for keys="field               : get   : set   : genCode                 : name"
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t// Pointer to $(_BASENAME) hardware instance
+      \tvolatile $(_Type) * const $(_basename);
+      \t\n
+   ]]></template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Constructor
+      \t *
+      \t * @param $(_basename) $(_BASENAME) hardware instance
+      \t */
+      \tconstexpr $(_BasicInfo)(volatile $(_Type) * $(_basename)) : $(_basename)($(_basename)) {
+      \t}
+      \t\n
+   ]]></template>
+
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo/Info duplicated methods -->
+<!-- ====================================================================================================== -->
+
+<for
+   keys="   static    : const    : where     : guard                                      "
+   values=" ''        : 'const ' : basicInfo : $(_BasicInfoGuard)                         ;
+            'static ' : ''       : info      : $(_InfoGuard)                              "  >
+
+   <!-- ____ Getters and Setters ____________ -->
+
+   <for keys="field               : set   : get   : clear : genCode                 : name"
         values="
-         ewm_ctrl_inten           : true  : true  : enableGettersAndSetters : Action;
-         ewm_ctrl_input           : true  : true  : true                    : InputPin;
-         ewm_ctrl_ewmen           : true  : true  : enableGettersAndSetters : Enable;
-         ewm_serv_service         : false : true  : enableGettersAndSetters : Service;
-         ewm_cmpl_comparel        : true  : true  : enableGettersAndSetters : MinimumTime;
-         ewm_cmph_compareh        : true  : true  : enableGettersAndSetters : MaximumTime" >
-      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
-      ><![CDATA[
+         ewm_ctrl_inten           : true  : true  : false : enableGettersAndSetters : Action;
+         ewm_ctrl_input           : true  : true  : false : true                    : InputPin;
+         ewm_ctrl_ewmen           : true  : true  : false : enableGettersAndSetters : Enable;
+         ewm_cmpl_comparel        : true  : true  : false : enableGettersAndSetters : MinimumTime;
+         ewm_cmph_compareh        : true  : true  : false : enableGettersAndSetters : MaximumTime" >
+      <variableTemplate location="%(where)" condition="%(set)" codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)" >
+      <![CDATA[
          \t/**
          \t * Set %description
-         \t * (%(field))
+         \t * (%variables)
          \t *
          %paramDescription
          \t */
-         \tstatic void set%(name)(%params) {
+         \t%(static)void set%(name)(%params) %(const){
          \t   %fieldAssignment;
          \t}
          \t\n
-      ]]></variableTemplate>
-      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
-      ><![CDATA[
+      ]]>
+      </variableTemplate>
+      <variableTemplate location="%(where)" condition="%(get)" codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)" >
+      <![CDATA[
          \t/**
          \t * Get %description
-         \t * (%(field))
+         \t * (%variables)
          \t *
          \t * @return %tooltip
          \t */
-         \tstatic %returnType get%(name)() {
-         \t   return %returnType(%register&%mask);
+         \t%(static)%returnType get%(name)() %(const){
+         \t   return %fieldExtract;
          \t}
          \t\n
-      ]]></variableTemplate>
+      ]]>
+      </variableTemplate>
+      <variableTemplate location="%(where)" condition='="(%variables)"=="%(clear)"' codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)"
+         tooltipPadding="x*x" >
+      <![CDATA[
+         \t/**
+         \t * Clear %description
+         \t * (%variables)
+         \t *
+         %paramDescription
+         \t */
+         \t%(static)void clear%(name)(%params) %(const){
+         \t   // w1c and mixed register
+         \t   %register = %register|%paramExpression;
+         \t}
+         \t\n
+      ]]>
+      </variableTemplate>
+      <variableTemplate location="%(where)" condition='="w1cIm"=="%(clear)"' codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)"
+         tooltipPadding="x*x" >
+      <![CDATA[
+         \t/**
+         \t * Clear %description
+         \t * (%variables)
+         \t *
+         \t * %tooltip
+         \t */
+         \t%(static)void clear%(name)() %(const){
+         \t   // w1c and mixed register
+         \t   %register = %register|%mask;
+         \t}
+         \t\n
+      ]]>
+      </variableTemplate>
    </for>
 
    <for keys="field               : get   : set   : genCode                 : name"
         values="
          ewm_clkprescaler_clk_div : true  : true  : enableGettersAndSetters : Prescaler" >
-      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
-      ><![CDATA[
+      <variableTemplate location="%(where)" condition="%(set)"  codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)" > 
+      <![CDATA[
          \t/**
          \t * Set %description
+         \t * (%variables)
          \t *
          %paramDescription
          \t */
-         \tstatic void set%(name)(%params) {
+         \t%(static)void set%(name)(%params) %(const){
          \t   %register = %paramExpression-1;
          \t}
          \t\n
       ]]></variableTemplate>
-      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
-      ><![CDATA[
+      <variableTemplate location="%(where)" condition="%(get)"  codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)" >
+      <![CDATA[
          \t/**
          \t * Get %description
+         \t * (%variables)
          \t *
          \t * @return %tooltip
          \t */
-         \tstatic %returnType get%(name)() {
+         \t%(static)%returnType get%(name)() %(const){
          \t   return %returnType(%register+1);
          \t}
          \t\n
       ]]></variableTemplate>
    </for>
+   
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)"
+      variables="ewm_cmpl_comparel,ewm_cmph_compareh" 
+      params="min,max"
+      nonDefaultParams="2"
+      multipleParamsOnNewline="false" >
+   <![CDATA[
+         \t/**
+         \t * Set %description
+         \t * (%variables)
+         \t *
+         %paramDescription
+         \t */
+         \t%(static)void setWindow(%params) %(const){
+         \t   %register0 = %paramName0;
+         \t   %register1 = %paramName1;
+         \t}
+         \t\n
+   ]]></variableTemplate>
+   
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)"
+      variables="ewm_serv_service,ewm_serv_service" 
+      params="ewmService1,ewmService2"
+      nonDefaultParams="2"
+      multipleParamsOnNewline="false" >
+   <![CDATA[
+      \t/**
+      \t * Write key values to service register to restart watchdog.
+      \t * (%variables)
+      \t *
+      \t * The EWM service mechanism requires the CPU to write two values to the SERV register:
+      \t * - a first data byte of 0xB4 (EwmKey1), followed by
+      \t * - a second data byte of 0x2C (EwmKey2).
+      \t *
+      \t * The EWM service is illegal if either of the following conditions is true.
+      \t * - The first or second data byte is not written correctly.
+      \t * - The second data byte is not written within a fixed number of peripheral bus cycles of the first data byte.
+      \t *   This fixed number of cycles is called EWM_service_time.
+      \t * (%variables)
+      \t *
+      \t *
+      %paramDescription
+      \t */
+      \t%(static)void writeKeys(%params) %(const){
+      \t   CriticalSection cs;
+      \t   %register = %paramName0;
+      \t   %register = %paramName1;
+      \t}
+      \t\n
+   ]]></variableTemplate>
+</for>
 
-   <template><![CDATA[
+   <template where="info" codeGenCondition='$(_InfoGuard)&amp;&amp;SignalIsMapped("EWM_IN")' >
+   <![CDATA[
       \t//! Pin number in Info table for EWM input if mapped to a pin
       \tstatic constexpr int inputPin  = 0;
-
+      \t
+      \t/** Allow access to PCR of input pin */
+      \tusing InputPin  = PcrTable_T<$(_Info), inputPin>;
+      \t
+      \t/**
+      \t * Enable EWM_in pin as input and connected to EWM.
+      \t * Configures all Pin Control Register (PCR) values.
+      \t *
+      \t * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
+      \t * @param[in] pinAction        One of PinAction_None, etc (defaults to PinAction_None)
+      \t * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
+      \t */
+      \tstatic void setInput(
+      \t      PinPull           pinPull           = InputPin::defaultPcrValue,
+      \t      PinAction         pinAction         = InputPin::defaultPcrValue,
+      \t      PinFilter         pinFilter         = InputPin::defaultPcrValue
+      \t      ) {
+      \t   InputPin::setInput(pinPull, pinAction, pinFilter);
+      \t}
+      \t\n
+   ]]>
+   </template>
+   
+   <template where="info" codeGenCondition='$(_InfoGuard)&amp;&amp;SignalIsMapped("EWM_OUT_b")' >
+   <![CDATA[
       \t//! Pin number in Info table for EWM output if mapped to a pin
       \tstatic constexpr int outputPin  = 1;
+      \t
+      \t/** Allow access to PCR of output pin */
+      \tusing OutputPin = PcrTable_T<$(_Info), outputPin>;
+      \t
+      \t/**
+      \t * Enable EWM_out pin as output and connected to EWM.
+      \t * Configures all Pin Control Register (PCR) values.
+      \t *
+      \t * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
+      \t * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
+      \t * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
+      \t */
+      \tstatic void setOutput(
+      \t      PinDriveStrength  pinDriveStrength  = OutputPin::defaultPcrValue,
+      \t      PinDriveMode      pinDriveMode      = OutputPin::defaultPcrValue,
+      \t      PinSlewRate       pinSlewRate       = OutputPin::defaultPcrValue
+      \t      ) {
+      \t   OutputPin::setOutput(pinDriveStrength, pinDriveMode, pinSlewRate);
+      \t}
       \t\n
-   ]]></template>
-<!--
-======================================================================================================
-     START BasicInfo::Init class
-======================================================================================================
- -->
+   ]]>
+   </template>
+
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo::Init class      -->
+<!-- ====================================================================================================== -->
    <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
@@ -248,15 +425,6 @@
       \t *
       \t * Example:
       \t * @code
-      \t * ///
-      \t * /// $(_NAME) call-back
-      \t * ///
-      \t * /// @param status  Status reflecting active inputs
-      \t * ///
-      \t * void $(_name)Callback(ErrorCode ec) {
-      \t *    ....
-      \t * }
-      \t *
       \t * static const $(_Class)::Init $(_name)Init {
       \t *
       \t *   // Setup values
@@ -266,9 +434,7 @@
       \t *   0_ticks ,               // Minimum service time - No minimum
       \t *   150_ticks,              // Maximum service time - 150 ticks
       \t *
-      \t *   $(_name)Callback,                 // Call-back to execute on event - call-back function name
-      \t *   NvicPriority_Low,                 // Priority for interrupt - Low
-      \t *
+      \t *   // Optional base value to start with (must be last parameter)
       \t *   $(_Class)::DefaultInitValue   // Used as base value modified by above
       \t * };
       \t *
@@ -301,88 +467,23 @@
 
    <!-- ____ BasicInfo::Init class Member variables ________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
-      variables="irqHandlingMethod"
-    ><![CDATA[
-      \t   /// %description
-      \t   %params = nullptr;\n\n
-   ]]></variableTemplate>
+   <for keys=" type        : variables                                            : init    "
+       values="%baseType   : ewm_ctrl_inten,ewm_ctrl_input,
+                             ewm_ctrl_ewmen                                       :   0      ;
+               %baseType   : ewm_cmpl_comparel                                    :   0      ;
+               %baseType   : ewm_cmph_compareh                                    :   0      ;
+               %baseType   : ewm_clkprescaler_clk_div                             :   0      " >
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         variables="%(variables)"
+         linePadding="xxx" >
+      <![CDATA[
+         %multilineDescription
+         \t   %(type) %registerName = %(init);\n\n
+      ]]>
+      </variableTemplate>
+   </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
-      variables="ewm_ctrl_inten,ewm_ctrl_input,ewm_ctrl_ewmen"
-   ><![CDATA[
-      \t   /// Control Register
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
-      variables="ewm_cmpl_comparel"
-   ><![CDATA[
-      \t   /// Compare Low Register
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
-      variables="ewm_cmph_compareh"
-   ><![CDATA[
-      \t   /// Compare High Register
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
-      variables="ewm_clkprescaler_clk_div"
-   ><![CDATA[
-      \t   /// Clock Prescaler Register
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
-      variables="/PCR/nvic_irqLevel,irqLevel"
-   ><![CDATA[
-      \t   /// %description
-      \t   %returnType %registerName0 = %defaultValue;
-      \t\n
-   ]]></variableTemplate>
-
-   <!-- ____ BasicInfo::Init class Constructors _______ -->
-
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
-      variables="irqHandlingMethod"
-      linePadding="xxx"
-   ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      this->%paramName0 = %paramExpression;
-      \t   }\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
-      variables="/PCR/nvic_irqLevel"
-      linePadding="xxx"
-   ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      %registerName = %paramExpression;
-      \t   }\n\n
-   ]]></variableTemplate>
+   <!-- ____ BasicInfo::Init class Constructors ____________ -->
 
    <for keys="r"
       values="
@@ -406,7 +507,7 @@
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t
-         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t      %constructorFieldAssignment;
          \t   }
          \t\n
       ]]>
@@ -419,6 +520,7 @@
    <![CDATA[
          \t   /**
          \t    * Constructor for %description
+         \t    * (%variables)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -441,6 +543,7 @@
       \t   /**
       \t    * Constructor for %description1
       \t    * %description0 is set to zero
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -456,6 +559,7 @@
       \t
       \t   /**
       \t    * Constructor for %description0 and %description1
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -473,43 +577,115 @@
    ]]>
    </variableTemplate>
 
-
-<!--   Default Initialisation value -->
-
-   <variableTemplate codeGenCondition="$(_InfoGuard)"
-      separator=","
-      terminator=","
-      padToComments="35"
-      variables="
-            ewm_ctrl_ewmen,
-            ewm_ctrl_inten,
-            ewm_ctrl_input,
-            ewm_clkprescaler_clk_div,
-            ewm_cmpl_comparel,
-            ewm_cmph_compareh,
-            irqLevel
-         "
-   ><![CDATA[
-      \t/**
-      \t * Default initialisation value for $(_Class)
-      \t * This value is created from Configure.usbdmProject settings
-      \t */
-      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues
-      \t};
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t}; // class $(_BasicInfo)::Init
       \t\n
-   ]]></variableTemplate>
+   ]]>
+   </template>
 
-<!--   Configure methods -->
+<!-- ====================================================================================================== -->
+<!--     END BasicInfo::Init class      -->
+<!-- ====================================================================================================== -->
 
-   <template codeGenCondition="$(_BasicInfoGuard)" >
+   <!-- ____ BasicInfo class Configure methods ____ -->
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      linePadding="xxx" >
+   <![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t * This routine does not configure pins or interrupt handlers
+      \t *
+      \t * @param $(_basename)           Hardware instance pointer
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(
+      \t               volatile $(_Type) *$(_basename),
+      \t               const Init    &init) {
+      \t
+      \t\n
+   ]]>
+   </template>
+   <for keys=
+             " var                                                    : statement            "
+      values=" ewm_ctrl_inten,ewm_ctrl_input,
+               ewm_ctrl_ewmen                                         : %configRegAssignment  ;
+               ewm_cmpl_comparel                                      : %configRegAssignment  ;
+               ewm_cmph_compareh                                      : %configRegAssignment  ;
+               ewm_clkprescaler_clk_div                               : %configRegAssignment " >
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         variables="%(var)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t
+         %multilineDescription
+         \t   %(statement);\n
+      ]]>
+      </variableTemplate>
+   </for>
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t * This routine does not configure pins or interrupt handlers
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tvoid configure(const Init &init) const {
+      \t
+      \t   configure($(_basename), init);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+<!-- ====================================================================================================== -->
+<!--     END BasicInfo class      -->
+<!-- ====================================================================================================== -->
+<!-- ====================================================================================================== -->
+<!--     START Info class      -->
+<!-- ====================================================================================================== -->
+
+   <!-- ____ Info constructors ________ -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+   public:
+      \t/*
+      \t *   Default Constructor
+      \t */
+      \t$(_Info)() : $(_BasicInfo)($(_basename)) {
+      \t   defaultConfigure();
+      \t}
+      \t
+      \t/*
+      \t *   Constructor
+      \t */
+      \t$(_Info)(const Init &init) : $(_BasicInfo)($(_basename)) {
+      \t   configure(init);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <!-- Init configure methods -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
       \t */
-      \tstatic inline void defaultConfigure() {
+      \tstatic void defaultConfigure() {
       \t
-      \t   // Update settings
       \t   configure(DefaultInitValue);
       \t}
       \t
@@ -520,56 +696,76 @@
       \t */
       \tstatic void configure(const Init &init) {
       \t
-      \t   // Enable peripheral clock
-      \t   enableClock();
+      \t   // Enable peripheral
+      \t   enable();
       \t\n
-   ]]></template>
-   <template codeGenCondition="irqHandlingMethod"
-             condition="irqHandlingMethod" >   <![CDATA[
-      \t   // Set call-backs
-      \t   setCallback(init.callbackFunction);
-      \t   enableNvicInterrupt(irqNums[0], init.irqlevel);
-      \t
-      \t   // Initialise registers\n
-   ]]></template>
-   <template codeGenCondition="$(_BasicInfoGuard)" condition="ewm_clkprescaler_clk_div" >
+   ]]>
+   </template>
+   <template where="info" codeGenCondition="$(_InfoIrqGuard)" >
    <![CDATA[
-      \t   ewm->CLKPRESCALER    = init.clkprescaler;\n
-   ]]></template>
-   <template codeGenCondition="$(_BasicInfoGuard)" >
+      \t   // Configure call-back
+      \t   if (init.callbacks[0] != nullptr) {
+      \t      setCallback(init.callbacks[0]);
+      \t      enableNvicInterrupts(init.priorities[0]);
+      \t   }
+      \t\n
+   ]]>
+   </template>
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
-      \t   ewm->CMPL    = init.cmpl;
-      \t   ewm->CMPH    = init.cmph;
-      \t   ewm->CTRL    = init.ctrl;
+      \t   $(_BasicInfo)::configure($(_basename), init);
       \t}
       \t\n
    ]]>
    </template>
 
-   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <!-- ____  Default Initialisation value ____ -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
-      \t}; // class $(_BasicInfo)::Init
-      \t\n
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr $(_BasicInfo)::Init DefaultInitValue = {\n
    ]]>
    </template>
-
-<!--
-======================================================================================================
-     END Info class
-======================================================================================================
- -->
-<!--
-======================================================================================================
-     Common
-======================================================================================================
- -->
+   <variableTemplate where="info" codeGenCondition="$(_InfoGuard)"
+      separator=","
+      terminator=","
+      padToComments="40"
+      variables="
+            ewm_ctrl_ewmen,
+            ewm_ctrl_inten,
+            ewm_ctrl_input,
+            ewm_clkprescaler_clk_div,
+            ewm_cmpl_comparel,
+            ewm_cmph_compareh,
+            " >
+   <![CDATA[
+      \t%initNonZeroValues
+      \t};
+      \t\n
+   ]]>
+   </variableTemplate>
+<!-- ====================================================================================================== -->
+<!--     END Info class      -->
+<!-- ====================================================================================================== -->
+<!-- ====================================================================================================== -->
+<!--     Common      -->
+<!-- ====================================================================================================== -->
 
    <template key="/$(_BASENAME)/declarations" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
       \t/**
+      \t * Class representing $(_STRUCTNAME) instance
+      \t */
+      \ttypedef $(_BasicInfo) $(_Structname)Instance;
+      \t/**
       \t * Class representing $(_NAME)
       \t */
-      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Info)> {};
+      \ttypedef $(_Info) $(_Class);
+      \t\n
       \t\n
    ]]>
    </template>
@@ -597,7 +793,13 @@
 
    <!-- ____ SIM configuration ____ -->
 
-   <category name="Advanced" description="SIM configuration">
+   <category name="Advanced" description="SIM configuration"
+      toolTip="These settings only have effect if the SIM configuration is enabled" >
+      <title description="$(_BASENAME) Shared" />
+      <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+      <title description="$(_NAME) Specific" />
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
       <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />

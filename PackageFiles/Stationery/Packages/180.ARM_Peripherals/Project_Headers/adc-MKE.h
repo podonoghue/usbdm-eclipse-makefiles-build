@@ -18,7 +18,7 @@
 #include <cstddef>
 #include "pin_mapping.h"
 
-#if $(/ADC/enablePeripheralSupport) // /ADC/enablePeripheralSupport
+#if $(/ADC/_BasicInfoGuard) // /ADC/_BasicInfoGuard
 
 namespace USBDM {
 
@@ -823,7 +823,7 @@ $(/ADC/declarations:// #error "No declarations found")
 
 } // End namespace USBDM
 
-#endif // /ADC/enablePeripheralSupport
+#endif // /ADC/_BasicInfoGuard
 
 #endif /* HEADER_ADC_H */
 

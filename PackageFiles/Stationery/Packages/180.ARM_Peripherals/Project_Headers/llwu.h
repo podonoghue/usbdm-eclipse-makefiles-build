@@ -18,7 +18,7 @@
 
 namespace USBDM {
 
-#if $(/LLWU/enablePeripheralSupport) // /LLWU/enablePeripheralSupport
+#if $(/LLWU/_BasicInfoGuard) // /LLWU/_BasicInfoGuard
 
 /**
  * @addtogroup LLWU_Group LLWU, Low-leakage Wake-up Unit
@@ -63,7 +63,7 @@ protected:
       static constexpr void check() {}
    };
 
-#if $(/LLWU/irqHandlingMethod:false) // /LLWU/irqHandlingMethod
+#if $(/LLWU/_CommonInfoIrqGuard:false) // /LLWU/_CommonInfoIrqGuard
 
    using CallbackFunction = typename Info::CallbackFunction;
 
@@ -359,7 +359,7 @@ $(/LLWU/declarations: // No declarations found)
  * End LLWU_Group
  * @}
  */
-#endif // /LLWU/enablePeripheralSupport
+#endif // /LLWU/_BasicInfoGuard
 } // End namespace USBDM
 
 #endif /* HEADER_LLWU_H */

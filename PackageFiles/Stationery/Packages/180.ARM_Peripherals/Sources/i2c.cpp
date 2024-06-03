@@ -14,7 +14,7 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
-#if $(/I2C/enablePeripheralSupport) // /I2C/enablePeripheralSupport
+#if $(/I2C/_BasicInfoGuard) // /I2C/_BasicInfoGuard
 
 namespace USBDM {
 
@@ -23,7 +23,7 @@ namespace USBDM {
  *
  * @param[in]  address - address of slave to access
  */
-void I2c::sendAddress(uint8_t address) {
+void I2cBasicInfo::sendAddress(uint8_t address) {
 
    unsigned timeout = TIMEOUT_LIMIT;
 
@@ -50,7 +50,7 @@ void I2c::sendAddress(uint8_t address) {
 /**
  * I2C state-machine based interrupt handler
  */
-void I2c::poll(void) {
+void I2cBasicInfo::poll(void) {
 
    if ((i2c->S & I2C_S_ARBL_MASK) != 0) {
       i2c->S = I2C_S_ARBL_MASK|I2C_S_IICIF_MASK;
@@ -184,7 +184,7 @@ void I2c::poll(void) {
  *
  * @return E_NO_ERROR on success
  */
-ErrorCode I2c::transmit(uint8_t address, uint16_t size, const uint8_t data[]) {
+ErrorCode I2cBasicInfo::transmit(uint8_t address, uint16_t size, const uint8_t data[]) {
 #ifdef __CMSIS_RTOS
    startTransaction();
 #endif
@@ -221,7 +221,7 @@ ErrorCode I2c::transmit(uint8_t address, uint16_t size, const uint8_t data[]) {
  *
  * @return E_NO_ERROR on success
  */
-ErrorCode I2c::receive(uint8_t address, uint16_t size,  uint8_t data[]) {
+ErrorCode I2cBasicInfo::receive(uint8_t address, uint16_t size,  uint8_t data[]) {
 #ifdef __CMSIS_RTOS
    startTransaction();
 #endif
@@ -262,10 +262,13 @@ ErrorCode I2c::receive(uint8_t address, uint16_t size,  uint8_t data[]) {
  *
  * @return E_NO_ERROR on success
  */
-ErrorCode I2c::txRx(uint8_t address, uint16_t txSize, const uint8_t txData[], uint16_t rxSize, uint8_t rxData[] ) {
-#if defined __CMSIS_RTOS && !$(/I2C/irqHandlingMethod)
-   startTransaction();
+ErrorCode I2cBasicInfo::txRx(uint8_t address, uint16_t txSize, const uint8_t txData[], uint16_t rxSize, uint8_t rxData[] ) {
+
+   if constexpr (!irqHandlerInstalled) {
+#if defined __CMSIS_RTOS
+      startTransaction();
 #endif
+   }
    // Clear cumulative error code
    errorCode = E_NO_ERROR;
 
@@ -279,33 +282,17 @@ ErrorCode I2c::txRx(uint8_t address, uint16_t txSize, const uint8_t txData[], ui
    state = i2c_txData;
 
    sendAddress(address);
-   
-#if !$(/I2C/irqHandlingMethod) // !/I2C/irqHandlingMethod
-   // Poll until complete
-   waitWhileBusy();
 
+   if constexpr (!irqHandlerInstalled) {
+      // Poll until complete
+      waitWhileBusy();
+         
 #ifdef __CMSIS_RTOS
-   endTransaction();
+      endTransaction();
 #endif
-#endif
+   }
 
    return errorCode;
-}
-
-/**
- * Transmit message followed by receive message.
- * Uses repeated-start.\n
- * Uses shared transmit and receive buffer
- *
- * @param[in]    address  Address of slave to communicate with (should include LSB = R/W bit = 0)
- * @param[in]    txSize   Size of transmission data
- * @param[in]    rxSize   Size of reception data
- * @param[inout] data     Data for transmission and reception
- *
- * @return E_NO_ERROR on success
- */
-ErrorCode I2c::txRx(uint8_t address, uint16_t txSize, uint16_t rxSize, uint8_t data[] ) {
-   return txRx(address, txSize, data, rxSize, data);
 }
 
 /*

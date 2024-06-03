@@ -28,7 +28,7 @@ namespace USBDM {
  * @{
  */
 $(/QSPI/peripheral_h_definition:// $/QSPI/peripheral_h_definition not found)
-#if $(/QSPI/enablePeripheralSupport:false) // /QSPI/enablePeripheralSupport
+#if $(/QSPI/_BasicInfoGuard:false) // /QSPI/_BasicInfoGuard
 
 /**
  * Crossbar Switch Master Assignments - with System MPU
@@ -2636,7 +2636,7 @@ public:
 
 $(/QSPI/declarations: // No declarations found)
 
-#endif // /QSPI/enablePeripheralSupport
+#endif // /QSPI/_BasicInfoGuard
 /**
  * End QSPI_Group
  * @}

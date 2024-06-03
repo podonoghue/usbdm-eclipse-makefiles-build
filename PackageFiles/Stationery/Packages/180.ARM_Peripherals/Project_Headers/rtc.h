@@ -39,7 +39,7 @@ template <class Info>
 class RtcBase_T : public Info {
 
 public:
-#if $(/RTC/irqHandlingMethod:false) // /RTC/irqHandlingMethod
+#if $(/RTC/_CommonInfoIrqGuard:false) // /RTC/_CommonInfoIrqGuard
    /**
     * Wrapper to allow the use of a class member as a callback function
     * @note Only usable with static objects.
@@ -118,7 +118,7 @@ public:
       };
       return fn;
    }
-#endif // /RTC/irqHandlingMethod
+#endif // /RTC/_CommonInfoIrqGuard
 
 protected:
    /** Hardware instance */

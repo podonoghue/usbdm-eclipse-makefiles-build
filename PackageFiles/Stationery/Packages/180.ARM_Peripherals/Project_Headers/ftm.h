@@ -19,7 +19,7 @@
 #include "pin_mapping.h"
 #include "gpio.h"
 
-#if $(/FTM/enablePeripheralSupport) // /FTM/enablePeripheralSupport
+#if $(/FTM/_BasicInfoGuard) // /FTM/_BasicInfoGuard
 namespace USBDM {
 /**
  * @addtogroup FTM_Group FTM, PWM, Input capture and Output compare
@@ -365,7 +365,7 @@ public:
       }
       
 $(/FTM_CHANNEL/static_functions:  // /FTM_CHANNEL/static_functions not found)
-#if false // /FTM/irqHandlingMethod
+#if false // /FTM/_CommonInfoIrqGuard - disabled
    /**
     * Set channel event callback function
     *
@@ -378,7 +378,7 @@ $(/FTM_CHANNEL/static_functions:  // /FTM_CHANNEL/static_functions not found)
     * @note Channel callbacks may be shared by multiple channels of the timer.\n
     *       It is necessary to identify the originating channel in the callback
     */
-   static ErrorCode setChannelCallback(ChannelCallbackFunction callback) {
+   static ErrorCode setChannelCallback(typename OwningFtm::CallbackFunction callback) {
       if constexpr (Info::individualChannelCallbacks) {
          return OwningFtm::setChannelCallback(channel, callback);
       }
@@ -386,7 +386,7 @@ $(/FTM_CHANNEL/static_functions:  // /FTM_CHANNEL/static_functions not found)
          return OwningFtm::setChannelCallback(callback);
       }
    }
-#endif // /FTM/irqHandlingMethod
+#endif // /FTM/_CommonInfoIrqGuard
 #if $(/PCR/_present:false) // /PCR/_present
    /*******************************
     *  PIN Functions
@@ -806,7 +806,7 @@ $(/FTM/declarations: // No declarations found)
 
 } // End namespace USBDM
 
-#endif // /FTM/enablePeripheralSupport
+#endif // /FTM/_BasicInfoGuard
 
 #endif /* HEADER_FTM_H */
 

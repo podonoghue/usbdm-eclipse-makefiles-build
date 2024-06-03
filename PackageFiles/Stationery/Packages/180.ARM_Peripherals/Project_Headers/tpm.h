@@ -19,7 +19,7 @@
 #include "pin_mapping.h"
 #include "gpio.h"
 
-#if $(/TPM/enablePeripheralSupport) // /TPM/enablePeripheralSupport
+#if $(/TPM/_BasicInfoGuard) // /TPM/_BasicInfoGuard
 
 /*
  * Default port information
@@ -360,7 +360,7 @@ public:
       }
       
 $(/TPM_CHANNEL/static_functions:  // /TPM_CHANNEL/static_functions not found)
-#if false // /TPM/irqHandlingMethod
+#if false // /TPM/_CommonInfoIrqGuard
    /**
     * Set channel event callback function
     *
@@ -381,7 +381,7 @@ $(/TPM_CHANNEL/static_functions:  // /TPM_CHANNEL/static_functions not found)
          return OwningTpm::setChannelCallback(callback);
       }
    }
-#endif // /TPM/irqHandlingMethod
+#endif // /TPM/_CommonInfoIrqGuard
 #if $(/PCR/_present:false) // /PCR/_present
    /*******************************
     *  PIN Functions
@@ -695,7 +695,7 @@ $(/TPM/declarations: // No TPM declarations found)
 
 } // End namespace USBDM
 
-#endif // /TPM/enablePeripheralSupport
+#endif // /TPM/_BasicInfoGuard
 
 #endif /* HEADER_TPM_H */
 

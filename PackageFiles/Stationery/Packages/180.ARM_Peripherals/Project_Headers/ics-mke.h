@@ -125,7 +125,7 @@ $(/ICS/publicMethods: // No public methods found)
     */
    static void SystemCoreClockUpdate(void);
 
-#if $(/ICS/enablePeripheralSupport:false) // /ICS/enablePeripheralSupport
+#if $(/ICS/_BasicInfoGuard:false) // /ICS/_BasicInfoGuard
 
    /**
     * Transition from current clock mode to mode given

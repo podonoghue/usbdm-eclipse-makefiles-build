@@ -29,7 +29,7 @@ namespace USBDM {
  * @{
  */
 $(/USBHS/peripheral_h_definition:// $/USBHS/peripheral_h_definition not found)
-#if $(/USBHS/enablePeripheralSupport) // /USBHS/enablePeripheralSupport
+#if $(/USBHS/_BasicInfoGuard) // /USBHS/_BasicInfoGuard
 
 /**
  * Type definition for interrupt call back

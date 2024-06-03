@@ -92,7 +92,7 @@ protected:
    }
 
 public:
-#if $(/GPIO/enablePeripheralSupport:false)
+#if $(/GPIO/_BasicInfoGuard:false)
 $(/GPIO/memberFunctions: // /GPIO/memberFunctions not found)
 
    /**
@@ -241,7 +241,7 @@ $(/GPIO/getGpioAddress: // /GPIO/getGpioAddress not found)
    /** Polarity of pin */
    static constexpr Polarity POLARITY = polarity;
 
-#if $(/GPIO/enablePeripheralSupport:false)
+#if $(/GPIO/_BasicInfoGuard:false)
 $(/GPIO/staticFunctions: // /GPIO/staticFunctions not found)
    /**
     * Set pin to active level (if configured as output)

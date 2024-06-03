@@ -25,13 +25,13 @@ namespace USBDM {
  * @{
  */
 
-#if $(/SDHC/enablePeripheralSupport:false) // /SDHC/enablePeripheralSupport
+#if $(/SDHC/_BasicInfoGuard:false) // /SDHC/_BasicInfoGuard
 
 $(/SDHC/peripheral_h_definition:// $/SDHC/peripheral_h_definition not found)
 
 $(/SDHC/declarations: // No declarations found)
 
-#endif  // /SDHC/enablePeripheralSupport
+#endif  // /SDHC/_BasicInfoGuard
 
 /**
  * End SDHC_Group

@@ -27,7 +27,7 @@ namespace USBDM {
  */
 $(/SMC/peripheral_h_definition:// $/SMC/peripheral_h_definition not found)
 
-#if $(/SMC/enablePeripheralSupport) // /SMC/enablePeripheralSupport
+#if $(/SMC/_BasicInfoGuard) // /SMC/_BasicInfoGuard
 /**
  *  Sleep on exit from Interrupt Service Routine (ISR)\n
  *  This option controls whether the processor re-enters sleep mode when exiting the\n
@@ -241,7 +241,7 @@ $(/SMC/InitMethod: // /SMC/InitMethod not found)
 };
 
 $(/SMC/declarations: // No declarations found)
-#endif // /SMC/enablePeripheralSupport
+#endif // /SMC/_BasicInfoGuard
 /**
  * End SMC_Group
  * @}

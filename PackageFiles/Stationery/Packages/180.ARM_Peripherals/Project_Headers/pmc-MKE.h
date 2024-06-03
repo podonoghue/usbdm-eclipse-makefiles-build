@@ -26,7 +26,7 @@ namespace USBDM {
  * @{
  */
 
-#if $(/PMC/enablePeripheralSupport) // /PMC/enablePeripheralSupport
+#if $(/PMC/_BasicInfoGuard) // /PMC/_BasicInfoGuard
 /**
  * Template class providing interface to Power Management Controller
  *
@@ -55,7 +55,7 @@ $(/PMC/InitMethod:// /PMC/InitMethod not found)
 
 $(/PMC/staticDefinitions: // No static declarations found)
 $(/PMC/declarations: // No declarations found)
-#endif // /PMC/enablePeripheralSupport
+#endif // /PMC/_BasicInfoGuard
 
 /**
  * End PMC_Group

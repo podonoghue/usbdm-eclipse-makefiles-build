@@ -21,7 +21,7 @@
  */
 namespace USBDM {
 
-#if $(/DMA/enablePeripheralSupport) // /DMA/enablePeripheralSupport
+#if $(/DMA/_BasicInfoGuard) // /DMA/_BasicInfoGuard
 
 /**
  * @addtogroup DMA_Group DMA, Direct Memory Access (DMA)

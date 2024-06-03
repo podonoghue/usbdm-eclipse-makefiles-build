@@ -23,11 +23,11 @@ namespace USBDM {
  * @{
  */
 
-#if $(/MPU/enablePeripheralSupport:false) // /MPU/enablePeripheralSupport
+#if $(/MPU/_BasicInfoGuard:false) // /MPU/_BasicInfoGuard
 $(/MPU/peripheral_h_definition:// $/MPU/peripheral_h_definition not found)
 
 $(/MPU/declarations: // No declarations found)
-#endif // /MPU/enablePeripheralSupport
+#endif // /MPU/_BasicInfoGuard
 /**
  * End MPU_Group
  * @}

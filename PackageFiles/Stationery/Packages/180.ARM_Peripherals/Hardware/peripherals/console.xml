@@ -4,6 +4,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Console routines">
 
+   <!-- constant key="log_class" value='"true"'/ -->
+   
    <binaryOption key="consoleEnable"
       description="Enable Console I/O"
       toolTip="Provides basic console I/O for the project\n
@@ -30,7 +32,7 @@
       <choice name="Lpuart 5" value="USBDM::Lpuart5"  condition="/LPUART5/_present" />
    </choiceOption>
 
-   <choiceOption key="console_baudrate" where="info"
+   <choiceOption key="console_baudrate"
       enabledBy="consoleEnable"
       valueFormat="%s"
       typeName="UartBaudRate"

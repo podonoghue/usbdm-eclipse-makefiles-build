@@ -20,7 +20,7 @@
 #include "pin_mapping.h"
 #include "dma.h"
 
-#if $(/PIT/enablePeripheralSupport) // /PIT/enablePeripheralSupport
+#if $(/PIT/_BasicInfoGuard) // /PIT/_BasicInfoGuard
 
 namespace USBDM {
 
@@ -85,7 +85,7 @@ protected:
 $(/PIT/protectedMethods: // /PIT/protectedMethods not found)
 public:
 
-   using IrqNum = PitBasicInfo::IrqNum;
+   using IrqNum = PitInfo::IrqNum;
 
    /// Defaulted constructor
    constexpr PitBase_T() = default;
@@ -108,7 +108,7 @@ $(/PIT/publicMethods: // /PIT/publicMethods not found)
       return (PitChannelNum) channelNum;
    }
 
-#if $(/DMA/enablePeripheralSupport:false) // (/DMA/enablePeripheralSupport)
+#if $(/DMA/_BasicInfoGuard:false) // (/DMA/_BasicInfoGuard)
    /**
     * Allocate PIT channel associated with DMA channel.
     * This is a channel that may be used to throttle the associated DMA channel.
@@ -130,7 +130,7 @@ $(/PIT/publicMethods: // /PIT/publicMethods not found)
       allocatedChannels &= ~channelMask;
       return (PitChannelNum) dmaChannelNum;
    }
-#endif // (/DMA/enablePeripheralSupport)
+#endif // (/DMA/_BasicInfoGuard)
 
    /**
     * Free PIT channel.
@@ -443,7 +443,7 @@ public:
    }
 #endif // /PIT/secondsSupport
 
-#if $(/PIT/irqHandlingMethod:false) // /PIT/irqHandlingMethod
+#if $(/PIT/_CommonInfoIrqGuard:false) // /PIT/_CommonInfoIrqGuard
 
    using CallbackFunction = typename Info::CallbackFunction;
    
@@ -465,7 +465,7 @@ public:
     * @param callback  Callback function to execute on interrupt
     *                  Use nullptr to remove callback.
     */
-   static void setCallback(PitBasicInfo::IrqNum pitIrqNum, CallbackFunction callback) {
+   static void setCallback(IrqNum pitIrqNum, CallbackFunction callback) {
       Info::setCallback(pitIrqNum, callback);
    }
 
@@ -531,7 +531,7 @@ public:
       oneShot(pitChannelNum, callback, Info::convertSecondsToTicks(interval));
    }
 #endif // /PIT/secondsSupport
-#endif // /PIT/irqHandlingMethod
+#endif // /PIT/_CommonInfoIrqGuard
 
    /**
     * Class representing a PIT channel.
@@ -589,6 +589,6 @@ $(/PIT/declarations:  // No declarations found)
 
 } // End namespace USBDM
 
-#endif // /PIT/enablePeripheralSupport
+#endif // /PIT/_BasicInfoGuard
 
 #endif /* INCLUDE_USBDM_PIT_H_ */

@@ -16,7 +16,7 @@
  */
 #include "pin_mapping.h"
 
-#if $(/KBI/enablePeripheralSupport) // /KBI/enablePeripheralSupport
+#if $(/KBI/_BasicInfoGuard) // /KBI/_BasicInfoGuard
 
 namespace USBDM {
 
@@ -39,6 +39,6 @@ $(/KBI/declarations: )
 
 }; // namespace USBDM
 
-#endif // /KBI/enablePeripheralSupport
+#endif // /KBI/_BasicInfoGuard
 
 #endif /* PROJECT_HEADERS_KBI_H_ */

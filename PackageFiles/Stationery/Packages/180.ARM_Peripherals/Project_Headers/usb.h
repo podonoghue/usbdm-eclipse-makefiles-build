@@ -111,7 +111,7 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
-#if $(/USB0/enablePeripheralSupport) // /USB0/enablePeripheralSupport
+#if $(/USB0/_BasicInfoGuard) // /USB0/_BasicInfoGuard
 
 #include <cstring>
 #include "pin_mapping.h"
@@ -1590,6 +1590,6 @@ void UsbBase_T<Info, EP0_SIZE>::irqHandler() {
  */
 
 } // End namespace USBDM
-#endif // /USB0/enablePeripheralSupport
+#endif // /USB0/_BasicInfoGuard
 
 #endif /* HEADER_USB_H */

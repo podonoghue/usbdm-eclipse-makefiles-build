@@ -12,7 +12,7 @@
 
 #include "pin_mapping.h"
 
-#if $(/ACMP/enablePeripheralSupport) // /ACMP/enablePeripheralSupport
+#if $(/ACMP/_BasicInfoGuard) // /ACMP/_BasicInfoGuard
 
 namespace USBDM {
 
@@ -35,6 +35,6 @@ $(/ACMP/declarations: )
 $(/ACMP/InputMapping:   // /CMP/InputMapping None Found)
 }; // namespace USBDM
 
-#endif // /ACMP/enablePeripheralSupport
+#endif // /ACMP/_BasicInfoGuard
 
 #endif /* PROJECT_HEADERS_ACMP_H_ */

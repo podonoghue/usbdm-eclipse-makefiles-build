@@ -17,8 +17,8 @@ read -d '' TOx <<EOF
       \</for\> 
 EOF
 
-FROM='irq_call)'
-TO='irq_call_parameters)'
+FROM='/irqHandlingMethod'
+TO='/_CommonInfoIrqGuard'
 
 #FROM='\"&quot;&quot;\"'
 #TO=\'\"\"\'
@@ -31,7 +31,7 @@ echo starting
 rm -r new
 mkdir new
 
-for filename in *.xml; do
+for filename in *.h; do
    #echo sed  "s#${FROM}#${TO}#g" "${filename}" "new/${filename}"
    sed  "s#${FROM}#${TO}#g" "${filename}" >"new/${filename}"
 done

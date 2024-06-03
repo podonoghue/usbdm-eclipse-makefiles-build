@@ -26,7 +26,7 @@ namespace USBDM {
  * @{
  */
 $(/SDRAMC/peripheral_h_definition:// $/SDRAMC/peripheral_h_definition not found)
-#if $(/SDRAMC/enablePeripheralSupport:false) // /SDRAMC/enablePeripheralSupport
+#if $(/SDRAMC/_BasicInfoGuard:false) // /SDRAMC/_BasicInfoGuard
 
 /**
  * Indices for SDRAMC memory blocks
@@ -736,7 +736,7 @@ public:
 };
 
 $(/SDRAMC/declarations: // No declarations found)
-#endif // /SDRAMC/enablePeripheralSupport
+#endif // /SDRAMC/_BasicInfoGuard
 
 /**
  * End SDRAMC_Group

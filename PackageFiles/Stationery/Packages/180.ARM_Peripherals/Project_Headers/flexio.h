@@ -25,7 +25,7 @@ namespace USBDM {
  * @{
  */
 $(/FLEXIO/peripheral_h_definition:// $/FLEXIO/peripheral_h_definition not found)
-#if $(/FLEXIO/enablePeripheralSupport:false) // /FLEXIO/enablePeripheralSupport
+#if $(/FLEXIO/_BasicInfoGuard:false) // /FLEXIO/_BasicInfoGuard
 /**
  * Doze Enable
  * Controls disabling of FlexIO operation in Doze modes.
@@ -1474,7 +1474,7 @@ $(/FLEXIO/classInfo: // No class Info found)
 template<class Info> FLEXIOCallbackFunction FlexioBase_T<Info>::callback = FlexioBase_T<Info>::unhandledCallback;
 
 $(/FLEXIO/declarations: // No declarations found)
-#endif // /FLEXIO/enablePeripheralSupport
+#endif // /FLEXIO/_BasicInfoGuard
 /**
  * End FLEXIO_Group
  * @}

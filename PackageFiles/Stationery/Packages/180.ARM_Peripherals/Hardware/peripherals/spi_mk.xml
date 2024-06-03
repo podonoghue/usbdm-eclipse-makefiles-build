@@ -10,7 +10,7 @@
    <equation key="suppressIrqHandler"         value="" />
    <equation key="irq_parameters"             value="ErrorCode errorcode"  />
    <equation key="irq_dummy_parameters"       value="ErrorCode"            />
-   <equation key="irq_call"                   value="E_NO_ERROR"           />
+   <equation key="irq_call_parameters"        value="E_NO_ERROR"           />
    <equation key="generateDefault"            value="false"         />
    <equation key="configureInStartupDefault"  value="false"         />
    <xi:include href="enablePeripheral.xml"    />

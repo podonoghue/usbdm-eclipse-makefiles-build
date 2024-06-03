@@ -21,7 +21,7 @@
 #include "cmsis.h"
 #endif
 
-#if $(/SPI/enablePeripheralSupport) // /SPI/enablePeripheralSupport
+#if $(/SPI/_BasicInfoGuard) // /SPI/_BasicInfoGuard
 
 namespace USBDM {
 
@@ -593,6 +593,6 @@ $(/SPI/declarations)
 
 } // End namespace USBDM
 
-#endif // /SPI/enablePeripheralSupport
+#endif // /SPI/_BasicInfoGuard
 
 #endif /* INCLUDE_USBDM_SPI_H_ */

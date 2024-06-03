@@ -9,7 +9,7 @@
    <equation key="suppressIrqHandler"         value="" />
    <equation key="irq_parameters"             value='uint32_t timeSinceEpoch'  />
    <equation key="irq_dummy_parameters"       value='uint32_t'         />
-   <equation key="irq_call"                   value='timeSinceEpoch'   />
+   <equation key="irq_call_parameters"        value='timeSinceEpoch'   />
    <equation key="generateDefault"            value="false"     />
    <equation key="configureInStartupDefault"  value="false"     />
    <xi:include href="enablePeripheral.xml"    />

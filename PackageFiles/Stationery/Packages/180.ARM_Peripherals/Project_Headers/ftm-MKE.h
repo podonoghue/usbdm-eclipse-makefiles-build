@@ -18,7 +18,7 @@
 #include <cmath>
 #include "pin_mapping.h"
 
-#if $(/FTM/enablePeripheralSupport) // /FTM/enablePeripheralSupport
+#if $(/FTM/_BasicInfoGuard) // /FTM/_BasicInfoGuard
 
 /*
  * Default port information
@@ -169,7 +169,7 @@ private:
    FtmBase_T(const FtmBase_T&) = delete;
    FtmBase_T(FtmBase_T&&) = delete;
 
-#if $(/FTM/irqHandlingMethod:false) // /FTM/irqHandlingMethod
+#if $(/FTM/_CommonInfoIrqGuard:false) // /FTM/_CommonInfoIrqGuard
    typedef typename Info::ChannelCallbackFunction ChannelCallbackFunction;
 #endif
 
@@ -216,7 +216,7 @@ protected:
 
 public:
 
-#if $(/FTM/irqHandlingMethod) // /FTM/irqHandlingMethod
+#if $(/FTM/_CommonInfoIrqGuard) // /FTM/_CommonInfoIrqGuard
    /**
     * Wrapper to allow the use of a class member as a callback function
     * @note Only usable with static objects.
@@ -295,7 +295,7 @@ public:
       };
       return fn;
    }
-#endif // /FTM/irqHandlingMethod
+#endif // /FTM/_CommonInfoIrqGuard
 
 public:
 $(/FTM/classInfo: // No class Info found)
@@ -437,7 +437,7 @@ public:
       }
       
 $(/FTM_CHANNEL/static_functions:  // /FTM_CHANNEL/static_functions not found)
-#if false // /FTM/irqHandlingMethod
+#if false // /FTM/_CommonInfoIrqGuard
    /**
     * Set channel event callback function
     *
@@ -458,7 +458,7 @@ $(/FTM_CHANNEL/static_functions:  // /FTM_CHANNEL/static_functions not found)
          return OwningFtm::setChannelCallback(callback);
       }
    }
-#endif // /FTM/irqHandlingMethod
+#endif // /FTM/_CommonInfoIrqGuard
 #if $(/PCR/_present:false) // /PCR/_present
    /*******************************
     *  PIN Functions
@@ -887,7 +887,7 @@ $(/FTM/quadDeclarations: // No declarations found)
 
 } // End namespace USBDM
 
-#endif // /FTM/enablePeripheralSupport
+#endif // /FTM/_BasicInfoGuard
 
 #endif /* HEADER_FTM_H */
 

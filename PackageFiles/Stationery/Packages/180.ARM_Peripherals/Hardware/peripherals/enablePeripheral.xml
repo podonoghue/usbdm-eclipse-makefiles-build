@@ -7,12 +7,13 @@
 <!--====================================================================================================== -->
 <!-- GENERAL SETTINGS -->
 <!-- Generates: -->
-<!--  $(_InfoGuard)       = enablePeripheralSupport           = enable support for this instance -->
+<!--  $(_InfoGuard)       = enablePeripheralSupport           = Per instance - peripheral enabled -->
 <!--  $(_BasicInfoGuard)  = /STRUCTNAME/generateSharedInfo    = OR of enablePeripheralSupport for instances using same STRUCTNAME -->
 <!--  $(_CommonInfoGuard) = /BASENAME/enablePeripheralSupport = OR of enablePeripheralSupport for all instances of peripheral -->
 <!--====================================================================================================== -->
 
-   <equation key="_debugcode" value="false" />
+   <!--  Debug defaults to off -->
+   <equation key="_debugcode" value="false" condition="!_debugcode" />
 
    <title description="General Settings" toolTip="" />
 
@@ -29,12 +30,14 @@
       <choice value="true"  name="Generate code for $(_NAME)" isDefault="=generateDefault" />
    </binaryOption>
 
-   <!-- If not already generated -->
-   <if condition="!$(_BasicInfoGuard)" >
+   <!-- printVar key="$(_BasicInfoGuard)" condition="$(_BasicInfoGuard)" / -->
+   
+   <if condition="!$(_BasicInfoGuard)" >  <!-- Only generate once -->
 
-      <!-- Construct equation to check if any instance sharing the same struct is enabled -->
       <equation key="_enable" value='="false"' />
       <for keys="instance" values="=_instanceList" >
+      
+      <!-- Construct $(_BasicInfoGuard) equation to check if any instance sharing the same struct is enabled -->
          <equation
             key="_enable"
             condition='="$(_STRUCTNAME)"==/%(instance)/structName'
@@ -54,10 +57,10 @@
       </binaryOption>
    </if>
 
-   <!-- If not already generated -->
-   <if condition="!/$(_BASENAME)/enablePeripheralSupport" >
+   <if condition="!$(_CommonInfoGuard)" > <!-- Only generate once -->
+      <!-- Construct $(_BasicInfoGuard) equation to check if any instance sharing the same struct is enabled -->
 
-      <!-- Construct equation to check if any instance sharing the same struct is enabled -->
+      <!-- Construct equation to check if any instance of the same peripheral type is enabled -->
       <equation key="_enable" value='="false"' />
       <for keys="instance" values="=_instanceList" >
          <equation
@@ -68,7 +71,7 @@
       <!-- stringOption key="yyy" value="=_enable"/ -->
 
       <!-- Enable for shared code needed by all instances of peripheral -->
-      <binaryOption key="/$(_BASENAME)/enablePeripheralSupport"
+      <binaryOption key="$(_CommonInfoGuard)"
          ref="=_enable"
          description="=_enable"
          hidden="true"
@@ -80,8 +83,8 @@
    </if>
 
    <aliasOption key="enablePeripheralSupport" locked="false" />
-   <aliasOption name="/$(_BASENAME)/enablePeripheralSupport" key="/$(_BASENAME)/enablePeripheralSupport" optional="true"  condition="=_debugcode" />
-   <aliasOption name="$(_BasicInfoGuard)"    key="$(_BasicInfoGuard)"    optional="true"  condition="=_debugcode" />
+   <aliasOption name='"$(_BasicInfoGuard)"'  key="$(_BasicInfoGuard)"  optional="true"  condition="=_debugcode" />
+   <aliasOption name='"$(_CommonInfoGuard)"' key="$(_CommonInfoGuard)" optional="true"  condition="=_debugcode" />
 
    <!-- _______ Getters and Setters __________  -->
 
@@ -172,11 +175,10 @@
 
       <!--
          Generates:
-            irqHandlingMethod                     = Interrupts enabled for this instance
-            $(_BasicInfoIrqGuard) = OR of irqHandlingMethod using same _STRUCTNAME
-            /$(_BASENAME)/irqHandlingMethod       = OR of all irqHandlingMethod
+            irqHandlingMethod       = Interrupts enabled for this instance
+            $(_BasicInfoIrqGuard)   = OR of irqHandlingMethod using same _STRUCTNAME
+            $(_CommonInfoIrqGuard)  = OR of all irqHandlingMethod
       -->
-
       <title description="Interrupts" />
 
       <equation key="_userIrqCount" value="=_hardwareIrqCount" condition="!_userIrqCount" />
@@ -248,11 +250,11 @@
             locked="true"
             derived="true" >
             <choice value="false" name="No shared interrupt code for $(_STRUCTNAME)"  />
-            <choice value="true"  name="Shared interrupt code for $(_STRUCTNAME)"      />
+            <choice value="true"  name="Shared interrupt code for $(_STRUCTNAME)"     />
          </binaryOption>
       </if>
 
-      <if condition="!/$(_BASENAME)/irqHandlingMethod" >
+      <if condition="!$(_CommonInfoIrqGuard)" >
 
          <!-- Construct equation to check if interrupts are enabled on any instance -->
          <equation key="_enable" value='="false"' />
@@ -267,22 +269,22 @@
          <!-- stringOption key="yyy" value="=_enable"/ -->
 
          <!-- Enable for shared code needed by all instances of peripheral -->
-         <binaryOption key="/$(_BASENAME)/irqHandlingMethod"  name="/$(_BASENAME)/irqHandlingMethod"
+         <binaryOption key="$(_CommonInfoIrqGuard)"  name="$(_CommonInfoIrqGuard)"
             ref="=_enable"
             description="=_enable"
             hidden="true"
             locked="true"
             derived="true" >
             <choice value="false" name="No shared interrupt code for $(_BASENAME)"  />
-            <choice value="true"  name="Shared interrupt code for $(_BASENAME)"      />
+            <choice value="true"  name="Shared interrupt code for $(_BASENAME)"     />
          </binaryOption>
       </if>
 
       <!-- Display here -->
       <aliasOption key="irqHandlingMethod" locked="false" optional="true"  />
+      <aliasOption name='"$(_BasicInfoIrqGuard)"'  key="$(_BasicInfoIrqGuard)"  optional="true"  condition="=_debugcode" />
+      <aliasOption name='"$(_CommonInfoIrqGuard)"' key="$(_CommonInfoIrqGuard)" optional="true"  condition="=_debugcode" />
 
-      <aliasOption key="$(_BasicInfoIrqGuard)" optional="true"  condition="=_debugcode" />
-      <aliasOption key="/$(_BASENAME)/irqHandlingMethod"       optional="true"  condition="=_debugcode"/>
    </if>
 
    <if condition="_hardwareIrqCount&amp;&amp;!suppressIrqArray" >
@@ -356,22 +358,24 @@
       <!-- aliasOption key="irqLevel"       locked="false" optional="true" / -->
       <!--  aliasOption key="irqHandlerName" locked="false" / -->
 
-      <variableTemplate codeGenCondition="$(_InfoGuard)"
-         variables="irqHandlingMethod"
+      <variableTemplate where="info" codeGenCondition="$(_InfoGuard)"
+         variables="$(_BasicInfoIrqGuard)"
       ><![CDATA[
-          \t//! Class based callback handler has been installed in vector table for this instance
+          \t//! Class based interrupt code has been generated for this class of peripheral
+          \t// (%variables)
           \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
           \t\n
       ]]></variableTemplate>
 
       <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" condition="!suppressIrqArray"
-         variables="irqHandlingMethod"
+         variables="$(_BasicInfoIrqGuard)"
       ><![CDATA[
           \t//! Common class based callback code has been generated for this class of peripheral
+          \t// (%variables)
           \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
           \t\n
       ]]></variableTemplate>
-
+      
       <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"  condition="!suppressIrqArray"
          immediateVariables="irq_parameters,irq_dummy_parameters" >
       <![CDATA[
@@ -391,7 +395,7 @@
       </template>
 
       <variableTemplate
-         variables="/$(_BASENAME)/irqHandlingMethod,irqLevel" condition="!suppressIrqArray"
+         variables="$(_CommonInfoIrqGuard),irqLevel" condition="!suppressIrqArray"
       ><![CDATA[
          \t//! IRQ numbers for hardware
          \tstatic constexpr IRQn_Type irqNums[]  = $(_NAME)_IRQS;
@@ -401,7 +405,7 @@
          \t\n
       ]]></variableTemplate>
 
-<!-- 
+<!--
       <variableTemplate variables="irqLevel" codeGenCondition="enablePeripheralSupport"
       ><![CDATA[
          \t//! Default IRQ level
@@ -411,7 +415,7 @@
  -->
 
       <!-- enum for IRQ indices into irqNums[]  -->
-      <choiceOption  where="basicInfo" key="irq_enum" condition="!irq_enum&amp;&amp;(@_userIrqCount>1)"
+      <choiceOption where="info" key="irq_enum" condition="!irq_enum&amp;&amp;(@_userIrqCount>1)"
          hidden="false"
          description="IRQ entry"
          toolTip="Select amongst interrupts associated with the peripheral"
@@ -421,8 +425,6 @@
          <choiceExpansion keys="irq" values="=_hardwareIrqNums"
             value="%(i)" name="Maps to %(irq)" enum='=Prettify(ReplaceAll("%(irq)", "$(_NAME)_([a-z|A-Z|0-9_]+)_IRQn", "$1"))' />
       </choiceOption>
-
-      <!-- printVar key="irq_enum" / -->
 
       <!-- IRQ enable/disable when single hardware IRQ is available  -->
       <template condition="=(_hardwareIrqCount==1)" ><![CDATA[
@@ -536,8 +538,11 @@
       ]]>
       </template>
 
+      <equation key="irq_call" value="sCallback($(irq_call_parameters))" condition="!irq_call" />
+
       <!--  Interrupt handler -->
-      <template codeGenCondition="irqHandlingMethod" condition="!irq_enum&amp;&amp;!suppressIrqHandler" >
+      <template codeGenCondition="irqHandlingMethod" condition="!irq_enum&amp;&amp;!suppressIrqHandler"
+         immediateVariables="irq_call" >
       <![CDATA[
          \t/**
          \t * $(_BASENAME) interrupt handler -  Calls $(_BASENAME) callback
@@ -545,7 +550,7 @@
          \tstatic void irqHandler() {
          \t
          \t   // Execute call-back
-         \t   sCallback($(irq_call));
+         \t   $(irq_call);
          \t}
          \t\n
       ]]>
@@ -567,7 +572,7 @@
          \t   if ($(_basename)Callback == nullptr) {
          \t      $(_basename)Callback = unhandledCallback;
          \t   }
-         \t   // Allow either no handler set yet or removing handler or setting same handler
+         \t   // Allow either no handler set yet, setting same handler or removing handler
          \t   usbdm_assert(
          \t         (sCallback == unhandledCallback) ||
          \t         (sCallback == $(_basename)Callback) ||
@@ -594,7 +599,7 @@
          \tstatic void irqHandler() {
          \t
          \t   // Execute call-back
-         \t   sCallbacks[%paramName0]($(irq_call));
+         \t   sCallbacks[%paramName0]($(irq_call_parameters));
          \t}
          \t\n
       ]]>
@@ -612,7 +617,7 @@
          \tstatic void irqHandler() {
          \t
          \t   // Execute call-back
-         \t   sCallback($(irq_call));
+         \t   $(irq_call);
          \t}
          \t\n
       ]]>
@@ -645,8 +650,7 @@
          \t   if ($(_basename)Callback == nullptr) {
          \t      $(_basename)Callback = unhandledCallback;
          \t   }
-         \t   // Allow either no handler set yet or removing handler
-         \t   // Allow either no handler set yet or removing handler or setting same handler
+         \t   // Allow either no handler set yet, setting same handler or removing handler
          \t   usbdm_assert(
          \t         (sCallbacks[%paramName0] == unhandledCallback) ||
          \t         (sCallbacks[%paramName0] == $(_basename)Callback) ||
@@ -879,7 +883,7 @@
          \ttypedef $(_BasicInfo)::InitVectors<Init, %returnType0, $(_hardwareIrqCount)> Init;
          \t\n
       ]]></variableTemplate>
-   
+
       <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)"
          linePadding="xxx" >
       <![CDATA[

@@ -7,7 +7,7 @@
    <equation key="suppressIrqHandler"        value="" />
    <equation key="irq_parameters"            value="PmcInterruptReason pmcInterruptReason" />
    <equation key="irq_dummy_parameters"      value="PmcInterruptReason" />
-   <equation key="irq_call"                  value="PmcInterruptReason_LowVoltageWarning" />
+   <equation key="irq_call_parameters"       value="PmcInterruptReason_LowVoltageWarning" />
    <equation key="generateDefault"           value="false" />
    <equation key="configureInStartupDefault" value="false" />
    <xi:include href="enablePeripheral.xml"  />
@@ -178,7 +178,7 @@
       \t   pmc->SPMSC1 = pmc->SPMSC1 | PMC_SPMSC1_LVWACK_MASK;
       \t
       \t   // Execute call-back
-      \t   sCallback($(irq_call));
+      \t   sCallback($(irq_call_parameters));
       \t   return;
       \t}
       \t\n

@@ -19,7 +19,7 @@
 #include "pin_mapping.h"
 #include "gpio.h"
 
-#if $(/ADC/enablePeripheralSupport) // /ADC/enablePeripheralSupport
+#if $(/ADC/_BasicInfoGuard) // /ADC/_BasicInfoGuard
 
 namespace USBDM {
 
@@ -29,9 +29,6 @@ namespace USBDM {
  * @{
  */
 $(/ADC/peripheral_h_definition:// $/ADC/peripheral_h_definition not found)
-
-
-typedef AdcBasicInfo Adc;
 
 /**
  * Class representing a minimal ADC channel
@@ -468,7 +465,7 @@ $(/ADC/declarations:// #error "No declarations found")
 
 } // End namespace USBDM
 
-#endif // /ADC/enablePeripheralSupport
+#endif // /ADC/_BasicInfoGuard
 
 #endif /* HEADER_ADC_H */
 

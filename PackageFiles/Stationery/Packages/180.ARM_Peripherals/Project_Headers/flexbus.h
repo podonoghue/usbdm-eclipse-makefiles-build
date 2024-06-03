@@ -25,7 +25,7 @@ namespace USBDM {
  * @{
  */
 $(/FLEXBUS/peripheral_h_definition:// $/FLEXBUS/peripheral_h_definition not found)
-#if $(/FLEXBUS/enablePeripheralSupport:false) // /FLEXIO/enablePeripheralSupport
+#if $(/FLEXBUS/_BasicInfoGuard:false) // /FLEXIO/_BasicInfoGuard
 
 /**
  * Indices for FLEXBUS select regions
@@ -454,7 +454,7 @@ public:
 };
 
 $(/FLEXBUS/declarations: // No declarations found)
-#endif // /FLEXIO/enablePeripheralSupport
+#endif // /FLEXIO/_BasicInfoGuard
 /**
  * End FLEXBUS_Group
  * @}

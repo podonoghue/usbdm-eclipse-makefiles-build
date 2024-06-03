@@ -12,23 +12,32 @@
 
 using namespace USBDM;
 
-// Address (LSB = R/W bit)
+// Address (LSB = R/W bit) // 0x1D for FRDM_MK20D50? 0x1C for FRDM_MK22F
 static const unsigned I2C_ADDRESS = 0x1D<<1;
 
+bool complete = false;
+
+//#define USE_INTERRUPT
+
+#ifdef USE_INTERRUPT
 void i2cCallback(ErrorCode errorCode) {
    __asm__("nop");
-   console.writeln("Tx complete, rc = ", getErrorMessage(errorCode));
+   console.writeln("Complete, rc = ", getErrorMessage(errorCode));
+   complete = true;
 }
+#endif
 
 int main() {
 #define SELECT 0
 
    static constexpr I2c0::Init i2cInit = {
+#ifdef USE_INTERRUPT
+      NvicPriority_Normal,
+      i2cCallback,
+#endif
+
       400_kHz,                  // Speed
       I2cBusRole_Controller ,   // Bus Role Select - Controller mode
-
-      i2cCallback,
-      NvicPriority_Normal,
    };
 
    I2c0 i2c{i2cInit};
@@ -43,9 +52,18 @@ int main() {
          static const uint8_t txData[] = { 0xA1,0xB2,0xC3,0xD4,};
          uint8_t rxData[2] = {};
 
+         complete = false;
          i2c.startTransaction();
          i2c.txRx(I2C_ADDRESS, txData, rxData);
          i2c.endTransaction();
+
+#ifdef USE_INTERRUPT
+         while (!complete) {
+            console.write(".");
+            waitUS(100);
+         }
+         console.writeln();
+#endif
       }
 #elif SELECT == 1
       {
@@ -58,6 +76,14 @@ int main() {
          i2c.startTransaction();
          i2c.txRx(I2C_ADDRESS, 2, sizeof(data), data);
          i2c.endTransaction();
+
+#ifdef USE_INTERRUPT
+         while (!complete) {
+            console.write(".");
+            waitUS(100);
+         }
+         console.writeln();
+#endif
       }
 #elif SELECT == 2
       {
@@ -69,6 +95,14 @@ int main() {
          i2c.startTransaction();
          i2c.transmit(I2C_ADDRESS, data);
          i2c.endTransaction();
+
+#ifdef USE_INTERRUPT
+         while (!complete) {
+            console.write(".");
+            waitUS(100);
+         }
+         console.writeln();
+#endif
       }
 #else
       {
@@ -80,6 +114,15 @@ int main() {
          i2c.startTransaction();
          i2c.receive(I2C_ADDRESS, data);
          i2c.endTransaction();
+
+#ifdef USE_INTERRUPT
+         while (!complete) {
+            console.write(".");
+            waitUS(100);
+         }
+         console.writeln();
+#endif
+
       }
 #endif
       waitMS(100);

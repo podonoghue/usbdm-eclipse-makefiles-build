@@ -6,18 +6,22 @@
 
    <constant key="disable_peripheral" value = '"dac->C0 = DAC_C0_DACEN(0);"' type="String" />
 
+   <!-- ____ Class Declarations ________ -->
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
+
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
+   <!-- ____ Instance control ________ -->
+   <constant key="_can_create_instance" value="true" type="Boolean" />
+
    <equation key="irq_parameters"             value="uint8_t status"  />
    <equation key="irq_dummy_parameters"       value="uint8_t"  />
-   <equation key="irq_call"                   value="getAndClearStatus()"  />
+   <equation key="irq_call_parameters"        value="getAndClearStatus()"  />
    <equation key="generateDefault"            value="false"         />
    <equation key="configureInStartupDefault"  value="false"         />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
-   <constant key="definitionsInHeader" value="true" type="Boolean" />
-
-   <!-- _____________ Class Declaration __________________ -->
-   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <template><![CDATA[
       \t//! Pin number in Info table for DAC output if mapped to a pin
@@ -79,13 +83,17 @@
    </binaryOption>
 
    <binaryOption key="dac_c0_dacswtrg" condition="dac_c0_dacswtrg_present"
-      locked="true"
+      derived="true"
+      hidden="true"
       enabledBy="enablePeripheralSupport"
       typeName="DacTrigger"
       baseType="uint8_t"
-      description="Software Trigger" >
-      <choice name="Trigger is not valid"  value="0" enum="TriggerIsNotValid"/>
-      <choice name="Trigger is valid"      value="1" enum="TriggerIsValid"/>
+      description="Software Trigger" 
+      toolTip="This is a write-only field, which always reads 0.\n
+               If DAC software trigger is selected and buffer is enabled, writing 1\n
+               to this field will advance the buffer read pointer once." >
+      <choice name="Trigger not asserted"  value="0" enum="TriggerNotAsserted" />
+      <choice name="Trigger asserted"      value="1" enum="TriggerAsserted"    />
    </binaryOption >
 
    <binaryOption key="dac_c0_dacbtien" condition="dac_c0_dacbtien_present"
@@ -146,7 +154,7 @@
    </choiceOption>
 
    <choiceOption key="dac_c1_dacbfwm" condition="dac_c1_dacbfwm_present"
-      enabledBy="dac_c0_dacen"
+      enabledBy="dac_c1_buffer_mode>1"
       typeName="DacWaterMark"
       baseType="uint8_t"
       description="Buffer Watermark Select"
@@ -156,41 +164,66 @@
                  from the upper limit (DACBUP). This allows user configuration of the watermark interrupt. \n
                FIFO mode: \n
                  SR[DACBFWMF] will be set when there is a threshold number of entries left in the FIFO.">
-      <choice value="0" name="Normal mode: 1 free entry"                enum="Normal_1"      isDefault="true" />
-      <choice value="1" name="Normal mode: 2 free entries"              enum="Normal_2"      condition="@dac_data_dim>1" />
-      <choice value="2" name="Normal mode: 3 free entries"              enum="Normal_3"      condition="@dac_data_dim>2" />
-      <choice value="3" name="Normal mode: 4 free entries"              enum="Normal_4"      condition="@dac_data_dim>3" />
-      <choice value="0" name="FIFO threshold: &lt;= 2 full entries"     enum="Fifo2"         condition="dac_c1_dacbfmd_fifo_present" />
-      <choice value="1" name="FIFO threshold: &lt;= Max/4 full entries" enum="FifoMaxDiv4"   condition="dac_c1_dacbfmd_fifo_present" />
-      <choice value="2" name="FIFO threshold: &lt;= Max/2 full entries" enum="FifoMaxDiv2"   condition="dac_c1_dacbfmd_fifo_present" />
-      <choice value="3" name="FIFO threshold: &lt;= Max-2 full entries" enum="FifoMaxMinus2" condition="dac_c1_dacbfmd_fifo_present" />
+      <choice value="0" name="Normal mode: 1 free entry"                enum="Normal_1"      enabledBy="dac_c1_buffer_mode>1" isDefault="true" />
+      <choice value="1" name="Normal mode: 2 free entries"              enum="Normal_2"      enabledBy="dac_c1_buffer_mode>1" condition="@dac_data_dim>1" />
+      <choice value="2" name="Normal mode: 3 free entries"              enum="Normal_3"      enabledBy="dac_c1_buffer_mode>1" condition="@dac_data_dim>2" />
+      <choice value="3" name="Normal mode: 4 free entries"              enum="Normal_4"      enabledBy="dac_c1_buffer_mode>1" condition="@dac_data_dim>3" />
+      <choice value="4" name="FIFO threshold: &lt;= 2 full entries"     enum="Fifo2"         enabledBy="dac_c1_buffer_mode==4" condition="dac_c1_dacbfmd_fifo_present" />
+      <choice value="5" name="FIFO threshold: &lt;= Max/4 full entries" enum="FifoMaxDiv4"   enabledBy="dac_c1_buffer_mode==4" condition="dac_c1_dacbfmd_fifo_present" />
+      <choice value="6" name="FIFO threshold: &lt;= Max/2 full entries" enum="FifoMaxDiv2"   enabledBy="dac_c1_buffer_mode==4" condition="dac_c1_dacbfmd_fifo_present" />
+      <choice value="7" name="FIFO threshold: &lt;= Max-2 full entries" enum="FifoMaxMinus2" enabledBy="dac_c1_buffer_mode==4" condition="dac_c1_dacbfmd_fifo_present" />
    </choiceOption>
 
    <!-- _____________ C2 __________________ -->
 
-   <choiceOption key="dac_c2_dacbfrp" condition="dac_c2_dacbfrp_present"
-      locked="true"
+   <choiceOption key="dac_c2_dacbfrp[0]" condition="dac_c2_dacbfrp_present"
+      derived="true"
+      hidden="true"
       enabledBy="enablePeripheralSupport"
-      typeName="DacC2Dacbfrp"
+      typeName="DacWritePtr"
       baseType="uint8_t"
-      toolTip="In normal mode it keeps the current value of the buffer read pointer.\n
-               In FIFO mode it is the FIFO read pointer. \n
-               It is writable in FIFO mode. User can configure it to same address to reset FIFO as empty."
+      toolTip="Only applicable in normal mode.\n
+               It is the current value of the buffer read pointer."
       description="Buffer Read Pointer" >
-      <choice name="Buffer Pointer"  value="0" enum="BufferPointer"/>
+      <choiceExpansion keys="dac_data" dim="=dac_data_dim" value="%(dac_data)" name="%(dac_data) entries" enum="%(dac_data)" />
+      <choice value="15" name="max entries" enum="Max" isDefault="true" />
    </choiceOption >
 
-   <choiceOption key="dac_c2_dacbfup" condition="dac_c2_dacbfup_present"
+   <choiceOption key="dac_c2_dacbfup[0]" condition="dac_c2_dacbfup_present"
       enabledBy="dac_c0_dacen"
       typeName="DacBufferUpperLimit"
       baseType="uint8_t"
-      toolTip="Normal mode\n
-               - Selects the upper limit of the DAC buffer. The buffer read pointer cannot exceed it\n
-               FIFO mode\n
-               - This register becomes the Write_Pointer and its value is initially set to equal\n
-                 READ_POINTER automatically and the FIFO status is empty. \n
-                 It is writable and the user can configure it to the same address to reset FIFO as empty."
+      toolTip="Only applicable in Normal mode\n
+               Selects the upper limit of the DAC buffer.\n
+               The buffer read pointer cannot exceed it."
       description="DAC Buffer Upper Limit" >
+      <choiceExpansion keys="dac_data" dim="=dac_data_dim" value="%(dac_data)" name="%(dac_data) entries" enum="%(dac_data)" />
+      <choice value="15" name="max entries" enum="Max" isDefault="true" />
+   </choiceOption>
+
+   <choiceOption key="dac_c2_dacbfrp[1]" condition="dac_c2_dacbfrp_present&amp;&amp;dac_c1_dacbfmd_fifo_present"
+      derived="true"
+      hidden="true"
+      typeName="DacFifoWritePtr"
+      baseType="uint8_t"
+      toolTip="Only applicable in FIFO mode. \n
+               It is writable in FIFO mode.\n
+               User can configure it to same value as the read pointer to reset FIFO as empty."
+      description="FIFO Read Pointer" >
+      <choiceExpansion keys="dac_data" dim="=dac_data_dim" value="%(dac_data)" name="%(dac_data) entries" enum="%(dac_data)" />
+      <choice value="15" name="max entries" enum="Max" isDefault="true" />
+   </choiceOption >
+
+   <choiceOption key="dac_c2_dacbfup[1]" condition="dac_c2_dacbfup_present&amp;&amp;dac_c1_dacbfmd_fifo_present"
+      derived="true"
+      hidden="true"
+      typeName="DacFifoReadPtr"
+      baseType="uint8_t"
+      toolTip="Only applicable in FIFO mode\n
+               When the DAC is first configured to FIFO mode this register is set equal to the write pointer automatically.
+               It is writable in FIFO mode.\n
+               User can configure it to same value as the write pointer to reset FIFO as empty."
+      description="FIFO Write pointer" >
       <choiceExpansion keys="dac_data" dim="=dac_data_dim" value="%(dac_data)" name="%(dac_data) entries" enum="%(dac_data)" />
       <choice value="15" name="max entries" enum="Max" isDefault="true" />
    </choiceOption>
@@ -237,94 +270,266 @@
       <choice value="1" name="Reached"     enum="Reached" />
    </binaryOption>
 
-<!-- Setters and getters -->
+   <bitfieldOption key="dac_sr"
+      derived="true"
+      hidden="false" 
+      valueFormat="%s"
+      enumClass="true"
+      baseType="uint8_t"
+      typeName="DacStatus"
+      description="Status bits from DAC"
+      toolTip="Bits masks for the status register" >
+      <bitField var="dac_sr_dacbfwmf"  bit="2" condition="dac_sr_dacbfwmf_present" />
+      <bitField var="dac_sr_dacbfrptf" bit="1" condition="dac_sr_dacbfrptf_present" />
+      <bitField var="dac_sr_dacbfrpbf" bit="0" condition="dac_sr_dacbfrpbf_present" />
+   </bitfieldOption>
 
-   <variableTemplate codeGenCondition="enableGettersAndSetters"
-      variables="dac_c0_dacbwien, dac_c0_dacbtien, dac_c0_dacbbien"
-   ><![CDATA[
+   <intOption key="dac_data_index" condition="dac_data_dim"
+      derived="true"
+      hidden="true"
+      description="DAC data array index"
+      toolTip="Index into the DAC data array"
+      baseType="unsigned"
+      min="0"
+      max="=dac_data_dim"
+   />
+
+   <intOption key="dac_data_data[0]" condition="dac_data_data_present"
+      derived="true"
+      hidden="true"
+      description="DAC Data"
+      toolTip="When the DAC buffer is not enabled, DATA[0] directly controls the DAC output voltage\n
+               When FIFO is enabled DATA[0] writes to the FIFO."
+      baseType="uint16_t"
+   />
+
+   <intOption key="dac_data_data[1]" condition="dac_data_data_present"
+      derived="true"
+      hidden="true"
+      description="DAC Data array"
+      toolTip="When the DAC buffer is enabled and not in FIFO mode, DATA is a 16-word array."
+      baseType="uint16_t"
+   />
+
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo Class      -->
+<!-- ====================================================================================================== -->
+
+   <!-- BasicInfo Instance pointer and Constructors  -->
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t// Pointer to $(_BASENAME) hardware instance
+      \tvolatile $(_Type) * const $(_basename);
+      \t\n
+   ]]></template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
       \t/**
-      \t * Set %description
+      \t * Constructor
       \t *
-      %paramDescription
+      \t * @param $(_basename) $(_BASENAME) hardware instance
       \t */
-      \tstatic void setActions(%params) {
-      \t
-      \t   %register = (%register&~%mask) |
-      \t               %paramExpression;
+      \tconstexpr $(_BasicInfo)(volatile $(_Type) * $(_basename)) : $(_basename)($(_basename)) {
       \t}
       \t\n
-   ]]></variableTemplate>
+   ]]></template>
 
-   <for keys="field           : get   : set   : genCode                 : name"
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo/Info duplicated methods -->
+<!-- ====================================================================================================== -->
+
+<for
+   keys="   static    : const    : where     : guard                                      "
+   values=" ''        : 'const ' : basicInfo : $(_BasicInfoGuard)                         ;
+            'static ' : ''       : info      : $(_InfoGuard)                              "  >
+
+   <!-- ____ Getters and Setters ____________ -->
+
+   <for keys="field           : set   : get   : clear : genCode                 : name"
         values="
-         dac_data_data        : true  : true  : enableGettersAndSetters : Data;
-         dac_sr_dacbfwmf      : true  : true  : enableGettersAndSetters : WaterMarkFlag;
-         dac_sr_dacbfrptf     : true  : true  : enableGettersAndSetters : ReadPointerTopFlag;
-         dac_sr_dacbfrpbf     : true  : true  : enableGettersAndSetters : ReadPointerBottomFlag;
-         dac_c0_dacen         : true  : true  : enableGettersAndSetters : Enable;
-         dac_c0_dacrfs        : true  : true  : enableGettersAndSetters : Reference;
-         dac_c0_dactrgsel     : true  : true  : enableGettersAndSetters : TriggerSelect;
-         dac_c0_dacswtrg      : true  : true  : enableGettersAndSetters : Trigger;
-         dac_c0_lpen          : true  : true  : enableGettersAndSetters : LowPower;
-         dac_c0_dacbwien      : true  : true  : enableGettersAndSetters : WaterMarkAction;
-         dac_c0_dacbtien      : true  : true  : enableGettersAndSetters : ReadPointerTopAction;
-         dac_c0_dacbbien      : true  : true  : enableGettersAndSetters : ReadPointerBottomAction;
-         dac_c1_dmaen         : true  : true  : enableGettersAndSetters : Dma;
-         dac_c1_dacbfwm       : true  : true  : enableGettersAndSetters : WaterMark;
-         dac_c1_buffer_mode   : true  : true  : enableGettersAndSetters : BufferMode;
-         dac_c2_dacbfrp       : true  : true  : enableGettersAndSetters : ReadPointer;
-         dac_c2_dacbfup       : true  : true  : enableGettersAndSetters : UpperLimit" >
-      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
-      ><![CDATA[
+         dac_sr               : false : true  : false : true                    : Status;
+         dac_c0_dacbwien,
+         dac_c0_dacbtien,
+         dac_c0_dacbbien      : true  : false : false : true                    : Actions;
+         dac_sr_dacbfwmf      : false : true  : false : enableGettersAndSetters : WaterMarkFlag;
+         dac_sr_dacbfrptf     : false : true  : false : enableGettersAndSetters : ReadPointerTopFlag;
+         dac_sr_dacbfrpbf     : false : true  : false : enableGettersAndSetters : ReadPointerBottomFlag;
+         dac_c0_dacen         : true  : true  : false : enableGettersAndSetters : Enable;
+         dac_c0_dacrfs        : true  : true  : false : enableGettersAndSetters : Reference;
+         dac_c0_dactrgsel     : true  : true  : false : enableGettersAndSetters : TriggerSelect;
+         dac_c0_dacswtrg      : false : false : w1s   : enableGettersAndSetters : Trigger;
+         dac_c0_lpen          : true  : true  : false : enableGettersAndSetters : LowPower;
+         dac_c0_dacbwien      : true  : true  : false : enableGettersAndSetters : WaterMarkAction;
+         dac_c0_dacbtien      : true  : true  : false : enableGettersAndSetters : ReadPointerTopAction;
+         dac_c0_dacbbien      : true  : true  : false : enableGettersAndSetters : ReadPointerBottomAction;
+         dac_c1_dmaen         : true  : true  : false : enableGettersAndSetters : Dma;
+         dac_c1_dacbfwm       : true  : true  : false : enableGettersAndSetters : WaterMark;
+         dac_c1_buffer_mode   : true  : true  : false : enableGettersAndSetters : BufferMode;
+         dac_c2_dacbfrp[0]    : false : true  : false : enableGettersAndSetters : BufferReadPointer;
+         dac_c2_dacbfup[0]    : true  : true  : false : enableGettersAndSetters : BufferUpperLimit;
+         dac_c2_dacbfrp[1]    : true  : true  : false : enableGettersAndSetters : FifoReadPointer;
+         dac_c2_dacbfup[1]    : true  : true  : false : enableGettersAndSetters : FifoWritePointer;
+         dac_c2_dacbfrp[1],
+         dac_c2_dacbfup[1]    : true  : false : false : enableGettersAndSetters : FifoPointers" >
+      <variableTemplate location="%(where)" condition="%(set)" codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)" >
+      <![CDATA[
          \t/**
          \t * Set %description
+         \t * (%variables)
          \t *
          %paramDescription
          \t */
-         \tstatic void set%(name)(%params) {
+         \t%(static)void set%(name)(%params) %(const){
          \t   %fieldAssignment;
          \t}
          \t\n
-      ]]></variableTemplate>
-      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
-      ><![CDATA[
+      ]]>
+      </variableTemplate>
+      <variableTemplate location="%(where)" condition="%(get)" codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)" >
+      <![CDATA[
          \t/**
          \t * Get %description
+         \t * (%variables)
          \t *
          \t * @return %tooltip
          \t */
-         \tstatic %paramType get%(name)() {
-         \t   return %paramType(%register&%mask);
+         \t%(static)%returnType get%(name)() %(const){
+         \t   return %fieldExtract;
          \t}
          \t\n
-      ]]></variableTemplate>
+      ]]>
+      </variableTemplate>
+      <variableTemplate location="%(where)" condition='="(%variables)"=="%(clear)"' codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)"
+         tooltipPadding="x*x" >
+      <![CDATA[
+         \t/**
+         \t * Clear %description
+         \t * (%variables)
+         \t *
+         %paramDescription
+         \t */
+         \t%(static)void clear%(name)(%params) %(const){
+         \t   // w1c and mixed register
+         \t   %register = %register|%paramExpression;
+         \t}
+         \t\n
+      ]]>
+      </variableTemplate>
+      <variableTemplate location="%(where)" condition='="w1cIm"=="%(clear)"' codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)"
+         tooltipPadding="x*x" >
+      <![CDATA[
+         \t/**
+         \t * Clear %description
+         \t * (%variables)
+         \t *
+         \t * %tooltip
+         \t */
+         \t%(static)void clear%(name)() %(const){
+         \t   // w1c and mixed register
+         \t   %register = %register|%mask;
+         \t}
+         \t\n
+      ]]>
+      </variableTemplate>
+      <variableTemplate location="%(where)" condition='="w1s"=="%(clear)"' codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)"
+         tooltipPadding="x*x" >
+      <![CDATA[
+         \t/**
+         \t * Set %description
+         \t * (%variables)
+         \t *
+         \t * %tooltip
+         \t */
+         \t%(static)void set%(name)() %(const){
+         \t   // w1s and mixed register
+         \t   %register = %register|%mask;
+         \t}
+         \t\n
+      ]]>
+      </variableTemplate>
    </for>
 
-   <!--   ========== Interrupt handling =============================== -->
-
-   <template codeGenCondition="irqHandlingMethod" >
+   <for keys="field                     : set   : get   : clear : genCode                 : context              : name"
+        values="
+         dac_data_index,dac_data_data[1] : true  : true  : false : true                    : %s[%%paramName0]          : Data" >
+      <variableTemplate location="%(where)" condition="%(set)" codeGenCondition="%(genCode)&amp;&amp;%(guard)" context="%(context)"
+         variables="%(field)"
+         nonDefaultParams="2"
+         params="index,value" >
+      <![CDATA[
+         \t/**
+         \t * Set %description1
+         \t * (%variables)
+         \t *
+         %paramDescription
+         \t */
+         \t%(static)void set%(name)(%params) %(const){
+         \t   %fieldAssignment1;
+         \t}
+         \t\n
+      ]]>
+      </variableTemplate>
+      <variableTemplate location="%(where)" condition="%(get)" codeGenCondition="%(genCode)&amp;&amp;%(guard)" context="%(context)"
+         variables="%(field)"
+         nonDefaultParams="2"
+         params="index" >
+      <![CDATA[
+         \t/**
+         \t * Get %description1
+         \t * (%variables)
+         \t *
+         %paramDescription0
+         \t *
+         \t * @return %tooltip1
+         \t */
+         \t%(static)%paramType1 get%(name)(%param0) %(const){
+         \t   return %fieldExtract1;
+         \t}
+         \t\n
+      ]]>
+      </variableTemplate>
+   </for>
+   
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)" context="%s[0]"
+      variables="dac_data_data[0]" >
    <![CDATA[
       \t/**
-      \t * Get and clear DAC status
+      \t * Set %description0
+      \t * (%variables)
       \t *
-      \t * @return DAC status value see DacStatus
+      %paramDescription
       \t */
-      \tstatic uint8_t getAndClearStatus() {
-      \t   // Get status
-      \t   uint8_t status = dac->SR;
-      \t
-      \t   // Clear set flags
-      \t   dac->SR = ~status;
-      \t
-      \t   // return original status
-      \t   return status;
+      \t%(static)void setData(%params) %(const){
+      \t   %fieldAssignment;
       \t}
       \t\n
    ]]>
-   </template>
+   </variableTemplate>
+   
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)" context="%s[0]"
+      variables="dac_c2_dacbfrp[1],dac_c2_dacbfup[1]" >
+   <![CDATA[
+      \t/**
+      \t * Clear (empty) FIFO.
+      \t */
+      \t%(static)void clearFifo() %(const){
+      \t   dac->C2 = %macro0(0)|%macro1(0);
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+</for>
 
-   <!--   ========== DAC Init class =============================== -->
-
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo::Init class      -->
+<!-- ====================================================================================================== -->
    <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
@@ -338,15 +543,6 @@
       \t *
       \t * Example:
       \t * @code
-      \t * ///
-      \t * /// $(_NAME) call-back
-      \t * ///
-      \t * /// @param status  Status reflecting active inputs
-      \t * ///
-      \t * void $(_name)Callback(uint32_t status) {
-      \t *    (void) status;
-      \t * }
-      \t *
       \t * static const $(_Class)::Init $(_name)Init {
       \t *
       \t *   // Setup values
@@ -362,9 +558,6 @@
       \t *   DacBufferMode_Normal ,        // Buffer operation mode - Normal
       \t *   DacC2Dacbfrp_BufferPointer ,  // Buffer Read Pointer - Buffer Pointer
       \t *   DacBufferUpperLimit_Max,      // DAC Buffer Upper Limit - max entries
-      \t *
-      \t *   $(_name)Callback,                 // Call-back to execute on event - call-back function name
-      \t *   NvicPriority_Low,             // Priority for interrupt - Low
       \t *
       \t *   // Optional base value to start with (must be last parameter)
       \t *   $(_Class)::DefaultInitValue   // Used as base value modified by above
@@ -397,93 +590,33 @@
    ]]>
    </template>
 
-   <!--   Member variables -->
-
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
-      variables="irqHandlingMethod"
-    ><![CDATA[
-      \t   /// %description
-      \t   %params = nullptr;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
-      variables="/PCR/nvic_irqLevel,irqLevel"
-   ><![CDATA[
-      \t   /// %description
-      \t   %paramType %registerName0 = %defaultValue;
-      \t\n
-   ]]></variableTemplate>
+   <!-- ____ BasicInfo::Init class Member variables ________ -->
 
    <for keys=" type        : variables                                         : init    "
        values="%baseType   : dac_c0_dacen,dac_c0_dacrfs,dac_c0_dactrgsel,
-                             dac_c0_dacswtrg,dac_c0_lpen,dac_c0_dacbwien,
+                             dac_c0_lpen,dac_c0_dacbwien,
                              dac_c0_dacbtien,dac_c0_dacbbien                   : 0       ;
                %baseType   : dac_c1_dmaen,dac_c1_dacbfwm,dac_c1_dacbfmd,
                              dac_c1_dacbfen                                    : 0       ;
-               %baseType   : dac_c2_dacbfrp,dac_c2_dacbfup                     : 0       ">
+               %baseType   : dac_c2_dacbfup[0]                                 : 0       ">
       <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
-         linePadding="xxx"
-      ><![CDATA[
+         linePadding="xxx" >
+      <![CDATA[
          %multilineDescription
          \t   %(type) %registerName = %(init);\n\n
-      ]]></variableTemplate>
+      ]]>
+      </variableTemplate>
    </for>
 
-   <!--   Constructors -->
-
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
-      variables="irqHandlingMethod"
-      linePadding="xxx"
-   ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      this->%paramName0 = %paramExpression;
-      \t   }\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
-      variables="/PCR/nvic_irqLevel"
-      linePadding="xxx"
-   ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      %registerName = %paramExpression;
-      \t   }\n\n
-   ]]></variableTemplate>
+   <!-- ____ BasicInfo::Init class Constructors ____________ -->
 
    <for keys="r"
       values="
-            dac_c0_dacen;
-            dac_c0_dacrfs;
-            dac_c0_dactrgsel;
-            dac_c0_lpen;
-            dac_c0_dacbwien;
-            dac_c0_dacbtien;
-            dac_c0_dacbbien;
-            dac_c1_dmaen;
-            dac_c1_dacbfwm;
-            dac_c1_buffer_mode;
-            dac_c2_dacbfrp;
-            dac_c2_dacbfup
+            dac_c0_dacen;dac_c0_dacrfs;dac_c0_dactrgsel;dac_c0_lpen;
+            dac_c0_dacbwien;dac_c0_dacbtien;dac_c0_dacbbien;
+            dac_c1_dmaen;dac_c1_dacbfwm;dac_c1_buffer_mode;
+            dac_c2_dacbfup[0]
             " >
       <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
@@ -491,6 +624,7 @@
       <![CDATA[
          \t   /**
          \t    * Constructor for %description
+         \t    * (%variables)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -500,19 +634,279 @@
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t
-         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t      %constructorFieldAssignment;
          \t   }
          \t\n
       ]]>
       </variableTemplate>
    </for>
 
-<!--   Default Initialisation value -->
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t}; // class $(_BasicInfo)::Init
+      \t\n
+   ]]>
+   </template>
 
-   <variableTemplate codeGenCondition="enablePeripheralSupport"
+<!-- ====================================================================================================== -->
+<!--     END BasicInfo::Init class      -->
+<!-- ====================================================================================================== -->
+
+   <!-- ____ Interrupt handling (only needed when not done in enablePeripheral.xml) _____________ -->
+
+   <template where="info" codeGenCondition="$(_InfoIrqGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Get and clear DAC status
+      \t *
+      \t * @return DAC status value see DacStatus
+      \t */
+      \tstatic uint8_t getAndClearStatus() {
+      \t   // Get status
+      \t   uint8_t status = dac->SR;
+      \t
+      \t   // Clear set flags
+      \t   dac->SR = ~status;
+      \t
+      \t   // return original status
+      \t   return status;
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template where="info" codeGenCondition="$(_InfoGuard)"
+      linePadding="xxx" >
+   <![CDATA[
+      \t/**
+      \t * Enable DAC output pin as output.
+      \t * Configures all Pin Control Register (PCR) values
+      \t */
+      \tstatic void setOutput() {
+      \t
+      \t   //CheckOutputIsMapped<outputPin>::check();
+      \t
+      \t   using Pcr = PcrTable_T<$(_Info), outputPin>;
+      \t
+      \t   // Enable and map pin to CMP_OUT
+      \t   Pcr::setPCR();
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____ BasicInfo class Configure methods ____ -->
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      linePadding="xxx" >
+   <![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t * This routine does not configure pins or interrupt handlers
+      \t *
+      \t * @param $(_basename)           Hardware instance pointer
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(
+      \t               volatile $(_Type) *$(_basename),
+      \t               const Init    &init) {
+      \t
+      \t\n
+   ]]>
+   </template>
+   <for keys=
+             "  var                                               : statement"
+       values=' dac_c0_dacen,dac_c0_dacrfs,dac_c0_dactrgsel,
+                dac_c0_lpen,dac_c0_dacbwien,
+                dac_c0_dacbtien,dac_c0_dacbbien                   : "%register = init.%registerName;" ;
+                dac_c1_dmaen,dac_c1_dacbfwm,dac_c1_dacbfmd,
+                dac_c1_dacbfen                                    : "%register = init.%registerName;" ;
+                dac_c2_dacbfup[0]                                 : "%register = init.%registerName;" ' >
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         variables="%(var)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t
+         %multilineDescription
+         \t   %(statement);\n
+      ]]>
+      </variableTemplate>
+   </for>
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t * This routine does not configure pins or interrupt handlers
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tvoid configure(const Init &init) const {
+      \t
+      \t   configure($(_basename), init);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" 
+      variables="dac_data_data[]" >
+   <![CDATA[
+      \t/**
+      \t * Get domain of DAC values
+      \t *
+      \t * @return Range of DAC e.g. 2^12-1
+      \t */
+      \tstatic constexpr unsigned getDomain() {
+      \t   return %mask;
+      \t}
+      \t
+      \t/**
+      \t * Get size of ADC FIFO
+      \t *
+      \t * @return size in entries
+      \t */
+      \tstatic constexpr unsigned getBufferSize() {
+      \t   return sizeof(DAC_Type::DATA)/sizeof(DAC_Type::DATA[0]);
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>   
+   
+<!-- ====================================================================================================== -->
+<!--     END BasicInfo class      -->
+<!-- ====================================================================================================== -->
+<!-- ====================================================================================================== -->
+<!--     START Info class      -->
+<!-- ====================================================================================================== -->
+   <!-- ____ Info constructors ________ -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/*
+      \t *   Default Constructor
+      \t */
+      \t$(_Info)() : $(_BasicInfo)($(_basename)) {
+      \t   defaultConfigure();
+      \t}
+      \t
+      \t/*
+      \t *   Constructor
+      \t */
+      \t$(_Info)(const Init &init) : $(_BasicInfo)($(_basename)) {
+      \t   configure(init);
+      \t}
+      \t/** Get base address of DAC hardware as uint32_t */
+      \tstatic constexpr uint32_t dacBase() { return baseAddress; }
+      \t
+      \t/** Get base address of DAC.DATA register as uint32_t */
+      \tstatic constexpr uint32_t dacData() { return dacBase() + offsetof(DAC_Type, DATA[0]); }
+      \t
+      \t/** Get base address of DAC.DATA[index] register as uint32_t */
+      \tstatic constexpr uint32_t dacData(unsigned index) { return dacBase() + offsetof(DAC_Type, DATA) + index*sizeof(DAC_Type::DATA[0]); }
+      \t\n
+   ]]>
+   </template>
+
+   <!-- Init configure methods -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic void defaultConfigure() {
+      \t
+      \t   configure(DefaultInitValue);
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const Init &init) {
+      \t
+      \t   // Enable peripheral
+      \t   enable();
+      \t\n
+   ]]>
+   </template>
+   <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)" >
+   <![CDATA[
+      \t   // Configure call-back
+      \t   if (init.callbacks[0] != nullptr) {
+      \t      setCallback(init.callbacks[0]);
+      \t      enableNvicInterrupts(init.priorities[0]);
+      \t   }
+      \t\n
+   ]]>
+   </template>
+   <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount>1)"
+      variables="irq_enum"
+      immediateVariables="_hardwareIrqCount">
+   <![CDATA[
+      \t   for(int index=0; index<$(_hardwareIrqCount); index++) {
+      \t      if (init.callbacks[index] != nullptr) {
+      \t         // Configure call-back
+      \t         setCallback(%returnType0(index), init.callbacks[index]);
+      \t         enableNvicInterrupts(%returnType0(index), init.priorities[index]);
+      \t      }
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t   $(_BasicInfo)::configure($(_basename), init);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____  Default Initialisation value ____ -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr $(_BasicInfo)::Init DefaultInitValue = {\n
+   ]]>
+   </template>
+   <!-- Interrupt information -->
+<!--
+   <for keys="irqName" values="=_hardwareIrqNums">
+      <equation key="irqEnum" value='=ReplaceAll("%(irqName)","^(.*?)_(.*)_IRQn$","IrqNum_$2")' />
+      <equation key="var"     value='=ReplaceAll("%(irqName)","^(.*?)_(.*)_IRQn$","irqLevel_$2")' />
+      <print text="(irqName) = %(irqName)"/>
+      <printVar key="irqEnum" />
+      <printVar key="var" />
+      <variableTemplate where="info" codeGenCondition='$(_InfoIrqGuard)&amp;&amp;!IsZero(@var)'
+         variables='=var'
+         separator=","
+         terminator=","
+         padToComments="40"
+         immediateVariables="irqEnum" >
+      <![CDATA[
+         \t   $(irqEnum), %initExpression,
+         \t   unhandledCallback,\n
+      ]]>
+      </variableTemplate>
+   </for>
+-->
+   <variableTemplate where="info" codeGenCondition="$(_InfoGuard)"
       separator=","
       terminator=","
-      padToComments="35"
+      padToComments="45"
       variables="
             dac_c0_dacen,
             dac_c0_dacrfs,
@@ -524,95 +918,38 @@
             dac_c1_dmaen,
             dac_c1_dacbfwm,
             dac_c1_buffer_mode,
-            dac_c2_dacbfrp,
-            dac_c2_dacbfup,
-            irqLevel
-         "
-   ><![CDATA[
-      \t/**
-      \t * Default initialisation value for $(_Class)
-      \t * This value is created from Configure.usbdmProject settings
-      \t */
-      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues
-      \t};
-      \t\n
-   ]]></variableTemplate>
-
-<!--   Configure methods -->
-
-   <template codeGenCondition="enablePeripheralSupport" >
+            dac_c2_dacbfup[0],
+            " >
    <![CDATA[
-      \t/**
-      \t * Configure with default settings.
-      \t * Configuration determined from Configure.usbdmProject
-      \t */
-      \tstatic inline void defaultConfigure() {
-      \t
-      \t   // Update settings
-      \t   configure(DefaultInitValue);
-      \t}
-      \t
-      \t/**
-      \t * Configure $(_BASENAME) from values specified in init
-      \t *
-      \t * @param init Class containing initialisation values
-      \t */
-      \tstatic void configure(const Init &init) {
-      \t
-      \t   // Enable peripheral clock
-      \t   enableClock();
-      \t\n
-   ]]></template>
-   <template codeGenCondition="irqHandlingMethod" >   <![CDATA[
-      \t   // Set call-backs
-      \t   setCallback(init.callbackFunction);
-      \t   enableNvicInterrupts(init.irqlevel);
-      \t\n
-   ]]></template>
-   <for keys=
-             "  var                                               : statement"
-       values=' dac_c0_dacen,dac_c0_dacrfs,dac_c0_dactrgsel,
-                dac_c0_dacswtrg,dac_c0_lpen,dac_c0_dacbwien,
-                dac_c0_dacbtien,dac_c0_dacbbien                   : "%register = init.%registerName;" ;
-                dac_c1_dmaen,dac_c1_dacbfwm,dac_c1_dacbfmd,
-                dac_c1_dacbfen                                    : "%register = init.%registerName;" ;
-                dac_c2_dacbfrp,dac_c2_dacbfup                     : "%register = init.%registerName;" ' >
-      <variableTemplate codeGenCondition="enablePeripheralSupport"
-         variables="%(var)"
-         linePadding="xxx"
-      ><![CDATA[
-         %multilineDescription
-         \t   %(statement)
-         \t\n
-      ]]></variableTemplate>
-   </for>
-   <template codeGenCondition="enablePeripheralSupport" >   <![CDATA[
+      \t%initNonZeroValues
       \t};
-      \t\n
-   ]]></template>
-
-
-   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
-   <![CDATA[
-      \t}; // class $(_BasicInfo)::Init
       \t\n
    ]]>
-   </template>
+   </variableTemplate>
 
-   <!-- _____________ Common __________________ -->
-
-   <template><![CDATA[
+   <template where="info" codeGenCondition="$(_InfoGuard)"><![CDATA[
       \t/// Number of Data output registers
       \tstatic constexpr size_t NumDataRegisters = $(dac_data_dim);
       \t\n
    ]]></template>
 
-   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
+<!-- ====================================================================================================== -->
+<!--     END Info class      -->
+<!-- ====================================================================================================== -->
+<!-- ====================================================================================================== -->
+<!--     Common      -->
+<!-- ====================================================================================================== -->
+
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
+      \t/**
+      \t * Class representing $(_STRUCTNAME) instance
+      \t */
+      \ttypedef $(_BasicInfo) $(_Structname);
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Info)> {};
+      \ttypedef $(_Info) $(_Class);
       \t\n
    ]]>
    </template>
@@ -631,7 +968,7 @@
       <copy source="Snippets/dac-softwareTrigger-example.cpp"      target="Snippets/dac-softwareTrigger-example.cpp"      overwrite="true" derived="true" />
    </projectActionList>
 
-   <!-- _____________ Startup __________________ -->
+   <!-- ____ Startup ____ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
@@ -643,15 +980,22 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <!-- _____________ SIM configuration __________________ -->
+   <!-- ____ SIM configuration ____ -->
 
-   <category name="Advanced" description="SIM configuration">
+   <category name="Advanced" description="SIM configuration"
+      toolTip="These settings only have effect if the SIM configuration is enabled" >
+      <title description="$(_BASENAME) Shared" />
+      <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+      <title description="$(_NAME) Specific" />
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
       <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
       </for>
    </category>
 
+   <!--  ____ Signal mapping ____ -->
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 
 </fragment>

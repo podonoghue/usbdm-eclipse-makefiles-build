@@ -1195,7 +1195,7 @@
    <!-- Variables that will be available for immediate substitution -->
    <!ATTLIST template immediateVariables       CDATA                   #IMPLIED>
    <!-- Indicates parameters should start on a new line if there are multiple -->
-   <!ATTLIST template multipleParamsOnNewline  (true)                   #IMPLIED >
+   <!ATTLIST template multipleParamsOnNewline  (false)                   #IMPLIED >
 
 <!-- ____  variableTemplate -->
 <!ELEMENT variableTemplate (#PCDATA)* >
@@ -1245,7 +1245,7 @@
    <!-- Variables that will be available for immediate substitution -->
    <!ATTLIST variableTemplate immediateVariables        CDATA                   #IMPLIED>
    <!-- Indicates parameters should start on a new line if there are multiple -->
-   <!ATTLIST variableTemplate multipleParamsOnNewline  (true)                   #IMPLIED >
+   <!ATTLIST variableTemplate multipleParamsOnNewline  (false)                   #IMPLIED >
    <!-- Context for register e.g. register prefix e.g. SP[mpuSlavePortNum]. -->
    <!ATTLIST variableTemplate context                  CDATA                    #IMPLIED >
    <!-- Pad initExpressions and initNonDefaultExpressions to this width -->
@@ -1290,7 +1290,7 @@
    <!-- Variables that will be available for immediate substitution -->
    <!ATTLIST clockCodeTemplate immediateVariables       CDATA                   #IMPLIED>
    <!-- Indicates parameters should start on a new line if there are multiple -->
-   <!ATTLIST clockCodeTemplate multipleParamsOnNewline  (true)                   #IMPLIED >
+   <!ATTLIST clockCodeTemplate multipleParamsOnNewline  (false)                   #IMPLIED >
 
 <!-- ____ validate -->
 <!ELEMENT validate (param*) >

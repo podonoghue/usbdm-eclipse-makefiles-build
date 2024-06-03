@@ -21,7 +21,7 @@
 #include "cmsis.h"
 #endif
 
-#if $(/I2S/enablePeripheralSupport) // /I2S/enablePeripheralSupport
+#if $(/I2S/_BasicInfoGuard) // /I2S/_BasicInfoGuard
 
 namespace USBDM {
 
@@ -120,6 +120,6 @@ $(/I2S/declarations: // No declarations found)
 
 } // End namespace USBDM
 
-#endif // /I2S/enablePeripheralSupport
+#endif // /I2S/_BasicInfoGuard
 
 #endif /* HEADER_I2S_H */

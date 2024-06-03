@@ -30,7 +30,7 @@ namespace USBDM {
  * @brief C++ Class allowing access to UART interface
  * @{
  */
-#if $(/UART/enablePeripheralSupport) // /UART/enablePeripheralSupport
+#if $(/UART/_BasicInfoGuard) // /UART/_BasicInfoGuard
 
 /**
  * @brief Abstract Base class for UART interface

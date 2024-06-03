@@ -20,7 +20,7 @@
 #include "system.h"
 #include "pin_mapping.h"
 
-#if $(/PIT/enablePeripheralSupport) // /PIT/enablePeripheralSupport
+#if $(/PIT/_BasicInfoGuard) // /PIT/_BasicInfoGuard
 
 namespace USBDM {
 
@@ -110,7 +110,7 @@ $(/PIT/publicMethods: // /PIT/publicMethods not found)
       return (PitChannelNum) channelNum;
    }
 
-#if $(/DMA/enablePeripheralSupport:false) // (/DMA/enablePeripheralSupport) not found
+#if $(/DMA/_BasicInfoGuard:false) // (/DMA/_BasicInfoGuard) not found
    /**
     * Allocate PIT channel associated with DMA channel.
     * This is a channel that may be used to throttle the associated DMA channel.
@@ -163,7 +163,7 @@ $(/PIT/publicMethods: // /PIT/publicMethods not found)
       pit->CHANNEL[pitChannelNum].TCTRL = pit->CHANNEL[pitChannelNum].TCTRL | pitChannelAction;
    }
 
-#if $(/PIT/irqHandlingMethod:false) // /PIT/irqHandlingMethod not found
+#if $(/PIT/_CommonInfoIrqGuard:false) // /PIT/_CommonInfoIrqGuard not found
 
    /**
     * PIT interrupt handler -  Calls PIT callback
@@ -657,9 +657,9 @@ public:
       }
       disableChannel(pitChannelNum);
    }
-#endif
+#endif // /PIT/secondsSupport
 
-#if $(/PIT/irqHandlingMethod:false) // /PIT/irqHandlingMethod
+#if $(/PIT/_CommonInfoIrqGuard:false) // /PIT/_CommonInfoIrqGuard
 #if $(/PIT/secondsSupport:false) // /PIT/secondsSupport
    /**
     * Set one-shot timer callback.
@@ -720,7 +720,7 @@ public:
       setCallback(pitChannelNum, callback);
       configureChannel(pitChannelNum, tickInterval, PitChannelIrq_Enabled);
    }
-#endif // /PIT/irqHandlingMethod
+#endif // /PIT/_CommonInfoIrqGuard
 
    /**
     * Class representing a PIT channel.
@@ -1222,6 +1222,6 @@ $(/PIT/declarations:  // No declarations found)
 
 } // End namespace USBDM
 
-#endif // /PIT/enablePeripheralSupport
+#endif // /PIT/_BasicInfoGuard
 
 #endif /* INCLUDE_USBDM_PIT_H_ */

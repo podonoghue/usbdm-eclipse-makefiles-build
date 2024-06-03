@@ -21,7 +21,7 @@
 #include "cmsis.h"
 #endif
 
-#if $(/I2C/enablePeripheralSupport) // /I2C/enablePeripheralSupport
+#if $(/I2C/_BasicInfoGuard) // /I2C/_BasicInfoGuard
 
 namespace USBDM {
 
@@ -631,6 +631,6 @@ $(/I2C/declarations: // No declarations found)
 
 } // End namespace USBDM
 
-#endif // /I2C/enablePeripheralSupport
+#endif // /I2C/_BasicInfoGuard
 
 #endif /* INCLUDE_USBDM_I2C_H_ */

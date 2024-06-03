@@ -38,7 +38,7 @@
 \endverbatim
 
  */
-#if $(/USB0/enablePeripheralSupport) // /USB0/enablePeripheralSupport
+#if $(/USB0/_BasicInfoGuard) // /USB0/_BasicInfoGuard
 #include "usb_defs.h"
 #include "derivative.h"
 #include "error.h"
@@ -945,6 +945,6 @@ public:
  */
 
 }; // end namespace
-#endif // /USB0/enablePeripheralSupport
+#endif // /USB0/_BasicInfoGuard
 
 #endif /* HEADER_USB_ENDPOINT_H */

@@ -29,7 +29,7 @@ namespace USBDM {
  * @{
  */
 $(/USBPHY/peripheral_h_definition:// $/USBPHY/peripheral_h_definition not found)
-#if $(/USBPHY/enablePeripheralSupport:false) // /USBPHY/enablePeripheralSupport
+#if $(/USBPHY/_BasicInfoGuard:false) // /USBPHY/_BasicInfoGuard
 
 /**
  * Type definition for interrupt call back
@@ -160,7 +160,7 @@ template<class Info> UsbphyCallbackFunction UsbphyBase_T<Info>::sCallback = Usbp
 template<class Info> USBPHY_Type *UsbphyBase_T<Info>::thisPtr = 0;
 
 $(/USBPHY/declarations: // No declarations found)
-#endif // /USBPHY/enablePeripheralSupport
+#endif // /USBPHY/_BasicInfoGuard
 /**
  * End USBPHY_Group
  * @}

@@ -25,7 +25,7 @@ namespace USBDM {
  */
 $(/RCM/peripheral_h_definition:// $/RCM/peripheral_h_definition not found)
 
-#if $(/RCM/enablePeripheralSupport) // /RCM/enablePeripheralSupport
+#if $(/RCM/_BasicInfoGuard) // /RCM/_BasicInfoGuard
 /**
  * Indicates reason for reset
  */
@@ -214,7 +214,7 @@ $(/RCM/InitMethod:// /RCM/InitMethod not found)
 
 $(/RCM/staticDefinitions: // No static declarations found)
 $(/RCM/declarations: // No declarations found)
-#endif  // /RCM/enablePeripheralSupport
+#endif  // /RCM/_BasicInfoGuard
 
 /**
  * End RMC_Group

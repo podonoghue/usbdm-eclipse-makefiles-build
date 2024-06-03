@@ -27,7 +27,7 @@ namespace USBDM {
  * @brief Abstraction for Low Power Timer
  * @{
  */
-#if $(/LPTMR/enablePeripheralSupport:false) // /LPTMR/enablePeripheralSupport
+#if $(/LPTMR/_BasicInfoGuard:false) // /LPTMR/_BasicInfoGuard
 $(/LPTMR/peripheral_h_definition:// $/LPTMR/peripheral_h_definition not found)
 
 #ifdef PCC_PCC_LPTMR0_CGC_MASK
@@ -481,7 +481,7 @@ public:
 };
 
 $(/LPTMR/declarations: // No declarations found)
-#endif // /LPTMR/enablePeripheralSupport
+#endif // /LPTMR/_BasicInfoGuard
 /**
  * End LPTMR_Group
  * @}

@@ -19,7 +19,7 @@
 
 namespace USBDM {
 
-#if $(/PDB/enablePeripheralSupport) // /PDB/enablePeripheralSupport
+#if $(/PDB/_BasicInfoGuard) // /PDB/_BasicInfoGuard
 
 /**
  * @addtogroup PDB_Group PDB, Programmable Delay Block
@@ -1016,7 +1016,7 @@ $(/PDB/declarations: // No declarations found)
  * End PDB_Group
  * @}
  */
-#endif // /PDB/enablePeripheralSupport
+#endif // /PDB/_BasicInfoGuard
 } // End namespace USBDM
 
 #endif /* HEADER_PDB_H */

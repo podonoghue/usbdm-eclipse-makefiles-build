@@ -128,7 +128,7 @@ $(/MCG/publicMethods: // No public methods found)
     */
    static void SystemCoreClockUpdate(void);
 
-#if $(/MCG/enablePeripheralSupport:false) // /MCG/enablePeripheralSupport
+#if $(/MCG/_BasicInfoGuard:false) // /MCG/_BasicInfoGuard
 
    /**
     * Write main MCG registers from clockInfo

@@ -384,10 +384,10 @@ private:
     */
    Gpio_T(const Gpio_T&) = delete;
    Gpio_T(Gpio_T&&) = delete;
-protected:
-   constexpr Gpio_T() : Gpio(gpioAddress, bitNum, polarity) {};
 
 public:
+   constexpr Gpio_T() : Gpio(gpioAddress, bitNum, polarity) {};
+
    static constexpr PcrInit defaultPcrValue = gpioPcrValue(defPcrValue);
 
    // IRQ index for this GPIO

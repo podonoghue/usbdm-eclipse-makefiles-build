@@ -31,7 +31,7 @@ namespace USBDM {
  * @{
  */
 $(/UART/peripheral_h_definition:// $/UART/peripheral_h_definition not found)
-#if $(/UART/enablePeripheralSupport) // /UART/enablePeripheralSupport
+#if $(/UART/_BasicInfoGuard) // /UART/_BasicInfoGuard
 
 /**
  * @brief Abstract Base class for UART interface
@@ -528,7 +528,7 @@ template<class Info, int rxSize, int txSize> volatile uint32_t   UartBuffered_T<
 #endif
 
 $(/UART/declarations: // No declarations found)
-#endif // /UART/enablePeripheralSupport
+#endif // /UART/_BasicInfoGuard
 
 /**
  * End UART_Group

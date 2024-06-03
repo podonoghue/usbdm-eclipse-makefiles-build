@@ -18,7 +18,7 @@
 
 namespace USBDM {
 
-#if $(/MCM/enablePeripheralSupport) // /MCM/enablePeripheralSupport
+#if $(/MCM/_BasicInfoGuard) // /MCM/_BasicInfoGuard
 
 /**
  * @addtogroup MCM_Group MCM, Miscellaneous Control Module
@@ -44,7 +44,7 @@ $(/MCM/declarations: // No declarations found)
  * End MCM_Group
  * @}
  */
-#endif // /MCM/enablePeripheralSupport
+#endif // /MCM/_BasicInfoGuard
 } // End namespace USBDM
 
 #endif /* HEADER_MCM_H */

@@ -21,7 +21,7 @@
 
    <equation key="irq_parameters"            value=""  />
    <equation key="irq_dummy_parameters"      value=""  />
-   <equation key="irq_call"                  value=""  />
+   <equation key="irq_call_parameters"       value=""  />
    <equation key="generateDefault"           value="false"         />
    <equation key="configureInStartupDefault" value="false"         />
    <xi:include href="enablePeripheral.xml"  />
@@ -1813,7 +1813,7 @@
       \tstatic void irqMessageBufferHandler() {
       \t
       \t   // Execute call-back
-      \t   sCallback($(irq_call));
+      \t   sCallback($(irq_call_parameters));
       \t}
       \t
       \t/**
@@ -1844,7 +1844,7 @@
       \tstatic void irqBusOffHandler() {
       \t
       \t   // Execute call-back
-      \t   sCallback($(irq_call));
+      \t   sCallback($(irq_call_parameters));
       \t}
       \t
       \t/**
@@ -1875,7 +1875,7 @@
       \tstatic void irqErrorHandler() {
       \t
       \t   // Execute call-back
-      \t   sCallback($(irq_call));
+      \t   sCallback($(irq_call_parameters));
       \t}
       \t
       \t/**
@@ -1906,7 +1906,7 @@
       \tstatic void irqTxWarningHandler() {
       \t
       \t   // Execute call-back
-      \t   sCallback($(irq_call));
+      \t   sCallback($(irq_call_parameters));
       \t}
       \t
       \t/**
@@ -1937,7 +1937,7 @@
       \tstatic void irqRxWarningHandler() {
       \t
       \t   // Execute call-back
-      \t   sCallback($(irq_call));
+      \t   sCallback($(irq_call_parameters));
       \t}
       \t
       \t/**
@@ -1968,7 +1968,7 @@
       \tstatic void irqWakeUpHandler() {
       \t
       \t   // Execute call-back
-      \t   sCallback($(irq_call));
+      \t   sCallback($(irq_call_parameters));
       \t}
       \t
       \t/**

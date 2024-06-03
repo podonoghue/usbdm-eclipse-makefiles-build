@@ -17,7 +17,7 @@
    <equation key="suppressIrqHandler"         value="" />
    <equation key="irq_parameters"             value="const CmpStatus &amp;status"  />
    <equation key="irq_dummy_parameters"       value="const CmpStatus &amp;"  />
-   <equation key="irq_call"                   value="cmpStatus"      />
+   <equation key="irq_call_parameters"        value="cmpStatus"      />
    <equation key="generateDefault"            value="false"     />
    <equation key="configureInStartupDefault"  value="false"     />
    <xi:include href="enablePeripheral.xml"    />
@@ -27,21 +27,21 @@
    <!-- constant key="window_input" value='"PDB"'   description="External Window input" / -->
    <!--  constant key="trigger"      value='"LPTMR"'      description="External Trigger input" / -->
 
-   <stringOption key="window_input" 
+   <stringOption key="window_input"
       enabledBy="cmp_mode==(6,7,8)"
       hidden="true"
       derived="true"
       description="External Window input"
       value="PDB"
-   />   
+   />
 
-   <stringOption key="sample_input" 
+   <stringOption key="sample_input"
       enabledBy="cmp_mode==(2,4)"
       hidden="true"
       derived="true"
       description="External Window input"
       value="PDB"
-   />   
+   />
 
    <stringOption key="trigger"  condition="cmp_cr1_trigm_present"
       hidden="true"
@@ -49,19 +49,19 @@
       enabledBy="cmp_cr1_trigm"
       description="External Trigger input"
       value="LPTMR"
-   />   
+   />
 
    <aliasOption key="cmp_mode" locked="false" />
-   
+
    <graphic key="cmp_config_graphics"
       var="cmp_holder"
       description="Comparator Configuration"
       toolTip="Opens a dialogue to configure the comparator" >
-      
+
       <graphicBox       x="10" y="10" params="0,0, x1000, y400, x" >
          <graphicItem id="Mode of operation"  var="cmp_mode"  type="variableBox" params="250, 25,  240, large"                          />
 
-         <!-- DAC -->         
+         <!-- DAC -->
          <graphicItem type="polygon"     id="DAC,x+10,y+25" var="cmp_daccr_vosel"     params="120:240, y+40,i, y+40, +40:-20,i, +40:-20,o, -80:-40" />
          <graphicItem type="node"                           var="cmp_daccr_dacen"     params="180,280"              />
          <graphicItem type="variableBox" id="Reference"     var="cmp_daccr_vrsel"     params="120,360,  180, small, on-60"    />
@@ -72,7 +72,7 @@
          <!-- CMP -->
          <graphicItem type="variableBox" id="Input +"       var="cmp_muxcr_psel"      params="130, 105,  250, large, is100, oe"    />
          <graphicItem type="variableBox" id="Input -"       var="cmp_muxcr_msel"      params="130, 205,  250, large, is100, oe"    />
-                            
+
          <graphicItem type="connector"                                                params="Input +,0, CMP,0, (x-30),y,x"            />
          <graphicItem type="connector"                                                params="Input -,0, CMP,1, (x-30),y,x"            />
          <graphicItem type="polygon"     id="CMP,x+20,y+30,NOVALUE"  var="cmp_cr1_en" params="300:115, y+20,i, y+40,i, y+20, +20:-10,i, +30:-15,i, +30:-15,o" />
@@ -80,15 +80,15 @@
          <!-- Inversion -->
          <graphicItem type="connector"                                                params="CMP,0, Polarity,0"     />
          <graphicItem type="variableBox" id="Polarity"      var="cmp_cr1_inv"         params="460, 155,  90, large"    />
-                                                            
+
          <!-- Window -->
          <graphicItem type="connector"                                                params="Polarity,0,      Window,0"     />
          <graphicItem type="variableBox" id="Window"        var="cmp_cr1_we"          params="580, 155,  90, large, iw,is-30, is+30,oe"    />
-                                                            
+
          <graphicItem type="connector"                                                  params="Window,0, Filter,0, x,y"     />
          <graphicItem type="variableBox" id="Filter"        var="cmp_cr0_filter_cnt"    params="730, 155,  150, large, iw,is+50,oe"    />
          <graphicItem type="variableBox" id="fi,NONAME,"    var="cmp_fpr_filt_interval" params="730, 185,  150, small, is+50"    />
-                                                            
+
          <graphicItem type="connector"                                                params="Filter,0, Action,0" />
          <graphicItem type="variableBox" id="Action"        var="cmp_scr_interrupt"   params="885, 155,  100, large, oe, os"      />
          <graphicItem type="connector"                                                params="Action,0, IRQ,0"            />
@@ -102,18 +102,18 @@
          <graphicItem type="variableBox" id="Hysteresis"    var="cmp_cr0_hystctr"     params="400, 235,  140, small, on"    />
          <graphicItem type="variableBox" id="Speed"         var="cmp_cr1_pmode"       params="400, 255,  140, small"        />
          <graphicItem type="connector"                                                params="Hysteresis,0, CMP,3, x,y"     />
-         
+
          <if  condition="cmp_cr1_trigm_present" >
             <graphicItem type="variableBox" id="Trigger In.0"      var="trigger"         params="320, 450,  140, small, on"             />
             <graphicItem type="connector"                                                params="Trigger In.0,0, Trigger In,0, x,y"       />
             <graphicItem type="node"        id="Trigger In,NONAME" var="trigger"         params="320, 400, is, on"                      />
             <graphicItem type="connector"                                                params="Trigger In,0, Trigger,0, (y+20),x,y"     />
-   
+
             <graphicItem type="variableBox" id="Trigger"       var="cmp_cr1_trigm"       params="320, 360,  140, small,on,is"            />
             <graphicItem type="connector"                      var="trigger"             params="Trigger,0, DAC,1, y-30,d,x,y"            />
             <graphicItem type="connector"                      var="trigger"             params="Trigger,0, CMP,2"                      />
          </if>
-         
+
 
          <graphicItem type="connector"                                                params="Window,0, COS,1, x+10,d,y"     />
          <graphicItem type="connector"                                                params="Filter,0, COS,2, x+10,d,y"     />
@@ -124,18 +124,18 @@
 
          <graphicItem type="variableBox" id="Clock Prescaler" var="cmp_fpr_filt_per"  params="600, 270,  120, large, iw"    />
          <graphicItem type="variableBox" id="fp,NONAME,"      var="cmp_filterPeriod"  params="600, 300,  120, small"    />
-         
+
          <graphicItem type="connector"                                                  params="Clock Prescaler,0, Filter Clock,0, x+20,y,x"     />
          <graphicItem type="mux"         id="Filter Clock,x-30,y+70"  var="cmp_cr1_se"  params="740, 280, 0"       />
          <graphicItem type="connector"                                                  params="Filter Clock,0, fi,0, x,y"     />
 
-         <graphicItem type="variableBox" id="Clock Config"   var="cmpClockConfig"     params="600, 450, 300, small" />
-         <graphicItem type="variableBox" id="Input Clock.0"  var="input_clock"        params="600, 470, 300, small, on-100" />
+         <graphicItem type="variableBox" id="Clock Config"   var="cmpClockConfig"     params="590, 450, 320, small" />
+         <graphicItem type="variableBox" id="Input Clock.0"  var="input_clock"        params="590, 470, 320, small, on-100" />
          <graphicItem type="connector"                                                params="Input Clock.0,0, Input Clock,0, x,y"     />
          <graphicItem type="node"        id="Input Clock,NONAME" var="input_clock"    params="500, 400, is, on"                />
          <graphicItem type="connector"                                                params="Input Clock,0, Clock Prescaler,0, y,d,x"     />
          <graphicItem type="connector"                                                params="Input Clock,0, Window,1, (y+30),x,y"     />
-         
+
          <graphicItem type="variableBox" id="Window In.0"        var="window_input"   params="830, 450,  120, small, on"    />
          <graphicItem type="variableBox" id="Sample In.0"        var="sample_input"   params="830, 470,  120, small, on"    />
          <graphicItem type="connector"                           var="window_input"   params="Window In.0,0, Window In,0, x,y"     />
@@ -143,9 +143,9 @@
          <graphicItem type="node"        id="Window In,NONAME"   var="window_input"   params="800, 400, is, on"                />
          <graphicItem type="connector"                           var="sample_input"   params="Window In,0, Filter Clock,1, y-40,x-100,y,d,x"     />
          <graphicItem type="connector"                           var="window_input"   params="Window In,0, Window,2,       y-40,x-100,(y+40),x"     />
-         
+
       </graphicBox>
-      
+
    </graphic>
 
    <!-- Interrupts and DMA -->
@@ -352,63 +352,63 @@
       description="Comparator Filtering Mode"
       toolTip="Comparitor mode of operation">
       <!--                                                                                            cr1_en; cr1_we; cr1_se;cr0_filter_cnt;fpr_filt_per  -->
-      <choice value="0" name="1    Disabled"                         enum="Disabled"             ref="false ; false ; false ;     0       ;     0      "  
+      <choice value="0" name="1    Disabled"                         enum="Disabled"             ref="false ; false ; false ;     0       ;     0      "
          toolTip="Comparator is non-functional and consumes no power.\n
                   CMPO is 0 in this mode." />
-                  
-      <choice value="1" name="2a/b Continuous"                       enum="Continuous"           ref="true  ; false ; false ;     0       ;     0      "    
+
+      <choice value="1" name="2a/b Continuous"                       enum="Continuous"           ref="true  ; false ; false ;     0       ;     0      "
          toolTip="Mode 2 - Continuous mode\n
                   Both window control and filter blocks are completely bypassed.  \n
                   COUTA,COUT are the output of the comparator, with optional inversion, but without sampling or filtering. \n
                   SCR[COUT] is updated continuously.  \n
                   The path from comparator input pins is operating in combinational unclocked mode." />
-                  
-      <choice value="2" name="3a   Externally sampled, Non-Filtered" enum="External_NonFiltered" ref="true  ; false ; true  ;     1       ;     0      "    
+
+      <choice value="2" name="3a   Externally sampled, Non-Filtered" enum="External_NonFiltered" ref="true  ; false ; true  ;     1       ;     0      "
          toolTip="Mode 3a - Externally clocked Sampling, Non-Filtered\n
                   Window control is bypassed. The filter block operates as a simple Sample and Hold \n
                   COUTA is the output of the comparator, with optional inversion, but without sampling or filtering. \n
                   COUT is COUTA after sampling.  \n
                   The external window/sample input is used to clock the Sample and Hold" />
-               
-      <choice value="3" name="3b   Internally sampled, Non-Filtered" enum="Internal_NonFiltered" ref="true  ; false ; false ;     1       ;     1      "    
+
+      <choice value="3" name="3b   Internally sampled, Non-Filtered" enum="Internal_NonFiltered" ref="true  ; false ; false ;     1       ;     1      "
          toolTip="Mode 3a/b - Internally clock Sampling, Non-Filtered mode\n
                   Window control is bypassed. The filter block operates as a simple Sample and Hold \n
                   COUTA is the output of the comparator, with optional inversion, but without sampling or filtering. \n
                   COUT is COUTA after sampling.  \n
                   FILT_PER acts as a prescaler for the bus clock driving the Sample and Hold" />
-               
-      <choice value="4" name="4a   Externally sampled, Filtered"     enum="External_Filtered"    ref="true  ; false ; true  ;      2      ;     0      "    
+
+      <choice value="4" name="4a   Externally sampled, Filtered"     enum="External_Filtered"    ref="true  ; false ; true  ;      2      ;     0      "
          toolTip="Mode 4a/b - Externally clocked Samping, Filtered mode\n
                   Window control is bypassed. The filter is enabled (FILTER_CNT>1). \n
                   COUTA is the output of the comparator, with optional inversion, but without sampling or filtering. \n
                   COUT is COUTA after filtering.  \n
                   The external window/sample input is used to clock the Filter.\n
                   FILTER_CNT determines the filter sample count (width)" />
-               
-      <choice value="5" name="4b   Internally sampled, Filtered"     enum="Internal_Filtered"    ref="true  ; false ; false ;      2      ;     1      "    
+
+      <choice value="5" name="4b   Internally sampled, Filtered"     enum="Internal_Filtered"    ref="true  ; false ; false ;      2      ;     1      "
          toolTip="Mode 4a/b - Internally clocked Sampling, Filtered\n
                   Window control is bypassed. The filter is enabled (FILTER_CNT>1). \n
                   COUTA is the output of the comparator, with optional inversion, but without sampling or filtering. \n
                   COUT is COUTA after filtering.  \n
                   FILT_PER acts as a prescaler for the bus clock driving the Filter\n
                   FILTER_CNT determines the filter sample count (width)" />
-               
-      <choice value="6" name="5a/b Windowed"                         enum="Windowed"             ref="true  ; true  ; false ;     0       ;     0      "    
+
+      <choice value="6" name="5a/b Windowed"                         enum="Windowed"             ref="true  ; true  ; false ;     0       ;     0      "
          toolTip="Mode 5a/b - Windowed mode\n
                   The comparator output is qualified by an external window signal. \n
                   COUTA is the windowed output of the comparator, with optional inversion. \n
                   When enabled by the window, the comparator output is clocked by the bus clock and held otherwise. \n
                   This introduces up to 1 clock delay. " />
-               
-      <choice value="7" name="6    Windowed, Re-sampled"             enum="Windowed_Resampled"   ref="true  ; true  ; false ;     1       ;     1      "    
+
+      <choice value="7" name="6    Windowed, Re-sampled"             enum="Windowed_Resampled"   ref="true  ; true  ; false ;     1       ;     1      "
          toolTip="Mode 6 - Windowed/Resampled mode\n
                   The comparator output is qualified by an external window signal and then resampled. \n
                   COUTA is the windowed output of the comparator, with optional inversion. \n
                   COUT is COUTA after sampling  \n
                   When enabled by the window, the comparator output is clocked by the bus clock and then resampled at a \n
                   rate determined by the bus clock*FILT_PER to generate COUT. " />
-               
-      <choice value="8" name="7    Windowed, Filtered"               enum="Windowed_Filtered"    ref="true  ; true  ; false ;     2       ;     1      "    
+
+      <choice value="8" name="7    Windowed, Filtered"               enum="Windowed_Filtered"    ref="true  ; true  ; false ;     2       ;     1      "
          toolTip=" Mode 7 - Windowed/Filtered mode\n
                   The comparator output is qualified by an external window signal and then filtered. \n
                   COUTA is the windowed output of the comparator, with optional inversion. \n
@@ -1135,7 +1135,7 @@
       \t   };
       \t
       \t   // Execute call-back
-      \t   sCallback($(irq_call));
+      \t   sCallback($(irq_call_parameters));
       \t}
       \t\n
    ]]>
@@ -1565,6 +1565,10 @@
 
    <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
+      \t/**
+      \t * Class representing $(_STRUCTNAME) instance
+      \t */
+      \ttypedef $(_BasicInfo) $(_Structname);
       \t/**
       \t * Class representing $(_NAME)
       \t */

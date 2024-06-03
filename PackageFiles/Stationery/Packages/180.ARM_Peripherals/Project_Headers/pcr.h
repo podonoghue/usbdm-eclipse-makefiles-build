@@ -304,8 +304,6 @@ enum Ticks : unsigned {
    using Hertz    = float;
    using Percent  = float;
 
-#endif
-
    static inline constexpr Ticks operator+ (const Ticks &left, const Ticks &right) {
       return Ticks(unsigned(left)+unsigned(right));
    }
@@ -321,6 +319,8 @@ enum Ticks : unsigned {
    static inline constexpr Ticks operator* (const int &left, const Ticks &right) {
       return Ticks((left)*unsigned(right));
    }
+
+#endif
 
    /**
     * Create a value of type `To` from the bits of `from`.
@@ -909,7 +909,7 @@ public:
    static constexpr bool HANDLER_INSTALLED = PcrBase::isHandlerInstalled(mapPortToPin(portIndex));
 
 public:
-#if $(/GPIO/irqHandlingMethod:false)   // /GPIO/irqHandlingMethod   
+#if $(/GPIO/_CommonInfoIrqGuard:false)   // /GPIO/_CommonInfoIrqGuard   
    /**
     * Set callback for Pin interrupts
     *
@@ -926,7 +926,7 @@ public:
       static_assert(portIrqNum>=0, "Port doesn't support interrupts or they are disabled");
       PcrBase::setPinCallback(portIrqNum, pinCallback);
    }
-#endif // /GPIO/irqHandlingMethod
+#endif // /GPIO/_CommonInfoIrqGuard
 
    /**
     * Enable Pin interrupts in NVIC.

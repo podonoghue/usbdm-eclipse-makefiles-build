@@ -86,7 +86,7 @@ protected:
     */
    CallbackFunction callback = unhandledCallback;
 
-#if $(/SPI0/irqHandlingMethod:false)||$(/SPI1/irqHandlingMethod:false)||$(/SPI2/irqHandlingMethod:false)||$(/SPI3/irqHandlingMethod:false)||$(/SPI4/irqHandlingMethod:false)||$(/SPI5/irqHandlingMethod:false)
+#if $(/SPI0/_CommonInfoIrqGuard:false)||$(/SPI1/_CommonInfoIrqGuard:false)||$(/SPI2/_CommonInfoIrqGuard:false)||$(/SPI3/_CommonInfoIrqGuard:false)||$(/SPI4/_CommonInfoIrqGuard:false)||$(/SPI5/_CommonInfoIrqGuard:false)
    /**
     * Callback function (trampoline)
     */
@@ -110,7 +110,7 @@ protected:
     */
    Spi(unsigned instanceNum, uint32_t baseAddress) :
       spi(baseAddress), pushrMask(0), pushrMaskFinal(0) {
-#if $(/SPI0/irqHandlingMethod:false)||$(/SPI1/irqHandlingMethod:false)||$(/SPI2/irqHandlingMethod:false)||$(/SPI3/irqHandlingMethod:false)||$(/SPI4/irqHandlingMethod:false)||$(/SPI5/irqHandlingMethod:false)
+#if $(/SPI0/_CommonInfoIrqGuard:false)||$(/SPI1/_CommonInfoIrqGuard:false)||$(/SPI2/_CommonInfoIrqGuard:false)||$(/SPI3/_CommonInfoIrqGuard:false)||$(/SPI4/_CommonInfoIrqGuard:false)||$(/SPI5/_CommonInfoIrqGuard:false)
       irqInformation[instanceNum].This = this;
 #else
       (void)instanceNum;
@@ -892,7 +892,7 @@ public:
       return status;
    }
 
-#if $(/SPI0/irqHandlingMethod:false)||$(/SPI1/irqHandlingMethod:false)||$(/SPI2/irqHandlingMethod:false)||$(/SPI3/irqHandlingMethod:false)||$(/SPI4/irqHandlingMethod:false)||$(/SPI5/irqHandlingMethod:false)
+#if $(/SPI0/_CommonInfoIrqGuard:false)||$(/SPI1/_CommonInfoIrqGuard:false)||$(/SPI2/_CommonInfoIrqGuard:false)||$(/SPI3/_CommonInfoIrqGuard:false)||$(/SPI4/_CommonInfoIrqGuard:false)||$(/SPI5/_CommonInfoIrqGuard:false)
    /**
     * Set Callback function\n
     *
@@ -909,7 +909,7 @@ public:
 #endif
 };
 
-#if $(/SPI0/irqHandlingMethod:false)||$(/SPI1/irqHandlingMethod:false)||$(/SPI2/irqHandlingMethod:false)||$(/SPI3/irqHandlingMethod:false)||$(/SPI4/irqHandlingMethod:false)||$(/SPI5/irqHandlingMethod:false)
+#if $(/SPI0/_CommonInfoIrqGuard:false)||$(/SPI1/_CommonInfoIrqGuard:false)||$(/SPI2/_CommonInfoIrqGuard:false)||$(/SPI3/_CommonInfoIrqGuard:false)||$(/SPI4/_CommonInfoIrqGuard:false)||$(/SPI5/_CommonInfoIrqGuard:false)
 /**
  * Class to handle SPI DMA operations
  * It will create the required buffer to format data for the DMA transfer.
@@ -1475,7 +1475,7 @@ public:
       return status;
    }
 
-#if $(/SPI0/irqHandlingMethod:false)||$(/SPI1/irqHandlingMethod:false)||$(/SPI2/irqHandlingMethod:false)||$(/SPI3/irqHandlingMethod:false)||$(/SPI4/irqHandlingMethod:false)||$(/SPI5/irqHandlingMethod:false)
+#if $(/SPI0/_CommonInfoIrqGuard:false)||$(/SPI1/_CommonInfoIrqGuard:false)||$(/SPI2/_CommonInfoIrqGuard:false)||$(/SPI3/_CommonInfoIrqGuard:false)||$(/SPI4/_CommonInfoIrqGuard:false)||$(/SPI5/_CommonInfoIrqGuard:false)
    /**
     * IRQ handler
     */

@@ -18,7 +18,7 @@
 
 namespace USBDM {
 
-#if $(/DMA/enablePeripheralSupport) // /DMA/enablePeripheralSupport
+#if $(/DMA/_BasicInfoGuard) // /DMA/_BasicInfoGuard
 
 /**
  * @addtogroup DMA_Group DMA, Direct Memory Access (DMA)
@@ -969,7 +969,7 @@ $(/DMAMUX/declarations: // No declaractions found)
  * End DMA_Group
  * @}
  */
-#endif  // /DMA/enablePeripheralSupport
+#endif  // /DMA/_BasicInfoGuard
 } // End namespace USBDM
 
 #endif /* INCLUDE_USBDM_DMA_H_ */

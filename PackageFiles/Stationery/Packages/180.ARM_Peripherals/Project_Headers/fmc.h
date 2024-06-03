@@ -24,7 +24,7 @@ $(/FMC/peripheral_h_definition:// $/FMC/peripheral_h_definition not found)
  * @brief Abstraction for Miscellaneous Control Module
  * @{
  */
-#if $(/FMC/enablePeripheralSupport:false) // /FMC/enablePeripheralSupport
+#if $(/FMC/_BasicInfoGuard:false) // /FMC/_BasicInfoGuard
 
 /**
  * Template class providing a base for Miscellaneous Control Module
@@ -188,7 +188,7 @@ template<class Info> FmcCallbackFunction FmcInterrupt_T<Info>::sCallback = FmcIn
 #endif
 
 $(/FMC/declarations: // No declarations found)
-#endif // /FMC/enablePeripheralSupport
+#endif // /FMC/_BasicInfoGuard
 /**
  * End FMC_Group
  * @}
