@@ -21,7 +21,7 @@ Devices using this peripheral:
             <parameter> <value>2</value> <name>CH_COUNT</name> <description>Number of PDB channels</description></parameter>
             <parameter> <value>2</value> <name>DAC_COUNT</name> <description>Number of DAC outputs</description></parameter>
             <parameter> <value>2</value> <name>DLY_COUNT</name> <description>Number of Pre-triggers</description></parameter>
-            <parameter> <value>2</value> <name>POnDLY_COUNT</name> <description>Number of Pulse outputs</description></parameter>
+            <parameter> <value>2</value> <name>PO_COUNT</name> <description>Number of Pulse outputs</description></parameter>
          </parameters>
          <addressBlock>
             <offset>0x0</offset>
@@ -610,13 +610,13 @@ Enables the external trigger for DAC interval counter</description>
                   </fields>
                </register>
                <register>
-                  <name>INT</name>
+                  <name>INTV</name>
                   <description>DAC Trigger Interval Register\n
 Specifies the interval value for DAC interval trigger. DAC interval trigger triggers DAC[1:0] update when the DAC interval counter is equal to the DACINT. Reading this field returns the value of internal register that is effective for the current PDB cycle</description>
                   <addressOffset>0x4</addressOffset>
                   <fields>
                      <field>
-                        <name>INT</name>
+                        <name>INTV</name>
                         <description>DAC Interval</description>
                         <bitOffset>0</bitOffset>
                         <bitWidth>16</bitWidth>
@@ -651,9 +651,9 @@ Enables the pulse output. Only lower Y bits are implemented in this MCU</descrip
                </fields>
             </register>
             <cluster>
-               <dim>$(POnDLY_COUNT)</dim>
+               <dim>$(PO_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
-               <name>POnDLY,@pPOnDLY@i@f</name>
+               <name>PO,@pPO@i@f</name>
                <addressOffset>0x194</addressOffset>
                <register>
                   <dim>2</dim>

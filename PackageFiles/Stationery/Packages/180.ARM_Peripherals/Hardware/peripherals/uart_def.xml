@@ -4,6 +4,8 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
+   <!-- equation key="_debugcode" value="true" / -->
+
    <equation key="FifoTxSize" value='=($(_instance)==0)?8:1' />
    <equation key="FifoRxSize" value='=($(_instance)==0)?8:1' />
 

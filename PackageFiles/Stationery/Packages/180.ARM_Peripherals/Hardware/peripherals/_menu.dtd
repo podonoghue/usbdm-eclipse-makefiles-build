@@ -1250,12 +1250,13 @@
    <!ATTLIST variableTemplate context                  CDATA                    #IMPLIED >
    <!-- Pad initExpressions and initNonDefaultExpressions to this width -->
    <!ATTLIST variableTemplate padToComments            CDATA                    #IMPLIED >
+   
 <!-- ____ clockCodeTemplate -->
 <!ELEMENT clockCodeTemplate (#PCDATA)* >
    <!-- Where to place generated code -->
    <!ATTLIST clockCodeTemplate where        %where_items;  #IMPLIED >
    <!-- Where to place generated code -->
-   <!ATTLIST variableTemplate location     CDATA  #IMPLIED >
+   <!ATTLIST clockCodeTemplate location     CDATA  #IMPLIED >
    <!-- 
    Where to place generated code<br>
       info  - Within peripheral info class in pinmapping.h (default if not provided)<br>

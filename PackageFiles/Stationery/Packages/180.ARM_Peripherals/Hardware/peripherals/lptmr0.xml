@@ -4,9 +4,13 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Power Timer" >
 
+   <!-- ____ Class Declarations ________ -->
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
+
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
    <constant key="input_pins" condition="!input_pins" value='"CMP0;$(_NAME)_ALT1;$(_NAME)_ALT2"' />
 
-   <equation key="no_initvectors"             value="true"      />
    <equation key="irq_parameters"             value=""          />
    <equation key="irq_dummy_parameters"       value=""          />
    <equation key="irq_call_parameters"        value=""          />
@@ -14,11 +18,6 @@
    <equation key="configureInStartupDefault"  value="false"     />
    <xi:include href="enablePeripheral.xml"    />
    <title />
-
-   <constant key="definitionsInHeader" value="true" type="Boolean" />
-
-   <!-- ____ Class Declaration ________ -->
-   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <!-- ____ CSR ____ -->
 
@@ -255,168 +254,45 @@
    <intOption key="lptmr_cnr_counter" condition="lptmr_cnr_counter_present"
       hidden="true"
       derived="true"
+      typeName="uint16_t"
       baseType="uint16_t"
-      description="Counter Value"
       toolTip="Current counter value\n
                This is a read-only register."
+      description="Counter Value"
    />
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo Class      -->
+<!-- ====================================================================================================== -->
 
-   <!-- ____ Getters and Setters ________ -->
+   <!-- BasicInfo Instance pointer and Constructors  -->
 
-   <for keys="field                   : set   : get   : clear : genCode                 : name"
-        values="
-         lptmr_csr_tcf                : false : true  : true  : enablePeripheralSupport : EventFlag;
-         lptmr_csr_tie                : true  : true  : false : enablePeripheralSupport : EventAction;
-         lptmr_csr_tps                : true  : true  : false : enableGettersAndSetters : InputSelect;
-         lptmr_csr_tpp                : true  : true  : false : enableGettersAndSetters : InputEdge;
-         lptmr_csr_tfc                : true  : true  : false : enableGettersAndSetters : CounterActionOnEvent;
-         lptmr_csr_tms                : true  : true  : false : enableGettersAndSetters : Mode;
-         lptmr_csr_ten                : true  : true  : false : enableGettersAndSetters : Enable;
-         lptmr_csr_tps,lptmr_csr_tpp  : true  : false : false : enableGettersAndSetters : Input;
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t// Pointer to $(_BASENAME) hardware instance
+      \tvolatile $(_Type) * const $(_basename);
+      \t\n
+   ]]></template>
 
-         lptmr_psr_pcs                : true  : true  : false : enablePeripheralSupport : ClockSource;
-
-         lptmr_cmr_compare            : true  : true  : false : enablePeripheralSupport : CompareThreshold;
-
-
-         lptmr_cnr_counter            : false : true  : false : enablePeripheralSupport : Counter;
-
-         lptmr_cnr_counter            : false : false : false : enableGettersAndSetters : Counter" >
-      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
-      ><![CDATA[
-         \t/**
-         \t * Set %description
-         \t * (%(field))
-         \t *
-         %paramDescription
-         \t */
-         \tstatic void set%(name)(%params) {
-         \t   %fieldAssignment;
-         \t}
-         \t\n
-      ]]></variableTemplate>
-      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
-      ><![CDATA[
-         \t/**
-         \t * Get %description
-         \t * (%(field))
-         \t *
-         \t * @return %tooltip
-         \t */
-         \tstatic %returnType get%(name)() {
-         \t   return %fieldExtract;
-         \t}
-         \t\n
-      ]]></variableTemplate>
-      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
-         tooltipPadding="x*x"
-      ><![CDATA[
-         \t/**
-         \t * Clear %description
-         \t * (%(field))
-         \t *
-         \t * %tooltip
-         \t */
-         \tstatic void clear%(name)() {
-         \t   %register = %register|%mask;
-         \t}
-         \t\n
-      ]]></variableTemplate>
-   </for>
-
-   <variableTemplate variables="lptmr_psr_pcs,lptmr_psr_prescaler" codeGenCondition="enablePeripheralSupport"
-      nonDefaultParams="2"
-   ><![CDATA[
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
       \t/**
-      \t * Set %description0 and %description1
+      \t * Constructor
       \t *
-      \t * These settings are used for the clock prescaler in timer mode.
-      \t *
-      %paramDescription
+      \t * @param $(_basename) $(_BASENAME) hardware instance
       \t */
-      \tstatic void setClock(%params) {
-      \t   // Disable LPTMR before prescale change
-      \t   uint32_t csr = lptmr->CSR;
-      \t   lptmr->CSR   = 0;
-      \t   (void)(lptmr->CSR);
-      \t   %register   = %paramExpression;
-      \t   lptmr->CSR   = csr;
-      \t}\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate variables="lptmr_psr_pcs,lptmr_psr_glitchFilter" codeGenCondition="enablePeripheralSupport"
-      nonDefaultParams="2"
-   ><![CDATA[
-      \t/**
-      \t * Set %description0 and %description1
-      \t *
-      \t * These settings are used for the glitch filter in pulse-counting mode.
-      \t *
-      %paramDescription
-      \t */
-      \tstatic void setClock(%params) {
-      \t   // Disable LPTMR before prescale change
-      \t   uint32_t csr = lptmr->CSR;
-      \t   lptmr->CSR   = 0;
-      \t   (void)(lptmr->CSR);
-      \t   %register   = %paramExpression;
-      \t   lptmr->CSR   = csr;
-      \t}\n\n
-   ]]></variableTemplate>
-
-   <clockCodeTemplate variable="lptmr_psr_pcs" codeGenCondition="enablePeripheralSupport"
-      returnFormat="%s"
-   ><![CDATA[
-      \t// Make visible
-      \tusing LptmrBasicInfo::getInputClockFrequency;
-      \t
-      \t/**
-      \t * Get %description frequency
-      \t *
-      \t * @return Clock frequency in Hz
-      \t */
-      \tstatic uint32_t getInputClockFrequency() {
-      \t
-      \t   return getInputClockFrequency(LptmrClockSel(%maskingExpression));
+      \tconstexpr $(_BasicInfo)(volatile $(_Type) * $(_basename)) : $(_basename)($(_basename)) {
       \t}
-      \t
-      \t/**
-      \t * Get clock frequency after prescaler
-      \t *
-      \t * @return Frequency as a float in Hz
-      \t */
-      \tstatic float getClockFrequencyF() {
-      \t
-      \t   float freq = getInputClockFrequency();
-      \t   if (lptmr->PSR&LPTMR_PSR_PBYP_MASK) {
-      \t      return freq;
-      \t   }
-      \t   return freq/(1<<(((lptmr->PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
-      \t}
-      \t
-      \t/**
-      \t * Get clock frequency
-      \t *
-      \t * @return Frequency as a uint32_t in Hz (may underflow)
-      \t */
-      \tstatic uint32_t getClockFrequency() {
-      \t
-      \t   uint32_t freq = getInputClockFrequency();
-      \t   if (lptmr->PSR&LPTMR_PSR_PBYP_MASK) {
-      \t      return freq;
-      \t   }
-      \t   return freq/(1<<(((lptmr->PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
-      \t}\n\n
-   ]]></clockCodeTemplate>
+      \t\n
+   ]]></template>
 
-   <!--   ______ LPTMR Init class ___________ -->
-
+   <!-- Shared clock selection -->
    <clockCodeTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variable="lptmr_psr_pcs"
       returnFormat="%s"
    ><![CDATA[
       \t/**
       \t * Get %description frequency
+      \t * (%variables)
       \t *
       %paramDescription
       \t
@@ -444,7 +320,7 @@
       \t * @return E_NO_ERROR      => Success
       \t * @return E_ILLEGAL_PARAM => Failed to find suitable values for psr.prescale and psr.pbyp
       \t */
-      \tstatic ErrorCode calculateDurationValues(Seconds duration, uint8_t &psr, uint32_t &cmr) {
+      \tstatic ErrorCode calculateDurationValues(Seconds duration, uint8_t &psr, uint16_t &cmr) {
       \t
       \t   float inputClock = getInputClockFrequency(LptmrClockSel(psr&LPTMR_PSR_PCS_MASK));
       \t
@@ -467,7 +343,457 @@
       \t\n
    ]]></template >
 
-   <!--   ______ LPTMR Init class ___________ -->
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo/Info duplicated methods -->
+<!-- ====================================================================================================== -->
+
+<for
+   keys="   static    : const    : where     : guard                                      "
+   values=" ''        : 'const ' : basicInfo : $(_BasicInfoGuard)                         ;
+            'static ' : ''       : info      : $(_InfoGuard)                              "  >
+
+   <!-- ____ Getters and Setters ____________ -->
+
+   <for keys="field                   : set   : get   : clear : genCode                 : name"
+        values="
+
+         lptmr_csr_tcf                : false : true  : w1cIm : enablePeripheralSupport : EventFlag;
+         lptmr_csr_tie                : true  : true  : false : enablePeripheralSupport : EventAction;
+         lptmr_csr_tps                : true  : true  : false : enableGettersAndSetters : InputSelect;
+         lptmr_csr_tpp                : true  : true  : false : enableGettersAndSetters : InputEdge;
+         lptmr_csr_tfc                : true  : true  : false : enableGettersAndSetters : CounterActionOnEvent;
+         lptmr_csr_tms                : true  : true  : false : enableGettersAndSetters : Mode;
+         lptmr_csr_ten                : true  : true  : false : enableGettersAndSetters : Enable;
+         lptmr_csr_tps,lptmr_csr_tpp  : true  : false : false : enableGettersAndSetters : Input;
+
+         lptmr_psr_pcs                : true  : true  : false : enablePeripheralSupport : ClockSource;
+
+         lptmr_cmr_compare            : true  : true  : false : enablePeripheralSupport : CompareThreshold" >
+      <variableTemplate location="%(where)" condition="%(set)" codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)" >
+      <![CDATA[
+         \t/**
+         \t * Set %description
+         \t * (%variables)
+         \t *
+         %paramDescription
+         \t */
+         \t%(static)void set%(name)(%params) %(const){
+         \t   %fieldAssignment;
+         \t}
+         \t\n
+      ]]>
+      </variableTemplate>
+      <variableTemplate location="%(where)" condition="%(get)" codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)" >
+      <![CDATA[
+         \t/**
+         \t * Get %description
+         \t * (%variables)
+         \t *
+         \t * @return %tooltip
+         \t */
+         \t%(static)%returnType get%(name)() %(const){
+         \t   return %fieldExtract;
+         \t}
+         \t\n
+      ]]>
+      </variableTemplate>
+      <variableTemplate location="%(where)" condition='="w1c"=="%(clear)"' codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)"
+         tooltipPadding="x*x" >
+      <![CDATA[
+         \t/**
+         \t * Clear %description
+         \t * (%variables)
+         \t *
+         %paramDescription
+         \t */
+         \t%(static)void clear%(name)(%params) %(const){
+         \t   // w1c and mixed register
+         \t   %register = %register|%paramExpression;
+         \t}
+         \t\n
+      ]]>
+      </variableTemplate>
+      <variableTemplate location="%(where)" condition='="w1cIm"=="%(clear)"' codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)"
+         tooltipPadding="x*x" >
+      <![CDATA[
+         \t/**
+         \t * Clear %description
+         \t * (%variables)
+         \t *
+         \t * %tooltip
+         \t */
+         \t%(static)void clear%(name)() %(const){
+         \t   // w1c and mixed register
+         \t   %register = %register|%mask;
+         \t}
+         \t\n
+      ]]>
+      </variableTemplate>
+   </for>
+
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)"
+      variables="lptmr_psr_pcs,lptmr_psr_prescaler"
+      nonDefaultParams="2"
+   ><![CDATA[
+      \t/**
+      \t * Set %description0 and %description1
+      \t * (%variables)
+      \t *
+      \t * These settings are used for the clock prescaler in timer mode.
+      \t *
+      %paramDescription
+      \t */
+      \t%(static)void setClock(%params) %(const){
+      \t   // Disable LPTMR before prescale change
+      \t   uint32_t csr = lptmr->CSR;
+      \t   lptmr->CSR   = 0;
+      \t   (void)(lptmr->CSR);
+      \t   %register   = %paramExpression;
+      \t   lptmr->CSR   = csr;
+      \t}\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)"
+      variables="lptmr_psr_pcs,lptmr_psr_glitchFilter"
+      nonDefaultParams="2"
+   ><![CDATA[
+      \t/**
+      \t * Set %description0 and %description1
+      \t * (%variables)
+      \t *
+      \t * These settings are used for the glitch filter in pulse-counting mode.
+      \t *
+      %paramDescription
+      \t */
+      \t%(static)void setClock(%params) %(const){
+      \t   // Disable LPTMR before prescale change
+      \t   uint32_t csr = lptmr->CSR;
+      \t   lptmr->CSR   = 0;
+      \t   (void)(lptmr->CSR);
+      \t   %register   = %paramExpression;
+      \t   lptmr->CSR   = csr;
+      \t}\n\n
+   ]]></variableTemplate>
+
+   <clockCodeTemplate location="%(where)" codeGenCondition="%(guard)"
+      variable="lptmr_psr_pcs"
+      returnFormat="%s"
+   ><![CDATA[
+      \t/**
+      \t * Get %description frequency
+      \t * (%variables)
+      \t *
+      \t * @return Clock frequency in Hz
+      \t */
+      \t%(static)uint32_t getInputClockFrequency() %(const){
+      \t
+      \t   return LptmrBasicInfo::getInputClockFrequency(LptmrClockSel(%mask&%register));
+      \t}
+      \t
+      \t/**
+      \t * Get clock frequency after prescaler
+      \t * (%variables)
+      \t *
+      \t * @return Frequency as a float in Hz
+      \t */
+      \t%(static)float getClockFrequencyF() %(const){
+      \t
+      \t   float freq = getInputClockFrequency();
+      \t   if (lptmr->PSR&LPTMR_PSR_PBYP_MASK) {
+      \t      return freq;
+      \t   }
+      \t   return freq/(1<<(((lptmr->PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
+      \t}
+      \t
+      \t/**
+      \t * Get clock frequency
+      \t * (%variables)
+      \t *
+      \t * @return Frequency as a uint32_t in Hz (may underflow)
+      \t */
+      \t%(static)uint32_t getClockFrequency() %(const){
+      \t
+      \t   uint32_t freq = getInputClockFrequency();
+      \t   if (lptmr->PSR&LPTMR_PSR_PBYP_MASK) {
+      \t      return freq;
+      \t   }
+      \t   return freq/(1<<(((lptmr->PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
+      \t}
+      \t
+      \t/**
+      \t * Converts a number in ticks to time in microseconds.
+      \t *
+      \t * @param[in]  ticks Time in ticks
+      \t *
+      \t * @return Time in microseconds
+      \t *
+      \t * @note Assumes prescale has been chosen appropriately.
+      \t * @note Rudimentary range checking only. Sets error code.
+      \t */
+      \t%(static)uint32_t convertTicksToMicroseconds(Ticks ticks) %(const){
+      \t   uint32_t tickRate = getClockFrequency();
+      \t   uint64_t rv       = (((uint64_t)ticks)*1000000)/(unsigned)tickRate;
+      \t
+      #ifdef DEBUG_BUILD
+      \t   if (rv > UINT_MAX) {
+      \t      // Attempt to set too long a period
+      \t      setErrorCode(E_TOO_LARGE);
+      \t   }
+      \t   if (rv == 0) {
+      \t      // Attempt to set too short a period
+      \t      setErrorCode(E_TOO_SMALL);
+      \t   }
+      #endif
+      \t   return rv;
+      \t}
+      \t
+      \t/**
+      \t * Converts a number in ticks to time in milliseconds.
+      \t *
+      \t * @param[in]  ticks Time in ticks
+      \t *
+      \t * @return Time in milliseconds
+      \t *
+      \t * @note Assumes prescale has been chosen appropriately.
+      \t * @note Rudimentary range checking only. Sets error code.
+      \t */
+      \t%(static)unsigned convertTicksToMilliseconds(Ticks ticks) %(const){
+      \t   uint32_t tickRate = getClockFrequency();
+      \t   uint64_t rv       = (((uint64_t)ticks)*1000)/(unsigned)tickRate;
+      \t
+      #ifdef DEBUG_BUILD
+      \t   if (rv > UINT_MAX) {
+      \t      // Attempt to set too long a period
+      \t      setErrorCode(E_TOO_LARGE);
+      \t   }
+      \t   if (rv == 0) {
+      \t      // Attempt to set too short a period
+      \t      setErrorCode(E_TOO_SMALL);
+      \t   }
+      #endif
+      \t   return unsigned(rv);
+      \t}
+      \t
+      \t/**
+      \t * Converts a number in ticks to time in seconds.
+      \t *
+      \t * @param[in]  ticks Time in ticks
+      \t *
+      \t * @return Time in seconds (as float)
+      \t *
+      \t * @note Assumes prescale has been chosen appropriately.
+      \t */
+      \t%(static)Seconds convertTicksToSeconds(Ticks ticks) %(const){
+      \t   float tickRate = getClockFrequencyF();
+      \t   return Seconds(((float)ticks)/tickRate);
+      \t}
+      \t
+      \t/**
+      \t * Converts a time in microseconds to number of ticks.
+      \t *
+      \t * @param[in]  time Time in microseconds
+      \t *
+      \t * @return Time in ticks
+      \t *
+      \t * @note Assumes prescale has been chosen appropriately.
+      \t */
+      \t%(static)Ticks convertMicrosecondsToTicks(int time) %(const){
+      \t
+      \t   // Calculate period
+      \t   uint32_t tickRate = getClockFrequency();
+      \t   uint64_t rv       = (unsigned)((uint64_t)time*tickRate)/1000000;
+      \t
+      #ifdef DEBUG_BUILD
+      \t   if (rv > UINT_MAX) {
+      \t      // Attempt to set too long a period
+      \t      setErrorCode(E_TOO_LARGE);
+      \t   }
+      \t   if (rv == 0) {
+      \t      // Attempt to set too short a period
+      \t      setErrorCode(E_TOO_SMALL);
+      \t   }
+      #endif
+      \t   return Ticks(uint32_t(rv));
+      \t}
+      \t/**
+      \t * Converts a time in milliseconds to number of ticks.
+      \t *
+      \t * @param[in]  time Time in milliseconds
+      \t *
+      \t * @return Time in ticks
+      \t *
+      \t * @note Assumes prescale has been chosen appropriately.
+      \t */
+      \t%(static)Ticks convertMillisecondsToTicks(int time) %(const){
+      \t
+      \t   // Calculate period
+      \t   uint32_t tickRate = getClockFrequency();
+      \t   uint64_t rv       = (unsigned)((uint64_t)time*tickRate)/1000;
+      \t
+      #ifdef DEBUG_BUILD
+      \t   if (rv > UINT_MAX) {
+      \t      // Attempt to set too long a period
+      \t      setErrorCode(E_TOO_LARGE);
+      \t   }
+      \t   if (rv == 0) {
+      \t      // Attempt to set too short a period
+      \t      setErrorCode(E_TOO_SMALL);
+      \t   }
+      #endif
+      \t   return Ticks(uint32_t(rv));
+      \t}
+      \t
+      \t/**
+      \t * Converts a time in seconds to number of ticks
+      \t *
+      \t * @param[in]  time Time in seconds (float!)
+      \t *
+      \t * @return Time in ticks
+      \t *
+      \t * @note Uses floating point
+      \t * @note Rudimentary range checking only. Sets error code.
+      \t */
+      \t%(static)Ticks convertSecondsToTicks(Seconds time) %(const){
+      \t
+      \t   // Calculate period
+      \t   float    tickRate = getClockFrequencyF();
+      \t   uint64_t rv       = (unsigned)((float)time*tickRate);
+      \t
+      #ifdef DEBUG_BUILD
+      \t   if (rv > UINT_MAX) {
+      \t      // Attempt to set too long a period
+      \t      setErrorCode(E_TOO_LARGE);
+      \t   }
+      \t   if (rv == 0) {
+      \t      // Attempt to set too long a period
+      \t      setErrorCode(E_TOO_SMALL);
+      \t   }
+      #endif
+      \t   return Ticks(uint32_t(rv));
+      \t}
+      \t
+      \t/**
+      \t * Calculate filter information based on desired interval
+      \t * This calculates a clock prescaler so that the filter interval is at least the given value.
+      \t *
+      \t * @param[in]     interval   Desired filter interval
+      \t * @param[inout]  psr        Input: psr.pcs Output: updated with psr.prescale and psr.pbyp
+      \t *
+      \t * @return E_NO_ERROR      => Success
+      \t * @return E_ILLEGAL_PARAM => Failed to find suitable values for psr.prescale and psr.pbyp
+      \t */
+      \t%(static)ErrorCode calculateFilterValues(Seconds interval, uint8_t &psr) %(const){
+      \t
+      \t   float    inputClock = LptmrBasicInfo::getInputClockFrequency(LptmrClockSel(psr&LPTMR_PSR_PCS_MASK));
+      \t   int      prescaleFactor=1;
+      \t   uint32_t prescalerValue=0;
+      \t   while (prescalerValue<=16) {
+      \t      if ((float)(interval*prescaleFactor) < inputClock) {
+      \t         psr  = (psr&LPTMR_PSR_PCS_MASK)|LPTMR_PSR_PRESCALE(prescalerValue-1)|LPTMR_PSR_PBYP(prescalerValue==0);
+      \t         return E_NO_ERROR;
+      \t      }
+      \t      prescalerValue++;
+      \t      prescaleFactor <<= 1;
+      \t   }
+      \t   // Too long a duration
+      \t   return setAndCheckErrorCode(E_TOO_LARGE);
+      \t}
+      \t
+      \t/**
+      \t * Set period of timer.
+      \t *
+      \t * @param[in]  period Period in seconds as a float
+      \t *
+      \t * @note Will enable and adjust the pre-scaler to appropriate value.\n
+      \t *       The clock source should be selected by setClock() before using this function.
+      \t *
+      \t * @return E_NO_ERROR      => Success
+      \t * @return E_ILLEGAL_PARAM => Failed to find suitable values for psr.prescale and psr.pbyp
+      \t */
+      \t%(static)ErrorCode setPeriod(Seconds period) %(const){
+      \t
+      \t   uint8_t  psr = lptmr->PSR;
+      \t   uint16_t cmr;
+      \t   ErrorCode rc = LptmrBasicInfo::calculateDurationValues(period, psr, cmr);
+      \t   if (rc != E_NO_ERROR) {
+      \t      return rc;
+      \t   }
+      \t   // Disable before changing clock
+      \t   uint32_t csr = lptmr->CSR;
+      \t   lptmr->CSR = 0;
+      \t   (void)(lptmr->CSR);
+      \t
+      \t   lptmr->CMR  = cmr;
+      \t   lptmr->PSR  = psr;
+      \t
+      \t   lptmr->CSR  = csr;
+      \t
+      \t   return E_NO_ERROR;
+      \t}
+      \t
+      \t/**
+      \t * Set glitch filter interval.
+      \t * This adjusts the clock prescaler so that the filter interval is at least the given value.
+      \t *
+      \t * @param[in]  interval Interval in seconds as a float
+      \t *
+      \t * @note Will enable and adjust the pre-scaler to appropriate value.\n
+      \t *       The clock source should be selected by setClock() before using this function.
+      \t *
+      \t * @return E_NO_ERROR      => Success
+      \t * @return E_ILLEGAL_PARAM => Failed to find suitable values for PBYP & PRESCALE
+      \t */
+      \t%(static)ErrorCode setFilterInterval(Seconds interval) %(const){
+      \t
+      \t   uint8_t  psr = lptmr->PSR;
+      \t
+      \t   ErrorCode rc = calculateFilterValues(interval, psr);
+      \t   if (rc != E_NO_ERROR) {
+      \t      return rc;
+      \t   }
+      \t   // Disable LPTMR before prescale change
+      \t   uint32_t csr = lptmr->CSR;
+      \t   lptmr->CSR = 0;
+      \t   (void)(lptmr->CSR);
+      \t
+      \t   lptmr->PSR  = psr;
+      \t
+      \t   lptmr->CSR  = csr;
+      \t
+      \t   return E_NO_ERROR;
+      \t}
+      \t
+      \t/**
+      \t * Get timer counter value
+      \t *
+      \t * @return Timer value in ticks.
+      \t */
+      \t%(static)Ticks getCounterValue() %(const){
+      \t   // It is necessary to write to the CNR to capture current value
+      \t   lptmr->CNR = 0;
+      \t   return (Ticks)(lptmr->CNR);
+      \t}
+      \t
+      \t/**
+      \t * Restarts the counter\n
+      \t * Mostly for debug.
+      \t */
+      \t%(static)void restart() %(const){
+      \t   uint32_t csr = lptmr->CSR;
+      \t   lptmr->CSR   = 0;
+      \t   lptmr->CSR   = csr|LPTMR_CSR_TCF_MASK;
+      \t}
+      \t\n
+   ]]></clockCodeTemplate>
+</for>
+
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo::Init class      -->
+<!-- ====================================================================================================== -->
 
    <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
@@ -492,43 +818,44 @@
       \t   /**
       \t    * Default Constructor
       \t    */
-      \t   constexpr Init() {};
+      \t   constexpr Init() = default;
       \t
       \tpublic:\n
    ]]></template >
 
-   <!-- ____ Init class Member variables ________ -->
-
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
-      variables="irqHandlingMethod"
-      linePadding="xxx"
-   ><![CDATA[
-      %multilineDescription
-      \t   %returnType %registerName = nullptr;\n\n
-   ]]></variableTemplate>
+   <!-- ____ BasicInfo::Init class Member variables ________ -->
 
    <for keys=" type        : variables                                            : init           "
        values="%returnType : lptmr_cmrPeriod                                      : 0_s            ;
                %baseType   : lptmr_cmr_compare                                    : 0              ;
                %baseType   : lptmr_psr_prescaler,lptmr_psr_pcs                    : 0              ;
-               %baseType   : lptmr_csr_tie,lptmr_csr_tfc                          : 0              ;
-               %paramType  : /PCR/nvic_irqLevel                                   : %defaultValue  " >
+               %baseType   : lptmr_csr_tie,lptmr_csr_tfc                          : 0              " >
       <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
-         linePadding="xxx"
-      ><![CDATA[
+         linePadding="xxx" >
+      <![CDATA[
          %multilineDescription
          \t   %(type) %registerName = %(init);\n\n
-      ]]></variableTemplate>
+      ]]>
+      </variableTemplate>
    </for>
 
-   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
-      \t}; // class $(_BasicInfo)::Init\n\n
-   ]]></template >
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t}; // class $(_BasicInfo)::Init
+      \t\n
+   ]]>
+   </template>
 
-<!--   ______ LPTMR TimeIntervalModeInit class ___________ -->
+<!-- ====================================================================================================== -->
+<!--     END BasicInfo::Init class      -->
+<!-- ====================================================================================================== -->
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo::TimeIntervalModeInit class      -->
+<!-- ====================================================================================================== -->
 
-   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
       \t/**
       \t * Class used to do initialisation of LPTMR in Time Interval Mode
       \t *
@@ -538,7 +865,7 @@
       \t *
       \t * Example:
       \t * @code
-      \t * static const Lptmr$(_instance)::TimeIntervalModeInit lptmrInit {
+      \t * %(static)const Lptmr$(_instance)::TimeIntervalModeInit lptmrInit {
       \t *    LptmrResetOn_Compare,    // Timer Free-Running Counter enable
       \t *    LptmrInterrupt_Disabled, // Timer interrupt enable
       \t *    LptmrClockSel_Oscerclk,  // Clock Source
@@ -568,14 +895,13 @@
       \t      csr = (csr & ~LPTMR_CSR_TMS_MASK) | LptmrMode_TimeInterval;
       \t   }
       \t\n
-   ]]></template >
+   ]]>
+   </template >
 
-   <!-- ____ TimeIntervalModeInit class Constructors ________ -->
+   <!-- ____ BasicInfo::TimeIntervalModeInit class Constructors ____________ -->
 
    <for keys="variable           : condition"
      values="
-             /PCR/nvic_irqLevel  : $(_BasicInfoGuard) ;
-             irqHandlingMethod   : $(_BasicInfoIrqGuard) ;
              lptmr_csr_tie       : $(_BasicInfoGuard) ;
              lptmr_csr_tfc       : $(_BasicInfoGuard) ;
              lptmr_psr_prescaler : $(_BasicInfoGuard) ;
@@ -605,13 +931,22 @@
       </variableTemplate>
    </for>
 
-   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
-      \t}; // class $(_BasicInfo)::TimeIntervalModeInit\n\n
-   ]]></template>
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t}; // class $(_BasicInfo)::TimeIntervalModeInit
+      \t\n
+   ]]>
+   </template>
 
-<!--   ______ LPTMR PulseCountingModeInit class ___________ -->
+<!-- ====================================================================================================== -->
+<!--     END BasicInfo::TimeIntervalModeInit class      -->
+<!-- ====================================================================================================== -->
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo::PulseCountingModeInit class      -->
+<!-- ====================================================================================================== -->
 
-   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
       \t/**
       \t * Class used to do initialisation of LPTMR in Pulse Counting Mode
       \t *
@@ -620,7 +955,6 @@
       \t * @note This constructor may be used to create a const instance in ROM
       \t *
       \t * Example:
-      \t * @code
       \t * static const Lptmr$(_instance)::PulseCountingModeInit lptmrInit {
       \t *    LptmrPinSel_Cmp0,           // Timer Pin Select for Pulse Counter mode
       \t *    LptmrInputEdge_Rising,      // Timer Pin Polarity for Pulse Counter mode
@@ -653,14 +987,13 @@
       \t      csr = (csr & ~LPTMR_CSR_TMS_MASK) | LptmrMode_PulseCounting;
       \t   }
       \t\n
-   ]]></template>
+   ]]>
+   </template>
 
-<!-- Constructors -->
+   <!-- ____ BasicInfo::PulseCountingModeInit class Constructors ____________ -->
 
    <for keys="variable              : condition"
      values="
-             /PCR/nvic_irqLevel     : $(_BasicInfoGuard) ;
-             irqHandlingMethod      : $(_BasicInfoIrqGuard) ;
              lptmr_csr_tie          : $(_BasicInfoGuard) ;
              lptmr_csr_tfc          : $(_BasicInfoGuard) ;
              lptmr_psr_pcs          : $(_BasicInfoGuard) ;
@@ -698,115 +1031,264 @@
    ]]>
    </template>
 
-<!--   ______ Default Values ___________ -->
+   <!-- ____ BasicInfo class Configure methods ____ -->
 
-   <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;!lptmr_csr_tms"
-      terminator=","
-      separator=","
-      padToComments="35"
-      variables="
-         lptmr_csr_tfc,lptmr_csr_tie,
-         lptmr_psr_pcs,lptmr_psr_prescaler,
-         lptmr_cmr_compare,
-         irqLevel"
-   ><![CDATA[
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      linePadding="xxx" >
+   <![CDATA[
       \t/**
-      \t * Default value for Lptmr in Time Interval Mode
-      \t * This value is created from Configure.usbdmProject settings (Peripheral Parameters->LPTMR)
-      \t */
-      \tstatic constexpr TimeIntervalModeInit DefaultInitValue {%initNonZeroValues
-      \t};
-      \t\n
-   ]]></variableTemplate>
-
-   <variableTemplate  codeGenCondition="enablePeripheralSupport&amp;&amp;lptmr_csr_tms"
-      variables=" lptmr_csr_tps,lptmr_csr_tpp,
-                  lptmr_psr_pcs,lptmr_psr_glitchFilter,
-                  lptmr_csr_tie,lptmr_csr_tfc,
-                  lptmr_cmr_compare,
-                  irqLevel"
-      terminator=","
-      separator=","
-   ><![CDATA[
-      \t/**
-      \t * Default value for Lptmr in Pulse Counting Mode
-      \t * This value is created from Configure.usbdmProject settings (Peripheral Parameters->LPTMR)
-      \t */
-      \tstatic constexpr PulseCountingModeInit DefaultInitValue {%initNonZeroValues
-      \t};
-      \t\n
-   ]]></variableTemplate>
-
-   <!-- ____ Configure methods and helpers ______________ -->
-
-   <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
-      \t/**
-      \t * Configure LPTMR from values specified in init.
+      \t * Configure $(_BASENAME) from values specified in init.
+      \t * This routine does not configure pins or interrupt handlers
       \t *
-      \t * @param init Class containing initialisation information
+      \t * @param $(_basename)           Hardware instance pointer
+      \t * @param init            Class containing initialisation values
+      \t *
+      \t * @return Error code
       \t */
-      \tstatic ErrorCode configure(const Init &init) {
-      \t
-      \t   // Enable peripheral clock and map pins
-      \t   enable();
-      \t\n
-   ]]></template>
-   <template codeGenCondition="irqHandlingMethod" condition="irqHandlingMethod" ><![CDATA[
-      \t   // Configure call-back
-      \t   setCallback(init.callbackfunction);
-      \t\n
-   ]]></template>
-   <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
-      \t   enableNvicInterrupts(init.irqlevel);
-      \t
-      \t   uint8_t  psr = init.psr;
-      \t   uint32_t cmr = init.cmr;
-      \t
-      \t   if (init.cmrperiod != 0) {
-      \t      // Calculate values from duration in seconds
-      \t      ErrorCode rc = calculateDurationValues(init.cmrperiod, psr, cmr);
-      \t      if (rc != E_NO_ERROR) {
-      \t         return rc;
-      \t      }
-      \t   }
-      \t   // Change settings with timer disabled
-      \t   lptmr->CSR = 0;
-      \t
-      \t   // Update clock setting
-      \t   lptmr->PSR = psr;
-      \t
-      \t   // Timer Compare Register
-      \t   lptmr->CMR = cmr;
-      \t
-      \t   // Enable timer
-      \t   lptmr->CSR = init.csr|LPTMR_CSR_TEN_MASK;
+      \tstatic ErrorCode configure(
+      \t               volatile $(_Type) *$(_basename),
+      \t               const Init    &init) {\n
+   ]]>
+   </template>
+   <for keys=
+             " var                                                    : statement            "
+      values="
+               lptmr_psr_pcs                                          : %baseType %registerName = init.%registerName   ;
+               lptmr_cmr_compare                                      : %baseType %registerName = init.%registerName   ;
+               lptmr_cmrPeriod                                        :
+                  'if (init.cmrperiod != 0) {
+               \n\t      // Calculate values from duration in seconds
+               \n\t      ErrorCode rc = calculateDurationValues(init.cmrperiod, psr, cmr);
+               \n\t      if (rc != E_NO_ERROR) {
+               \n\t         return rc;
+               \n\t      }
+               \n\t   }'                                                                                               ;
+               lptmr_csr_ten                                          : %register = 0                                  ;
+               lptmr_psr_pcs                                          : %register = %registerName                      ;
+               lptmr_cmr_compare                                      : %register = %registerName                      ;
+               lptmr_csr_ten, lptmr_csr_tcf,lptmr_csr_tie,
+               lptmr_csr_tps,lptmr_csr_tpp,lptmr_csr_tfc,
+               lptmr_csr_tms,                                         : %register = init.%registerName|%mask0          " >
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         variables="%(var)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t
+         %multilineDescription
+         \t   %(statement);\n
+      ]]>
+      </variableTemplate>
+   </for>
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
       \t
       \t   return E_NO_ERROR;
       \t}
       \t\n
-   ]]></template>
-
-   <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
+   ]]>
+   </template>
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
       \t/**
-      \t * Enable LPTMR with default configuration.
+      \t * Configure $(_BASENAME) from values specified in init
+      \t * This routine does not configure pins or interrupt handlers
       \t *
-      \t * Includes enabling clock and any pins used.
-      \t * Sets LPTMR to default configuration
+      \t * @param init Class containing initialisation values
       \t */
-      \tstatic void defaultConfigure() {
-      \t   configure(DefaultInitValue);
+      \tErrorCode configure(const Init &init) const {
+      \t
+      \t   return configure($(_basename), init);
       \t}
+      \t\n
+   ]]>
+   </template>
+<!-- ====================================================================================================== -->
+<!--     END BasicInfo class      -->
+<!-- ====================================================================================================== -->
+<!-- ====================================================================================================== -->
+<!--     START Info class      -->
+<!-- ====================================================================================================== -->
+
+   <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount>1)"
+      variables="irq_enum"
+      immediateVariables="_hardwareIrqCount"
+      linePadding="xxx" >
+   <![CDATA[
+      \t/**
+      \t * Information describing the priority and callback function for each interrupt
+      \t */
+      \ttypedef $(_BasicInfo)::InitVectors<TimeIntervalModeInit,  %returnType0, $(_hardwareIrqCount)> TimeIntervalModeInit;
+      \ttypedef $(_BasicInfo)::InitVectors<PulseCountingModeInit, %returnType0, $(_hardwareIrqCount)> PulseCountingModeInit;
+      \t\n
+   ]]></variableTemplate>
+
+   <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)"
+      linePadding="xxx" >
+   <![CDATA[
+      \t/**
+      \t * Information describing the priority and callback function for each interrupt
+      \t */
+      \ttypedef $(_BasicInfo)::InitVectors<TimeIntervalModeInit,  int, 1> TimeIntervalModeInit;
+      \ttypedef $(_BasicInfo)::InitVectors<PulseCountingModeInit, int, 1> PulseCountingModeInit;
       \t\n
    ]]></template>
 
-   <!-- ____ Common ______________ -->
+   <!-- ____ Info constructors ________ -->
 
-   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
+      \t/*
+      \t *   Default Constructor
+      \t */
+      \t$(_Info)() : $(_BasicInfo)($(_basename)) {
+      \t   defaultConfigure();
+      \t}
+      \t
+      \t/*
+      \t *   Constructor
+      \t */
+      \t$(_Info)(const TimeIntervalModeInit &init) : $(_BasicInfo)($(_basename)) {
+      \t   configure(init);
+      \t}
+      \t
+      \t/*
+      \t *   Constructor
+      \t */
+      \t$(_Info)(const PulseCountingModeInit &init) : $(_BasicInfo)($(_basename)) {
+      \t   configure(init);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <!-- Init configure methods -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic ErrorCode defaultConfigure() {
+      \t
+      \t   return configure(DefaultInitValue);
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic ErrorCode configure(const TimeIntervalModeInit &init) {
+      \t
+      \t   // Enable peripheral
+      \t   enable();
+      \t\n
+   ]]>
+   </template>
+   <template where="info" codeGenCondition="$(_InfoIrqGuard)" >
+   <![CDATA[
+      \t   // Configure call-back
+      \t   if (init.callbacks[0] != nullptr) {
+      \t      setCallback(init.callbacks[0]);
+      \t      enableNvicInterrupts(init.priorities[0]);
+      \t   }
+      \t\n
+   ]]>
+   </template>
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t   return $(_BasicInfo)::configure($(_basename), init);
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic ErrorCode configure(const PulseCountingModeInit &init) {
+      \t
+      \t   // Enable peripheral
+      \t   enable();
+      \t\n
+   ]]>
+   </template>
+   <template where="info" codeGenCondition="$(_InfoIrqGuard)" >
+   <![CDATA[
+      \t   // Configure call-back
+      \t   if (init.callbacks[0] != nullptr) {
+      \t      setCallback(init.callbacks[0]);
+      \t      enableNvicInterrupts(init.priorities[0]);
+      \t   }
+      \t\n
+   ]]>
+   </template>
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t   return $(_BasicInfo)::configure($(_basename), init);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____  Default Initialisation value ____ -->
+
+   <variableTemplate where="info" codeGenCondition="$(_InfoGuard)&amp;&amp;!lptmr_csr_tms"
+      terminator=","
+      separator=","
+      padToComments="45"
+      variables="
+         lptmr_csr_tfc,lptmr_csr_tie,
+         lptmr_psr_pcs,lptmr_psr_prescaler,
+         lptmr_cmr_compare"
+   ><![CDATA[
+      \t/**
+      \t * Default value for $(_Class) in Time Interval Mode
+      \t * This value is created from Configure.usbdmProject settings (Peripheral Parameters->LPTMR)
+      \t */
+      \tstatic constexpr TimeIntervalModeInit DefaultInitValue {%initExpression
+      \t};
+      \t\n
+   ]]></variableTemplate>
+
+   <variableTemplate where="info" codeGenCondition="$(_InfoGuard)&amp;&amp;lptmr_csr_tms"
+      variables="
+         lptmr_csr_tps,lptmr_csr_tpp,
+         lptmr_psr_pcs,lptmr_psr_glitchFilter,
+         lptmr_csr_tie,lptmr_csr_tfc,
+         lptmr_cmr_compare"
+      terminator=","
+      separator=","
+      padToComments="45"
+   ><![CDATA[
+      \t/**
+      \t * Default value for $(_Class) in Pulse Counting Mode
+      \t * This value is created from Configure.usbdmProject settings (Peripheral Parameters->LPTMR)
+      \t */
+      \tstatic constexpr PulseCountingModeInit DefaultInitValue {%initExpression
+      \t};
+      \t\n
+   ]]>
+   </variableTemplate>
+
+<!-- ====================================================================================================== -->
+<!--     END Info class      -->
+<!-- ====================================================================================================== -->
+<!-- ====================================================================================================== -->
+<!--     Common      -->
+<!-- ====================================================================================================== -->
+
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Class representing $(_STRUCTNAME) instance
+      \t */
+      \ttypedef $(_BasicInfo) $(_Structname);
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Info)> {};
+      \ttypedef $(_Info) $(_Class);
+      \t\n
       \t\n
    ]]>
    </template>
@@ -822,7 +1304,7 @@
       <copy source="Snippets/timer-inline-handler-example.cpp" target="Snippets/timer-inline-handler-example.cpp"    overwrite="true" derived="true" />
    </projectActionList>
 
-   <!-- ____ Startup ______________ -->
+   <!-- ____ Startup ____ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
@@ -834,7 +1316,7 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <!-- ____ SIM configuration ______________ -->
+   <!-- ____ SIM configuration ____ -->
 
    <category name="Advanced" description="SIM configuration"
       toolTip="These settings only have effect if the SIM configuration is enabled" >
@@ -849,7 +1331,7 @@
       </for>
    </category>
 
-   <!--  ____ Signal mapping ______________ -->
+   <!--  ____ Signal mapping ____ -->
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 
 </peripheralPage>

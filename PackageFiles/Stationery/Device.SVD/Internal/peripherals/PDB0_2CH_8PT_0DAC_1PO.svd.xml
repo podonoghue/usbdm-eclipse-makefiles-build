@@ -19,7 +19,7 @@ Devices using this peripheral:
             <parameter> <value>2</value> <name>CH_COUNT</name> <description>Number of PDB channels</description></parameter>
             <parameter> <value>0</value> <name>DAC_COUNT</name> <description>Number of DAC outputs</description></parameter>
             <parameter> <value>8</value> <name>DLY_COUNT</name> <description>Number of Pre-triggers</description></parameter>
-            <parameter> <value>1</value> <name>POnDLY_COUNT</name> <description>Number of Pulse outputs</description></parameter>
+            <parameter> <value>1</value> <name>PO_COUNT</name> <description>Number of Pulse outputs</description></parameter>
          </parameters>
          <addressBlock>
             <offset>0x0</offset>
@@ -575,9 +575,9 @@ Enables the pulse output. Only lower Y bits are implemented in this MCU</descrip
                </fields>
             </register>
             <cluster>
-               <dim>$(POnDLY_COUNT)</dim>
+               <dim>$(PO_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
-               <name>POnDLY,@pPOnDLY@i@f</name>
+               <name>PO,@pPO@i@f</name>
                <addressOffset>0x194</addressOffset>
                <register>
                   <dim>2</dim>

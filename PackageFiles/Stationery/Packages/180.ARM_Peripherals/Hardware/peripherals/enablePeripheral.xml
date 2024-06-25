@@ -249,8 +249,8 @@
             hidden="true"
             locked="true"
             derived="true" >
-            <choice value="false" name="No shared interrupt code for $(_STRUCTNAME)"  />
-            <choice value="true"  name="Shared interrupt code for $(_STRUCTNAME)"     />
+            <choice value="false" name="No shared interrupt code for structName=$(_STRUCTNAME)"  />
+            <choice value="true"  name="Shared interrupt code for structName=$(_STRUCTNAME)"     />
          </binaryOption>
       </if>
 
@@ -275,8 +275,8 @@
             hidden="true"
             locked="true"
             derived="true" >
-            <choice value="false" name="No shared interrupt code for $(_BASENAME)"  />
-            <choice value="true"  name="Shared interrupt code for $(_BASENAME)"     />
+            <choice value="false" name="No shared interrupt code for basename=$(_BASENAME)"  />
+            <choice value="true"  name="Shared interrupt code for basename=$(_BASENAME)"     />
          </binaryOption>
       </if>
 

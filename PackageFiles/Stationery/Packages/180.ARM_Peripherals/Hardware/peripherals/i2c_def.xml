@@ -6,8 +6,8 @@
 
    <!-- Some devices use bus clock while others system clock -->
 
-   <equation key="_debugcode" value="true" />
-   
+   <!-- equation key="_debugcode" value="true" / -->
+
    <equation key="individual_clock_source" value='="true"'     />
    <equation key="shared_clock_source"     value='="false"'    />
 
@@ -105,10 +105,11 @@
 
    <intOption key="i2c_speed"
       enabledBy="enablePeripheralSupport"
-      description="Speed of interface in Hz"
+      description="Nominal speed"
       toolTip="Speed of transmission"
       value="400_kHz" units="Hz"
-      min="0" max="/SIM/system_bus_clock[0]/2" />
+      disabledValue="400_kHz"
+      min="0" />
 
    <choiceOption key="i2c_f_mult" condition="i2c_f_mult_present"
       enabledBy="enablePeripheralSupport"
@@ -126,7 +127,7 @@
 
    <intOption key="i2c_f_icr" condition="i2c_f_icr_present"
       enabledBy="enablePeripheralSupport"
-      typeName="int"
+      typeName="I2cDivider"
       baseType="uint8_t"
       description="Baud rate divider"
       toolTip="Divider to generate the I2C baud rate"
@@ -539,7 +540,8 @@
    </binaryOption >
 
    <binaryOption key="i2c_flt_startf" condition="i2c_flt_startf_present"
-      enabledBy="enablePeripheralSupport"
+      derived="true"
+      hidden="true"
       typeName="I2cBusStartDetectFlag"
       baseType="uint8_t"
       toolTip="Hardware sets this bit when the I2C bus start status is detected.\n
@@ -690,7 +692,7 @@
 
       <intOption key="i2c_slt_value" condition="i2c_slth_sslt_present"
          units="ticks"
-         typeName="uint16_t"
+         typeName="I2cSmbLowTimeout"
          baseType="uint16_t"
          enabledBy="/$(_BASENAME)/smbOptionsAvailable"
          valueFormat="%s"
@@ -1447,30 +1449,6 @@
    ]]>
    </variableTemplate>
 
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
-      variables="i2c_f_mult,i2c_f_icr"
-      linePadding="xxx"
-      nonDefaultParams="2"
-      params=",divider"
-   >
-   <![CDATA[
-      \t   /**
-      \t    * Constructor for %description0 and %description1
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%paramType0 %paramName0, %paramType1 %paramName1, Types... rest) : Init(rest...) {
-      \t
-      \t      %registerName = %paramName0 | (%mask1&%paramName1);
-      \t   }
-      \t\n
-   ]]>
-   </variableTemplate>
-
    <variableTemplate where="basicInfo" codeGenCondition="/$(_STRUCTNAME)/baudSupport"
       variables="i2c_f_mult, i2c_speed"
       linePadding="xxx"
@@ -1487,7 +1465,7 @@
       \t   template <typename... Types>
       \t   constexpr Init(Hertz value, Types... rest) : Init(rest...) {
       \t
-      \t      %registerName0 = 0xFFU;
+      \t      %registerName0 = 0xFFU; // Used to indicate use of speed in Hz
       \t      %registerName1 = round(float(value));
       \t   }
       \t\n
@@ -1497,6 +1475,7 @@
    <for keys="r"
       values="
             i2c_c1_mst;i2c_c1_wuen;i2c_c1_dmaen;
+            i2c_f_mult;i2c_f_icr;
             i2c_c2_gcaen;i2c_c2_hdrs;i2c_c2_sbrc;i2c_c2_rmen;
             i2c_flt_shen;i2c_flt_stopie;i2c_flt_ssie;i2c_flt_flt;
             i2c_smb_fack;i2c_smb_alerten;i2c_smb_siicaen;i2c_smb_tcksel;i2c_smb_shtf2ie;
@@ -1585,7 +1564,7 @@
    ]]></template>
    <template where="basicInfo"  codeGenCondition="$(_BasicInfoGuard)&amp;&amp;/$(_STRUCTNAME)/baudSupport" ><![CDATA[
       \t   if (f == 0xFFU) {
-      \t      // Calculate prescale values from speed
+      \t      // Calculate i2c_f_mult and i2c_f_icr values from speed
       \t      f = calculateBPSValue(clockFrequency, init.speed);
       \t   }\n
    ]]></template>

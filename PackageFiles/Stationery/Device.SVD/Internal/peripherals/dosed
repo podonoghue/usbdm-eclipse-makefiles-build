@@ -6,15 +6,15 @@ cd ${HOME_DIR}
 
 #exit
 
-FROM="<addressOffset>0xC"
-TO="<addressOffset>0x9"
+FROM="<name>INT</name>"
+TO="<name>INTV</name>"
 
 echo starting
 rm -r new
 mkdir new
 
-for filename in UART*.svd.xml; do
-   echo sed  "s/${FROM}/${TO}/g" "${filename}" "new/${filename}"
-   sed  "s/${FROM}/${TO}/g" "${filename}" >"new/${filename}"
+for filename in PDB*.svd.xml; do
+   echo sed  "s%${FROM}%${TO}%g" "${filename}" "new/${filename}"
+   sed  "s%${FROM}%${TO}%g" "${filename}" >"new/${filename}"
 done
 

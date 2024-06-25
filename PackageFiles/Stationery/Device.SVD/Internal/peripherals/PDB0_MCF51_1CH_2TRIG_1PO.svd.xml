@@ -589,13 +589,13 @@ Enables the external trigger for DAC interval counter</description>
                   </fields>
                </register>
                <register>
-                  <name>INT</name>
+                  <name>INTV</name>
                   <description>DAC Interval n Register\n
 Specifies the interval value for DAC interval trigger. DAC interval trigger triggers DAC[1:0] update when the DAC interval counter is equal to the DACINT. Reading this field returns the value of internal register that is effective for the current PDB cycle</description>
                   <addressOffset>0x4</addressOffset>
                   <fields>
                      <field>
-                        <name>INT</name>
+                        <name>INTV</name>
                         <description>DAC Interval</description>
                         <bitOffset>0</bitOffset>
                         <bitWidth>16</bitWidth>

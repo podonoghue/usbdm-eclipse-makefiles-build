@@ -4,18 +4,18 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <constant key="definitionsInHeader" value="true" type="Boolean" />
-
-   <equation key="irq_parameters"            value=""  />
-   <equation key="irq_dummy_parameters"      value=""  />
-   <equation key="irq_call_parameters"       value=""  />
-   <equation key="generateDefault"           value="false"         />
-   <equation key="configureInStartupDefault" value="false"         />
-   <xi:include href="enablePeripheral.xml"  />
-   <title />
-
    <!-- ________ Class Declaration ________ -->
    <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
+   <equation key="irq_parameters"             value=""          />
+   <equation key="irq_dummy_parameters"       value=""          />
+   <equation key="irq_call_parameters"        value=""          />
+   <equation key="generateDefault"            value="false"     />
+   <equation key="configureInStartupDefault"  value="false"     />
+   <xi:include href="enablePeripheral.xml"    />
+   <title />
+
 
    <!-- ______ ME ______ -->
 
@@ -70,57 +70,6 @@
 
    </category>
 
-   <variableTemplate key="llwu_base_methods" codeGenCondition="enablePeripheralSupport"
-      variables="llwu_me_peripherals,llwu_me_wume"
-      nonDefaultParams="2" ><![CDATA[
-      \t/**
-      \t * Configure %description0
-      \t *
-      %paramDescription
-      \t */
-      \tstatic void configurePeripheralSource(%params) {
-      \t
-      \t   if (%paramName1) {
-      \t      %register = %register | %paramName0;
-      \t   }
-      \t   else {
-      \t      %register = %register & (uint8_t)~%paramName0;
-      \t   }
-      \t}
-      \t
-      \t/**
-      \t * Get flag bit mask indicating wake-up peripheral sources
-      \t * The mask returned correspond to (multiple) peripheral sources.
-      \t * These flags are cleared through the originating peripheral.
-      \t *
-      \t *
-      \t * Example checking source
-      \t * @code
-      \t *    if ((peripheralWakeupSource&LlwuPeripheral_Lptmr) != 0) {
-      \t *       // Wake-up from LPTMR
-      \t *    }
-      \t * @endcode
-      \t *
-      \t * @return Bit mask
-      \t */
-      \tstatic uint32_t getPeripheralWakeupSources() {
-      \t   return llwu->MF;
-      \t}
-
-      \t/**
-      \t *  Check if peripheral is source of wake-up
-      \t *  These flags are cleared through the originating peripheral.
-      \t *
-      %paramDescription0
-      \t *
-      \t * @return false Given peripheral is not source of wake-up.
-      \t * @return true  Given peripheral is source of wake-up.
-      \t */
-      \tstatic bool isPeripheralWakeupSource(%paramType0 %paramName0) {
-      \t   return llwu->MF & %paramName0;
-      \t}\n\n
-   ]]></variableTemplate>
-
    <!-- ______ RST ______ -->
 
    <binaryOption key="llwu_rst_llrste" condition="llwu_rst_llrste_present"
@@ -142,17 +91,6 @@
       <choice name="Filter not enabled" enum="Disabled" value="0" isDefault="true" />
       <choice name="Filter enabled"     enum="Enabled"  value="1" />
    </binaryOption>
-
-   <variableTemplate key="llwu_base_methods" variables="llwu_rst_rstfilt,llwu_rst_llrste" codeGenCondition="enablePeripheralSupport" ><![CDATA[
-      \t/**
-      \t * Controls Reset wake-up control
-      \t *
-      %paramDescription
-      \t */
-      \tstatic void configureResetFilter(%params) {
-      \t   %register = %paramExpression;
-      \t}\n
-   ]]></variableTemplate>
 
    <choiceOption key="llwu_pe"  condition="llwu_pe1_wupe0_present"
       hidden="true"
@@ -253,8 +191,270 @@
       </for>
    </category>
 
-<!--   ========== LLWU Init class =============================== -->
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo Class      -->
+<!-- ====================================================================================================== -->
 
+   <!-- BasicInfo Instance pointer and Constructors  -->
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t// Pointer to $(_BASENAME) hardware instance
+      \tvolatile $(_Type) * const $(_basename);
+      \t\n
+   ]]></template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Constructor
+      \t *
+      \t * @param $(_basename) $(_BASENAME) hardware instance
+      \t */
+      \tconstexpr $(_BasicInfo)(volatile $(_Type) * $(_basename)) : $(_basename)($(_basename)) {
+      \t}
+      \t\n
+   ]]></template>
+
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo/Info duplicated methods -->
+<!-- ====================================================================================================== -->
+
+<for
+   keys="   static    : const    : where     : guard                                      "
+   values=" ''        : 'const ' : basicInfo : $(_BasicInfoGuard)                         ;
+            'static ' : ''       : info      : $(_InfoGuard)                              "  >
+
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)"
+      variables="llwu_me_peripherals,llwu_me_wume"
+      nonDefaultParams="2" >
+   <![CDATA[
+      \t/**
+      \t * Configure %description0
+      \t *
+      %paramDescription
+      \t */
+      \t%(static)void configurePeripheralSource(%params) %(const){
+      \t
+      \t   if (%paramName1) {
+      \t      %register = %register | %paramName0;
+      \t   }
+      \t   else {
+      \t      %register = %register & (uint8_t)~%paramName0;
+      \t   }
+      \t}
+      \t
+      \t/**
+      \t * Get flag bit mask indicating wake-up peripheral sources
+      \t * The mask returned correspond to (multiple) peripheral sources.
+      \t * These flags are cleared through the originating peripheral.
+      \t *
+      \t *
+      \t * Example checking source
+      \t * @code
+      \t *    if ((peripheralWakeupSource&LlwuPeripheral_Lptmr) != 0) {
+      \t *       // Wake-up from LPTMR
+      \t *    }
+      \t * @endcode
+      \t *
+      \t * @return Bit mask
+      \t */
+      \t%(static)uint32_t getPeripheralWakeupSources() %(const){
+      \t   return llwu->MF;
+      \t}
+
+      \t/**
+      \t *  Check if peripheral is source of wake-up
+      \t *  These flags are cleared through the originating peripheral.
+      \t *
+      %paramDescription0
+      \t *
+      \t * @return false Given peripheral is not source of wake-up.
+      \t * @return true  Given peripheral is source of wake-up.
+      \t */
+      \t%(static)bool isPeripheralWakeupSource(%paramType0 %paramName0) %(const){
+      \t   return llwu->MF & %paramName0;
+      \t}\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)"
+      variables="llwu_rst_rstfilt,llwu_rst_llrste" >
+   <![CDATA[
+      \t/**
+      \t * Controls Reset wake-up control
+      \t *
+      %paramDescription
+      \t */
+      \t%(static)void configureResetFilter(%params) %(const){
+      \t   %register = %paramExpression;
+      \t}\n
+   ]]></variableTemplate>
+
+   <template location="%(where)" codeGenCondition="%(guard)" >
+   <![CDATA[
+      \t/*
+      \t * ***************************************************
+      \t * Wake-up pins
+      \t * ***************************************************
+      \t */
+      \t/**
+      \t * Configure pin as wake-up source
+      \t *
+      \t * @param[in] llwuPin       Pin to configure
+      \t * @param[in] llwuPinMode   Mode for pin as wake-up input
+      \t */
+      \t%(static)void configurePinSource(
+      \t      LlwuPin     llwuPin,
+      \t      LlwuPinMode llwuPinMode) %(const){
+      \t
+      \t   static const uint8_t masks[] =
+      \t      {LLWU_PE1_WUPE0_MASK, LLWU_PE1_WUPE1_MASK, LLWU_PE1_WUPE2_MASK, LLWU_PE1_WUPE3_MASK, };
+      \t   volatile uint8_t &llwuPe = llwu->PE[llwuPin>>2];
+      \t   uint8_t mask = masks[llwuPin&3];
+      \t   llwuPe = (llwuPe&~mask) | (llwuPinMode&mask);
+      \t}
+      \t
+      \t/**
+      \t * Get bit mask indicating wake-up pin sources\n
+      \t * The pin masks correspond to Pin sources.
+      \t *
+      \t * @code
+      \t *    if ((pinWakeupSource&(1<<LlwuPin_ptc1)) != 0) {
+      \t *       // Wakeup from LPTMR
+      \t *    }
+      \t * @endcode
+      \t *
+      \t * @return Bit mask
+      \t */
+      \t%(static)uint32_t getPinWakeupSources() %(const){
+      \t   constexpr unsigned PF_SIZE = sizeof(llwu->PF)/sizeof(llwu->PF[0]);
+      \t   if constexpr(PF_SIZE==4) {
+      \t      return (llwu->PF[1]<<24)|(llwu->PF[1]<<16)|(llwu->PF[1]<<8)|llwu->PF[0];
+      \t   }
+      \t   else if constexpr(PF_SIZE==3) {
+      \t      return (llwu->PF[1]<<16)|(llwu->PF[1]<<8)|llwu->PF[0];
+      \t   }
+      \t   else if constexpr(PF_SIZE==2) {
+      \t      return (llwu->PF[1]<<8)|llwu->PF[0];
+      \t   }
+      \t   else {
+      \t      return llwu->PF[0];
+      \t   }
+      \t}
+      \t
+      \t/**
+      \t * Check if pin is source of wake-up
+      \t *
+      \t * @param[in] llwuPin  Pin to check
+      \t *
+      \t * @return false Given pin is not source of wake-up.
+      \t * @return true  Given pin is source of wake-up.
+      \t */
+      \t%(static)bool isPinWakeupSource(LlwuPin llwuPin) %(const){
+      \t   return getPinWakeupSources() & (1<<llwuPin);
+      \t}
+      \t
+      \t/**
+      \t * Clear wake-up pin flag
+      \t *
+      \t *  @param[in] llwuPin Pin indicating which flag to clear
+      \t */
+      \t%(static)void clearPinWakeupFlag(LlwuPin llwuPin) %(const){
+      \t   llwu->PF[llwuPin>>3] = (1<<(llwuPin&0x7));
+      \t}
+      \t
+      \t/**
+      \t * Clear all wake-up flags\n
+      \t * Peripherals sources are not cleared since they are controlled by the peripheral
+      \t */
+      \t%(static)void clearAllFlags() %(const){
+      \t   clearPinWakeupFlags();
+      \t   clearFilteredPinWakeupFlags();
+      \t}
+      \t
+      \t/**
+      \t * Clear all wake-up pin flags
+      \t */
+      \t%(static)void clearPinWakeupFlags() %(const){
+      \t   for(unsigned index=0; index<(sizeof(llwu->PF)/sizeof(llwu->PF[0])); index++) {
+      \t      llwu->PF[index] = 0xFF;
+      \t   }
+      \t}
+      \t
+      \t/*
+      \t * ***************************************************
+      \t * Wake-up filtered pins
+      \t * ***************************************************
+      \t */
+      \t/**
+      \t * Configure one of the input pins as a filtered wake-up source
+      \t *
+      \t * @param[in] llwuFilterNum      Filter to configure - number available depends on device
+      \t * @param[in] llwuPin            Pin to assign to filter
+      \t * @param[in] llwuFilterPinMode  Mode for pin as wake-up input
+      \t *
+      \t * @note Filtering is bypassed in VLLS0
+      \t */
+      \t%(static)ErrorCode configureFilteredPinSource(
+      \t      LlwuFilterNum     llwuFilterNum,
+      \t      LlwuPin           llwuPin,
+      \t      LlwuFilterPinMode llwuFilterPinMode) %(const){
+      \t
+      \t   llwu->FILT[llwuFilterNum] = llwuPin|llwuFilterPinMode;
+      \t   return E_NO_ERROR;
+      \t}
+      \t
+      \t/**
+      \t * Check if filtered wake-up pin is source of wake-up
+      \t *
+      \t * @param[in] filterNum Pin Filter to check
+      \t *
+      \t * @return false Given filtered pin is not source of wake-up.
+      \t * @return true  Given filtered pin is source of wake-up.
+      \t */
+      \t%(static)bool isFilteredPinWakeupSource(unsigned filterNum) %(const){
+      \t   return (llwu->FILT[filterNum] & LLWU_FILT_FILTF_MASK);
+      \t}
+      \t
+      \t/**
+      \t * Clear filtered wake-up pin flag
+      \t *
+      \t * @param[in] filterNum Pin Filter to clear flag
+      \t */
+      \t%(static)void clearFilteredPinWakeupFlag(LlwuFilterNum filterNum) %(const){
+      \t   llwu->FILT[filterNum] = llwu->FILT[filterNum] | LLWU_FILT_FILTF_MASK;
+      \t}
+      \t
+      \t/**
+      \t * Clear all filtered wake-up pin flags
+      \t */
+      \t%(static)void clearFilteredPinWakeupFlags() %(const){
+      \t   for (unsigned index=0; index<(sizeof(llwu->FILT)/sizeof(llwu->FILT[0])); index++) {
+      \t      llwu->FILT[index] = llwu->FILT[index] | LLWU_FILT_FILTF_MASK;
+      \t   }
+      \t}
+      \t
+      \t/**
+      \t * Disable all wake-up sources (pins and peripherals)
+      \t */
+      \t%(static)void disableAllSources() %(const){
+      \t   for (unsigned index=0; index<(sizeof(llwu->PE)/(sizeof(llwu->PE[0]))); index++) {
+      \t      llwu->PE[index] = 0;
+      \t   }
+      \t
+   #if defined(LLWU_ME_WUME0_MASK)
+      \t   llwu->ME  = 0;
+   #endif
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   </for>
+
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo::Init class      -->
+<!-- ====================================================================================================== -->
    <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
@@ -303,6 +503,13 @@
       \t
       \tclass Init {
       \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(Types...) = delete;
+      \t
       \tpublic:
       \t   /**
       \t    * Copy Constructor
@@ -317,22 +524,7 @@
    ]]>
    </template>
 
-<!--   Member variables -->
-
-   <variableTemplate where="basicInfo" codeGenCondition="irqHandlingMethod"
-      variables="irqHandlingMethod"
-    ><![CDATA[
-      \t   /// %description
-      \t   %params = nullptr;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
-      variables="/PCR/nvic_irqLevel,irqLevel"
-   ><![CDATA[
-      \t   /// %description
-      \t   %paramType %registerName0 = %defaultValue;
-      \t\n
-   ]]></variableTemplate>
+   <!-- ____ BasicInfo::Init class Member variables ________ -->
 
    <template where="basicInfo" codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
@@ -380,52 +572,18 @@
       \t   uint8_t %registerName     = 0;\n
    ]]></variableTemplate>
 
-<!--   Constructors -->
-
-   <variableTemplate where="basicInfo" codeGenCondition="irqHandlingMethod"
-      variables="irqHandlingMethod"
-      linePadding="xxx"
-    ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      this->%paramName0 = %paramExpression;
-      \t   }\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
-      variables="/PCR/nvic_irqLevel"
-      linePadding="xxx"
-    ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      %registerName = %paramExpression;
-      \t   }\n\n
-   ]]></variableTemplate>
+   <!-- ____ BasicInfo::Init class Constructors ____________ -->
 
    <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport"
       variables="llwu_me_peripherals"
    ><![CDATA[
       \t   /**
       \t    * Constructor for %description
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
+      \t    *
       \t%paramDescription
       \t    */
       \t   template <typename... Types>
@@ -499,18 +657,280 @@
       \t\n
    ]]></template>
 
-<!--   Default Initialisation value -->
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t}; // class $(_BasicInfo)::Init
+      \t\n
+   ]]>
+   </template>
 
-   <template codeGenCondition="enablePeripheralSupport"
-   ><![CDATA[
-      \t// LLWU default init value
-      \tstatic constexpr LlwuInfo::Init DefaultInitValue {\n
-   ]]></template>
+<!-- ====================================================================================================== -->
+<!--     END BasicInfo::Init class      -->
+<!-- ====================================================================================================== -->
+
+   <!-- ____ BasicInfo class Configure methods ____ -->
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      linePadding="xxx" >
+   <![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t * This routine does not configure pins or interrupt handlers
+      \t *
+      \t * @param $(_basename)            Hardware instance pointer
+      \t * @param init            Class containing initialisation values
+      \t */
+      \tstatic void configure(
+      \t               volatile $(_Type) *$(_basename),
+      \t               const Init    &init) {
+      \t
+      \t\n
+   ]]>
+   </template>
+   <for keys="r" dim="1,4" >
+      <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         condition='="llwu_pf%(r)_present"' >
+      <![CDATA[
+         \t   // Clear pin flags
+         \t   llwu->PF%(r) = 0xFF;\n
+      ]]></template>
+   </for>
+   <for keys="r" dim="8" >
+      <equation key="reg" value='="llwu->PE"+ToString(%(r)+1)' />
+      <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         condition='="llwu_pe"+ToString(%(r)+1)+"_present"'
+         immediateVariables="reg" >
+      <![CDATA[
+         \t   // Configure pin sources
+         \t   $(reg)  = init.pe[%(r)];\n
+      ]]></template>
+   </for>
+   <for keys="r" dim="8" >
+      <equation key="reg" value='="llwu->FILT"+ToString(%(r)+1)' />
+      <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         condition='="llwu_filt"+ToString(%(r)+1)+"_filte_present"'
+         immediateVariables="reg" >
+      <![CDATA[
+         \t   // Configure and clear filtered pin source
+         \t   $(reg) = init.filt[%(r)];\n
+      ]]></template>
+   </for>
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      variables="llwu_me_peripherals" >
+   <![CDATA[
+      \t   // Configure peripheral sources
+      \t   %register    = init.%registerName;\n
+   ]]></variableTemplate>
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      variables="llwu_rst_llrste" >
+   <![CDATA[
+      \t   // Configure filtered reset pin source
+      \t   %register   = init.%registerName;\n
+   ]]></variableTemplate>
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t * This routine does not configure pins or interrupt handlers
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tvoid configure(const Init &init) const {
+      \t
+      \t   configure($(_basename), init);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \tprotected:
+      \t   /** Class to static check llwuPin exists and is mapped to a pin */
+      \t   template<int llwuPin> class CheckPinExistsAndIsMapped {
+      \t      // Tests are chained so only a single assertion can fail so as to reduce noise
+      \t
+      \t      // Out of bounds value for function index
+      \t      static constexpr bool Test1 = (llwuPin>=0) && (llwuPin<(numSignals));
+      \t      // Function is not currently mapped to a pin
+      \t      static constexpr bool Test2 = !Test1 || (info[llwuPin].pinIndex != PinIndex::UNMAPPED_PCR);
+      \t      // Non-existent function and catch-all. (should be INVALID_PCR)
+      \t      static constexpr bool Test3 = !Test1 || !Test2 || (info[llwuPin].pinIndex >= PinIndex::MIN_PIN_INDEX);
+      \t
+      \t      static_assert(Test1, "Illegal LLWU Input - Check Configure.usbdm for available inputs");
+      \t      static_assert(Test2, "LLWU input is not mapped to a pin - Modify Configure.usbdm");
+      \t      static_assert(Test3, "LLWU input doesn't exist in this device/package - Check Configure.usbdm for available input pins");
+      \t
+      \t   public:
+      \t      /** Dummy function to allow convenient in-line checking */
+      \t      static constexpr void check() {}
+      \t   };
+      \t\n
+   ]]>
+   </template>
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \tpublic:
+      \ttemplate<LlwuPin llwuPin>
+      \tclass Pin : public PcrTable_T<LlwuInfo, llwuPin> {
+      \t
+      \tprivate:
+      \t   // Checks pin mapping is valid
+      \t   CheckPinExistsAndIsMapped<llwuPin> checkPin;
+      \t
+      \t   using Pcr = PcrTable_T<LlwuInfo, llwuPin>;
+      \t
+      \t   // Hide setOutput
+      \t   using Pcr::setOutput;
+      \t
+      \tpublic:
+      \t   static constexpr LlwuPin  pin = llwuPin;
+      \t
+      \t   /**
+      \t    * Configure pin as wake-up source
+      \t    *
+      \t    * @param[in] llwuPinMode   Mode for pin as wake-up input
+      \t    */
+      \t   static void configurePinSource(LlwuPinMode llwuPinMode=LlwuPinMode_EitherEdge) {
+      \t      LlwuInfo::configurePinSource(llwuPin, llwuPinMode);
+      \t   }
+      \t
+      \t   /**
+      \t    * Set callback for Pin interrupts
+      \t    *
+      \t    * @param[in] pinCallback The function to call on Pin interrupt. \n
+      \t    *                        nullptr to indicate none
+      \t    *
+      \t    * @return E_NO_ERROR            No error
+      \t    * @return E_HANDLER_ALREADY_SET Handler already set
+      \t    *
+      \t    * @note There is a single callback function for all pins on the related port.
+      \t    *       It is necessary to identify the originating pin in the callback
+      \t    */
+      \t   static void setPinCallback(PinCallbackFunction pinCallback) {
+      \t      static_assert(Pcr::HANDLER_INSTALLED, "Gpio associated with LLWU pin not configured for PIN interrupts - Modify Configure.usbdm");
+      \t      Pcr::setPinCallback(pinCallback);
+      \t   }
+      \t};
+      \t\n
+   ]]>
+   </template>
+
+<!-- ====================================================================================================== -->
+<!--     END BasicInfo class      -->
+<!-- ====================================================================================================== -->
+<!-- ====================================================================================================== -->
+<!--     START Info class      -->
+<!-- ====================================================================================================== -->
+
+   <!-- ____ Info constructors ________ -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/*
+      \t *   Default Constructor
+      \t */
+      \t$(_Info)() : $(_BasicInfo)($(_basename)) {
+      \t   defaultConfigure();
+      \t}
+      \t
+      \t/*
+      \t *   Constructor
+      \t */
+      \t$(_Info)(const Init &init) : $(_BasicInfo)($(_basename)) {
+      \t   configure(init);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <!-- Init configure methods -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic void defaultConfigure() {
+      \t
+      \t   configure(DefaultInitValue);
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t * $(_BASENAME) flags from pin events are cleared.
+      \t * Requests from peripheral devices must be cleared at source
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const Init &init) {
+      \t
+      \t   // Enable peripheral
+      \t   enable();
+      \t\n
+   ]]>
+   </template>
+   <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)" >
+   <![CDATA[
+      \t   // Configure call-back
+      \t   if (init.callbacks[0] != nullptr) {
+      \t      setCallback(init.callbacks[0]);
+      \t      enableNvicInterrupts(init.priorities[0]);
+      \t   }
+      \t\n
+   ]]>
+   </template>
+   <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount>1)"
+      variables="irq_enum"
+      immediateVariables="_hardwareIrqCount">
+   <![CDATA[
+      \t   for(int index=0; index<$(_hardwareIrqCount); index++) {
+      \t      if (init.callbacks[index] != nullptr) {
+      \t         // Configure call-back
+      \t         setCallback(%returnType0(index), init.callbacks[index]);
+      \t         enableNvicInterrupts(%returnType0(index), init.priorities[index]);
+      \t      }
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t   $(_BasicInfo)::configure($(_basename), init);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____  Default Initialisation value ____ -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr $(_BasicInfo)::Init DefaultInitValue = {\n
+   ]]>
+   </template>
+
    <for keys="n" dim="8" >
       <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;(llwu_me_wume%(n))"
          variables="llwu_me_wume%(n)"
          terminator=","
          separator=","
+         padToComments="50"
+
       ><![CDATA[
          %initExpression  \n
       ]]></variableTemplate>
@@ -530,6 +950,7 @@
          variables='=var'
          terminator=","
          separator=","
+         padToComments="30"
          initExpressionOnSameLine="true"
       ><![CDATA[
           \t   $(pin), %initExpression, \n
@@ -537,19 +958,30 @@
    </for>
    <for keys="n" values="1;2;3;4">
       <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;(llwu_filt%(n)_filte>0)"
-         variables="llwu_filt%(n)_filtsel, llwu_filt%(n)_filte"
+         variables="llwu_filt%(n)_filtsel"
          terminator=","
          separator=","
+         padToComments="27"
          initExpressionOnSameLine="true"
       ><![CDATA[
          \t   LlwuFilterNum_%(n), %initExpression, \n
       ]]></variableTemplate>
+      <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;(llwu_filt%(n)_filte>0)"
+         variables="llwu_filt%(n)_filte"
+         terminator=","
+         separator=","
+         padToComments="44"
+         initExpressionOnSameLine="true"
+      ><![CDATA[
+         \t   %initExpression, \n
+      ]]></variableTemplate>
    </for>
 
    <variableTemplate codeGenCondition="enablePeripheralSupport"
-      variables="llwu_rst_llrste, llwu_rst_rstfilt, irqLevel"
+      variables="llwu_rst_llrste, llwu_rst_rstfilt"
       terminator=","
       separator=","
+      padToComments="30"
    ><![CDATA[
       \t   %initExpression,  \n
    ]]></variableTemplate>
@@ -559,120 +991,37 @@
       \t};\n\n
    ]]></template>
 
-<!--   Configure methods -->
+<!-- ====================================================================================================== -->
+<!--     END Info class      -->
+<!-- ====================================================================================================== -->
+<!-- ====================================================================================================== -->
+<!--     Common      -->
+<!-- ====================================================================================================== -->
 
-   <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
-      \t
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
       \t/**
-      \t * Configure with default settings.
-      \t * Configuration determined from Configure.usbdmProject
+      \t * Class representing $(_STRUCTNAME) instance
       \t */
-      \tstatic inline void defaultConfigure() {
-      \t
-      \t   // Update settings
-      \t   configure(DefaultInitValue);
-      \t}
-      \t\n
-   ]]></template>
-
-   <template codeGenCondition="enablePeripheralSupport" >
-   <![CDATA[
-      \t
-      \t/**
-      \t * Configure $(_BASENAME) from values specified in init
-      \t * $(_BASENAME) flags from pin events are cleared.
-      \t * Requests from peripheral devices must be cleared at source
-      \t *
-      \t * @param init Class containing initialisation values
-      \t */
-      \tstatic void configure(const Init &init) {
-      \t
-      \t\n
-   ]]></template>
-   <template codeGenCondition="irqHandlingMethod"
-      condition="irqHandlingMethod" >
-   <![CDATA[
-      \t   setCallback(init.callbackFunction);
-      \t\n
-   ]]></template>
-   <variableTemplate codeGenCondition="enablePeripheralSupport"
-      variables="irqLevel" >
-   <![CDATA[
-      \t   enableNvicInterrupts(init.irqlevel);
-      \t\n
-   ]]></variableTemplate>
-   <for keys="r" dim="1,4" >
-      <template codeGenCondition="enablePeripheralSupport"
-         condition='="llwu_pf%(r)_present"' >
-      <![CDATA[
-         \t   // Clear pin flags
-         \t   llwu->PF%(r) = 0xFF;\n
-      ]]></template>
-   </for>
-   <for keys="r" dim="8" >
-      <equation key="reg" value='="llwu->PE"+ToString(%(r)+1)' />
-      <template codeGenCondition="enablePeripheralSupport"
-         condition='="llwu_pe"+ToString(%(r)+1)+"_present"'
-         immediateVariables="reg" >
-      <![CDATA[
-         \t   // Configure pin sources
-         \t   $(reg)  = init.pe[%(r)];\n
-      ]]></template>
-   </for>
-
-   <for keys="r" dim="8" >
-      <equation key="reg" value='="llwu->FILT"+ToString(%(r)+1)' />
-      <template codeGenCondition="enablePeripheralSupport"
-         condition='="llwu_filt"+ToString(%(r)+1)+"_filte_present"'
-         immediateVariables="reg" >
-      <![CDATA[
-         \t   // Configure and clear filtered pin source
-         \t   $(reg) = init.filt[%(r)];\n
-      ]]></template>
-   </for>
-
-   <variableTemplate codeGenCondition="enablePeripheralSupport"
-      variables="llwu_me_peripherals" >
-   <![CDATA[
-      \t   // Configure peripheral sources
-      \t   %register    = init.%registerName;\n
-   ]]></variableTemplate>
-   <variableTemplate codeGenCondition="enablePeripheralSupport"
-      variables="llwu_rst_llrste" >
-   <![CDATA[
-      \t   // Configure filtered reset pin source
-      \t   %register   = init.%registerName;\n
-   ]]></variableTemplate>
-   <template  codeGenCondition="enablePeripheralSupport" >
-   <![CDATA[
-      \t};\n\n
-   ]]></template >
-
-   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
-      <![CDATA[
-      \t}; // $(_Class)BasicInfo::Init\n\n
-   ]]>
-   </template>
-
-   <!-- ________ Common ________ -->
-
-   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \ttypedef $(_BasicInfo) $(_Structname)Instance;
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Info)> {};\n
-   ]]></template>
+      \ttypedef $(_Info) $(_Class);
+      \t\n
+   ]]>
+   </template>
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.LlwuValidate">
    </validate>
 
-   <projectActionList id = "llwu_files" >
+   <projectActionList id="llwu_files" >
       <copy source="Project_Headers/llwu.h"            target="Project_Headers/llwu.h"            overwrite="true" derived="true" />
       <copy source="Snippets/llwu-simple-example.cpp"  target="Snippets/llwu-simple-example.cpp"  overwrite="true" derived="true" />
    </projectActionList>
 
-   <!-- ________ Startup ________ -->
+   <!-- ____ Startup ____ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
@@ -684,8 +1033,7 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <!-- ________ Signal mapping ________ -->
-
-   <signals enabledBy="enablePeripheralSupport" />
+   <!--  ____ Signal mapping ____ -->
+   <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 
 </fragment>

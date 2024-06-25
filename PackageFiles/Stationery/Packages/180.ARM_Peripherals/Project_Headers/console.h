@@ -17,10 +17,10 @@
 #define INCLUDE_USBDM_CONSOLE_H_
 #include <derivative.h>
 
-#if $(/UART/_BasicInfoGuard:false) // /UART/_BasicInfoGuard
+#if $(/UART/_CommonInfoGuard:false) // /UART/_CommonInfoGuard
 #include "uart.h"
 #endif
-#if $(/LPUART/_BasicInfoGuard:false) // /LPUART/_BasicInfoGuard
+#if $(/LPUART/_CommonInfoGuard:false) // /LPUART/_CommonInfoGuard
 #include "lpuart.h"
 #endif
 

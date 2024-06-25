@@ -47,10 +47,11 @@
 
 <binaryOption name="Use extended type system for timers" key="/HARDWARE/useTypeSystemForTimers"
    description="Use a dimensioned type system for time and frequency"
-   toolTip="Types 'Seconds', 'Hertz' and 'Ticks' are always defined but are simple aliases\n
-   rather than a enforced type system using classes">
-   <choice value="false" name="Don't use extended type system" isDefault="true" />
-   <choice value="true"  name="Use extended type system" />
+   toolTip="Controls 'Seconds', 'Hertz' and 'Ticks' type definitions">
+   <choice value="false" name="Don't use extended type system" isDefault="true"
+      toolTip="Types 'Seconds', 'Hertz' and 'Ticks' are simple aliases for basic C++ types"/>
+   <choice value="true"  name="Use extended type system"
+      toolTip="Types 'Seconds', 'Hertz' and 'Ticks' are an enforced type system using classes"/>
 </binaryOption>
 
 <binaryOption name="Debug definitions" key="/HARDWARE/generateDebugDefinitions"

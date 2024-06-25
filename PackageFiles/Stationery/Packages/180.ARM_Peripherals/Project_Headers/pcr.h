@@ -52,7 +52,7 @@ $(/PORT/Declarations: // #error /PORT/Declarations not found)
 // Pin number for port pin within individual port e.g. GPIOB[31..0]
 typedef uint8_t  PinNum;
 
-#if ($(/HARDWARE/useTypeSystemForTimers))
+#if ($(/HARDWARE/useTypeSystemForTimers)) // /HARDWARE/useTypeSystemForTimers
 class Ticks {
 
 private:
@@ -349,7 +349,7 @@ union Seconds_Ticks {
    constexpr Seconds toSeconds() const { return bit_cast<float, unsigned>(value); }
    constexpr Ticks   toTicks()   const { return (Ticks)value; }
 
-#if $(/HARDWARE/useTypeSystemForTimers)
+#if $(/HARDWARE/useTypeSystemForTimers) // /HARDWARE/useTypeSystemForTimers
    constexpr void fromSeconds(Seconds seconds) { value = bit_cast<unsigned, float>(seconds.getValue()); }
    constexpr void fromTicks(Ticks ticks)       { value = ticks.getValue(); }
 #else
