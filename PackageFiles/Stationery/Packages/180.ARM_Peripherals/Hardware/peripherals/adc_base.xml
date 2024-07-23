@@ -770,9 +770,9 @@ protected:
    \t%(static)void startConversion(int sc1Value) %(const){
    \t
    \t   // Select A/B Mux
-   \t   if ((sc1Value&(ADC_SC1_DIFF_MASK|ADC_SC1_ADCH_MASK))>=AdcChannelNum_BFirst) {
+   \t   if ((sc1Value&~ADC_SC1_AIEN_MASK)>=AdcChannelNum_BFirst) {
    \t      adc->CFG2 = adc->CFG2|ADC_CFG2_MUXSEL_MASK;
-   \t      sc1Value &= ~ADC_SC1_DIFF_MASK;
+   \t      sc1Value -= AdcChannelNum_BFirst-4;
    \t   }
    \t   else {
    \t      adc->CFG2 = adc->CFG2&~ADC_CFG2_MUXSEL_MASK;
@@ -886,8 +886,8 @@ public:
    \t   adc->SC2 = (adc->SC2)|ADC_SC2_ADTRG(1);
    \t
    \t   // Configure channel to use for hardware trigger input
-   \t   if ((sc1Value&(ADC_SC1_DIFF_MASK|ADC_SC1_ADCH_MASK))>=AdcChannelNum_BFirst) {
-   \t      sc1Value &= ~ADC_SC1_DIFF_MASK;
+   \t   if ((sc1Value&~ADC_SC1_AIEN_MASK)>=AdcChannelNum_BFirst) {
+   \t      sc1Value -= AdcChannelNum_BFirst-4;
    \t   }
    \t   adc->SC1[adcPretrigger] = sc1Value;
    \t}

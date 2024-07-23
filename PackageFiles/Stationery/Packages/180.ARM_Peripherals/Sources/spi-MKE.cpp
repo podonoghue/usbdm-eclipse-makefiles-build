@@ -17,7 +17,7 @@
  * Any manual changes will be lost.
  */
 
-#if $(/SPI/enablePeripheralSupport) // /SPI/enablePeripheralSupport
+#if $(/SPI/_BasicInfoGuard) // /SPI/_BasicInfoGuard
 
 namespace USBDM {
 

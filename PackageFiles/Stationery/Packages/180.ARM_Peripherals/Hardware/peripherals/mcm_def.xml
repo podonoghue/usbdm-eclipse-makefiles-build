@@ -169,6 +169,10 @@
       \t}\n\n
    ]]></variableTemplate>
 
+   <variableTemplate key="/SMC/headerFileIncludes" variables="mcm_placr_flash_speculation, mcm_placr_flash_cache" ><![CDATA[
+   #include "mcm.h"\n
+   ]]></variableTemplate>
+
    <variableTemplate key="/SMC/preEnterStopMode" variables="mcm_placr_flash_speculation, mcm_placr_flash_cache" ><![CDATA[
    \t   // Save current Flash settings
    \t   McmInfo::FlashInit savedFlashSettings;
@@ -244,7 +248,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <for keys="n" values="mcm_placr_flash_cache;mcm_placr_flash_speculation" >
+   <for keys="n" values="mcm_placr_esfc;mcm_placr_flash_cache;mcm_placr_flash_speculation" >
       <variableTemplate
          variables="%(n)"
       ><![CDATA[

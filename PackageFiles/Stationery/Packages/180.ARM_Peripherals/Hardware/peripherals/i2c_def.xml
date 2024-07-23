@@ -735,7 +735,7 @@
    <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/** States for the I2C state machine */
-      \tenum I2C_State { i2c_idle, i2c_txData, i2c_rxData, i2c_rxAddress };
+      \tenum I2C_State { i2c_idle, i2c_txData, i2c_txDataIncomplete, i2c_txDataSuspend, i2c_rxData, i2c_rxAddress };
       \t
       \tI2C_State           state;               //!< State of current transaction
       \t
@@ -848,6 +848,86 @@
       \ttemplate<unsigned N>
       \tErrorCode transmit(uint8_t address, const std::array<const uint8_t, N> &data) {
       \t   return transmit(address, N, data.data());
+      \t}
+      \t
+      \t/**
+      \t * Transmit message
+      \t * This routine leaves the I2C state machine in an non-idle state.
+      \t * It allows splitting the transmission into two transfers which is convenient for
+      \t * some devices that expect a fixed pre-amble followed by variable data.
+      \t * Call transmit to complete the transmission.
+      \t *
+      \t * Note: 0th byte of Tx is often register address.
+      \t *
+      \t * @param[in]  address  Address of slave to communicate with (should include LSB = R/W bit = 0)
+      \t * @param[in]  size     Size of transmission data
+      \t * @param[in]  data     Data to transmit
+      \t *
+      \t * @return E_NO_ERROR on success
+      \t */
+      \tErrorCode transmitIncomplete(uint8_t address, uint16_t size, const uint8_t data[]);
+      \t
+      \t/**
+      \t * Transmit message.
+      \t * This routine leaves the I2C state machine in an non-idle state.
+      \t * It allows splitting the transmission into two transfers which is convenient for
+      \t * some devices that expect a fixed pre-amble followed by variable data.
+      \t * Call transmit to complete the transmission.
+      \t *
+      \t * Note: 0th byte of Tx is often register address.
+      \t *
+      \t * @tparam txSize number of bytes to transmit
+      \t *
+      \t * @param[in]  address  Address of slave to communicate with (should include LSB = R/W bit = 0)
+      \t * @param[in]  data     Data to transmit (size of transmission is inferred from array size).
+      \t *
+      \t * @return E_NO_ERROR on success
+      \t */
+      \ttemplate<unsigned txSize>
+      \tErrorCode transmitIncomplete(uint8_t address, const uint8_t (&data)[txSize]) {
+      \t   return transmitIncomplete(address, txSize, data);
+      \t}
+      \t
+      \t/**
+      \t * Transmit message.
+      \t * This routine leaves the I2C state machine in an non-idle state.
+      \t * It allows splitting the transmission into two transfers which is convenient for
+      \t * some devices that expect a fixed pre-amble followed by variable data.
+      \t * Call transmit to complete the transmission.
+      \t *
+      \t * Note: 0th byte of Tx is often register address.
+      \t *
+      \t * @tparam N number of bytes to transmit (inferred)
+      \t *
+      \t * @param[in]  address  Address of slave to communicate with (should include LSB = R/W bit = 0)
+      \t * @param[in]  data     Data to transmit (size of transmission is inferred from array size).
+      \t *
+      \t * @return E_NO_ERROR on success
+      \t */
+      \ttemplate<unsigned N>
+      \tErrorCode transmitIncomplete(uint8_t address, const std::array<uint8_t, N> &data) {
+      \t   return transmitIncomplete(address, N, data.data());
+      \t}
+      \t
+      \t/**
+      \t * Transmit message.
+      \t * This routine leaves the I2C state machine in an non-idle state.
+      \t * It allows splitting the transmission into two transfers which is convenient for
+      \t * some devices that expect a fixed pre-amble followed by variable data.
+      \t * Call transmit to complete the transmission.
+      \t *
+      \t * Note: 0th byte of Tx is often register address.
+      \t *
+      \t * @tparam N number of bytes to transmit (inferred)
+      \t *
+      \t * @param[in]  address  Address of slave to communicate with (should include LSB = R/W bit = 0)
+      \t * @param[in]  data     Data to transmit (size of transmission is inferred from array size).
+      \t *
+      \t * @return E_NO_ERROR on success
+      \t */
+      \ttemplate<unsigned N>
+      \tErrorCode transmitIncomplete(uint8_t address, const std::array<const uint8_t, N> &data) {
+      \t   return transmitIncomplete(address, N, data.data());
       \t}
       \t
       \t/**
@@ -1029,7 +1109,7 @@
       \tvoid waitWhileBusy(void) {
       \t   I2C_State lastState = state;
       \t   unsigned timeout = TIMEOUT_LIMIT;
-      \t   while ((state != i2c_idle) && (--timeout>0)) {
+      \t   while ((state != i2c_idle) && (state != i2c_txDataSuspend) && (--timeout>0)) {
       \t      if (state != lastState) {
       \t         // Restart timeout
       \t         timeout = TIMEOUT_LIMIT;
@@ -1042,7 +1122,7 @@
       \t         __asm__("wfi");
       \t      }
       \t   }
-      \t   if (state != i2c_idle) {
+      \t   if ((state != i2c_idle) && (state != i2c_txDataSuspend)) {
       \t      errorCode = E_TIMEOUT;
       \t      busHangReset();
       \t   }
@@ -1553,7 +1633,7 @@
       \t               uint32_t          clockFrequency,
       \t               const Init    &init) {
       \t
-      \t   //clockInitialise($(_basename), clockFrequency, init.clockFrequency);
+      \t   (void)clockFrequency;
       \t\n
    ]]>
    </template>
@@ -1853,10 +1933,8 @@ public:
             i2c_slaveaddress,
             i2c_f_mult,
             i2c_f_icr,
-            i2c_c1_iicen,
             i2c_c1_mst,
             i2c_c1_wuen,
-            i2c_d_data,
             i2c_c2_gcaen,
             i2c_c2_hdrs,
             i2c_c2_sbrc,

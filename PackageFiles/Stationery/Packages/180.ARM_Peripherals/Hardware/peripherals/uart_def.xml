@@ -1846,6 +1846,20 @@ of a parity error or receiver buffer overruns before the host processor is notif
    <!-- _____ Formatted IO virtual functions _______ -->
    <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
+      \t
+      \t/**
+      \t * Flush output i.e. wait while UART busy with Tx
+      \t */
+      \tvirtual USBDM::FormattedIO& flushOutput() override {
+      \t
+      \t   // Wait for Tx idle
+      \t   while ((uart->S1 & UART_S1_TC_MASK) == 0) {
+      \t      __asm__("nop");
+      \t   }
+      \t
+      \t   return *this;
+      \t}
+      \t
       \t/**
       \t * Check if character is available
       \t *
@@ -3122,8 +3136,7 @@ XXXXXXXXXXXXXXXXXXXXXX
             uart_s4_cdet,uart_s4_ilcv,uart_s4_fe,
             uart_cpw_cpw,
             uart_ridt_ridt,
-            uart_tidt_tidt,
-            irqLevel" >
+            uart_tidt_tidt" >
    <![CDATA[
       \t%initNonZeroValues
       \t};

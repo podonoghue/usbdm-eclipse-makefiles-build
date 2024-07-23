@@ -13,22 +13,89 @@
 using namespace USBDM;
 
 // Control byte
-//static constexpr uint8_t SINGLE_COMMAND    = 0b10000000; ///< Co=1, D/C=0: Byte(s) are command data followed by another control byte
+static constexpr uint8_t SINGLE_COMMAND    = 0b10000000; ///< Co=1, D/C=0: Byte(s) are command data followed by another control byte
 static constexpr uint8_t MULTIPLE_COMMANDS = 0b00000000; ///< Co=0, D/C=0: Byte(s) are command data until I2C stop
 static constexpr uint8_t MULTIPLE_GDRAM    = 0b01000000; ///< Co=0, D/C=1: Byte(s) are graphic data until I2C stop
 
-/**
- * Clear internal frame buffer
- * The OLED is not affected until refreshImage() is called.
- */
-Oled &Oled::clearDisplay(void) {
-   memset((uint8_t *)&buffer, 0, sizeof(buffer));
+template <uint8_t height, uint8_t width, uint8_t vccControl, uint8_t padsModeSet=0x08, uint8_t contrast=0x7f>
+const uint8_t (&getInitSequence_ssd1306())[33] {
 
-   x = 0;
-   y = 0;
-   fontHeight = 0;
+   static constexpr uint8_t data[33] = {
+         MULTIPLE_COMMANDS,                    // Co = 0, D/C = 0
+         SSD1306_DISPLAYOFF,                   // 0xAE
+         SSD1306_SETDISPLAYCLOCKDIV,           // 0xD5
+         0x80,                                 // = Reset value (105Hz)
+         SSD1306_SETMULTIPLEX,                 // 0xA8
+         (height - 1),
+         SSD1306_SETDISPLAYOFFSET,             // 0xD3
+         0x0,                                  // = Reset value, no offset
+         SSD1306_SETSTARTLINE | 0x0,           // 0x40 - line #0
+         SSD1306_CHARGEPUMP,                   // 0x8D
+         ((vccControl == OledVccControl_External) ? 0x10 : 0x14),
+         SSD1306_MEMORYMODE,                   // 0x20
+         0x00,                                 // Horizontal addressing mode
+         SSD1306_SEGREMAP | 0x1,               // 0xA0 | 0x01 map col127->SEG0
+         SSD1306_COMSCANDEC | 0x8,             // 0xC0 | 0x8  scan COM[N-1] -> COM0
 
-   return *this;
+         SSD1306_COLUMNADDR,                   // 0x21
+         0,                                    // first column
+         (width-1),                            // last column
+         SSD1306_PAGEADDR,                     // 0x22
+         0,                                    // first page
+         (((height+7)/8)-1),                   // last page
+
+         SSD1306_SETCOMPINS,                   // 0xDA
+         0x02|padsModeSet,                     // b4=Sequential/Alt COM pin config, b5=-,left/right remap
+         SSD1306_SETCONTRAST,                  // 0x81
+         contrast,                             // Contrast level reset = 0x7F
+
+         SSD1306_SETPRECHARGE,                 // 0xD9
+         ((vccControl == OledVccControl_External) ? 0x22 : 0xF1),
+         SSD1306_SETVCOMDETECT,                // 0xDB
+         0x40,
+         SSD1306_DISPLAYALLON_RESUME,          // 0xA4
+         SSD1306_NORMALDISPLAY,                // 0xA6
+         SSD1306_DEACTIVATE_SCROLL,            // 0x2E
+         SSD1306_DISPLAYON,                    // Main screen turn on
+   };
+   return data;
+}
+
+template <uint8_t height, uint8_t width, uint8_t vccControl, uint8_t padsModeSet=0x08, uint8_t contrast=0x7f>
+const uint8_t (&getInitSequence_sh1106())[27] {
+
+   static constexpr uint8_t data[27] = {
+         MULTIPLE_COMMANDS,                    // Co = 0, D/C = 0
+         SSD1306_DISPLAYOFF,                   // 0xAE
+         SSD1306_SETDISPLAYCLOCKDIV,           // 0xD5
+         0x80,                                 // = Reset value (105Hz)
+         SSD1306_SETMULTIPLEX,                 // 0xA8
+         (height - 1),
+         SSD1306_SETDISPLAYOFFSET,             // 0xD3
+         0x0,                                  // = Reset value, no offset
+         SSD1306_SETSTARTLINE | 0x0,           // 0x40 - line #0
+         SSD1306_CHARGEPUMP,                   // 0x8D
+         ((vccControl == OledVccControl_External) ? 0x10 : 0x14),
+         SSD1306_MEMORYMODE,                   // 0x20
+         0x00,                                 // Horizontal addressing mode
+         SSD1306_SEGREMAP | 0x1,               // 0xA0 | 0x01 map col127->SEG0
+         SSD1306_COMSCANDEC | 0x8,             // 0xC0 | 0x8  scan COM[N-1] -> COM0
+
+         SSD1306_SETCOMPINS,                   // 0xDA
+         0x02|padsModeSet,                     // b4=Sequential/Alt COM pin config, b5=-,left/right remap
+         SSD1306_SETCONTRAST,                  // 0x81
+         contrast,                             // Contrast level reset = 0x7F
+
+         SSD1306_SETPRECHARGE,                 // 0xD9
+         ((vccControl == OledVccControl_External) ? 0x22 : 0xF1),
+         SSD1306_SETVCOMDETECT,                // 0xDB
+         0x40,
+         SSD1306_DISPLAYALLON_RESUME,          // 0xA4
+         SSD1306_NORMALDISPLAY,                // 0xA6
+         SSD1306_DEACTIVATE_SCROLL,            // 0x2E
+         SSD1306_DISPLAYON,                    // Main screen turn on
+   };
+   return data;
 }
 
 /**
@@ -40,81 +107,33 @@ Oled &Oled::clearDisplay(void) {
 void Oled::initialise() {
 
    clearDisplay();
+   if (DISPLAY_TYPE == OledDisplayType::ssd1306) {
+      if constexpr ((WIDTH == 128) && (HEIGHT == 32)) {
 
-   // Initialise sequence
-   static const uint8_t init1[] = {
-         MULTIPLE_COMMANDS,                    // Co = 0, D/C = 0
-         SSD1306_DISPLAYOFF,                   // 0xAE
-         SSD1306_SETDISPLAYCLOCKDIV,           // 0xD5
-         0x80,                                 // = Reset value (105Hz)
-         SSD1306_SETMULTIPLEX,                 // 0xA8
-         (HEIGHT - 1),
-         SSD1306_SETDISPLAYOFFSET,             // 0xD3
-         0x0,                                  // = Reset value, no offset
-         SSD1306_SETSTARTLINE | 0x0,           // 0x40 - line #0
-         SSD1306_CHARGEPUMP,                   // 0x8D
-         ((VCC_CONTROL == OledVccControl_External) ? 0x10 : 0x14),
-         SSD1306_MEMORYMODE,                   // 0x20
-         0x00,                                 // Horizontal addressing mode
-         SSD1306_SEGREMAP | 0x1,               // 0xA0 | 0x01 map col127->SEG0
-         SSD1306_COMSCANDEC | 0x8,             // 0xC0 | 0x8  scan COM[N-1] -> COM0
-         SSD1306_COLUMNADDR,                   // 0x21
-         0,                                    // first column
-         (WIDTH-1),                            // last column
-         SSD1306_PAGEADDR,                     // 0x22
-         0,                                    // first page
-         (((HEIGHT+7)/8)-1),                   // last page
-   };
-   i2c.transmit(I2C_ADDRESS, init1);
+         i2c.transmit(I2C_ADDRESS, getInitSequence_ssd1306<HEIGHT,WIDTH,VCC_CONTROL,0x02,0x10>());
 
-   if constexpr ((WIDTH == 128) && (HEIGHT == 32)) {
+      } else if constexpr ((WIDTH == 128) && (HEIGHT == 64)) {
 
-      static const uint8_t init4a[] = {
-            MULTIPLE_COMMANDS,                    // Co = 0, D/C = 0
-            SSD1306_SETCOMPINS,                   // 0xDA
-            0x02,                                 // = default
-            SSD1306_SETCONTRAST,                  // 0x81
-            0x10,
-      };
-      i2c.transmit(I2C_ADDRESS, init4a);
+         i2c.transmit(I2C_ADDRESS, getInitSequence_ssd1306<HEIGHT,WIDTH,VCC_CONTROL,0x12,0x9F>());
 
-   } else if constexpr ((WIDTH == 128) && (HEIGHT == 64)) {
+      } else if constexpr ((WIDTH == 96) && (HEIGHT == 16)) {
 
-      static const uint8_t init4b[] = {
-            MULTIPLE_COMMANDS,                    // Co = 0, D/C = 0
-            SSD1306_SETCOMPINS,                   // 0xDA
-            0x12,
-            SSD1306_SETCONTRAST,                  // 0x81
-            ((VCC_CONTROL == OledVccControl_External) ? 0x9F : 0xCF),
-      };
-      i2c.transmit(I2C_ADDRESS, init4b);
+         i2c.transmit(I2C_ADDRESS, getInitSequence_ssd1306<HEIGHT,WIDTH,VCC_CONTROL,0x02,0xAF>());
 
-   } else if constexpr ((WIDTH == 96) && (HEIGHT == 16)) {
-
-      static const uint8_t init4c[] = {
-            MULTIPLE_COMMANDS,                    // Co = 0, D/C = 0
-            SSD1306_SETCOMPINS,                   // 0xDA
-            0x2,    // ada x12
-            SSD1306_SETCONTRAST,                  // 0x81
-            ((VCC_CONTROL == OledVccControl_External) ? 0x10 : 0xAF),
-      };
-      i2c.transmit(I2C_ADDRESS, init4c);
-   } else {
-      // Other screen varieties -- TBD
+      } else {
+         __asm__("   bkpt");
+      }
    }
+   else if (DISPLAY_TYPE == OledDisplayType::sh1106) {
+      if constexpr ((WIDTH == 128) && (HEIGHT == 64)) {
 
-   static const uint8_t init5[] = {
-         MULTIPLE_COMMANDS,                    // Co = 0, D/C = 0
-         SSD1306_SETPRECHARGE,                 // 0xD9
-         ((VCC_CONTROL == OledVccControl_External) ? 0x22 : 0xF1),
-         SSD1306_SETVCOMDETECT,                // 0xDB
-         0x40,
-         SSD1306_DISPLAYALLON_RESUME,          // 0xA4
-         SSD1306_NORMALDISPLAY,                // 0xA6
-         SSD1306_DEACTIVATE_SCROLL,
-         SSD1306_DISPLAYON,                    // Main screen turn on
-   };
-   i2c.transmit(I2C_ADDRESS, init5);
+         i2c.transmit(I2C_ADDRESS, getInitSequence_sh1106<HEIGHT,WIDTH,VCC_CONTROL,0x12,0x9F>());
+
+      } else {
+         __asm__("   bkpt");
+      }
+   }
+   return;
 }
 
 /**
@@ -152,8 +171,36 @@ void Oled::setContrast(uint8_t level) {
  * Refresh OLED from frame buffer
  */
 void Oled::refreshImage() {
-   buffer.controlByte = MULTIPLE_GDRAM;
-   i2c.transmit(I2C_ADDRESS, buffer.rawData);
+   if constexpr (IMAGE_PAGE_COUNT==0) {
+      // Transmit as a single image
+      static const uint8_t preamble[] = {
+            MULTIPLE_GDRAM,
+      };
+      i2c.transmitIncomplete(I2C_ADDRESS, preamble);
+      i2c.transmit(I2C_ADDRESS, buffer);
+   }
+   else {
+      // Have to transmit a line at a time
+      uint8_t *dataPtr = buffer;
+
+      for (uint8_t page=0; page<HEIGHT/8; page++) {
+         // Each page
+         uint8_t preamble[] = {
+               SINGLE_COMMAND,                           // Co=1, D/C=0: Byte(s) are command data followed by another control byte
+               uint8_t(SH1106_SET_PAGE_ADDRESS|page),    // Select page
+               SINGLE_COMMAND,                           // Co=1, D/C=0: Byte(s) are command data followed by another control byte
+               uint8_t(SH1106_SETHIGHCOLUMN|0),
+               SINGLE_COMMAND,                           // Co=1, D/C=0: Byte(s) are command data followed by another control byte
+               uint8_t(SH1106_SETLOWCOLUMN|2),
+               MULTIPLE_GDRAM,                           // Co=0, D/C=1: Byte(s) are graphic data until I2C stop
+         };
+         // Select page, reset column, and set up for Graphic data
+         i2c.transmitIncomplete(I2C_ADDRESS, preamble);
+         // Graphic data
+         i2c.transmit(I2C_ADDRESS, WIDTH, dataPtr);
+         dataPtr += WIDTH;
+      }
+   }
 }
 
 /**
@@ -255,36 +302,39 @@ Oled &Oled::putSpace(int width) {
  */
 void Oled::putPixel(unsigned index, uint8_t mask, bool pixel, WriteMode writeMode) {
    usbdm_assert(index < IMAGE_DATA_SIZE, "Illegal index");
+   if (index>sizeof(buffer)) {
+      return;
+   }
    switch(writeMode) {
       case WriteMode_Write:
          if (pixel) {
-            buffer.data[index] |= mask;
+            buffer[index] |= mask;
          }
          else {
-            buffer.data[index] &= ~mask;
+            buffer[index] &= ~mask;
          }
          break;
       case WriteMode_InverseWrite:
          if (pixel) {
-            buffer.data[index] &= ~mask;
+            buffer[index] &= ~mask;
          }
          else {
-            buffer.data[index] |= mask;
+            buffer[index] |= mask;
          }
          break;
       case WriteMode_Or:
          if (pixel) {
-            buffer.data[index] |= mask;
+            buffer[index] |= mask;
          }
          break;
       case WriteMode_InverseAnd:
          if (!pixel) {
-            buffer.data[index] &= ~mask;
+            buffer[index] &= ~mask;
          }
          break;
       case WriteMode_Xor:
          if (pixel) {
-            buffer.data[index] ^= mask;
+            buffer[index] ^= mask;
          }
          break;
       default:

@@ -35,6 +35,9 @@ $(/MCG/ClockConfig: #error ClockConfig not found)
    ClockConfig_default = 0,
 };
 
+// Forward declaration
+enum SmcRunMode : uint8_t;
+
 $(/MCG/ClockInfoType:#error ClockInfoType not found)
 
 class ClockChangeCallback {
@@ -173,7 +176,7 @@ $(/MCG/publicMethods: // No public methods found)
    /**
     *  Configure the MCG for given mode
     *
-    *  @param[in]  settingNumber CLock setting number
+    *  @param[in]  settingNumber Clock setting number
     */
    static void configure(ClockConfig settingNumber=ClockConfig_default) {
       clockTransition(clockInfo[settingNumber]);

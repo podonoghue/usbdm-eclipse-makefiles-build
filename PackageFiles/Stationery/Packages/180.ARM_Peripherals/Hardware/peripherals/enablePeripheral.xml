@@ -181,7 +181,9 @@
       -->
       <title description="Interrupts" />
 
+      <!-- These control the IRQ number available to used (which may differ from actual hardware) -->
       <equation key="_userIrqCount" value="=_hardwareIrqCount" condition="!_userIrqCount" />
+      <equation key="_userIrqNums"  value="=_hardwareIrqNums"  condition="!_userIrqNums" />
 
       <!-- If not explicitly controlled, IRQ options are always enabled -->
       <constant key="irqEnable"        type="Boolean" value="true"  condition="!irqEnable"/>
@@ -208,10 +210,14 @@
             </for>
          </if>
       </if>
-      <!--
-      <printVar key="irq_pattern" />
-      <printVar key="irq_ClassHandler" />
-      -->
+      <!-- 
+      <printVar key="irq_pattern"/>
+      <printVar key="irq_ClassHandler"/>
+      <printVar key="_hardwareIrqCount"/>
+      <printVar key="_hardwareIrqNums"/>
+      <printVar key="_userIrqNums"/>
+      <printVar key="_userIrqCount"/>
+       -->
 
       <!-- Interrupt control for this peripheral -->
       <irqOption key="irqHandlingMethod" condition="!irqHandlingMethod"
@@ -415,7 +421,7 @@
  -->
 
       <!-- enum for IRQ indices into irqNums[]  -->
-      <choiceOption where="info" key="irq_enum" condition="!irq_enum&amp;&amp;(@_userIrqCount>1)"
+      <choiceOption where="info" key="irq_enum" condition="!irq_enum&amp;&amp;(@_hardwareIrqCount>1)"
          hidden="false"
          description="IRQ entry"
          toolTip="Select amongst interrupts associated with the peripheral"
@@ -423,6 +429,17 @@
          valueFormat="%s"
          >
          <choiceExpansion keys="irq" values="=_hardwareIrqNums"
+            value="%(i)" name="Maps to %(irq)" enum='=Prettify(ReplaceAll("%(irq)", "$(_NAME)_([a-z|A-Z|0-9_]+)_IRQn", "$1"))' />
+      </choiceOption>
+
+      <choiceOption where="info" key="irq_enum" condition="!irq_enum&amp;&amp;(@_userIrqCount>1)"
+         hidden="false"
+         description="IRQ entry"
+         toolTip="Select amongst interrupts associated with the peripheral"
+         typeName="IrqNum"
+         valueFormat="%s"
+         >
+         <choiceExpansion keys="irq" values="=_userIrqNums"
             value="%(i)" name="Maps to %(irq)" enum='=Prettify(ReplaceAll("%(irq)", "$(_NAME)_([a-z|A-Z|0-9_]+)_IRQn", "$1"))' />
       </choiceOption>
 
@@ -630,7 +647,7 @@
          \t/** Callback function for $(_Class) */
          \tstatic inline CallbackFunction sCallbacks[$(_userIrqCount)] = {\n
       ]]></variableTemplate>
-      <for keys="irqName" values="=_hardwareIrqNums" >
+      <for keys="irqName" values="=_userIrqNums" condition="=_userIrqCount>1" >
          <template codeGenCondition="irqHandlingMethod" condition="irq_enum&amp;&amp;!irq_single_handler" ><![CDATA[
             \t   $(_Info)::unhandledCallback,  // %(irqName) \n
          ]]></template>

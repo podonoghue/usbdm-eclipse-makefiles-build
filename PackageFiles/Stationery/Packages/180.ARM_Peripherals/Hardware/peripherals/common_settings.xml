@@ -4,6 +4,18 @@
 
 <peripheralPage name="CommonSettings" description="Common settings" >
 
+<stringOption name="Hardware includes" key="/HARDWARE_H/userIncludes"
+   description="Header files included in Hardware.h"
+   value="// None"  />
+
+<stringOption name="Hardware declarations" key="/HARDWARE_H/userDeclarations"
+   description="Code included in Hardware.h"
+   value="// None"  />
+
+<stringOption name="Hardware definitions" key="/HARDWARE_CPP/userDefinitions"
+   description="Code included in Hardware.cpp"
+   value="// None"  />
+
 <binaryOption name="Map all pins on startup" key="/HARDWARE/mapAllPins" condition="(/PCR/lk_present)"
    description="Execute mapAllPins() during startup"
    toolTip="Enables mapping of allocated pins during startup using mapAllPins()\n

@@ -382,11 +382,14 @@ private:
     */
    Gpio_T(const Gpio_T&) = delete;
    Gpio_T(Gpio_T&&) = delete;
-protected:
-   constexpr Gpio_T() : Gpio(gpioAddress, bitNum, polarity) {};
 
 public:
+   constexpr Gpio_T() : Gpio(gpioAddress, bitNum, polarity) {};
+
    static constexpr PcrInit defaultPcrValue = gpioPcrValue(defPcrValue);
+
+   // IRQ index for this GPIO
+   static constexpr PortIrqNum IRQ_INDEX = PcrBase::getIrqIndex(mapPinToPort(pinIndex));
 
    /// GPIO hardware address
    static constexpr uint32_t gpioAddress = Gpio::getGpioAddress(pinIndex);
@@ -803,6 +806,48 @@ $(/GPIO/set_input: // /GPIO/set_input not found)
          return t;
       }
    }
+
+   /**
+    * Get interrupt state
+    *
+    * @return true/false reflecting interrupt flag in PCR
+    */
+   static bool getInterruptState() {
+
+      static constexpr HardwarePtr<uint32_t> PCR = PcrBase::getPcrAddress(pinIndex);
+      
+      return bool(*PCR & PORT_PCR_ISF_MASK);
+   }
+
+   /**
+    * Clear interrupt state in PCR
+    */
+   static void clearInterruptState() {
+
+      static constexpr HardwarePtr<uint32_t> PCR = PcrBase::getPcrAddress(pinIndex);
+      
+      // Clear flag (if set)
+      *PCR = *PCR | PORT_PCR_ISF_MASK;
+   }
+   
+   /**
+    * Get and clear interrupt state
+    *
+    * @return true/false reflecting original interrupt flag in PCR
+    */
+   static bool getAndClearInterruptState() {
+
+      static constexpr HardwarePtr<uint32_t> PCR = PcrBase::getPcrAddress(pinIndex);
+      
+      uint32_t pcr = *PCR;
+
+      // Clear flag if originally set
+      *PCR = pcr;
+
+      // Return original flag
+      return bool(pcr & PORT_PCR_ISF_MASK);
+   }
+
 };
 
 /**
@@ -1151,8 +1196,9 @@ $(/GPIO/field_set_in_out: // /GPIO/field_set_in_out not found)
       setInOut(defaultPcrValue.pcrValue());
       bmeOr(gpio->PDDR, BITMASK);
    }
+
    /**
-    * Sets all pin as digital outputs.
+    * Sets all pins as digital outputs.
     * Configures all Pin Control Register (PCR) values
     *
     * @note This will also reset the Pin Control Register value (PCR value).
@@ -1164,6 +1210,34 @@ $(/GPIO/field_set_in_out: // /GPIO/field_set_in_out not found)
       setInOut(pcrValue);
       bmeOr(gpio->PDDR, BITMASK);
    }
+
+   /**
+    * Sets all pins as digital outputs.
+    * Configures all Pin Control Register (PCR) values
+    *
+    * @note This will also reset the Pin Control Register value (PCR value).
+    * @note Use setOut(), setIn() or setDirection() for a lightweight change of direction without affecting other pin settings.
+    *
+    * @param[in] pcrInit PCR value to use in configuring port (excluding mux fn)
+    */
+   static void setOutput(const PcrInit &pcrInit) {
+      setOutput(pcrInit.value);
+   }
+
+   /**
+    * Set field as digital I/O.
+    * Pins are initially set as an input.
+    * Use setIn(), setOut() and setDirection() to change pin directions.
+    *
+    * @note Resets the Pin Control Register values (PCR value).
+    * @note Resets the pin output value to the inactive state
+    *
+    * @param[in] pcrInit PCR value to use in configuring pin (excluding MUX value)
+    */
+   static void setInOut(const PcrInit &pcrInit) {
+      setInOut(pcrInit.value);
+   }
+
 $(/GPIO/field_set_output: // /GPIO/field_set_output not found)
    /**
     * Set all pins as digital inputs.
@@ -1185,6 +1259,7 @@ $(/GPIO/field_set_output: // /GPIO/field_set_output not found)
    static void setInput() {
       setInOut(defaultPcrValue.pcrValue());
    }
+
    /**
     * Set all pins as digital inputs.
     * Configures all Pin Control Register (PCR) values
@@ -1196,6 +1271,19 @@ $(/GPIO/field_set_output: // /GPIO/field_set_output not found)
     */
    static void setInput(PcrValue pcrValue) {
       setInOut(pcrValue);
+   }
+
+   /**
+    * Set all pins as digital inputs.
+    * Configures all Pin Control Register (PCR) values
+    *
+    * @note This will also reset the Pin Control Register value (PCR value).
+    * @note Use setOut(), setIn() or setDirection() for a lightweight change of direction without affecting other pin settings.
+    *
+    * @param[in] pcrInit PCR value to use in configuring port (excluding mux and irq functions)
+    */
+   static void setInput(const PcrInit &pcrInit) {
+      setInOut(pcrInit.value);
    }
 
 $(/GPIO/field_set_input: // /GPIO/field_set_input not found)

@@ -53,8 +53,10 @@ private:
          UartBaudRate_115200,
          UartTxEmptyAction_Interrupt ,    // (uart_txempty_action)      Transmit empty DMA/Interrupt action - Interrupt
          UartRxFullAction_Interrupt ,     // (uart_rxfull_action)       Receive full DMA/interrupt action - Interrupt
+#if $(/UART/uart_pfifo_txfe_present:false) // /UART/uart_pfifo_txfe_present
          UartTransmitFifoEnable_Enabled ,  // (uart_pfifo_txfe)          Transmit FIFO Enable - Enabled
          UartReceiveFifoEnable_Enabled ,   // (uart_pfifo_rxfe)          Receive FIFO Enable - Enabled
+#endif
    };
 
 public:

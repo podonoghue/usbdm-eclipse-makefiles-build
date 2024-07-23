@@ -34,8 +34,13 @@ extern "C" void __attribute__((constructor)) cpp_initialise() {
    }
 }
 
+// Hardware definitions
+$(/HARDWARE_CPP/Definitions:     // /HARDWARE_CPP/Definitions not found)
+
+// User definitions
+$(/HARDWARE_CPP/userDefinitions: // No user declarations found)
+
 #ifdef PORT_PCR_MUX
-$(/HARDWARE_CPP/Definitions:   // /HARDWARE_CPP/Definitions not found)
 
 /**
  * Map all configured pins to peripheral signals.

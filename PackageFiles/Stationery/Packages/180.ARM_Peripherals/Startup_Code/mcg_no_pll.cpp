@@ -15,6 +15,7 @@
 #include "pin_mapping.h"
 #include "sim.h"
 $(/MCG/Includes:// No extra includes found)
+#include "smc.h"
 #include "mcg.h"
 /*
  * *****************************

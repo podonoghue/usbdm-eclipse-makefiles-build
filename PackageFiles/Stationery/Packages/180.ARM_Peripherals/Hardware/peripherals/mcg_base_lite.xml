@@ -139,7 +139,7 @@
          description="Clock configuration[%(n)]"
          toolTip="Clock configurations for different run modes"
          value="ClockConfig_%(n)"
-         disabledValue="=(%(n)==0)?&quot;Reset Configuration&quot;:&quot;Disabled&quot;" >
+         disabledValue='=(%(n)==0)?"Reset Configuration":"Disabled"' >
 
          <if condition="%(n)==0" >
             <aliasOption key="enableClockConfiguration[%(n)]" />

@@ -1071,7 +1071,7 @@
          <choice          name="All Active-high"     enum="AllActiveHigh"     value='0x0000U' />
       </choiceOption>
 
-<!-- 
+<!--
          enumText="=polarityEnums"
  -->
       <bitmaskOption key="ftm_pol_pol" condition="ftm_pol_present"
@@ -1351,6 +1351,23 @@
       \t   %register = %paramExpression;
       \t}\n\n
    ]]></variableTemplate>
+
+   <template key="/$(_BASENAME)/static_functions" where="all"
+      discardRepeats="true"
+      nonDefaultParams="2"
+   ><![CDATA[
+      \t/**
+      \t * Truncate Tick value to correct range for modulo calculations.
+      \t *
+      \t * @param ticks Value to truncate in Ticks
+      \t *
+      \t * @return Truncated value in Ticks
+      \t */
+      \tstatic Ticks modulo(const Ticks &ticks) {
+      \t
+      \t   return Ticks(unsigned(ticks) & FTM_CNT_COUNT_MASK);
+      \t}\n\n
+   ]]></template>
 
 <!--  ___ Static/Non-Static Methods ______________ -->
    <for  keys="   key                  : static    : const    : getInputClockFrequency         : channel : Ftm       : isStatic : namespace"
@@ -1734,38 +1751,17 @@
          \t}
          \t
          \t/**
-         \t * Get timer event flags
+         \t * Get channel event flags
          \t *
          \t * @return Flags indicating if an event has occurred on a channel
          \t *         There is one bit for each channel
          \t */
-         \t%(static)unsigned getInterruptFlags()%(const) {
+         \t%(static)unsigned getChannelEventFlags()%(const) {
          \t   return ftm->STATUS;
          \t}
          \t
          \t/**
-         \t * Clear selected timer event flags
-         \t *
-         \t * @param channelMask Mask indicating which channel flags to clear
-         \t *                    There is one bit for each channel
-         \t *
-         \t * @note Flags will not be cleared if the channel is configured for DMA
-         \t */
-         \t%(static)void clearSelectedInterruptFlags(uint32_t channelMask)%(const) {
-         \t   (void)ftm->STATUS;
-         \t   ftm->STATUS = ~channelMask;
-         \t}
-         \t
-         \t/**
-         \t * Clear timer overflow event flag
-         \t */
-         \t%(static)void clearOverflowInterruptFlag()%(const) {
-         \t   // Clear TOI flag (read & w0c)
-         \t   ftm->SC = ftm->SC & ~FTM_SC_TOF_MASK;
-         \t}
-         \t
-         \t/**
-         \t * Get and clear timer event flags
+         \t * Get and clear channel event flags
          \t *
          \t * @return Flags indicating if an event has occurred on a channel
          \t *         There is one bit for each channel
@@ -1773,12 +1769,43 @@
          \t * @note Only flags captured in the return value are cleared
          \t * @note Flags will not be cleared if the channel is configured for DMA
          \t */
-         \t%(static)unsigned getAndClearInterruptFlags()%(const) {
+         \t%(static)unsigned getAndClearChannelEventFlags()%(const) {
          \t   // Note requires read and write zero to clear flags
          \t   // so only flags captured in status are cleared
          \t   unsigned status = ftm->STATUS;
          \t   ftm->STATUS = ~status;
          \t   return status;
+         \t}
+         \t
+         \t/**
+         \t * Clear selected channels event flags
+         \t *
+         \t * @param channelMask Mask indicating which channel flags to clear
+         \t *                    There is one bit for each channel
+         \t *
+         \t * @note Flags will not be cleared if the channel is configured for DMA
+         \t */
+         \t%(static)void clearSelectedChannelEventFlags(uint32_t channelMask)%(const) {
+         \t   (void)ftm->STATUS;
+         \t   ftm->STATUS = ~channelMask;
+         \t}
+         \t
+         \t/**
+         \t * Get and clear timer overflow event flag
+         \t */
+         \t%(static)bool getAndClearOverflowFlag()%(const) {
+         \t   // Clear TOI flag (read & w0c)
+         \t   unsigned status = ftm->SC;
+         \t   ftm->SC = status & ~FTM_SC_TOF_MASK;
+         \t   return bool(status & FTM_SC_TOF_MASK);
+         \t}
+         \t
+         \t/**
+         \t * Clear timer overflow event flag
+         \t */
+         \t%(static)void clearOverflowFlag()%(const) {
+         \t   // Clear TOI flag (read & w0c)
+         \t   ftm->SC = ftm->SC & ~FTM_SC_TOF_MASK;
          \t}
          \t\n
       ]]></template>
@@ -2363,36 +2390,36 @@
       \t   }
       \t
       \t   /**
-      \t    * Get Timer interrupt/event flag.
+      \t    * Get channel event flag.
       \t    *
       \t    * @return true  Indicates an event has occurred on a channel
       \t    * @return false Indicates no event has occurred on a channel since last polled
       \t    */
-      \t   %(static) bool getInterruptFlag()%(const) {
+      \t   %(static) bool getEventFlag()%(const) {
       \t      return (ftm->CONTROLS[%(channel)].CnSC&FTM_CnSC_CHF_MASK) != 0;
       \t   }
       \t
       \t   /**
-      \t    * Get and Clear Timer channel interrupt flag.
+      \t    * Get and Clear channel event flag.
       \t    *
       \t    * @return true  Indicates an event has occurred on a channel
       \t    * @return false Indicates no event has occurred on a channel since last polled
       \t    *
       \t    * @note Only flags captured in the return value are cleared
       \t    */
-      \t   %(static) bool getAndClearInterruptFlag()%(const) {
+      \t   %(static) bool getAndClearEventFlag()%(const) {
       \t      // Note - requires read and write zero to clear flags
       \t      uint8_t cnsc = ftm->CONTROLS[%(channel)].CnSC;
-      \t      ftm->CONTROLS[%(channel)].CnSC = cnsc&~CHANNEL_MASK;
-      \t      return (cnsc&CHANNEL_MASK) != 0;
+      \t      ftm->CONTROLS[%(channel)].CnSC = cnsc&~FTM_CnSC_CHF_MASK;
+      \t      return (cnsc&FTM_CnSC_CHF_MASK) != 0;
       \t   }
       \t
       \t   /**
-      \t    * Clear interrupt flag on channel.
+      \t    * Clear channel event flag
       \t    */
-      \t   %(static)void clearInterruptFlag()%(const) {
+      \t   %(static)void clearEventFlag()%(const) {
       \t      // Note - requires read and write zero to clear flag
-      \t      ftm->CONTROLS[CHANNEL].CnSC = ftm->CONTROLS[CHANNEL].CnSC & ~FTM_CnSC_CHF_MASK;
+      \t      ftm->CONTROLS[%(channel)].CnSC = ftm->CONTROLS[%(channel)].CnSC & ~FTM_CnSC_CHF_MASK;
       \t   }
       \t
       \t   /**
@@ -2833,7 +2860,7 @@
          "
    ><![CDATA[
       \t/**
-      \t * initExpression $(_Class)
+      \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
       \tstatic constexpr Init DefaultInitValue = {%initExpression\n

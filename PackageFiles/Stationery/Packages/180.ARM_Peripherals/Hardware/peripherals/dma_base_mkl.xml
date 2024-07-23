@@ -778,8 +778,8 @@
    <template codeGenCondition="irqHandlingMethod" >
    <![CDATA[
       \t   // Configure call-backs
-      \t   setCallback(Dma0IrqNum(init.dmaChannelNum), init.callbackFunction);
-      \t   enableNvicInterrupts(Dma0IrqNum(init.dmaChannelNum), init.irqlevel);
+      \t   setCallback(IrqNum(init.dmaChannelNum), init.callbackFunction);
+      \t   enableNvicInterrupts(IrqNum(init.dmaChannelNum), init.irqlevel);
       \t\n
    ]]>
    </template>

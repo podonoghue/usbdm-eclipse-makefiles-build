@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- mcm_mkl03z4.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Miscellaneous Control Module (MCM)">
+
+   <xi:include href="mcm_def.xml"/>
+
+</peripheralPage>

@@ -1200,18 +1200,18 @@
       </variableTemplate>
    </for>
 
-   <for keys=" type          : variables                                          : name     : dim                        "
-       values="%baseType     : pdb_intc0_triggerMode                              : intc  : '=NumDacIntervalTriggers'  ;
-               Seconds_Ticks : pdb_intv0                                          : intv  : '=NumDacIntervalTriggers'  ;
-               %baseType     : pdb_ch0_c1_pt0                                     : c1    : '=NumChannels'             ;
-               Seconds_Ticks : pdb_po0_dly1                                       : dly1  : '=NumPulseOutputs'         ;
-               Seconds_Ticks : pdb_po0_dly2                                       : dly2  : '=NumPulseOutputs'         " >
+   <for keys=" type          : variables              : name  : dim                        : init "
+       values="%baseType     : pdb_intc0_triggerMode  : intc  : '=NumDacIntervalTriggers'  : ' = {0}' ;
+               Seconds_Ticks : pdb_intv0              : intv  : '=NumDacIntervalTriggers'  :          ;
+               %baseType     : pdb_ch0_c1_pt0         : c1    : '=NumChannels'             : ' = {0}' ;
+               Seconds_Ticks : pdb_po0_dly1           : dly1  : '=NumPulseOutputs'         :          ;
+               Seconds_Ticks : pdb_po0_dly2           : dly2  : '=NumPulseOutputs'         :          " >
       <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx" >
       <![CDATA[
          %multilineDescription
-         \t   %(type) %(name)[%(dim)];\n\n
+         \t   %(type) %(name)[%(dim)]%(init);\n\n
       ]]>
       </variableTemplate>
    </for>

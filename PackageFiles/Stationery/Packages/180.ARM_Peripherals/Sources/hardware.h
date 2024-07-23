@@ -3,9 +3,6 @@
  *
  * Main header file for USBDM library.
  * Generated code is included via this file.
- *
- * @version  V4.12.1.270
- * @date     1 December 2021
  */
 
 /*
@@ -25,9 +22,15 @@
 #include "delay.h"
 #include "console.h"
 
-$(/HARDWARE_H/IncludeFiles:   // No header file inclusions found)
+$(/HARDWARE_H/IncludeFiles:       // No header file inclusions found)
+
+// User includes
+$(/HARDWARE_H/userIncludes:   // No user include files found)
 
 namespace USBDM {
+
+// User declarations
+$(/HARDWARE_H/userDeclarations:   // No user declarations found)
 
 /**
  * Map all configured pins to peripheral signals.
@@ -37,6 +40,8 @@ namespace USBDM {
  * @note Only the lower 16-bits of the PCR registers are initialised
  */
 extern void mapAllPins();
+
+// Hardware declarations
 $(/HARDWARE_H/Declarations: // /HARDWARE_H/Declarations not found)
 } // End namespace USBDM
 

@@ -9,12 +9,18 @@
 
 #ifndef SOURCES_OLED_H_
 #define SOURCES_OLED_H_
+#include <memory.h>
 
 #include "i2c.h"
 #include "fonts.h"
 #include "formatted_io.h"
 
 namespace USBDM {
+
+enum class OledDisplayType {
+   ssd1306,
+   sh1106
+};
 
 enum OledVccControl : uint8_t {
    OledVccControl_Internal = 0,
@@ -50,11 +56,11 @@ enum SSD1306_Commands : uint8_t {
    SSD1306_DISPLAYOFF                            = 0xAE, ///< See datasheet
    SSD1306_DISPLAYON                             = 0xAF, ///< See datasheet
    SSD1306_COMSCANINC                            = 0xC0, ///< Not currently used
-   SSD1306_COMSCANDEC                            = 0xC0, ///< See datasheet
+   SSD1306_COMSCANDEC                            = 0xC0, ///< b3=COM0..COMn/COMn..COM0
    SSD1306_SETDISPLAYOFFSET                      = 0xD3, ///< See datasheet
    SSD1306_SETDISPLAYCLOCKDIV                    = 0xD5, ///< See datasheet
    SSD1306_SETPRECHARGE                          = 0xD9, ///< See datasheet
-   SSD1306_SETCOMPINS                            = 0xDA, ///< See datasheet
+   SSD1306_SETCOMPINS                            = 0xDA, ///< b5=COM left/right map, b4=seq/alt COM pin config.
    SSD1306_SETVCOMDETECT                         = 0xDB, ///< See datasheet
 
    SSD1306_SETLOWCOLUMN                          = 0x00, ///< Not currently used
@@ -68,18 +74,23 @@ enum SSD1306_Commands : uint8_t {
    SSD1306_DEACTIVATE_SCROLL                     = 0x2E, ///< Stop scroll
    SSD1306_ACTIVATE_SCROLL                       = 0x2F, ///< Start scroll
    SSD1306_SET_VERTICAL_SCROLL_AREA              = 0xA3, ///< Set scroll range
+
+   SH1106_SET_PAGE_ADDRESS                       = 0xB0, ///< Set page address, b3-0 = page #
+   SH1106_SETLOWCOLUMN                           = 0x00, ///< Set column address b3-0 => addr3-0
+   SH1106_SETHIGHCOLUMN                          = 0x10, ///< Set column address b3-0 => addr7-4
 };
 
 class Oled : public USBDM::FormattedIO {
 public:
 
    // Change as needed for actual display
-   static constexpr int            WIDTH         = 128;
-   static constexpr int            HEIGHT        =  64;
-   static constexpr OledVccControl VCC_CONTROL   = OledVccControl_Internal;
+   static constexpr OledDisplayType DISPLAY_TYPE = OledDisplayType::sh1106;
+   static constexpr int             WIDTH        = 128;   // Visible display width
+   static constexpr int             HEIGHT       =  64;   // Height
+   static constexpr OledVccControl  VCC_CONTROL  = OledVccControl_Internal;
 
    enum Orientation {Orientation_Normal, Orientation_Rotated_180};
-   static constexpr Orientation orientation = Orientation_Rotated_180;
+   static constexpr Orientation orientation = Orientation_Normal;
 
 private:
 
@@ -134,19 +145,17 @@ public:
    // Size of image array in memory
    static constexpr size_t IMAGE_DATA_SIZE = WIDTH * ((HEIGHT + 7) / 8);
 
+   // Number of pages in OLED internal image buffer
+   // Set to zero if auto-increment of image pointer across pages is supported
+   static constexpr size_t IMAGE_PAGE_COUNT =
+         (DISPLAY_TYPE==OledDisplayType::sh1106)?(HEIGHT/8):
+         (DISPLAY_TYPE==OledDisplayType::ssd1306)?0:
+         0;
+
 #pragma pack(push,1)
    /// Buffer type for display data
    /// This is prefixed by a command byte for transmission to OLED
-   union Buffer {
-      struct {
-      /// Command byte
-      uint8_t  controlByte;
-      /// Data values
-      uint8_t  data[IMAGE_DATA_SIZE];
-      };
-      /// All data for transmission
-      uint8_t rawData[IMAGE_DATA_SIZE+1];
-   };
+   typedef uint8_t  Buffer[IMAGE_DATA_SIZE];
 #pragma pack(pop)
 
    /** I2C peripheral to use */
@@ -209,7 +218,15 @@ public:
      * Clear internal frame buffer
      * The OLED is not affected until refreshImage() is called.
      */
-    Oled &clearDisplay();
+    Oled &clearDisplay() {
+       memset((uint8_t *)&buffer, 0, sizeof(buffer));
+
+       x = 0;
+       y = 0;
+       fontHeight = 0;
+
+       return *this;
+    }
 
     /**
      * Turn display on or off

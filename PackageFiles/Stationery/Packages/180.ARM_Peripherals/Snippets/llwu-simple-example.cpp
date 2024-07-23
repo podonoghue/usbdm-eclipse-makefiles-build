@@ -21,11 +21,14 @@ bool llwuFlag;
 
 void lptmrCallback() {
    lptmrFlag = true;
+   Lptmr0::clearEventFlag();
 }
 
-void pinCallback(uint32_t pinStatusMask) {
+void pinCallback() {
+   uint32_t pinStatusMask = Switch2_llwu::getPinEventFlags();
    (void)pinStatusMask;
    pinFlag = true;
+   Switch2_llwu::clearPinEventFlag();
 }
 
 void llwuCallback() {
@@ -46,9 +49,9 @@ int main(void) {
       bool llwuPinFlag     = Llwu::isPinWakeupSource(Switch2_llwu::pin);
       bool llwuFilterFlag  = Llwu::isFilteredPinWakeupSource(LlwuFilterNum_1);
 
-      console.write("LLWU DeviceFlag = ").writeln(llwuDeviceFlag);
-      console.write("LLWU PinFlag    = ").writeln(llwuPinFlag);
-      console.write("LLWU FilterFlag = ").writeln(llwuFilterFlag);
+      console.writeln("LLWU DeviceFlag = ", llwuDeviceFlag);
+      console.writeln("LLWU PinFlag    = ", llwuPinFlag);
+      console.writeln("LLWU FilterFlag = ", llwuFilterFlag);
    }
 
    // LLWU sources
@@ -68,9 +71,21 @@ int main(void) {
 
    Llwu::setCallback(llwuCallback);
 
-   Lptmr0::setCallback(lptmrCallback);
-   Lptmr0::configureTimeIntervalMode(LptmrResetOnCompare_Enabled, LptmrInterrupt_Enabled, 10_s, LptmrClockSel_Lpoclk);
-   Lptmr0::enableNvicInterrupts(NvicPriority_Normal);
+   /**
+    * Configuration value for Lptmr0 in Time Interval Mode
+    */
+   static constexpr Lptmr0::TimeIntervalModeInit timerInitValue {
+      NvicPriority_Normal,
+      lptmrCallback,
+
+      LptmrCounterActionOnEvent_Reset ,      // (lptmr_csr_tfc)            Counter Action on Compare Event - Counter is reset on event
+      LptmrEventAction_Interrupt ,           // (lptmr_csr_tie)            Timer action on event - None
+      LptmrClockSel_Lpoclk ,                 // (lptmr_psr_pcs)            Clock source for LPTMR - Low power oscillator (LPO - 1kHz)
+      LptmrPrescale_Direct ,                 // (lptmr_psr_prescaler)      Prescaler Value - Prescaler = 1
+      10_s,                                  // (lptmr_cmr_compare)        Timer Compare Value
+   };
+
+   Lptmr0::configure(timerInitValue);
 
    Smc::enableAllPowerModes();
 
@@ -83,32 +98,35 @@ int main(void) {
     * Notes:
     * - LLWU will only be active in LLS/VLLS modes
     *   The LLWU interrupt will only be set for these modes
-    * - The Switch input will wake-up the processor either through the usual interrupt mechanism or through the LLWU pin wake-up.
+    * - The Switch input will wake-up the processor either through the usual interrupt mechanism or through the LLWU pin wake-up (reset).
     *   The PIN interrupt flag will be set for the former only as the PORTs are disabled in LLS/VLLS modes.
     * - The LPTMR input will wake-up the processor either through the usual interrupt mechanism or through the LLWU module wake-up.
     *   The LPTMR interrupt flag will be set in either case as the LPTMR is active in LLS/VLLS.
+    *   LPO doesn't run on VLLS0 so LPTMR will be unavailable for wake-up.
     */
    for(;;) {
-      wait(1_s);
+      wait(2_s);
 
-      Lptmr0::clearInterruptFlag();
-      Switch2_llwu::clearPinInterruptFlag();
+      Lptmr0::clearEventFlag();
+      Switch2_llwu::clearPinEventFlag();
 
       lptmrFlag   = false;
       pinFlag     = false;
       llwuFlag    = false;
 
       // LLWU is only of use in LLS/VLLS
-      llwuInit.configure();
+      Llwu::configure(llwuInit);
       Llwu::enableNvicInterrupts(NvicPriority_Normal);
 
       console.writeln("Going to sleep...").flushOutput();
 
-      ErrorCode rc = Smc::enterPowerMode(SmcPowerMode_VLLS0);
+      ErrorCode rc = Smc::enterPowerMode(SmcPowerMode_VLLS1);
 
-      Pmc::releasePins();
+      Pmc::releaseIsolation();
 
       console.writeln("Awake!, rc = ", getErrorMessage(rc));
+
+      // Note: This code will not run if wake-up via LLWU reset sequence
 
       if (lptmrFlag) {
          // Will indicate LPTMR timed out

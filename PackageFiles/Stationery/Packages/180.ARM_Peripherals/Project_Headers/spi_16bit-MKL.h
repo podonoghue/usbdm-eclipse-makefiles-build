@@ -190,6 +190,7 @@ protected:
             spi->DL = *txDataPtr++;
          }
          else {
+            // Dummy byte
             spi->DL = 0xFF;
          }
       }

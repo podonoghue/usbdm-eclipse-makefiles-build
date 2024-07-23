@@ -1316,6 +1316,20 @@
 
    <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
+      \t
+      \t/**
+      \t * Flush output i.e. wait while UART busy with Tx
+      \t */
+      \tvirtual USBDM::FormattedIO& flushOutput() override {
+      \t
+      \t   // Wait for Tx idle
+      \t   while ((lpuart->STAT & LPUART_STAT_TC_MASK) == 0) {
+      \t      __asm__("nop");
+      \t   }
+      \t
+      \t   return *this;
+      \t}
+      \t
       \t/**
       \t * Check if character is available
       \t *

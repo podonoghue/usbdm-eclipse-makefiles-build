@@ -266,6 +266,13 @@ $(/SPI/public: // /SPI/public not found)
    void setSpeed(int frequency) {
       spi->BR = calculateBr(getClockFrequency(), frequency);
    }
+   
+#if $(/PCR/_present:false) // /PCR/_present   
+   /**
+    * Enable pins used by SPI
+    */
+   virtual void enablePins(bool enable=true) = 0;
+#endif // /PCR/_present
 
    /**
     * Sets Communication speed for SPI
@@ -463,6 +470,9 @@ private:
 
 public:
 
+   // Disambiguate Init
+   using Init = Spi::Init;
+
    /**
     * IRQ handler
     */
@@ -529,10 +539,41 @@ public:
    }
 
 $(/SPI/InitMethod: // /SPI/InitMethod not found)
+#if $(/PCR/_present:false) // /PCR/_present   
+   /**
+    * Map/Unmap pins for peripheral
+    *
+    * @param enable
+    */
+   virtual void enablePins(bool enable) override {
+      if (enable) {
+         // Configure pins
+         Info::initPCRs();
+      }
+      else {
+         // Configure SPI pins to mux=0
+         Info::clearPCRs();
+      }
+   }
+#endif // /PCR/_present   
+
    /**
     * Constructor
     */
    SpiBase_T(const SpiBasicInfo::Init &init) : Spi(Info::baseAddress) {
+
+#if $(/PCR/_present:false) // /PCR/_present   
+#ifdef DEBUG_BUILD
+      // Check pin assignments
+      static_assert(Info::info[0].pinIndex != PinIndex::UNMAPPED_PCR, "SPIx_SCK has not been assigned to a pin - change in Configure.usbdmProject");
+      static_assert(Info::info[1].pinIndex != PinIndex::UNMAPPED_PCR, "SPIx_SIN has not been assigned to a pin - change in Configure.usbdmProject");
+      static_assert(Info::info[2].pinIndex != PinIndex::UNMAPPED_PCR, "SPIx_SOUT has not been assigned to a pin - change in Configure.usbdmProject");
+#endif
+
+      if (Info::mapPinsOnEnable) {
+         configureAllPins();
+      }
+#endif // /PCR/_present   
 
       // Record this pointer for IRQ handler
       thisPtr = this;

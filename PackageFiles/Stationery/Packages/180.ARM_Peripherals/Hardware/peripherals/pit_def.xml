@@ -47,22 +47,23 @@
       <equation key="_userIrqCount" value="=pit_channel_dim" />
 
       <!-- IRQ names -->
-      <equation key="_hardwareIrqNums" value='=""' />
+      <equation key="_userIrqNums" value='=""' />
       <for keys="irq" dim="=_userIrqCount" >
-         <if condition='=_hardwareIrqNums!=""'>
-            <equation key="_hardwareIrqNums" value='=_hardwareIrqNums+";"'/>
+         <if condition='=_userIrqNums!=""'>
+            <equation key="_userIrqNums" value='=_userIrqNums+";"'/>
          </if>
-         <equation key="_hardwareIrqNums" value='=_hardwareIrqNums+"$(_NAME)_CH"+"%(irq)_IRQn"'/>
+         <equation key="_userIrqNums" value='=_userIrqNums+"$(_NAME)_CH"+"%(irq)_IRQn"'/>
       </for>
    </if>
+   <printVar key="pit_channel_dim"/>
 
    <equation key="suppressIrqHandler"         value=""       />
-   <equation key="irq_parameters"             value='=""'    />
-   <equation key="irq_dummy_parameters"       value='=""'    />
-   <equation key="irq_call_parameters"        value='=""'    />
-   <equation key="generateDefault"            value="false"  />
-   <equation key="configureInStartupDefault"  value="false"  />
-   <xi:include href="enablePeripheral.xml" />
+   <equation key="irq_parameters"             value=""          />
+   <equation key="irq_dummy_parameters"       value=""          />
+   <equation key="irq_call_parameters"        value=""          />
+   <equation key="generateDefault"            value="false"     />
+   <equation key="configureInStartupDefault"  value="false"     />
+   <xi:include href="enablePeripheral.xml"    />
    <title />
 
 <!-- ____ Constants ________________ -->
@@ -618,8 +619,10 @@
    ]]>
    </template>
 
-   <!-- ______ Common Initialisation class _______________ -->
 
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo::Init class      -->
+<!-- ====================================================================================================== -->
    <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/** Bit-mask of allocated channels */

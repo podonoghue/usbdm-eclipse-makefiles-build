@@ -353,6 +353,10 @@
 
    </for> <!-- keys="n:m" values ="0:0; 1:1; 01:0; 23:1" -->
 
+   <template key="/SMC/headerFileIncludes"  where="all" ><![CDATA[
+   #include "fmc.h"\n
+   ]]></template>
+
    <!-- ************* Common ****************** -->
 
    <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >

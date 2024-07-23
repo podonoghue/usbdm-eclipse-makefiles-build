@@ -22,6 +22,8 @@ namespace USBDM {
  * Start Rx/Tx sequence by sending address byte
  *
  * @param[in]  address - address of slave to access
+ *
+ * @note Does not wait for transmission to complete
  */
 void I2cBasicInfo::sendAddress(uint8_t address) {
 
@@ -53,22 +55,26 @@ void I2cBasicInfo::sendAddress(uint8_t address) {
 void I2cBasicInfo::poll(void) {
 
    if ((i2c->S & I2C_S_ARBL_MASK) != 0) {
+      // Lost arbitration
+
       i2c->S = I2C_S_ARBL_MASK|I2C_S_IICIF_MASK;
       errorCode = E_LOST_ARBITRATION;
       state = i2c_idle;
+
       // Generate STOP
       i2c->C1 = i2cInterrupt|I2C_C1_IICEN_MASK;
       return;
    }
    if ((i2c->S & I2C_S_IICIF_MASK) == 0) {
+      // Interrupt handler in use - no further processing
       return;
    }
+
    // Clear interrupt flag
    i2c->S = I2C_S_IICIF_MASK;
 
    // i2c_txData* +-> i2c_idle
    //             +-> i2c_rxAddress -> i2c_rxData* +-> i2c_idle
-   //                                              *-> i2c_txData
 
    switch (state) {
    case i2c_idle:
@@ -77,9 +83,10 @@ void I2cBasicInfo::poll(void) {
       break;
 
    case i2c_txData:
+   case i2c_txDataIncomplete:
       // Just send data bytes until none left
       if ((i2c->S & I2C_S_RXAK_MASK) != 0) {
-         // No ACK on last Tx data byte
+         // Error - No ACK on last data byte sent
          errorCode = E_NO_ACK;
          state = i2c_idle;
          // Generate STOP
@@ -87,6 +94,12 @@ void I2cBasicInfo::poll(void) {
          return;
       }
       if (txBytesRemaining-- == 0) {
+         // Finished Transmission
+         if (state == i2c_txDataIncomplete) {
+            // If doing partial transmit - just suspend in incomplete state
+            state = i2c_txDataSuspend;
+            return;
+         }
          if (rxBytesRemaining > 0) {
             // Reception after transmission
             state = i2c_rxAddress;
@@ -193,8 +206,55 @@ ErrorCode I2cBasicInfo::transmit(uint8_t address, uint16_t size, const uint8_t d
 
    rxBytesRemaining = 0;
 
-   // Send address byte at start and move to data transmission
+   // Set up transmit data
+   txDataPtr        = data;
+   txBytesRemaining = size;
+
+   I2C_State lastState = state;
    state = i2c_txData;
+
+   if (lastState != i2c_txDataSuspend) {
+      // Send address byte at start and move to data transmission
+      sendAddress(address);
+   }
+   else {
+      // Send 1st data byte
+      txBytesRemaining--;
+      i2c->D = *txDataPtr++;
+   }
+   waitWhileBusy();
+
+   ErrorCode tErrorCode = errorCode;
+
+#ifdef __CMSIS_RTOS
+   endTransaction();
+#endif
+
+   return tErrorCode;
+}
+
+/**
+ * Transmit incomplete message.
+ * This would be followed by a further transmission.
+ * Note: 0th byte of Tx is often register address.
+ *
+ * @param[in]  address  Address of slave to communicate with (should include LSB = R/W bit = 0)
+ * @param[in]  size     Size of transmission data
+ * @param[in]  data     Data to transmit
+ *
+ * @return E_NO_ERROR on success
+ */
+ErrorCode I2cBasicInfo::transmitIncomplete(uint8_t address, uint16_t size, const uint8_t data[]) {
+#ifdef __CMSIS_RTOS
+   startTransaction();
+#endif
+
+   errorCode = E_NO_ERROR;
+
+   rxBytesRemaining = 0;
+
+   // Send address byte at start and move to data transmission
+   state = i2c_txDataIncomplete;
 
    // Set up transmit data
    txDataPtr        = data;

@@ -62,7 +62,7 @@
                Should only be altered when timer is disabled."
       description="Counter Action on Compare Event" >
       <choice value="0" name="Counter is reset on event" enum="Reset"  />
-      <choice value="1" name="Counter rolls over"        enum="None" />
+      <choice value="1" name="No effect on counter"      enum="None" />
    </binaryOption>
 
    <binaryOption key="lptmr_csr_tcf" condition="lptmr_csr_tcf_present"
@@ -231,7 +231,8 @@
                Should only be altered when timer is disabled." >
       <choiceExpansion
          keys="name" values='=input_pins' delimiter=";"
-         name="%(name)" value="%(i)"
+         name='@SignalDescription("%(name)","^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
+         value="%(i)"
          enum='=ReplaceAll("%(name)","^.*?_(.*)$","$1")'
          signal="%(name)"
          condition='=HardwareExists("%(name)")' />
@@ -343,6 +344,21 @@
       \t\n
    ]]></template >
 
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Truncate Tick value to correct range for modulo calculations.
+      \t *
+      \t * @param ticks Value to truncate in Ticks
+      \t *
+      \t * @return Truncated value in Ticks
+      \t */
+      \tstatic Ticks modulo(const Ticks &ticks) {
+      \t
+      \t   return Ticks(unsigned(ticks) & LPTMR_CNR_COUNTER_MASK);
+      \t}\n\n
+   ]]></template>
+
 <!-- ====================================================================================================== -->
 <!--     START BasicInfo/Info duplicated methods -->
 <!-- ====================================================================================================== -->
@@ -448,9 +464,10 @@
       %paramDescription
       \t */
       \t%(static)void setClock(%params) %(const){
+      \t
       \t   // Disable LPTMR before prescale change
       \t   uint32_t csr = lptmr->CSR;
-      \t   lptmr->CSR   = 0;
+      \t   lptmr->CSR   = csr&~LPTMR_CSR_TEN_MASK;
       \t   (void)(lptmr->CSR);
       \t   %register   = %paramExpression;
       \t   lptmr->CSR   = csr;
@@ -470,9 +487,10 @@
       %paramDescription
       \t */
       \t%(static)void setClock(%params) %(const){
+      \t
       \t   // Disable LPTMR before prescale change
       \t   uint32_t csr = lptmr->CSR;
-      \t   lptmr->CSR   = 0;
+      \t   lptmr->CSR   = csr&~LPTMR_CSR_TEN_MASK;
       \t   (void)(lptmr->CSR);
       \t   %register   = %paramExpression;
       \t   lptmr->CSR   = csr;
@@ -724,7 +742,7 @@
       \t   }
       \t   // Disable before changing clock
       \t   uint32_t csr = lptmr->CSR;
-      \t   lptmr->CSR = 0;
+      \t   lptmr->CSR   = csr&~LPTMR_CSR_TEN_MASK;
       \t   (void)(lptmr->CSR);
       \t
       \t   lptmr->CMR  = cmr;
@@ -757,7 +775,7 @@
       \t   }
       \t   // Disable LPTMR before prescale change
       \t   uint32_t csr = lptmr->CSR;
-      \t   lptmr->CSR = 0;
+      \t   lptmr->CSR   = csr&~LPTMR_CSR_TEN_MASK;
       \t   (void)(lptmr->CSR);
       \t
       \t   lptmr->PSR  = psr;
@@ -779,13 +797,13 @@
       \t}
       \t
       \t/**
-      \t * Restarts the counter\n
-      \t * Mostly for debug.
+      \t * Restarts the counter
+      \t * This restarts the timer by disabling and re-enabling with the same configuration
       \t */
       \t%(static)void restart() %(const){
       \t   uint32_t csr = lptmr->CSR;
-      \t   lptmr->CSR   = 0;
-      \t   lptmr->CSR   = csr|LPTMR_CSR_TCF_MASK;
+      \t   lptmr->CSR   = csr&~LPTMR_CSR_TEN_MASK;
+      \t   lptmr->CSR   = csr;
       \t}
       \t\n
    ]]></clockCodeTemplate>
@@ -1063,7 +1081,11 @@
                \n\t         return rc;
                \n\t      }
                \n\t   }'                                                                                               ;
-               lptmr_csr_ten                                          : %register = 0                                  ;
+               lptmr_csr_tcf,lptmr_csr_tie,
+               lptmr_csr_tps,lptmr_csr_tpp,lptmr_csr_tfc,
+               lptmr_csr_tms,                                         :
+                      '// Configure while disabled
+               \n\t   %register = init.%registerName'                 ;
                lptmr_psr_pcs                                          : %register = %registerName                      ;
                lptmr_cmr_compare                                      : %register = %registerName                      ;
                lptmr_csr_ten, lptmr_csr_tcf,lptmr_csr_tie,

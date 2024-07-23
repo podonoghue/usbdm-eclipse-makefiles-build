@@ -16,7 +16,7 @@
 #include "string.h"
 #include "mcg.h"
 #include "pin_mapping.h"
-#include "fmc.h"
+$(/SMC/headerFileIncludes:// $/SMC/headerFileIncludes not found)
 
 namespace USBDM {
 

@@ -19,6 +19,7 @@
 #include <math.h>
 #include <algorithm>
 #include <climits>
+#include <float.h>
 #include "derivative.h"
 #include "error.h"
 
@@ -66,8 +67,8 @@ public:
    constexpr Ticks(unsigned value)     : value(value) {}
    constexpr Ticks(long value)         : value((unsigned)value) {}
    constexpr Ticks(unsigned long value): value((unsigned)value) {}
-   constexpr Ticks(float    value)     : value(roundf(value)) {}
-   constexpr Ticks(double    value)    : value(roundf(value)) {}
+   constexpr Ticks(float    value)     : value(std::round(value)) {}
+   constexpr Ticks(double    value)    : value(std::round(value)) {}
    Ticks(const volatile Ticks& other)  : value(other.value) {}
 
    Ticks &operator =(const Ticks &other) = default;
@@ -192,10 +193,12 @@ public:
 
    constexpr operator float()    const { return value; }
    explicit  operator float()    const volatile { return value; }
-   constexpr operator unsigned() const { return (unsigned)round(value); }
-   constexpr operator uint32_t() const { return (uint32_t)round(value); }
-   constexpr operator signed()   const { return (signed)round(value); }
-   constexpr operator int32_t()  const { return (int32_t)round(value); }
+   constexpr operator unsigned() const { return (unsigned)std::round(value); }
+   constexpr operator uint32_t() const { return (uint32_t)std::round(value); }
+   constexpr operator signed()   const { return (signed)std::round(value); }
+   constexpr operator int32_t()  const { return (int32_t)std::round(value); }
+
+   constexpr unsigned round() const { return (unsigned)std::round(value); }
 };
 
 class Hertz {
@@ -268,10 +271,12 @@ public:
    constexpr auto operator >=(int other)            const { return value>=other; }
 
    constexpr operator float()    const { return value; }
-   constexpr operator unsigned() const { return (unsigned)round(value); }
-   constexpr operator uint32_t() const { return (uint32_t)round(value); }
-   constexpr operator signed()   const { return (signed)round(value); }
-   constexpr operator int32_t()  const { return (int32_t)round(value); }
+   constexpr operator unsigned() const { return (unsigned)std::round(value); }
+   constexpr operator uint32_t() const { return (uint32_t)std::round(value); }
+   constexpr operator signed()   const { return (signed)std::round(value); }
+   constexpr operator int32_t()  const { return (int32_t)std::round(value); }
+
+   constexpr unsigned round() const { return (unsigned)std::round(value); }
 };
 
 constexpr auto operator *(float left,     Seconds right)  { return Seconds(left*right.getValue()); }
@@ -926,6 +931,16 @@ public:
       static_assert(portIrqNum>=0, "Port doesn't support interrupts or they are disabled");
       PcrBase::setPinCallback(portIrqNum, pinCallback);
    }
+
+   /**
+    * Get pin change event flags
+    *
+    * @return status 32-bit value from ISFR (each bit indicates a pin interrupt source)
+    */
+   static uint32_t getPinEventFlags() {
+      static_assert(portIrqNum>=0, "Port doesn't support interrupts or they are disabled");
+      return port->ISFR;
+   }
 #endif // /GPIO/_CommonInfoIrqGuard
 
    /**
@@ -1134,10 +1149,10 @@ $(/PCR/set_pcr_option: // /PCR/set_pcr_option not found)
    }
 
    /**
-    * Clear pin interrupt flag.
+    * Clear pin change event flag.
     * Assumes clock to the port has already been enabled.
     */
-   static void clearPinInterruptFlag() {
+   static void clearPinEventFlag() {
       if constexpr (portAddress != 0) {
          *PCR = *PCR | PORT_PCR_ISF_MASK;
       }

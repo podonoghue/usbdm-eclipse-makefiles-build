@@ -94,10 +94,13 @@
          <graphicItem type="connector"                                                params="Action,0, IRQ,0"            />
          <graphicItem type="node"        id="IRQ,x+40,y+17" var="cmp_scr_interrupt"   params="1000, 155"                  />
 
+   <if condition="cmp_scr_dmaen_present">
+
          <graphicItem type="connector"                      var="cmp_scr_dmaen"       params="Action,1, Dma,0"               />
          <graphicItem type="variableBox" id="Dma"           var="cmp_scr_dmaen"       params="885,  250,  100, large, in" />
          <graphicItem type="connector"                                                params="Dma,0, DMA,0"               />
          <graphicItem type="node"        id="DMA,x+40,y+17" var="cmp_scr_dmaen"       params="1000, 250"                  />
+   </if>
 
          <graphicItem type="variableBox" id="Hysteresis"    var="cmp_cr0_hystctr"     params="400, 235,  140, small, on"    />
          <graphicItem type="variableBox" id="Speed"         var="cmp_cr1_pmode"       params="400, 255,  140, small"        />
