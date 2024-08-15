@@ -18,6 +18,8 @@
 #include "system.h"
 #include "pin_mapping.h"
 
+$(/SCG/prototypes:// $/SCG/prototypes not found)
+
 namespace USBDM {
 
 /**

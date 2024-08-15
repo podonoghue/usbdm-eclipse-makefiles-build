@@ -17,6 +17,8 @@
 #include "derivative.h"
 #include "hardware.h"
 
+$(/EWM/prototypes:// $/EWM/prototypes not found)
+
 namespace USBDM {
 
 /**

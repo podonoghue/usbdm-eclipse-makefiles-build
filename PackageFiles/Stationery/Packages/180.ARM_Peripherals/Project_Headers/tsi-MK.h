@@ -17,6 +17,8 @@
 #include <math.h>
 #include "pin_mapping.h"
 
+$(/TSI/prototypes:// $/TSI/prototypes not found)
+
 namespace USBDM {
 
 $(/TSI/peripheral_h_definition:// $/TSI/peripheral_h_definition not found)

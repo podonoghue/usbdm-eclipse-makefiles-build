@@ -7,7 +7,7 @@
 <!ENTITY % structure_items  "xi:include|section|list" >
 
 <!-- ____  Drawing elements with a Graphic -->
-<!ENTITY % graphic_items    "graphicGroup|graphicBox|graphicItem|equation|for|if" >
+<!ENTITY % graphic_items    "graphicGroup|graphicBox|graphicItem|equation|for|if|immediateValue" >
 
 <!-- ____  Dialogue elements -->
 <!ENTITY % dialogue_items    "timeOption|intOption|floatOption|stringOption|binaryOption|choiceOption|bitmaskOption|bitfieldOption" >
@@ -20,9 +20,9 @@
                               clockSelectionOption|validate|equation|signal|clipboard|bitfieldOption|
                               %template_items;" >
                   
-<!ENTITY % general_items    "dynamicSignalMapping|dialogue|graphic|category|categoryOption|aliasCategoryOption|if|for|%simple_items;" >
+<!ENTITY % general_items    "dynamicSignalMapping|dialogue|graphic|category|categoryOption|aliasCategoryOption|if|for|immediateValue|%simple_items;" >
 
- <!ENTITY % where_items     "(all|usbdm|definitions|commonInfo|basicInfo|info|static)" >
+<!ENTITY % where_items     "(all|usbdm|definitions|commonInfo|basicInfo|info|static)" >
   
 <!-- ____  dialogue -->
 <!ELEMENT dialogue (%dialogue_items;)*>
@@ -60,6 +60,18 @@
 <!ELEMENT section ((%structure_items;|%general_items;)*) >
    <!ATTLIST section name         CDATA        #IMPLIED>
 
+<!-- ____  immediateValue -->
+<!ELEMENT immediateValue ANY >
+   <!-- Condition evaluated during parsing that enables processing of this option -->
+   <!ATTLIST immediateValue condition           CDATA        #IMPLIED>
+   <!-- Substitution keys separated by ':'' -->
+   <!ATTLIST immediateValue keys                 CDATA        #REQUIRED>
+   <!-- Values for each key separated by ':'' -->
+   <!ATTLIST immediateValue values               CDATA        #IMPLIED>
+   <!-- Delimiter to use to separate keys / iteration values -->
+   <!ATTLIST immediateValue delimiter            CDATA        #IMPLIED>
+   <!-- Removes trailing semi-colon from value list if present -->
+   <!ATTLIST immediateValue stripSemicolon       (true)       #IMPLIED>
 <!-- ____  for -->
 <!ELEMENT for ANY >
    <!-- Condition evaluated during parsing that enables processing of this option -->
@@ -72,7 +84,7 @@
    <!ATTLIST for delimiter            CDATA        #IMPLIED>
    <!-- For simple iterated list (A) => [0...(A-1)] or (A,B) => [A...B] -->
    <!ATTLIST for dim                  CDATA        #IMPLIED>
-   <!-- Removes trailing seni-colon from value list if present -->
+   <!-- Removes trailing semi-colon from value list if present -->
    <!ATTLIST for stripSemicolon       (true)       #IMPLIED>
    <!-- Name of symbol to use for iteration - available as $(<name>) -->
    <!ATTLIST for iterationVar         CDATA       #IMPLIED>
@@ -136,6 +148,8 @@
    <!ATTLIST variable  condition          CDATA        #IMPLIED>
    <!-- Log changes to associated variable -->
    <!ATTLIST variable  logging            (true)       #IMPLIED >
+   <!-- Description for variable -->
+   <!ATTLIST variable description  CDATA        #IMPLIED>
 
 <!-- ____  graphic -->
 <!ELEMENT graphic ((%graphic_items;)*) >
@@ -224,6 +238,8 @@
    <!ATTLIST categoryOption  disabledValue      CDATA        #IMPLIED>
    <!-- Include another XML file -->
    <!ATTLIST categoryOption  xmlns:xi           CDATA        #IMPLIED>
+   <!-- Log changes to associated variable -->
+   <!ATTLIST categoryOption  logging            (true)       #IMPLIED >
 
 <!-- ____  title -->
 <!ELEMENT title EMPTY >

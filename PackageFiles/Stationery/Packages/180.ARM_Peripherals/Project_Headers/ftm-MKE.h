@@ -18,6 +18,8 @@
 #include <cmath>
 #include "pin_mapping.h"
 
+$(/FTM/prototypes:// $/FTM/prototypes not found)
+
 #if $(/FTM/_BasicInfoGuard) // /FTM/_BasicInfoGuard
 
 /*

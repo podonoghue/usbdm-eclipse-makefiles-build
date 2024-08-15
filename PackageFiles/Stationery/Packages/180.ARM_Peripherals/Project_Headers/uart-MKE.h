@@ -23,6 +23,8 @@
 #include "cmsis.h"
 #endif
 
+$(/UART/prototypes:// $/UART/prototypes not found)
+
 namespace USBDM {
 
 /**

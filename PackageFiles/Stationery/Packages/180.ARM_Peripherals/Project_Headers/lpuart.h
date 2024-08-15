@@ -19,6 +19,8 @@
 #include "formatted_io.h"
 #include "uart_queue.h"
 
+$(/LPUART/prototypes:// $/LPUART/prototypes not found)
+
 namespace USBDM {
 
 /**

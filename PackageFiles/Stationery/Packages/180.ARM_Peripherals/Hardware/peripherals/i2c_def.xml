@@ -22,7 +22,7 @@
    <!-- equation key="no_initvectors"             value="true"                 / -->
    <equation key="irq_call"                   value="thisPtr->_irqHandler()" />
    <equation key="irq_parameters"             value="ErrorCode errorCode"    />
-   <equation key="irq_dummy_parameters"       value="ErrorCode"              />
+   <equation key="irq_dummy_parameters"       value="USBDM\:\:ErrorCode"     />
    <equation key="irq_call_parameters"        value="errorCode"              />
    <equation key="generateDefault"            value="false"                  />
    <equation key="configureInStartupDefault"  value="false"                  />

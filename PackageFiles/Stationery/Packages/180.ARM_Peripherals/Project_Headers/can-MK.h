@@ -19,6 +19,7 @@
 #include "string.h"
 #include <limits.h>
 
+$(/CAN/prototypes:// $/CAN/prototypes not found)
 namespace USBDM {
 
 $(/CAN/peripheral_h_definition:// $/CAN/peripheral_h_definition not found)

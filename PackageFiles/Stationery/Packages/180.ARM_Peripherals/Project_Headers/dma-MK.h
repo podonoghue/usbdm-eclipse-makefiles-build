@@ -16,6 +16,8 @@
  */
 #include "pin_mapping.h"
 
+$(/DMA/prototypes:// $/DMA/prototypes not found)
+
 namespace USBDM {
 
 #if $(/DMA/_BasicInfoGuard) // /DMA/_BasicInfoGuard

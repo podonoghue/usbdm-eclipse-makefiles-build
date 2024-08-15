@@ -17,6 +17,8 @@
 #include "pin_mapping.h"
 #include "gpio.h"
 
+$(/I2C/prototypes:// $/I2C/prototypes not found)
+
 #ifdef __CMSIS_RTOS
 #include "cmsis.h"
 #endif

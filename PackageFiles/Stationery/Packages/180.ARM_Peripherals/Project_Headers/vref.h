@@ -16,6 +16,8 @@
 #include "derivative.h"
 #include "pin_mapping.h"
 
+$(/VREF/prototypes:// $/VREF/prototypes not found)
+
 namespace USBDM {
 
 /**

@@ -135,6 +135,7 @@
 
    <for keys="n" dim="=/SIM/numberOfClockSettings" >
       <categoryOption key="ClockConfig[%(n)]"
+         locked="false"
          enabledBy="enablePeripheralSupport&amp;&amp;enableClockConfiguration[%(n)]"
          description="Clock configuration[%(n)]"
          toolTip="Clock configurations for different run modes"
@@ -1121,7 +1122,7 @@
          \t *  %tooltip
          \t *  (Minimal configuration - definition)
          \t */
-         \tconstexpr uint32_t %(name) = %valueExpression;
+         \tstatic constexpr uint32_t %(name) = %valueExpression;
          \t\n
       ]]></variableTemplate>
    </for>

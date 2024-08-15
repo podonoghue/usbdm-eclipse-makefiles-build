@@ -21,9 +21,8 @@
 
 #if $(/TPM/_BasicInfoGuard) // /TPM/_BasicInfoGuard
 
-/*
- * Default port information
- */
+$(/TPM/prototypes:// $/TPM/prototypes not found)
+
 namespace USBDM {
 
 $(/TPM/peripheral_h_definition:// $/TPM/peripheral_h_definition not found)

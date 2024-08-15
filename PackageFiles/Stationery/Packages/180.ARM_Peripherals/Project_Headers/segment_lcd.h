@@ -26,6 +26,8 @@
 
 #include "pin_mapping.h"
 
+$(/LCD/prototypes:// $/LCD/prototypes not found)
+
 namespace USBDM {
 
 $(/LCD/peripheral_h_definition:// $/LCD/peripheral_h_definition not found)

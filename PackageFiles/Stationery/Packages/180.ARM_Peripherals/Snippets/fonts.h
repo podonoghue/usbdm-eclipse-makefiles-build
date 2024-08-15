@@ -49,6 +49,21 @@ public:
 template<unsigned width, unsigned height>
 using FontCharacter = std::array<uint8_t, ((width+7)/8)*height>;
 
+/**
+ * Used to create a Font that is a subset of another font.
+ * Only useful if a few characters are needed from a large font.
+ *
+ * Usage :
+ * @code
+ *    constexpr FontArraySubset<
+ *       FontVeryLarge,                                  // Font to extract character data from
+ *       ' ','0','1','2','3','4','5','6','7','8','9',',' // Characters to be available
+ *       > mainFont;
+ * @endcode
+ *
+ * @tparam FontData Font type to extract character data from
+ * @tparam elements Characters to be available (a list of characters)
+ */
 template<typename FontData, uint8_t... elements>
 class FontArraySubset : public Font {
 

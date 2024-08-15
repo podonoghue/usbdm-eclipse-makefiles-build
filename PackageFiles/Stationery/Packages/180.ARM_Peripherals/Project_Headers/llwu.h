@@ -16,6 +16,8 @@
  */
 #include "pin_mapping.h"
 
+$(/LLWU/prototypes:// $/LLWU/prototypes not found)
+
 namespace USBDM {
 
 #if $(/LLWU/_BasicInfoGuard) // /LLWU/_BasicInfoGuard

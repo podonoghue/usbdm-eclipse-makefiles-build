@@ -17,6 +17,8 @@
 #include "pin_mapping.h"
 #include "stringFormatter.h"
 
+$(/RCM/prototypes:// $/RCM/prototypes not found)
+
 namespace USBDM {
 /**
  * @addtogroup RCM_Group RCM, Reset Control Module

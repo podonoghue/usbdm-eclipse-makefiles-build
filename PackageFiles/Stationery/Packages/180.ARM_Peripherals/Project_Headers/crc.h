@@ -17,6 +17,8 @@
 #include "derivative.h"
 #include "pin_mapping.h"
 
+$(/CRC/prototypes:// $/CRC/prototypes not found)
+
 namespace USBDM {
 
 /**

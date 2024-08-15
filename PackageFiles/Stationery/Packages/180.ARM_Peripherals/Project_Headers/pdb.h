@@ -17,6 +17,8 @@
 #include <math.h>
 #include "pin_mapping.h"
 
+$(/PDB/prototypes:// $/PDB/prototypes not found)
+
 namespace USBDM {
 
 #if $(/PDB/_BasicInfoGuard) // /PDB/_BasicInfoGuard

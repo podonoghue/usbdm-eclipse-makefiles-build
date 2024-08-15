@@ -20,6 +20,8 @@
 #include "system.h"
 #include "pin_mapping.h"
 
+$(/LPTMR/prototypes:// $/LPTMR/prototypes not found)
+
 namespace USBDM {
 
 /**

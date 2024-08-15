@@ -18,6 +18,8 @@
 #include "pin_mapping.h"
 #include "flexbus.h"
 
+$(/SDRAMC/prototypes:// $/SDRAMC/prototypes not found)
+
 namespace USBDM {
 
 /**

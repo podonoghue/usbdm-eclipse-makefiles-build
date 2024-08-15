@@ -21,6 +21,8 @@
 #include "cmsis.h"
 #endif
 
+$(/LPI2C/prototypes:// $/LPI2C/prototypes not found)
+
 namespace USBDM {
 
 /**

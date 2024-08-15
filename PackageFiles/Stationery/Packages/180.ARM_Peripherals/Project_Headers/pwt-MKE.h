@@ -16,6 +16,8 @@
  */
 #include "pin_mapping.h"
 
+$(/PWT/prototypes:// $/PWT/prototypes not found)
+
 namespace USBDM {
 
 $(/PWT/peripheral_h_definition:// $/PWT/peripheral_h_definition not found)

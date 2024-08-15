@@ -17,6 +17,8 @@
 #include "derivative.h"
 #include "pin_mapping.h"
 
+$(/RNGA/prototypes:// $/RNGA/prototypes not found)
+
 namespace USBDM {
 
 /**

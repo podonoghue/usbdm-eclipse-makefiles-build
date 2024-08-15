@@ -94,7 +94,7 @@ public:
 
 private:
 
-   const USBDM::Font *font = &USBDM::fontSmall;
+   const USBDM::Font *font;
 
    /**
     * Check if character is available
@@ -178,7 +178,7 @@ public:
    }
 
 public:
-   Oled(USBDM::I2c &i2c) : i2c(i2c) {
+   Oled(USBDM::I2c &i2c, const Font *font=&USBDM::fontMedium) : font(font), i2c(i2c) {
       initialise();
    }
 

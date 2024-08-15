@@ -23,6 +23,9 @@
 #include "cmsis.h"
 #endif
 
+
+$(/SPI/prototypes:// $/SPI/prototypes not found)
+
 namespace USBDM {
 
 /**

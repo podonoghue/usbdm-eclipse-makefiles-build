@@ -17,6 +17,8 @@
 #include "string.h"
 #include "pin_mapping.h"
 
+$(/SMC/prototypes:// $/SMC/prototypes not found)
+
 namespace USBDM {
 
 /**

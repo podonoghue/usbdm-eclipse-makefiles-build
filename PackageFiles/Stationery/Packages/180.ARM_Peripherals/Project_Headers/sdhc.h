@@ -17,6 +17,8 @@
 #include "derivative.h"
 #include "pin_mapping.h"
 
+$(/SDHC/prototypes:// $/SDHC/prototypes not found)
+
 namespace USBDM {
 
 /**

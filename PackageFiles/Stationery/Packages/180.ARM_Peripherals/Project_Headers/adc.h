@@ -22,6 +22,12 @@
 #if $(/ADC/_BasicInfoGuard) // /ADC/_BasicInfoGuard
 
 namespace USBDM {
+// Forward declaration
+enum AdcChannelNum : uint8_t;
+}
+
+$(/ADC/prototypes:// $/ADC/prototypes not found)
+namespace USBDM {
 
 /**
  * @addtogroup ADC_Group ADC, Analogue Input

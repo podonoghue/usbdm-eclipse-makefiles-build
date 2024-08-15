@@ -369,6 +369,12 @@ void Oled::drawVerticalLine(int x, int y1, int y2, WriteMode writeMode) {
    if (y1<0) {
       y1 = 0;
    }
+   if (y2<0) {
+      y2 = 0;
+   }
+   if (y1>=HEIGHT) {
+      y1 = HEIGHT-1;
+   }
    if (y2>=HEIGHT) {
       y2 = HEIGHT-1;
    }

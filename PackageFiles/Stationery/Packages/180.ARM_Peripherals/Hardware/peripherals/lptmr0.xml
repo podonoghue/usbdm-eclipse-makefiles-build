@@ -1255,6 +1255,26 @@
 
    <!-- ____  Default Initialisation value ____ -->
 
+   <template where="info" codeGenCondition="$(_InfoGuard)&amp;&amp;!lptmr_csr_tms">
+   <![CDATA[
+      \t/**
+      \t * Default value for $(_Class) in Time Interval Mode
+      \t * This value is created from Configure.usbdmProject settings (Peripheral Parameters->LPTMR)
+      \t */
+      \tstatic constexpr TimeIntervalModeInit DefaultInitValue {\n
+   ]]></template>
+
+   <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)&amp;&amp;!lptmr_csr_tms"
+      terminator=","
+      separator=","
+      padToComments="45"
+      variables="
+         irqLevel,
+         irqHandlerName" >
+   <![CDATA[
+      %initExpression\n
+   ]]></variableTemplate>
+
    <variableTemplate where="info" codeGenCondition="$(_InfoGuard)&amp;&amp;!lptmr_csr_tms"
       terminator=","
       separator=","
@@ -1262,32 +1282,44 @@
       variables="
          lptmr_csr_tfc,lptmr_csr_tie,
          lptmr_psr_pcs,lptmr_psr_prescaler,
-         lptmr_cmr_compare"
-   ><![CDATA[
-      \t/**
-      \t * Default value for $(_Class) in Time Interval Mode
-      \t * This value is created from Configure.usbdmProject settings (Peripheral Parameters->LPTMR)
-      \t */
-      \tstatic constexpr TimeIntervalModeInit DefaultInitValue {%initExpression
+         lptmr_cmr_compare" >
+   <![CDATA[
+      \t%initExpression
       \t};
       \t\n
    ]]></variableTemplate>
 
+   <!-- ============================= -->
+   <template where="info" codeGenCondition="$(_InfoGuard)&amp;&amp;lptmr_csr_tms" >
+   <![CDATA[
+      \t/**
+      \t * Default value for $(_Class) in Pulse Counting Mode
+      \t * This value is created from Configure.usbdmProject settings (Peripheral Parameters->LPTMR)
+      \t */
+      \tstatic constexpr PulseCountingModeInit DefaultInitValue {\n
+   ]]>
+   </template>
+   <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)&amp;&amp;lptmr_csr_tms"
+      terminator=","
+      separator=","
+      padToComments="45"
+      variables="
+         irqLevel,
+         irqHandlerName" >
+   <![CDATA[
+      %initExpression\n
+   ]]></variableTemplate>
    <variableTemplate where="info" codeGenCondition="$(_InfoGuard)&amp;&amp;lptmr_csr_tms"
+      terminator=","
+      separator=","
+      padToComments="45"
       variables="
          lptmr_csr_tps,lptmr_csr_tpp,
          lptmr_psr_pcs,lptmr_psr_glitchFilter,
          lptmr_csr_tie,lptmr_csr_tfc,
          lptmr_cmr_compare"
-      terminator=","
-      separator=","
-      padToComments="45"
    ><![CDATA[
-      \t/**
-      \t * Default value for $(_Class) in Pulse Counting Mode
-      \t * This value is created from Configure.usbdmProject settings (Peripheral Parameters->LPTMR)
-      \t */
-      \tstatic constexpr PulseCountingModeInit DefaultInitValue {%initExpression
+      %initExpression
       \t};
       \t\n
    ]]>

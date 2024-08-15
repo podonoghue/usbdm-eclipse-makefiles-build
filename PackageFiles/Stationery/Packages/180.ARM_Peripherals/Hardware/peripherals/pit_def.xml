@@ -6,6 +6,7 @@
 
    <constant key="definitionsInHeader" value="true" type="Boolean" />
 
+<!-- 
    <if condition="=(_hardwareIrqCount==pit_channel_dim)">
       <for keys="irqNum" values="=_hardwareIrqNums" iterationVar="ch" >
          <choiceOption key="irqLevel_Ch%(ch)"
@@ -39,6 +40,7 @@
          </clipboard>
       </for>
    </if>
+ -->
 
    <if condition="=(_hardwareIrqCount&lt;pit_channel_dim)">
       <!-- Pretend there is a handler for each channel -->
@@ -52,10 +54,9 @@
          <if condition='=_userIrqNums!=""'>
             <equation key="_userIrqNums" value='=_userIrqNums+";"'/>
          </if>
-         <equation key="_userIrqNums" value='=_userIrqNums+"$(_NAME)_CH"+"%(irq)_IRQn"'/>
+         <equation key="_userIrqNums" value='=_userIrqNums+"$(_NAME)_Ch"+"%(irq)_IRQn"'/>
       </for>
    </if>
-   <printVar key="pit_channel_dim"/>
 
    <equation key="suppressIrqHandler"         value=""       />
    <equation key="irq_parameters"             value=""          />
@@ -1096,6 +1097,11 @@
       \t */
       \tstatic void configure(PitChannelNum channelNum, const ChannelInit &init) {
       \t
+      \t   if (channelNum>=NumChannels) {
+      \t      // Illegal PIT channel number
+      \t      __BKPT();
+      \t      return;
+      \t   }
       \t   // Enable peripheral if needed using default settings
       \t   defaultConfigureIfNeeded();
       \t
@@ -1165,7 +1171,7 @@
    ]]></template>
 
    <for keys="ch" dim="=NumChannels" >
-      <variableTemplate codeGenCondition="enablePeripheralSupport&amp;&amp;pit_tctrl_ten[%(ch)]"
+      <variableTemplate codeGenCondition="$(_InfoGuard)&amp;&amp;pit_tctrl_ten[%(ch)]"
          separator=","
          terminator=","
          padToComments="35"
@@ -1173,15 +1179,28 @@
             pit_tctrl_ten[%(ch)],
             pit_tctrl_chn[%(ch)],
             pit_tctrl_tie[%(ch)],
-            pit_ldval_tsv[%(ch)],
-            irqLevel_Ch%(ch)"
+            pit_ldval_tsv[%(ch)]"
          >
       <![CDATA[
          \t   {
          \t   PitChannelNum_%(ch),
-         %initExpression
-         \t   },\n
+         %initExpression\n
       ]]></variableTemplate>
+      <variableTemplate codeGenCondition="$(_InfoIrqGuard)&amp;&amp;pit_tctrl_ten[%(ch)]"
+         separator=","
+         terminator=","
+         padToComments="35"
+         variables="
+            irqLevel_Ch%(ch),
+            handlerName_Ch%(ch)"
+         >
+      <![CDATA[
+         %initExpression\n
+      ]]></variableTemplate>
+      <template codeGenCondition="$(_InfoGuard)&amp;&amp;pit_tctrl_ten[%(ch)]" >
+      <![CDATA[
+         \t   },\n
+      ]]></template>
    </for>
 
    <template codeGenCondition="enablePeripheralSupport" >

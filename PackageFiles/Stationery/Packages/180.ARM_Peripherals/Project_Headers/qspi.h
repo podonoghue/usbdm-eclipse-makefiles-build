@@ -20,6 +20,8 @@
 #include "formatted_io.h"
 #include "delay.h"
 
+$(/QSPI/prototypes:// $/QSPI/prototypes not found)
+
 namespace USBDM {
 
 /**

@@ -31,12 +31,12 @@
    </binaryOption>
 
    <!-- printVar key="$(_BasicInfoGuard)" condition="$(_BasicInfoGuard)" / -->
-   
+
    <if condition="!$(_BasicInfoGuard)" >  <!-- Only generate once -->
 
       <equation key="_enable" value='="false"' />
       <for keys="instance" values="=_instanceList" >
-      
+
       <!-- Construct $(_BasicInfoGuard) equation to check if any instance sharing the same struct is enabled -->
          <equation
             key="_enable"
@@ -210,7 +210,7 @@
             </for>
          </if>
       </if>
-      <!-- 
+      <!--
       <printVar key="irq_pattern"/>
       <printVar key="irq_ClassHandler"/>
       <printVar key="_hardwareIrqCount"/>
@@ -218,6 +218,7 @@
       <printVar key="_userIrqNums"/>
       <printVar key="_userIrqCount"/>
        -->
+
 
       <!-- Interrupt control for this peripheral -->
       <irqOption key="irqHandlingMethod" condition="!irqHandlingMethod"
@@ -297,67 +298,143 @@
 
       <!-- Create only if needed -->
 
-      <for keys="irqNum" values="=_hardwareIrqNums" iterationVar="ch" condition='=(_hardwareIrqCount>1)' >
-         <equation key="irqmodifier" value='=ReplaceAll("%(irqNum)","^(.+)_(.+)_IRQn$","$2")' />
-         <equation key="handlerName"  value='="handler_template_"+irqmodifier' />
-         <clipboard key='=handlerName' condition='=!Exists(handlerName)'
-            hiddenBy="irqHandlingMethod||!enablePeripheralSupport"
-            description='="Interrupt handler template for "+irqmodifier'
-            toolTip='Interrupt handler example'>
-            <![CDATA[="
-               \t/**
-               \t * Handler for $(_NAME) "+irqmodifier+" interrupt
-               \t */
-               \tvoid "+"$(_NAME)_"+irqmodifier+"_IRQHandler() {
-               \t   ...
-               \t};
-               \t"
-            ]]>
-         </clipboard>
+      <for keys="irqNum" values="=_hardwareIrqNums" iterationVar="ch" >
+         <if condition='=(_hardwareIrqCount>1)' >
 
-         <equation key="irqLevelName" value='="irqLevel_"+irqmodifier'         />
-         <choiceOption key='=irqLevelName' condition='=!Exists(irqLevelName)'
-            hidden="true"
-            derived="true"
-            description='="IRQ priority level for "+irqmodifier'
-            toolTip='="Priority level used to configure the NVIC for "+irqmodifier+"\n
-                     Selecting -Interrupts Disabled- will disable interrupts in the NVIC when configured"'
-            valueFormat="%s"
-            disabledValue="Interrupts disabled"
-            derivedFrom="/PCR/nvic_irqLevel"
-            >
-         </choiceOption>
+            <!-- Extract IRQ 'name' RTC_Alarm_IRQn => Alarm, Ch0 etc  -->
+            <immediateValue keys="irqmodifier" values='=ReplaceAll("%(irqNum)","^(.+)_(.+)_IRQn$","$2")'>
+               <clipboard key='irqHandlerTemplate_%(irqmodifier)' condition='!irqHandlerTemplate_%(irqmodifier)'
+                  hiddenBy="irqHandlingMethod||!enablePeripheralSupport"
+                  description='Interrupt handler template for %(irqmodifier)'
+                  toolTip='Interrupt handler example' >
+                  <![CDATA[="
+                     \t/**
+                     \t * Handler for $(_NAME) %(irqmodifier) interrupt (Multiple entries)
+                     \t */
+                     \tvoid "+"$(_NAME)_%(irqmodifier)_IRQHandler() {
+                     \t   ...
+                     \t};
+                     \t"
+                  ]]>
+               </clipboard>
+      
+               <choiceOption key='irqLevel_%(irqmodifier)' condition='!irqLevel_%(irqmodifier)'
+                  hiddenBy="!irqHandlingMethod||!enablePeripheralSupport"
+                  description='IRQ priority level for %(irqmodifier)'
+                  toolTip='="Priority level used to configure the NVIC for %(irqmodifier)\n
+                           Selecting -Interrupts Disabled- will disable interrupts in the NVIC when configured"'
+                  valueFormat="%s"
+                  disabledValue="Interrupts disabled"
+                  derivedFrom="/PCR/nvic_irqLevel"
+                  >
+               </choiceOption>
+            </immediateValue>
+         <else/>
+            <clipboard key='irqHandlerTemplate' condition='!irqHandlerTemplate'
+               hiddenBy="irqHandlingMethod||!enablePeripheralSupport"
+               description='Interrupt handler template'
+               toolTip='Interrupt handler example'>
+               <![CDATA[="
+                  \t/**
+                  \t * Handler for $(_NAME) interrupt (Single entry)
+                  \t */
+                  \tvoid "+"$(_NAME)_IRQHandler() {
+                  \t   ...
+                  \t};
+                  \t"
+               ]]>
+            </clipboard>
+   
+            <choiceOption key='irqLevel' condition='!irqLevel'
+               hiddenBy="!irqHandlingMethod||!enablePeripheralSupport"
+               derived="true"
+               description='IRQ priority level'
+               toolTip='Priority level used to configure the NVIC\n
+                        Selecting -Interrupts Disabled- will disable interrupts in the NVIC when configured'
+               valueFormat="%s"
+               disabledValue="Interrupts disabled"
+               derivedFrom="/PCR/nvic_irqLevel"
+               >
+            </choiceOption>
+         </if>
+
       </for>
 
-      <for keys="irqNum" values="=_hardwareIrqNums" iterationVar="ch" condition='=_hardwareIrqCount==1' >
-         <equation key="irqmodifier" value='=ReplaceAll("%(irqNum)","^(.+)_IRQn$","$1")'/>
-         <clipboard key='="handler_template"' condition="!handler_template"
-            hiddenBy="irqHandlingMethod||!enablePeripheralSupport"
-            description="Interrupt handler template"
-            toolTip='Interrupt handler example' >
-            <![CDATA[="
-               \t/**
-               \t * Handler for $(_NAME) interrupt
-               \t */
-               \tvoid "+irqmodifier+"_IRQHandler() {
-               \t   ...
-               \t};
-               \t"
-            ]]>
-         </clipboard>
-         <equation key="irqLevelName" value='="irqLevel_"+irqmodifier'         />
-         <choiceOption key="irqLevel" condition="!irqLevel"
-            hidden="true"
-            derived="true"
-            enabledBy="enablePeripheralSupport"
-            description="IRQ priority level"
-            toolTip="Priority level used to configure the NVIC.\n
-                     Selecting -Interrupts Disabled- will disable interrupts in the NVIC when configured"
-            valueFormat="%s"
-            disabledValue="Interrupts disabled"
-            derivedFrom="/PCR/nvic_irqLevel"
-            >
-         </choiceOption>
+      <for keys="irqNum" values="=_userIrqNums" iterationVar="ch" >
+         <if condition='=(_userIrqCount>1)' >
+            <!-- Extract IRQ 'name' RTC_Alarm_IRQn => Alarm, Ch0 etc  -->
+            <immediateValue keys="irqmodifier,irq_dummy_parameters" values='=ReplaceAll("%(irqNum)","^(.+)_(.+)_IRQn$","$2"),irq_dummy_parameters'>
+               <!-- irqmodifier = Alarm, Ch0 etc -->
+               <stringOption key='irqHandlerName_%(irqmodifier)'
+                  valueFormat="%s"
+                  hiddenBy="!irqHandlingMethod||!enablePeripheralSupport"
+                  description="Name of %(irqmodifier) event handler"
+                  toolTip="Name of interrupt handler to be used in default settings object.\n
+                           This must be a global function matching the expected interrupt handler signature"
+                  value=""  />
+                  
+               <variable key='handlerName_%(irqmodifier)' type="String" 
+                  description="User event handler"
+                  expression='isBlank(irqHandlerName_%(irqmodifier))?"unhandledCallback":irqHandlerName_%(irqmodifier)' />
+                  
+               <variable key='handlerPrototype_%(irqmodifier)' type="String" 
+                  description="Protype for user event handler"
+                  expression='isBlank(irqHandlerName_%(irqmodifier))?"// No handler defined":"extern void "+irqHandlerName_%(irqmodifier)+"(%(irq_dummy_parameters));"' />
+
+               <template key="/$(_BASENAME)/prototypes" >
+                  <![CDATA[
+                  $(/$(_NAME)/handlerPrototype_%(irqmodifier))\n
+                  ]]>
+               </template>
+
+               <!-- 
+               <stringOption key='_handlerName_%(irqmodifier)' 
+                  hiddenBy="!irqHandlingMethod||!enablePeripheralSupport"
+                  locked="true"
+                  derived="true" 
+                  ref='="handlerName_%(irqmodifier)"' />        
+               <stringOption key='_handlerPrototype_%(irqmodifier)' 
+                  hiddenBy="!irqHandlingMethod||!enablePeripheralSupport"
+                  locked="true"
+                  derived="true" 
+                  ref='="handlerPrototype_%(irqmodifier)"' />
+               -->                          
+            </immediateValue>
+         <else/> <!-- !(_userIrqCount>1) -->
+            <immediateValue keys="irq_dummy_parameters" values='=irq_dummy_parameters'>
+               <stringOption key="irqHandlerName"
+                  valueFormat="%s"
+                  hiddenBy="!irqHandlingMethod||!enablePeripheralSupport"
+                  description="Name of interrupt handler"
+                  toolTip="Name of interrupt handler to be used in default settings object.\n
+                           This must be a global function matching the expected interrupt handler signature"
+                  value=""  />
+               <variable key='handlerName' type="String" 
+                  expression='isBlank(irqHandlerName)?"unhandledCallback":irqHandlerName' />
+               
+               <variable key='handlerPrototype' type="String" 
+                  expression='isBlank(irqHandlerName)?"// No handler defined":"extern void "+irqHandlerName+"(%(irq_dummy_parameters));"' />
+                  
+               <template key="/$(_BASENAME)/prototypes" >
+                  <![CDATA[
+                  $(/$(_NAME)/handlerPrototype)\n
+                  ]]>
+               </template>
+               <!-- 
+               <stringOption key='_handlerName' 
+                  hiddenBy="!irqHandlingMethod||!enablePeripheralSupport"
+                  locked="true"
+                  derived="true" 
+                  ref='handlerName' />        
+               <stringOption key='_handlerPrototype' 
+                  hiddenBy="!irqHandlingMethod||!enablePeripheralSupport"
+                  locked="true"
+                  derived="true" 
+                  ref='handlerPrototype' />        
+               -->                          
+            </immediateValue>
+         </if>
+
       </for>
 
       <!-- Display here (wherever the original) -->
@@ -381,7 +458,7 @@
           \tstatic constexpr bool irqHandlerInstalled = %symbolicExpression;
           \t\n
       ]]></variableTemplate>
-      
+
       <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"  condition="!suppressIrqArray"
          immediateVariables="irq_parameters,irq_dummy_parameters" >
       <![CDATA[
@@ -422,7 +499,7 @@
 
       <!-- enum for IRQ indices into irqNums[]  -->
       <choiceOption where="info" key="irq_enum" condition="!irq_enum&amp;&amp;(@_hardwareIrqCount>1)"
-         hidden="false"
+         hidden="true"
          description="IRQ entry"
          toolTip="Select amongst interrupts associated with the peripheral"
          typeName="IrqNum"
@@ -433,7 +510,7 @@
       </choiceOption>
 
       <choiceOption where="info" key="irq_enum" condition="!irq_enum&amp;&amp;(@_userIrqCount>1)"
-         hidden="false"
+         hidden="true"
          description="IRQ entry"
          toolTip="Select amongst interrupts associated with the peripheral"
          typeName="IrqNum"

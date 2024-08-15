@@ -18,6 +18,13 @@
 #include "pin_mapping.h"
 
 namespace USBDM {
+// Forward declaration
+struct CmpStatus;
+}
+
+$(/CMP/prototypes:// $/CMP/prototypes not found)
+
+namespace USBDM {
 
 /**
  * @addtogroup CMP_Group CMP, Analogue Comparator

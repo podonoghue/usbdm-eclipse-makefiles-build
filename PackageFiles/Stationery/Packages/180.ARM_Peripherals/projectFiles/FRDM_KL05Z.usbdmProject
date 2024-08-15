@@ -95,15 +95,20 @@
    <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_VLPR_BLPI_31kHz" />
    <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_VLPR_BLPI_4MHz" />
    <item key="/MCG/ClockConfig[3]"                         value="ClockConfig_RUN_FEI_48MHz" />
+   <item key="/MCG/configurePeripheralInStartUp"           value="true" />
    <item key="/MCG/enableClockConfiguration[1]"            value="true" />
+   <item key="/MCG/enablePeripheralSupport"                value="true" />
    <item key="/MCG/mcgClockMode[0]"                        value="1" />
    <item key="/MCG/mcgClockMode[1]"                        value="3" />
    <item key="/MCG/mcgClockMode[2]"                        value="3" />
+   <item key="/MCG/mcg_c1_frdiv[0]"                        value="0" />
    <item key="/MCG/mcg_c4_dmx32[0]"                        value="true" />
    <item key="/MCG/mcg_c4_dmx32[3]"                        value="true" />
    <item key="/MCG/mcg_sc_fcrdiv[1]"                       value="7" />
    <item key="/MCG/system_mcgfllclk_clock[0]"              value="47972352" />
    <item key="/MCG/system_mcgfllclk_clock[3]"              value="47972352" />
+   <item key="/OSC0/configurePeripheralInStartUp"          value="true" />
+   <item key="/OSC0/enablePeripheralSupport"               value="true" />
    <item key="/OSC0/osc_input_freq"                        value="32768" />
    <item key="/PIT/pit_ldval"                              value="10000" />
    <item key="/RTC/EnableRtc"                              value="true" />

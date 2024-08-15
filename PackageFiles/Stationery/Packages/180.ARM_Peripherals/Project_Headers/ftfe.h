@@ -24,6 +24,8 @@
 #include "pin_mapping.h"
 #include "smc.h"
 
+$(/FTFE/prototypes:// $/FTFE/prototypes not found)
+
 // Set by linker
 extern uint8_t __FlexRamStart[];
 extern uint8_t __FlexRamEnd[];

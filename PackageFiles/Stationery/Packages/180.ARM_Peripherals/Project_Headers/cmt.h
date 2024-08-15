@@ -17,6 +17,8 @@
 #include "derivative.h"
 #include "pin_mapping.h"
 
+$(/CMT/prototypes:// $/CMT/prototypes not found)
+
 namespace USBDM {
 
 $(/CMT/peripheral_h_definition:// $/CMT/peripheral_h_definition not found)

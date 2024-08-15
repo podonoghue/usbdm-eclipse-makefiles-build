@@ -18,6 +18,8 @@
 #include "pin_mapping.h"
 $(/SMC/headerFileIncludes:// $/SMC/headerFileIncludes not found)
 
+$(/SMC/prototypes:// $/SMC/prototypes not found)
+
 namespace USBDM {
 
 /**

@@ -17,6 +17,8 @@
 #include "derivative.h"
 #include "pin_mapping.h"
 
+$(/DAC/prototypes:// $/DAC/prototypes not found)
+
 namespace USBDM {
 
 /**

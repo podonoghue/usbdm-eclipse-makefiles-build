@@ -122,7 +122,8 @@
    </choiceOption>
 
    <for keys="n" dim="=/SIM/numberOfClockSettings" >
-      <categoryOption key="ClockConfig[%(n)]"
+      <categoryOption key="ClockConfig[%(n)]" 
+         locked="false"
          enabledBy="enablePeripheralSupport&amp;&amp;enableClockConfiguration[%(n)]"
          description="Clock configuration[%(n)]"
          toolTip="Clock configurations for different run modes"
@@ -1618,13 +1619,13 @@
          \tvolatile uint32_t %(name);
          \t\n
       ]]></variableTemplate>
-      <variableTemplate where="basicInfo" variables="%(clock)" codeGenCondition="!/MCG/enablePeripheralSupport"
+      <variableTemplate where="usbdm" variables="%(clock)" codeGenCondition="!/MCG/enablePeripheralSupport"
                    tooltipPadding="x*xx" ><![CDATA[
          \t/**
          \t *  %description
          \t *  %tooltip
          \t */
-         \tconstexpr uint32_t %(name) = %valueExpression;
+         \tstatic constexpr uint32_t %(name) = %valueExpression;
          \t\n
       ]]></variableTemplate>
    </for>

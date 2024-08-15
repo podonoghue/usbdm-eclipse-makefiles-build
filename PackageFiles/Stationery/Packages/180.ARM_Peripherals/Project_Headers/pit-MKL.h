@@ -20,6 +20,8 @@
 #include "system.h"
 #include "pin_mapping.h"
 
+$(/PIT/prototypes:// $/PIT/prototypes not found)
+
 #if $(/PIT/_BasicInfoGuard) // /PIT/_BasicInfoGuard
 
 namespace USBDM {

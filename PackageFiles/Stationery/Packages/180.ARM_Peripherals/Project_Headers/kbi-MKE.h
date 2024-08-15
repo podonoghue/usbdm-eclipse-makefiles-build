@@ -16,6 +16,8 @@
  */
 #include "pin_mapping.h"
 
+$(/KBI/prototypes:// $/KBI/prototypes not found)
+
 #if $(/KBI/_BasicInfoGuard) // /KBI/_BasicInfoGuard
 
 namespace USBDM {

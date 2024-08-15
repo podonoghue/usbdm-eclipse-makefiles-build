@@ -18,6 +18,8 @@
  */
 #include "pin_mapping.h"
 
+$(/PMC/prototypes:// $/PMC/prototypes not found)
+
 namespace USBDM {
 
 /**

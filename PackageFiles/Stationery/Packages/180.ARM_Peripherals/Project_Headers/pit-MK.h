@@ -1,5 +1,6 @@
 /**
  * @file     pit.h (180.ARM_Peripherals/Project_Headers/pit-MK.h)
+ *
  * @brief    Programmable Interrupt Timer interface
  */
 
@@ -19,6 +20,8 @@
 #include "system.h"
 #include "pin_mapping.h"
 #include "dma.h"
+
+$(/PIT/prototypes:// $/PIT/prototypes not found)
 
 #if $(/PIT/_BasicInfoGuard) // /PIT/_BasicInfoGuard
 

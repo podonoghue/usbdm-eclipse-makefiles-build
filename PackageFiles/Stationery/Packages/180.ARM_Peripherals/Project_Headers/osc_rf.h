@@ -16,6 +16,8 @@
  */
 #include "pin_mapping.h"
 
+$(/OSC/prototypes:// $/OSC/prototypes not found)
+
 namespace USBDM {
 /**
  * @addtogroup OSC_Group OSC, Crystal OscRfillator

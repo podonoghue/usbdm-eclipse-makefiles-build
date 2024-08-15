@@ -18,6 +18,8 @@
 #include "system.h"
 #include "hardware.h"
 
+$(/PIT/prototypes:// $/PIT/prototypes not found)
+
 namespace USBDM {
 
 /**

@@ -16,8 +16,10 @@
 #include "derivative.h"
 #include "pin_mapping.h"
 
-namespace USBDM {
+$(/WDOG/prototypes:// $/WDOG/prototypes not found)
 
+namespace USBDM {
+ 
 /**
  * @addtogroup WDOG_Group WDOG, Watchdog Timer
  * @brief Abstraction for Watchdog Timer

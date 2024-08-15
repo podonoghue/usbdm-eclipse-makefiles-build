@@ -16,6 +16,8 @@
 #include "derivative.h"
 #include "pin_mapping.h"
 
+$(/WDOG/prototypes:// $/WDOG/prototypes not found)
+
 namespace USBDM {
  
 /**

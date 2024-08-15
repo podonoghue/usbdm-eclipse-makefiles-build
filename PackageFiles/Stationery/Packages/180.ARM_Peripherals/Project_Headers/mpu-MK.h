@@ -16,6 +16,8 @@
  */
 #include "pin_mapping.h"
 
+$(/MPU/prototypes:// $/MPU/prototypes not found)
+
 namespace USBDM {
 /**
  * @addtogroup MPU_Group MPU, Miscellaneous Control Module

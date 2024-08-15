@@ -16,6 +16,8 @@
  */
 #include "pin_mapping.h"
 
+$(/MCM/prototypes:// $/MCM/prototypes not found)
+
 namespace USBDM {
 
 #if $(/MCM/_BasicInfoGuard) // /MCM/_BasicInfoGuard

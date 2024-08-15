@@ -25,6 +25,8 @@
 #include "pin_mapping.h"
 #include "smc.h"
 
+$(/FTFA/prototypes:// $/FTFA/prototypes not found)
+
 namespace USBDM {
 /**
  * @addtogroup FTFA_Group FTFA, Flash Memory Module

@@ -18,6 +18,8 @@
 #include "system.h"
 #include "pin_mapping.h"
 
+$(/LPIT/prototypes:// $/LPIT/prototypes not found)
+
 namespace USBDM {
 
 enum DmaChannelNum : unsigned;

@@ -120,6 +120,7 @@
 #include "usb_endpoint.h"
 #include "stringFormatter.h"
 
+$(/USB/prototypes:// $/USB/prototypes not found)
 
 namespace USBDM {
 

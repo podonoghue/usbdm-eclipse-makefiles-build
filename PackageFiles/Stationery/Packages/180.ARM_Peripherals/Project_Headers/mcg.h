@@ -17,6 +17,8 @@
 #include "derivative.h"
 #include "system.h"
 
+$(/MCG/prototypes:// $/MCG/prototypes not found)
+
 namespace USBDM {
 
 /**

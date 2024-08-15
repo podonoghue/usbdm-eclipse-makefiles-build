@@ -18,6 +18,8 @@
 #include "system.h"
 #include "pin_mapping.h"
 
+$(/ICS/prototypes:// $/ICS/prototypes not found)
+
 namespace USBDM {
 
 /**

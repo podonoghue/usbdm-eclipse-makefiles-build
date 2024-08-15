@@ -23,6 +23,8 @@
 
 #if $(/SPI/_BasicInfoGuard) // /SPI/_BasicInfoGuard
 
+$(/SPI/prototypes:// $/SPI/prototypes not found)
+
 namespace USBDM {
 
 /**

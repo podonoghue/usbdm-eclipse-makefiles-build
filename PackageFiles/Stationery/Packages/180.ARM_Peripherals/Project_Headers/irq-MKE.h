@@ -16,6 +16,8 @@
  */
 #include "pin_mapping.h"
 
+$(/IRQ/prototypes:// $/IRQ/prototypes not found)
+
 namespace USBDM {
 
 $(/IRQ/peripheral_h_definition:// $/IRQ/peripheral_h_definition not found)

@@ -20,6 +20,9 @@
 #include "gpio.h"
 
 #if $(/FTM/_BasicInfoGuard) // /FTM/_BasicInfoGuard
+
+$(/FTM/prototypes:// $/FTM/prototypes not found)
+
 namespace USBDM {
 /**
  * @addtogroup FTM_Group FTM, PWM, Input capture and Output compare

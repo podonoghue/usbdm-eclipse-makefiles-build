@@ -17,6 +17,8 @@
 #include "derivative.h"
 #include "pin_mapping.h"
 
+$(/FLEXIO/prototypes:// $/FLEXIO/prototypes not found)
+
 namespace USBDM {
 
 /**

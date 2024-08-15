@@ -16,6 +16,8 @@
  */
 #include "pin_mapping.h"
 
+$(/FMC/prototypes:// $/FMC/prototypes not found)
+
 namespace USBDM {
 
 $(/FMC/peripheral_h_definition:// $/FMC/peripheral_h_definition not found)

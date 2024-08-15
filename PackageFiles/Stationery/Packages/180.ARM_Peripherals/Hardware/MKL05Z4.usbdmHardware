@@ -8,17 +8,17 @@
 <root version="1.3.0">
    <family name="MKL05Z4">
       <device variant="FRDM_KL05Z" manual="KL05P48M48SF1RM" package="FRDM_KL05Z" deviceName="" />
-      <device variant="MKL05Z16VFK4" manual="KL05P48M48SF1RM" package="QFN_24"    deviceName="" />
-      <device variant="MKL05Z16VFM4" manual="KL05P48M48SF1RM" package="QFN_32"    deviceName="" />
-      <device variant="MKL05Z16VLC4" manual="KL05P48M48SF1RM" package="LQFP_32"   deviceName="" />
-      <device variant="MKL05Z16VLF4" manual="KL05P48M48SF1RM" package="LQFP_48"   deviceName="" />
-      <device variant="MKL05Z32VFK4" manual="KL05P48M48SF1RM" package="QFN_24"    deviceName="" />
-      <device variant="MKL05Z32VFM4" manual="KL05P48M48SF1RM" package="QFN_32"    deviceName="" />
-      <device variant="MKL05Z32VLC4" manual="KL05P48M48SF1RM" package="LQFP_32"   deviceName="" />
-      <device variant="MKL05Z32VLF4" manual="KL05P48M48SF1RM" package="LQFP_48"   deviceName="" />
-      <device variant="MKL05Z8VFK4" manual="KL05P48M48SF1RM" package="QFN_24"    deviceName="" />
-      <device variant="MKL05Z8VFM4" manual="KL05P48M48SF1RM" package="QFN_32"    deviceName="" />
-      <device variant="MKL05Z8VLC4" manual="KL05P48M48SF1RM" package="LQFP_32"   deviceName="" />
+      <device variant="MKL05Z16VFK4" manual="KL05P48M48SF1RM" package="MKL05_QFN24" deviceName="" />
+      <device variant="MKL05Z16VFM4" manual="KL05P48M48SF1RM" package="MKL05_QFN32" deviceName="" />
+      <device variant="MKL05Z16VLC4" manual="KL05P48M48SF1RM" package="MKL05_LQFP32" deviceName="" />
+      <device variant="MKL05Z16VLF4" manual="KL05P48M48SF1RM" package="MKL05_LQFP48" deviceName="" />
+      <device variant="MKL05Z32VFK4" manual="KL05P48M48SF1RM" package="MKL05_QFN24" deviceName="" />
+      <device variant="MKL05Z32VFM4" manual="KL05P48M48SF1RM" package="MKL05_QFN32" deviceName="" />
+      <device variant="MKL05Z32VLC4" manual="KL05P48M48SF1RM" package="MKL05_LQFP32" deviceName="" />
+      <device variant="MKL05Z32VLF4" manual="KL05P48M48SF1RM" package="MKL05_LQFP48" deviceName="" />
+      <device variant="MKL05Z8VFK4" manual="KL05P48M48SF1RM" package="MKL05_QFN24" deviceName="" />
+      <device variant="MKL05Z8VFM4" manual="KL05P48M48SF1RM" package="MKL05_QFN32" deviceName="" />
+      <device variant="MKL05Z8VLC4" manual="KL05P48M48SF1RM" package="MKL05_LQFP32" deviceName="" />
    </family>
    <peripherals>
       <peripheral baseName="ADC"      instance="0"        instanceList="ADC0" version="adc0_mkl_dma">
@@ -1571,7 +1571,7 @@
          <placement pin="VREFL"         location="VREFL" />
          <placement pin="VSS"           location="VSS" />
       </package>
-      <package name="LQFP_32">
+      <package name="MKL05_LQFP32">
          <placement pin="BANDGAP"       location="Internal" />
          <placement pin="PTA0"          location="p30" />
          <placement pin="PTA1"          location="p31" />
@@ -1607,7 +1607,7 @@
          <placement pin="VREFL"         location="p5" />
          <placement pin="VSS"           location="p6" />
       </package>
-      <package name="LQFP_48">
+      <package name="MKL05_LQFP48">
          <placement pin="BANDGAP"       location="Internal" />
          <placement pin="PTA0"          location="p46" />
          <placement pin="PTA1"          location="p47" />
@@ -1659,7 +1659,7 @@
          <placement pin="VSS1"          location="p11" />
          <placement pin="VSS2"          location="p30" />
       </package>
-      <package name="QFN_24">
+      <package name="MKL05_QFN24">
          <placement pin="BANDGAP"       location="Internal" />
          <placement pin="PTA0"          location="p22" />
          <placement pin="PTA1"          location="p23" />
@@ -1689,7 +1689,7 @@
          <placement pin="VREFL"         location="p4" />
          <placement pin="VSS"           location="p4" />
       </package>
-      <package name="QFN_32">
+      <package name="MKL05_QFN32">
          <placement pin="BANDGAP"       location="Internal" />
          <placement pin="PTA0"          location="p30" />
          <placement pin="PTA1"          location="p31" />

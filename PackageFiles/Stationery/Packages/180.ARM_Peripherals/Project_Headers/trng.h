@@ -17,6 +17,9 @@
 #include "derivative.h"
 #include "pin_mapping.h"
 
+
+$(/TRNG/prototypes:// $/TRNG/prototypes not found)
+
 namespace USBDM {
 
 /**

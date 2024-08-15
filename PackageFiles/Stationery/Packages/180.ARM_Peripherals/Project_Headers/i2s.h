@@ -17,6 +17,9 @@
 #include <stdint.h>
 #include "derivative.h"
 #include "pin_mapping.h"
+
+$(/I2S/prototypes:// $/I2S/prototypes not found)
+
 #ifdef __CMSIS_RTOS
 #include "cmsis.h"
 #endif

@@ -16,6 +16,8 @@
  */
 #include "pin_mapping.h"
 
+$(/RTC/prototypes:// $/RTC/prototypes not found)
+
 namespace USBDM {
 
 /**
