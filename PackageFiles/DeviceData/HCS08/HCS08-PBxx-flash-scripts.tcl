@@ -21,10 +21,7 @@
 ;#  History
 ;#
 ;#  V4.12.1.325 - Changed Rc from isUnsecure
-;#  V4.12.1.280 - Minor tweaks to messages
-;#  V4.11.1.50  - initFlash{} now queries target for speed
-;#  V4.10.4.240 - Added return error codes
-;#  V4.10.4     - Changed return code handling
+;#  V4.12.1.325 - Created
 ;# 
 
 ;######################################################################################
@@ -40,31 +37,19 @@ proc loadSymbols {} {
    set ::NVM_FSEC_SEC_FNORED       0x40   ;# Vector redirection disable
    set ::NVM_FSEC_UNSEC_VALUE      0xFE   ;# Value to use when unsecuring
    
-   set ::WDOG                      0x3030
-   set ::WDOG_CS1                  0x3030
-   set ::WDOG_CS2                  0x3031
-   set ::WDOG_CNT                  0x3032
-   set ::WDOG_TOVAL                0x3034
-   set ::WDOG_CS1_VALUE            0x00
-   set ::WDOG_CS2_VALUE            0x00
-   set ::WDOG_UNLOCK1              0xC520
-   set ::WDOG_UNLOCK2              0xD928
+   set ::HCS08_SOPT5               0x3008
+   set ::HCS08_SOPT5_COP_DISABLE   0x00
                                 
    set ::NVM_FCLKDIV              0x3020
    set ::NVM_FSEC                 0x3021
    set ::NVM_FCCOBIX              0x3022
    set ::NVM_FCNFG                0x3024
-   set ::NVM_FERCNFG              0x3025
    set ::NVM_FSTAT                0x3026
-   set ::NVM_FERSTAT              0x3027
    set ::NVM_FPROT                0x3028
-   set ::NVM_EPROT                0x3029
    set ::NVM_xPROT_VALUE          0xFF
    set ::NVM_FCCOBHI              0x302A
    set ::NVM_FCCOBLO              0x302B
-   set ::NVM_FOPT                 0x302C ;# Flash reg ??
-
-;#   set ::NVM_NVOPT              0xFFBF
+   set ::NVM_FOPT                 0x302C ;# NV reg loaded from flash 0xFF7E
 
    set ::NVM_FSTAT_CCIF           0x80
    set ::NVM_FSTAT_ACCERR         0x20
@@ -107,18 +92,23 @@ proc loadSymbols {} {
 ;#
 proc disableWatchdog { } {
 
-   ;# puts "disableWatchdog {}"
-   ;# halt   ;# in case sleeping
-   ;# wb $::HCS08_SOPT $::HCS08_SOPT_INIT ;# Disable COP
-   ;# rb $::HCS08_SOPT
+   puts "disableWatchdog {}"
+   catch {
+      connect
+      halt   ;# in case sleeping
+   }
+   catch {
+      wb $::HCS08_SOPT5 $::HCS08_SOPT5_COP_DISABLE ;# Disable COP
+      rb $::HCS08_SOPT5
+   }
    
    ;# Disable watchdog
    ;#   set ::ramAddress 0x1000
-   ;#   set wdogH [expr $::WDOG>>8]
-   ;#   set wdogL [expr $::WDOG&0xFF]
+   ;#   set wdogH [expr $::HCS08_SOPT5>>8]
+   ;#   set wdogL [expr $::HCS08_SOPT5&0xFF]
 
-   ;#                ldhx #WDOG;        lda #0x10; sta 4,X;  clra; sta 5,X;  sta 1,X;  sta ,X;   
-   ;#   wb  $::ramAddress 0x45 $wdogH $wdogL 0xA6 0x10  0xE7 0x04 0x4F  0xE7 0x05 0xE7 0x01 0xF7 0x82
+   ;#                     ldhx #SOPT5;       clra; sta ,X;   
+   ;#   wb  $::ramAddress 0x45 $wdogH $wdogL 0x4F  0xF7 0x82
    ;#   wpc $::ramAddress
    ;#   go 
 }
@@ -128,7 +118,7 @@ proc disableWatchdog { } {
 ;# @param flashRegions - list of flash array addresses
 ;#
 proc initTarget { flashRegions } {
-   puts "Target script = HCS08-PTxx-flash-scripts.tcl"
+   puts "Target script = HCS08-PBxx-flash-scripts.tcl"
    puts "initTarget { $flashRegions }"
    
    set ::FLASH_REGIONS  $flashRegions 
@@ -165,7 +155,6 @@ proc initFlash { {busSpeedkHz 0} } {
    rb $::NVM_FCLKDIV
    
    wb $::NVM_FPROT   $::NVM_xPROT_VALUE   ;# unprotect Flash
-   wb $::NVM_EPROT   $::NVM_xPROT_VALUE   ;# unprotect EEPROM
    
    return
 }
@@ -264,9 +253,24 @@ proc massEraseTarget { } {
    ;# Mass erase flash
    executeFlashCommand $::NVM_FCMD_ERASE_ALL_BLKS
    
-   ;# Should be temporarily unsecure
+   ;# Should be temporarily unsecure until next reset
    ;# Confirm unsecured
    return [ isUnsecure ]
+}
+
+;######################################################################################
+;#  Verifies that all flash blocks are erased in Target
+;#
+proc eraseVerifyTarget { } {
+
+   puts "eraseVerifyTarget{}"
+   
+   ;# No initial connect as may fail.  Assumed done by caller.
+
+   initFlash [expr [speed]/1000]  ;# Flash speed calculated from BDM connection speed
+
+   ;# Mass erase flash
+   executeFlashCommand $::NVM_FCMD_ERASE_VERIFY
 }
 
 ######################################################################################

@@ -3777,10 +3777,9 @@ static int cmd_sync(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *ar
       return TCL_ERROR;
    }
    unsigned char usb_data[20] = {0};
-   usb_data[0] = 0;
-   usb_data[1] = CMD_USBDM_DEBUG;
-   usb_data[2] = BDM_DBG_SYNC;
-   bdmInterface->bdmCommand(3, sizeof(usb_data), usb_data);
+   usb_data[0] = CMD_USBDM_DEBUG;
+   usb_data[1] = BDM_DBG_SYNC;
+   bdmInterface->bdmCommand(2, sizeof(usb_data), usb_data);
 
    if (usb_data[0] != BDM_RC_OK) {
       PRINT("sync: Failed\n");
@@ -3811,12 +3810,11 @@ static int cmd_sync(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *ar
          bdm_status.reset_state?"Reset":"No Reset",
                (BDMStatus&S_POWER_MASK)?"Power":"No Power" );
 
-   PRINT("%2.2X 0x%2.2X 0x%2.2X 0x%2.2X \n", usb_data[0], usb_data[1], usb_data[2], usb_data[3]);
-   PRINT("%2.2X 0x%4.4X \n", *(usb_data+2), *(uint16_t*)(usb_data+2) );
+   PRINT("0x%2.2X 0x%2.2X 0x%2.2X 0x%2.2X \n", usb_data[0], usb_data[1], usb_data[2], usb_data[3]);
 
    ticks = (usb_data[2]<<8) + usb_data[3];
 
-   speed =  (60.0 * 128) / ticks;
+   speed = (60.0 * 128) / ticks;
 
    PRINT("sync: Speed = %.2f MHz (%d ticks, sync=%.1f us)\n",
          speed, ticks, ticks/60.0);

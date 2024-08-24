@@ -2014,6 +2014,8 @@ void DeviceXmlParser::parseDeviceXML(void) {
             log.print("Adding Device %s\n", targetName.asCString());
             deviceDataBase->addDevice(device);
          }
+//         log.error("Device = %-12s, clockRegisterAddress = 0x%08X\n",
+//               device->getTargetName().c_str(), device->getClockAddress());
       }
    }
 }

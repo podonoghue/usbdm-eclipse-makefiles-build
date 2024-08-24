@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE DeviceList SYSTEM "usbdmDeviceSchema.dtd" >
 
-<!-- 
+<!--
       V4.10.6.240    - Added experimental FXTH87xx11
-      V4.10.6        - Changed SDIDs for MC9S08PAxx, MC9S08PTxx and MC9S08PLxx 
+      V4.10.6        - Changed SDIDs for MC9S08PAxx, MC9S08PTxx and MC9S08PLxx
       V4.10.6        - Added SDID for MC9S08PT32
       V4.10.6        - Added MC9S08PA4
       V4.10.4        - Changed how security information is expressed
@@ -11,27 +11,29 @@
 <root xmlns:xi="http://www.w3.org/2001/XInclude" version="4.12.1.180">
    <description>HCS08 Device characteristics v4.8.0 25/12/2011</description>
    <sharedInformation>
-      <!-- 
-            TCL Scripts 
+      <!--
+            TCL Scripts
       -->
       <tclScript id="HCS08-default-flash-scripts">     <xi:include parse="text" href="HCS08/HCS08-default-flash-scripts.tcl" />    </tclScript>
       <tclScript id="HCS08-PTxx-flash-scripts">        <xi:include parse="text" href="HCS08/HCS08-PTxx-flash-scripts.tcl" />       </tclScript>
+      <tclScript id="HCS08-PBxx-flash-scripts">        <xi:include parse="text" href="HCS08/HCS08-PBxx-flash-scripts.tcl" />       </tclScript>
 
-      <!-- 
+      <!--
             Flash Programs
       -->
       <flashProgram id="HCS08-PAxx-small-flash-program">    <xi:include parse="text" href="HCS08/HCS08-PAxx-small-flash-program.abs.s19" />   </flashProgram>
       <flashProgram id="HCS08-PAxx-small-eeprom-program">   <xi:include parse="text" href="HCS08/HCS08-PAxx-small-eeprom-program.abs.s19" />  </flashProgram>
       <flashProgram id="HCS08-PTxx-flash-program">          <xi:include parse="text" href="HCS08/HCS08-PTxx-flash-program.abs.s19" />         </flashProgram>
+      <flashProgram id="HCS08-PBxx-flash-program">          <xi:include parse="text" href="HCS08/HCS08-PBxx-flash-program.abs.s19" />         </flashProgram>
       <flashProgram id="HCS08-small-flash-program">         <xi:include parse="text" href="HCS08/HCS08-small-0x80-flash-program.abs.s19" />        </flashProgram>
       <flashProgram id="HCS08-default-flash-program">       <xi:include parse="text" href="HCS08/HCS08-default-0x80-flash-program.abs.s19" />      </flashProgram>
       <flashProgram id="HCS08-alt-load-flash-program">      <xi:include parse="text" href="HCS08/HCS08-default-0xB0-flash-program.abs.s19" />     </flashProgram>
 
-      <!--  
+      <!--
             Register sets (dummy sets to pass validation)
       -->
       <registerDescription id="CortexM0-register-description"  count="0" />
-   
+
       <!-- Security Values for Flash -->
       <securityEntry id="HCS08-default-security">
          <securityDescription>
@@ -72,12 +74,12 @@
             FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD
          </securityInfo>
       </securityEntry>
-      
+
       <resetMethods id="hcs08ResetMethods" >
          <resetMethod method="hardware" />
          <resetMethod method="software" isDefault="true" />
       </resetMethods>
-      
+
       <eraseMethods id="hcs08EraseMethods" >
          <eraseMethod method="Mass" isDefault="true"  />
          <eraseMethod method="All" />
@@ -87,7 +89,7 @@
 
    <deviceList>
 <!-- ===================================================================================== -->
-<!-- 
+<!--
    HCS08 Defaults
 -->
       <device name="hcs08DefaultDevice" family="HCS08" isDefault="true">
@@ -826,7 +828,6 @@
             <memoryRange start="0x00C000" end="0x00FFFF" />
          </memory>
          <sdid value="0x02E" />
-         <note>S08ICSV4 Clock module appears to be the same as S08ICSV3</note>
       </device>
       <device family="HCS08" name="MC9S08GW64" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x183C" type="S08ICSV3" />
@@ -845,7 +846,6 @@
             <memoryRange start="0x00C000" end="0x00FFFF" />
          </memory>
          <sdid value="0x02E" />
-         <note>S08ICSV4 Clock module appears to be the same as S08ICSV3</note>
       </device>
       <device family="HCS08" name="MC9S08JE64" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08MCGV3" />
@@ -1348,6 +1348,24 @@
       </device>
       <device family="HCS08Plus" name="MC9S08PL60" alias="MC9S08PA60">
          <sdid value="0x0040"  mask="0x0FFF"/>
+      </device>
+      <device family="HCS08" name="MC9S08PB16" vddMin="2.7" vddMax="5.5" >
+         <clock registerAddress="0x3038" type="S08ICSV5" />
+         <memory type="ram">
+            <memoryRange start="0x0040" end="0x043F" />
+         </memory>
+         <memory registerAddress="0x3020" type="flash" securityAddress="0xFF70" sectorSize="512" alignment="4">
+            <securityEntryRef ref="HCS08-default-security" />
+            <memoryRange start="0x00C000" end="0x00FFFF" />
+         </memory>
+         <soptAddress value="0x3008" /> <!-- SOPT5 = COP -->
+         <sdidAddress value="0x3002" />
+         <sdid value="0x0046" />
+         <sbdfrAddress value="0x3001"/>
+         <flashScripts>
+            <tclScriptRef ref="HCS08-PBxx-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="HCS08-PBxx-flash-program" />
       </device>
       <device family="HCS08" name="MC9S08QA2" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0048" type="S08ICSV1" />
@@ -1951,7 +1969,7 @@
          </memory>
          <sdid value="0x002" />
       </device>
-      <!-- 
+      <!--
       ====================================================================================
       Experimental
        -->
@@ -1966,7 +1984,7 @@
          <flashProgramRef ref="HCS08-alt-load-flash-program" />
          <note>Untested</note>
       </device>
-      <!-- 
+      <!--
       ====================================================================================
       Experimental
        -->
@@ -1982,9 +2000,9 @@
          <flashProgramRef ref="HCS08-alt-load-flash-program" />
          <note>Untested</note>
       </device>
-      
+
       <device name="FXTH870000" alias="FXTH87xx11" hidden="true"> </device>
-      
+
       <!-- device family="HCS08" name="MC1323x">
          <memory type="ram">
             <memoryRange start="0x000080" end="0x0017FF" />
@@ -1998,12 +2016,12 @@
          <sdid value="0x2044" /> <!- MC13234 ->
          <sdid value="0x3044" /> <!- MC13237 ->
       </device -->
-      
-      <!-- 
+
+      <!--
       ====================================================================================
       Experimental
        -->
-      <!-- 
+      <!--
       &Test-Devices;
        -->
    </deviceList>

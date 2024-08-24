@@ -20,6 +20,7 @@
 ;#####################################################################################
 ;#  History
 ;#
+;#  V4.12.1.325 - Changed Rc from isUnsecure
 ;#  V4.12.1.280 - Fixes for incompatibility between C code and TCL parameters
 ;#  V4.11.1.50  - initFlash{} now queries target for speed
 ;#  V4.11.1.50  - Changed security checking routine (now does blank check first)
@@ -75,6 +76,7 @@ proc loadSymbols {} {
 
    set ::FLASH_REGIONS         "" ;# List of addresses within each unique flash region (incl. eeprom)
    
+   set ::PROGRAMMING_RC_OK                           0
    set ::PROGRAMMING_RC_ERROR_SECURED              114
    set ::PROGRAMMING_RC_ERROR_FAILED_FLASH_COMMAND 115
    set ::PROGRAMMING_RC_ERROR_NO_VALID_FCDIV_VALUE 116
@@ -238,9 +240,16 @@ proc massEraseTarget { } {
    return [ isUnsecure ]
 }
 
-;######################################################################################
-;#
+######################################################################################
+# Checks if target is secured
+#
+# @return $::PROGRAMMING_RC_OK (= 0)      if unsecured
+# @return $::PROGRAMMING_RC_ERROR_SECURED if secured
+#
 proc isUnsecure { } {
+
+   puts "============================================="
+   puts "isUnsecure{}"
    
    ;# Check security bits in FOPT
    puts "isUnsecure{} - Checking FOPT security"
@@ -269,7 +278,7 @@ proc isUnsecure { } {
       }
    }
    puts "isUnsecure{} - Flash is blank and temporarily unsecured"
-   return 0
+   return $::PROGRAMMING_RC_OK
 }
 
 ;######################################################################################

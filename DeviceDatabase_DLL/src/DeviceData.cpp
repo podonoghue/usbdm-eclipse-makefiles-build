@@ -1254,6 +1254,7 @@ const EnumValuePair ClockTypes::clockNames[] = {
    EnumValuePair(  S08ICSV2x512, ("S08ICSV2x512") ),
    EnumValuePair(  S08ICSV3,     ("S08ICSV3") ),
    EnumValuePair(  S08ICSV4,     ("S08ICSV4") ),
+   EnumValuePair(  S08ICSV5,     ("S08ICSV5") ),
    EnumValuePair(  S08MCGV1,     ("S08MCGV1") ),
    EnumValuePair(  S08MCGV2,     ("S08MCGV2") ),
    EnumValuePair(  S08MCGV3,     ("S08MCGV3") ),
@@ -1296,18 +1297,21 @@ uint32_t DeviceData::getDefaultClockTrimNVAddress(ClockTypes_t clockType) const 
          case S08ICSV2x512 :
          case S08ICSV3 :
          case RS08ICSOSCV1 :
-         case RS08ICSV1 :     return 0xFFAE;
+         case RS08ICSV1 :
+         case MKEICS :        return 0xFFAE;
 
-         case S08ICSV4 :      return 0xFF6E;
+         case S08ICSV4 :
+         case S08ICSV5 :      return 0xFF6E;
 
          case S08MCGV1 :
          case S08MCGV2 :
-         case S08MCGV3 :      return 0xFFAE;
+         case S08MCGV3 :
+         case MKMCGV1  :      return 0xFFAE;
 
          case CLKINVALID :
-         case CLKEXT :
-         default :            return 0U;
+         case CLKEXT :        return 0U;
       }
+      return 0U;
    }
    else if ((targetType == T_ARM)||(targetType == T_ARM_JTAG)||(targetType == T_ARM_SWD)) {
       return 0x03FE;
@@ -1343,6 +1347,7 @@ uint32_t DeviceData::getDefaultClockTrimFreq(ClockTypes_t clockType) const {
    case S08ICSV2x512 :
    case S08ICSV3 :
    case S08ICSV4 :
+   case S08ICSV5 :
    case RS08ICSOSCV1 :
    case RS08ICSV1 :
       return 31250UL;
@@ -1354,9 +1359,9 @@ uint32_t DeviceData::getDefaultClockTrimFreq(ClockTypes_t clockType) const {
       return 31250UL;
    case CLKINVALID :
    case CLKEXT :
-   default :
       return 0U;
    }
+   return 0U;
 }
 
 /**
