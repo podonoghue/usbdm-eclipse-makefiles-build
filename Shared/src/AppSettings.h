@@ -198,6 +198,16 @@ public:
    }
 
    /**
+    * Used to set the filepath use for persistence
+    *
+    * @param basename     Base name for settings file in settings directory.
+    * @param targetType   Target type used in creating file name
+    */
+   void setFilepath(std::string basename, TargetType_t targetType) {
+      fFilePath = getSettingsFilename(basename, targetType);
+   }
+
+   /**
     * @param filepath     Path for settings file. If not absolute then settings directory is used.
     * @param description  Description added to settings file
     */

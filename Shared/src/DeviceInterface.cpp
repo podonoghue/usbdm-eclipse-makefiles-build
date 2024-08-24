@@ -70,9 +70,11 @@ USBDM_ErrorCode DeviceInterface::setCurrentDeviceByIndex(int newDeviceIndex) {
       currentDevice->setTargetSDIDs(targetSDIDs);
    }
    currentDeviceIndex = newDeviceIndex;
+
    log.print("Resetting device data to defaults\n");
    currentDevice->setClockTrimFreq(currentDevice->getDefaultClockTrimFreq());
-   currentDevice->setClockAddress(currentDevice->getDefaultClockAddress());
+   currentDevice->setClockTrimNVAddress(currentDevice->getDefaultClockTrimNVAddress());
+
    return rc;
 }
 

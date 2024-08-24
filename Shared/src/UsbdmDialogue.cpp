@@ -437,6 +437,7 @@ std::string UsbdmDialogue::update() {
    // Target Vdd related
    if (!(bdmCapabilities & BDM_CAP_VDDCONTROL)) {
       // BDM interface doesn't have Vdd control - Vdd control options disabled
+      log.print("Disabling Vdd controls\n");
       targetVddControl->Enable(false);
       bdmInterface->getBdmOptions().targetVdd          = BDM_TARGET_VDD_OFF;
       bdmInterface->getBdmOptions().cycleVddOnReset    = false;
@@ -444,6 +445,7 @@ std::string UsbdmDialogue::update() {
       bdmInterface->getBdmOptions().cycleVddOnConnect  = false;
    }
    else {
+      log.print("Enabling Vdd controls\n");
       targetVddControl->Enable(true);
    }
    targetVddControl->Select(bdmInterface->getBdmOptions().targetVdd);
@@ -1725,6 +1727,9 @@ USBDM_ErrorCode UsbdmDialogue::programFlash(bool loadAndGo) {
 
    DeviceDataPtr device = deviceInterface->getCurrentDevice();
 
+   log.error("Device = %-12s, clockRegisterAddress = 0x%08X\n",
+         device->getTargetName().c_str(), device->getClockAddress());
+
    rc = vddCheck(device);
    if (rc != BDM_RC_OK) {
       return rc;
@@ -2892,7 +2897,9 @@ void UsbdmDialogue::OnTrimFrequencyCheckboxClick( wxCommandEvent& event ) {
    doTrim = event.IsChecked() &&
             (deviceInterface->getCurrentDevice()->getClockType() != CLKEXT) &&
             (deviceInterface->getCurrentDevice()->getClockType() != CLKINVALID);
-   log.print("- doTrim= %s\n", doTrim?"True":"False");
+   log.print("doTrim= %s\n", doTrim?"True":"False");
+   log.print("defaultClockTrimFreq      = %u\n",     deviceInterface->getCurrentDevice()->getDefaultClockTrimFreq());
+   log.print("defaultClockTrimNVAddress = 0x%06X\n", deviceInterface->getCurrentDevice()->getDefaultClockTrimNVAddress());
    if (doTrim) {
       // Enabling trim - restore to default value
       deviceInterface->getCurrentDevice()->setClockTrimFreq(deviceInterface->getCurrentDevice()->getDefaultClockTrimFreq());
@@ -3256,7 +3263,7 @@ void UsbdmDialogue::OnResetRecoveryIntervalText( wxCommandEvent& event ) {
  * @param event
  */
 void UsbdmDialogue::onCloseButton( wxCommandEvent& event ) {
-   saveSettings();
+   LOGGING;
    modalReturnValue = BDM_RC_OK;
    Close(true);
 }
@@ -3268,6 +3275,7 @@ void UsbdmDialogue::onCloseButton( wxCommandEvent& event ) {
  * @param event
  */
 void UsbdmDialogue::OnKeepChangesClick( wxCommandEvent& event ) {
+   LOGGING;
    saveSettings();
    modalReturnValue = BDM_RC_OK;
 //   Close(true);
@@ -3281,6 +3289,7 @@ void UsbdmDialogue::OnKeepChangesClick( wxCommandEvent& event ) {
  * @param event
  */
 void UsbdmDialogue::OnDiscardChangesClick( wxCommandEvent& event ) {
+   LOGGING;
    modalReturnValue = BDM_RC_FAIL;
 //   Close(true);
    EndModal(modalReturnValue);
@@ -3294,7 +3303,7 @@ void UsbdmDialogue::OnDiscardChangesClick( wxCommandEvent& event ) {
  * @param event
  */
 void UsbdmDialogue::OnClose( wxCloseEvent& event ) {
-   LOGGING_Q;
+   LOGGING;
 
    if (modalReturnValue == BDM_RC_OK) {
       TransferDataFromWindow();

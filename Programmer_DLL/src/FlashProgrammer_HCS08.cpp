@@ -1918,13 +1918,14 @@ USBDM_ErrorCode FlashProgrammer_HCS08::checkTargetUnSecured() {
    USBDM_ErrorCode rc = initialiseTarget();
    if (rc != PROGRAMMING_RC_OK)
       return rc;
-   rc = runTCLCommand("isUnsecure");
+   int result;
+   rc = runTCLCommandWithRc("isUnsecure", result);
    if (rc != PROGRAMMING_RC_OK) {
-      log.print("Secured\n");
       return rc;
    }
-   log.print("Unsecured\n");
-   return PROGRAMMING_RC_OK;
+   rc = USBDM_ErrorCode(result);
+   log.print((result==BDM_RC_OK)?"Unsecured\n":"Secured\n");
+   return rc;
 }
 
 USBDM_ErrorCode FlashProgrammer_HCS08::setDeviceData(const DeviceDataConstPtr device) {

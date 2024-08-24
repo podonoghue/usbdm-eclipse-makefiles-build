@@ -84,7 +84,7 @@ private:
    BdmInterfacePtr              bdmInterface;
    DeviceInterfacePtr           deviceInterface;
    USBDM_ErrorCode              commandLineRC;
-   AppSettings                  appSettings;
+//   AppSettings                  appSettings;
 
    USBDM_ErrorCode doCommandLineProgram();
    USBDM_ErrorCode parseCommandLine(wxCmdLineParser& parser);
@@ -120,8 +120,9 @@ END_EVENT_TABLE()
 
 FlashProgrammerApp::FlashProgrammerApp() :
    targetType(T_ARM),
-   openLog(),
-   appSettings(CONFIG_FILE_NAME, targetType, "Programmer settings"){
+   openLog()/*,
+   appSettings(CONFIG_FILE_NAME, targetType, "Programmer settings") */ {
+   LOGGING;
    useGUI         = true;
    trimNVAddress  = 0;
    verbose        = false;
@@ -130,6 +131,8 @@ FlashProgrammerApp::FlashProgrammerApp() :
    program        = false;
 //   dialogue       = 0;
    commandLineRC  = BDM_RC_ILLEGAL_PARAMS;
+
+   log.error("targetType = %s\n", getTargetTypeName(targetType));
 }
 
 USBDM_ErrorCode programmerCallBack(USBDM_ErrorCode status, int percent, const char *message) {
@@ -241,6 +244,7 @@ int FlashProgrammerApp::OnRun(void) {
 
    USBDM_ErrorCode returnValue = BDM_RC_OK;
    if (useGUI) {
+      AppSettings appSettings(CONFIG_FILE_NAME, targetType, "Programmer settings");
 
       // Load interactive settings
       appSettings.load();
@@ -380,6 +384,7 @@ bool FlashProgrammerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
       parser.Usage();
       return false;
    }
+//   appSettings.setFilepath(CONFIG_FILE_NAME, targetType);
    return true;
 }
 
