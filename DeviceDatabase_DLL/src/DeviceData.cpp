@@ -879,6 +879,10 @@ const std::string DeviceData::getTargetName() const {
    return targetName;
 }
 
+TargetType_t DeviceData::getTargetType() const {
+   return targetType;
+}
+
 bool DeviceData::isHidden() const {
    return hidden;
 }

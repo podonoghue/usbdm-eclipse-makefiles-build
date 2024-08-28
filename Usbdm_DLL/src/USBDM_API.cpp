@@ -1221,9 +1221,11 @@ USBDM_ErrorCode USBDM_BDMCommand(unsigned int txSize, unsigned int rxSize, unsig
    memcpy(usb_data+1, data, txSize);
    unsigned int actualSize;
    USBDM_ErrorCode rc = bdm_usb_transaction(txSize+1, rxSize, usb_data, 500, &actualSize);
-   memcpy(data, usb_data, actualSize);
-   log.printq("<=");
-   log.printDump(data, actualSize,0,0);
+   if (rc == BDM_RC_OK) {
+      memcpy(data, usb_data, actualSize);
+      log.printq("<=");
+      log.printDump(data, actualSize,0,0);
+   }
    return rc;
 }
 

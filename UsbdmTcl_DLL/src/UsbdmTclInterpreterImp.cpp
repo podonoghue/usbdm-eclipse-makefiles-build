@@ -255,6 +255,7 @@ UsbdmTclInterpreterImp::UsbdmTclInterpreterImp(bool doInit) {
 
    if (doInit) {
       setTCLExecutable();
+      log.print("Discarding interp@%p\n", interp.get());
       interp.reset(Tcl_CreateInterp(), deleteInterpreter);
       Tcl_Init(interp.get());
       log.print("Created interp@%p\n", interp.get());
@@ -451,6 +452,10 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::setDeviceParameters(DeviceDataConstPtr d
    if (rc != PROGRAMMING_RC_OK) {
       log.error("evalTclScript() failed\n");
       return rc;
+   }
+   if (device->getTargetType() == TargetType_t::T_HCS08) {
+      uint32_t sbdfrAddress = device->getHCS08sbdfrAddress();
+      bdmInterface->getBdmOptions().hcs08sbdfrAddress = sbdfrAddress;
    }
    return rc;
 }
@@ -742,6 +747,8 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::evalTclScript(const char *script) {
 
    // Clear TCL result
    Tcl_ResetResult(interp.get());
+   log.error("TCL interp = '%p'\n", interp.get());
+
 
    if (strlen(script)<40) {
       log.error("Executing TCL command '%s'\n", script);
@@ -3093,6 +3100,10 @@ static int listDevices() {
 static int cmd_setDevice(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    LOGGING;
    // setdevice <deviceName>
+
+   log.error("TCL interp = '%p'\n", interp);
+
+
    if ((argc == 1)) {
       const char *name = "No device selected";
       if (deviceInterface != 0) {
@@ -3758,6 +3769,10 @@ static int cmd_setSpeed(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
 static int cmd_sync(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    // sync <control_value>
 
+   if (bdmInterface == nullptr) {
+      PRINT("Interface not open\n");
+      return TCL_ERROR;
+   }
    TargetType_t targetType = bdmInterface->getBdmOptions().targetType;
    if (((targetType == T_ARM)||(targetType == T_ARM_SWD)||targetType == T_ARM_JTAG)) {
       bdmInterface->basicConnect();
@@ -3779,7 +3794,9 @@ static int cmd_sync(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *ar
    unsigned char usb_data[20] = {0};
    usb_data[0] = CMD_USBDM_DEBUG;
    usb_data[1] = BDM_DBG_SYNC;
-   bdmInterface->bdmCommand(2, sizeof(usb_data), usb_data);
+   if (checkUsbdmRC(interp,  bdmInterface->bdmCommand(2, sizeof(usb_data), usb_data)) != 0) {
+      return TCL_ERROR;
+   }
 
    if (usb_data[0] != BDM_RC_OK) {
       PRINT("sync: Failed\n");
@@ -4506,10 +4523,14 @@ static struct {
  * @param interp The interpreter to use
  */
 void UsbdmTclInterpreterImp::registerUSBDMCommands(Tcl_Interp *interp) {
+   LOGGING;
+
    int index;
    /*
-    *  Register our TCL commands.
+    *  Register our TCL commands
     */
+   log.error("TCL interp (param)= '%p'\n", interp);
+
    for (index=0; myCommands[index].command != NULL; index++) {
       Tcl_CreateObjCommand(interp, myCommands[index].name, myCommands[index].command, NULL,  NULL);
    }

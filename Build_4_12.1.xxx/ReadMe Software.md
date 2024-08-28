@@ -21,6 +21,11 @@ There are no driver needed if using the deb installer
 *******  
 **USBDM_V4_12_1_325** (Jan 2024)  
 
+- Added MC9S08PB16
+
+*******  
+**USBDM_V4_12_1_330** (Aug 2024)  
+
 - HCS12 programmer would crash when verifying against invalid memory image
 - MemoryDump program would fail to load PPAGE value from config file in some situations
 - Increased number of entries in MemoryDump table

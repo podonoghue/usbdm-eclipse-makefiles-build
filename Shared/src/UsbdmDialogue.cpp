@@ -1760,6 +1760,11 @@ USBDM_ErrorCode UsbdmDialogue::programFlash(bool loadAndGo) {
       log.print("Setting reset method to %s\n", DeviceData::getResetMethodName(currentResetMethod));
       device->setResetMethod(currentResetMethod);
 
+      // Need to do this early so programmer has chance to update BDM interface for specific target
+      rc = flashprogrammer->setDeviceData(device);
+      if (rc != BDM_RC_OK) {
+         continue;
+      }
       // Temporarily change power options for "load & Go"
       bool leaveTargetPowered = bdmInterface->getBdmOptions().leaveTargetPowered;
       bdmInterface->getBdmOptions().leaveTargetPowered = loadAndGo||leaveTargetPowered;
@@ -1780,10 +1785,6 @@ USBDM_ErrorCode UsbdmDialogue::programFlash(bool loadAndGo) {
          if ((rc != BDM_RC_OK) && (rc != BDM_RC_BDM_EN_FAILED) && (rc != BDM_RC_SECURED)) {
             continue;
          }
-      }
-      rc = flashprogrammer->setDeviceData(device);
-      if (rc != BDM_RC_OK) {
-         continue;
       }
       rc = flashprogrammer->programFlash(flashImage, &progressCallBack, true);
       if (rc != BDM_RC_OK) {
@@ -1902,6 +1903,11 @@ USBDM_ErrorCode UsbdmDialogue::verifyFlash(void) {
       flashprogrammer = FlashProgrammerFactory::createFlashProgrammer(bdmInterface);
    }
    do {
+      // Need to do this early so programmer has chance to update BDM interface for specific target
+      rc = flashprogrammer->setDeviceData(device);
+      if (rc != BDM_RC_OK) {
+         continue;
+      }
       rc = bdmInterface->initBdm();
       if (rc != BDM_RC_OK) {
          continue;
@@ -1917,10 +1923,6 @@ USBDM_ErrorCode UsbdmDialogue::verifyFlash(void) {
          if ((rc != BDM_RC_OK) && (rc != BDM_RC_BDM_EN_FAILED) && (rc != BDM_RC_SECURED)) {
             continue;
          }
-      }
-      rc = flashprogrammer->setDeviceData(device);
-      if (rc != BDM_RC_OK) {
-         continue;
       }
       rc = flashprogrammer->verifyFlash(flashImage, progressCallBack);
    } while(false);

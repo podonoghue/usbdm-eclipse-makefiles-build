@@ -98,6 +98,8 @@ proc disableWatchdog { } {
       halt   ;# in case sleeping
    }
    catch {
+      ;# for debug
+      rb $::HCS08_SOPT
       wb $::HCS08_SOPT $::HCS08_SOPT_INIT ;# Disable COP
       rb $::HCS08_SOPT
    }

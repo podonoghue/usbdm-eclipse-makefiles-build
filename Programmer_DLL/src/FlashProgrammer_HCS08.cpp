@@ -441,7 +441,8 @@ USBDM_ErrorCode FlashProgrammer_HCS08::resetAndConnectTarget(void) {
    }
 
    // Reset to special mode to allow unlocking of Flash
-   bdmInterface->connect();
+   bdmInterface->targetConnectWithRetry(BdmInterface::RetryMode::retryAlways);
+//   bdmInterface->connect();
    rc = bdmInterface->reset(targetMode);
    if (rc != BDM_RC_OK) {
       // Try again with hardware reset
@@ -1929,8 +1930,11 @@ USBDM_ErrorCode FlashProgrammer_HCS08::checkTargetUnSecured() {
 }
 
 USBDM_ErrorCode FlashProgrammer_HCS08::setDeviceData(const DeviceDataConstPtr device) {
+   LOGGING;
+   uint32_t sbdfrAddress = device->getHCS08sbdfrAddress();
+   bdmInterface->getBdmOptions().hcs08sbdfrAddress = sbdfrAddress;
+   log.print("sbdfrAddress = 0x%06X\n", sbdfrAddress);
    USBDM_ErrorCode rc = FlashProgrammerCommon::setDeviceData(device);
-   bdmInterface->getBdmOptions().hcs08sbdfrAddress = device->getHCS08sbdfrAddress();
    return rc;
 }
 
@@ -2423,7 +2427,7 @@ USBDM_ErrorCode FlashProgrammer_HCS08::doReadbackVerify(FlashImagePtr flashImage
 
 #ifdef LOG
    // Used to suppress multiple error messages
-   bool            reportedError = false;
+   bool reportedError = false;
 #endif
 
    flashImage->printMemoryMap();

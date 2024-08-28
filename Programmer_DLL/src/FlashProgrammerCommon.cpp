@@ -1246,7 +1246,7 @@ USBDM_ErrorCode FlashProgrammerCommon::setFlashTrimValues(FlashImagePtr flashIma
  * @param flashImage   = Flash image
  */
 USBDM_ErrorCode FlashProgrammerCommon::dummyTrimLocations(FlashImagePtr flashImage) {
-   LOGGING_Q;
+   LOGGING;
    unsigned size  = 0;
    uint32_t start = 0;
 
@@ -1262,6 +1262,7 @@ USBDM_ErrorCode FlashProgrammerCommon::dummyTrimLocations(FlashImagePtr flashIma
       case S08ICGV2:
       case S08ICGV3:
       case S08ICGV4:
+      case MKMCGV1:
          start = device->getClockTrimNVAddress();
          size  = 2;
          break;
@@ -1270,6 +1271,7 @@ USBDM_ErrorCode FlashProgrammerCommon::dummyTrimLocations(FlashImagePtr flashIma
       case S08ICSV2x512:
       case S08ICSV3:
       case S08ICSV4:
+      case S08ICSV5:
       case S08MCGV1:
       case S08MCGV2:
       case S08MCGV3:
@@ -1279,7 +1281,7 @@ USBDM_ErrorCode FlashProgrammerCommon::dummyTrimLocations(FlashImagePtr flashIma
          size  = 2;
          break;
       case CLKEXT:
-      default:
+      case CLKINVALID:
          break;
    }
    if (size == 0) {
