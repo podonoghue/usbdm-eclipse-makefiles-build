@@ -104,15 +104,6 @@ proc disableWatchdog { } {
       rb $::HCS08_SOPT5
    }
    
-   ;# Disable watchdog
-   ;#   set ::ramAddress 0x1000
-   ;#   set wdogH [expr $::HCS08_SOPT5>>8]
-   ;#   set wdogL [expr $::HCS08_SOPT5&0xFF]
-
-   ;#                     ldhx #SOPT5;       clra; sta ,X;   
-   ;#   wb  $::ramAddress 0x45 $wdogH $wdogL 0x4F  0xF7 0x82
-   ;#   wpc $::ramAddress
-   ;#   go 
 }
 
 ;######################################################################################
@@ -261,7 +252,7 @@ proc massEraseTarget { } {
 }
 
 ;######################################################################################
-;#  Verifies that all flash blocks are erased in Target
+;#  Verifies that all flash blocks are erased in Target - not used
 ;#
 proc eraseVerifyTarget { } {
 
@@ -298,5 +289,8 @@ proc isUnsecure { } {
 ;######################################################################################
 ;# Actions on initial load
 ;#
+
+puts "Target script = HCS08-PBxx-flash-scripts.tcl"
+
 loadSymbols
 

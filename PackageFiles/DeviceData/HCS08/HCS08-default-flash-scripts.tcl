@@ -286,5 +286,8 @@ proc isUnsecure { } {
 ;######################################################################################
 ;# Actions on initial load
 ;#
+
+puts "Target script = HCS08-default-flash-scripts.tcl"
+
 loadSymbols
 

@@ -269,6 +269,21 @@ proc massEraseTarget { } {
    return [ isUnsecure ]
 }
 
+;######################################################################################
+;#  Verifies that all flash blocks are erased in Target - not used
+;#
+proc eraseVerifyTarget { } {
+
+   puts "eraseVerifyTarget{}"
+   
+   ;# No initial connect as may fail.  Assumed done by caller.
+
+   initFlash [expr [speed]/1000]  ;# Flash speed calculated from BDM connection speed
+
+   ;# Mass erase flash
+   executeFlashCommand $::NVM_FCMD_ERASE_VERIFY
+}
+
 ######################################################################################
 # Checks if target is secured
 #
@@ -292,5 +307,8 @@ proc isUnsecure { } {
 ;######################################################################################
 ;# Actions on initial load
 ;#
+
+puts "Target script = HCS08-PTxx-flash-scripts.tcl"
+
 loadSymbols
 
