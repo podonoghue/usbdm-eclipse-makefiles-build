@@ -32,8 +32,8 @@ sudo apt-get -y install libusb-1.0-0-dev
 sudo apt-get -y install tcl8.6-dev
 sudo apt-get -y install tcl8.6
 sudo apt-get -y install libxerces-c-dev
-sudo apt-get -y install libwxgtk3.0-gtk3-dev
-sudo apt-get -y install libwxbase3.0-dev
+sudo apt-get -y install libwxgtk3.2-dev
+sudo apt-get -y install libwxbase3.2
 sudo apt-get -y install g++
 sudo apt-get -y install openjdk-17-jdk
 sudo apt-get -y install libusb-1.0-0
@@ -47,8 +47,8 @@ sudo apt-get -y install libusb-1.0-0-dev
 sudo apt-get -y install tcl-dev
 sudo apt-get -y install tcl
 sudo apt-get -y install libxerces-c-dev
-sudo apt-get -y install libwxgtk3.0-gtk3-dev
-sudo apt-get -y install libwxbase3.0-dev
+sudo apt-get -y install libwxgtk3.2-dev
+sudo apt-get -y install libwxbase3.2
 sudo apt-get -y install g++
 sudo apt-get -y install openjdk-17-jdk
 sudo apt-get -y install libusb-1.0-0
