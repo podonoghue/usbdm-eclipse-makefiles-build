@@ -19,12 +19,14 @@ There are no driver needed if using the deb installer
 # History
 
 *******  
-**USBDM_V4_12_1_325** (Jan 2024)  
+**USBDM_V4_12_1_330** (Aug 2024)  
 
-- Added MC9S08PB16
+- Added MC9S08PB8, MC9S08PB16
+- Corrected a bugs with software reset for faster HCS08 devices (requires BDM firmware update).
 
 *******  
-**USBDM_V4_12_1_330** (Aug 2024)  
+**USBDM_V4_12_1_325** (Jan 2024)  
+
 
 - HCS12 programmer would crash when verifying against invalid memory image
 - MemoryDump program would fail to load PPAGE value from config file in some situations

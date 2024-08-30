@@ -1349,7 +1349,25 @@
       <device family="HCS08Plus" name="MC9S08PL60" alias="MC9S08PA60">
          <sdid value="0x0040"  mask="0x0FFF"/>
       </device>
-      <device family="HCS08" name="MC9S08PB16" vddMin="2.7" vddMax="5.5" >
+      <device family="HCS08Plus" name="MC9S08PB8">
+         <clock registerAddress="0x3038" type="S08ICSV4" />
+         <memory type="ram">
+            <memoryRange start="0x0040" end="0x043F" />
+         </memory>
+         <memory registerAddress="0x3020" type="flash" securityAddress="0xFF70" sectorSize="512" alignment="4">
+            <securityEntryRef ref="HCS08-default-security" />
+            <memoryRange start="0x00E000" end="0x00FFFF" />
+         </memory>
+         <soptAddress value="0x3008" /> <!-- SOPT5 = COP -->
+         <sdidAddress value="0x3002" />
+         <sdid value="0x0046" />
+         <sbdfrAddress value="0x3001"/>
+         <flashScripts>
+            <tclScriptRef ref="HCS08-PBxx-flash-scripts" />
+         </flashScripts>
+         <flashProgramRef ref="HCS08-PBxx-flash-program" />
+      </device>
+      <device family="HCS08Plus" name="MC9S08PB16" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x3038" type="S08ICSV5" />
          <memory type="ram">
             <memoryRange start="0x0040" end="0x043F" />
