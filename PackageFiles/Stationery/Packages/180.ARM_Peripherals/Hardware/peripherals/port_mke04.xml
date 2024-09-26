@@ -154,6 +154,7 @@
             toolTip="Each bit controls the pull-up for the corresponding pin"
             baseType="uint32_t"
             bitList="Pin%i"
+            bitDescription="Pull-up for Pin%i"
             typeName="PortPullUp%(P)"
             value="%(v)"
             bitmask="%(m)" />

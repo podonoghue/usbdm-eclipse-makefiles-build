@@ -4,11 +4,14 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Pulse Width Timer" >
 
-   <equation key="irq_parameters"            value=""        />
-   <equation key="irq_dummy_parameters"      value=""        />
-   <equation key="irq_call_parameters"       value=""        />
-   <equation key="generateDefault"           value="false"     />
-   <equation key="configureInStartupDefault" value="false"     />
+
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
+   <equation key="irq_parameters"            value=""       />
+   <equation key="irq_dummy_parameters"      value=""       />
+   <equation key="irq_call_parameters"       value=""       />
+   <equation key="generateDefault"           value="false"  />
+   <equation key="configureInStartupDefault" value="false"  />
    <xi:include href="enablePeripheral.xml"  />
    <title />
 

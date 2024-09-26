@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!-- irqHandlingInit.xml -->
+
+<!-- 
+   Interrupt related initialisation values for DefaultInitValue constructor
+-->
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
+
+   <!-- Only create if device has interrupts -->
+   <if condition="_hardwareIrqCount" >
+      <if condition="=_hardwareIrqCount==1" >
+         <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)"
+            separator=","
+            terminator=","
+            padToComments="40"
+            variables="
+               irqLevel,
+               handlerName" >
+         <![CDATA[
+            %initExpression\n
+         ]]></variableTemplate>
+      </if>
+      <if condition="=_hardwareIrqCount>1" >
+         <!-- printVar key="_hardwareIrqNums" / -->
+         <for keys="irqName" values="=_hardwareIrqNums">
+            <equation key="irqEnum"       value='=ReplaceAll("%(irqName)","^(.*?)_(.*)_IRQn$","IrqNum_$2")' />
+            <equation key="irqlLvl"       value='=ReplaceAll("%(irqName)","^(.*?)_(.*)_IRQn$","irqLevel_$2")' />
+            <equation key="irqHandlerNm"  value='=ReplaceAll("%(irqName)","^(.*?)_(.*)_IRQn$","handlerName_$2")' />
+            <!-- 
+            <print text="(irqName) = %(irqName)"/>
+            <printVar key="irqEnum" />
+            <printVar key="irqlLvl" />
+            <printVar key="irqHandlerNm" />
+            -->
+            <variableTemplate where="info" codeGenCondition='$(_InfoIrqGuard)&amp;&amp;!IsZero(@irqlLvl)'
+               variables='=irqlLvl,irqHandlerNm'
+               separator=","
+               terminator=","
+               padToComments="40"
+               immediateVariables="irqEnum" >
+            <![CDATA[
+               \t   $(irqEnum), %initExpression\n
+            ]]></variableTemplate>
+         </for>
+      </if>
+   </if>
+</fragment>

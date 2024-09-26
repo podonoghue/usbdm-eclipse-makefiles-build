@@ -19,7 +19,9 @@
 #include "derivative.h"
 #include "system.h"
 #include "pin_mapping.h"
+#if $(/DMA/_BasicInfoGuard:false) // (/DMA/_BasicInfoGuard)
 #include "dma.h"
+#endif
 
 $(/PIT/prototypes:// $/PIT/prototypes not found)
 

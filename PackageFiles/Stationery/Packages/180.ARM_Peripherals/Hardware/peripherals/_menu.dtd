@@ -472,8 +472,12 @@
    <!ATTLIST bitmaskOption logging        (true)       #IMPLIED>
    <!-- Used to control generation of enum (default is true) -->
    <!ATTLIST bitmaskOption generateEnum   (true|empty) #IMPLIED>
+   <!-- Generate logical operators to combine enum values -->
+   <!ATTLIST bitmaskOption generateOperators (true)  #IMPLIED>
    <!-- Name of associate signal -->
    <!ATTLIST bitmaskOption signal          CDATA #IMPLIED>
+   <!-- Generate choice values as constants rather than as an enum -->
+   <!ATTLIST bitmaskOption generateAsConstants (true)  #IMPLIED>
 
 <!-- ____  floatOption -->
 <!ELEMENT floatOption EMPTY >
@@ -693,8 +697,16 @@
    
 <!-- ____  bitfieldOption -->
 <!ELEMENT bitfieldOption ((bitField|bitFieldExpansion)*) >
-   <!-- Where to place generated code -->
-   <!ATTLIST choiceOption where        %where_items;  #IMPLIED >
+   <!-- 
+   Where to place generated code<br>
+      info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
+      definitions - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
+      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
+      all   - Explicitly available anywhere controlled by key substitution<br>
+      forceInfo - forces Info namespace and clears key and discardRepeats
+      baseClass - In base class for peripheral (causes discard repeats using StructName as key)
+   -->
+   <!ATTLIST bitfieldOption where        %where_items;  #IMPLIED >
    <!-- Visible name of option - also used for key if not provided -->
    <!ATTLIST bitfieldOption name                CDATA        #IMPLIED>
    <!-- Key for option - also used as visible name if not provided -->
@@ -735,16 +747,6 @@
    <!ATTLIST bitfieldOption tableType            CDATA        #IMPLIED>
    <!-- Structure for elements of the table associated with this choice -->
    <!ATTLIST bitfieldOption bitmask              CDATA        #IMPLIED>
-   <!-- 
-   Where to place generated code<br>
-      info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
-      definitions - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
-      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
-      all   - Explicitly available anywhere controlled by key substitution<br>
-      forceInfo - forces Info namespace and clears key and discardRepeats
-      baseClass - In base class for peripheral (causes discard repeats using StructName as key)
-   -->
-   <!ATTLIST bitfieldOption namespace           CDATA        #IMPLIED >
    <!-- Use 'enum class' for enums and generate operator|() -->
    <!ATTLIST bitfieldOption enumClass           (true)       #IMPLIED>
    <!-- Name for enum and first part of enum values -->
@@ -783,6 +785,8 @@
    <!ATTLIST bitfieldOption logging             (true)       #IMPLIED>
    <!-- Generate choice values as constants rather than as an enum -->
    <!ATTLIST bitfieldOption generateAsConstants (true)       #IMPLIED>
+   <!-- Generate logical operators to combine enum values -->
+   <!ATTLIST bitfieldOption generateOperators        (true)       #IMPLIED>
    <!-- Name of associate signal -->
    <!ATTLIST bitfieldOption signal              CDATA        #IMPLIED>
    
@@ -831,7 +835,15 @@
    
 <!-- ____  choiceOption -->
 <!ELEMENT choiceOption ((choice|choiceExpansion)*) >
-   <!-- Where to place generated code -->
+   <!-- 
+   Where to place generated code<br>
+      info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
+      definitions - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
+      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
+      all   - Explicitly available anywhere controlled by key substitution<br>
+      forceInfo - forces Info namespace and clears key and discardRepeats
+      baseClass - In base class for peripheral (causes discard repeats using StructName as key)
+   -->
    <!ATTLIST choiceOption where        %where_items;  #IMPLIED >
    <!-- Visible name of option - also used for key if not provided -->
    <!ATTLIST choiceOption name                CDATA        #IMPLIED>
@@ -878,7 +890,7 @@
       forceInfo - forces Info namespace and clears key and discardRepeats
       baseClass - In base class for peripheral (causes discard repeats using StructName as key)
    -->
-   <!ATTLIST choiceOption namespace           CDATA        #IMPLIED >
+   <!ATTLIST choiceOption where           %where_items;        #IMPLIED >
    <!-- Use 'enum class' for enums and generate operator|() -->
    <!ATTLIST choiceOption enumClass          (true)       #IMPLIED>
    <!-- Name for enum and first part of enum values -->
@@ -917,8 +929,12 @@
    <!ATTLIST choiceOption logging             (true)       #IMPLIED>
    <!-- Generate choice values as constants rather than as an enum -->
    <!ATTLIST choiceOption generateAsConstants (true)       #IMPLIED>
+   <!-- Generate logical operators to combine enum values -->
+   <!ATTLIST choiceOption generateOperators   (true)       #IMPLIED>
    <!-- Name of associate signal -->
    <!ATTLIST choiceOption signal              CDATA        #IMPLIED>
+   <!-- Suppresses stem on enum values -->
+   <!ATTLIST choiceOption noStem              (true)       #IMPLIED>
 
 <!-- ____  choice -->
 <!ELEMENT choice EMPTY >
@@ -976,7 +992,15 @@
    
 <!-- ____  binaryOption -->
 <!ELEMENT binaryOption (choice?, choice?) >
-   <!-- Where to place generated code -->
+   <!-- 
+   Where to place generated code<br>
+      info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
+      definitions - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
+      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
+      all   - Explicitly available anywhere controlled by key substitution<br>
+      forceInfo - forces Info namespace and clears key and discardRepeats
+      baseClass - In base class for peripheral (causes discard repeats using StructName as key)
+   -->
    <!ATTLIST choiceOption where        %where_items;  #IMPLIED >
    <!-- Visible name of option - also used for key if not provided -->
    <!ATTLIST binaryOption name                CDATA        #IMPLIED>
@@ -1026,7 +1050,7 @@
       forceInfo - forces Info namespace and clears key and discardRepeats
       baseClass - In base class for peripheral (causes discard repeats using StructName as key)
    -->
-   <!ATTLIST binaryOption namespace           CDATA                   #IMPLIED >
+   <!ATTLIST binaryOption where           %where_items;                   #IMPLIED >
    <!-- Use 'enum class' for enums and generate operator|() -->
    <!ATTLIST binaryOption enumClass          (true)       #IMPLIED>
    <!-- Name for enum and first part of enum values -->
@@ -1039,8 +1063,6 @@
    <!ATTLIST binaryOption register            CDATA        #IMPLIED>
    <!-- Text to add to enum body generated from choices -->
    <!ATTLIST binaryOption enumText            CDATA        #IMPLIED>
-   <!-- Name of register. If not provided it is derived from variable -->
-   <!ATTLIST binaryOption register            CDATA        #IMPLIED>
    <!-- Replace existing variable associated with option quietly -->
    <!ATTLIST binaryOption replace             CDATA        #IMPLIED>
    <!-- How to format a raw value e.g. 'MCM_PLACR_DFCS(%s),MCM_PLACR_EFDS(%s)' or '%s_s' -->
@@ -1063,6 +1085,8 @@
    <!ATTLIST binaryOption logging             (true)       #IMPLIED>
    <!-- Name of associate signal -->
    <!ATTLIST binaryOption signal              CDATA #IMPLIED>
+   <!-- Suppresses stem on enum values -->
+   <!ATTLIST binaryOption noStem              (true)       #IMPLIED>
 
 <!-- ____  irqOption -->
 <!ELEMENT irqOption EMPTY >
@@ -1187,8 +1211,6 @@
 <!ELEMENT template (#PCDATA)* >
    <!-- Where to place generated code -->
    <!ATTLIST template location     CDATA  #IMPLIED >
-   <!-- Where to place generated code -->
-   <!ATTLIST template where        %where_items;  #IMPLIED >
    <!-- 
    Where to place generated code<br>
       info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
@@ -1197,7 +1219,7 @@
       forceInfo - forces Info namespace and clears key and discardRepeats
       baseClass - In base class for peripheral (causes discard repeats using StructName as key)
    -->
-   <!ATTLIST template namespace                 CDATA                   #IMPLIED >
+   <!ATTLIST template where                 %where_items;                   #IMPLIED >
    <!-- Key for template -->
    <!ATTLIST template key                       CDATA                   #IMPLIED >
    <!-- Condition evaluated during parsing that enables processing of this option -->
@@ -1216,8 +1238,6 @@
 <!-- ____  variableTemplate -->
 <!ELEMENT variableTemplate (#PCDATA)* >
    <!-- Where to place generated code -->
-   <!ATTLIST variableTemplate where        %where_items;  #IMPLIED >
-   <!-- Where to place generated code -->
    <!ATTLIST variableTemplate location     CDATA  #IMPLIED >
    <!-- 
    Where to place generated code<br>
@@ -1227,7 +1247,7 @@
       forceInfo - forces Info namespace and clears key and discardRepeats
       baseClass - In base class for peripheral (causes discard repeats using StructName as key)
    -->
-   <!ATTLIST variableTemplate namespace                 CDATA                   #IMPLIED >
+   <!ATTLIST variableTemplate where                 %where_items;                   #IMPLIED >
    <!-- Key for template -->
    <!ATTLIST variableTemplate key                       CDATA                   #IMPLIED >
    <!-- Condition evaluated during parsing that enables processing of this option -->
@@ -1270,8 +1290,6 @@
 <!-- ____ clockCodeTemplate -->
 <!ELEMENT clockCodeTemplate (#PCDATA)* >
    <!-- Where to place generated code -->
-   <!ATTLIST clockCodeTemplate where        %where_items;  #IMPLIED >
-   <!-- Where to place generated code -->
    <!ATTLIST clockCodeTemplate location     CDATA  #IMPLIED >
    <!-- 
    Where to place generated code<br>
@@ -1281,7 +1299,7 @@
       forceInfo - forces Info namespace and clears key and discardRepeats
       baseClass - In base class for peripheral (causes discard repeats using StructName as key)
    -->
-   <!ATTLIST clockCodeTemplate namespace                 CDATA                   #IMPLIED >
+   <!ATTLIST clockCodeTemplate where                 %where_items;                  #IMPLIED >
    <!-- Key for template -->
    <!ATTLIST clockCodeTemplate key                       CDATA                   #IMPLIED >
    <!-- Condition evaluated during parsing that enables processing of this option -->

@@ -554,7 +554,7 @@ USBDM_ErrorCode BdmInterfaceCommon::targetConnectWithRetry(BdmInterfaceCommon::R
 //!
 USBDM_ErrorCode BdmInterfaceCommon::targetConnectWithRetry(USBDMStatus_t *usbdmStatus, RetryMode retryMode) {
    LOGGING_X;
-   log.print("%s", getConnectionRetryName(retryMode));
+   log.print("%s\n", getConnectionRetryName(retryMode));
 
    USBDM_ErrorCode rc;
 

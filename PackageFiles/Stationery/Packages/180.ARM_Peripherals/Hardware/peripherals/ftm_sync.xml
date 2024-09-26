@@ -489,7 +489,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr SyncInit DefaultSyncInitValue = {%initNonZeroValues\n
+      \tstatic constexpr SyncInit DefaultSyncInitValue = {%initExpression\n
       \t};
       \t\n
    ]]>

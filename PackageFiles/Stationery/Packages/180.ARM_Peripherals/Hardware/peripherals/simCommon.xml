@@ -5,7 +5,20 @@
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
    <!-- Convenient location for common SIM Settings -->
-
+   
+   <binaryOption where="all" key="/Common/polarity" templateKey="/PCR/PolarityDeclaration"
+      valueFormat="%s"
+      hidden="true"
+      derived="true"
+      typeName="Polarity"
+      baseType="uint32_t"
+      noStem="true"
+      description="Used to indicate or control the polarity of an I/O with selectable polarity"
+      toolTip="Selects Pin Polarity" >
+      <choice name="Signal is active low i.e. Active => Low level, Inactive => High level"  value="(uint32_t)-1" enum="ActiveLow"  />
+      <choice name="Signal is active high i.e. Active => High level, Inactive => Low level" value="0"            enum="ActiveHigh" isDefault="true" />
+   </binaryOption >
+   
    <intOption key="numberOfClockSettings"
       hidden="true"
       description="Number of clock settings"

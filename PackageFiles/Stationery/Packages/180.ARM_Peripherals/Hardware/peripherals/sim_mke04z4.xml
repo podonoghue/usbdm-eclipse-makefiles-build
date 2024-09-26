@@ -1184,6 +1184,20 @@
       \t}\n\n
    ]]></template>
 
+   <template  ><![CDATA[
+      \t//! Frequency of Low Power Oscillator (LPO) Clock [~1kHz]
+      \tstatic constexpr uint32_t system_low_power_clock = $(/PMC/system_low_power_clock)UL;
+
+      \t/**
+      \t * Get LPO clock
+      \t *
+      \t * @return frequency in Hz as uint32_t
+      \t */
+      \tstatic constexpr uint32_t getLpoClock() {
+      \t   return system_low_power_clock;
+      \t}\n\n
+   ]]></template>
+
    <!-- ____ Common __________________ -->
 
    <validate

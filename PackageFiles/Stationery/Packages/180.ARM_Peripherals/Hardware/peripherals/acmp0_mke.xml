@@ -4,6 +4,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Analogue comparator" >
 
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
    <equation key="irq_parameters"            value=""        />
    <equation key="irq_dummy_parameters"      value=""        />
    <equation key="irq_call_parameters"       value=""        />
@@ -180,6 +182,7 @@
       derived="true"
       typeName="AcmpInputEnable"
       baseType="uint8_t"
+      generateOperators="true"
       toolTip="Enables ACMP pins as analogue inputs\n
                Disables other functions"
       description="ACMP Input Pin Enables" >
@@ -188,13 +191,15 @@
 
    <bitmaskOption key="acmp_c2_acipe" condition="acmp_c2_acipe_present"
       enabledBy="acmp_cs_ace"
-      typeName="AcmpInputEnable"
-      baseType="uint8_t"
+      typeName="Acmp$(_instance)InputEnable"
+      baseType="AcmpInputEnable"
       disabledValue="0"
+      generateAsConstants="true"
       toolTip="Bitmask controlling which ACMP pins are available as analogue inputs"
       description="ACMP Input Pin Enables"
       bitmask="0x7"
       bitList="=inputPinMap"
+      bitDescription="Input %i"
       pinMap='="ACMP$(_instance)_IN%i:"+inputPinMap'
       value="0"
    />
@@ -211,7 +216,7 @@
 
    <!-- ____ Setters and Getters ____________ -->
 
-   <variableTemplate variables="acmp_c2_acipe" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate variables="acmp_c2_acipe_base" codeGenCondition="enablePeripheralSupport"
    ><![CDATA[
       \t/**
       \t * Allocate %description
@@ -371,7 +376,7 @@
                              acmp_cs_acope,acmp_cs_acmod                          :   0      ;
                %baseType   : acmp_c0_acpsel,acmp_c0_acnsel                        :   0      ;
                %baseType   : acmp_c1_dacen,acmp_c1_dacref,acmp_c1_dacval          :   0      ;
-               %baseType   : acmp_c2_acipe                                        :   0      " >
+               %baseType   : acmp_c2_acipe_base                                   :   %baseType(0)      " >
       <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
          linePadding="xxx"
@@ -430,7 +435,7 @@
    ]]></variableTemplate>
 
    <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
-      variables="acmp_c2_acipe"
+      variables="acmp_c2_acipe_base"
       linePadding="xxx" >
    <![CDATA[
       \t   /**
@@ -444,7 +449,7 @@
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t      %registerName = %registerName | %paramExpression;
+      \t      %registerName = %paramExpression;
       \t   }
       \t\n
    ]]>

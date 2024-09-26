@@ -1056,7 +1056,7 @@
 
       <!-- ____ POL ______________ -->
 
-      <choiceOption key="ftm_pol_pol_masks" condition="ftm_pol_present"
+      <!-- choiceOption key="ftm_pol_pol_masks" condition="ftm_pol_present"
          valueFormat="%s"
          hidden="true"
          derived="true"
@@ -1069,18 +1069,18 @@
          <choice          name="All Active-low"      enum="AllActiveLow"      value='0xFFFFU' />
          <choiceExpansion name="Ch%(ch) Active-high" enum="Ch%(ch)ActiveHigh" value='=Format("0x%04XU",0xFF00^(1&lt;&lt;(%(ch)+8)))' keys="ch" dim="8"/>
          <choice          name="All Active-high"     enum="AllActiveHigh"     value='0x0000U' />
-      </choiceOption>
+      <choiceOption -->
 
       <bitmaskOption key="ftm_pol_pol" condition="ftm_pol_present"
          enabledBy="enablePeripheralSupport"
          valueFormat="%s"
          typeName="FtmPolarity"
          baseType="uint16_t"
-         enumText="=polarityEnums"
          description="Channel Output Polarity"
          toolTip="Bitmask defining the active-low channel outputs (1=ActiveLow).\n
                   This field is write protected. It can be written only when MODE[WPDIS] = 1."
          value="0"
+         generateOperators="true"
          bitDescription='@SignalList("^(FTM\d_CH%i)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
          bitList="Ch%iActiveLow"
          bitmask="=(1&lt;&lt;_channelCount)-1" />
@@ -1227,7 +1227,7 @@
           />
       </for>
 
-      <choiceOption key="ftm_exttrig_trigEnums" condition="ftm_exttrig_inittrigen_present"
+      <!-- choiceOption key="ftm_exttrig_trigEnums" condition="ftm_exttrig_inittrigen_present"
          hidden="true"
          derived="true"
          valueFormat="%s"
@@ -1242,7 +1242,7 @@
          <choice          enum="IgnoreAllChannelsMatches" name="Ignore all channel matches"  value='=Format("0x%04X", 0xFF00^0x3F00)'              />
          <choiceExpansion enum="OnCh%(ch)Match"           name="Use Ch%(ch) match"           value='=Format("0x%04X", 0xFF00+(1&lt;&lt;%(b)))'              keys="ch:b" values="0:2;1:3;2:4;3:5;4:0;5:1"/>
          <choiceExpansion enum="IgnoreCh%(ch)Match"       name="Ignore Ch%(ch) match"        value='=Format("0x%04X", 0xFF00^(1&lt;&lt;(%(b)+8)))' keys="ch:b" values="0:2;1:3;2:4;3:5;4:0;5:1" />
-      </choiceOption >
+      <choiceOption -->
 
       <equation key="triggerChannels"
          condition="ftm_exttrig_inittrigen_present"
@@ -1256,10 +1256,11 @@
          valueFormat="%s"
          typeName="FtmExternalTrigger"
          baseType="uint8_t"
+         generateOperators="true"
          value="0"
          bitmask="0"
          bitList="=triggerChannels"
-         bitDescription="Trigger on CNV = %n"
+         bitDescription='@SignalList("^(FTM\d_CH%i)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","Trigger on $4")'
          />
    </categoryOption>
 
@@ -1352,7 +1353,6 @@
 
    <template key="/$(_BASENAME)/static_functions" where="all"
       discardRepeats="true"
-      nonDefaultParams="2"
    ><![CDATA[
       \t/**
       \t * Truncate Tick value to correct range for modulo calculations.
@@ -2678,8 +2678,8 @@
          \t   template <typename... Types>
          \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t
-            \t      // Modify bit
-            \t      %registerName = (%registerName&(%paramExpression>>8))|%paramExpression;
+            \t      // Modify register
+            \t      %registerName = %paramExpression;
             \t   }
             \t\n
          ]]></variableTemplate>

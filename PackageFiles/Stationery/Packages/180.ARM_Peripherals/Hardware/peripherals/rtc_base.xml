@@ -1395,33 +1395,26 @@
 
    <!-- ____  Default Initialisation value ____ -->
 
+   <template where="usbdm" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      } // End namespace USBDM
+      
+      // User declared handlers for RTC
+      $(/RTC/prototypes:// $/RTC/prototypes not found)
+      namespace USBDM {
+      \t\n
+   ]]>
+   </template>
    <template where="info" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
       \t/**
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr $(_BasicInfo)::Init DefaultInitValue = {\n
+      \tstatic constexpr Init DefaultInitValue = {\n
    ]]>
-   <!-- Interrupt information -->
    </template>
-   <!-- for keys="irqName" values="=_hardwareIrqNums">
-      <equation key="irqEnum" value='=ReplaceAll("%(irqName)","^(.*?)_(.*)_IRQn$","IrqNum_$2")' />
-      <equation key="var"     value='=ReplaceAll("%(irqName)","^(.*?)_(.*)_IRQn$","irqLevel_$2")' />
-      <print text="(irqName) = %(irqName)"/>
-      <printVar key="irqEnum" />
-      <printVar key="var" />
-      <variableTemplate where="info" codeGenCondition='$(_InfoIrqGuard)&amp;&amp;!IsZero(@var)'
-         variables='=var'
-         separator=","
-         terminator=","
-         padToComments="40"
-         immediateVariables="irqEnum" >
-      <![CDATA[
-         \t   $(irqEnum), %initExpression,
-         \t   unhandledCallback,\n
-      ]]></variableTemplate>
-   </for -->
+   <xi:include href="irqHandlingInit.xml"    />
    <variableTemplate where="info" codeGenCondition="$(_InfoGuard)"
       separator=","
       terminator=","

@@ -4,109 +4,107 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Analog-to-Digital Converter" >
 
-   <constant key="disable_peripheral" value='"adc->SC1[0] = ADC_SC1_ADCH(-1);"'  type="String" />
+   <option key="debugGuards" value="true" />
 
-   <equation key="irq_parameters"            value=""       />
-   <equation key="irq_dummy_parameters"      value=""       />
-   <equation key="irq_call_parameters"       value=""       />
-   <equation key="generateDefault"           value="false"  />
-   <equation key="configureInStartupDefault" value="false"  />
-   <xi:include href="enablePeripheral.xml"  />
+   <equation key="individual_clock_source" value='=Exists("/SIM/system_$(_name)_clock[]")'     />
+   <equation key="shared_clock_source"     value='=Exists("/SIM/system_$(_basename)_clock[]")' />
 
-   <!-- ____ Class Declaration ________ -->
+   <!-- ____ Class Declarations ________ -->
    <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
-   <!-- ____ Interrupts continued ____ -->
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
+   <!-- ____ Instance control ________ -->
+   <constant key="disable_peripheral" value='"adc->SC1[0] = ADC_SC1_ADCH(-1);"'  type="String" />
+
+   <equation key="irq_parameters"             value='uint32_t result, USBDM\:\:AdcChannelNum channel'  />
+   <equation key="irq_dummy_parameters"       value='uint32_t, USBDM\:\:AdcChannelNum'                 />
+   <equation key="irq_call_parameters"        value='adc->R[0], AdcChannelNum(adc->SC1[0]&amp;ADC_SC1_ADCH_MASK)'  />
+   <equation key="generateDefault"            value="false"     />
+   <equation key="configureInStartupDefault"  value="false"     />
+   <xi:include href="enablePeripheral.xml"    />
+
+   <!-- ____ SC1 ____ -->
+   <choiceOption key="adc_sc1_channel" condition="adc_sc1_adch_present"
+      valueFormat="ADC_SC1_ADCH(%s)"
+      hidden="true"
+      derived="true"
+      typeName="AdcChannelNum"
+      baseType="uint8_t"
+      toolTip="Selects an ADC channel"
+      description="ADC Channel number" >
+      <choiceExpansion keys="ch" dim="0,30" value="%(ch)"                 name="Channel SE%(ch)"    enum="Se%(ch)"    />
+      <choice                               value="31"                    name="Disabled"           enum="Disabled"  isDefault="true" />
+   </choiceOption >
+
+   <choiceOption key="adc$(_instance)_sc1_channel" condition="adc_sc1_adch_present"
+      hidden="true"
+      derived="true"
+      valueFormat="%s"
+      typeName="Adc$(_instance)ChannelNum"
+      baseType="AdcChannelNum"
+      toolTip="Selects an ADC channel"
+      description="ADC Channel number"
+      generateAsConstants="true" >
+      <choiceExpansion keys="sig" values='=SignalList("^($(_NAME)_SE.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$1")'
+         signal="%(sig)"
+         name='@SignalDescription("%(sig)","^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
+         enum='=Prettify(ToUppercase(ReplaceAll("%(sig)","^$(_NAME)_(.*)$","$1")))' delimiter="," condition='="%(sig)"!="-"'
+         value='="AdcChannelNum_"+Prettify(ToUppercase(ReplaceAll("%(sig)","^$(_NAME)_(.*)$","$1")))' />
+      <choiceExpansion keys="sig" values='=SignalList("^($(_NAME)_DP.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$1")'
+         signal="%(sig)"
+         name='@SignalDescription("%(sig)","^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
+         enum='=Prettify(ToUppercase(ReplaceAll("%(sig)","^$(_NAME)_DP(.*)$","Diff$1")))' delimiter="," condition='="%(sig)"!="-"'
+         value='="AdcChannelNum_"+Prettify(ToUppercase(ReplaceAll("%(sig)","^$(_NAME)_DP(.*)$","Diff$1")))' />
+   </choiceOption >
 
    <binaryOption key="adc_sc1_aien" condition="adc_sc1_aien_present"
-      enabledBy="irqHandlingMethod"
-      typeName="AdcInterrupt"
+      typeName="AdcAction"
       baseType="uint8_t"
-      description="Conversion Complete Interrupt"
-      toolTip="Allows an interrupt to be generated on when a conversion completes" >
-      <choice name="Disabled"    value="0" enum="Disabled" />
-      <choice name="Enabled"     value="1" enum="Enabled" />
-   </binaryOption >
-
-   <!-- ____ Hidden ____ -->
-
-   <binaryOption key="adc_sc2_adact" condition="adc_sc2_adact_present"
       hidden="true"
-      derived="true"
-      typeName="AdcActive"
-      baseType="uint8_t"
-      description="Conversion Active"
-      toolTip="Indicates if the ADC is busy with a conversion" >
-      <choice name="Idle"        value="0" enum="Idle" />
-      <choice name="Busy"        value="1" enum="Busy" />
-   </binaryOption >
-
-   <binaryOption key="adc_sc2_fempty" condition="adc_sc2_fempty_present"
-      hidden="true"
-      derived="true"
-      typeName="AdcFifoEmpty"
-      baseType="uint8_t"
-      description="Result FIFO empty"
-      toolTip="Indicates if the FIFO is empty" >
-      <choice name="FIFO has data"  value="0" enum="FifoHasData" />
-      <choice name="FIFO empty"     value="1" enum="FifoEmpty" />
-   </binaryOption >
-
-   <binaryOption key="adc_sc2_ffull" condition="adc_sc2_ffull_present"
-      hidden="true"
-      derived="true"
-      typeName="AdcFifofull"
-      baseType="uint8_t"
-      description="Result FIFO full"
-      toolTip="Indicates if the FIFO is full" >
-      <choice name="FIFO not full"  value="0" enum="FifoNotFull" />
-      <choice name="FIFO full"      value="1" enum="FifoFull" />
-   </binaryOption >
-
-   <intOption key="adc_r_d" condition="adc_r_d_present"
-      hidden="true"
-      derived="true"
-      typeName="uint16_t"
-      description="Data result"
-      toolTip="Result from last conversion"
-   />
+      description="Action on conversion completion"
+      toolTip="Controls whether an interrupt is triggered at the end of each conversion" >
+      <choice value="0" enum="None"       name="None"      isDefault="true" />
+      <choice value="1" enum="Interrupt"  name="Interrupt" />
+   </binaryOption>
 
    <binaryOption key="adc_sc1_coco" condition="adc_sc1_coco_present"
       hidden="true"
       derived="true"
-      typeName="AdcConversionComplete"
+      typeName="AdcCompleteFlag"
       baseType="uint8_t"
-      description="Conversion Complete Flag"
-      toolTip="Flag set when conversion completes" >
-      <choice name="Not complete"  value="0" enum="NotComplete" />
-      <choice name="Complete"      value="1" enum="Complete" />
+      toolTip=""
+      description="Conversion Complete Flag" >
+      <choice name="Not complete"  value="0" enum="NotComplete"/>
+      <choice name="Complete"      value="1" enum="Complete"/>
    </binaryOption >
 
-   <!-- ____ Clock ____ -->
+   <binaryOption key="adc_sc1_diff" condition="adc_sc1_diff_present"
+      hidden="true"
+      typeName="AdcDifferential"
+      baseType="uint8_t"
+      toolTip="Enable differential conversion"
+      description="Differential Mode Enable" >
+      <choice name="Single-ended"  value="0" enum="SingleEnded"/>
+      <choice name="Differential"  value="1" enum="Differential"/>
+   </binaryOption >
+
+
+<!-- __________  ADC clock sources _______________________________ -->
 
    <title description="Clock" />
-
-   <binaryOption key="adc_sc3_adlpc" condition="adc_sc3_adlpc_present"
+   <intOption key="adcInternalClock"
       enabledBy="enablePeripheralSupport"
-      typeName="AdcPower"
-      baseType="uint8_t"
-      description="Low-Power Configuration"
-      toolTip="Controls trade-off between speed and power consumption\n
-               It also determines the speed of the asynchronous clock" >
-      <choice name="Normal"      value="0" enum="Normal" />
-      <choice name="Low power"   value="1" enum="Low" />
-   </binaryOption >
-
-   <intOption key="adc_internal_clock"
-      ref="adc_sc3_adlpc?4000000:8000000"
+      ref="adc_sc3_adlpc?2000000:3300000"
       derived="true"
-      description="Adc asynchronous clock"
+      locked="true"
+      description="Frequency of Internal ADC clock"
       toolTip="This clock is generated from a clock source within the ADC module.\n
                When selected as the clock source, this clock remains active while\n
                the MCU is in Wait or Stop mode and allows conversions in these modes\n
                for lower noise operation.\n
-               This is nominally 8MHz in Adc high speed or 4MHz in in ADC low power modes"
-      locked="true"
+               Varies with ADLPC"
+      origin="Internal ADC clock"
       units="Hz" />
 
    <choiceOption key="adc_sc3_adiclk" condition="adc_sc3_adiclk_present"
@@ -114,12 +112,12 @@
       enabledBy="enablePeripheralSupport"
       typeName="AdcClockSource"
       baseType="uint8_t"
-      description="Input Clock Select"
-      toolTip="Input clock for ADC" >
-      <choice name="Bus clock"                   value="0" enum="BusClock"     code="SystemBusClock"           ref="/SIM/system_bus_clock[0]"   />
-      <choice name="(Bus clock)/2"               value="1" enum="BusClockDiv2" code="SystemBusClock/2"         ref="/SIM/system_bus_clock[0]/2" />
-      <choice name="Alternate clock (ALTCLK)"    value="2" enum="Altclk"       code="Osc0Info::getOscClock()"  ref="/OSC0/oscer_clock"           />
-      <choice name="Asynchronous clock (ADICK)"  value="3" enum="Asynch"       code="adiclk"                   ref="adc_internal_clock"         />
+      description="ADC Input Clock"
+      toolTip="Clock source for the ADC module" >
+      <choice name="Bus clock"                  value="0" enum="BusClock"     code="SystemBusClock"            ref="/SIM/system_bus_clock[0]" />
+      <choice name="Bus clock/2"                value="1" enum="BusClockDiv2" code="SystemBusClock/2"          ref="/SIM/system_bus_clock[0]/2" condition="!/SIM/system_irc48m_clock[]" />
+      <choice name="Alternate clock (OSCERCLK)" value="2" enum="OscerClk"     code="Osc0Info::getOscClock()"   ref="/OSC0/oscer_clock"        />
+      <choice name="Asynchronous clock (ADACK)" value="3" enum="Asynch"       code="$(adcInternalClock)"       ref="adcInternalClock"         isDefault="true" />
    </choiceOption >
 
    <intOption key="adc_intermediate_clock_frequency"
@@ -133,10 +131,10 @@
       baseType="uint8_t"
       description="Clock Divide Select"
       toolTip="Sets the division of the available clock for use by the ADC" >
-      <choice name="Divide by 1"  value="0" enum="DivBy1" ref="adc_intermediate_clock_frequency"     />
-      <choice name="Divide by 2"  value="1" enum="DivBy2" ref="adc_intermediate_clock_frequency/(2)" />
-      <choice name="Divide by 4"  value="2" enum="DivBy4" ref="adc_intermediate_clock_frequency/(4)" />
-      <choice name="Divide by 8"  value="3" enum="DivBy8" ref="adc_intermediate_clock_frequency/(8)" />
+      <choice name="Divide by 1" value="0" enum="DivBy1" ref="adc_intermediate_clock_frequency"     />
+      <choice name="Divide by 2" value="1" enum="DivBy2" ref="adc_intermediate_clock_frequency/(2)" />
+      <choice name="Divide by 4" value="2" enum="DivBy4" ref="adc_intermediate_clock_frequency/(4)" />
+      <choice name="Divide by 8" value="3" enum="DivBy8" ref="adc_intermediate_clock_frequency/(8)" />
    </choiceOption >
 
    <intOption key="adc_clock_frequency"
@@ -144,29 +142,16 @@
       locked="true"
       description="ADC Clock Frequency"
       toolTip="This is the final clock provided to the ADC after\n
-               input clock selection and division"
+               input clock selection and division.\n
+               The maximum value is affected by the ADC power mode"
       units="Hz"
       min="400000"
       max="adc_sc3_adlpc?4000000:8000000"
-       />
+   />
 
    <!-- ____ Main Configuration ____ -->
 
    <title/>
-
-   <choiceOption key="adc_sc1_adch" condition="adc_sc1_adch_present"
-      typeName="AdcChannelNum"
-      baseType="uint8_t"
-      description="Input Channel Select"
-      toolTip="ADC Channel to use" >
-      <choiceExpansion keys="ch" dim="16" value="%(ch)" name="Channel %(ch)" enum="%(ch)" />
-      <choice name="Vss"                value="16" enum="Vss"        />
-      <choice name="Temperature Sensor" value="22" enum="TempSensor" />
-      <choice name="Bandgap"            value="23" enum="Bandgap"    />
-      <choice name="VRefH"              value="29" enum="Vrefh"      />
-      <choice name="VRefL"              value="30" enum="Vrefl"      />
-      <choice name="Module disabled"    value="31" enum="Disabled"   isDefault="true" />
-   </choiceOption >
 
    <choiceOption key="adc_sc3_mode" condition="adc_sc3_mode_present"
       enabledBy="enablePeripheralSupport"
@@ -174,41 +159,52 @@
       baseType="uint8_t"
       description="ADC resolution"
       toolTip="Resolution used for conversion" >
-      <choice name="8-bit"       value="0" enum="8bit_se" />
-      <choice name="10-bit"      value="1" enum="10bit_se" />
-      <choice name="12-bit"      value="2" enum="12bit_se" />
+      <choice name="8-bit unsigned (single-ended mode)"       value="0" enum="8bit_se" />
+      <choice name="10-bit unsigned (single-ended mode)"      value="1" enum="10bit_se" />
+      <choice name="12-bit unsigned (single-ended mode)"      value="2" enum="12bit_se" />
    </choiceOption >
+
+   <binaryOption key="adc_sc3_adlpc" condition="adc_sc3_adlpc_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="AdcPower"
+      baseType="uint8_t"
+      description="Low-Power Configuration"
+      toolTip="Controls trade-off between speed and power consumption\n
+               It also affects the speed of the asynchronous clock" >
+      <choice name="Normal power configuration"              value="0" enum="Normal" isDefault="true" />
+      <choice name="Low-power configuration (reduced speed)" value="1" enum="Low"    />
+   </binaryOption >
+
+   <binaryOption key="adc_sc3_adlsmp" condition="adc_sc3_adlsmp_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="AdcSampleMode"
+      baseType="uint8_t"
+      description="Sample Time Configuration"
+      toolTip="Selects between long and short sample times.\n
+               Longer sample times allow higher impedance inputs to be accurately sampled or\n
+               shorter sample times maximizes the conversion speed for lower impedance inputs.\n
+               Longer sample times can also be used to lower overall power consumption when\n
+               continuous conversions are enabled." >
+      <choice name="Short sample time" value="0" enum="ShortSampleTime" />
+      <choice name="Long sample time"  value="1" enum="LongSampleTime" />
+   </binaryOption >
 
    <choiceOption key="adc_sc2_refsel" condition="adc_sc2_refsel_present"
       enabledBy="enablePeripheralSupport"
       typeName="AdcReferenceSel"
       baseType="uint8_t"
       description="Voltage Reference Selection"
-      toolTip="Select the voltage reference used for the conversion" >
-      <choice name="VREFH and VREFL"  value="0" enum="VrefhAndVrefl" />
-      <choice name="VDDA and VSSA"    value="1" enum="VddaAndVssa" />
-      <choice name="Reserved"         value="2" enum="Reserved" />
+      toolTip="Selects the voltage reference source used for conversions" >
+      <choice name="VRefH and VRefl"       value="0" enum="VrefhAndVrefl"  isDefault="true" />
+      <choice name="VAltH and VAltl"       value="0" enum="ValthAndValtl" />
+      <choice name="Default"               value="0" enum="Default"       />
    </choiceOption >
-
-   <binaryOption key="adc_sc3_adlsmp" condition="adc_sc3_adlsmp_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="AdcSample"
-      baseType="uint8_t"
-      description="Sample Time Configuration"
-      toolTip="Selects between long and short sample times.\n
-               Longer sample periods allow higher impedance inputs to be accurately sampled.\n
-               Shorter sample period maximizes the conversion speed for lower impedance inputs.\n
-               Longer sample times can also be used to lower overall power consumption when\n
-               continuous conversions are enabled." >
-      <choice name="Short sample"  value="0" enum="Short" />
-      <choice name="Long sample"   value="1" enum="Long" />
-   </binaryOption >
 
    <binaryOption key="adc_sc1_adco" condition="adc_sc1_adco_present"
       enabledBy="enablePeripheralSupport"
       typeName="AdcOperation"
       baseType="uint8_t"
-      description="Continuous Conversion Enable"
+      description="Single or continuous conversion"
       toolTip="Selects between single and multiple conversions.\n
                Conversions are triggered by a write to the ADC_SC1 when software triggered operation is selected,\n
                or following assertion of ADHWT when hardware triggered operation is selected.\n
@@ -242,7 +238,7 @@
    </choiceOption >
 
    <binaryOption key="adc_sc4_ascane" condition="adc_sc4_ascane_present"
-      enabledBy="adc_sc4_afdep>0"
+      hiddenBy="adc_sc4_afdep==0"
       typeName="AdcFifoScanMode"
       baseType="uint16_t"
       description="FIFO Scan Mode Enable"
@@ -255,41 +251,26 @@
       <choice name="Enabled"     value="1" enum="Enabled"  />
    </binaryOption >
 
-   <!-- ____ Trigger ____ -->
-
-   <title description="Trigger" />
-
-   <binaryOption key="adc_sc2_adtrg" condition="adc_sc2_adtrg_present"
-      enabledBy="enablePeripheralSupport"
-      typeName="AdcPretrigger"
+   <binaryOption key="adc_sc2_fempty" condition="adc_sc2_fempty_present"
+      hidden="true"
+      derived="true"
+      typeName="AdcFifoEmpty"
       baseType="uint8_t"
-      description="Conversion Trigger Select"
-      toolTip="Controls whether conversions are triggered by writes to ADC_SC1 (software)\n
-               or assertion of ADHWT input (hardware)" >
-      <choice name="Software trigger"  value="0" enum="SoftwareTrigger" />
-      <choice name="Hardware trigger"  value="1" enum="HardwareTrigger" />
+      description="Result FIFO empty"
+      toolTip="Indicates if the FIFO is empty" >
+      <choice name="FIFO has data"  value="0" enum="FifoHasData" />
+      <choice name="FIFO empty"     value="1" enum="FifoEmpty" />
    </binaryOption >
 
-   <choiceOption key="adc_sc5_htrigger" condition="adc_sc5_htrigger_present"
-      enabledBy="adc_sc2_adtrg"
-      typeName="AdcHardwareTriggerMask"
+   <binaryOption key="adc_sc2_ffull" condition="adc_sc2_ffull_present"
+      hidden="true"
+      derived="true"
+      typeName="AdcFifofull"
       baseType="uint8_t"
-      description="Hardware Trigger Mask"
-      toolTip="Control hardware trigger" >
-      <choice name="Masking disabled"              value="0b00" enum="Unmasked"              />
-      <choice name="Masked"                        value="0b10" enum="Masked"                />
-      <choice name="Masked when FIFO is not empty" value="0b01" enum="MaskedIfFifoNotEmpty"  />
-   </choiceOption>
-
-   <binaryOption key="adc_sc4_htrgme" condition="adc_sc4_htrgme_present"
-      enabledBy="adc_sc2_adtrg&amp;&amp;(adc_sc4_afdep>0)"
-      typeName="AdcHardwareAction"
-      baseType="uint16_t"
-      description="Hardware Trigger Multiple Conversion Enable"
-      toolTip="Selects whether a hardware trigger event initiates a single conversion\n
-               or multiple conversions until the FIFO is full" >
-      <choice name="Single conversion"                 value="0" enum="SingleConversion"     />
-      <choice name="Multiple conversions filling FIFO" value="1" enum="MultipleConversions"  />
+      description="Result FIFO full"
+      toolTip="Indicates if the FIFO is full" >
+      <choice name="FIFO not full"  value="0" enum="FifoNotFull" />
+      <choice name="FIFO full"      value="1" enum="FifoFull" />
    </binaryOption >
 
    <!-- ____ Compare ____ -->
@@ -309,9 +290,9 @@
    </choiceOption >
 
    <intOption key="adc_cv_cv" condition="adc_cv_cv_present"
-      enabledBy="adc_sc2_compare>0"
-      typeName="uint16_t"
+      hiddenBy="adc_sc2_compare==0"
       valueFormat="%s"
+      baseType="int"
       description="Compare Value"
       toolTip="Value compared against ADC conversion result to generate compare events"
       value="0"
@@ -319,16 +300,88 @@
    />
 
    <binaryOption key="adc_sc4_acfsel" condition="adc_sc4_acfsel_present"
-      enabledBy="adc_sc4_afdep>0"
-      typeName="AdcCompareCondition"
+      hiddenBy="(adc_sc2_compare==0)||(adc_sc4_afdep==0)"
+      typeName="AdcCompareCombine"
       baseType="uint16_t"
       description="Compare function OR/AND selection."
       toolTip="This controls how the compare events from the FIFO values are combined.\n
                If cleared, ADC will OR all of the compare events and set COCO if at least one events occurs. \n
                If set, ADC will AND all of compare events and set COCO only when all events have occurred" >
-      <choice name="ORed events"   value="0" enum="OredEvents"  />
-      <choice name="ANDed events"  value="1" enum="AndedEvents" />
+      <choice name="ORed events"   value="0" enum="AsOredEvents"  />
+      <choice name="ANDed events"  value="1" enum="AsAndedEvents" />
    </binaryOption >
+
+   <intOption key="adc_r_d"
+      hidden="true"
+      derived="true"
+      description="ADC Result"
+      toolTip="Result from ADC conversion as unsigned value"
+      baseType="uint16_t"
+      />
+
+   <intOption key="adc_r_ud"
+      valueFormat="ADC_R_D(%s)"
+      hidden="true"
+      derived="true"
+      description="ADC Result"
+      toolTip="Result from ADC conversion as signed value"
+      baseType="int16_t"
+      />
+
+   <!-- ____ Trigger ____ -->
+
+   <title description="Trigger" />
+
+   <binaryOption key="adc_sc2_adtrg" condition="adc_sc2_adtrg_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="AdcTrigger"
+      baseType="uint8_t"
+      description="Conversion Trigger Select"
+      toolTip="Controls whether conversions are triggered by writes to ADC_SC1 (software)\n
+               or assertion of ADHWT input (hardware)" >
+      <choice name="Software trigger (write to SC1[0])" value="0" enum="Software" isDefault="true" />
+      <choice name="Hardware trigger (ADHWT source)"    value="1" enum="Hardware" />
+   </binaryOption >
+
+   <choiceOption key="adc_sc5_htrigger" condition="adc_sc5_htrigger_present"
+      hiddenBy="!adc_sc2_adtrg"
+      typeName="AdcHardwareTriggerMask"
+      baseType="uint8_t"
+      description="Hardware Trigger Mask"
+      toolTip="Control hardware trigger" >
+      <choice name="Masking disabled"              value="0b00" enum="Unmasked"              />
+      <choice name="Masked"                        value="0b10" enum="Masked"                />
+      <choice name="Masked when FIFO is not empty" value="0b01" enum="MaskedIfFifoNotEmpty"  />
+   </choiceOption >
+
+   <binaryOption key="adc_sc4_htrgme" condition="adc_sc4_htrgme_present"
+      hiddenBy="!adc_sc2_adtrg||(adc_sc4_afdep==0)"
+      typeName="AdcHardwareAction"
+      baseType="uint16_t"
+      description="Hardware Trigger Multiple Conversion Enable"
+      toolTip="Selects whether a hardware trigger event initiates a single conversion\n
+               or multiple conversions until the FIFO is full" >
+      <choice name="Single conversion"                 value="0" enum="SingleConversion"     />
+      <choice name="Multiple conversions filling FIFO" value="1" enum="MultipleConversions"  />
+   </binaryOption >
+
+   <choiceOption key="adc_sc1_adch"
+      derivedFrom="adc$(_instance)_sc1_channel" >
+   </choiceOption >
+
+
+   <binaryOption key="adc_sc2_adact" condition="adc_sc2_adact_present"
+      hidden="true"
+      derived="true"
+      typeName="AdcStatus"
+      baseType="uint8_t"
+      description="Conversion Status"
+      toolTip="Indicates that a conversion or sequence of conversions is in progress.\n
+               Set when a conversion is initiated and cleared when a conversion is completed or aborted" >
+      <choice value="0" enum="Idle" name="Conversion not in progress." isDefault="true" />
+      <choice value="1" enum="Busy" name="Conversion in progress." />
+   </binaryOption >
+
 
    <!-- ____ Inputs ____ -->
 
@@ -348,90 +401,449 @@
       bitList="=inputPinMap"
       pinMap='="ADC$(_instance)_SE%i:"+inputPinMap'
       bitDescription="Channel %i"
+      generateOperators="true"
     />
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo Class      -->
+<!-- ====================================================================================================== -->
 
-   <!-- ____ Setters and Getters ____________ -->
+   <!-- BasicInfo Instance pointer and Constructors  -->
 
-   <variableTemplate variables="adc_sc2_compare,adc_cv_cv" codeGenCondition="enableGettersAndSetters" multipleParamsOnNewline="true"
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t// Pointer to $(_BASENAME) hardware instance
+      \tvolatile $(_Type) * const $(_basename);
+      \t\n
+   ]]></template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Constructor
+      \t *
+      \t * @param $(_basename) $(_BASENAME) hardware instance
+      \t */
+      \tconstexpr $(_BasicInfo)(volatile $(_Type) * $(_basename)) : $(_basename)($(_basename)) {
+      \t}
+      \t\n
+   ]]></template>
+
+   <!-- BasicInfo Clock methods  -->
+
+   <clockCodeTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      variable="adc_sc3_adiclk"
+      returnFormat="%s"
    ><![CDATA[
       \t/**
+      \t * Get %description
+      \t *
+      \t * @param %paramName %tooltip
+      \t *
+      \t * @return Clock frequency in Hz
+      \t */
+      \tstatic uint32_t getInputClockFrequency(%paramType %paramName) {
+      \t
+      \t   switch(%paramName) {
+      \t      default: return 0;
+      %body
+      \t   }
+      \t}
+      \t\n
+   ]]></clockCodeTemplate>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Calculate ADC clock divider (ADC_SC3_ADIV) and confirm clock source (ADC_SC3_ADICLK)
+      \t *
+      \t * @param sc3 ADC SC3  register value
+      \t *
+      \t * @return modified sc3 value (ADC_SC3_ADIV|ADC_SC3_ADICLK fields may be changed)
+      \t */
+      \tstatic unsigned calculateClockDivider(uint8_t sc3) {
+      \t
+      \t   AdcClockSource adcClockSource = AdcClockSource(ADC_SC3_ADICLK_MASK&sc3);
+      \t   AdcPower       adcPower       = AdcPower(ADC_SC3_ADLPC_MASK&sc3);
+      \t
+      \t   // Clear existing fields
+      \t   sc3 &= ~(ADC_SC3_ADICLK_MASK|ADC_SC3_ADIV_MASK);
+      \t
+      \t   if (adcClockSource == AdcClockSource_Asynch) {
+      \t      // Internal clock is always OK with /1
+      \t      return sc3|AdcClockSource_Asynch|AdcClockDivider_DivBy1;
+      \t   }
+      \t   static constexpr unsigned MinClock =  2000000;
+      \t   unsigned maxClock = 0;
+      \t   switch(adcPower) {
+      \t      case AdcPower_Low :
+      \t      maxClock =  4000000;
+      \t      break;
+      \t      case AdcPower_Normal :
+      \t      maxClock =  8000000;
+      \t      break;
+      \t   }
+      \t   unsigned adiv;
+      \t   for(;;) {
+      \t      unsigned clockFrequency = getInputClockFrequency(adcClockSource);
+      \t      for (adiv=0; adiv<=3; adiv++) {
+      \t         if ((clockFrequency <= maxClock) && (clockFrequency >= MinClock)) {
+      \t            break;
+      \t         }
+      \t         clockFrequency /= 2;
+      \t      }
+      #if $(/adc_alt_clock_is_busDiv2:false)
+      \t      if ((adiv>3) && (adcClockSource == AdcClockSource_BusClock)) {
+      \t         // Automatically switch from  AdcClockSource_Bus -> AdcClockSource_Busdiv2
+      \t         adcClockSource = AdcClockSource_BusClockDiv2;
+      \t         continue;
+      \t      }
+      #endif
+      \t      break;
+      \t   }
+      \t   usbdm_assert(adiv<4, "Unable to find suitable ADC clock");
+      \t   return sc3|adcClockSource|ADC_SC3_ADIV(adiv);
+      \t}
+      \t\n
+   ]]></template>
+
+   <if condition="adc_sc3_mode" >
+      <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+      <![CDATA[
+         \t/**
+         \t * Get ADC maximum conversion value for an single-ended range
+         \t *
+         \t * @param adcResolution
+         \t *
+         \t * @return range e.g. AdcResolution_8bit_se => (2^8)-1
+         \t */
+         \tstatic constexpr int getSingleEndedMaximum(AdcResolution adcResolution) {
+         \t   switch(adcResolution) {
+         \t      case AdcResolution_8bit_se:  return (1<<8)-1;
+         \t      case AdcResolution_10bit_se: return (1<<10)-1;
+         \t      case AdcResolution_12bit_se: return (1<<12)-1;\n
+      ]]></template>
+      <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" condition="adc_sc3_mode_16bit_present" ><![CDATA[
+         \t      case AdcResolution_16bit_se: return (1<<16)-1;\n
+      ]]></template>
+      <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+      <![CDATA[
+         \t      default:                     return 0;
+         \t   }
+         \t}\n\n
+      ]]></template>
+   </if>
+
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo/Info duplicated methods -->
+<!-- ====================================================================================================== -->
+
+<for
+   keys="   static    : const    : where     : guard                                      "
+   values=" ''        : 'const ' : basicInfo : $(_BasicInfoGuard)                         ;
+            'static ' : ''       : info      : $(_InfoGuard)                              "  >
+
+   <template location="%(where)" codeGenCondition="%(guard)" >
+   <![CDATA[
+protected:
+   \t/**
+   \t * Initiates a conversion at the current resolution but does not wait for it to complete.
+   \t * Intended for use with interrupts or DMA.
+   \t *
+   \t * @param[in] sc1Value SC1 register value.
+   \t *                     This includes channel, differential mode, interrupt and mux selection.
+   \t */
+   \t%(static)void startConversion(int sc1Value) %(const){
+   \t
+   \t   // Trigger conversion
+   \t   adc->SC1[0] = sc1Value;
+   \t   (void)adc->SC1[0];
+   \t};
+   \t
+   \t/**
+   \t * Initiates a conversion but does not wait for it to complete.
+   \t * Intended for use with interrupts or DMA.
+   \t *
+   \t * @param[in] sc1Value SC1 register value.
+   \t *                     This includes channel, differential mode, interrupt and mux selection.
+   \t * @param adcResolution      New Resolution to use (persistent)
+   \t */
+   \t%(static)void startConversion(const int sc1Value, AdcResolution adcResolution) %(const){
+   \t
+   \t   // Set resolution
+   \t   adc->SC3 = (adc->SC3&~ADC_SC3_MODE_MASK)|adcResolution;
+   \t   startConversion(sc1Value);
+   \t};
+   \t
+   \t/**
+   \t * Initiates a conversion at the current resolution and waits for it to complete.
+   \t *
+   \t * @param[in] sc1Value SC1 register value.
+   \t *                     This includes channel, differential mode, interrupt and mux selection.
+   \t *
+   \t * @return - The result of the conversion as an integer converted from 16-bit ADC value
+   \t *           For single-ended conversions this will be zero extended
+   \t *           For differential conversions this will be sign-extended
+   \t *
+   \t * @note Result is signed but will always be positive for single-ended conversions.
+   \t */
+   \t%(static)int readAnalogue(uint32_t sc1Value) %(const){
+   \t
+   \t   startConversion(sc1Value);
+   \t   while ((adc->SC1[0]&ADC_SC1_COCO_MASK) == 0) {
+   \t      __asm__("nop");
+   \t   }
+   \t   return getConversionResult();
+   \t};
+   \t
+   \t/**
+   \t * Initiates a conversion and waits for it to complete.
+   \t *
+   \t * @param[in] sc1Value SC1 register value.
+   \t *                     This includes channel, differential mode, interrupt and mux selection.
+   \t * @param[in] adcResolution Resolution for converter e.g. AdcResolution_16bit_se
+   \t *
+   \t * @return - The result of the conversion as an integer converted from 16-bit ADC value
+   \t *           For single-ended conversions this will be zero extended
+   \t *           For differential conversions this will be sign-extended
+   \t *
+   \t * @note Result is signed but will always be positive for single-ended conversions.
+   \t * @note The resolution used affects all future conversion on all channels on the ADC
+   \t */
+   \t%(static)int readAnalogue(uint32_t sc1Value, AdcResolution adcResolution) %(const){
+   \t   adc->SC3 = (adc->SC3&~ADC_SC3_MODE_MASK)|adcResolution;
+   \t   return readAnalogue(sc1Value);
+   \t};
+   \t\n
+   ]]>
+   </template>
+
+   <template location="%(where)" codeGenCondition="%(guard)" >
+   <![CDATA[
+public:
+   \t/**
+   \t * Initiates a conversion and waits for it to complete.
+   \t *
+   \t * @param adcChannelNum Number of channel to convert
+   \t *
+   \t * @return - The result of the conversion as an integer converted from 16-bit ADC value
+   \t *           For single-ended conversions this will be zero extended
+   \t *           For differential conversions this will be sign-extended
+   \t *
+   \t * @note Result is signed but will always be positive for single-ended conversions.
+   \t */
+   \t%(static)int readAnalogue(AdcChannelNum adcChannelNum) %(const){
+   \t
+   \t   return readAnalogue((uint32_t)adcChannelNum);
+   \t}
+   \t
+   \t/**
+   \t * Enables hardware trigger mode of operation and configures the channel.
+   \t * Note this does not configure the MUX which should be done beforehand
+   \t *
+   \t * @param[in] sc1Value        SC1 register value including the ADC channel, Differential mode and interrupt enable
+   \t */
+   \t%(static)void enableHardwareConversion(int sc1Value) %(const){
+   \t
+   \t   // Enable hardware triggers
+   \t   adc->SC2 = (adc->SC2)|ADC_SC2_ADTRG_MASK;
+   \t
+   \t   adc->SC1[0] = sc1Value;
+   \t}
+   \t
+   \t/**
+   \t * Configure comparison mode.
+   \t *
+   \t * @param[in] adcCompare   Comparison operation to enable
+   \t * @param[in] threshold    Threshold for comparison
+   \t */
+   \t%(static)void enableComparison(AdcCompare adcCompare, int threshold) %(const){
+   \t
+   \t   adc->CV = threshold;
+   \t
+   \t   // The mask for valid bits (note adcCompare value may contain out-of-bound bits)
+   \t   static constexpr uint32_t mask = ADC_SC2_ACFE_MASK|ADC_SC2_ACFGT_MASK;
+   \t
+   \t   // Set comparison fields
+   \t   adc->SC2 = (adc->SC2&~mask)|adcCompare;
+   \t}
+   \t
+   \t/**
+   \t * Gets result of last software initiated conversion
+   \t *
+   \t * @return The result of the conversion as an integer converted from 16-bit ADC value
+   \t *         For single-ended conversions this will be zero extended
+   \t *         For differential conversions this will be sign-extended
+   \t *
+   \t * @note Result is signed but will always be positive for single-ended conversions.
+   \t * @note This will also clear the conversion flag if set
+   \t */
+   \t%(static)int getConversionResult() %(const){
+   \t
+   \t   // This is a 32-bit value with leading zeroes i.e unsigned
+   \t   int value = ADC_R_D_MASK & (adc->R[0]);
+   \t
+   \t   return value;
+   \t};
+   \t
+   \t/**
+   \t * Gets result of hardware initiated conversion
+   \t *
+   \t * @return The result of the conversion as an integer converted from 16-bit ADC value
+   \t *         For single-ended conversions this will be zero extended
+   \t *         For differential conversions this will be sign-extended
+   \t *
+   \t * @note Result is signed but will always be positive for single-ended conversions.
+   \t * @note This will also clear the conversion flag if set
+   \t */
+   \t%(static)int getHardwareConversionResult() %(const){
+   \t
+   \t   // This is a 32-bit value with leading zeroes i.e unsigned
+   \t   int value = ADC_R_D_MASK & (adc->R[0]);
+   \t
+   \t   return value;
+   \t};
+   \t
+   \t/**
+   \t * Set clock source
+   \t *
+   \t * @param[in] adcClockSource  Clock source e.g. AdcClockSource_Asynch
+   \t * @param[in] adcClockDivider Clock divider e.g. AdcClockDivider_4
+   \t *
+   \t * @note This affects all channels on the ADC.\n
+   \t * The resulting ADC clock rate should be restricted to the following ranges:\n
+   \t *  [400kHz..4MHz] for low power mode  \n
+   \t *  [400kHz..8MHz] for normal mode
+   \t */
+   \t%(static)void setClockSource(
+   \t                       AdcClockSource adcClockSource,
+   \t                       AdcClockDivider adcClockDivider=AdcClockDivider_DivBy1) %(const){
+   \t   adc->SC3 = (adc->SC3&~(ADC_SC3_ADIV_MASK|ADC_SC3_ADICLK_MASK))|adcClockSource|adcClockDivider;
+   \t}
+   \t
+   \t\n
+   ]]>
+   </template>
+
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)&amp;&amp;enableGettersAndSetters"
+      variables="adc_sample" >
+   <![CDATA[
+      \t/**
       \t * Set %description
+      \t * (%variables)
       \t *
       %paramDescription
       \t */
-      \tstatic void configureCompare(%params) {
+      \t%(static)void setSampleTime(%params) %(const){
       \t
-      \t      %register0 =  (%register0 & ~%mask0)| %paramName0;
-      \t      %register1 =  %paramName1;
-      \t   }\n\n
-   ]]></variableTemplate>
+      \t   adc->SC3 = (adc->SC3&~ADC_SC3_ADLSMP_MASK) | (%paramExpression&ADC_SC3_ADLSMP_MASK);
+      \t   adc->CFG2 = (adc->CFG2&~ADC_CFG2_ADLSTS_MASK) | (%paramExpression&ADC_CFG2_ADLSTS_MASK);
+      \t}
+      \t
+      \t/**
+      \t * Get %description
+      \t * (%variables)
+      \t *
+      \t * @return %tooltip
+      \t */
+      \t%(static)%paramType getSampleTime() {
+      \t   return %paramType((adc->SC3&~ADC_SC3_ADLSMP_MASK)|(adc->CFG2&~ADC_CFG2_ADLSTS_MASK));
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
 
-   <for keys="field                     : set   : get   : clear : genCode                 : name"
+   <!-- ____ Getters and Setters ____________ -->
+
+   <for keys="field           : set   : get   : clear : genCode                 : name"
         values="
-         adc_sc2_adact                  : false : true  : false : enableGettersAndSetters : Active;
-         adc_sc2_adtrg                  : true  : true  : false : enableGettersAndSetters : Pretrigger;
-         adc_sc2_compare                : true  : true  : false : enableGettersAndSetters : Compare;
-         adc_sc2_fempty                 : false : true  : false : enableGettersAndSetters : FifoEmpty;
-         adc_sc2_ffull                  : false : true  : false : enableGettersAndSetters : FifoFull;
-         adc_sc2_refsel                 : true  : true  : false : enableGettersAndSetters : RefSel;
+         adc_sc3_adlpc        : true  : true  : false : enableGettersAndSetters : LowPower;
+         adc_sc3_adiv         : true  : true  : false : enableGettersAndSetters : ClockDivider;
+         adc_sc3_adlsmp       : true  : true  : false : enableGettersAndSetters : SampleLength;
+         adc_sc3_mode         : true  : true  : false : enableGettersAndSetters : Resolution;
+         adc_sc3_adiclk       : true  : true  : false : enableGettersAndSetters : ClockSource;
 
-         adc_sc3_adlpc                  : true  : true  : false : enableGettersAndSetters : Power;
-         adc_sc3_adiv                   : true  : true  : false : enableGettersAndSetters : ClockDivider;
-         adc_sc3_adlsmp                 : true  : true  : false : enableGettersAndSetters : Sample;
-         adc_sc3_mode                   : true  : true  : false : enableGettersAndSetters : Resolution;
-         adc_sc3_adiclk                 : true  : true  : false : enableGettersAndSetters : ClockSource;
+         adc_sc2_adact        : false : true  : false : true                    : ConversionActive;
+         adc_sc2_adtrg        : true  : true  : false : enableGettersAndSetters : Trigger;
+         adc_sc2_compare      : true  : true  : false : enableGettersAndSetters : Compare;
+         adc_sc2_fempty       : false : true  : false : enableGettersAndSetters : FifoEmpty;
+         adc_sc2_ffull        : false : true  : false : enableGettersAndSetters : FifoFull;
+         adc_sc2_refsel       : true  : true  : false : enableGettersAndSetters : Reference;
 
-         adc_sc4_htrgme                 : true  : true  : false : enableGettersAndSetters : HardwareMultipleConversion;
-         adc_sc4_ascane                 : true  : true  : false : enableGettersAndSetters : ScanMode;
-         adc_sc4_acfsel                 : true  : true  : false : enableGettersAndSetters : CompareOperation;
-         adc_sc4_afdep                  : true  : true  : false : enableGettersAndSetters : FifoDepth;
+         adc_sc4_htrgme       : true  : true  : false : enableGettersAndSetters : HardwareMultipleConversion;
+         adc_sc4_ascane       : true  : true  : false : enableGettersAndSetters : ScanMode;
+         adc_sc4_acfsel       : true  : true  : false : enableGettersAndSetters : CompareOperation;
+         adc_sc4_afdep        : true  : true  : false : enableGettersAndSetters : FifoDepth;
 
-         adc_cv_cv                      : true  : true  : false : enableGettersAndSetters : CompareValue;
+         adc_cv_cv            : true  : true  : false : enableGettersAndSetters : CompareValue;
 
-         adc_apctl1_adpc                : true  : true  : false : enableGettersAndSetters : DisabledGpios;
+         adc_apctl1_adpc      : true  : true  : false : enableGettersAndSetters : DisabledGpios;
 
-         adc_sc5_htrigger               : true  : true  : false : enableGettersAndSetters : HardwareMask" >
-      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
-      ><![CDATA[
+         adc_sc5_htrigger     : true  : true  : false : enableGettersAndSetters : HardwareTriggerModeSelect" >
+      <variableTemplate location="%(where)" condition="%(set)" codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)" >
+      <![CDATA[
          \t/**
          \t * Set %description
+         \t * (%variables)
          \t *
          %paramDescription
          \t */
-         \tstatic void set%(name)(%params) {
+         \t%(static)void set%(name)(%params) %(const){
          \t   %fieldAssignment;
          \t}
          \t\n
-      ]]></variableTemplate>
-      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)"
-      ><![CDATA[
+      ]]>
+      </variableTemplate>
+      <variableTemplate location="%(where)" condition="%(get)" codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)" >
+      <![CDATA[
          \t/**
          \t * Get %description
+         \t * (%variables)
          \t *
          \t * @return %tooltip
          \t */
-         \tstatic %paramType get%(name)() {
+         \t%(static)%returnType get%(name)() %(const){
          \t   return %fieldExtract;
          \t}
          \t\n
-      ]]></variableTemplate>
-      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
-      ><![CDATA[
+      ]]>
+      </variableTemplate>
+      <variableTemplate location="%(where)" condition='="w1c"=="%(clear)"' codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)"
+         tooltipPadding="x*x" >
+      <![CDATA[
          \t/**
          \t * Clear %description
+         \t * (%variables)
          \t *
+         %paramDescription
          \t */
-         \tstatic void clear%(name)() {
+         \t%(static)void clear%(name)(%params) %(const){
+         \t   // w1c and mixed register
+         \t   %register = %register|%paramExpression;
+         \t}
+         \t\n
+      ]]>
+      </variableTemplate>
+      <variableTemplate location="%(where)" condition='="w1cIm"=="%(clear)"' codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+         variables="%(field)"
+         tooltipPadding="x*x" >
+      <![CDATA[
+         \t/**
+         \t * Clear %description
+         \t * (%variables)
+         \t *
+         \t * %tooltip
+         \t */
+         \t%(static)void clear%(name)() %(const){
+         \t   // w1c and mixed register
          \t   %register = %register|%mask;
          \t}
          \t\n
-      ]]></variableTemplate>
-   </for>
-
-   <!--
-   <deleteVariables variables="adc_sc1_dim"           />
-   <constant key="adc_sc1_dim" type="Long" value="2"  />
-   -->
+      ]]>
+      </variableTemplate>
+   </for> <!-- Getters/Setters 1 -->
 
    <choiceOption key="adc_index" condition="=adc_sc1_dim>1"
       hidden="true"
@@ -443,66 +855,74 @@
       toolTip="Some ADCs have multiple SC1[] or R[] registers to\n
                allow multiple hardware triggers while retaining results" >
       <choiceExpansion value="%(i)" name="Index %(i)" enum="%(i)" keys="i" values="0" />
-   </choiceOption>
+   </choiceOption >
 
-   <equation key="sc1_index" value="0"        condition="=(adc_sc1_dim==1)" />
-   <equation key="sc1_index" value="adcIndex" condition="=(adc_sc1_dim>1)"  />
-   <!--
-   <printVar key="adc_sc1_dim" />
-   <printVar key="sc1_index" />
-   -->
+   <immediateValue keys="sc1_index" values='=(adc_sc1_dim==1)?"0":"adc_index"' delimiter="/" >
+      <!-- print text="sc1_index = %(sc1_index)" / -->
 
-   <for keys="field                     : set   : get   : clear : genCode                 : context              : name"
-        values="
-         adc_sc1_coco,adc_index         : false : true  : false : true                    : SC1[$(sc1_index)]    : ConversionComplete;
-         adc_sc1_aien,adc_index         : true  : true  : false : enableGettersAndSetters : SC1[$(sc1_index)]    : InterruptEnable;
-         adc_sc1_adco,adc_index         : true  : true  : false : enableGettersAndSetters : SC1[$(sc1_index)]    : ContinuousConversion;
-         adc_sc1_adch,adc_index         : true  : true  : false : true                    : SC1[$(sc1_index)]    : Channel;
+      <for keys="field                 : genCode                 : context              : name"
+           values="
+            adc_sc1_coco,adc_index     : true                    : SC1[%(sc1_index)]    : ConversionComplete;
+            adc_sc1_aien,adc_index     : enableGettersAndSetters : SC1[%(sc1_index)]    : InterruptEnable;
+            adc_sc1_adco,adc_index     : enableGettersAndSetters : SC1[%(sc1_index)]    : ContinuousConversion;
+            adc_sc1_channel,adc_index  : true                    : SC1[%(sc1_index)]    : Channel" >
 
-         adc_r_d,adc_index              : false : true  : false : true                    : R[$(sc1_index)]      : ConversionResult" >
-      <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)" multipleParamsOnNewline="true"
-      immediateVariables="sc1_index"
+         <if condition="=(adc_sc1_dim==1)" >
+            <variableTemplate location="%(where)" codeGenCondition="%(genCode)&amp;&amp;%(guard)" context="%(context)"
+               variables="%(field)" >
+            <![CDATA[
+               \t/**
+               \t * Get %description
+               \t * (%variables)
+               \t *
+               \t * @return %tooltip
+               \t */
+               \t%(static)%returnType0 get%(name)() %(const){
+               \t   return %fieldExtract;
+               \t}
+               \t\n
+            ]]>
+            </variableTemplate>
+         <else/>
+            <variableTemplate location="%(where)" codeGenCondition="%(genCode)&amp;&amp;%(guard)" context="%(context)"
+               variables="%(field)" >
+            <![CDATA[
+               \t/**
+               \t * Get %description0
+               \t * (%variables)
+               \t *
+               %paramDescription1
+               \t *
+               \t * @return %tooltip0
+               \t */
+               \t%(static)%returnType0 get%(name)(%param1) %(const){
+               \t   return %fieldExtract0;
+               \t}
+               \t\n
+            ]]>
+            </variableTemplate>
+         </if>
+      </for>
+   </immediateValue>
+
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)"
+      variables="adc_sc2_compare,adc_cv_cv" 
+      nonDefaultParams="2"
       ><![CDATA[
-         \t/**
-         \t * Set %description
-         \t *
-         %paramDescription
-         \t */
-         \tstatic void set%(name)(%params) {
-         \t
-         \t   $(_basename)->%(context) = ($(_basename)->%(context) & ~%mask)|%paramName0;
-         \t}
-         \t\n
-      ]]></variableTemplate>
-      <variableTemplate variables="%(field)" condition="%(get)" codeGenCondition="%(genCode)" params="*,"  multipleParamsOnNewline="true"
-      ><![CDATA[
-         \t/**
-         \t * Get %description
-         \t *
-         %paramDescription
-         \t *
-         \t * @return %tooltip0
-         \t */
-         \tstatic %paramType get%(name)(%params) {
-         \t   return %paramType($(_basename)->%(context)&%mask);
-         \t}
-         \t\n
-      ]]></variableTemplate>
-      <variableTemplate variables="%(field)" condition="%(clear)" codeGenCondition="%(genCode)"
-      ><![CDATA[
-         \t/**
-         \t * Clear %description
-         \t *
-         %paramDescription
-         \t */
-         \tstatic void clear%(name)() {
-         \t   $(_basename)->%(context) = $(_basename)->%(context)|%mask;
-         \t}
-         \t\n
-      ]]></variableTemplate>
-   </for>
+      \t/**
+      \t * Set %description
+      \t *
+      %paramDescription
+      \t */
+      \t%(static) void configureCompare(%params) %(const){
+      \t
+      \t      %register0 =  (%register0 & ~%mask0)| %paramName0;
+      \t      %register1 =  %paramName1;
+      \t   }\n\n
+   ]]></variableTemplate>
 
-   <variableTemplate variables="adc_sc1_adch, adc_apctl1_adpc" codeGenCondition="enablePeripheralSupport"
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)"
+      variables="adc_sc1_channel, adc_apctl1_adpc"
    ><![CDATA[
       \t/**
       \t * Allocate %description0
@@ -510,7 +930,7 @@
       \t *
       %paramDescription0
       \t */
-      \tstatic void allocateAnaloguePin(%paramType0 %paramName0) {
+      \t%(static) void allocateAnaloguePin(%paramType0 %paramName0) %(const){
       \t   %register1 = %register1 | (1<<%paramName0);
       \t}
       \t
@@ -520,13 +940,16 @@
       \t *
       %paramDescription0
       \t */
-      \tstatic void releaseAnaloguePin(%paramType0 %paramName0) {
+      \t%(static) void releaseAnaloguePin(%paramType0 %paramName0) %(const){
       \t   %register1 = %register1 & ~(1<<%paramName0);
       \t}\n\n
    ]]></variableTemplate>
 
-   <!-- ________ ADC Init class ____________________________ -->
+</for>
 
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo::Init class      -->
+<!-- ====================================================================================================== -->
    <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t/**
@@ -540,39 +963,31 @@
       \t *
       \t * Example:
       \t * @code
-      \t * ///
-      \t * /// $(_NAME) call-back
-      \t * ///
-      \t * /// @param status  Status reflecting active inputs
-      \t * ///
-      \t * void $(_name)Callback(uint32_t result, int channel) {
-      \t *    (void) status;
-      \t * }
-      \t *
       \t * static const $(_Class)::Init $(_name)Init {
       \t *
       \t *   // Setup values
-      \t *   AdcInterrupt_Enabled ,           // (adc_sc1_aien) Conversion Complete Interrupt - Enabled
-      \t *   AdcContinuous_Continuous ,       // (adc_sc1_adco) Continuous Conversion Enable - Continuous
-      \t *   AdcChannelNum_6 ,                // (adc_sc1_adch) Input Channel Select - Channel 6
-      \t *   AdcPretrigger_SoftwareTrigger ,  // (adc_sc2_adtrg) Conversion Trigger Select - Software trigger
-      \t *   AdcCompare_LessThan , 1000,      // (adc_sc2_compare) Compare Function Control - ADC value < 1000
-      \t *   AdcReferenceSel_VrefhAndVrefl ,  // (adc_sc2_refsel) Voltage Reference Selection - VREFH and VREFL
-      \t *   AdcPower_Normal ,                // (adc_sc3_adlpc) Low-Power Configuration - Normal
-      \t *   AdcClockDivider_DivBy2 ,         // (adc_sc3_adiv) Clock Divide Select - Divide by 2
-      \t *   AdcSample_Long ,                 // (adc_sc3_adlsmp) Sample Time Configuration - Long sample
-      \t *   AdcResolution_12bit_se ,         // (adc_sc3_mode) ADC resolution - 12-bit
-      \t *   AdcClockSource_BusClockDiv2 ,    // (adc_sc3_adiclk) Input Clock Select - (Bus clock)/2
-      \t *   AdcSc4Htrgme_Single ,            // (adc_sc4_htrgme) Hardware Trigger Multiple Conversion Enable - Single conversion
-      \t *   AdcSc4Ascane_Enabled ,           // (adc_sc4_ascane) FIFO Scan Mode Enable - Enabled
-      \t *   AdcSc4Acfsel_OredTriggers ,      // (adc_sc4_acfsel) Compare function OR/AND selection. - ORed triggers
-      \t *   AdcSc4Afdep_8LevelFifo ,         // (adc_sc4_afdep) FIFO Depth - 8-level FIFO
-      \t *   AdcChannelMask_PTA0 ,            // (adc_apctl1_adpc) GPIO Pin Disable
-      \t *   AdcChannelMask_PTA6 ,            // (adc_apctl1_adpc) GPIO Pin Disable
-      \t *   AdcHardwareTriggerMask_Unmasked, // (adc_sc5_htrigger) Hardware Trigger Mask - Masking disabled
-      \t *
-      \t *   $(_name)Callback,                 // Call-back to execute on event - call-back function name
-      \t *   NvicPriority_Low,                 // Priority for interrupt - Low
+      AdcAction_None ,                       // (adc_sc1_aien)             Action on conversion completion - None
+      AdcOperation_Continuous ,              // (adc_sc1_adco)             Single or continuous conversion - Continuous
+      Adc0ChannelNum_Se5 ,                   // (adc_sc1_adch)             ADC Channel number - [PTB1(11)]
+      AdcTrigger_Software ,                  // (adc_sc2_adtrg)            Conversion Trigger Select - Software trigger (write to SC1[0])
+      AdcCompare_Disabled ,                  // (adc_sc2_compare)          Compare Function Control - No comparison done
+      0 ,                                    // (adc_cv_cv)                Compare Value
+      AdcReferenceSel_VrefhAndVrefl ,        // (adc_sc2_refsel)           Voltage Reference Selection - VRefH and VRefl
+      AdcPower_Normal ,                      // (adc_sc3_adlpc)            Low-Power Configuration - Normal power configuration
+      AdcClockDivider_DivBy8 ,               // (adc_sc3_adiv)             Clock Divide Select - Divide by 8
+      AdcSampleMode_ShortSampleTime ,        // (adc_sc3_adlsmp)           Sample Time Configuration - Short sample time
+      AdcResolution_12bit_se ,               // (adc_sc3_mode)             ADC resolution - 12-bit unsigned (single-ended mode)
+      AdcClockSource_Asynch ,                // (adc_sc3_adiclk)           ADC Input Clock - Asynchronous clock (ADACK)
+      AdcHardwareAction_SingleConversion ,   // (adc_sc4_htrgme)           Hardware Trigger Multiple Conversion Enable - Single conversion
+      AdcFifoScanMode_Disabled ,             // (adc_sc4_ascane)           FIFO Scan Mode Enable - Disabled
+      AdcCompareCondition_OredEvents ,       // (adc_sc4_acfsel)           Compare function OR/AND selection. - ORed events
+      AdcFifoDepth_FifoDisabled ,            // (adc_sc4_afdep)            FIFO Depth - FIFO disabled
+      AdcChannelMask_PTA1,
+      AdcChannelMask_PTB0,
+      AdcChannelMask_PTB1,
+      AdcChannelMask_PTB2,
+      AdcChannelMask_PTB3,                   // (adc_apctl1_adpc)          GPIO Pin Disable
+      AdcHardwareTriggerMask_Unmasked,       // (adc_sc5_htrigger)         Hardware Trigger Mask - Masking disabled
       \t *
       \t *   // Optional base value to start with (must be last parameter)
       \t *   $(_Class)::DefaultInitValue   // Used as base value modified by above
@@ -583,6 +998,13 @@
       \t * @endcode
       \t */
       \tclass Init {
+      \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(Types...) = delete;
       \t
       \tpublic:
       \t   /**
@@ -598,17 +1020,10 @@
    ]]>
    </template>
 
-   <!-- ____ Init class Member variables ________ -->
-
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
-      variables="irqHandlingMethod"
-   ><![CDATA[
-      \t   /// %description
-      \t   %params = nullptr;\n\n
-   ]]></variableTemplate>
+   <!-- ____ BasicInfo::Init class Member variables ________ -->
 
    <for keys=" type        : variables                                            : init    "
-       values="%baseType   : adc_sc1_aien,adc_sc1_adco,adc_sc1_adch               :   0      ;
+       values="%baseType   : adc_sc1_aien,adc_sc1_adco,adc_sc1_channel            :   0      ;
                %baseType   : adc_sc2_adtrg,adc_sc2_compare,
                              adc_sc2_refsel                                       :   0      ;
                %baseType   : adc_sc3_adlpc,adc_sc3_adiv,adc_sc3_adlsmp,
@@ -620,60 +1035,15 @@
                %baseType   : adc_sc5_htrigger                                     :   0      " >
       <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
-         linePadding="xxx"
-      ><![CDATA[
+         linePadding="xxx" >
+      <![CDATA[
          %multilineDescription
          \t   %(type) %registerName = %(init);\n\n
-      ]]></variableTemplate>
+      ]]>
+      </variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
-      variables="/PCR/nvic_irqLevel,irqLevel"
-   ><![CDATA[
-      \t   /// %description
-      \t   %paramType %registerName0 = %defaultValue;
-      \t\n
-   ]]></variableTemplate>
-
-   <!-- ____ Init class Constructors ____________ -->
-
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
-      variables="irqHandlingMethod"
-      linePadding="xxx"
-   ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      this->%paramName0 = %paramExpression;
-      \t   }\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
-      variables="/PCR/nvic_irqLevel"
-      linePadding="xxx"
-   ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
-      \t
-      \t      %registerName = %paramExpression;
-      \t   }\n\n
-   ]]></variableTemplate>
+   <!-- ____ BasicInfo::Init class Constructors ____________ -->
 
    <for keys="r"
       values="
@@ -691,7 +1061,7 @@
       <![CDATA[
          \t   /**
          \t    * Constructor for %description
-         \t    * (%(r))
+         \t    * (%variables)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -708,13 +1078,14 @@
       </variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" multipleParamsOnNewline="true"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="adc_sc2_compare,adc_cv_cv"
       linePadding="xxx"
       nonDefaultParams="3" >
    <![CDATA[
       \t   /**
       \t    * Constructor for %description0, %description1
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -737,6 +1108,7 @@
    <![CDATA[
       \t   /**
       \t    * Constructor for %description using a bit mask
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -753,7 +1125,7 @@
    </variableTemplate>
 
    <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
-      variables="adc_sc1_adch, adc_apctl1_adpc"
+      variables="adc_sc1_channel, adc_apctl1_adpc"
       linePadding="xxx" >
    <![CDATA[
       \t   /**
@@ -776,17 +1148,137 @@
    ]]>
    </variableTemplate>
 
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t}; // class $(_BasicInfo)::Init
+      \t\n
+   ]]>
+   </template>
+
+<!-- ====================================================================================================== -->
+<!--     END BasicInfo::Init class      -->
+<!-- ====================================================================================================== -->
+
+   <!-- ____ BasicInfo class Configure methods ____ -->
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      linePadding="xxx" >
+   <![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t * This routine does not configure pins or interrupt handlers
+      \t *
+      \t * @param $(_basename)            Hardware instance pointer
+      \t * @param init            Class containing initialisation values
+      \t */
+      \tstatic void configure(
+      \t               volatile $(_Type) *$(_basename),
+      \t               const Init    &init) {
+      \t
+      \t   // Calculate clock dividers and update sc3
+      \t   uint8_t sc3 = calculateClockDivider(init.sc3);
+      \t\n
+   ]]>
+   </template>
+   <for keys=
+             " var                                                    : statement               "
+      values=" adc_sc1_channel                                        : adc->SC1[0] = AdcChannelNum_Disabled  ;
+               adc_apctl1_adpc                                        : %configRegAssignment    ;
+               adc_sc2_adtrg,adc_sc2_acfe,adc_sc2_acfgt,
+               adc_sc2_refsel                                         : %configRegAssignment    ;
+               adc_sc3_adlpc,adc_sc3_adiv,adc_sc3_adlsmp,
+               adc_sc3_mode,adc_sc3_adiclk                            : %register = sc3           ;
+               adc_sc4_htrgme,adc_sc4_ascane,adc_sc4_acfsel,
+               adc_sc4_afdep                                          : %configRegAssignment    ;
+               adc_cv_cv                                              : %configRegAssignment    ;
+               adc_sc5_htrigger                                       : %configRegAssignment    ;
+               adc_sc1_aien,adc_sc1_adco,adc_sc1_channel              : adc->SC1[0] = init.sc1  " >
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         variables="%(var)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t
+         %multilineDescription
+         \t   %(statement);\n
+      ]]>
+      </variableTemplate>
+   </for>
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t * This routine does not configure pins or interrupt handlers
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tvoid configure(const Init &init) const {
+      \t
+      \t   configure($(_basename), init);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+<!-- ====================================================================================================== -->
+<!--     END BasicInfo class      -->
+<!-- ====================================================================================================== -->
+<!-- ====================================================================================================== -->
+<!--     START Info class      -->
+<!-- ====================================================================================================== -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/** Get reference to ADC hardware as struct */
+      \tstatic volatile ADC_Type &adcPtr() { return *adc; }
+      \t
+      \t/** @return Base address of ADC hardware as uint32_t */
+      \tstatic constexpr uint32_t adcBase() { return baseAddress; }
+      \t/** @return Base address of ADC.SC1[index] registers as uint32_t */
+      \tstatic constexpr uint32_t adcSC(unsigned index) { return adcBase() + offsetof(ADC_Type, SC1) + index*sizeof(ADC_Type::SC1[0]); }
+      \t/** @return Base address of ADC.R[index] registers as uint32_t */
+      \tstatic constexpr uint32_t adcR(unsigned index) { return adcBase() + offsetof(ADC_Type, R) + index*sizeof(ADC_Type::R[0]); }
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____ Info constructors ________ -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t *   Default Constructor
+      \t */
+      \t$(_Info)() : $(_BasicInfo)($(_basename)) {
+      \t   defaultConfigure();
+      \t}
+      \t
+      \t/**
+      \t *   Constructor
+      \t */
+      \t$(_Info)(const Init &init) : $(_BasicInfo)($(_basename)) {
+      \t   configure(init);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
    <!-- ____ Init class Configure method ____ -->
 
-   <template codeGenCondition="enablePeripheralSupport" >
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
       \t/**
       \t * Configure with default settings.
       \t * Configuration determined from Configure.usbdmProject
       \t */
-      \tstatic inline void defaultConfigure() {
+      \tstatic void defaultConfigure() {
       \t
-      \t   // Update settings
       \t   configure(DefaultInitValue);
       \t}
       \t
@@ -797,41 +1289,38 @@
       \t */
       \tstatic void configure(const Init &init) {
       \t
-      \t   // Enable peripheral clock
+      \t   // Enable peripheral
       \t   enable();
       \t\n
-   ]]></template>
-   <template codeGenCondition="irqHandlingMethod" >
+   ]]>
+   </template>
+   <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)" >
    <![CDATA[
-      \t   // Only set call-backs if feature enabled
-      \t   setCallback(init.callbackFunction);
-      \t   enableNvicInterrupts(init.irqlevel);
+      \t   // Configure call-back
+      \t   if (init.callbacks[0] != nullptr) {
+      \t      setCallback(init.callbacks[0]);
+      \t      enableNvicInterrupts(init.priorities[0]);
+      \t   }
       \t\n
-   ]]></template>
-   <for keys=
-             " var                                                    : statement               "
-      values=" adc_sc1_adch                                           : adc->SC1[0] = AdcChannelNum_Disabled  ;
-               adc_apctl1_adpc                                        : %configRegAssignment    ;
-               adc_sc2_adtrg,adc_sc2_acfe,adc_sc2_acfgt,
-               adc_sc2_refsel                                         : %configRegAssignment    ;
-               adc_sc3_adlpc,adc_sc3_adiv,adc_sc3_adlsmp,
-               adc_sc3_mode,adc_sc3_adiclk                            : %configRegAssignment    ;
-               adc_sc4_htrgme,adc_sc4_ascane,adc_sc4_acfsel,
-               adc_sc4_afdep                                          : %configRegAssignment    ;
-               adc_cv_cv                                              : %configRegAssignment    ;
-               adc_sc5_htrgmaske,adc_sc5_htrgmasksel,adc_sc5_htrigger : %configRegAssignment    ;
-               adc_sc1_aien,adc_sc1_adco,adc_sc1_adch                 : adc->SC1[0] = init.sc1  " >
-      <variableTemplate codeGenCondition="enablePeripheralSupport"
-      variables="%(var)"
-      linePadding="xxx"
-      ><![CDATA[
-         \t
-         %multilineDescription
-         \t   %(statement);\n
-      ]]></variableTemplate>
-   </for>
-   <template codeGenCondition="enablePeripheralSupport" >
+   ]]>
+   </template>
+   <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount>1)"
+      variables="irq_enum"
+      immediateVariables="_hardwareIrqCount">
    <![CDATA[
+      \t   for(int index=0; index<$(_hardwareIrqCount); index++) {
+      \t      if (init.callbacks[index] != nullptr) {
+      \t         // Configure call-back
+      \t         setCallback(%returnType0(index), init.callbacks[index]);
+      \t         enableNvicInterrupts(%returnType0(index), init.priorities[index]);
+      \t      }
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t   $(_BasicInfo)::configure($(_basename), init);
       \t}
       \t\n
    ]]>
@@ -839,9 +1328,20 @@
 
    <!-- ____  Default Initialisation value ____ -->
 
-   <variableTemplate codeGenCondition="enablePeripheralSupport"
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Default initialisation value for $(_Class)
+      \t * This value is created from Configure.usbdmProject settings
+      \t */
+      \tstatic constexpr Init DefaultInitValue = {\n
+   ]]>
+   </template>
+   <xi:include href="irqHandlingInit.xml"    />
+   <variableTemplate where="info" codeGenCondition="$(_InfoGuard)"
       separator=","
       terminator=","
+      padToComments="45"
       variables="
             adc_sc1_aien,adc_sc1_adco,adc_sc1_adch,
             adc_sc2_adtrg,
@@ -849,30 +1349,29 @@
             adc_sc2_compare,adc_cv_cv,
             adc_sc2_refsel,
 
-            adc_sc3_adlpc,adc_sc3_adiv,adc_sc3_adlsmp,
-            adc_sc3_mode,adc_sc3_adiclk,
+            adc_sc3_adiclk,adc_sc3_adiv,adc_sc3_adlpc,adc_sc3_adlsmp,
+            adc_sc3_mode,
 
             adc_sc4_htrgme,adc_sc4_ascane,adc_sc4_acfsel,
             adc_sc4_afdep,
-
             adc_apctl1_adpc,
-            adc_sc5_htrigger" >
+            adc_sc5_htrigger
+            " >
    <![CDATA[
-      \t/**
-      \t * Default initialisation value for $(_Class)
-      \t * This value is created from Configure.usbdmProject settings
-      \t */
-      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues
+      \t%initExpression\n
+   ]]></variableTemplate>
+   <template codeGenCondition="$(_InfoGuard)"
+   ><![CDATA[
       \t};
       \t\n
-   ]]></variableTemplate>
+   ]]></template>
 
 <!--  ==========  ADC MISC =============================== -->
 
-   <clockCodeTemplate variable="adc_sc3_adiclk" returnFormat="%s" codeGenCondition="$(_BasicInfoGuard)"
+   <clockCodeTemplate variable="adc_sc3_adiclk" returnFormat="%s" codeGenCondition="$(_InfoGuard)"
    ><![CDATA[
       \t/** Internal ADC clock */
-      \tstatic constexpr unsigned adiclk = $(adc_internal_clock);
+      \tstatic constexpr unsigned adiclk = $(adcInternalClock);
       \t
       \t/**
       \t * Set %description
@@ -906,21 +1405,25 @@
       \t}; \n\n
    ]]></clockCodeTemplate>
 
-   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
-   <![CDATA[
-      \t}; // class $(_BasicInfo)::Init
-      \t\n
-   ]]>
-   </template>
+<!-- ====================================================================================================== -->
+<!--     END Info class      -->
+<!-- ====================================================================================================== -->
 
-   <!-- ____ Common __________________ -->
+<!-- ====================================================================================================== -->
+<!--     Common      -->
+<!-- ====================================================================================================== -->
 
-   <template key="/$(_BASENAME)/declarations" codeGenCondition="enablePeripheralSupport" >
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
+      \t/**
+      \t * Class representing $(_STRUCTNAME) instance
+      \t */
+      \ttypedef $(_BasicInfo) $(_Structname);
       \t/**
       \t * Class representing $(_NAME)
       \t */
-      \tclass $(_Class) : public $(_Baseclass)Base_T<$(_Info)> {};
+      \ttypedef $(_Baseclass)Base_T<$(_Info)> $(_Class);
+      \t\n
    ]]>
    </template>
 
@@ -937,7 +1440,7 @@
       <copy source="Snippets/analogue-joystick-example.cpp"   target="Snippets/analogue-joystick-example.cpp"   overwrite="true"  derived="true" />
    </projectActionList>
 
-   <!-- ____ Startup __________________ -->
+   <!-- ____ Startup ____ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
@@ -949,10 +1452,10 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <!-- ____ SIM configuration __________________ -->
+   <!-- ____ SIM configuration ____ -->
 
    <category name="Advanced" description="SIM configuration"
-      toolTip="Thes settings only have effect if the SIM configuration is enabled" >
+      toolTip="These settings only have effect if the SIM configuration is enabled" >
       <title description="$(_BASENAME) Shared" />
       <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
@@ -964,6 +1467,7 @@
       </for>
    </category>
 
+   <!--  ____ Signal mapping ____ -->
    <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 
 </peripheralPage>

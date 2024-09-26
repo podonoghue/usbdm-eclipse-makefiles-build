@@ -21,7 +21,7 @@
 
    <!-- equation key="no_initvectors"             value="true"                 / -->
    <equation key="irq_call"                   value="thisPtr->_irqHandler()" />
-   <equation key="irq_parameters"             value="ErrorCode errorCode"    />
+   <equation key="irq_parameters"             value="USBDM\:\:ErrorCode errorCode"    />
    <equation key="irq_dummy_parameters"       value="USBDM\:\:ErrorCode"     />
    <equation key="irq_call_parameters"        value="errorCode"              />
    <equation key="generateDefault"            value="false"                  />
@@ -1595,7 +1595,15 @@
 <!--     END BasicInfo::Init class      -->
 <!-- ====================================================================================================== -->
 
-   <!-- ____ Interrupt handling (only needed when not done in enablePeripheral.xml) _____________ -->
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t// I2C SCL (clock) Pin index in Info table
+      \tstatic constexpr unsigned sclInfoIndex = 0;
+      \t
+      \t// I2C SDA (data) Pin index in Info table
+      \tstatic constexpr unsigned sdaInfoIndex = 1;
+      \t\n
+   ]]></template>
 
    <template where="info" codeGenCondition="$(_InfoIrqGuard)" >
    <![CDATA[
@@ -1834,7 +1842,7 @@ public:
       \t */
       \tvirtual void busHangReset() {
       \t
-#if true // /PCR/_present
+#if $(/PCR/_present:false) // /PCR/_present
       \t   // I2C SCL (clock) Pin
       \t   using SclGpio = GpioTable_T<$(_Info), sclInfoIndex, ActiveHigh>;
       \t
@@ -1842,10 +1850,10 @@ public:
       \t   using SdaGpio = GpioTable_T<$(_Info), sdaInfoIndex, ActiveHigh>;
 #else
       \t// I2C SCL (clock) Pin
-      \t   using SclGpio = Gpio_T<info[sclInfoIndex].pinIndex, ActiveHigh>;
+      \t   using SclGpio = Gpio_T<sclPinIndex, ActiveHigh>;
       \t
       \t   // I2C SDA (data) Pin
-      \t   using SdaGpio = Gpio_T<info[sdaInfoIndex].pinIndex, ActiveHigh>;
+      \t   using SdaGpio = Gpio_T<sdaPinIndex, ActiveHigh>;
 #endif
       \t
       \t   // Re-map pins to GPIOs initially 3-state
@@ -1854,8 +1862,10 @@ public:
       \t
       \t   I2cBasicInfo::busHangReset(SclGpio{}, SdaGpio{});
       \t
+#if $(/PCR/_present:false) // /PCR/_present
       \t   // Restore pin mapping
       \t   initPCRs();
+#endif
       \t}
       \t\n
    ]]>
@@ -1946,7 +1956,7 @@ public:
             i2c_flt_flt
             " >
    <![CDATA[
-      \t%initNonZeroValues
+      \t%initExpression
    ]]>
    </variableTemplate>
    <variableTemplate where="info" codeGenCondition="$(_InfoGuard)&amp;&amp;/$(_BASENAME)/smbOptionsAvailable"
@@ -1963,7 +1973,7 @@ public:
             i2c_slt_value
          " >
    <![CDATA[
-      \t%initNonZeroValues
+      \t%initExpression
    ]]></variableTemplate>
    <template where="info" codeGenCondition="$(_InfoGuard)"
    ><![CDATA[

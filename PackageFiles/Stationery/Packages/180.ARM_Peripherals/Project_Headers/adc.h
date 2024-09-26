@@ -93,22 +93,22 @@ public:
    /**
     * Enables hardware trigger mode of operation and configures a channel.
     *
-    * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel.\n
-    *                            This corresponds to pre-triggers in the PDB channels and SC1[n]/R[n] register selection
-    * @param[in] adcInterrupt    Whether to generate an interrupt when each conversion completes
+    * @param[in] adcPretrigger Hardware pre-trigger to use for this channel.\n
+    *                          This corresponds to pre-triggers in the PDB channels and SC1[n]/R[n] register selection
+    * @param[in] adcAction     Whether to generate an interrupt when each conversion completes
     */
-   void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcAction adcInterrupt=AdcAction_None) const {
-      AdcBasicInfo::enableHardwareConversion(adcInterrupt|sc1Value, adcPretrigger);
+   void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcAction adcAction=AdcAction_None) const {
+      AdcBasicInfo::enableHardwareConversion(adcAction|sc1Value, adcPretrigger);
    }
 
    /**
     * Initiates a conversion but does not wait for it to complete.
     * Intended for use with interrupts or DMA.
     *
-    * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
+    * @param[in] adcAction   Determines if an interrupt is generated when conversions are complete
     */
-   void startConversion(AdcAction adcInterrupt=AdcAction_None) const {
-      AdcBasicInfo::startConversion(sc1Value|adcInterrupt);
+   void startConversion(AdcAction adcAction=AdcAction_None) const {
+      AdcBasicInfo::startConversion(sc1Value|adcAction);
    };
 
 }; // class AdcChannel
@@ -197,14 +197,14 @@ public:
        * Initiates a conversion but does not wait for it to complete.
        * Intended for use with interrupts or DMA.
        *
-       * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
+       * @param[in] adcAction   Determines if an interrupt is generated when conversions are complete
        */
-      static void startConversion(AdcAction adcInterrupt=AdcAction_None) {
+      static void startConversion(AdcAction adcAction=AdcAction_None) {
          if constexpr(!Info::irqHandlerInstalled) {
-            usbdm_assert((adcInterrupt == AdcAction_None),
+            usbdm_assert((adcAction == AdcAction_None),
                   "ADC not configured for interrupts. Modify Configure.usbdmProject");
          }
-         AdcBase_T::startConversion(mapChannelNumToPhysicalChannelNum(channel)|adcInterrupt);
+         AdcBase_T::startConversion(mapChannelNumToPhysicalChannelNum(channel)|adcAction);
       };
 
       /**
@@ -212,14 +212,14 @@ public:
        * Intended for use with interrupts or DMA.
        *
        * @param adcResolution      New Resolution to use (persistent)
-       * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
+       * @param[in] adcAction   Determines if an interrupt is generated when conversions are complete
        */
-      static void startConversion(AdcResolution adcResolution, AdcAction adcInterrupt=AdcAction_None) {
+      static void startConversion(AdcResolution adcResolution, AdcAction adcAction=AdcAction_None) {
          if constexpr(!Info::irqHandlerInstalled) {
-            usbdm_assert((adcInterrupt == AdcAction_None),
+            usbdm_assert((adcAction == AdcAction_None),
                   "ADC not configured for interrupts. Modify Configure.usbdmProject");
          }
-         AdcBase_T::startConversion(mapChannelNumToPhysicalChannelNum(channel)|adcInterrupt, adcResolution);
+         AdcBase_T::startConversion(mapChannelNumToPhysicalChannelNum(channel)|adcAction, adcResolution);
       };
 
       /**
@@ -255,10 +255,10 @@ public:
        *
        * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel.\n
        *                            This corresponds to pre-triggers in the PDB channels and SC1[n]/R[n] register selection
-       * @param[in] adcInterrupt    Whether to generate an interrupt when each conversion completes
+       * @param[in] adcAction    Whether to generate an interrupt when each conversion completes
        */
-      static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcAction adcInterrupt=AdcAction_None) {
-         AdcBase_T::enableHardwareConversion(mapChannelNumToPhysicalChannelNum(channel)|adcInterrupt, adcPretrigger);
+      static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcAction adcAction=AdcAction_None) {
+         AdcBase_T::enableHardwareConversion(mapChannelNumToPhysicalChannelNum(channel)|adcAction, adcPretrigger);
       }
 
 #ifdef ADC_SC2_DMAEN
@@ -267,11 +267,11 @@ public:
        *
        * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
        *                            This corresponds to pre-triggers in the PDB channels and SC1[n]/R[n] register selection
-       * @param[in] adcInterrupt    Whether to generate an interrupt when each conversion completes
+       * @param[in] adcAction    Whether to generate an interrupt when each conversion completes
        * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
        */
-      static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcAction adcInterrupt, AdcDma adcDma) {
-         AdcBase_T::enableHardwareConversion(mapChannelNumToPhysicalChannelNum(channel)|adcInterrupt, adcPretrigger, adcDma);
+      static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcAction adcAction, AdcDma adcDma) {
+         AdcBase_T::enableHardwareConversion(mapChannelNumToPhysicalChannelNum(channel)|adcAction, adcPretrigger, adcDma);
       }
 #endif
    };

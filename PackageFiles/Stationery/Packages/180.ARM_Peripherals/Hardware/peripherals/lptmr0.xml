@@ -1139,8 +1139,8 @@
       \t/**
       \t * Information describing the priority and callback function for each interrupt
       \t */
-      \ttypedef $(_BasicInfo)::InitVectors<TimeIntervalModeInit,  %returnType0, $(_hardwareIrqCount)> TimeIntervalModeInit;
-      \ttypedef $(_BasicInfo)::InitVectors<PulseCountingModeInit, %returnType0, $(_hardwareIrqCount)> PulseCountingModeInit;
+      \ttypedef InitVectors<TimeIntervalModeInit,  CallbackFunction, %returnType0, $(_hardwareIrqCount)> TimeIntervalModeInit;
+      \ttypedef InitVectors<PulseCountingModeInit, CallbackFunction, %returnType0, $(_hardwareIrqCount)> PulseCountingModeInit;
       \t\n
    ]]></variableTemplate>
 
@@ -1150,8 +1150,8 @@
       \t/**
       \t * Information describing the priority and callback function for each interrupt
       \t */
-      \ttypedef $(_BasicInfo)::InitVectors<TimeIntervalModeInit,  int, 1> TimeIntervalModeInit;
-      \ttypedef $(_BasicInfo)::InitVectors<PulseCountingModeInit, int, 1> PulseCountingModeInit;
+      \ttypedef InitVectors<TimeIntervalModeInit, CallbackFunction, int, 1> TimeIntervalModeInit;
+      \ttypedef InitVectors<PulseCountingModeInit, CallbackFunction, int, 1> PulseCountingModeInit;
       \t\n
    ]]></template>
 
@@ -1270,7 +1270,7 @@
       padToComments="45"
       variables="
          irqLevel,
-         irqHandlerName" >
+         handlerName" >
    <![CDATA[
       %initExpression\n
    ]]></variableTemplate>
@@ -1305,7 +1305,7 @@
       padToComments="45"
       variables="
          irqLevel,
-         irqHandlerName" >
+         handlerName" >
    <![CDATA[
       %initExpression\n
    ]]></variableTemplate>

@@ -30,7 +30,7 @@
    </binaryOption >
 
    <binaryOption key="rtc_sc_rtco" condition="rtc_sc_rtco_present &amp;&amp; outputPinMap"
-      enabledBy="$(_BasicInfoGuard)"
+      enabledBy="enablePeripheralSupport"
       typeName="RtcOutput"
       toolTip="Enables the toggling of RTCO pin on overflow"
       description="Real-Time Counter Output" >
@@ -39,7 +39,7 @@
    </binaryOption >
 
    <binaryOption key="rtc_sc_rtco" condition="rtc_sc_rtco_present &amp;&amp; !outputPinMap"
-      enabledBy="$(_BasicInfoGuard)"
+      enabledBy="enablePeripheralSupport"
       typeName="RtcOutput"
       toolTip="Enables the toggling of RTCO pin on overflow"
       description="Real-Time Counter Output" >
@@ -49,7 +49,7 @@
 
    <choiceOption key="rtc_sc_rtclks" condition="rtc_sc_rtclks_present"
       target="rtc_input_clock"
-      enabledBy="$(_BasicInfoGuard)"
+      enabledBy="enablePeripheralSupport"
       typeName="RtcClockSource"
       toolTip="Selects the clock source for the RTC prescaler.\n
                This also determines the prescaler range. \n
@@ -71,12 +71,14 @@
 
    <choiceOption key="rtc_sc_rtcps" condition="rtc_sc_rtcps_present"
       target="rtc_clock"
-      enabledBy="$(_BasicInfoGuard)"
+      enabledBy="enablePeripheralSupport"
       typeName="RtcPrescaler"
       toolTip="Selects binary-based or decimal-based divide-by values for the clock source.\n
                Changing the prescaler value clears the prescaler and RTCCNT counters\n
                Division factor depends on clock source chosen by RTCLKS"
-      description="Real-Time Clock Prescaler Select" >
+      description="Real-Time Clock Prescaler Select" 
+      disabledValue="Off"
+      >
       <choice name="Off" value="0" enum="Off" ref="0" />
       <choice name="@&quot;Divide by &quot;+(((rtc_sc_rtclks&amp;0b1)==0)?&quot;1&quot;:&quot;128&quot;)"   value="1" enum="DivideBy1or128"   ref="(rtc_input_clock)/(((rtc_sc_rtclks&amp;0b1)==0)?1:128)"   />
       <choice name="@&quot;Divide by &quot;+(((rtc_sc_rtclks&amp;0b1)==0)?&quot;2&quot;:&quot;256&quot;)"   value="1" enum="DivideBy2or256"   ref="(rtc_input_clock)/(((rtc_sc_rtclks&amp;0b1)==0)?2:256)"   />
@@ -88,17 +90,19 @@
    </choiceOption >
 
    <floatOption key="rtc_clock"
+      enabledBy="enablePeripheralSupport"
       derived="true"
       locked="true"
       description="RTCCNTR input clock frequency"
       toolTip="Input clock selected by rtc_sc_rtclks"
       units="Hz"
+      disabledValue="0"
       />
 
    <!-- ************* MOD ****************** -->
 
    <intOption key="rtc_mod_mod" condition="rtc_mod_mod_present"
-      enabledBy="$(_BasicInfoGuard)"
+      enabledBy="enablePeripheralSupport"
       description="Modulo"
       units="ticks"
       toolTip="16-bit modulo value.\n
@@ -107,9 +111,10 @@
    />
 
    <floatOption key="rtc_period"
+      enabledBy="rtc_sc_rtco"
       derived="true"
       locked="true"
-      ref="(rtc_mod_mod+1)/rtc_clock#rtc_clock"
+      ref="rtc_sc_rtco?((rtc_mod_mod+1)/rtc_clock):0.0#rtc_clock"
       description="RTCCNTR counter period"
       toolTip="Input clock selected by rtc_sc_rtclks"
       units="s"
@@ -119,10 +124,11 @@
       enabledBy="rtc_sc_rtco"
       derived="true"
       locked="true"
-      ref="1/rtc_period"
+      ref="rtc_sc_rtco?(1/rtc_period):0.0"
       description="RTC Output"
       toolTip="RTC output if enabled"
       units="Hz"
+      disabledValue="0"
       />
 
 <!-- Graphic here -->

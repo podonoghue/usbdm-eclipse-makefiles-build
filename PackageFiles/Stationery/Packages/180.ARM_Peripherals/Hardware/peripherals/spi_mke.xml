@@ -877,7 +877,7 @@
       \t * Default initialisation value for $(_Baseclass)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr $(_Baseclass)BasicInfo::Init DefaultInitValue = {%initNonZeroValues
+      \tstatic constexpr $(_Baseclass)BasicInfo::Init DefaultInitValue = {%initExpression
       \t};\n\n
    ]]></variableTemplate>
 

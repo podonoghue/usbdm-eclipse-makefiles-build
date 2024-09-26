@@ -19,7 +19,9 @@
    <xi:include href="enablePeripheral.xml"  />
    <title />
 
-   <!-- ************* Class Declaration ****************** -->
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
+   <!-- ____ Class Declaration ________ -->
    <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <binaryOption key="fullCodeSupport"
@@ -558,7 +560,7 @@
       %paramDescription
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+      \t   constexpr Init(%param0, %param1, Types... rest) : Init(rest...) {
       \t
       \t      this->%paramName0.fromSeconds(%paramName0);
       \t      this->%paramName1.fromSeconds(%paramName1);

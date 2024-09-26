@@ -867,8 +867,10 @@
             toolTip="Selects the basic clock mode for the Clock generator" >
             <choice name="FLL Engaged Internal (FEI)"          enum="FEI"  code="McgClockMode_FEI"  value="0"
                toolTip="FLL Engaged Internal(FEI)\n
-                     In FEI mode, MCGOUT is derived from the FLL clock (DCOCLK) that is controlled by the 32 kHz Internal Reference Clock (IRC).\n
-                     The FLL loop will lock the DCO frequency to the FLL factor, as selected by the C4[DRST_DRS] and C4[DMX32] bits, times the\n
+                     In FEI mode, MCGOUT is derived from the FLL clock (DCOCLK) that is controlled by the \n
+                     32 kHz Internal Reference Clock (IRC).\n
+                     The FLL loop will lock the DCO frequency to the FLL factor, as selected by the\n
+                     C4[DRST_DRS] and C4[DMX32] bits, times the\n
                      internal reference frequency."
             />
             <choice name="FLL Engaged External (FEE)"          enum="FEE"  code="McgClockMode_FEE"  value="1"

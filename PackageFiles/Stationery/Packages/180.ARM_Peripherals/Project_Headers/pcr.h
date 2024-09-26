@@ -491,14 +491,7 @@ void enableNvicInterrupt(IRQn_Type irqNum, NvicPriority nvicPriority);
  * @{
  */
 
-/**
- * Used to indicate or control the polarity of an I/O with selectable polarity
- */
-enum Polarity : uint32_t {
-   ActiveLow  = 0xFFFFFFFFU,  ///< Signal is active low i.e. Active => Low level, Inactive => High level
-   ActiveHigh = 0x00000000U,  ///< Signal is active high i.e. Active => High level, Inactive => Low level
-};
-
+$(/PCR/PolarityDeclaration:// $/PCR/PolarityDeclaration not found)
 
 #ifdef PCC
 /**

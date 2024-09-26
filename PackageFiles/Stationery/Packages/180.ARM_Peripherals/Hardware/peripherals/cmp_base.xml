@@ -15,7 +15,7 @@
    <constant key="_can_create_instance" value="true" type="Boolean" />
 
    <equation key="suppressIrqHandler"         value="" />
-   <equation key="irq_parameters"             value="const CmpStatus &amp;status"  />
+   <equation key="irq_parameters"             value="const USBDM\:\:CmpStatus &amp;status"  />
    <equation key="irq_dummy_parameters"       value="const USBDM\:\:CmpStatus &amp;"  />
    <equation key="irq_call_parameters"        value="cmpStatus"      />
    <equation key="generateDefault"            value="false"     />
@@ -1518,30 +1518,10 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr $(_BasicInfo)::Init DefaultInitValue = {\n
+      \tstatic constexpr Init DefaultInitValue = {\n
    ]]>
-   <!-- Interrupt information -->
    </template>
-   <for keys="irqName" values="=_hardwareIrqNums">
-      <equation key="irqEnum" value='=ReplaceAll("%(irqName)","^(.*?)_(.*)_IRQn$","IrqNum_$2")' />
-      <equation key="var"     value='=ReplaceAll("%(irqName)","^(.*?)_(.*)_IRQn$","irqLevel_$2")' />
-      <!--
-      <print text="(irqName) = %(irqName)"/>
-      <printVar key="irqEnum" />
-      <printVar key="var" />
-      -->
-      <variableTemplate where="info" codeGenCondition='$(_InfoIrqGuard)&amp;&amp;!IsZero(@var)'
-         variables='=var'
-         separator=","
-         terminator=","
-         padToComments="40"
-         immediateVariables="irqEnum" >
-      <![CDATA[
-         \t   $(irqEnum), %initExpression,
-         \t   unhandledCallback,\n
-      ]]></variableTemplate>
-   </for>
-
+   <xi:include href="irqHandlingInit.xml"    />
    <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","

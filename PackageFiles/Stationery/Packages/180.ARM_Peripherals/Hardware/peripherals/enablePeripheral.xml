@@ -363,7 +363,7 @@
       <for keys="irqNum" values="=_userIrqNums" iterationVar="ch" >
          <if condition='=(_userIrqCount>1)' >
             <!-- Extract IRQ 'name' RTC_Alarm_IRQn => Alarm, Ch0 etc  -->
-            <immediateValue keys="irqmodifier,irq_dummy_parameters" values='=ReplaceAll("%(irqNum)","^(.+)_(.+)_IRQn$","$2"),irq_dummy_parameters'>
+            <immediateValue keys="irqmodifier,irq_parameters" values='=ReplaceAll("%(irqNum)","^(.+)_(.+)_IRQn$","$2"),irq_parameters'>
                <!-- irqmodifier = Alarm, Ch0 etc -->
                <stringOption key='irqHandlerName_%(irqmodifier)'
                   valueFormat="%s"
@@ -374,34 +374,32 @@
                   value=""  />
                   
                <variable key='handlerName_%(irqmodifier)' type="String" 
-                  description="User event handler"
+                  description="User declared event handler"
                   expression='isBlank(irqHandlerName_%(irqmodifier))?"unhandledCallback":irqHandlerName_%(irqmodifier)' />
                   
-               <variable key='handlerPrototype_%(irqmodifier)' type="String" 
-                  description="Protype for user event handler"
-                  expression='isBlank(irqHandlerName_%(irqmodifier))?"// No handler defined":"extern void "+irqHandlerName_%(irqmodifier)+"(%(irq_dummy_parameters));"' />
-
                <template key="/$(_BASENAME)/prototypes" >
                   <![CDATA[
-                  $(/$(_NAME)/handlerPrototype_%(irqmodifier))\n
+                  $(/$(_NAME)/handlerPrototype_%(irqmodifier):// No handler defined for $(_NAME) %(irqmodifier))\n
                   ]]>
                </template>
 
-               <!-- 
+               <!-- For debug - displays handler information 
                <stringOption key='_handlerName_%(irqmodifier)' 
                   hiddenBy="!irqHandlingMethod||!enablePeripheralSupport"
                   locked="true"
                   derived="true" 
-                  ref='="handlerName_%(irqmodifier)"' />        
-               <stringOption key='_handlerPrototype_%(irqmodifier)' 
+                  ref='="handlerName_%(irqmodifier)"' />
+               -->        
+               <stringOption key='handlerPrototype_%(irqmodifier)'
+                  description="Handler prototype" 
+                  toolTip="Prototype for user callback"
                   hiddenBy="!irqHandlingMethod||!enablePeripheralSupport"
                   locked="true"
                   derived="true" 
-                  ref='="handlerPrototype_%(irqmodifier)"' />
-               -->                          
+                  ref='isBlank(irqHandlerName_%(irqmodifier))?"// No handler defined for $(_NAME) %(irqmodifier)":"extern void "+irqHandlerName_%(irqmodifier)+"(%(irq_parameters));"' />
             </immediateValue>
          <else/> <!-- !(_userIrqCount>1) -->
-            <immediateValue keys="irq_dummy_parameters" values='=irq_dummy_parameters'>
+            <immediateValue keys="irq_parameters" values='=irq_parameters'>
                <stringOption key="irqHandlerName"
                   valueFormat="%s"
                   hiddenBy="!irqHandlingMethod||!enablePeripheralSupport"
@@ -410,31 +408,30 @@
                            This must be a global function matching the expected interrupt handler signature"
                   value=""  />
                <variable key='handlerName' type="String" 
+                  description="User declared event handler"
                   expression='isBlank(irqHandlerName)?"unhandledCallback":irqHandlerName' />
                
-               <variable key='handlerPrototype' type="String" 
-                  expression='isBlank(irqHandlerName)?"// No handler defined":"extern void "+irqHandlerName+"(%(irq_dummy_parameters));"' />
-                  
                <template key="/$(_BASENAME)/prototypes" >
                   <![CDATA[
-                  $(/$(_NAME)/handlerPrototype)\n
+                  $(/$(_NAME)/handlerPrototype:// No handler defined for $(_NAME))\n
                   ]]>
                </template>
-               <!-- 
+               <!-- For debug - displays handler information 
                <stringOption key='_handlerName' 
                   hiddenBy="!irqHandlingMethod||!enablePeripheralSupport"
                   locked="true"
                   derived="true" 
-                  ref='handlerName' />        
-               <stringOption key='_handlerPrototype' 
+                  ref='handlerName' />
+               -->        
+               <stringOption key='handlerPrototype' 
+                  description="Handler prototype" 
+                  toolTip="Prototype for user callback"
                   hiddenBy="!irqHandlingMethod||!enablePeripheralSupport"
                   locked="true"
                   derived="true" 
-                  ref='handlerPrototype' />        
-               -->                          
+                  ref='isBlank(irqHandlerName)?"// No handler defined for $(_NAME) ":"extern void "+irqHandlerName+"(%(irq_parameters));"' />        
             </immediateValue>
          </if>
-
       </for>
 
       <!-- Display here (wherever the original) -->
@@ -891,81 +888,7 @@
 <!--     START BasicInfo::InitVectors class and Init typedef -->
 <!--====================================================================================================== -->
    <if condition="_hardwareIrqCount&amp;&amp;!suppressIrqArray&amp;&amp;!no_initvectors" >
-      <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)" >
-      <![CDATA[
-         \t/**
-         \t * Class used to do vector initialisation for $(_Baseclass)
-         \t *
-         \t * This class has a templated constructor that accepts various values.
-         \t * Parameters available may vary with device - see $(_Class)::DefaultInitValue for relevant example.
-         \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.
-         \t *
-         \t * @note This constructor may be used to create a const instance in Flash
-         \t *
-         \t */
-         \ttemplate <typename Init, typename EnumType, size_t NumVectors>
-         \tclass InitVectors : public Init {
-         \t
-         \tpublic:
-         \t   /**
-         \t    * Copy Constructor
-         \t    */
-         \t   constexpr InitVectors(const InitVectors &other) = default;
-         \t
-         \t   /**
-         \t    * Other constructors are inherited
-         \t    *
-         \t    * @tparam Types
-         \t    * @param rest
-         \t    */
-         \t   template <typename... Types>
-         \t   constexpr InitVectors(Types... rest) : Init(rest...) {
-         \t   }
-         \t
-         \t   /**
-         \t    * Initialise Interrupt callbacks
-         \t    * (Used when only a single vector)
-         \t    *
-         \t    * @tparam Types
-         \t    * @param rest         Remaining parameters
-         \t
-         \t    * @param nvicPriority Priority for the handler
-         \t    * @param callback     Callback function to use
-         \t    */
-         \t   template <typename... Types>
-         \t   constexpr InitVectors(NvicPriority nvicPriority, CallbackFunction callback, Types... rest) : InitVectors(rest...) {
-         \t      priorities[0]  = nvicPriority;
-         \t      callbacks[0]   = callback;
-         \t   }
-         \t
-         \t   /**
-         \t    * Initialise Interrupt callbacks
-         \t    * (Multiple vectors)
-         \t    *
-         \t    * @tparam Types
-         \t    * @param rest         Remaining parameters
-         \t
-         \t    * @param irqNum       Interrupt number
-         \t    * @param nvicPriority Priority for the handler
-         \t    * @param callback     Callback function to use
-         \t    */
-         \t   template <typename... Types>
-         \t   constexpr InitVectors(EnumType irqNum, NvicPriority nvicPriority, CallbackFunction callback, Types... rest) : InitVectors(rest...) {
-         \t      priorities[irqNum]  = nvicPriority;
-         \t      callbacks[irqNum]   = callback;
-         \t   }
-         \t
-         \t   /**
-         \t    * Information describing the priority and callback function for each interrupt
-         \t    */
-         \t    CallbackFunction callbacks[NumVectors]  = {};
-         \t    NvicPriority     priorities[NumVectors] = {};
-         \t
-         \t}; // class $(_BasicInfo)::InitVectors
-         \t\n
-      ]]>
-      </template>
-
+   
       <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount>1)"
          variables="irq_enum"
          immediateVariables="_hardwareIrqCount"
@@ -974,7 +897,7 @@
          \t/**
          \t * Information describing the priority and callback function for each interrupt
          \t */
-         \ttypedef $(_BasicInfo)::InitVectors<Init, %returnType0, $(_hardwareIrqCount)> Init;
+         \ttypedef InitVectors<Init, CallbackFunction, %returnType0, $(_hardwareIrqCount)> Init;
          \t\n
       ]]></variableTemplate>
 
@@ -984,7 +907,7 @@
          \t/**
          \t * Information describing the priority and callback function for each interrupt
          \t */
-         \ttypedef $(_BasicInfo)::InitVectors<Init, int, 1> Init;
+         \ttypedef InitVectors<Init, CallbackFunction, int, 1> Init;
          \t\n
       ]]></template>
    </if>

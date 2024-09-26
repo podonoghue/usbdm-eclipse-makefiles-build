@@ -90,7 +90,7 @@
          description="Clock configuration[%(n)]"
          toolTip="Clock configurations for different run modes"
          value="ClockConfig_%(n)"
-         disabledValue="=(%(n)==0)?&quot;Reset Configuration&quot;:&quot;Disabled&quot;" >
+         disabledValue="=(%(n)==0)?&quot;Reset_Configuration&quot;:&quot;Disabled&quot;" >
 
          <if condition="%(n)==0" >
             <aliasOption key="enableClockConfiguration[%(n)]" />
@@ -391,7 +391,7 @@
          </category>
 
          <choiceOption key="icsClockMode[%(n)]"
-            enabledBy="enableClockConfiguration[%(n)]"
+            enabledBy="enableClockConfiguration[%(n)]&amp;&amp;enablePeripheralSupport"
             typeName="IcsClockMode"
             baseType="uint8_t"
             valueFormat="%s"
@@ -399,8 +399,10 @@
             toolTip="Selects the basic clock mode for the Clock generator" >
             <choice name="FLL Engaged Internal (FEI)"               enum="FEI"   code="IcsClockMode_FEI"   value="0"
                toolTip="FLL Engaged Internal(FEI)\n
-                     In FEI mode, ICSOUT is derived from the FLL clock (DCOCLK) that is controlled by the Internal Reference Clock (IRC).\n
-                     The FLL loop will lock the DCO frequency to the FLL factor (1280) times the internal reference frequency."
+                     In FEI mode, ICSOUT is derived from the FLL clock (DCOCLK) that is controlled by the\n
+                     Internal Reference Clock (IRC).\n
+                     The FLL loop will lock the DCO frequency to the FLL factor (1280) times\n
+                     the internal reference frequency."
             />
             <choice name="FLL Engaged External (FEE)"               enum="FEE"   code="IcsClockMode_FEE"   value="1"
                toolTip="FLL Engaged External(FEE)\n
@@ -437,7 +439,7 @@
          <category name="Clock monitors"
             description="Clock monitors" >
             <binaryOption key="ics_c4_cme[%(n)]" condition="ics_c4_cme_present"
-               enabledBy="enableClockConfiguration[%(n)]"
+               enabledBy="enableClockConfiguration[%(n)]&amp;&amp;enablePeripheralSupport"
                typeName="IcsClockMonitor"
                description="Clock Monitor Enable"
                toolTip="Determines if a reset request is made following a loss of external clock indication.\n
@@ -447,7 +449,7 @@
             </binaryOption>
 
             <binaryOption key="ics_c4_lolie0[%(n)]" condition="ics_c4_lolie0_present"
-               enabledBy="enableClockConfiguration[%(n)]"
+               enabledBy="enableClockConfiguration[%(n)]&amp;&amp;enablePeripheralSupport"
                typeName="IcsLossOfLockInterrupt"
                description="Loss of Lock Interrupt Enable"
                toolTip="Determines if an interrupt request is made following a loss of lock.\n
@@ -463,18 +465,18 @@
             <aliasOption key="icsirclk" />
 
             <binaryOption key="ics_c1_irclken[%(n)]" condition="ics_c1_irclken_present"
-               enabledBy="enableClockConfiguration[%(n)]"
+               enabledBy="enableClockConfiguration[%(n)]&amp;&amp;enablePeripheralSupport"
                typeName="IcsIrClkEn"
                target="system_icsirclk_clock[%(n)]"
                description="Internal Reference Clock [ICSIRCLK] enable"
                toolTip="Enables the internal reference clock for use by peripherals" >
-               <choice value="0" ref="Disabled"                enum="Disabled" name="Disabled" code="0"                           />
+               <choice value="0" ref="Disabled"                 enum="Disabled" name="Disabled" code="0"                           />
                <choice value="1" ref="icsirclk" enum="Enabled"  name="Enabled"  code="icsirclk"    isDefault="true"/>
             </binaryOption>
 
             <binaryOption key="ics_c1_irefsten[%(n)]"
                typeName="IcsIrefs"
-               enabledBy="ics_c1_irclken[%(n)]"
+               enabledBy="ics_c1_irclken[%(n)]&amp;&amp;enablePeripheralSupport"
                description="Internal Reference [ICSIRCLK] Stop Enable"
                toolTip="Controls whether or not the internal reference clock remains enabled when the ICS enters Stop mode.\n
                         (only if IRCLKEN is set or if ICS is in FEI, FBI, or FBILP modes before entering Stop mode)" >
@@ -526,7 +528,7 @@
             <aliasOption key="/OSC0/osc_cr_range"   optional="true"   />
 
             <choiceOption key="ics_c1_rdiv[%(n)]" condition="ics_c1_rdiv_present"
-               enabledBy="enableClockConfiguration[%(n)]"
+               enabledBy="enableClockConfiguration[%(n)]&amp;&amp;enablePeripheralSupport"
                target="ics_erc_clock_divided[%(n)]"
                typeName="IcsFllPrescale"
                derived="true"

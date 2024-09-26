@@ -3,8 +3,8 @@
  * @brief    Analogue Comparator
  */
 
-#ifndef HEADER_CMP_H_
-#define HEADER_CMP_H_
+#ifndef PROJECT_HEADERS_CMP_H_
+#define PROJECT_HEADERS_CMP_H_
 
 /*
  * *****************************
@@ -16,6 +16,8 @@
  */
 #include "derivative.h"
 #include "pin_mapping.h"
+
+#if $(/CMP/_BasicInfoGuard) // /CMP/_BasicInfoGuard
 
 namespace USBDM {
 // Forward declaration
@@ -42,4 +44,6 @@ $(/CMP/declarations:   // /CMP/declarations None Found)
  */
 } // End namespace USBDM
 
-#endif /* HEADER_CMP_H_ */
+#endif // /ACMP/_BasicInfoGuard
+
+#endif /* PROJECT_HEADERS_CMP_H_ */

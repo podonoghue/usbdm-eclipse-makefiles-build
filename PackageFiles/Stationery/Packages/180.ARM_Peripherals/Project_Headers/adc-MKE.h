@@ -1,5 +1,5 @@
 /**
- * @file     adc.h (180.ARM_Peripherals/Project_Headers/adc.h)
+ * @file     adc.h (180.ARM_Peripherals/Project_Headers/adc-MKE.h)
  * @brief    ADC routines
  */
 
@@ -17,246 +17,31 @@
 #include <climits>
 #include <cstddef>
 #include "pin_mapping.h"
+#include "gpio.h"
 
 #if $(/ADC/_BasicInfoGuard) // /ADC/_BasicInfoGuard
 
 namespace USBDM {
+// Forward declaration
+enum AdcChannelNum : uint8_t;
+}
 
-$(/ADC/peripheral_h_definition:// $/ADC/peripheral_h_definition not found)
+$(/ADC/prototypes:// $/ADC/prototypes not found)
+namespace USBDM {
+
 /**
  * @addtogroup ADC_Group ADC, Analogue Input
  * @brief Abstraction for Analogue Input
  * @{
  */
-
-/**
- * Provides:
- * - Common unhandledCallback for all ADCs.
- * - Shared constants
- *
- * This class is not intended to be instantiated directly.
- */
-class Adc {
-
-public:
-
-   /// Pointer to hardware instance
-   const HardwarePtr<ADC_Type> adc;
-
-private:
-   Adc(const Adc&) = delete;
-   Adc(Adc&&) = delete;
-
-protected:
-   /**
-    * Constructor
-    *
-    * @param adcBaseAddress Base address of ADC hardware
-    */
-   constexpr  Adc(uint32_t adcBaseAddress) : adc(adcBaseAddress) {
-   }
-
-   /**
-    * Initiates a conversion but does not wait for it to complete.
-    * Intended for use with interrupts or DMA.
-    *
-    * @param[in] sc1Value SC1 register value. This includes channel, differential mode and interrupts enable.
-    */
-   void startConversion(const int sc1Value) const {
-      // Trigger conversion
-      adc->SC1[0] = sc1Value;
-   };
-
-   /**
-    * Initiates a conversion and waits for it to complete.
-    *
-    * @param[in] sc1Value SC1 register value including the ADC channel to use and differential mode
-    *
-    * @return - The result of the conversion as an integer converted from 16-bit ADC value
-    *           For single-ended conversions this will be zero extended
-    *           For differential conversions this will be sign-extended
-    *
-    * @note Result is signed but will always be positive for single-ended conversions.
-    */
-   int readAnalogue(uint32_t sc1Value) const {
-
-      // Trigger conversion
-      adc->SC1[0] = sc1Value;
-      (void)adc->SC1[0];
-
-      while ((adc->SC1[0]&ADC_SC1_COCO_MASK) == 0) {
-         __asm__("nop");
-      }
-
-      return getConversionResult();
-   };
-
-   /**
-    * Initiates a conversion and waits for it to complete.
-    *
-    * @param[in] sc1Value SC1 register value including the ADC channel to use and differential mode
-    * @param[in] adcResolution Resolution for converter e.g. AdcResolution_16bit_se
-    *
-    * @return - The result of the conversion as an integer converted from 16-bit ADC value
-    *           For single-ended conversions this will be zero extended
-    *           For differential conversions this will be sign-extended
-    *
-    * @note Result is signed but will always be positive for single-ended conversions.
-    * @note The resolution used affects all future conversion on all channels on the ADC
-    */
-   int readAnalogue(uint32_t sc1Value, AdcResolution adcResolution) const {
-      adc->SC3 = (adc->SC3&~ADC_SC3_MODE_MASK)|adcResolution;
-      return readAnalogue(sc1Value);
-   };
-
-public:
-
-   /**
-    * Get ADC maximum conversion value for an single-ended range
-    *
-    * @param adcResolution
-    *
-    * @return range e.g. AdcResolution_8bit_se => (2^8)-1
-    */
-   static constexpr int getSingleEndedMaximum(AdcResolution adcResolution) {
-      switch(adcResolution) {
-         case AdcResolution_8bit_se:  return (1<<8)-1;
-         case AdcResolution_10bit_se: return (1<<10)-1;
-         case AdcResolution_12bit_se: return (1<<12)-1;
-         default:                     return 0;
-      }
-   }
-
-   /**
-    * Enables hardware trigger mode of operation and configures the channel.
-    *
-    * @param[in] sc1Value        SC1 register value including the ADC channel, Differential mode and interrupt enable
-    * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel
-
-    *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
-    */
-   void enableHardwareConversion(int sc1Value, AdcPretrigger adcPretrigger) const {
-      // Set hardware triggers
-      adc->SC2 = (adc->SC2)|ADC_SC2_ADTRG(1);
-      // Configure channel for hardware trigger input
-      adc->SC1[adcPretrigger] = sc1Value;
-   }
-
-   /**
-    * Set resolution
-    *
-    * @param[in] adcResolution Resolution for converter e.g. AdcResolution_16bit_se
-    *
-    * @note This affects all channels on the ADC
-    */
-   void setResolution(AdcResolution adcResolution) const {
-      adc->SC3 = (adc->SC3&~ADC_SC3_MODE_MASK)|adcResolution;
-   }
-
-   /**
-    * Set ADC  (and PGA if present) voltage reference
-    *
-    * @param adcRefSel Reference to select
-    *
-    * @note The PGA requires use of AdcRefSel_VrefOut (~1.2V)
-    */
-   void setReference(AdcReferenceSel adcRefSel=AdcReferenceSel_VrefhAndVrefl) {
-      adc->SC2 = (adc->SC2&~ADC_SC2_REFSEL_MASK)|adcRefSel;
-   }
-
-   /**
-    * Configure comparison mode.
-    *
-    * @param[in] adcCompare   Comparison operation to enable
-    * @param[in] low          Lower threshold
-    * @param[in] high         Higher threshold (if needed)
-    */
-   void enableComparison(AdcCompare adcCompare, int value) const {
-
-      // Set comparison value;
-      adc->CV = value;
-
-      // Set comparison fields
-      adc->SC2 = adc->SC2 | (adc->SC2&~(ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)))|
-            (adcCompare&(ADC_SC2_ACFE_MASK|ADC_SC2_ACFGT_MASK));
-   }
-
-   /**
-    * Gets result of last software initiated conversion
-    *
-    * @return The result of the conversion as an integer converted from 16-bit ADC value\n
-    *         For single-ended conversions this will be zero extended\n
-    *         For differential conversions this will be sign-extended
-    *
-    * @note Result is signed but will always be positive for single-ended conversions.
-    * @note This will also clear the conversion flag if set
-    */
-   int getConversionResult() const {
-
-      // This is a 32-bit value with leading zeroes i.e unsigned
-      int value = ADC_R_D_MASK & (adc->R[0]);
-      return value;
-   };
-
-   /**
-    * Gets result of hardware initiated conversion
-    *
-    * @param pretrigger Pretrigger to use (identifies which SC1 register to access)
-    *
-    * @return The result of the conversion as an integer converted from 16-bit ADC value\n
-    *         For single-ended conversions this will be zero extended\n
-    *         For differential conversions this will be sign-extended
-    *
-    * @note Result is signed but will always be positive for single-ended conversions.
-    * @note This will also clear the conversion flag if set
-    */
-   int getHardwareConversionResult(AdcPretrigger preTrigger) const {
-
-      // This is a 32-bit value with leading zeroes i.e unsigned
-      int value = ADC_R_D_MASK & (adc->R[preTrigger]);
-
-      return value;
-   };
-
-   /**
-    * Check if ADC is current doing a conversion
-    *
-    * @return true   => ADC is busy doing a conversion
-    * @return false  => ADC is idle
-    */
-   bool isBusy() const {
-      return adc->SC2&ADC_SC2_ADACT_MASK;
-   }
-
-   /**
-    * Configure the pin associated with this ADC channel.
-    *
-    * @param sc1Value Used to obtain channel number
-    */
-   void setInput(unsigned sc1Value) const {
-      // Map pin to ADC
-      adc->APCTL1 |= (1<<(sc1Value&0b11111));
-   }
-
-   /**
-    *  Disable Pin
-    *  The pin is restored to usual operation (non-ADC)
-    *
-    * @param sc1Value Used to obtain channel number
-    */
-   void disablePin(unsigned sc1Value) const {
-      // Map pin to ADC
-      adc->APCTL1 &= ~(1<<(sc1Value&0b11111));
-   }
-
-}; // class Adc
+$(/ADC/peripheral_h_definition:// $/ADC/peripheral_h_definition not found)
 
 /**
  * Class representing a minimal ADC channel
  *
  * This class is not intended to be instantiated directly.
  */
-class AdcChannel : public Adc {
+class AdcChannel : public AdcBasicInfo {
 
 private:
    AdcChannel() = delete;
@@ -273,7 +58,7 @@ protected:
     * @param adcAddress  ADC address
     * @param channel     ADC channel to use
     */
-   constexpr AdcChannel(uint32_t adcAddress, uint8_t channel) : Adc(adcAddress), sc1Value(channel) {}
+   constexpr AdcChannel(uint32_t adcAddress, uint8_t channel) : AdcBasicInfo((volatile ADC_Type *)adcAddress), sc1Value(channel) {}
 
 public:
    /**
@@ -286,7 +71,7 @@ public:
     * @note Result is signed but will always be positive for single-ended conversions.
     */
    int readAnalogue() const {
-      return Adc::readAnalogue(sc1Value);
+      return AdcBasicInfo::readAnalogue(sc1Value);
    };
 
    /**
@@ -302,44 +87,27 @@ public:
     * @note The resolution used here affects all future conversion on all channels on the ADC
     */
    int readAnalogue(AdcResolution adcResolution) const {
-      return Adc::readAnalogue(sc1Value, adcResolution);
+      return AdcBasicInfo::readAnalogue(sc1Value, adcResolution);
    };
 
    /**
     * Enables hardware trigger mode of operation and configures a channel.
     *
-    * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel.\n
-    *                            This corresponds to pre-triggers in the PDB channels and SC1[n]/R[n] register selection
-    * @param[in] adcInterrupt    Whether to generate an interrupt when each conversion completes
+    * @param[in] adcAction     Whether to generate an interrupt when each conversion completes
     */
-   void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt=AdcInterrupt_Disabled) const {
-      Adc::enableHardwareConversion(adcInterrupt|sc1Value, adcPretrigger);
+   void enableHardwareConversion(AdcAction adcAction) const {
+      AdcBasicInfo::enableHardwareConversion(adcAction|sc1Value);
    }
 
    /**
     * Initiates a conversion but does not wait for it to complete.
     * Intended for use with interrupts or DMA.
     *
-    * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
+    * @param[in] adcAction   Determines if an interrupt is generated when conversions are complete
     */
-   void startConversion(AdcInterrupt adcInterrupt=AdcInterrupt_Disabled) const {
-      Adc::startConversion(sc1Value|adcInterrupt);
+   void startConversion(AdcAction adcAction=AdcAction_None) const {
+      AdcBasicInfo::startConversion(sc1Value|adcAction);
    };
-
-   /**
-    * Configure the pin associated with this ADC channel.
-    */
-   void setInput() const {
-      Adc::setInput(sc1Value);
-   }
-
-   /**
-    *  Disable Pin
-    *  The pin is restored to usual operation (non-ADC)
-    */
-   void disablePin() const {
-      Adc::disablePin(sc1Value);
-   }
 
 }; // class AdcChannel
 
@@ -359,15 +127,7 @@ public:
  * @tparam info Table of information describing ADC
  */
 template<class Info>
-class AdcBase_T : public Adc, public Info {
-
-private:
-   AdcBase_T(const AdcBase_T&) = delete;
-   AdcBase_T(AdcBase_T&&) = delete;
-
-
-protected:
-$(/ADC/protectedMethods: // No /ADC/protectedMethods found)
+class AdcBase_T : public Info {
 
 public:
    /** Hardware instance pointer */
@@ -383,291 +143,11 @@ public:
    /** @return Base address of ADC.R[index] registers as uint32_t */
    static constexpr uint32_t adcR(unsigned index) { return adcBase() + offsetof(ADC_Type, R) + index*sizeof(ADC_Type::R[0]); }
 
-public:
-
-   constexpr AdcBase_T() : Adc(Info::baseAddress) {};
-
-   /** Allow convenient access to associate AdcInfo */
-   using AdcInfo = Info;
    using Info::configure;
 
-$(/ADC/publicMethods: // No /ADC/publicMethods found)
-$(/ADC/InitMethod: // /ADC/InitMethod not found)
-   /**
-    * Configure the ADC
-    *
-    * @param[in] adcResolution   Resolution for converter e.g. AdcResolution_16bit_se
-    * @param[in] adcClockSource  Clock source e.g. AdcClockSource_Asynch
-    * @param[in] adcSample       Input sample interval. Allows use of higher input impedance sources
-    * @param[in] adcPower        Allows reduced power consumption but with restricted input clock speed
-    * @param[in] adcMuxsel       Selects between A/B multiplexor inputs on channels 4-8
-    * @param[in] adcClockRange   Allows higher input clock speed operation
-    * @param[in] adcAsyncClock   Controls whether the internal ADC clock is always enabled or only when needed for a conversion
-    *
-    * @note These settings apply to all channels on the ADC.\n
-    * The resulting ADC clock rate should be restricted to the following ranges (assumes AdcPower_Normal, AdcClockRange_High):\n
-    *  [2..12MHz] for 16-bit conversion modes  \n
-    *  [1..18MHz] for other conversion modes
-    */
-   static void configure(
-         AdcResolution   adcResolution,
-         AdcClockSource  adcClockSource  = AdcClockSource_Asynch,
-         AdcSample       adcSample       = AdcSample_Short,
-         AdcPower        adcPower        = AdcPower_Normal
-   ) {
-      Info::enable();
-      adc->SC3 = adcResolution|calculateClockDivider(adcClockSource, adcPower)|adcPower|(adcSample&ADC_SC3_ADLSMP_MASK);
-   }
-
-   /**
-    * Calculate ADC clock divider (ADC_CFG1_ADIV) and confirm clock source (ADC_CFG1_ADICLK)
-    * @note adcClockSource may be modified in return value
-    *
-    * @param adcClockSource   ADC clock source
-    * @param adcClockRange    ADC clock range (high/normal)
-    * @param adcPower         ADC power level (normal/low)
-    *
-    *
-    * @return ADC_CFG1_ADIV|ADC_CFG1_ADICLK value
-    */
-   static unsigned calculateClockDivider(AdcClockSource adcClockSource, AdcPower adcPower) {
-      if (adcClockSource == AdcClockSource_Asynch) {
-         // Internal clock is always OK with /1
-         return AdcClockSource_Asynch|AdcClockDivider_DivBy1;
-      }
-      static constexpr unsigned MinClock =  2000000;
-      unsigned maxClock = 0;
-      switch(adcPower) {
-         case AdcPower_Low :
-            maxClock =  4000000;
-            break;
-         case AdcPower_Normal :
-            maxClock =  8000000;
-            break;
-      }
-      unsigned adiv;
-      for(;;) {
-         unsigned clockFrequency = Info::getClockFrequency(adcClockSource);
-         for (adiv=0; adiv<=3; adiv++) {
-            if ((clockFrequency <= maxClock) && (clockFrequency >= MinClock)) {
-               break;
-            }
-            clockFrequency /= 2;
-         }
-         if ((adiv>3) && (adcClockSource == AdcClockSource_BusClock)) {
-            // Automatically switch from  AdcClockSource_Bus -> AdcClockSource_Busdiv2
-            adcClockSource = AdcClockSource_BusClockDiv2;
-            continue;
-         }
-         break;
-      }
-      usbdm_assert(adiv<4, "Unable to find suitable ADC clock");
-      return ADC_SC3_ADIV(adiv)|adcClockSource;
-   }
-
-   /**
-    * Check if ADC is current doing a conversion
-    *
-    * @return true   => ADC is busy doing a conversion
-    * @return false  => ADC is idle
-    */
-   static bool isBusy() {
-      return adc->SC2&ADC_SC2_ADACT_MASK;
-   }
-
-   /**
-    * Check if ADC result from last conversion is available.
-    * This statis will be cleared if when the result is retrieved.
-    *
-    * @return true   => ADC conversion result is available
-    * @return false  => ADC is idle
-    */
-   static bool isResultAvailable() {
-      return adc->SC1[0]&ADC_SC1_COCO_MASK;
-   }
-
-   /**
-    * Set conversion mode
-    *
-    * @param[in] adcResolution Resolution for converter e.g. AdcResolution_16bit_se
-    *
-    * @note This affects all channels on the ADC
-    */
-   static void setResolution(AdcResolution adcResolution) {
-      adc->SC3 = (adc->SC3&~ADC_SC3_MODE_MASK)|adcResolution;
-   }
-
-   /**
-    * Set clock source
-    *
-    * @param[in] adcClockSource  Clock source e.g. AdcClockSource_Asynch
-    * @param[in] adcClockDivider Clock divider e.g. AdcClockDivider_4
-    *
-    * @note This affects all channels on the ADC.\n
-    * The resulting ADC clock rate should be restricted to the following ranges:\n
-    *  [2..12MHz] for 16-bit conversion modes  \n
-    *  [1..18MHz] for other conversion modes
-    */
-   static void setClockSource(AdcClockSource adcClockSource, AdcClockDivider adcClockDivider=AdcClockDivider_DivBy1) {
-      adc->SC3 = (adc->SC3&~(ADC_SC3_ADIV_MASK|ADC_SC3_ADICLK_MASK))|adcClockSource|adcClockDivider;
-   }
-
-   /**
-    * Set ADC  (and PGA if present) voltage reference
-    *
-    * @param adcRefSel Reference to select
-    */
-   static void setReference(AdcReferenceSel adcRefSel=AdcReferenceSel_VrefhAndVrefl) {
-      adc->SC2 = (adc->SC2&~ADC_SC2_REFSEL_MASK)|adcRefSel;
-   }
-
-   /**
-    * Configure comparison mode.
-    *
-    * @param[in] adcCompare   Comparison operation to enable
-    * @param[in] low          Lower threshold
-    * @param[in] high         Higher threshold (if needed)
-    */
-   static void enableComparison(AdcCompare adcCompare, int value) {
-
-      // Set comparison value
-      adc->CV = value;
-
-      // Set comparison fields
-      adc->SC2 = adc->SC2 | (adc->SC2&~(ADC_SC2_ACFE_MASK|ADC_SC2_ACFGT_MASK))|
-            (adcCompare&(ADC_SC2_ACFE_MASK|ADC_SC2_ACFGT_MASK));
-   }
-
-protected:
-   /**
-    * Enables hardware trigger mode of operation and configures the channel.
-    *
-    * @param[in] sc1Value        SC1 register value including the ADC channel, Differential mode and interrupt enable
-    * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
-    *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
-    */
-   static void enableHardwareConversion(int sc1Value, AdcPretrigger adcPretrigger) {
-      // Set hardware triggers
-      adc->SC2 = (adc->SC2)|ADC_SC2_ADTRG(1);
-      // Configure channel for hardware trigger input
-      adc->SC1[adcPretrigger] = sc1Value;
-   }
-
-   /**
-    * Initiates a conversion but does not wait for it to complete.
-    * Intended for use with interrupts or DMA.
-    *
-    * @param[in] sc1Value SC1 register value.
-    *                     This includes channel, differential mode and interrupts enable.
-    */
-   static void startConversion(const int sc1Value) {
-      // Trigger conversion
-      adc->SC1[0] = sc1Value;
-   };
-
 public:
-   /**
-    * Gets result of last software initiated conversion
-    *
-    * @return - The result of the conversion as an integer converted from 16-bit ADC value\n
-    *           For single-ended conversions this will be zero extended\n
-    *           For differential conversions this will be sign-extended
-    *
-    * @note Result is signed but will always be positive for single-ended channels.
-    * @note This will also clear the conversion flag if set
-    */
-   static int getConversionResult() {
 
-      // This is a 32-bit value with leading zeroes i.e unsigned
-      int value = ADC_R_D_MASK & (adc->R[0]);
-
-      return value;
-   };
-
-   /**
-    * Gets result of hardware initiated conversion
-    *
-    * @param pretrigger Pretrigger to use (identifies which SC1 register to access)
-    *
-    * @return The result of the conversion as an integer converted from 16-bit ADC value\n
-    *         For single-ended conversions this will be zero extended\n
-    *         For differential conversions this will be sign-extended
-    *
-    * @note Result is signed but will always be positive for single-ended channels.
-    * @note This will also clear the conversion flag if set
-    */
-   static int getHardwareConversionResult(AdcPretrigger pretrigger) {
-
-      // This is a 32-bit value with leading zeroes i.e unsigned
-      int value = ADC_R_D_MASK & (adc->R[pretrigger]);
-
-      return value;
-   };
-
-protected:
-   /**
-    * Initiates a conversion and waits for it to complete.
-    *
-    * @param[in] sc1Value SC1 register value including the ADC channel to use and whether differential mode
-    *
-    * @return - The result of the conversion as an integer converted from 16-bit ADC value\n
-    *           For single-ended conversions this will be zero extended\n
-    *           For differential conversions this will be sign-extended
-    *
-    * @note Result is signed but will always be positive for single-ended conversions.
-    */
-   static int readAnalogue(const int sc1Value) {
-      // Trigger conversion
-      adc->SC1[0] = sc1Value;
-      (void)adc->SC1[0];
-
-      while ((adc->SC1[0]&ADC_SC1_COCO_MASK) == 0) {
-         __asm__("nop");
-      }
-
-      return getConversionResult();
-   };
-
-   /**
-    * Initiates a conversion and waits for it to complete.
-    *
-    * @param[in] sc1Value SC1 register value including the ADC channel to use and whether differential mode
-    * @param[in] adcResolution Resolution for converter e.g. AdcResolution_16bit_se
-    *
-    * @return - The result of the conversion as an integer converted from 16-bit ADC value\n
-    *           For single-ended conversions this will be zero extended\n
-    *           For differential conversions this will be sign-extended
-    *
-    * @note Result is signed but will always be positive for single-ended conversions.
-    * @note The resolution used here affects all further conversion on all channels on the ADC
-    *
-    */
-   static int readAnalogue(const int sc1Value, AdcResolution adcResolution) {
-      adc->SC3 = (adc->SC3&~ADC_SC3_MODE_MASK)|adcResolution;
-      return readAnalogue(sc1Value);
-   }
-
-public:
-   /**
-    * Configure the pin associated with this ADC channel.
-    *
-    * @param sc1Value Used to obtain channel number
-    */
-   static void setInput(unsigned sc1Value) {
-      // Map pin to ADC
-      adc->APCTL1 |= (1<<(sc1Value&0b11111));
-   }
-
-   /**
-    *  Disable Pin
-    *  The pin is restored to usual operation (non-ADC)
-    *
-    * @param sc1Value Used to obtain channel number
-    */
-   static void disablePin(unsigned sc1Value) {
-      // Map pin to ADC
-      adc->APCTL1 &= ~(1<<(sc1Value&0b11111));
-   }
+   AdcBase_T() = default;
 
    /**
     * Template class representing an ADC channel.
@@ -687,74 +167,54 @@ public:
     *
     * @tparam channel ADC channel
     */
-   template<int channel>
-   class Channel : public AdcChannel {
+   template<AdcChannelNum channel>
+   class ChannelCommon : public AdcChannel {
    private:
       /**
        * This class is not intended to be instantiated
        */
-      Channel(const Channel&) = delete;
-      Channel(Channel&&) = delete;
+      ChannelCommon(const ChannelCommon&) = delete;
+      ChannelCommon(ChannelCommon&&) = delete;
 
    public:
-      constexpr Channel() : AdcChannel(AdcInfo::baseAddress, channel) {}
-
-      /** Channel number */
-      static constexpr AdcChannelNum CHANNEL=(AdcChannelNum)channel;
+      constexpr ChannelCommon() : AdcChannel(AdcInfo::baseAddress, channel) {}
 
       /** The ADC that owns this channel */
-      using OwningAdc = AdcBase_T;
+      using Owner = AdcBase_T;
 
       /** Information about this ADC */
       using AdcInfo = Info;
 
-      /**
-       * Gets result of last software initiated conversion
-       *
-       * @return - The result of the conversion as an integer converted from 16-bit ADC value\n
-       *           For single-ended conversions this will be zero extended\n
-       *           For differential conversions this will be sign-extended
-       *
-       * @note Result is signed but will always be positive for single-ended channels.
-       * @note This will also clear the conversion flag if set
-       */
-      static int getConversionResult() {
-         return OwningAdc::getConversionResult();
-      }
-
-      /**
-       * Check if ADC result from last conversion is available.
-       * This statis will be cleared if when the result is retrieved.
-       *
-       * @return true   => ADC conversion result is available
-       * @return false  => ADC is idle
-       */
-      static bool isResultAvailable() {
-         return OwningAdc::isResultAvailable();
-      }
-
-      /**
-       * Check if ADC is current doing a conversion
-       *
-       * @return true   => ADC is busy doing a conversion
-       * @return false  => ADC is idle
-       */
-      static int isBusy() {
-         return OwningAdc::isBusy();
-      }
+      /** Channel number */
+      static constexpr AdcChannelNum CHANNEL=channel;
 
       /**
        * Initiates a conversion but does not wait for it to complete.
        * Intended for use with interrupts or DMA.
        *
-       * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
+       * @param[in] adcAction   Determines if an interrupt is generated when conversions are complete
        */
-      static void startConversion(AdcInterrupt adcInterrupt=AdcInterrupt_Disabled) {
+      static void startConversion(AdcAction adcAction=AdcAction_None) {
          if constexpr(!Info::irqHandlerInstalled) {
-            usbdm_assert((adcInterrupt == AdcInterrupt_Disabled),
+            usbdm_assert((adcAction == AdcAction_None),
                   "ADC not configured for interrupts. Modify Configure.usbdmProject");
          }
-         AdcBase_T::startConversion(channel|adcInterrupt);
+         AdcBase_T::startConversion(channel|adcAction);
+      };
+
+      /**
+       * Initiates a conversion but does not wait for it to complete.
+       * Intended for use with interrupts or DMA.
+       *
+       * @param adcResolution      New Resolution to use (persistent)
+       * @param[in] adcAction   Determines if an interrupt is generated when conversions are complete
+       */
+      static void startConversion(AdcResolution adcResolution, AdcAction adcAction=AdcAction_None) {
+         if constexpr(!Info::irqHandlerInstalled) {
+            usbdm_assert((adcAction == AdcAction_None),
+                  "ADC not configured for interrupts. Modify Configure.usbdmProject");
+         }
+         AdcBase_T::startConversion(channel|adcAction, adcResolution);
       };
 
       /**
@@ -790,30 +250,201 @@ public:
        *
        * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel.\n
        *                            This corresponds to pre-triggers in the PDB channels and SC1[n]/R[n] register selection
-       * @param[in] adcInterrupt    Whether to generate an interrupt when each conversion completes
+       * @param[in] adcAction    Whether to generate an interrupt when each conversion completes
        */
-      static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt=AdcInterrupt_Disabled) {
-         AdcBase_T::enableHardwareConversion(channel|adcInterrupt, adcPretrigger);
+      static void enableHardwareConversion(AdcAction adcAction=AdcAction_None) {
+         AdcBase_T::enableHardwareConversion(channel|adcAction);
       }
+
+#ifdef ADC_SC2_DMAEN
+      /**
+       * Enables hardware trigger mode of operation and configures a channel.
+       *
+       * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
+       *                            This corresponds to pre-triggers in the PDB channels and SC1[n]/R[n] register selection
+       * @param[in] adcAction    Whether to generate an interrupt when each conversion completes
+       * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
+       */
+      static void enableHardwareConversion(AdcAction adcAction, AdcDma adcDma) {
+         AdcBase_T::enableHardwareConversion(channel|adcAction, adcDma);
+      }
+#endif
+   };
+
+   template<AdcChannelNum channel>
+   class Channel : public ChannelCommon<channel>  {
+   private:
+#if $(/ADC0/adc_sc1_diff_present:false) // adc_sc1_diff_present
+      static_assert(((channel<AdcChannelNum_DiffFirst)||(channel>AdcChannelNum_DiffLast)), "Illegal channel number");
+#endif
+   public:
 
       /**
        * Configure the pin associated with this ADC channel.
+       * The pin is in analogue mode so no PCR settings are active.
+       * This function is of use if mapAllPins and mapAllPinsOnEnable are not selected in USBDM configuration.
        */
       static void setInput() {
-         AdcBase_T::setInput(channel);
+         // Map pin to ADC (disable associated digital function)
+         adc->APCTL1 = adc->APCTL1| 1<<channel;
       }
 
       /**
        *  Disable Pin
-       *  The pin is restored to usual operation (non-ADC)
+       *  This sets the pin to MUX 0 which is specified for minimum leakage in low-power modes.
+       *
+       *  @note The clock is left enabled as shared with other pins.
+       *  @note Mux(0) is also the Analogue MUX setting
        */
       static void disablePin() {
-         AdcBase_T::disablePin(channel);
+         // Unmap pin from ADC (enable associated digital function)
+         adc->APCTL1 = adc->APCTL1 &~(1<<channel);
+      }
+   };
+
+#if defined(ADC_PGA_PGAEN_MASK)
+   /**
+    * Template class representing an ADC channel with programmable gain amplifier.
+    *
+    * Example
+    * @code
+    * // Instantiate the ADC and the channel (for ADC0 channel 6)
+    * using Adc0    = AdcBase_T<Adc0Info>;
+    * using Adc0Ch6 = Adc0::PgaChannel;
+    *
+    * // Set ADC resolution
+    * Adc0::setMode(AdcResolution_16bit_se);
+    *
+    * // Read ADC value
+    * uint32_t value = Adc0Ch6::readAnalogue();
+    * @endcode
+    */
+   class PgaChannel : public ChannelCommon<AdcChannelNum_Diff2> {
+   private:
+      /**
+       * This class is not intended to be instantiated
+       */
+      PgaChannel(const PgaChannel&) = delete;
+      PgaChannel(PgaChannel&&) = delete;
+
+   public:
+      constexpr PgaChannel(){}
+   };
+#endif
+
+#ifdef ADC_SC1_DIFF_MASK
+   /**
+    * Template class representing an ADC differential channel
+    *
+    * Example
+    * @code
+    * // Instantiate the ADC and the differential channel (for ADC_DM0, ADC_DP0)
+    * using Adc0 = AdcBase_T<Adc0Info>;
+    * using Adc0Ch6 = Adc0::DiffChannel<AdcChannelNum_Diff1>;
+    *
+    * // Set ADC resolution
+    * Adc0.setMode(AdcResolution_11bit_diff );
+    *
+    * // Read ADC value
+    * uint32_t value = Adc0Ch0.readAnalogue();
+    * @endcode
+    *
+    * @tparam channel ADC channel
+    */
+   template<AdcChannelNum channel>
+   class DiffChannel : public ChannelCommon<channel> {
+
+      static_assert((channel>=AdcChannelNum_DiffFirst)&&(channel<=AdcChannelNum_DiffLast), "Illegal differential channel number");
+
+   private:
+      /**
+       * This class is not intended to be instantiated
+       */
+      DiffChannel(const DiffChannel&) = delete;
+      DiffChannel(DiffChannel&&) = delete;
+
+      static constexpr AdcBasicInfo::CheckPinExistsAndIsMapped<Info, channel>   checkPos{};
+      static constexpr AdcBasicInfo::CheckPinExistsAndIsMapped<Info, channel+8> checkNeg{};
+
+   public:
+      constexpr DiffChannel() : ChannelCommon<AdcChannelNum(channel)>() {}
+
+      /** PCR associated with plus channel */
+      using PcrP = PcrTable_T<Info, channel>;
+
+      /** PCR associated with minus channel */
+      using PcrM = PcrTable_T<Info, channel>;
+
+      /** The ADC that owns this channel */
+      using Owner = AdcBase_T;
+
+      /** Information about this ADC */
+      using AdcInfo = Info;
+
+      /** Channel number */
+      static constexpr int CHANNEL=channel;
+
+      /**
+       * Configure the pins associated with this ADC channel.
+       * The pins are in analogue mode so no PCR settings are active.
+       * This function is of use if mapAllPins and mapAllPinsOnEnable are not selected in USBDM configuration.
+       */
+      static void setInput() {
+         // Map pins to ADC
+         PcrP::setPCR(Info::info[channel].pcrValue);
+         PcrM::setPCR(Info::info[channel].pcrValue);
       }
 
-   }; // class Channel
+      /**
+       *  Disable Pin
+       *  This sets the pin to MUX 0 which is specified for minimum leakage in low-power modes.
+       *
+       *  @note The clock is left enabled as shared with other pins.
+       *  @note Mux(0) is also the Analogue MUX setting
+       */
+      static void disablePin() {
+         // Map pin to ADC
+         if constexpr (AdcInfo::InfoDP::info[0x1f&mapChannelNumToPhysicalChannelNum(channel)].portAddress != 0) {
+            PcrP::disablePin();
+            PcrM::disablePin();
+         }
+      }
+   };
 
-}; // class AdcBase_T
+#if defined(ADC_PGA_PGAEN_MASK)
+   /**
+    * Template class representing an ADC channel with programmable gain amplifier.
+    *
+    * Example
+    * @code
+    * // Instantiate the ADC and the channel (for ADC0 channel 6)
+    * using Adc0    = AdcBase_T<Adc0Info>;
+    * using Adc0Ch6 = Adc0::PgaChannel;
+    *
+    * // Set ADC resolution
+    * Adc0::setMode(AdcResolution_16bit_se);
+    *
+    * // Read ADC value
+    * uint32_t value = Adc0Ch6::readAnalogue();
+    * @endcode
+    */
+   class PgaDiffChannel : public DiffChannel<AdcChannelNum_Diff2> {
+
+   private:
+      /**
+       * This class is not intended to be instantiated
+       */
+      PgaDiffChannel(const PgaDiffChannel&) = delete;
+      PgaDiffChannel(PgaDiffChannel&&) = delete;
+
+   public:
+      constexpr PgaDiffChannel(){}
+   };
+#endif
+
+#endif
+
+};
 
 $(/ADC/declarations:// #error "No declarations found")
 /**
