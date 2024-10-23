@@ -480,8 +480,8 @@ condition can set the IDLE flag.\n
       derived="true"
       valueFormat="(%s)"
       bitmask="0xFF"
-      typeName="UartStatusFlag"
       generateOperators="true"
+      typeName="UartStatusFlag"
       baseType="uint32_t"
       enumClass="true"
       toolTip="These masks may be used to test or modify the status flags"
@@ -1538,7 +1538,7 @@ XXXXXXXXXXXXXXXXXXXXXX
                uart_c1_loops,uart_c1_uartswai,uart_c1_rsrc,
                uart_c1_m,uart_c1_wake,uart_c1_ilt,uart_c1_pe,
                uart_c1_pt                                             : %configRegAssignment  ;
-               uart_s2_lbkdif,uart_s2_rxedgif,
+               uart_s2_lbkdif,uart_s2_rxedgif,uart_s2_msbf,
                uart_s2_rxinv,uart_s2_rwuid,uart_s2_brk13,
                uart_s2_lbkde                                          : %configRegAssignment  ;
                uart_c3_t8,uart_c3_txdir,uart_c3_txinv,uart_c3_orie,
@@ -1733,7 +1733,7 @@ XXXXXXXXXXXXXXXXXXXXXX
             uart_c1_pt,
             uart_c2_tie,uart_c2_tcie,uart_c2_rie,uart_c2_ilie,
             uart_c2_te,uart_c2_re,uart_c2_rwu,uart_c2_sbk,
-            uart_s2_lbkdif,uart_s2_rxedgif,
+            uart_s2_lbkdif,uart_s2_rxedgif,uart_s2_msbf,
             uart_s2_rxinv,uart_s2_rwuid,uart_s2_brk13,
             uart_s2_lbkde,
             uart_c3_t8,uart_c3_txdir,uart_c3_txinv,uart_c3_orie,

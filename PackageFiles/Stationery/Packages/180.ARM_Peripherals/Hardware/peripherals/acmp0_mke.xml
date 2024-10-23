@@ -4,22 +4,28 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Analogue comparator" >
 
-   <constant key="definitionsInHeader" value="true" type="Boolean" />
-
-   <equation key="irq_parameters"            value=""        />
-   <equation key="irq_dummy_parameters"      value=""        />
-   <equation key="irq_call_parameters"       value=""        />
-   <equation key="generateDefault"           value="false"     />
-   <equation key="configureInStartupDefault" value="false"     />
-   <xi:include href="enablePeripheral.xml"  />
+   <constant key="disable_peripheral" value='"acmp->CS = ACMP_CS_ACE(0);"' type="String" />
 
    <!-- ____ Class Declaration ________ -->
-   <constant key="_class_declaration" type="String"
-      value='"$(_Info) : public $(_BasicInfo)"' />
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
+   <!-- ____ Instance control ________ -->
+   <constant key="_can_create_instance" value="true" type="Boolean" />
+
+   <equation key="irq_parameters"             value=""        />
+   <equation key="irq_dummy_parameters"       value=""        />
+   <equation key="irq_call_parameters"        value=""        />
+   <equation key="generateDefault"            value="false"     />
+   <equation key="configureInStartupDefault"  value="false"     />
+   <xi:include href="enablePeripheral.xml" />
+
+
+   <!-- Interrupts and DMA -->
    <binaryOption key="acmp_cs_acie" condition="acmp_cs_acie_present"
       enabledBy="irqHandlingMethod"
-      typeName="AcmpInterrupt"
+      typeName="AcmpEvent"
       baseType="uint8_t"
       description="ACMP Interrupt Enable"
       toolTip="Controls Interrupt generation" >
@@ -89,6 +95,8 @@
 
    <constant key="inputPinMap" type="String" value='"Inp0,Inp1,Inp2"' condition="!inputPinMap" />
 
+<!-- =================================================================================== -->
+
    <choiceOption key="acmp_c0_acpsel_base" condition="acmp_c0_acpsel_present"
       valueFormat="ACMP_C0_ACPSEL(%s)"
       hidden="true"
@@ -97,18 +105,22 @@
       baseType="uint8_t"
       description="ACMP Positive Input Select"
       toolTip="Selects the positive input source" >
-      <choiceExpansion name="External input %(i)" value="%(i)" enum="%(i)" keys="i" dim="3" />
-      <choice          name="Internal DAC"        value="3"    enum="Dac" />
+      <choiceExpansion name="External input %(i)" value="%(i)" enum="%(i)" keys="i" dim="4" />
    </choiceOption >
 
    <choiceOption key="acmp_c0_acpsel" condition="acmp_c0_acpsel_present"
+      valueFormat="AcmpInputPlus_%s"
       enabledBy="acmp_cs_ace"
-      typeName="AcmpInputPlus"
-      baseType="uint8_t"
+      typeName="Acmp$(_instance)InputPlus"
+      baseType="AcmpInputPlus"
+      generateAsConstants="true"
       description="ACMP$(_instance) Positive Input Select"
       toolTip="Selects the $(_Class) positive input source" >
-      <choiceExpansion name="%(pin)"       value="%(i)" enum="%(i)" keys="pin" values="=inputPinMap" delimiter="," />
-      <choice          name="Internal DAC" value="Dac"  enum="Dac"    />
+      <choiceExpansion name='@SignalDescriptionFromIndex(%(i),"^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
+             value="%(i)" enum="%(i)" keys="pin"
+             values="=inputPinMap" delimiter=","
+             signal="ACMP$(_instance)_IN%(i)" />
+      <choice          name="Internal DAC" value="3"  enum="Dac"    />
    </choiceOption >
 
    <choiceOption key="acmp_c0_acnsel_base" condition="acmp_c0_acnsel_present"
@@ -119,19 +131,25 @@
       baseType="uint8_t"
       description="ACMP Negative Input Select"
       toolTip="Selects the negative input source" >
-      <choiceExpansion name="External input %(i)" value="%(i)" enum="%(i)" keys="i" dim="3" />
-      <choice          name="Internal DAC"        value="3"    enum="Dac" />
+      <choiceExpansion name="External input %(i)" value="%(i)" enum="%(i)" keys="i" dim="4" />
    </choiceOption >
 
    <choiceOption key="acmp_c0_acnsel" condition="acmp_c0_acnsel_present"
+      valueFormat="AcmpInputMinus_%s"
       enabledBy="acmp_cs_ace"
-      typeName="AcmpInputMinus"
-      baseType="uint8_t"
-      description="ACMP Negative Input Select"
+      typeName="Acmp$(_instance)InputMinus"
+      baseType="AcmpInputMinus"
+      generateAsConstants="true"
+      description="ACMP$(_instance) Negative Input Select"
       toolTip="Selects the negative input source" >
-      <choiceExpansion name="%(pin)"       value="%(i)" enum="%(i)" keys="pin" values="=inputPinMap" delimiter="," />
-      <choice          name="Internal DAC" value="Dac"  enum="Dac"    />
+      <choiceExpansion name='@SignalDescriptionFromIndex(%(i),"^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
+             value="%(i)" enum="%(i)" keys="pin"
+             values="=inputPinMap" delimiter=","
+             signal="ACMP$(_instance)_IN%(i)" />
+      <choice          name="Internal DAC" value="3"    enum="Dac"    />
    </choiceOption >
+
+<!-- =================================================================================== -->
 
    <!-- ____ C1 ____ -->
 
@@ -185,8 +203,21 @@
       generateOperators="true"
       toolTip="Enables ACMP pins as analogue inputs\n
                Disables other functions"
-      description="ACMP Input Pin Enables" >
+      description="Bitmask controlling which ACMP pins are available as analogue inputs" >
       <choiceExpansion name="Pin enable %(i)" value="1&lt;&lt;%(i)" enum="%(i)" keys="i" dim="3" />
+   </choiceOption>
+
+   <choiceOption  key="acmp_c2_acipe_pins" condition="acmp_c2_acipe_present"
+      valueFormat="AcmpInputEnable_%s"
+      hidden="true"
+      derived="true"
+      typeName="Acmp$(_instance)InputEnable"
+      baseType="AcmpInputEnable"
+      generateAsConstants="true"
+      toolTip="Enables ACMP$(_instance) pins as analogue inputs\n
+               Disables digital functions on pin"
+      description="Bitmask controlling which ACMP$(_instance) pins are available as analogue inputs" >
+      <choiceExpansion name="Pin enable %(i)" value="%(i)" enum="%(i)" keys="i" dim="3" signal="ACMP$(_instance)_IN%(i)" />
    </choiceOption>
 
    <bitmaskOption key="acmp_c2_acipe" condition="acmp_c2_acipe_present"
@@ -194,13 +225,14 @@
       typeName="Acmp$(_instance)InputEnable"
       baseType="AcmpInputEnable"
       disabledValue="0"
-      generateAsConstants="true"
+      generateOperators="true"
       toolTip="Bitmask controlling which ACMP pins are available as analogue inputs"
       description="ACMP Input Pin Enables"
       bitmask="0x7"
-      bitList="=inputPinMap"
-      bitDescription="Input %i"
+      bitList='=Prettify(inputPinMap,",")'
+      bitDescription='@"Input "+SignalDescription("ACMP0_IN%i","^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$1 mapped to $3")'
       pinMap='="ACMP$(_instance)_IN%i:"+inputPinMap'
+      generateEnum="false"
       value="0"
    />
 
@@ -250,8 +282,8 @@
          acmp_cs_acope                  : true  : true  : false : enableGettersAndSetters : PinEnable;
          acmp_cs_acmod                  : true  : true  : false : enableGettersAndSetters : EdgeSensitivity;
 
-         acmp_c0_acpsel                 : true  : true  : false : enableGettersAndSetters : PositiveInput;
-         acmp_c0_acnsel                 : true  : true  : false : enableGettersAndSetters : NegativeInput;
+         acmp_c0_acpsel_base            : true  : true  : false : enableGettersAndSetters : PositiveInput;
+         acmp_c0_acnsel_base            : true  : true  : false : enableGettersAndSetters : NegativeInput;
 
          acmp_c1_dacen                  : true  : true  : false : enableGettersAndSetters : Dac;
          acmp_c1_dacref                 : true  : true  : false : enableGettersAndSetters : DacReference;
@@ -322,7 +354,7 @@
       \t *   // Setup values
       \t *   AcmpEnable_Enabled ,             // Analogue Comparator Enable - Enabled
       \t *   AcmpHysterisis_20mV ,            // Analogue Comparator Hysteresis Selection - 20 mV
-      \t *   AcmpInterrupt_Disabled ,         // ACMP Interrupt Enable - Interrupt disabled
+      \t *   AcmpEvent_Disabled ,         // ACMP Interrupt Enable - Interrupt disabled
       \t *   AcmpOutputPin_Disabled ,         // ACMP Output Pin Enable - Pin disabled
       \t *   AcmpMode_FallingEdge ,           // InterruptEdge - Falling edge
       \t *   CmpInputPlus_ExternalRef0 , // ACMP Positive Input Select - External ref 0
@@ -374,7 +406,7 @@
    <for keys=" type        : variables                                            : init    "
        values="%baseType   : acmp_cs_ace,acmp_cs_hyst,acmp_cs_acf,acmp_cs_acie,
                              acmp_cs_acope,acmp_cs_acmod                          :   0      ;
-               %baseType   : acmp_c0_acpsel,acmp_c0_acnsel                        :   0      ;
+               uint8_t     : acmp_c0_acpsel,acmp_c0_acnsel                        :   0      ;
                %baseType   : acmp_c1_dacen,acmp_c1_dacref,acmp_c1_dacval          :   0      ;
                %baseType   : acmp_c2_acipe_base                                   :   %baseType(0)      " >
       <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
@@ -459,7 +491,7 @@
       values="
             acmp_cs_ace;acmp_cs_hyst;acmp_cs_acie;
             acmp_cs_acope;acmp_cs_acmod;
-            acmp_c0_acpsel;acmp_c0_acnsel;
+            acmp_c0_acpsel_base;acmp_c0_acnsel_base;
             acmp_c1_dacen;acmp_c1_dacref;acmp_c1_dacval" >
       <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
@@ -538,6 +570,48 @@
    ]]>
    </template>
 
+   <variableTemplate where="info" codeGenCondition="$(_InfoGuard)"
+      variables="acmp_c0_acpsel,acmp_c0_acnsel"
+      nonDefaultParams="2"
+   ><![CDATA[
+      \t/**
+      \t * Configure Comparator input sources
+      \t * (%variables)
+      \t *
+      %paramDescription
+      \t */
+      \tstatic void selectInputs(%params) {
+      \t
+      \t   //! MUX Control Register
+      \t   %register = %paramExpression;
+      \t}
+      \t
+      \t/**
+      \t * Class representing a Comparator pin
+      \t * (%variables)
+      \t *
+      \t * @tparam cmpInput Number of comparator input (0-7) for associated pin.
+      \t */
+      \ttemplate<AcmpInputMinus cmpInput>
+      \tclass Pin {
+      \t
+      \tpublic:
+      \t   static constexpr AcmpInputPlus  plusPin  = AcmpInputPlus(ACMP_C0_ACPSEL(cmpInput));
+      \t   static constexpr AcmpInputMinus minusPin = cmpInput;
+      \t
+      \t   constexpr operator AcmpInputPlus()  const { return plusPin;  }
+      \t   constexpr operator AcmpInputMinus() const { return minusPin; }
+      \t
+      \t   constexpr Pin() {}
+      \t
+      \t   static void setInput() {
+      \t      //Pcr::setPCR();
+      \t   }
+      \t};
+      \t\n
+   ]]>
+   </variableTemplate>
+
    <!-- ____  Default Initialisation value ____ -->
 
    <variableTemplate codeGenCondition="enablePeripheralSupport"
@@ -555,7 +629,7 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr Init DefaultInitValue = {%initNonZeroValues
+      \tstatic constexpr Init DefaultInitValue = {%initExpression
       \t};
       \t\n
    ]]></variableTemplate>

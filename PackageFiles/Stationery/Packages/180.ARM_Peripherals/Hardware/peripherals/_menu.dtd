@@ -471,7 +471,7 @@
    <!-- Log changes to associated variable -->
    <!ATTLIST bitmaskOption logging        (true)       #IMPLIED>
    <!-- Used to control generation of enum (default is true) -->
-   <!ATTLIST bitmaskOption generateEnum   (true|empty) #IMPLIED>
+   <!ATTLIST bitmaskOption generateEnum   (false|empty) #IMPLIED>
    <!-- Generate logical operators to combine enum values -->
    <!ATTLIST bitmaskOption generateOperators (true)  #IMPLIED>
    <!-- Name of associate signal -->

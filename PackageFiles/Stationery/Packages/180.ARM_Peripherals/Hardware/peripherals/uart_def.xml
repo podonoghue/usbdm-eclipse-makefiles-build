@@ -141,6 +141,16 @@
       min="0" max="31"
    />
 
+   <binaryOption key="uart_bdh_sbns" condition="uart_bdh_sbns_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="UartStopBits"
+      baseType="uint8_t"
+      toolTip="SBNS selects the number of stop bits present in a data frame"
+      description="Stop Bit Number Select" >
+      <choice name="One stop bit"   value="0" enum="OneBit"  />
+      <choice name="Two stop bits"  value="1" enum="TwoBits" />
+   </binaryOption >
+
    <binaryOption key="uart_bdh_lbkdie" condition="uart_bdh_lbkdie_present"
       enabledBy="irqHandlingMethod"
       typeName="UartLinBreakAction"
@@ -470,6 +480,7 @@ condition can set the IDLE flag.\n
       derived="true"
       valueFormat="(%s)"
       bitmask="0xFF"
+      generateOperators="true"
       typeName="UartStatusFlag"
       baseType="uint32_t"
       enumClass="true"
@@ -2263,6 +2274,7 @@ of a parity error or receiver buffer overruns before the host processor is notif
         values="
          uart_bdh_lbkdie                : true  : true  : false : enableGettersAndSetters : LinBreakDetectInterruptEnable;
          uart_bdh_rxedgie               : true  : true  : false : enableGettersAndSetters : RxdInputActiveEdgeInterruptEnable;
+         uart_bdh_sbns                  : true  : true  : false : enableGettersAndSetters : StopBitNumberSelect;
          uart_bdh_sbr                   : true  : true  : false : enableGettersAndSetters : BaudRateModuloDivisor;
 
          uart_bdl_sbr                   : true  : true  : false : enableGettersAndSetters : BaudRateBits;
@@ -2588,7 +2600,7 @@ XXXXXXXXXXXXXXXXXXXXXX
 
    <for keys=" type        : variables                                            : init    "
        values="%returnType : uart_baudrate                                        :   %returnType(0)      ;
-               %baseType   : uart_bdh_lbkdie,uart_bdh_rxedgie                     :   0      ;
+               %baseType   : uart_bdh_lbkdie,uart_bdh_rxedgie,uart_bdh_sbns       :   0      ;
                %baseType   : uart_c1_loops,uart_c1_uartswai,uart_c1_rsrc,
                              uart_c1_m,uart_c1_wake,uart_c1_ilt,uart_c1_pe,
                              uart_c1_pt                                           :   0      ;
@@ -2726,7 +2738,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       values="
             uart_baudrate;
 
-            uart_bdh_lbkdie;uart_bdh_rxedgie;
+            uart_bdh_lbkdie;uart_bdh_rxedgie;uart_bdh_sbns;
             uart_c1_loops;uart_c1_uartswai;uart_c1_rsrc;
             uart_c1_m;uart_c1_wake;uart_c1_ilt;uart_c1_pe;
             uart_c1_pt;
@@ -2841,7 +2853,7 @@ XXXXXXXXXXXXXXXXXXXXXX
    <for keys=
              " var                                                    : statement            "
       values=" uart_c2_te,uart_c2_re                                  : %register = 0  ;
-               uart_bdh_lbkdie,uart_bdh_rxedgie,                      : %configRegAssignment  ;
+               uart_bdh_lbkdie,uart_bdh_rxedgie,uart_bdh_sbns         : %configRegAssignment  ;
                uart_baudrate                                          : setBaudRate($(_basename), clockFrequency, init.%registerName) ;
                uart_c1_loops,uart_c1_uartswai,uart_c1_rsrc,
                uart_c1_m,uart_c1_wake,uart_c1_ilt,uart_c1_pe,
@@ -3080,7 +3092,7 @@ XXXXXXXXXXXXXXXXXXXXXX
       variables="
             uart_baudrate,
             uart_txempty_action,uart_rxfull_action,
-            uart_bdh_lbkdie,uart_bdh_rxedgie,
+            uart_bdh_lbkdie,uart_bdh_rxedgie,uart_bdh_sbns,
             uart_c1_loops,uart_c1_uartswai,uart_c1_rsrc,
             uart_c1_m,uart_c1_wake,uart_c1_ilt,uart_c1_pe,
             uart_c1_pt,

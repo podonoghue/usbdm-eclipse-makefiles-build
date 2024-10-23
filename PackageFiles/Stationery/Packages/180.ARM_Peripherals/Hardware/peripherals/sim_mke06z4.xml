@@ -1602,6 +1602,17 @@
       \t}\n\n
    ]]></template>
 
+   <template where="static" ><![CDATA[
+      \t/**
+      \t * Shared callback to catch unhandled interrupt
+      \t * Only used for callbacks with no parameters
+      \t */
+      \tvoid unhandledCallback() {
+      \t   setAndCheckErrorCode(E_NO_HANDLER);
+      \t}
+      \t\n
+   ]]></template>
+
    <!-- ____ Common __________________ -->
 
    <validate

@@ -456,14 +456,22 @@
           \t\n
       ]]></variableTemplate>
 
-      <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"  condition="!suppressIrqArray"
-         immediateVariables="irq_parameters,irq_dummy_parameters" >
+      <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"  
+         condition="!suppressIrqArray"
+         immediateVariables="irq_parameters" >
       <![CDATA[
          \t/**
          \t * Type definition for $(_Baseclass) interrupt call back.
          \t */
          \ttypedef void (*CallbackFunction)($(irq_parameters));
-         \t
+         \t\n
+      ]]>
+      </template>
+
+      <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"  
+         condition="!isBlank(@irq_dummy_parameters)&amp;&amp;!suppressIrqArray"
+         immediateVariables="irq_dummy_parameters" >
+      <![CDATA[
          \t/**
          \t * Callback to catch unhandled interrupt
          \t */
@@ -648,11 +656,24 @@
       </template>
 
       <!--  Set callback -->
-      <template codeGenCondition="irqHandlingMethod" condition="!irq_enum||irq_single_handler" >
+      <template codeGenCondition="irqHandlingMethod" 
+         condition="isBlank(@irq_dummy_parameters)&amp;&amp;!irq_enum||irq_single_handler" >
+      <![CDATA[
+         \t/** Callback function for $(_Class) */
+         \tstatic inline CallbackFunction sCallback = unhandledCallback; // $(_hardwareIrqNums);
+         \t\n
+      ]]>
+      </template>
+      <template codeGenCondition="irqHandlingMethod" 
+         condition="!isBlank(@irq_dummy_parameters)&amp;&amp;!irq_enum||irq_single_handler" >
       <![CDATA[
          \t/** Callback function for $(_Class) */
          \tstatic inline CallbackFunction sCallback = $(_Info)::unhandledCallback; // $(_hardwareIrqNums);
-         \t
+         \t\n
+      ]]>
+      </template>
+      <template codeGenCondition="irqHandlingMethod" condition="!irq_enum||irq_single_handler" >
+      <![CDATA[
          \t/**
          \t * Set interrupt callback function.
          \t *
@@ -722,7 +743,12 @@
          \tstatic inline CallbackFunction sCallbacks[$(_userIrqCount)] = {\n
       ]]></variableTemplate>
       <for keys="irqName" values="=_userIrqNums" condition="=_userIrqCount>1" >
-         <template codeGenCondition="irqHandlingMethod" condition="irq_enum&amp;&amp;!irq_single_handler" ><![CDATA[
+         <template codeGenCondition="irqHandlingMethod" 
+            condition="isBlank(@irq_dummy_parameters)&amp;&amp;irq_enum&amp;&amp;!irq_single_handler" ><![CDATA[
+            \t   unhandledCallback,  // %(irqName) \n
+         ]]></template>
+         <template codeGenCondition="irqHandlingMethod" 
+            condition="!isBlank(@irq_dummy_parameters)&amp;&amp;irq_enum&amp;&amp;!irq_single_handler" ><![CDATA[
             \t   $(_Info)::unhandledCallback,  // %(irqName) \n
          ]]></template>
       </for>

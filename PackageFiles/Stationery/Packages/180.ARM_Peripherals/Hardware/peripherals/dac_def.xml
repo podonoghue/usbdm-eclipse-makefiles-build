@@ -88,7 +88,7 @@
       enabledBy="enablePeripheralSupport"
       typeName="DacTrigger"
       baseType="uint8_t"
-      description="Software Trigger" 
+      description="Software Trigger"
       toolTip="This is a write-only field, which always reads 0.\n
                If DAC software trigger is selected and buffer is enabled, writing 1\n
                to this field will advance the buffer read pointer once." >
@@ -272,10 +272,11 @@
 
    <bitfieldOption key="dac_sr"
       derived="true"
-      hidden="false" 
+      hidden="false"
       valueFormat="%s"
       enumClass="true"
       baseType="uint8_t"
+      generateOperators="true"
       typeName="DacStatus"
       description="Status bits from DAC"
       toolTip="Bits masks for the status register" >
@@ -496,7 +497,7 @@
       ]]>
       </variableTemplate>
    </for>
-   
+
    <variableTemplate location="%(where)" codeGenCondition="%(guard)" context="%s[0]"
       variables="dac_data_data[0]" >
    <![CDATA[
@@ -512,7 +513,7 @@
       \t\n
    ]]>
    </variableTemplate>
-   
+
    <variableTemplate location="%(where)" codeGenCondition="%(guard)" context="%s[0]"
       variables="dac_c2_dacbfrp[1],dac_c2_dacbfup[1]" >
    <![CDATA[
@@ -755,7 +756,7 @@
    ]]>
    </template>
 
-   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" 
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="dac_data_data[]" >
    <![CDATA[
       \t/**
@@ -777,8 +778,8 @@
       \t}
       \t\n
    ]]>
-   </variableTemplate>   
-   
+   </variableTemplate>
+
 <!-- ====================================================================================================== -->
 <!--     END BasicInfo class      -->
 <!-- ====================================================================================================== -->

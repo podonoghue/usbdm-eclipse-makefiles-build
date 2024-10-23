@@ -356,8 +356,8 @@
       toolTip="Selects between single and multiple conversions.\n
                Conversions are triggered by a write to the ADC_SC1 when software triggered operation is selected,\n
                or following assertion of ADHWT when hardware triggered operation is selected." >
-      <choice name="Single conversion on each trigger"        value="0" enum="Disabled" isDefault="true" />
-      <choice name="Continuous conversions after 1st trigger" value="1" enum="Enabled"  />
+      <choice name="Single conversion on each trigger"        value="0" enum="Single"      isDefault="true" />
+      <choice name="Continuous conversions after 1st trigger" value="1" enum="Continuous"  />
    </binaryOption >
 
    <binaryOption key="adc_sc3_cal"
@@ -1592,7 +1592,7 @@ public:
       \t\n
    ]]>
    </template>
-   <variableTemplate where="basicInfo" codeGenCondition="enablePeripheralSupport" condition="adc_sc2_adtrg"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" condition="adc_sc2_adtrg"
       variables="adc_sc2_adtrg,adc_sc1_adch" >
    <![CDATA[
       \t   // Set up channel information

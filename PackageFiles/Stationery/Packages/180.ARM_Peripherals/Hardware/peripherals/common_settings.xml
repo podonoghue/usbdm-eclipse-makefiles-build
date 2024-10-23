@@ -195,108 +195,118 @@
    \t\n
 ]]></template -->
 
-      <template where="usbdm" >
-      <![CDATA[
-         \t/**
-         \t * Class used to do vector initialisation
-         \t *
-         \t * This class has a templated constructor that accepts various values.
-         \t *
-         \t * @note This constructor may be used to create a const instance in Flash
-         \t *
-         \t */
-         \ttemplate <typename Init, typename CallbackFunction, typename EnumType, size_t NumVectors>
-         \tclass InitVectors : public Init {
-         \t
-         \tpublic:
-         \t   /**
-         \t    * Copy Constructor
-         \t    */
-         \t   constexpr InitVectors(const InitVectors &other) = default;
-         \t
-         \t  /**
-         \t   * Copy constructor
-         \t   *
-         \t   * @tparam Types
-         \t   * @param rest         Remaining parameters
-         \t
-         \t   * @param other   Object to use as default value
-         \t   */
-         \t  template <typename... Types>
-         \t  constexpr InitVectors(const InitVectors &other, Types... rest) : InitVectors(rest...) {
-         \t     priorities = other.priorities;
-         \t     callbacks  = other.callbacks;
-         \t  }
-         \t
-         \t   /**
-         \t    * Other constructors are inherited
-         \t    *
-         \t    * @tparam Types
-         \t    * @param rest
-         \t    */
-         \t   template <typename... Types>
-         \t   constexpr InitVectors(Types... rest) : Init(rest...) {
-         \t   }
-         \t
-         \t   /**
-         \t    * Initialise Interrupt callbacks
-         \t    * (Used when only a single vector)
-         \t    *
-         \t    * @tparam Types
-         \t    * @param rest         Remaining parameters
-         \t
-         \t    * @param nvicPriority Priority for the handler
-         \t    * @param callback     Callback function to use
-         \t    */
-         \t   template <typename... Types>
-         \t   constexpr InitVectors(CallbackFunction callback, NvicPriority nvicPriority, Types... rest) : InitVectors(rest...) {
-         \t      priorities[0]  = nvicPriority;
-         \t      callbacks[0]   = callback;
-         \t   }
-         \t
-         \t   /**
-         \t    * Initialise Interrupt callbacks
-         \t    * (Used when only a single vector)
-         \t    *
-         \t    * @tparam Types
-         \t    * @param rest         Remaining parameters
-         \t
-         \t    * @param nvicPriority Priority for the handler
-         \t    * @param callback     Callback function to use
-         \t    */
-         \t   template <typename... Types>
-         \t   constexpr InitVectors(NvicPriority nvicPriority, CallbackFunction callback, Types... rest) : InitVectors(rest...) {
-         \t      priorities[0]  = nvicPriority;
-         \t      callbacks[0]   = callback;
-         \t   }
-         \t
-         \t   /**
-         \t    * Initialise Interrupt callbacks
-         \t    * (Multiple vectors)
-         \t    *
-         \t    * @tparam Types
-         \t    * @param rest         Remaining parameters
-         \t
-         \t    * @param irqNum       Interrupt number
-         \t    * @param nvicPriority Priority for the handler
-         \t    * @param callback     Callback function to use
-         \t    */
-         \t   template <typename... Types>
-         \t   constexpr InitVectors(EnumType irqNum, NvicPriority nvicPriority, CallbackFunction callback, Types... rest) : InitVectors(rest...) {
-         \t      priorities[irqNum]  = nvicPriority;
-         \t      callbacks[irqNum]   = callback;
-         \t   }
-         \t
-         \t   /**
-         \t    * Information describing the priority and callback function for each interrupt
-         \t    */
-         \t    std::array<CallbackFunction, NumVectors> callbacks = {};
-         \t    std::array<NvicPriority,     NumVectors> priorities = {};
-         \t
-         \t}; // class $(_BasicInfo)::InitVectors
-         \t\n
-      ]]>
-      </template>
+<template where="usbdm" ><![CDATA[
+   /* Template:common_settings.xml */
+   \t/**
+   \t * Shared callback to catch unhandled interrupt
+   \t * Only used for callbacks with no parameters
+   \t */
+   \textern void unhandledCallback();
+   \t\n
+]]></template>
+
+<template where="usbdm" >
+<![CDATA[
+   \t/**
+   \t * Class used to do vector initialisation
+   \t *
+   \t * This class has a templated constructor that accepts various values.
+   \t *
+   \t * @note This constructor may be used to create a const instance in Flash
+   \t *
+   \t */
+   \ttemplate <typename Init, typename CallbackFunction, typename EnumType, size_t NumVectors>
+   \tclass InitVectors : public Init {
+   \t
+   \tpublic:
+   \t   /**
+   \t    * Copy Constructor
+   \t    */
+   \t   constexpr InitVectors(const InitVectors &other) = default;
+   \t
+   \t  /**
+   \t   * Copy constructor
+   \t   *
+   \t   * @tparam Types
+   \t   * @param rest         Remaining parameters
+   \t
+   \t   * @param other   Object to use as default value
+   \t   */
+   \t  template <typename... Types>
+   \t  constexpr InitVectors(const InitVectors &other, Types... rest) : InitVectors(rest...) {
+   \t     priorities = other.priorities;
+   \t     callbacks  = other.callbacks;
+   \t  }
+   \t
+   \t   /**
+   \t    * Other constructors are inherited
+   \t    *
+   \t    * @tparam Types
+   \t    * @param rest
+   \t    */
+   \t   template <typename... Types>
+   \t   constexpr InitVectors(Types... rest) : Init(rest...) {
+   \t   }
+   \t
+   \t   /**
+   \t    * Initialise Interrupt callbacks
+   \t    * (Used when only a single vector)
+   \t    *
+   \t    * @tparam Types
+   \t    * @param rest         Remaining parameters
+   \t
+   \t    * @param nvicPriority Priority for the handler
+   \t    * @param callback     Callback function to use
+   \t    */
+   \t   template <typename... Types>
+   \t   constexpr InitVectors(CallbackFunction callback, NvicPriority nvicPriority, Types... rest) : InitVectors(rest...) {
+   \t      priorities[0]  = nvicPriority;
+   \t      callbacks[0]   = callback;
+   \t   }
+   \t
+   \t   /**
+   \t    * Initialise Interrupt callbacks
+   \t    * (Used when only a single vector)
+   \t    *
+   \t    * @tparam Types
+   \t    * @param rest         Remaining parameters
+   \t
+   \t    * @param nvicPriority Priority for the handler
+   \t    * @param callback     Callback function to use
+   \t    */
+   \t   template <typename... Types>
+   \t   constexpr InitVectors(NvicPriority nvicPriority, CallbackFunction callback, Types... rest) : InitVectors(rest...) {
+   \t      priorities[0]  = nvicPriority;
+   \t      callbacks[0]   = callback;
+   \t   }
+   \t
+   \t   /**
+   \t    * Initialise Interrupt callbacks
+   \t    * (Multiple vectors)
+   \t    *
+   \t    * @tparam Types
+   \t    * @param rest         Remaining parameters
+   \t
+   \t    * @param irqNum       Interrupt number
+   \t    * @param nvicPriority Priority for the handler
+   \t    * @param callback     Callback function to use
+   \t    */
+   \t   template <typename... Types>
+   \t   constexpr InitVectors(EnumType irqNum, NvicPriority nvicPriority, CallbackFunction callback, Types... rest) : InitVectors(rest...) {
+   \t      priorities[irqNum]  = nvicPriority;
+   \t      callbacks[irqNum]   = callback;
+   \t   }
+   \t
+   \t   /**
+   \t    * Information describing the priority and callback function for each interrupt
+   \t    */
+   \t    std::array<CallbackFunction, NumVectors> callbacks = {};
+   \t    std::array<NvicPriority,     NumVectors> priorities = {};
+   \t
+   \t}; // class $(_BasicInfo)::InitVectors
+   \t\n
+]]>
+</template>
 
 
 <template where="usbdm" condition="(/PCR/lk_present)" ><![CDATA[

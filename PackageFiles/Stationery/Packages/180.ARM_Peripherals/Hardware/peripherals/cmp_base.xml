@@ -20,7 +20,7 @@
    <equation key="irq_call_parameters"        value="cmpStatus"      />
    <equation key="generateDefault"            value="false"     />
    <equation key="configureInStartupDefault"  value="false"     />
-   <xi:include href="enablePeripheral.xml"    />
+   <xi:include href="enablePeripheral.xml" />
    <title />
 
    <variable key="cmp_holder"                   type="String" expression='"Comparitor"' />
@@ -259,49 +259,63 @@
       <choice value="1,0" name="Filtered"             enum="Filtered" />
    </choiceOption>
 
-   <choiceOption key="cmp_muxcr_psel"
-      enabledBy="cmp_cr1_en"
+<!-- =================================================================================== -->
+
+   <choiceOption key="cmp_muxcr_psel_base" condition="cmp_muxcr_psel_present"
       valueFormat="CMP_MUXCR_PSEL(%s)"
+      hidden="true"
+      derived="true"
       typeName="CmpInputPlus"
       baseType="uint8_t"
-      description="Plus Input Mux Control"
-      toolTip="Determines which input is selected for the plus input of the comparator" >
-      <choiceExpansion value="%(i)"  enum="%(i)"
-                       name='@SignalDescriptionFromIndex(%(i),"^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
-                       keys="i" dim="8" />
-   </choiceOption>
+      description="CMP Positive Input Select"
+      toolTip="Selects the positive input source" >
+      <choiceExpansion name="External input %(i)" value="%(i)" enum="%(i)" keys="i" dim="8" />
+   </choiceOption >
 
-   <choiceOption key="cmp_muxcr_msel"
+   <choiceOption key="cmp_muxcr_psel" condition="cmp_muxcr_psel_present"
+      valueFormat="CmpInputPlus_%s"
       enabledBy="cmp_cr1_en"
-      valueFormat="CMP_MUXCR_MSEL(%s)"
-      typeName="CmpInputMinus"
-      baseType="uint8_t"
-      description="Minus Input Mux Control"
-      toolTip="Determines which input is selected for the minus input of the comparator" >
-      <choiceExpansion value="%(i)"  enum="%(i)"
-                       name='@SignalDescriptionFromIndex(%(i),"^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
-                       keys="i" dim="8" />
+      typeName="Cmp$(_instance)InputPlus"
+      baseType="CmpInputPlus"
+      generateAsConstants="true"
+      description="CMP$(_instance) Positive Input Select"
+      toolTip="Selects the $(_Class) positive input source" >
+      <choiceExpansion 
+            name='@SignalDescriptionFromIndex(%(i),"^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
+            condition='SignalExists("CMP$(_instance)_IN%(i)")'
+            value="%(i)" enum="%(i)"
+            keys="i" dim="8"
+            signal="CMP$(_instance)_IN%(i)" />
    </choiceOption>
 
-   <!--  choiceOption key="cmp_muxcr_plus"
-      hidden="true"
-      valueFormat="CMP_MUXCR_PSEL(%s)"
-      typeName="CmpInputPlus"
-      baseType="uint8_t"
-      description="Plus Input Mux Control"
-      toolTip="Determines which input is selected for the plus input of the comparator" >
-      <choiceExpansion value="%(i)" name='CMP_IN%(i) as positive input' enum="%(i)" keys="i" dim="8" />
-   </choiceOption>
-
-   <choiceOption key="cmp_muxcr_minus"
-      hidden="true"
+   <choiceOption key="cmp_muxcr_msel_base" condition="cmp_muxcr_msel_present"
       valueFormat="CMP_MUXCR_MSEL(%s)"
+      hidden="true"
+      derived="true"
       typeName="CmpInputMinus"
       baseType="uint8_t"
-      description="Minus Input Mux Control"
-      toolTip="Determines which input is selected for the minus input of the comparator" >
-      <choiceExpansion value="%(i)" name='CMP_IN%(i) as negative input' enum="%(i)" keys="i" dim="8" />
-   </choiceOption -->
+      description="CMP Negative Input Select"
+      toolTip="Selects the negative input source" >
+      <choiceExpansion name="External input %(i)" value="%(i)" enum="%(i)" keys="i" dim="8" />
+   </choiceOption >
+
+   <choiceOption key="cmp_muxcr_msel" condition="cmp_muxcr_msel_present"
+      valueFormat="CmpInputMinus_%s"
+      enabledBy="cmp_cr1_en"
+      typeName="Cmp$(_instance)InputMinus"
+      baseType="CmpInputMinus"
+      generateAsConstants="true"
+      description="CMP$(_instance) Negative Input Select"
+      toolTip="Selects the $(_Class) negative input source" >
+      <choiceExpansion 
+            name='@SignalDescriptionFromIndex(%(i),"^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
+            condition='SignalExists("CMP$(_instance)_IN%(i)")'
+            value="%(i)" enum="%(i)"
+            keys="i" dim="8"
+            signal="CMP$(_instance)_IN%(i)" />
+   </choiceOption>
+
+<!-- =================================================================================== -->
 
    <!-- DAC Configuration -->
    <title description="Internal DAC Configuration" />
@@ -725,8 +739,8 @@
          cmp_daccr_vrsel      : true  : true  : false : enableGettersAndSetters : DacReferenceSelect;
          cmp_daccr_vosel      : true  : true  : false : true                    : DacLevel;
 
-         cmp_muxcr_psel       : true  : true  : false : enableGettersAndSetters : PlusSelect;
-         cmp_muxcr_msel       : true  : true  : false : enableGettersAndSetters : MinusSelect" >
+         cmp_muxcr_psel_base  : true  : true  : false : enableGettersAndSetters : PlusSelect;
+         cmp_muxcr_msel_base  : true  : true  : false : enableGettersAndSetters : MinusSelect" >
       <variableTemplate location="%(where)" condition="%(set)" codeGenCondition="%(genCode)&amp;&amp;%(guard)"
          variables="%(field)" >
       <![CDATA[
@@ -1037,7 +1051,7 @@
                %baseType   : cmp_scr_dmaen,cmp_scr_interrupt,cmp_scr_cfr,
                              cmp_scr_cff                                          :   0      ;
                %baseType   : cmp_daccr_dacen,cmp_daccr_vrsel,cmp_daccr_vosel      :   0      ;
-               %baseType   : cmp_muxcr_psel,cmp_muxcr_msel                        :   0      ;
+               %baseType   : cmp_muxcr_psel_base,cmp_muxcr_msel_base              :   0      ;
                %baseType   : cmp_filterPeriod                                     :   0_s       " >
       <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
@@ -1057,7 +1071,7 @@
             cmp_cr1_pmode;cmp_cr1_inv;cmp_cr1_output;
             cmp_cr0_hystctr;
             cmp_scr_dmaen;cmp_scr_interrupt;
-            cmp_muxcr_psel;cmp_muxcr_msel;
+            cmp_muxcr_psel_base;cmp_muxcr_msel_base;
             cmp_cr0_filter_cnt;cmp_fpr_filt_per;cmp_filterPeriod;
             cmp_daccr_dacen;cmp_daccr_vrsel;cmp_daccr_vosel
             " >
@@ -1351,6 +1365,7 @@
       \t * Enable comparator output pin as output.
       \t * Mux value is set appropriately for the pin function being used.
       \t * The clock to the port will be enabled before changing the PCR.
+      \t * (%variables)
       \t *
       \t * @param pcrValue PCR value to use
       \t *
@@ -1370,6 +1385,7 @@
       \t * Enable comparator output pin as output.\n
       \t * The Pin Control Register Attributes are set to the default values determined by Configure.usbdmProject.
       \t * The clock to the port will be enabled before changing the PCR.
+      \t * (%variables)
       \t */
       \tstatic void setOutput() {
       \t   setOutput(OutputPin::defaultPcrValue.value);
@@ -1397,6 +1413,7 @@
    ><![CDATA[
       \t/**
       \t * Configure Comparator input sources
+      \t * (%variables)
       \t *
       %paramDescription
       \t */
@@ -1408,6 +1425,7 @@
       \t
       \t/**
       \t * Class representing a Comparator pin
+      \t * (%variables)
       \t *
       \t * @tparam cmpInput Number of comparator input (0-7) for associated pin.
       \t */
@@ -1534,7 +1552,7 @@
             cmp_daccr_dacen,cmp_daccr_vrsel,cmp_daccr_vosel,
             cmp_muxcr_psel,cmp_muxcr_msel" >
    <![CDATA[
-      \t%initNonZeroValues
+      \t%initExpression
       \t};
       \t\n
    ]]>

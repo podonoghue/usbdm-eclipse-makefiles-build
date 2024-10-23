@@ -47,12 +47,12 @@
       </template>
 
       <!--  Callback table + numbers -->
-      <template where="static" codeGenCondition="$(_CommonInfoIrqGuard)" >
+      <template key="/PORT/AccessFunctions" codeGenCondition="$(_CommonInfoIrqGuard)" >
       <![CDATA[
          \t/**
          \t * Callback table of programmatically set handlers for Ports
          \t */
-         \tPinCallbackFunction PcrBase::sCallbacks[] = {\n
+         \tstatic inline PinCallbackFunction sCallbacks[] = {\n
       ]]></template>
 
       <equation key="portVectors" value='=IrqVectors("^(PORT.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$1|$5")' />
@@ -74,7 +74,7 @@
             \t   $(name), // Used by $(peripherals)\n
          ]]></template>
 
-         <template where="static" codeGenCondition="=cond"
+         <template key="/PORT/AccessFunctions" codeGenCondition="=cond"
             immediateVariables="name,peripherals,cond,irqName"
          ><![CDATA[
             \t   PcrBase::unhandledCallback,  // $(irqName), used by $(peripherals)\n
@@ -88,7 +88,7 @@
       ]]>
       </template>
 
-      <template where="static" codeGenCondition="$(_CommonInfoIrqGuard)" >
+      <template key="/PORT/AccessFunctions" codeGenCondition="$(_CommonInfoIrqGuard)" >
       <![CDATA[
          \t};
          \t\n
@@ -131,9 +131,6 @@
 
       <template key="/PORT/AccessFunctions" codeGenCondition="$(_CommonInfoIrqGuard)" >
       <![CDATA[
-      \t/** Callback functions for ISRs */
-      \tstatic PinCallbackFunction sCallbacks[];
-      \t
       \t/**
       \t * Set callback for Pin interrupts
       \t *

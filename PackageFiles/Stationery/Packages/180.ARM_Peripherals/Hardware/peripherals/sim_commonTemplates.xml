@@ -10,6 +10,17 @@
    <printVar key="irq_vectors" split=";"/>
    -->
 
+   <template where="static" ><![CDATA[
+      \t/**
+      \t * Shared callback to catch unhandled interrupt
+      \t * Only used for callbacks with no parameters
+      \t */
+      \tvoid unhandledCallback() {
+      \t   setAndCheckErrorCode(E_NO_HANDLER);
+      \t}
+      \t\n
+   ]]></template>
+
    <!-- ___ Clock Variables _______ -->
 
    <template codeGenCondition='Exists("/PMC/system_low_power_clock")' ><![CDATA[
