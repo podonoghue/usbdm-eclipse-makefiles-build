@@ -182,43 +182,89 @@ void dumpWords(FILE *fp, uint32_t startAddress, uint32_t endAddress) {
 void usage(void) {
    fprintf(stderr, "\n\nUsage:\n"
                    "CreateDummyImage [-alt] [-word] [-random] [-verbose] [-hcs08|-hcs12|-kin|-cfv1] imageFile.s19 [startAddress endAddress]*\n\n"
-                   "-alt      - Create file with alternative name\n"
-                   "-word     - create image with word addresses (DSC)\n"
-                   "-random   - Randomise seed before 1st use\n"
-                   "-verbose  - Report as each block range is written\n"
-                   "-hcs08    - Set image as unsecured for hcs08 devices\n"
-                   "-s12z     - Set image as unsecured for s12z devices\n"
-                   "-hcs12    - Set image as unsecured for hcs12 devices\n"
-                   "-kin      - Set image as unsecured for kinetis devices\n"
-                   "-cfv1     - Set image as unsecured for coldfire V1 devices\n\n"
+                   "-alt           - Create file with alternative name\n"
+                   "-word          - create image with word addresses (DSC)\n"
+                   "-random        - Randomise seed before 1st use\n"
+                   "-verbose       - Report as each block range is written\n"
+                   "-hcs08[=addr]  - Set image as unsecured for hcs08 devices, addr=0xFFB0 etc\n"
+                   "-s12z[=addr]   - Set image as unsecured for s12z devices, addr=0xFFFE00 etc\n"
+                   "-hcs12[=addr]  - Set image as unsecured for hcs12 devices, addr=0xFF00 etc\n"
+                   "-kin[=addr]    - Set image as unsecured for kinetis devices, addr=0x0400 etc\n"
+                   "-cfv1[=addr]   - Set image as unsecured for coldfire V1 devices, addr=0x0400 etc\n\n"
            );
    exit(1);
 }
+
+struct ParamInfo {
+   char argName[1000];
+   char argParam[30];
+};
+
+void parseParameter(const char* argv, ParamInfo& paramInfo) {
+   unsigned index = 0;
+   unsigned sub   = 0;
+   while (argv[index] != '\0') {
+      if (argv[index] == '=') {
+         index++;
+         break;
+      }
+      if (index>=sizeof(paramInfo.argName)) {
+         usage();
+      }
+      paramInfo.argName[sub++] = argv[index++];
+   }
+   paramInfo.argName[sub] = '\0';
+//   printf("argName = \"%s\"\n", paramInfo.argName);
+   sub   = 0;
+   while (argv[index] != '\0') {
+      if (index>=sizeof(paramInfo.argName)) {
+         usage();
+      }
+      paramInfo.argParam[sub++] = argv[index++];
+   }
+   paramInfo.argParam[sub] = '\0';
+//   printf("argParam = \"%s\"\n", paramInfo.argParam);
+}
+
+uint32_t getParamValue(const char* argParam, uint32_t defaultValue) {
+   uint32_t paramValue = defaultValue;
+   char* checkPtr = nullptr;
+   if (argParam[0] != '\0') {
+      paramValue = strtol(argParam, &checkPtr, 16);
+      if (checkPtr != argParam+strlen(argParam)) {
+         usage();
+      }
+   }
+   return paramValue;
+}
+
 int main(int argc, char *argv[]) {
    int argNum;
 
    for(argNum=1;argNum<argc;) {
-      if (strcasecmp(argv[argNum], "-word") == 0) {
+      ParamInfo paramInfo;
+      parseParameter(argv[argNum], paramInfo);
+      if (strcasecmp(paramInfo.argName, "-word") == 0) {
          wordAddresses = true;
          argNum++;
       }
-      else if (strcasecmp(argv[argNum], "-alt") == 0) {
+      else if (strcasecmp(paramInfo.argName, "-alt") == 0) {
          altName = true;
          argNum++;
       }
-      else if (strcasecmp(argv[argNum], "-verbose") == 0) {
+      else if (strcasecmp(paramInfo.argName, "-verbose") == 0) {
          verbose = true;
          argNum++;
       }
-      else if (strcasecmp(argv[argNum], "-random") == 0) {
+      else if (strcasecmp(paramInfo.argName, "-random") == 0) {
          randomise = true;
          argNum++;
       }
-      else if (strcasecmp(argv[argNum], "-hcs08") == 0) {
+      else if (strcasecmp(paramInfo.argName, "-hcs08") == 0) {
          static const uint8_t  newSecurityValues[]   = {
                0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
                0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFE };
-         securityStartAddress = 0xFFB0;
+         securityStartAddress = getParamValue(paramInfo.argParam, 0xFFB0);
          securitySize         = sizeof(newSecurityValues);
          securityValues       = newSecurityValues;
 
@@ -230,11 +276,11 @@ int main(int argc, char *argv[]) {
 
          argNum++;
       }
-      else if (strcasecmp(argv[argNum], "-hcs12") == 0) {
+      else if (strcasecmp(paramInfo.argName, "-hcs12") == 0) {
          static const uint8_t  newSecurityValues[]   = {
                0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
                0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFE };
-         securityStartAddress = 0xFF00;
+         securityStartAddress = getParamValue(paramInfo.argParam, 0xFF00);
          securitySize         = sizeof(newSecurityValues);
          securityValues       = newSecurityValues;
 
@@ -246,11 +292,11 @@ int main(int argc, char *argv[]) {
 
          argNum++;
       }
-      else if (strcasecmp(argv[argNum], "-s12z") == 0) {
+      else if (strcasecmp(paramInfo.argName, "-s12z") == 0) {
          static const uint8_t  newSecurityValues[]   = {
                0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
                0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFE };
-         securityStartAddress = 0xFFFE00;
+         securityStartAddress = getParamValue(paramInfo.argParam, 0xFFFE00);
          securitySize         = sizeof(newSecurityValues);
          securityValues       = newSecurityValues;
 
@@ -262,11 +308,11 @@ int main(int argc, char *argv[]) {
 
          argNum++;
       }
-      else if (strcasecmp(argv[argNum], "-kin") == 0) {
+      else if (strcasecmp(paramInfo.argName, "-kin") == 0) {
          static const uint8_t  newSecurityValues[]   = {
                0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
                0xFF, 0xFF, 0xFF, 0xFF, 0xFE, 0xFF, 0xFF, 0xFF };
-         securityStartAddress = 0x0400;
+         securityStartAddress = getParamValue(paramInfo.argParam, 0x0400);
          securitySize         = sizeof(newSecurityValues);
          securityValues       = newSecurityValues;
 
@@ -278,11 +324,11 @@ int main(int argc, char *argv[]) {
 
          argNum++;
       }
-      else if (strcasecmp(argv[argNum], "-cfv1") == 0) {
+      else if (strcasecmp(paramInfo.argName, "-cfv1") == 0) {
          static const uint8_t  newSecurityValues[]   = {
                0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
                0xFF, 0xFF, 0xFF, 0xFF, 0xFE, 0xFF, 0xFF, 0xFF };
-         securityStartAddress = 0x0400;
+         securityStartAddress = getParamValue(paramInfo.argParam, 0x0400);
          securitySize         = sizeof(newSecurityValues);
          securityValues       = newSecurityValues;
 
@@ -294,7 +340,7 @@ int main(int argc, char *argv[]) {
 
          argNum++;
       }
-      else if (strcasecmp(argv[argNum], "-cfvx") == 0) {
+      else if (strcasecmp(paramInfo.argName, "-cfvx") == 0) {
          // ToDo: Not done yet
          argNum++;
       }
