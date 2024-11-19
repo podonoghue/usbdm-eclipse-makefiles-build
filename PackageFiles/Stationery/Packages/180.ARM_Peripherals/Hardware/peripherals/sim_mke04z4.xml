@@ -1031,6 +1031,7 @@
    <variableTemplate codeGenCondition="enablePeripheralSupport"
       separator=","
       terminator=","
+      padToComments="45"
       variables="
             sim_sopt_delay,
             sim_sopt_dlyact,

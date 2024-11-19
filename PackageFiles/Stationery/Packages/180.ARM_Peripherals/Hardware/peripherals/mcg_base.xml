@@ -1146,8 +1146,6 @@
                enabledBy="!mcg_c1_irefs[%(n)]##Disabled by IREFS"
                target="mcg_erc_clock_divided[%(n)]"
                typeName="McgFllPrescale"
-               derived="true"
-               locked="true"
                description="FLL External Reference Divider"
                origin="Determined by FLL input frequency constraints and external reference clock frequency"
                toolTip="Selects the amount to divide down the external reference clock for the FLL.\n

@@ -221,11 +221,10 @@
 
             <!-- TCLKn -->
             <graphicGroup x="10" y="y" condition="/SIM/sim_pinsel_ftm0clkps_present||/SIM/sim_pinsel0_ftm0clkps_present" >
-               <graphicItem id="TCLK0.0,x-20,y+16"   type="node"        params="330, 10" />
-               <graphicItem id="TCLK1.0,x-20,y+16"   type="node"        params="330, 30" />
-               <graphicItem id="TCLK2.0,x-20,y+16"   type="node"        params="330, 50" condition="/SIM/sim_pinsel0_pwtclkps_present"  />
-
-               <equation key="y" value="=y+10" />
+               <for keys="v" values="0;1;2;3;4" >
+                  <graphicItem id="TCLK%(v).0"   type="node"        params="330, %(v)*40" var="/SIM/Tclk%(v)" condition="/SIM/Tclk%(v)" />
+                  <equation key="y" value="=y+10" />
+               </for>
             </graphicGroup>
 
             <graphicBox    id="SIM" x="290" y="70" params="290,0, x360, y1640, x-600, y-1280, x" >
@@ -315,63 +314,51 @@
                   <equation key="y" value="=y+40" />
                </graphicGroup>
 
-               <!-- TCLKn -->
-               <graphicGroup x="0" y="y" condition="/SIM/sim_pinsel0_ftm0clkps_present" >
-                  <graphicItem id=""             type="connector"   params="TCLK0.0,0, FTM0CLKPS,0, x.7,d,y,x"                          />
-                  <graphicItem id=""             type="connector"   params="TCLK1.0,0, FTM0CLKPS,1, x.8,d,y,x"                          />
-                  <graphicItem id=""             type="connector"   params="TCLK2.0,0, FTM0CLKPS,2, x.9,d,y,x"                          />
-                  <graphicItem id="FTM0CLKPS" type="mux"         params="500, 30, 3"                 var="/SIM/sim_pinsel0_ftm0clkps"   />
-                  <graphicItem id=""             type="connector"   params="FTM0CLKPS,0, FTM_CLK0,0"                                    />
-                  <graphicItem id="FTM_CLK0"  type="node"        params="650, 30"                                                       />
-
-                  <equation key="y" value="=y+100" />
-               </graphicGroup>
-               <for keys="v" values="1;2;3;4" >
+               <!-- TCLKn sim_pinsel0 in MKE06 -->
+               <for keys="v" values="0;1;2;3;4" >
                   <graphicGroup x="0" y="y" condition="/SIM/sim_pinsel0_ftm%(v)clkps_present" >
-                     <graphicItem id=""             type="connector"   params="TCLK0.0,0, FTM%(v)CLKPS,0, x.7,d,y,d,x"                          />
-                     <graphicItem id=""             type="connector"   params="TCLK1.0,0, FTM%(v)CLKPS,1, x.8,d,y,d,x"                          />
-                     <graphicItem id=""             type="connector"   params="TCLK2.0,0, FTM%(v)CLKPS,2, x.9,d,y,d,x"                          />
+                     <graphicItem id=""             type="connector"   params="TCLK0.0,0, FTM%(v)CLKPS,0, x.7,d,y,d,x" condition="/SIM/Tclk0"   />
+                     <graphicItem id=""             type="connector"   params="TCLK1.0,0, FTM%(v)CLKPS,1, x.8,d,y,d,x" condition="/SIM/Tclk1"   />
+                     <graphicItem id=""             type="connector"   params="TCLK2.0,0, FTM%(v)CLKPS,2, x.9,d,y,d,x" condition="/SIM/Tclk2"   />
                      <graphicItem id="FTM%(v)CLKPS" type="mux"         params="500, 30, 3"                 var="/SIM/sim_pinsel0_ftm%(v)clkps"  />
                      <graphicItem id=""             type="connector"   params="FTM%(v)CLKPS,0, FTM_CLK%(v),0"                                   />
-                     <graphicItem id="FTM_CLK%(v)"  type="node"        params="650, 30"                                                         />
+                     <graphicItem id="FTM_CLK%(v)"  type="node"        params="650, 30"                    var="/SIM/ftm%(v)ExternalClock"     />
 
                      <equation key="y" value="=y+100" />
                   </graphicGroup>
                </for>
                <graphicGroup x="0" y="y" condition="/SIM/sim_pinsel0_pwtclkps_present" >
-                  <graphicItem id=""             type="connector"   params="TCLK0.0,0, PWTCLKPS,0, x.7,d,y,x"                      />
-                  <graphicItem id=""             type="connector"   params="TCLK1.0,0, PWTCLKPS,1, x.8,d,y,x"                      />
-                  <graphicItem id=""             type="connector"   params="TCLK2.0,0, PWTCLKPS,2, x.9,d,y,x"                      />
-                  <graphicItem id="PWTCLKPS"     type="mux"         params="500, 30, 3"           var="/SIM/sim_pinsel0_pwtclkps"  />
-                  <graphicItem id=""             type="connector"   params="PWTCLKPS,0, PWT_CLK,0"                                 />
-                  <graphicItem id="PWT_CLK"      type="node"        params="650, 30"                                               />
+                  <graphicItem id=""             type="connector"   params="TCLK0.0,0, PWTCLKPS,0, x.7,d,y,x"  condition="/SIM/Tclk0"           />
+                  <graphicItem id=""             type="connector"   params="TCLK1.0,0, PWTCLKPS,1, x.8,d,y,x"  condition="/SIM/Tclk1"           />
+                  <graphicItem id=""             type="connector"   params="TCLK2.0,0, PWTCLKPS,2, x.9,d,y,x"  condition="/SIM/Tclk2"           />
+                  <graphicItem id="PWTCLKPS"     type="mux"         params="500, 30, 3"                        var="/SIM/sim_pinsel0_pwtclkps"  />
+                  <graphicItem id=""             type="connector"   params="PWTCLKPS,0, PWT_CLK,0"                                              />
+                  <graphicItem id="PWT_CLK"      type="node"        params="650, 30"                           var="/SIM/pwtExternalClock"      />
 
                   <equation key="y" value="=y+100" />
                </graphicGroup>
 
-               <!-- TCLKn -->
+               <!-- TCLKn sim_pinsel in MKE04 -->
                <graphicGroup x="0" y="y" condition="/SIM/sim_pinsel_ftm0clkps_present" >
-                  <equation key="y" value="=y+90" />
+                  <equation key="y" value="=y+120" />
                </graphicGroup>
                <for keys="v" dim="3" >
                   <graphicGroup x="0" y="y" condition="/SIM/sim_pinsel_ftm%(v)clkps_present" >
-                     <graphicItem id=""             type="connector"   params="TCLK0.0,0, FTM%(v)CLKPS,0, x.7,d,y,d,x"                          />
-                     <graphicItem id=""             type="connector"   params="TCLK1.0,0, FTM%(v)CLKPS,1, x.8,d,y,d,x"                          />
-                     <graphicItem id=""             type="connector"   params="TCLK2.0,0, FTM%(v)CLKPS,2, x.9,d,y,d,x"   condition="@/SIM/sim_pinsel_ftm%(v)clkps.size>2"           />
-                     <graphicItem id="FTM%(v)CLKPS" type="mux"         params="500, 30, 3"                               var="/SIM/sim_pinsel_ftm%(v)clkps"   />
-                     <graphicItem id=""             type="connector"   params="FTM%(v)CLKPS,0, FTM_CLK%(v),0"                                   />
-                     <graphicItem id="FTM_CLK%(v)"  type="node"        params="650, 30"                                                         />
+                     <graphicItem id=""             type="connector"   params="TCLK1.0,0, FTM%(v)CLKPS,0, x.8,d,y,d,x"  condition="/SIM/Tclk1"              />
+                     <graphicItem id=""             type="connector"   params="TCLK2.0,0, FTM%(v)CLKPS,1, x.9,d,y,d,x"  condition="/SIM/Tclk2"              />
+                     <graphicItem id="FTM%(v)CLKPS" type="mux"         params="500, 30, 3"                              var="/SIM/sim_pinsel_ftm%(v)clkps"  />
+                     <graphicItem id=""             type="connector"   params="FTM%(v)CLKPS,0, FTM_CLK%(v),0"                                               />
+                     <graphicItem id="FTM_CLK%(v)"  type="node"        params="650, 30"                                 var="/SIM/ftm%(v)ExternalClock"     />
 
                      <equation key="y" value="=y+100" />
                   </graphicGroup>
                </for>
                <graphicGroup x="0" y="y" condition="/SIM/sim_pinsel_pwtclkps_present" >
-                  <graphicItem id=""             type="connector"   params="TCLK0.0,0, PWTCLKPS,0, x.7,d,y,x"                      />
-                  <graphicItem id=""             type="connector"   params="TCLK1.0,0, PWTCLKPS,1, x.8,d,y,x"                      />
-                  <graphicItem id=""             type="connector"   params="TCLK2.0,0, PWTCLKPS,2, x.9,d,y,x"  condition="@/SIM/sim_pinsel_pwtclkps.size>2" />
-                  <graphicItem id="PWTCLKPS"     type="mux"         params="500, 30, 3"                        var="/SIM/sim_pinsel_pwtclkps"  />
-                  <graphicItem id=""             type="connector"   params="PWTCLKPS,0, PWT_CLK,0"                                 />
-                  <graphicItem id="PWT_CLK"      type="node"        params="650, 30"                                               />
+                  <graphicItem id=""             type="connector"   params="TCLK1.0,0, PWTCLKPS,0, x.8,d,y,x"  condition="/SIM/Tclk1"           />
+                  <graphicItem id=""             type="connector"   params="TCLK2.0,0, PWTCLKPS,1, x.9,d,y,x"  condition="/SIM/Tclk2"           />
+                  <graphicItem id="PWTCLKPS"     type="mux"         params="500, 30, 3"                        var="/SIM/sim_pinsel_pwtclkps"   />
+                  <graphicItem id=""             type="connector"   params="PWTCLKPS,0, PWT_CLK,0"                                              />
+                  <graphicItem id="PWT_CLK"      type="node"        params="650, 30"                           var="/SIM/pwtExternalClock"      />
 
                   <equation key="y" value="=y+100" />
                </graphicGroup>
@@ -538,25 +525,25 @@
                toolTip="Selects the amount to divide down the external reference clock for the FLL.\n
                         The resulting frequency must be in [31.25 kHz to 39.0625 kHz] to be suitable for the FLL\n
                         Division factors choices depends on clock Range [OSC_C2_RANGE]" >
-               <choice value="0" name="Disabled"     enum="Disabled"      enabledBy="true"                          ref="Disabled" />
+               <choice value="0"  name="Disabled"     enum="Disabled"      ref="Disabled" />
 
-               <choice value="0" name="/1 (low)"     enum="LowDivBy1"     enabledBy="(/OSC0/osc_cr_range == false)" ref="ics_erc_clock[%(n)]"      />
-               <choice value="1" name="/2 (low)"     enum="LowDivBy2"     enabledBy="(/OSC0/osc_cr_range == false)" ref="ics_erc_clock[%(n)]/2"    />
-               <choice value="2" name="/4 (low)"     enum="LowDivBy3"     enabledBy="(/OSC0/osc_cr_range == false)" ref="ics_erc_clock[%(n)]/4"    />
-               <choice value="3" name="/8 (low)"     enum="LowDivBy8"     enabledBy="(/OSC0/osc_cr_range == false)" ref="ics_erc_clock[%(n)]/8"    />
-               <choice value="4" name="/16 (low)"    enum="LowDivBy16"    enabledBy="(/OSC0/osc_cr_range == false)" ref="ics_erc_clock[%(n)]/16"   />
-               <choice value="5" name="/32 (low)"    enum="LowDivBy32"    enabledBy="(/OSC0/osc_cr_range == false)" ref="ics_erc_clock[%(n)]/32"   />
-               <choice value="6" name="/64 (low)"    enum="LowDivBy64"    enabledBy="(/OSC0/osc_cr_range == false)" ref="ics_erc_clock[%(n)]/64"   />
-               <choice value="7" name="/128 (low)"   enum="LowDivBy128"   enabledBy="(/OSC0/osc_cr_range == false)" ref="ics_erc_clock[%(n)]/128"  />
+               <choice value="0"  name="/1 (low)"     enum="LowDivBy1"     ref="ics_erc_clock[%(n)]"     />
+               <choice value="1"  name="/2 (low)"     enum="LowDivBy2"     ref="ics_erc_clock[%(n)]/2"   />
+               <choice value="2"  name="/4 (low)"     enum="LowDivBy3"     ref="ics_erc_clock[%(n)]/4"   />
+               <choice value="3"  name="/8 (low)"     enum="LowDivBy8"     ref="ics_erc_clock[%(n)]/8"   />
+               <choice value="4"  name="/16 (low)"    enum="LowDivBy16"    ref="ics_erc_clock[%(n)]/16"  />
+               <choice value="5"  name="/32 (low)"    enum="LowDivBy32"    ref="ics_erc_clock[%(n)]/32"  />
+               <choice value="6"  name="/64 (low)"    enum="LowDivBy64"    ref="ics_erc_clock[%(n)]/64"  />
+               <choice value="7"  name="/128 (low)"   enum="LowDivBy128"   ref="ics_erc_clock[%(n)]/128" />
 
-               <choice value="0" name="/32 (high)"   enum="HighDivBy32"   enabledBy="(/OSC0/osc_cr_range == true)" ref="ics_erc_clock[%(n)]/32"   />
-               <choice value="1" name="/64 (high)"   enum="HighDivBy64"   enabledBy="(/OSC0/osc_cr_range == true)" ref="ics_erc_clock[%(n)]/64"   />
-               <choice value="2" name="/128 (high)"  enum="HighDivBy128"  enabledBy="(/OSC0/osc_cr_range == true)" ref="ics_erc_clock[%(n)]/128"  />
-               <choice value="3" name="/256 (high)"  enum="HighDivBy256"  enabledBy="(/OSC0/osc_cr_range == true)" ref="ics_erc_clock[%(n)]/256"  />
-               <choice value="4" name="/512 (high)"  enum="HighDivBy512"  enabledBy="(/OSC0/osc_cr_range == true)" ref="ics_erc_clock[%(n)]/512"  />
-               <choice value="5" name="/1024 (high)" enum="HighDivBy1024" enabledBy="(/OSC0/osc_cr_range == true)" ref="ics_erc_clock[%(n)]/1024" />
-               <choice value="6" name="Reserved"     enum="Reserved6"     enabledBy="(/OSC0/osc_cr_range == true)" ref="Disabled"   />
-               <choice value="7" name="Reserved"     enum="Reserved7"     enabledBy="(/OSC0/osc_cr_range == true)" ref="Disabled"  />
+               <choice value="8+0"  name="/32 (high)"   enum="HighDivBy32"   ref="ics_erc_clock[%(n)]/32"   />
+               <choice value="8+1"  name="/64 (high)"   enum="HighDivBy64"   ref="ics_erc_clock[%(n)]/64"   />
+               <choice value="8+2" name="/128 (high)"  enum="HighDivBy128"  ref="ics_erc_clock[%(n)]/128"  />
+               <choice value="8+3" name="/256 (high)"  enum="HighDivBy256"  ref="ics_erc_clock[%(n)]/256"  />
+               <choice value="8+4" name="/512 (high)"  enum="HighDivBy512"  ref="ics_erc_clock[%(n)]/512"  />
+               <choice value="8+5" name="/1024 (high)" enum="HighDivBy1024" ref="ics_erc_clock[%(n)]/1024" />
+               <choice value="8+6" name="Reserved"     enum="Reserved6"     ref="Disabled"   />
+               <choice value="8+7" name="Reserved"     enum="Reserved7"     ref="Disabled"  />
             </choiceOption>
 
             <intOption key="ics_erc_clock_divided[%(n)]"

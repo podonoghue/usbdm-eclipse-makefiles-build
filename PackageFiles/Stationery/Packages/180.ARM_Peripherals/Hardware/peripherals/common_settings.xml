@@ -303,7 +303,7 @@
    \t    std::array<CallbackFunction, NumVectors> callbacks = {};
    \t    std::array<NvicPriority,     NumVectors> priorities = {};
    \t
-   \t}; // class $(_BasicInfo)::InitVectors
+   \t}; // class InitVectors
    \t\n
 ]]>
 </template>

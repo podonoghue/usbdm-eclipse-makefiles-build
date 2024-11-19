@@ -2170,6 +2170,7 @@
       \tstatic constexpr Init DefaultInitValue {\n
    ]]></template>
    <variableTemplate
+      padToComments="45"
       variables="
          sim_sopt2_pllfllsel[],
          sim_sopt2_sdhcsrc[],
