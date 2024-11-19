@@ -284,6 +284,20 @@ void UsbdmDialogue::Init() {
 
    log.print("targetProperties = 0x%X\n", targetProperties);
 
+   populateBDMChoices();
+
+   // Some initial data depends on chosen BDM interface - load first
+   bdmIdentification = wxString(bdmInterface->getBdmSerialNumber().c_str(), wxConvUTF8);
+   log.print("Initial BDM = \'%s\'\n", (const char *)bdmIdentification.ToAscii());
+   // Try to set choice to match BDM identification string
+   if (!bdmSelectChoiceControl->SetStringSelection(bdmIdentification)) {
+      log.warning("Can't select previous BDM = %s\n", (const char *)bdmIdentification.ToAscii());
+      // Failed - select first BDM
+      bdmSelectChoiceControl->Select(0);
+   }
+   int choice = bdmSelectChoiceControl->GetSelection();
+   bdmDeviceNum = (int)(intptr_t)bdmSelectChoiceControl->GetClientData(choice);
+
    populateInterfaceSpeeds();
 //   populateBDMChoices();
    populateInterfaceSpeeds();
@@ -303,6 +317,7 @@ void UsbdmDialogue::Init() {
    updateFilterDescription();
    updateFlashNVM();
    updateSecurity();
+
    update();
 }
 
@@ -403,7 +418,7 @@ void UsbdmDialogue::setCurrentResetSelection(DeviceData::ResetMethod resetMethod
 std::string UsbdmDialogue::update() {
    LOGGING;
 
-   log.print("Device# = %d, BDM = \'%s\'\n", bdmDeviceNum, (const char *)bdmIdentification.ToAscii());
+   log.print("BDM Device# = %d, BDM = \'%s\'\n", bdmDeviceNum, (const char *)bdmIdentification.ToAscii());
    log.print("CurrentDeviceIndex = %d\n", deviceInterface->getCurrentDeviceIndex());
    log.print("CurrentDevice = %s\n", deviceInterface->getCurrentDevice()->getTargetName().c_str());
 
@@ -1095,18 +1110,6 @@ bool UsbdmDialogue::TransferDataToWindow() {
     * Interface
     * ===============================================================================
     */
-   populateBDMChoices();
-
-   bdmIdentification = wxString(bdmInterface->getBdmSerialNumber().c_str(), wxConvUTF8);
-   log.print("Initial BDM = \'%s\'\n", (const char *)bdmIdentification.ToAscii());
-   // Try to set choice to match BDM identification string
-   if (!bdmSelectChoiceControl->SetStringSelection(bdmIdentification)) {
-      log.warning("Can't select previous BDM = %s\n", (const char *)bdmIdentification.ToAscii());
-      // Failed - select first BDM
-      bdmSelectChoiceControl->Select(0);
-   }
-   int choice = bdmSelectChoiceControl->GetSelection();
-   bdmDeviceNum = (int)(intptr_t)bdmSelectChoiceControl->GetClientData(choice);
 
    /*
     * ===============================================================================

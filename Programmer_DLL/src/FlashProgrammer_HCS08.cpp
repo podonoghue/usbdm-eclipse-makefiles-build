@@ -1590,7 +1590,7 @@ USBDM_ErrorCode FlashProgrammer_HCS08::executeTargetProgram(uint8_t *pBuffer, ui
    }
    progressTimer->progress(0, NULL);
 #ifdef LOG
-   log.print("Polling");
+   log.print("Polling\n");
    int dotCount = 50;
 #endif
    // Wait for target stop at execution completion
