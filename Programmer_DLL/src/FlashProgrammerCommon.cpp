@@ -1410,9 +1410,10 @@ USBDM_ErrorCode FlashProgrammerCommon::setFlashSecurity(FlashImagePtr flashImage
    LOGGING;
    uint32_t securityRegionAddress = flashRegion->getSecurityAddress();
    if (securityRegionAddress == 0) {
-      log.print("No security area, not modifying flash image\n");
+      log.print("No security area for %s, not modifying memory region in image\n", flashRegion->getMemoryTypeName());
       return PROGRAMMING_RC_OK;
    }
+   log.print("Processing security area for %s, may modify memory region in image\n", flashRegion->getMemoryTypeName());
    auto memoryRange       = flashRegion->getMemoryRangeFor(securityRegionAddress);
 
    // Get security information and size
@@ -1465,6 +1466,8 @@ USBDM_ErrorCode FlashProgrammerCommon::setFlashSecurity(FlashImagePtr flashImage
       }
    }
 
+   bool securityAreaInImageNeedsModification = false;
+
    // Create security area contents
    uint8_t securityData[securityRegionSize];
    switch (securityOption) {
@@ -1472,11 +1475,14 @@ USBDM_ErrorCode FlashProgrammerCommon::setFlashSecurity(FlashImagePtr flashImage
       case SEC_UNSECURED:
       case SEC_CUSTOM:
          memcpy(securityData, securityInfo->getData(), securityRegionSize);
+         securityAreaInImageNeedsModification = true;
          break;
       case SEC_DEFAULT:
       default:
          // Copy security information from flash
          for(int index=0; index<securityRegionSize; index++) {
+            securityAreaInImageNeedsModification = securityAreaInImageNeedsModification ||
+                  flashImage->isValid(securityRegionAddress+index);
             securityData[index] = flashImage->getValue(securityRegionAddress+index);
          }
          break;
@@ -1484,10 +1490,10 @@ USBDM_ErrorCode FlashProgrammerCommon::setFlashSecurity(FlashImagePtr flashImage
 
    // Save contents of current security area within Flash image
    recordSecurityArea(flashImage, securityRegionAddress, securityRegionSize);
-
-   // Update flash with new security info
-   flashImage->loadDataBytes(securityRegionSize, securityRegionAddress, securityData, FlashImage::Overwrite);
-
+   if (securityAreaInImageNeedsModification) {
+      // Update flash with new security info
+      flashImage->loadDataBytes(securityRegionSize, securityRegionAddress, securityData, FlashImage::Overwrite);
+   }
 #ifdef LOG
    log.print("Flash security region: "
          "              mem[0x%06lX-0x%06lX] = \n", (unsigned long)securityRegionAddress, (unsigned long)(securityRegionAddress+securityRegionSize/sizeof(uint8_t)-1));
