@@ -25,6 +25,7 @@
 +============================================================================================
 | Revision History
 +============================================================================================
+| 30 Nov 24 | Capabilities are qualified by caps of loaded programming code - pgo
 | 19 Jan 24 | Removed MS_FAST for HCS08/HCS12 as fails if BDM memory space  - pgo
 | 14 Apr 17 | Fixed loadTargetProgram() for OpWriteRam                      - pgo 4.12.1.170
 | 4  Mar 16 | Fixed saving/restoring security regions                       - pgo 4.12.1.90
@@ -1109,7 +1110,7 @@ USBDM_ErrorCode FlashProgrammer_HCS08::loadLargeTargetProgram(
    currentFlashAlignment = flashOperationInfo.alignment;
 
    // Loaded routines support extended operations
-   targetProgramInfo.programOperation = DO_BLANK_CHECK_RANGE|DO_PROGRAM_RANGE|DO_VERIFY_RANGE;
+   targetProgramInfo.programOperation = (DO_BLANK_CHECK_RANGE|DO_PROGRAM_RANGE|DO_VERIFY_RANGE)&capabilities;
    return BDM_RC_OK;
 }
 
@@ -2682,7 +2683,7 @@ USBDM_ErrorCode FlashProgrammer_HCS08::verifyFlash(FlashImagePtr flashImage,
       log.error("Error: device parameters not set\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
-   log.print("===========================================================\n");
+   log.print("!===========================================================\n");
    log.print("\tprogressCallBack = %p\n",                 progressCallBack);
    log.print("\tDevice = \'%s\'\n",                       device->getTargetName().c_str());
    log.print("\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n",   device->getClockTrimFreq(),
@@ -2691,7 +2692,9 @@ USBDM_ErrorCode FlashProgrammer_HCS08::verifyFlash(FlashImagePtr flashImage,
    log.print("\tReset=%s\n",                              DeviceData::getResetMethodName(getResetMethod()));
    log.print("\tSecurity=%s\n",                           getSecurityName(device->getSecurity()));
    log.print("\tTotal bytes=%d\n",                        flashImage->getByteCount());
-   log.print("===========================================================\n");
+   log.print("!===========================================================\n");
+
+   flashImage->printMemoryMap();
 
    this->doRamWrites = false;
    progressTimer.reset(new ProgressTimer(progressCallBack, flashImage->getByteCount()));
@@ -2742,6 +2745,8 @@ USBDM_ErrorCode FlashProgrammer_HCS08::verifyFlash(FlashImagePtr flashImage,
       if (rc != PROGRAMMING_RC_OK) {
          break;
       }
+      flashImage->printMemoryMap();
+
 #if (TARGET == CFV1) || (TARGET == HCS08)
       // Modify flash image according to trim options - to be consistent with what is programmed
       rc = dummyTrimLocations(flashImage);
@@ -2916,6 +2921,7 @@ USBDM_ErrorCode FlashProgrammer_HCS08::programFlash(FlashImagePtr flashImage,
       if (rc != PROGRAMMING_RC_OK) {
          break;
       }
+      flashImage->printMemoryMap();
 #if (TARGET == CFVx) || (TARGET == MC56F80xx)// || (TARGET == ARM)
       rc = determineTargetSpeed();
       if (rc != PROGRAMMING_RC_OK) {
