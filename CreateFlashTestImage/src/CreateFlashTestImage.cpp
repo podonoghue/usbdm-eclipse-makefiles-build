@@ -96,10 +96,11 @@ void dumpS9Rec(FILE *fp, uint16_t address) {
 //
 // @note size must be less than or equal to \ref maxSrecSize
 //
-void dumpSrec(FILE *fp, uint32_t address, uint8_t size) {
+bool dumpSrec(FILE *fp, uint32_t address, uint8_t size) {
 
+   bool foundSecurity = false;
    if (size == 0)
-      return;
+      return false;
 
    uint8_t checkSum;
    if ((address) < 0x10000U) {
@@ -127,6 +128,7 @@ void dumpSrec(FILE *fp, uint32_t address, uint8_t size) {
       uint8_t data = (uint8_t)((255.0 * rand())/(RAND_MAX+1.0));
       if ((securityStartAddress <= address) && (address < (securityStartAddress+securitySize))) {
          data = securityValues[address-securityStartAddress];
+         foundSecurity = false;
       }
       if ((resetStartAddress <= address) && (address < (resetStartAddress+resetSize))) {
          data = resetValues[address-resetStartAddress];
@@ -137,6 +139,7 @@ void dumpSrec(FILE *fp, uint32_t address, uint8_t size) {
    }
    checkSum = checkSum^0xFF;
    fprintf(fp, "%02X\n", checkSum);
+   return foundSecurity;
 }
 
 // Dump dummy data as S-records to fp
@@ -144,8 +147,9 @@ void dumpSrec(FILE *fp, uint32_t address, uint8_t size) {
 // @param startAddress  start address of data (inclusive)
 // @param endAddress    end address of data (inclusive)
 //
-void dumpBytes(FILE *fp, uint32_t startAddress, uint32_t endAddress) {
+bool dumpBytes(FILE *fp, uint32_t startAddress, uint32_t endAddress) {
    uint32_t address = startAddress;
+   bool foundSecurity = false;
 
    while (address<=endAddress) {
       uint32_t size     = endAddress-address+1;
@@ -153,10 +157,11 @@ void dumpBytes(FILE *fp, uint32_t startAddress, uint32_t endAddress) {
       uint8_t  srecSize = maxSrecSize - oddBytes;
       if (srecSize > size)
          srecSize = (uint8_t) size;
-      dumpSrec(fp, address, srecSize);
+      foundSecurity = dumpSrec(fp, address, srecSize) | foundSecurity;
       address += srecSize;
       size    -= srecSize;
    }
+   return foundSecurity;
 }
 
 // Dump dummy data as S-records to fp
@@ -164,8 +169,9 @@ void dumpBytes(FILE *fp, uint32_t startAddress, uint32_t endAddress) {
 // @param startAddress  start address of data (inclusive)
 // @param endAddress    end address of data (inclusive)
 //
-void dumpWords(FILE *fp, uint32_t startAddress, uint32_t endAddress) {
+bool dumpWords(FILE *fp, uint32_t startAddress, uint32_t endAddress) {
    uint32_t address = startAddress;
+   bool foundSecurity = false;
 
    while (address<=endAddress) {
       uint32_t size     = 2*(endAddress-address+1);
@@ -173,10 +179,11 @@ void dumpWords(FILE *fp, uint32_t startAddress, uint32_t endAddress) {
       uint8_t  srecSize = maxSrecSize - oddBytes;
       if (srecSize > size)
          srecSize = (uint8_t) size;
-      dumpSrec(fp, address, srecSize);
+      foundSecurity = dumpSrec(fp, address, srecSize) | foundSecurity;
       address += srecSize/2;
       size    -= srecSize/2;
    }
+   return foundSecurity;
 }
 
 void usage(void) {
@@ -377,6 +384,8 @@ int main(int argc, char *argv[]) {
       fclose(fp);
    }
    char *cp;
+   bool foundSecurity = false;
+
    for(;argNum<argc-1; argNum+=2) {
       uint32_t startAddress = strtol(argv[argNum  ], &cp, 0);
       uint32_t endAddress   = strtol(argv[argNum+1], &cp, 0);
@@ -384,13 +393,26 @@ int main(int argc, char *argv[]) {
          fprintf(stderr, "Range [0x%08X..0x%08X] \n", startAddress, endAddress);
       }
       if (wordAddresses) {
-         dumpWords(fp, startAddress, endAddress);
+         foundSecurity = dumpWords(fp, startAddress, endAddress) | foundSecurity;
       }
       else {
-         dumpBytes(fp, startAddress, endAddress);
+         foundSecurity = dumpBytes(fp, startAddress, endAddress) | foundSecurity;
+      }
+   }
+   if (!foundSecurity) {
+      // Add security area if not done already
+      if (verbose) {
+         fprintf(stderr, "Adding security area [0x%08X..0x%08X] \n", securityStartAddress, securityStartAddress+securitySize-1);
+      }
+      if (wordAddresses) {
+         dumpWords(fp, securityStartAddress, securityStartAddress+securitySize-1);
+      }
+      else {
+         dumpBytes(fp, securityStartAddress, securityStartAddress+securitySize-1);
       }
    }
    dumpS9Rec(fp, 0x0000);
+
    fclose(fp);
    return 0;
 }
