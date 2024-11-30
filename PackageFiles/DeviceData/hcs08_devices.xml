@@ -1350,7 +1350,7 @@
          <sdid value="0x0040"  mask="0x0FFF"/>
       </device>
       <device family="HCS08Plus" name="MC9S08PB8">
-         <clock registerAddress="0x3038" type="S08ICSV4" />
+         <clock registerAddress="0x3038" type="S08ICSV5" />
          <memory type="ram">
             <memoryRange start="0x0040" end="0x043F" />
          </memory>
