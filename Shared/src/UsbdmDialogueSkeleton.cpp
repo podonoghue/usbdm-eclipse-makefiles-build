@@ -196,7 +196,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	fInterfacePanel->SetSizer( bSizer3 );
 	fInterfacePanel->Layout();
 	bSizer3->Fit( fInterfacePanel );
-	fNotebook->AddPage( fInterfacePanel, wxT("Interface"), true );
+	fNotebook->AddPage( fInterfacePanel, wxT("Interface"), false );
 	fTargetPanel = new wxPanel( fNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
@@ -461,7 +461,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	fTargetPanel->SetSizer( bSizer4 );
 	fTargetPanel->Layout();
 	bSizer4->Fit( fTargetPanel );
-	fNotebook->AddPage( fTargetPanel, wxT("Target"), false );
+	fNotebook->AddPage( fTargetPanel, wxT("Target"), true );
 	fAdvancedPanel = new wxPanel( fNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
