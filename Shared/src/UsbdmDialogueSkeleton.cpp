@@ -201,8 +201,8 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 
 	bSizer16->Add( loadFileButtonControl, 0, wxLEFT|wxRIGHT, 5 );
 
-	LinearImageCheckBoxControl = new wxCheckBox( sbSizer7->GetStaticBox(), wxID_ANY, wxT("Linear Image"), wxDefaultPosition, wxDefaultSize, 0 );
-	LinearImageCheckBoxControl->SetToolTip( wxT("Assumes hex file uses linear flash addresses. \nThis will cause linear addresses to be mapped\n to paged addresses when loading SREC files.") );
+	LinearImageCheckBoxControl = new wxCheckBox( sbSizer7->GetStaticBox(), wxID_ANY, wxT("Linear To Paged"), wxDefaultPosition, wxDefaultSize, 0 );
+	LinearImageCheckBoxControl->SetToolTip( wxT("Map linear addresses to paged addresses when loading SREC files.\n\n==== PFlash (Program flash) ==== \n2222 1111 1111 11\n3210 9876 5432 1098 7654 3210\n-1pp pppp ppoo oooo oooo oooo   linear address (PFlash) [0x40_0000-0x7F_FFFF]\npppp pppp 10oo oooo oooo oooo   paged address using PPAGE=pppp pppp\n          10oo oooo oooo oooo   logical address range (CPU+BDM) using\n          1011 1111 1111 1111   PPAGE window [0x8000-0BFFF]\n\n==== DFlash (EEPROM) ====\n2222 1111 1111 11\n3210 9876 5432 1098 7654 3210\n-001 00ee eeee eeoo oooo oooo   linear address (DFlash) [0x10_0000-0x13_FFFF]\neeee eeee 0000 10oo oooo oooo   paged address using EPAGE=pppp pppp\n          0000 1000 0000 0000   logical address range (CPU+BDM) using\n          0000 1011 1111 1111   EPAGE page window [0x0800-0x0BFF]") );
 
 	bSizer16->Add( LinearImageCheckBoxControl, 0, wxALL, 5 );
 
@@ -212,7 +212,6 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	bSizer16->Add( incrementalFileLoadCheckBoxControl, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	autoFileReloadCheckBoxControl = new wxCheckBox( sbSizer7->GetStaticBox(), wxID_ANY, wxT("Auto Reload"), wxDefaultPosition, wxDefaultSize, 0 );
-	autoFileReloadCheckBoxControl->SetValue(true);
 	autoFileReloadCheckBoxControl->SetToolTip( wxT("Quietly reload file before programming if it has changed") );
 
 	bSizer16->Add( autoFileReloadCheckBoxControl, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );

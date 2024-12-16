@@ -19,6 +19,12 @@ There are no driver needed if using the deb installer
 # History
 
 *******  
+**USBDM_V4_12_1_340** (Dec 2024)  
+
+- Fixes for MC9S08PB8, MC9S08PB16. Changed to readback verify as immediate verify of small ranges fails for some reason.
+- Additional settings are now preserved in the programmer between uses.
+
+*******  
 **USBDM_V4_12_1_330** (Aug 2024)  
 
 - Added MC9S08PB8, MC9S08PB16

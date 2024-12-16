@@ -151,7 +151,7 @@ const int deviceNumber = 0; // USBDM device to open, devices enumerated from 0..
    // May check deviceCount here if desired or let USBDM_Open() fail
    CHECK(USBDM_Open(deviceNumber));
 
-   USBDM_bdmInformation_t bdmInformation = {sizeof(bdmInformation)};
+   USBDM_bdmInformation_t bdmInformation {sizeof(bdmInformation)};
    USBDM_GetBdmInformation(&bdmInformation);
    CHECK((bdmInformation.BDMsoftwareVersion < 0x40905)?BDM_RC_WRONG_BDM_REVISION:BDM_RC_OK);
 

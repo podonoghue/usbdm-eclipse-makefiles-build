@@ -47,7 +47,7 @@
             <property name="minimum_size"></property>
             <property name="name">UsbdmDialogueSkeleton</property>
             <property name="pos"></property>
-            <property name="size">529,1017</property>
+            <property name="size">555,1017</property>
             <property name="style">wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxDIALOG_NO_PARENT|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER</property>
             <property name="subclass"></property>
             <property name="title">USBDM</property>
@@ -1809,7 +1809,7 @@
                                                             <property name="gripper">0</property>
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
-                                                            <property name="label">Linear Image</property>
+                                                            <property name="label">Linear To Paged</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
@@ -1830,7 +1830,7 @@
                                                             <property name="style"></property>
                                                             <property name="subclass">; ; forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
-                                                            <property name="tooltip">Assumes hex file uses linear flash addresses. &#x0A;This will cause linear addresses to be mapped&#x0A; to paged addresses when loading SREC files.</property>
+                                                            <property name="tooltip">Map linear addresses to paged addresses when loading SREC files.&#x0A;&#x0A;==== PFlash (Program flash) ==== &#x0A;2222 1111 1111 11&#x0A;3210 9876 5432 1098 7654 3210&#x0A;-1pp pppp ppoo oooo oooo oooo   linear address (PFlash) [0x40_0000-0x7F_FFFF]&#x0A;pppp pppp 10oo oooo oooo oooo   paged address using PPAGE=pppp pppp&#x0A;          10oo oooo oooo oooo   logical address range (CPU+BDM) using&#x0A;          1011 1111 1111 1111   PPAGE window [0x8000-0BFFF]&#x0A;&#x0A;==== DFlash (EEPROM) ====&#x0A;2222 1111 1111 11&#x0A;3210 9876 5432 1098 7654 3210&#x0A;-001 00ee eeee eeoo oooo oooo   linear address (DFlash) [0x10_0000-0x13_FFFF]&#x0A;eeee eeee 0000 10oo oooo oooo   paged address using EPAGE=pppp pppp&#x0A;          0000 1000 0000 0000   logical address range (CPU+BDM) using&#x0A;          0000 1011 1111 1111   EPAGE page window [0x0800-0x0BFF]</property>
                                                             <property name="validator_data_type"></property>
                                                             <property name="validator_style">wxFILTER_NONE</property>
                                                             <property name="validator_type">wxDefaultValidator</property>
@@ -1924,7 +1924,7 @@
                                                             <property name="caption"></property>
                                                             <property name="caption_visible">1</property>
                                                             <property name="center_pane">0</property>
-                                                            <property name="checked">1</property>
+                                                            <property name="checked">0</property>
                                                             <property name="close_button">1</property>
                                                             <property name="context_help"></property>
                                                             <property name="context_menu">1</property>

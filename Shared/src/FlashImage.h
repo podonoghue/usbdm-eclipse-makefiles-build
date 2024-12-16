@@ -81,6 +81,12 @@ public:
       Overwrite,           /**< Overwrite quietly                                 */
       OverwriteAndReport}; /**< Overwrite and return SFILE_RC_IMAGE_OVERLAPS      */
 
+   enum SrecMode {
+      noConversion,
+      checkLinear,
+      convertLinearToPaged
+   };
+
    /**
     *  Class to enumerate the occupied locations within the memory image
     *
@@ -166,13 +172,13 @@ public:
     *
     *  @param filePath           Path of file to load
     *  @param clearBuffer        Clear buffer before loading
-    *  @param forceLinearToPaged Force conversion  of linear addresses to paged (SREC only)
+    *  @param srecMode           Indicates how SRECs should be handled (linear/paged etc)
     *
     *  @return SFILE_RC_OK                 Successful load
     *  @return SFILE_RC_IMAGE_OVERLAPS     Successful load but loaded image overwrites existing contents
     *  @return Other (fatal) error code
     */
-   virtual USBDM_ErrorCode      loadFile(const std::string &filePath, bool clearBuffer, bool forceLinearToPaged ) = 0;
+   virtual USBDM_ErrorCode      loadFile(const std::string &filePath, bool clearBuffer, SrecMode srecMode=noConversion ) = 0;
    /**
     *  Save image buffer as a S19 file. \n
     *

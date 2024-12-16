@@ -126,7 +126,7 @@ public:
    virtual void                  printMemoryMap();
    virtual unsigned              getByteCount() const;
    virtual const std::string    &getSourcePathname() const;
-   virtual USBDM_ErrorCode       loadFile(const std::string &filePath, bool clearBuffer, bool forceLinearToPaged);
+   virtual USBDM_ErrorCode       loadFile(const std::string &filePath, bool clearBuffer, SrecMode srecMode=SrecMode::noConversion);
    virtual USBDM_ErrorCode       saveFile(const std::string &filePath, bool discardFF=true);
    virtual uint8_t               getValue(uint32_t address);
    virtual void                  setValue(uint32_t address, uint8_t value);
@@ -163,7 +163,7 @@ protected:
    USBDM_ErrorCode         recordElfProgramBlock(Elf32_Phdr *programHeader);
    USBDM_ErrorCode         loadElfFile(const std::string &fileName);
    USBDM_ErrorCode         checkTargetType(Elf32_Half e_machine, TargetType_t targetType);
-   USBDM_ErrorCode         loadS1S9File(const std::string &fileName, bool forceLinearToPaged);
+   USBDM_ErrorCode         loadS1S9File(const std::string &fileName, SrecMode srecMode);
    USBDM_ErrorCode         loadAbsoluteFile(const std::string &fileName);
 
    static void             addressToPageOffset(uint32_t address, uint16_t &pageNum, uint16_t &offset);

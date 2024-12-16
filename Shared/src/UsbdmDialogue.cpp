@@ -204,7 +204,7 @@ UsbdmDialogue::UsbdmDialogue(
 
    deviceChanged           = true;
    incrementalLoad         = false;
-   forcelinearToPagedImage = false;
+   forcelinearToPagedImage = FlashImage::SrecMode::noConversion;
    sound                   = false;
    flashprogrammer         = FlashProgrammerPtr();
    fileLoadTime            = 0;
@@ -263,7 +263,7 @@ void UsbdmDialogue::Init() {
    doFilterByChipId           = false;
    filterChipIds.clear();
    incrementalLoad            = false;
-   forcelinearToPagedImage    = false;
+   forcelinearToPagedImage    = FlashImage::SrecMode::noConversion;
    autoFileLoad               = false;
    fileLoaded                 = false;
    needManualFrequencySet     = false;
@@ -354,7 +354,7 @@ USBDM_ErrorCode UsbdmDialogue::execute(wxString const &hexFilename) {
    hideUnusedControls();
    Fit();
    Init();
-   if (!hexFilename.IsEmpty() && (loadHexFile(hexFilename, true, false) != PROGRAMMING_RC_OK)) {
+   if (!hexFilename.IsEmpty() && (loadHexFile(hexFilename, true) != PROGRAMMING_RC_OK)) {
       log.print(" - Failed to load Hex file\n");
    }
 
@@ -514,7 +514,8 @@ std::string UsbdmDialogue::update() {
       // PST feature not utilised
       bdmInterface->getBdmOptions().usePSTSignals = false;
    }
-   LinearImageCheckBoxControl->SetValue((targetProperties & HAS_LINEAR_IMAGE) && forcelinearToPagedImage);
+   LinearImageCheckBoxControl->SetValue((targetProperties & HAS_LINEAR_IMAGE) &&
+         (forcelinearToPagedImage==FlashImage::SrecMode::convertLinearToPaged));
    LinearImageCheckBoxControl->Show(targetProperties & HAS_LINEAR_IMAGE);
    LinearImageCheckBoxControl->Enable(targetProperties & HAS_LINEAR_IMAGE);
    if (targetProperties & HAS_GUESS_SPEED) {
@@ -1577,12 +1578,12 @@ LOGGING;
 /**
  * LOad a file from given path
  *
- * @param hexFilepath         Path to file
- * @param clearBuffer         Clear image buffer before load
- * @param forceLinearToPaged  Convert Lineart to Paged addresses in motorola format files (SRC)
+ * @param hexFilepath     Path to file
+ * @param clearBuffer     Clear image buffer before load
+ * @param srecMode        Indicates how SRECs should be handled (linear/paged etc)
  * @return
  */
-USBDM_ErrorCode UsbdmDialogue::loadHexFile( wxString hexFilepath, bool clearBuffer, bool forceLinearToPaged ) {
+USBDM_ErrorCode UsbdmDialogue::loadHexFile( wxString hexFilepath, bool clearBuffer, FlashImage::SrecMode srecMode) {
    LOGGING_Q;
    USBDM_ErrorCode rc;
 
@@ -1590,7 +1591,7 @@ USBDM_ErrorCode UsbdmDialogue::loadHexFile( wxString hexFilepath, bool clearBuff
 
    log.print("(%s)\n", (const char *)hexFilepath.ToAscii());
    loadedFilenameStaticControl->SetLabel(_("Loading File"));
-   rc = flashImage->loadFile((const char*)hexFilepath.mb_str(wxConvUTF8), clearBuffer, forceLinearToPaged);
+   rc = flashImage->loadFile((const char*)hexFilepath.mb_str(wxConvUTF8), clearBuffer, srecMode);
    if (rc == SFILE_RC_IMAGE_OVERLAPS) {
       wxMessageBox(_("File loaded overlaps and differs from previously loaded file contents\n"
                    "Contents of '") + filename + _("' have replaced earlier file data.\n"),
@@ -2794,7 +2795,9 @@ void UsbdmDialogue::OnLoadFileButtonClick( wxCommandEvent& event ) {
  *  @param event The event to handle
  */
 void UsbdmDialogue::OnLinearImageCheckboxClick( wxCommandEvent& event ) {
-   forcelinearToPagedImage = event.IsChecked();
+   forcelinearToPagedImage =
+         event.IsChecked()?FlashImage::SrecMode::convertLinearToPaged:
+               FlashImage::SrecMode::noConversion;
 }
 
 /** Handler for OnIncrementalFileLoadCheckbox

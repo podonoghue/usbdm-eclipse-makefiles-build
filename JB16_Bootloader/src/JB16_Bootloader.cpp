@@ -78,7 +78,7 @@ USBDM_ErrorCode ProgramDevice(std::string filePath) {
 
    log.print("Loading file \'%s\'\n", filePath.c_str());
    FlashImagePtr flashImage = FlashImageFactory::createFlashImage(T_ARM);
-   rc = flashImage->loadFile(filePath.c_str(), true, false);
+   rc = flashImage->loadFile(filePath.c_str(), true);
    if (rc != BDM_RC_OK) {
       log.print("main() - Failed to load file, Reason: %s\n", flashImage->getErrorString(rc));
       return rc;

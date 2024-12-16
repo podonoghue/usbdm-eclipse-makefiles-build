@@ -492,13 +492,13 @@ MemoryPagePtr FlashImageImp::allocatePage(uint32_t pageNum) {
  *
  *  @param filePath           Path of file to load
  *  @param clearBuffer        Clear buffer before loading
- *  @param forceLinearToPaged Force conversion  of linear addresses to paged (SREC only)
+ *  @param srecMode           Indicates how SRECs should be handled (linear/paged etc)
  *
  *  @return SFILE_RC_OK                 Successful load
  *  @return SFILE_RC_IMAGE_OVERLAPS     Successful load but loaded image overwrites existing contents
  *  @return Other (fatal) error code
  */
-USBDM_ErrorCode  FlashImageImp::loadFile(const string &filePath, bool clearBuffer, bool forceLinearToPaged) {
+USBDM_ErrorCode  FlashImageImp::loadFile(const string &filePath, bool clearBuffer, SrecMode srecMode) {
    LOGGING_Q;
 
    sourceFilename = "";
@@ -514,7 +514,7 @@ USBDM_ErrorCode  FlashImageImp::loadFile(const string &filePath, bool clearBuffe
    if (rc == SFILE_RC_UNKNOWN_FILE_FORMAT) {
 
       // Try SREC Format if not recognized
-      rc = loadS1S9File(filePath,forceLinearToPaged);
+      rc = loadS1S9File(filePath,srecMode);
    }
    if ((rc != SFILE_RC_OK) && (rc != SFILE_RC_IMAGE_OVERLAPS)) {
 
@@ -1025,14 +1025,42 @@ USBDM_ErrorCode FlashImageImp::loadAbsoluteFile(const string &fileName) {
    return imageOverlaps?SFILE_RC_IMAGE_OVERLAPS:SFILE_RC_OK;
 }
 
-static uint32_t convertLinearAddressToPaged( uint32_t linearAddress) {
+static uint32_t convertLinearAddressToPaged(uint32_t linearAddress) {
    uint32_t pagedAddress;
 
-   pagedAddress  = linearAddress&0x3FFF;          // Offset within page
-   pagedAddress |= 0x8000;                        // Start of paged address window
-   pagedAddress |= (linearAddress << 2)&0xFF0000;  // page number
+   // Program flash mapped to page window [0x8000-0BFFF] using PPAGE register
+   bool isPFlash = (linearAddress&0xC0'0000) == (0x40'0000);
+
+   // Data flash mapped to EEPROM window [0x0800-0xBFF] using EPAGE register
+   bool isDFlash = (linearAddress&0xFC'0000) == (0x10'0000);
+
+   if (isPFlash) {
+      pagedAddress  = linearAddress&0x3FFF;           // Offset within page
+      pagedAddress += 0x8000;                         // Start of paged address window
+      pagedAddress |= (linearAddress << 2)&0xFF0000;  // page number
+   }
+   else if (isDFlash) {
+      pagedAddress  = linearAddress&0x3FF;            // Offset within page
+      pagedAddress += 0x0800;                         // Start of paged address window
+      pagedAddress |= (linearAddress << 6)&0xFF0000;  // page number
+   }
+   else {
+      // Indicates illegal linear address
+      return 0;
+   }
 
    return pagedAddress;
+}
+
+static bool isValidLinearAddress(uint32_t linearAddress) {
+
+   // Program flash mapped to page window [0x8000-0BFFF] using PPAGE register
+   bool isPFlash = (linearAddress&0xC0'0000) == (0x40'0000);
+
+   // Data flash mapped to EEPROM window [0x0800-0xBFF] using EPAGE register
+   bool isDFlash = (linearAddress&0xFC'0000) == (0x10'0000);
+
+   return isPFlash || isDFlash;
 }
 
 /**
@@ -1041,13 +1069,13 @@ static uint32_t convertLinearAddressToPaged( uint32_t linearAddress) {
  *  Modified locations will have a non-0xFF upper byte so used locations can be differentiated. \n
  *
  *  @param fileName Path of file to load
- *  @param forceLinearToPaged Force conversion  of linear addresses to paged
+ *  @param srecMode Indicates how SRECs should be handled (linear/paged etc)
  *
  *  @return SFILE_RC_OK                 Successful load
  *  @return SFILE_RC_IMAGE_OVERLAPS     Successful load but loaded image overwrites existing contents
  *  @return Other (fatal) error code
  */
-USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName, bool forceLinearToPaged) {
+USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName, SrecMode srecMode) {
    LOGGING_Q;
    char        *ptr;
    char         buffer[1024];
@@ -1139,8 +1167,24 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName, bool forceLi
       if (wordAddresses) {
          addr *= 2;
       }
-      if (forceLinearToPaged) {
-         addr = convertLinearAddressToPaged(addr);
+      uint32_t linearAddress = 0;
+      if (srecMode==SrecMode::checkLinear) {
+         linearAddress = addr;
+         if (!isValidLinearAddress(linearAddress)) {
+            log.error("Address 0x%X is not a valid HCS12 linear address\n", linearAddress);
+            // Address cannot be mapped to paged address on HCS12
+            return SFILE_RC_ILLEGAL_LINEAR_ADDRESS;
+         }
+      }
+      else if (srecMode==SrecMode::convertLinearToPaged) {
+         linearAddress = addr;
+         // Convert address being used to paged
+         addr = convertLinearAddressToPaged(linearAddress);
+         if (addr == 0) {
+            log.error("Address 0x%X cannot be converted to page address\n", linearAddress);
+            // Address cannot be mapped to paged address on HCS12
+            return SFILE_RC_ILLEGAL_LINEAR_ADDRESS;
+         }
       }
       while (srecSize>0) {
          uint8_t data;
@@ -1148,10 +1192,10 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName, bool forceLi
          checkSum += (uint8_t)data;
          if (this->isValid(addr) &&
              (this->getValue(addr) != (uint8_t)data)) {
-            if (!imageOverlaps) {
+//            if (!imageOverlaps) {
                // Occupied address - Only report first overlap
-               log.print("Memory image overlaps @0x%X\n", addr);
-            }
+               log.print("Memory image overlaps @0x%X(linear 0x%X)\n", addr, linearAddress);
+//            }
             imageOverlaps = true;
          }
          this->setValue(addr++, (uint8_t)data);

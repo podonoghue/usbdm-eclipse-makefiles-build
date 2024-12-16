@@ -154,7 +154,7 @@ typedef enum  {
  SFILE_RC_UNKNOWN_FILE_FORMAT                  = 205 , //!< File is not recognised as ELF or SREC
  SFILE_RC_ELF_WRONG_TARGET                     = 206 , //!< ELF is intended for another target
  SFILE_RC_IMAGE_OVERLAPS                       = 207 , //!< File being loaded overlaps existing contents (will still be loaded)
-
+ SFILE_RC_ILLEGAL_LINEAR_ADDRESS               = 208 , //!< Illegal linear address for mapping to paged address (HCS12 only)
 } USBDM_ErrorCode;
 
 #if defined __cplusplus

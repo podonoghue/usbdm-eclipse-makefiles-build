@@ -158,7 +158,7 @@ USBDM_ErrorCode FlashProgrammerApp::doCommandLineProgram() {
          break;
       }
       if (!hexFileName.IsEmpty()) {
-         returnValue = flashImage->loadFile((const char *)hexFileName.c_str(), true, false);
+         returnValue = flashImage->loadFile((const char *)hexFileName.c_str(), true);
          if (returnValue != BDM_RC_OK) {
             break;
          }

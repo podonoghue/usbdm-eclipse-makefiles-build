@@ -91,7 +91,7 @@ void doSequence(void) {
       FlashImagePtr flashImage(FlashImageFactory::createFlashImage(TARGET_TYPE));
 
       fprintf(stderr, "Loading image from \'%s\' \n", FLASH_IMAGE);
-      CHECK(flashImage->loadFile(FLASH_IMAGE, true, false));
+      CHECK(flashImage->loadFile(FLASH_IMAGE, true));
 
       fprintf(stderr, "Creating device database\n");
       DeviceInterfacePtr deviceInterface(new DeviceInterface(TARGET_TYPE));

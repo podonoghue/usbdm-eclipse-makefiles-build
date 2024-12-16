@@ -295,7 +295,7 @@ bool FirmwareChangerDialogue::loadFlashImageFile(wxString path) {
    flashImage.reset();
    flashImage = FlashImageFactory::createFlashImage(T_HCS08);
 
-   bool isOK = (flashImage->loadFile((const char *)path.c_str(), true, false) == BDM_RC_OK) && getICPData();
+   bool isOK = (flashImage->loadFile((const char *)path.c_str(), true) == BDM_RC_OK) && getICPData();
 
    // Extract the ICP information from the image
    if (!isOK) {

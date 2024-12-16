@@ -176,7 +176,9 @@ protected:
 
    void                    setDeviceIndex(int newDeviceIndex);
    USBDM_ErrorCode         autoDetectTargetDevice(void);
-   USBDM_ErrorCode         loadHexFile( wxString hexFilename, bool clearBuffer, bool forceLinearToPaged );
+   USBDM_ErrorCode         loadHexFile( wxString hexFilename,
+                                        bool clearBuffer,
+                                        FlashImage::SrecMode srecMode=FlashImage::SrecMode::noConversion);
    USBDM_ErrorCode         checkFileChange(void);
    USBDM_ErrorCode         programFlash(bool loadAndGo = false);
    USBDM_ErrorCode         verifyFlash(void);
@@ -208,7 +210,7 @@ protected:
    bool                          doFilterByChipId;                   //!< For dialogue handling - Filter by SDID
    std::map<uint32_t,uint32_t>   filterChipIds;                      //!< The SDIDs being filtered by
    bool                          incrementalLoad;                    //!< Don't clear buffer when loading a file
-   bool                          forcelinearToPagedImage = 0;        //!< Force conversion  of linear addresses to paged on file load
+   FlashImage::SrecMode          forcelinearToPagedImage;            //!< How to handle SRC files
    bool                          autoFileLoad;                       //!< Auto load changed files before programming
    DeviceData::EraseMethod       initialEraseMethod;                 //!< Initial erase setting loaded
    DeviceData::ResetMethod       initialResetMethod;                 //!< Initial reset setting loaded
