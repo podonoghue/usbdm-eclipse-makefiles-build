@@ -84,7 +84,7 @@ protected:
    virtual void OnCycleVddOnResetCheckboxClick( wxCommandEvent&  event ) override;
    virtual void OnCycleTargetVddOnConnectionCheckboxClick( wxCommandEvent&  event ) override;
    virtual void OnLeaveTargetOnCheckboxClick( wxCommandEvent&  event ) override;
-   virtual void OnReconnectCheckboxClick( wxCommandEvent&  event ) override;
+   virtual void OnAutoConnectStrategyComboSelected( wxCommandEvent&  event ) override;
    virtual void OnUseResetCheckboxClick( wxCommandEvent&  event ) override;
    virtual void OnUseUsePstSignalCheckboxClick( wxCommandEvent&  event ) override;
    virtual void OnGuessSpeedCheckboxClick( wxCommandEvent&  event ) override;
@@ -161,9 +161,9 @@ protected:
    // Interface
    void                    populateBDMChoices(void);
    void                    populateInterfaceSpeeds();
+   void                    populateConnectionStrategyControl();
    const wxString   &      bdmGetDllVersion(void);
    void                    updateFilterDescription();
-
    void                    findBDMs(void);
 
    // Target

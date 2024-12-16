@@ -416,9 +416,9 @@ const char *getDebugCommandName(unsigned char cmd) {
 char const *getAutoConnectName(AutoConnect_t mode) {
    static char buff[40] = "";
    switch(mode) {
-   case AUTOCONNECT_NEVER  : strcpy(buff,"NEVER");       break;
-   case AUTOCONNECT_STATUS : strcpy(buff,"STATUS");      break;
-   case AUTOCONNECT_ALWAYS : strcpy(buff,"ALWAYS");      break;
+   case AUTOCONNECT_NEVER  : strcpy(buff,"Minimal");     break;
+   case AUTOCONNECT_STATUS : strcpy(buff,"Status");      break;
+   case AUTOCONNECT_ALWAYS : strcpy(buff,"Always");      break;
    }
    return buff;
 }

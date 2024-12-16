@@ -62,7 +62,8 @@ class UsbdmDialogueSkeleton : public wxDialog
 		wxCheckBox* cycleVddOnResetControl;
 		wxCheckBox* cycleVddOnConnectionControl;
 		wxCheckBox* leaveTargetPoweredControl;
-		wxCheckBox* automaticallyReconnectControl;
+		wxStaticText* automaticallyConnectStaticText;
+		wxChoice* autoConnectStrategyContol;
 		wxCheckBox* useResetSignalControl;
 		wxCheckBox* usePstSignalControl;
 		wxCheckBox* guessTargetSpeedControl;
@@ -150,7 +151,7 @@ class UsbdmDialogueSkeleton : public wxDialog
 		virtual void OnCycleVddOnResetCheckboxClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCycleTargetVddOnConnectionCheckboxClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnLeaveTargetOnCheckboxClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnReconnectCheckboxClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAutoConnectStrategyComboSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUseResetCheckboxClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUseUsePstSignalCheckboxClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGuessSpeedCheckboxClick( wxCommandEvent& event ) { event.Skip(); }

@@ -302,9 +302,11 @@ void UsbdmDialogue::Init() {
 //   populateBDMChoices();
    populateInterfaceSpeeds();
    populateDeviceDropDown();
+   populateConnectionStrategyControl();
 
    populateEraseControl();
    populateResetControl();
+
 
    // Update dialogue saved load settings
    setCurrentEraseSelection(initialEraseMethod);
@@ -478,7 +480,9 @@ std::string UsbdmDialogue::update() {
    else {
       bdmInterface->getBdmOptions().leaveTargetPowered = false;
    }
-   automaticallyReconnectControl->SetValue(bdmInterface->getBdmOptions().autoReconnect != AUTOCONNECT_NEVER);
+
+   autoConnectStrategyContol->SetSelection(bdmInterface->getBdmOptions().autoReconnect);
+//   automaticallyReconnectControl->SetValue(bdmInterface->getBdmOptions().autoReconnect != AUTOCONNECT_NEVER);
 
    if (targetProperties & HAS_OPTIONAL_RESET) {
       // Reset control present
@@ -676,6 +680,16 @@ std::string UsbdmDialogue::update() {
    resetRecoveryIntervalTextControl->SetDecimalValue(bdmInterface->getBdmOptions().resetRecoveryInterval);
 
    return "";
+}
+
+
+/**
+ * Populate Connection Strategy Control with permitted selections
+ */
+void UsbdmDialogue::populateConnectionStrategyControl() {
+   autoConnectStrategyContol->Append(wxString(getAutoConnectName(AUTOCONNECT_NEVER), wxConvUTF7), (void*)AUTOCONNECT_NEVER);
+   autoConnectStrategyContol->Append(wxString(getAutoConnectName(AUTOCONNECT_STATUS),wxConvUTF7), (void*)AUTOCONNECT_STATUS);
+   autoConnectStrategyContol->Append(wxString(getAutoConnectName(AUTOCONNECT_ALWAYS),wxConvUTF7), (void*)AUTOCONNECT_ALWAYS);
 }
 
 /**
@@ -2692,8 +2706,10 @@ void UsbdmDialogue::OnLeaveTargetOnCheckboxClick( wxCommandEvent& event ) {
  *
  *  @param event The event to handle
  */
-void UsbdmDialogue::OnReconnectCheckboxClick( wxCommandEvent& event ) {
-   bdmInterface->getBdmOptions().autoReconnect = event.IsChecked()?AUTOCONNECT_STATUS:AUTOCONNECT_NEVER;
+void UsbdmDialogue::OnAutoConnectStrategyComboSelected( wxCommandEvent& event ) {
+
+   AutoConnect_t autoConnectStrategy = (AutoConnect_t) autoConnectStrategyContol->GetSelection();
+   bdmInterface->getBdmOptions().autoReconnect = autoConnectStrategy;
 }
 
 /** Handler for OnUseResetCheckbox

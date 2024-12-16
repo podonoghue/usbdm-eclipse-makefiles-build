@@ -35,6 +35,7 @@ CFLAGS +=
 DEFS += $(CDEFS)  # From command line
 DEFS += $(WXWIDGETS_DEFS)
 DEFS += $(XERCES_DEFS)
+DEFS += -DNEED_ALL_NAMES
 
 # Look for include files in each of the modules
 INCS := $(patsubst %,-I%,$(SOURCEDIRS))

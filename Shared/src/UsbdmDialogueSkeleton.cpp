@@ -87,11 +87,22 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	wxStaticBoxSizer* sbSizer6;
 	sbSizer6 = new wxStaticBoxSizer( new wxStaticBox( fInterfacePanel, wxID_ANY, wxT("Connection Control") ), wxVERTICAL );
 
-	automaticallyReconnectControl = new wxCheckBox( sbSizer6->GetStaticBox(), wxID_ANY, wxT("Automatically re-connect"), wxDefaultPosition, wxDefaultSize, 0 );
-	automaticallyReconnectControl->SetValue(true);
-	automaticallyReconnectControl->SetToolTip( wxT("Re-synchronise with target before each operation") );
+	wxBoxSizer* bSizer111;
+	bSizer111 = new wxBoxSizer( wxHORIZONTAL );
 
-	sbSizer6->Add( automaticallyReconnectControl, 0, wxALL, 5 );
+	automaticallyConnectStaticText = new wxStaticText( sbSizer6->GetStaticBox(), wxID_ANY, wxT("Connection strategy"), wxDefaultPosition, wxDefaultSize, 0 );
+	automaticallyConnectStaticText->Wrap( -1 );
+	bSizer111->Add( automaticallyConnectStaticText, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	wxArrayString autoConnectStrategyContolChoices;
+	autoConnectStrategyContol = new wxChoice( sbSizer6->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, autoConnectStrategyContolChoices, 0 );
+	autoConnectStrategyContol->SetSelection( 0 );
+	autoConnectStrategyContol->SetToolTip( wxT("Connection strategy\n\nMinimal\nReconnect on status checks\nReconnect before all commands") );
+
+	bSizer111->Add( autoConnectStrategyContol, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	sbSizer6->Add( bSizer111, 1, wxEXPAND, 5 );
 
 	useResetSignalControl = new wxCheckBox( sbSizer6->GetStaticBox(), wxID_ANY, wxT("Use hardware RESET"), wxDefaultPosition, wxDefaultSize, 0 );
 	useResetSignalControl->SetValue(true);
@@ -185,7 +196,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	fInterfacePanel->SetSizer( bSizer3 );
 	fInterfacePanel->Layout();
 	bSizer3->Fit( fInterfacePanel );
-	fNotebook->AddPage( fInterfacePanel, wxT("Interface"), false );
+	fNotebook->AddPage( fInterfacePanel, wxT("Interface"), true );
 	fTargetPanel = new wxPanel( fNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
@@ -450,7 +461,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	fTargetPanel->SetSizer( bSizer4 );
 	fTargetPanel->Layout();
 	bSizer4->Fit( fTargetPanel );
-	fNotebook->AddPage( fTargetPanel, wxT("Target"), true );
+	fNotebook->AddPage( fTargetPanel, wxT("Target"), false );
 	fAdvancedPanel = new wxPanel( fNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
@@ -671,7 +682,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	cycleVddOnResetControl->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnCycleVddOnResetCheckboxClick ), NULL, this );
 	cycleVddOnConnectionControl->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnCycleTargetVddOnConnectionCheckboxClick ), NULL, this );
 	leaveTargetPoweredControl->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnLeaveTargetOnCheckboxClick ), NULL, this );
-	automaticallyReconnectControl->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnReconnectCheckboxClick ), NULL, this );
+	autoConnectStrategyContol->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnAutoConnectStrategyComboSelected ), NULL, this );
 	useResetSignalControl->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnUseResetCheckboxClick ), NULL, this );
 	usePstSignalControl->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnUseUsePstSignalCheckboxClick ), NULL, this );
 	guessTargetSpeedControl->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnGuessSpeedCheckboxClick ), NULL, this );
@@ -728,7 +739,7 @@ UsbdmDialogueSkeleton::~UsbdmDialogueSkeleton()
 	cycleVddOnResetControl->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnCycleVddOnResetCheckboxClick ), NULL, this );
 	cycleVddOnConnectionControl->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnCycleTargetVddOnConnectionCheckboxClick ), NULL, this );
 	leaveTargetPoweredControl->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnLeaveTargetOnCheckboxClick ), NULL, this );
-	automaticallyReconnectControl->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnReconnectCheckboxClick ), NULL, this );
+	autoConnectStrategyContol->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnAutoConnectStrategyComboSelected ), NULL, this );
 	useResetSignalControl->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnUseResetCheckboxClick ), NULL, this );
 	usePstSignalControl->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnUseUsePstSignalCheckboxClick ), NULL, this );
 	guessTargetSpeedControl->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnGuessSpeedCheckboxClick ), NULL, this );

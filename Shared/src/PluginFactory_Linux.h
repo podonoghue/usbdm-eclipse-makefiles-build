@@ -95,7 +95,7 @@ private:
          }
          log.error("Module \'%s\' loaded from application directory\n", moduleName);
       }
-      log.print("Module \'%s\' loaded @0x%p, handle cached @%p\n", moduleName, moduleHandle, &moduleHandle);
+      log.print("Module \'%s\' /* loaded @0x%p, handle cached @%p */\n", moduleName, moduleHandle, &moduleHandle);
 
       return moduleHandle;
    }
@@ -148,7 +148,7 @@ protected:
 
       //      log.print("Calling new\n");
       T* p = static_cast<T*>(::operator new(classSize));
-      log.print("Allocated storage @%p, size = %lu\n", p, (long unsigned)classSize);
+      log.print("Allocated storage /* @%p, size = %lu */\n", p, (long unsigned)classSize);
 
       //      log.print("Calling placement constructor\n");
       (*newInstance)(p);
