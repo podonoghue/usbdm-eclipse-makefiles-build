@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2024/02
+ * @date     2025/02
  *
  */
 
@@ -32,9 +32,9 @@ extern "C" {
 typedef enum {
 /* ------------------------  Processor Exceptions Numbers  ------------------------- */
   Reset_IRQn                    = -15,   /**<   1 Reset Vector, invoked on Power up and warm reset                                 */
-  NonMaskableInt_IRQn           = -14,   /**<   2 Non maskable Interrupt, cannot be stopped or preempted                           */
+  NMI_IRQn                      = -14,   /**<   2 Non maskable Interrupt, cannot be stopped or preempted                           */
   HardFault_IRQn                = -13,   /**<   3 Hard Fault, all classes of Fault                                                 */
-  SVCall_IRQn                   =  -5,   /**<  11 System Service Call via SVC instruction                                          */
+  SVC_IRQn                      =  -5,   /**<  11 System Service Call via SVC instruction                                          */
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
 /* ----------------------   MKL27Z4 (32K and 64K) VectorTable        ---------------------- */
@@ -42,7 +42,7 @@ typedef enum {
   DMA0_Ch1_IRQn                 =   1,   /**<  17 Direct memory access controller                                                  */
   DMA0_Ch2_IRQn                 =   2,   /**<  18 Direct memory access controller                                                  */
   DMA0_Ch3_IRQn                 =   3,   /**<  19 Direct memory access controller                                                  */
-  FTFA_Command_IRQn             =   5,   /**<  21 Flash Memory Interface                                                           */
+  FTFA_IRQn                     =   5,   /**<  21 Flash Memory Interface                                                           */
   PMC_IRQn                      =   6,   /**<  22 Power Management Controller                                                      */
   LLWU_IRQn                     =   7,   /**<  23 Low Leakage Wakeup                                                               */
   I2C0_IRQn                     =   8,   /**<  24 Inter-Integrated Circuit                                                         */
@@ -78,7 +78,7 @@ extern void DMA0_Ch0_IRQHandler(void);               /**< Direct memory access c
 extern void DMA0_Ch1_IRQHandler(void);               /**< Direct memory access controller                                                  */
 extern void DMA0_Ch2_IRQHandler(void);               /**< Direct memory access controller                                                  */
 extern void DMA0_Ch3_IRQHandler(void);               /**< Direct memory access controller                                                  */
-extern void FTFA_Command_IRQHandler(void);           /**< Flash Memory Interface                                                           */
+extern void FTFA_IRQHandler(void);                   /**< Flash Memory Interface                                                           */
 extern void PMC_IRQHandler(void);                    /**< Power Management Controller                                                      */
 extern void LLWU_IRQHandler(void);                   /**< Low Leakage Wakeup                                                               */
 extern void I2C0_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
@@ -1503,7 +1503,7 @@ typedef struct FTFA_Type {
 #define FTFA_BasePtr                   0x40020000UL //!< Peripheral base address
 #define FTFA                           ((FTFA_Type *) FTFA_BasePtr) //!< Freescale base pointer
 #define FTFA_BASE_PTR                  (FTFA) //!< Freescale style base pointer
-#define FTFA_IRQS { FTFA_Command_IRQn,  }
+#define FTFA_IRQS { FTFA_IRQn,  }
 
 
 /** @} */ /* End group FTFA_Peripheral_access_layer_GROUP */
@@ -2375,6 +2375,9 @@ typedef struct LPUART_Type {
 /** @} */
 
 /** @name STAT - Status Register */ /** @{ */
+#define LPUART_STAT_STAT_MASK                    (0xFFFFFFFFU)                                       /**< LPUART0_STAT.STAT Mask                  */
+#define LPUART_STAT_STAT_SHIFT                   (0U)                                                /**< LPUART0_STAT.STAT Position              */
+#define LPUART_STAT_STAT(x)                      (((uint32_t)(((uint32_t)(x))<<LPUART_STAT_STAT_SHIFT))&LPUART_STAT_STAT_MASK) /**< LPUART0_STAT.STAT Field                 */
 #define LPUART_STAT_MA2F_MASK                    (0x4000U)                                           /**< LPUART0_STAT.MA2F Mask                  */
 #define LPUART_STAT_MA2F_SHIFT                   (14U)                                               /**< LPUART0_STAT.MA2F Position              */
 #define LPUART_STAT_MA2F(x)                      (((uint32_t)(((uint32_t)(x))<<LPUART_STAT_MA2F_SHIFT))&LPUART_STAT_MA2F_MASK) /**< LPUART0_STAT.MA2F Field                 */
@@ -2432,6 +2435,9 @@ typedef struct LPUART_Type {
 /** @} */
 
 /** @name CTRL - Control Register */ /** @{ */
+#define LPUART_CTRL_CTRL_MASK                    (0xFFFFFFFFU)                                       /**< LPUART0_CTRL.CTRL Mask                  */
+#define LPUART_CTRL_CTRL_SHIFT                   (0U)                                                /**< LPUART0_CTRL.CTRL Position              */
+#define LPUART_CTRL_CTRL(x)                      (((uint32_t)(((uint32_t)(x))<<LPUART_CTRL_CTRL_SHIFT))&LPUART_CTRL_CTRL_MASK) /**< LPUART0_CTRL.CTRL Field                 */
 #define LPUART_CTRL_PT_MASK                      (0x1U)                                              /**< LPUART0_CTRL.PT Mask                    */
 #define LPUART_CTRL_PT_SHIFT                     (0U)                                                /**< LPUART0_CTRL.PT Position                */
 #define LPUART_CTRL_PT(x)                        (((uint32_t)(((uint32_t)(x))<<LPUART_CTRL_PT_SHIFT))&LPUART_CTRL_PT_MASK) /**< LPUART0_CTRL.PT Field                   */
@@ -2525,9 +2531,12 @@ typedef struct LPUART_Type {
 #define LPUART_DATA_RXEMPT_MASK                  (0x1000U)                                           /**< LPUART0_DATA.RXEMPT Mask                */
 #define LPUART_DATA_RXEMPT_SHIFT                 (12U)                                               /**< LPUART0_DATA.RXEMPT Position            */
 #define LPUART_DATA_RXEMPT(x)                    (((uint32_t)(((uint32_t)(x))<<LPUART_DATA_RXEMPT_SHIFT))&LPUART_DATA_RXEMPT_MASK) /**< LPUART0_DATA.RXEMPT Field               */
-#define LPUART_DATA_FRETSC_MASK                  (0x2000U)                                           /**< LPUART0_DATA.FRETSC Mask                */
-#define LPUART_DATA_FRETSC_SHIFT                 (13U)                                               /**< LPUART0_DATA.FRETSC Position            */
-#define LPUART_DATA_FRETSC(x)                    (((uint32_t)(((uint32_t)(x))<<LPUART_DATA_FRETSC_SHIFT))&LPUART_DATA_FRETSC_MASK) /**< LPUART0_DATA.FRETSC Field               */
+#define LPUART_DATA_FRAME_MASK                   (0x2000U)                                           /**< LPUART0_DATA.FRAME Mask                 */
+#define LPUART_DATA_FRAME_SHIFT                  (13U)                                               /**< LPUART0_DATA.FRAME Position             */
+#define LPUART_DATA_FRAME(x)                     (((uint32_t)(((uint32_t)(x))<<LPUART_DATA_FRAME_SHIFT))&LPUART_DATA_FRAME_MASK) /**< LPUART0_DATA.FRAME Field                */
+#define LPUART_DATA_TXSPECIAL_MASK               (0x2000U)                                           /**< LPUART0_DATA.TXSPECIAL Mask             */
+#define LPUART_DATA_TXSPECIAL_SHIFT              (13U)                                               /**< LPUART0_DATA.TXSPECIAL Position         */
+#define LPUART_DATA_TXSPECIAL(x)                 (((uint32_t)(((uint32_t)(x))<<LPUART_DATA_TXSPECIAL_SHIFT))&LPUART_DATA_TXSPECIAL_MASK) /**< LPUART0_DATA.TXSPECIAL Field            */
 #define LPUART_DATA_PARITYE_MASK                 (0x4000U)                                           /**< LPUART0_DATA.PARITYE Mask               */
 #define LPUART_DATA_PARITYE_SHIFT                (14U)                                               /**< LPUART0_DATA.PARITYE Position           */
 #define LPUART_DATA_PARITYE(x)                   (((uint32_t)(((uint32_t)(x))<<LPUART_DATA_PARITYE_SHIFT))&LPUART_DATA_PARITYE_MASK) /**< LPUART0_DATA.PARITYE Field              */
@@ -5278,8 +5287,8 @@ typedef struct UART_Type {
    __IO uint8_t   S2;                           /**< 0005: Status Register 2                                            */
    __IO uint8_t   C3;                           /**< 0006: Control Register 3                                           */
    __IO uint8_t   D;                            /**< 0007: Data Register                                                */
-   __IO uint8_t   MA1;                          /**< 0008: Match Address Registers 1                                    */
-   __IO uint8_t   MA2;                          /**< 0009: Match Address Registers 2                                    */
+   __IO uint8_t   MA1;                          /**< 0008: Match Address Register 1                                     */
+   __IO uint8_t   MA2;                          /**< 0009: Match Address Register 2                                     */
    __IO uint8_t   C4;                           /**< 000A: Control Register 4                                           */
    __IO uint8_t   C5;                           /**< 000B: Control Register 5                                           */
         uint8_t   RESERVED_0[12];               /**< 000C: 0xC bytes                                                    */
@@ -5463,7 +5472,7 @@ typedef struct UART_Type {
 #define UART_D_RT(x)                             (((uint8_t)(((uint8_t)(x))<<UART_D_RT_SHIFT))&UART_D_RT_MASK) /**< UART2_D.RT Field                        */
 /** @} */
 
-/** @name MA - Match Address Registers %s */ /** @{ */
+/** @name MA - Match Address Register %s */ /** @{ */
 #define UART_MA_MA_MASK                          (0xFFU)                                             /**< UART2_MA.MA Mask                        */
 #define UART_MA_MA_SHIFT                         (0U)                                                /**< UART2_MA.MA Position                    */
 #define UART_MA_MA(x)                            (((uint8_t)(((uint8_t)(x))<<UART_MA_MA_SHIFT))&UART_MA_MA_MASK) /**< UART2_MA.MA Field                       */

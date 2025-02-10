@@ -85,7 +85,7 @@
       <xi:include href="peripherals/RNGA_0x40029000.svd.xml"/>
       <xi:include href="peripherals/RTC_MK22F12810.svd.xml"/>
       <xi:include href="peripherals/SCB_CM4_CPACR.svd.xml"/>
-      <xi:include href="peripherals/SDHC0_MK21F12.svd.xml"/>
+      <xi:include href="peripherals/SDHC0_MK10D10.svd.xml"/>
       <xi:include href="peripherals/SIM_MK63F12.svd.xml"/>
       <xi:include href="peripherals/SMC_MK10D5.svd.xml"/>
       <xi:include href="peripherals/SPI0_MK_PCSIS6.svd.xml"/>

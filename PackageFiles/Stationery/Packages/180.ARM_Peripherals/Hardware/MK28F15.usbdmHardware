@@ -2825,7 +2825,7 @@
          <param type="BooleanVariable"        name="llwu_pf4_wuf31_present"         value="true"             key="/LLWU/llwu_pf4_wuf31_present" />
          <param type="StringVariable"         name="structName"                     value="LLWU"             key="/LLWU/structName" />
       </peripheral>
-      <peripheral baseName="LPTMR"    instance="0"        instanceList="LPTMR0;LPTMR1" version="lptmr0">
+      <peripheral baseName="LPTMR"    instance="0"        instanceList="LPTMR0;LPTMR1" version="lptmr0_32bit">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
          <irq num="LPTMR0_LPTMR1_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="LPTMR0;LPTMR1"    key="/LPTMR0/_instanceList" />
@@ -2851,7 +2851,7 @@
          <param type="BooleanVariable"        name="lptmr_psr_present"              value="true"             key="/LPTMR0/lptmr_psr_present" />
          <param type="StringVariable"         name="structName"                     value="LPTMR"            key="/LPTMR0/structName" />
       </peripheral>
-      <peripheral baseName="LPTMR"    instance="1"        instanceList="LPTMR0;LPTMR1" version="lptmr0">
+      <peripheral baseName="LPTMR"    instance="1"        instanceList="LPTMR0;LPTMR1" version="lptmr0_32bit">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
          <irq num="LPTMR0_LPTMR1_IRQn" />
          <param type="StringVariable"         name="_instanceList"                  value="LPTMR0;LPTMR1"    key="/LPTMR1/_instanceList" />

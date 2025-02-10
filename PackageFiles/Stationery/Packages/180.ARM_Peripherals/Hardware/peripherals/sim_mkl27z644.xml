@@ -110,7 +110,7 @@
 
    <!-- _____________ USB Clock __________________ -->
 
-   <intOption key="system_usb_clkin_clock"
+   <intOption key="system_usb_clkin_clock" condition="sim_sopt2_usbsrc_present"
       addToVar="UsbExternalItems"
       hidden="true"
       origin="USB Clock In pin"

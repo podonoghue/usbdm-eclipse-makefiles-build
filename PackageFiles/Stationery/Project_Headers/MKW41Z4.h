@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2024/02
+ * @date     2025/02
  *
  */
 
@@ -32,9 +32,9 @@ extern "C" {
 typedef enum {
 /* ------------------------  Processor Exceptions Numbers  ------------------------- */
   Reset_IRQn                    = -15,   /**<   1 Reset Vector, invoked on Power up and warm reset                                 */
-  NonMaskableInt_IRQn           = -14,   /**<   2 Non maskable Interrupt, cannot be stopped or preempted                           */
+  NMI_IRQn                      = -14,   /**<   2 Non maskable Interrupt, cannot be stopped or preempted                           */
   HardFault_IRQn                = -13,   /**<   3 Hard Fault, all classes of Fault                                                 */
-  SVCall_IRQn                   =  -5,   /**<  11 System Service Call via SVC instruction                                          */
+  SVC_IRQn                      =  -5,   /**<  11 System Service Call via SVC instruction                                          */
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
 /* ----------------------   MKW41Z4 VectorTable                      ---------------------- */
@@ -43,7 +43,7 @@ typedef enum {
   DMA0_Ch2_IRQn                 =   2,   /**<  18 DMA Controller                                                                   */
   DMA0_Ch3_IRQn                 =   3,   /**<  19 DMA Controller                                                                   */
   FTFA_IRQn                     =   5,   /**<  21 Flash Memory Interface                                                           */
-  PMC_DCDC_IRQn                 =   6,   /**<  22 Power Management Controller, DC-DC converter                                     */
+  PMC_IRQn                      =   6,   /**<  22 Power Management Controller, DC-DC converter                                     */
   LLWU_IRQn                     =   7,   /**<  23 Low leakage wakeup unit                                                          */
   I2C0_IRQn                     =   8,   /**<  24 Inter-Integrated Circuit                                                         */
   I2C1_IRQn                     =   9,   /**<  25 Inter-Integrated Circuit                                                         */
@@ -68,7 +68,7 @@ typedef enum {
   LPTMR0_IRQn                   =  28,   /**<  44 Low Power Timer                                                                  */
   SPI1_IRQn                     =  29,   /**<  45 Serial Peripheral Interface                                                      */
   PORTA_IRQn                    =  30,   /**<  46 General Purpose Input/Output                                                     */
-  PORTB_PORTC_IRQn              =  31,   /**<  47 General Purpose Input/Output                                                     */
+  PORTBC_IRQn                   =  31,   /**<  47 General Purpose Input/Output                                                     */
 } IRQn_Type;
 
 
@@ -84,7 +84,7 @@ extern void DMA0_Ch1_IRQHandler(void);               /**< DMA Controller        
 extern void DMA0_Ch2_IRQHandler(void);               /**< DMA Controller                                                                   */
 extern void DMA0_Ch3_IRQHandler(void);               /**< DMA Controller                                                                   */
 extern void FTFA_IRQHandler(void);                   /**< Flash Memory Interface                                                           */
-extern void PMC_DCDC_IRQHandler(void);               /**< Power Management Controller, DC-DC converter                                     */
+extern void PMC_IRQHandler(void);                    /**< Power Management Controller, DC-DC converter                                     */
 extern void LLWU_IRQHandler(void);                   /**< Low leakage wakeup unit                                                          */
 extern void I2C0_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
 extern void I2C1_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
@@ -109,7 +109,7 @@ extern void MCG_IRQHandler(void);                    /**< Multipurpose Clock Gen
 extern void LPTMR0_IRQHandler(void);                 /**< Low Power Timer                                                                  */
 extern void SPI1_IRQHandler(void);                   /**< Serial Peripheral Interface                                                      */
 extern void PORTA_IRQHandler(void);                  /**< General Purpose Input/Output                                                     */
-extern void PORTB_PORTC_IRQHandler(void);            /**< General Purpose Input/Output                                                     */
+extern void PORTBC_IRQHandler(void);                 /**< General Purpose Input/Output                                                     */
 
 
 /** @} */ /* End group Interrupt_vector_numbers_GROUP */
@@ -1487,7 +1487,7 @@ typedef struct DCDC_Type {
 #define DCDC_BasePtr                   0x4005A000UL //!< Peripheral base address
 #define DCDC                           ((DCDC_Type *) DCDC_BasePtr) //!< Freescale base pointer
 #define DCDC_BASE_PTR                  (DCDC) //!< Freescale style base pointer
-#define DCDC_IRQS { PMC_DCDC_IRQn,  }
+#define DCDC_IRQS { PMC_IRQn,  }
 
 
 /** @} */ /* End group DCDC_Peripheral_access_layer_GROUP */
@@ -3675,6 +3675,9 @@ typedef struct LPUART_Type {
 /** @} */
 
 /** @name STAT - Status Register */ /** @{ */
+#define LPUART_STAT_STAT_MASK                    (0xFFFFFFFFU)                                       /**< LPUART0_STAT.STAT Mask                  */
+#define LPUART_STAT_STAT_SHIFT                   (0U)                                                /**< LPUART0_STAT.STAT Position              */
+#define LPUART_STAT_STAT(x)                      (((uint32_t)(((uint32_t)(x))<<LPUART_STAT_STAT_SHIFT))&LPUART_STAT_STAT_MASK) /**< LPUART0_STAT.STAT Field                 */
 #define LPUART_STAT_MA2F_MASK                    (0x4000U)                                           /**< LPUART0_STAT.MA2F Mask                  */
 #define LPUART_STAT_MA2F_SHIFT                   (14U)                                               /**< LPUART0_STAT.MA2F Position              */
 #define LPUART_STAT_MA2F(x)                      (((uint32_t)(((uint32_t)(x))<<LPUART_STAT_MA2F_SHIFT))&LPUART_STAT_MA2F_MASK) /**< LPUART0_STAT.MA2F Field                 */
@@ -3732,6 +3735,9 @@ typedef struct LPUART_Type {
 /** @} */
 
 /** @name CTRL - Control Register */ /** @{ */
+#define LPUART_CTRL_CTRL_MASK                    (0xFFFFFFFFU)                                       /**< LPUART0_CTRL.CTRL Mask                  */
+#define LPUART_CTRL_CTRL_SHIFT                   (0U)                                                /**< LPUART0_CTRL.CTRL Position              */
+#define LPUART_CTRL_CTRL(x)                      (((uint32_t)(((uint32_t)(x))<<LPUART_CTRL_CTRL_SHIFT))&LPUART_CTRL_CTRL_MASK) /**< LPUART0_CTRL.CTRL Field                 */
 #define LPUART_CTRL_PT_MASK                      (0x1U)                                              /**< LPUART0_CTRL.PT Mask                    */
 #define LPUART_CTRL_PT_SHIFT                     (0U)                                                /**< LPUART0_CTRL.PT Position                */
 #define LPUART_CTRL_PT(x)                        (((uint32_t)(((uint32_t)(x))<<LPUART_CTRL_PT_SHIFT))&LPUART_CTRL_PT_MASK) /**< LPUART0_CTRL.PT Field                   */
@@ -3825,9 +3831,12 @@ typedef struct LPUART_Type {
 #define LPUART_DATA_RXEMPT_MASK                  (0x1000U)                                           /**< LPUART0_DATA.RXEMPT Mask                */
 #define LPUART_DATA_RXEMPT_SHIFT                 (12U)                                               /**< LPUART0_DATA.RXEMPT Position            */
 #define LPUART_DATA_RXEMPT(x)                    (((uint32_t)(((uint32_t)(x))<<LPUART_DATA_RXEMPT_SHIFT))&LPUART_DATA_RXEMPT_MASK) /**< LPUART0_DATA.RXEMPT Field               */
-#define LPUART_DATA_FRETSC_MASK                  (0x2000U)                                           /**< LPUART0_DATA.FRETSC Mask                */
-#define LPUART_DATA_FRETSC_SHIFT                 (13U)                                               /**< LPUART0_DATA.FRETSC Position            */
-#define LPUART_DATA_FRETSC(x)                    (((uint32_t)(((uint32_t)(x))<<LPUART_DATA_FRETSC_SHIFT))&LPUART_DATA_FRETSC_MASK) /**< LPUART0_DATA.FRETSC Field               */
+#define LPUART_DATA_FRAME_MASK                   (0x2000U)                                           /**< LPUART0_DATA.FRAME Mask                 */
+#define LPUART_DATA_FRAME_SHIFT                  (13U)                                               /**< LPUART0_DATA.FRAME Position             */
+#define LPUART_DATA_FRAME(x)                     (((uint32_t)(((uint32_t)(x))<<LPUART_DATA_FRAME_SHIFT))&LPUART_DATA_FRAME_MASK) /**< LPUART0_DATA.FRAME Field                */
+#define LPUART_DATA_TXSPECIAL_MASK               (0x2000U)                                           /**< LPUART0_DATA.TXSPECIAL Mask             */
+#define LPUART_DATA_TXSPECIAL_SHIFT              (13U)                                               /**< LPUART0_DATA.TXSPECIAL Position         */
+#define LPUART_DATA_TXSPECIAL(x)                 (((uint32_t)(((uint32_t)(x))<<LPUART_DATA_TXSPECIAL_SHIFT))&LPUART_DATA_TXSPECIAL_MASK) /**< LPUART0_DATA.TXSPECIAL Field            */
 #define LPUART_DATA_PARITYE_MASK                 (0x4000U)                                           /**< LPUART0_DATA.PARITYE Mask               */
 #define LPUART_DATA_PARITYE_SHIFT                (14U)                                               /**< LPUART0_DATA.PARITYE Position           */
 #define LPUART_DATA_PARITYE(x)                   (((uint32_t)(((uint32_t)(x))<<LPUART_DATA_PARITYE_SHIFT))&LPUART_DATA_PARITYE_MASK) /**< LPUART0_DATA.PARITYE Field              */
@@ -5195,7 +5204,7 @@ typedef struct PMC_Type {
 #define PMC_BasePtr                    0x4007D000UL //!< Peripheral base address
 #define PMC                            ((PMC_Type *) PMC_BasePtr) //!< Freescale base pointer
 #define PMC_BASE_PTR                   (PMC) //!< Freescale style base pointer
-#define PMC_IRQS { PMC_DCDC_IRQn,  }
+#define PMC_IRQS { PMC_IRQn,  }
 
 
 /** @} */ /* End group PMC_Peripheral_access_layer_GROUP */
@@ -5313,7 +5322,7 @@ typedef struct PORT_Type {
 #define PORTB_BasePtr                  0x4004A000UL //!< Peripheral base address
 #define PORTB                          ((PORT_Type *) PORTB_BasePtr) //!< Freescale base pointer
 #define PORTB_BASE_PTR                 (PORTB) //!< Freescale style base pointer
-#define PORTB_IRQS { PORTB_PORTC_IRQn,  }
+#define PORTB_IRQS { PORTBC_IRQn,  }
 
 
 /** @} */ /* End group PORT_Peripheral_access_layer_GROUP */
@@ -5336,7 +5345,7 @@ typedef struct PORT_Type {
 #define PORTC_BasePtr                  0x4004B000UL //!< Peripheral base address
 #define PORTC                          ((PORT_Type *) PORTC_BasePtr) //!< Freescale base pointer
 #define PORTC_BASE_PTR                 (PORTC) //!< Freescale style base pointer
-#define PORTC_IRQS { PORTB_PORTC_IRQn,  }
+#define PORTC_IRQS { PORTBC_IRQn,  }
 
 
 /** @} */ /* End group PORT_Peripheral_access_layer_GROUP */

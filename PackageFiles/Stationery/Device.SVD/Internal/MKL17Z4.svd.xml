@@ -7,7 +7,7 @@
 >
    <name>MKL17Z4</name>
    <version>1.6</version>
-   <description>Freescale Kinetis MKL17Z4</description>
+   <description>Freescale Kinetis MKL17Z4 Family (MKL17Z128xxx4, MKL17Z256xxx4)(KL17P64M48SF6RM)</description>
    <cpu>
       <name>CM0PLUS</name>
       <revision>r1p0</revision>
@@ -65,7 +65,7 @@
       <xi:include href="peripherals/SIM_MKL17Z4.svd.xml"/>
       <xi:include href="peripherals/SMC_ALLS_MKL04Z4.svd.xml"/>
       <xi:include href="peripherals/SPI0_16Bit_MKL.svd.xml"/>
-      <peripheral derivedFrom="SPI0"><name>SPI1</name><baseAddress>0x40077000</baseAddress></peripheral>
+      <peripheral derivedFrom="SPI0"><name>SPI1</name><baseAddress>0x40077000</baseAddress><template>#define %n_HAS_FIFO (1)</template></peripheral>
       <xi:include href="peripherals/SYST.svd.xml"/>
       <xi:include href="peripherals/TPM0_6CH_POL.svd.xml"/>
       <xi:include href="peripherals/TPM1_2CH_POL.svd.xml"/>

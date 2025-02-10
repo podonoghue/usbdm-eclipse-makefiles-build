@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V10
- * @date     2024/02
+ * @date     2025/02
  *
  */
 
@@ -32,9 +32,9 @@ extern "C" {
 typedef enum {
 /* ------------------------  Processor Exceptions Numbers  ------------------------- */
   Reset_IRQn                    = -15,   /**<   1 Reset Vector, invoked on Power up and warm reset                                 */
-  NonMaskableInt_IRQn           = -14,   /**<   2 Non maskable Interrupt, cannot be stopped or preempted                           */
+  NMI_IRQn                      = -14,   /**<   2 Non maskable Interrupt, cannot be stopped or preempted                           */
   HardFault_IRQn                = -13,   /**<   3 Hard Fault, all classes of Fault                                                 */
-  SVCall_IRQn                   =  -5,   /**<  11 System Service Call via SVC instruction                                          */
+  SVC_IRQn                      =  -5,   /**<  11 System Service Call via SVC instruction                                          */
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
 /* ----------------------   LPC11Cxx VectorTable                     ---------------------- */

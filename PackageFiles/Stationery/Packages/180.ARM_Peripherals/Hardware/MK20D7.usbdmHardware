@@ -3100,10 +3100,9 @@
          <param type="BooleanVariable"        name="uart_is7816_rxt_present"        value="true"             key="/UART0/uart_is7816_rxt_present" />
          <param type="BooleanVariable"        name="uart_is7816_txt_present"        value="true"             key="/UART0/uart_is7816_txt_present" />
          <param type="BooleanVariable"        name="uart_is7816_wt_present"         value="true"             key="/UART0/uart_is7816_wt_present" />
-         <param type="BooleanVariable"        name="uart_ma1_ma1_present"           value="true"             key="/UART0/uart_ma1_ma1_present" />
-         <param type="BooleanVariable"        name="uart_ma1_present"               value="true"             key="/UART0/uart_ma1_present" />
-         <param type="BooleanVariable"        name="uart_ma2_ma2_present"           value="true"             key="/UART0/uart_ma2_ma2_present" />
-         <param type="BooleanVariable"        name="uart_ma2_present"               value="true"             key="/UART0/uart_ma2_present" />
+         <param type="LongVariable"           name="uart_ma_dim"                    value="2"                key="/UART0/uart_ma_dim" />
+         <param type="BooleanVariable"        name="uart_ma_ma_present"             value="true"             key="/UART0/uart_ma_ma_present" />
+         <param type="BooleanVariable"        name="uart_ma_present"                value="true"             key="/UART0/uart_ma_present" />
          <param type="BooleanVariable"        name="uart_modem_present"             value="true"             key="/UART0/uart_modem_present" />
          <param type="BooleanVariable"        name="uart_modem_rxrtse_present"      value="true"             key="/UART0/uart_modem_rxrtse_present" />
          <param type="BooleanVariable"        name="uart_modem_txctse_present"      value="true"             key="/UART0/uart_modem_txctse_present" />
@@ -3224,10 +3223,9 @@
          <param type="BooleanVariable"        name="uart_ir_iren_present"           value="true"             key="/UART1/uart_ir_iren_present" />
          <param type="BooleanVariable"        name="uart_ir_present"                value="true"             key="/UART1/uart_ir_present" />
          <param type="BooleanVariable"        name="uart_ir_tnp_present"            value="true"             key="/UART1/uart_ir_tnp_present" />
-         <param type="BooleanVariable"        name="uart_ma1_ma1_present"           value="true"             key="/UART1/uart_ma1_ma1_present" />
-         <param type="BooleanVariable"        name="uart_ma1_present"               value="true"             key="/UART1/uart_ma1_present" />
-         <param type="BooleanVariable"        name="uart_ma2_ma2_present"           value="true"             key="/UART1/uart_ma2_ma2_present" />
-         <param type="BooleanVariable"        name="uart_ma2_present"               value="true"             key="/UART1/uart_ma2_present" />
+         <param type="LongVariable"           name="uart_ma_dim"                    value="2"                key="/UART1/uart_ma_dim" />
+         <param type="BooleanVariable"        name="uart_ma_ma_present"             value="true"             key="/UART1/uart_ma_ma_present" />
+         <param type="BooleanVariable"        name="uart_ma_present"                value="true"             key="/UART1/uart_ma_present" />
          <param type="BooleanVariable"        name="uart_modem_present"             value="true"             key="/UART1/uart_modem_present" />
          <param type="BooleanVariable"        name="uart_modem_rxrtse_present"      value="true"             key="/UART1/uart_modem_rxrtse_present" />
          <param type="BooleanVariable"        name="uart_modem_txctse_present"      value="true"             key="/UART1/uart_modem_txctse_present" />
@@ -3337,10 +3335,9 @@
          <param type="BooleanVariable"        name="uart_ir_iren_present"           value="true"             key="/UART2/uart_ir_iren_present" />
          <param type="BooleanVariable"        name="uart_ir_present"                value="true"             key="/UART2/uart_ir_present" />
          <param type="BooleanVariable"        name="uart_ir_tnp_present"            value="true"             key="/UART2/uart_ir_tnp_present" />
-         <param type="BooleanVariable"        name="uart_ma1_ma1_present"           value="true"             key="/UART2/uart_ma1_ma1_present" />
-         <param type="BooleanVariable"        name="uart_ma1_present"               value="true"             key="/UART2/uart_ma1_present" />
-         <param type="BooleanVariable"        name="uart_ma2_ma2_present"           value="true"             key="/UART2/uart_ma2_ma2_present" />
-         <param type="BooleanVariable"        name="uart_ma2_present"               value="true"             key="/UART2/uart_ma2_present" />
+         <param type="LongVariable"           name="uart_ma_dim"                    value="2"                key="/UART2/uart_ma_dim" />
+         <param type="BooleanVariable"        name="uart_ma_ma_present"             value="true"             key="/UART2/uart_ma_ma_present" />
+         <param type="BooleanVariable"        name="uart_ma_present"                value="true"             key="/UART2/uart_ma_present" />
          <param type="BooleanVariable"        name="uart_modem_present"             value="true"             key="/UART2/uart_modem_present" />
          <param type="BooleanVariable"        name="uart_modem_rxrtse_present"      value="true"             key="/UART2/uart_modem_rxrtse_present" />
          <param type="BooleanVariable"        name="uart_modem_txctse_present"      value="true"             key="/UART2/uart_modem_txctse_present" />

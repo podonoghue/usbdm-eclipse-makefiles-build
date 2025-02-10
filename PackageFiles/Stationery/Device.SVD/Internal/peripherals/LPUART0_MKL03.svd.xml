@@ -1,7 +1,8 @@
 <!--
-Devices using this peripheral:
+Devices using this peripheral: 
       MKL03Z4
       MKL17Z4
+      MKL17Z644
       MKL27Z4
       MKL27Z644
       MKL33Z4
@@ -418,10 +419,10 @@ the transmitter and receiver are both disabled</description>
                <fields>
                   <field>
                      <name>STAT</name>
+                     <?ignoreOverlap?>
                      <description>Status Flags</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>32</bitWidth>
-                     <?ignoreOverlap?>
                   </field>
                   <field>
                      <name>MA2F</name>
@@ -811,10 +812,10 @@ LBKDIF is cleared by writing a 1 to it</description>
                <fields>
                   <field>
                      <name>CTRL</name>
+                     <?ignoreOverlap?>
                      <description>Control features</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>32</bitWidth>
-                     <?ignoreOverlap?>
                   </field>
                   <field>
                      <name>PT</name>
@@ -1388,7 +1389,7 @@ receive shift register</description>
                      <name>FRAME</name>
                      <description>Frame Error\n
 Indicates the current received dataword contained in DATA[R9:R0] was received with a frame
-error.</description>
+error</description>
                      <bitOffset>13</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
@@ -1407,6 +1408,7 @@ error.</description>
                   </field>
                   <field>
                      <name>TXSPECIAL</name>
+                     <?ignoreOverlap?>
                      <description>Transmit Special Character\n
 Indicates a break or idle character is to be transmitted instead of the contents in DATA[T9:T0].
 T9 is used to indicate a break character when 0 and a idle character when 1, he contents of
@@ -1414,7 +1416,6 @@ DATA[T8:T0] should be zero</description>
                      <bitOffset>13</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>write-only</access>
-                     <?ignoreOverlap?>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>

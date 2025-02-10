@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2024/02
+ * @date     2025/02
  *
  */
 
@@ -32,9 +32,9 @@ extern "C" {
 typedef enum {
 /* ------------------------  Processor Exceptions Numbers  ------------------------- */
   Reset_IRQn                    = -15,   /**<   1 Reset Vector, invoked on Power up and warm reset                                 */
-  NonMaskableInt_IRQn           = -14,   /**<   2 Non maskable Interrupt, cannot be stopped or preempted                           */
+  NMI_IRQn                      = -14,   /**<   2 Non maskable Interrupt, cannot be stopped or preempted                           */
   HardFault_IRQn                = -13,   /**<   3 Hard Fault, all classes of Fault                                                 */
-  SVCall_IRQn                   =  -5,   /**<  11 System Service Call via SVC instruction                                          */
+  SVC_IRQn                      =  -5,   /**<  11 System Service Call via SVC instruction                                          */
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
 /* ----------------------   MKL04Z4 VectorTable                      ---------------------- */
@@ -42,7 +42,7 @@ typedef enum {
   DMA0_Ch1_IRQn                 =   1,   /**<  17 Direct memory access controller                                                  */
   DMA0_Ch2_IRQn                 =   2,   /**<  18 Direct memory access controller                                                  */
   DMA0_Ch3_IRQn                 =   3,   /**<  19 Direct memory access controller                                                  */
-  FTFA_Command_IRQn             =   5,   /**<  21 Flash Memory Interface                                                           */
+  FTFA_IRQn                     =   5,   /**<  21 Flash Memory Interface                                                           */
   PMC_IRQn                      =   6,   /**<  22 Power Management Controller                                                      */
   LLWU_IRQn                     =   7,   /**<  23 Low Leakage Wakeup                                                               */
   I2C0_IRQn                     =   8,   /**<  24 Inter-Integrated Circuit                                                         */
@@ -73,7 +73,7 @@ extern void DMA0_Ch0_IRQHandler(void);               /**< Direct memory access c
 extern void DMA0_Ch1_IRQHandler(void);               /**< Direct memory access controller                                                  */
 extern void DMA0_Ch2_IRQHandler(void);               /**< Direct memory access controller                                                  */
 extern void DMA0_Ch3_IRQHandler(void);               /**< Direct memory access controller                                                  */
-extern void FTFA_Command_IRQHandler(void);           /**< Flash Memory Interface                                                           */
+extern void FTFA_IRQHandler(void);                   /**< Flash Memory Interface                                                           */
 extern void PMC_IRQHandler(void);                    /**< Power Management Controller                                                      */
 extern void LLWU_IRQHandler(void);                   /**< Low Leakage Wakeup                                                               */
 extern void I2C0_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
@@ -1062,7 +1062,7 @@ typedef struct FTFA_Type {
 #define FTFA_BasePtr                   0x40020000UL //!< Peripheral base address
 #define FTFA                           ((FTFA_Type *) FTFA_BasePtr) //!< Freescale base pointer
 #define FTFA_BASE_PTR                  (FTFA) //!< Freescale style base pointer
-#define FTFA_IRQS { FTFA_Command_IRQn,  }
+#define FTFA_IRQS { FTFA_IRQn,  }
 
 
 /** @} */ /* End group FTFA_Peripheral_access_layer_GROUP */
@@ -3936,8 +3936,8 @@ typedef struct UART_Type {
    __IO uint8_t   S2;                           /**< 0005: Status Register 2                                            */
    __IO uint8_t   C3;                           /**< 0006: Control Register 3                                           */
    __IO uint8_t   D;                            /**< 0007: Data Register                                                */
-   __IO uint8_t   MA1;                          /**< 0008: Match Address Registers 1                                    */
-   __IO uint8_t   MA2;                          /**< 0009: Match Address Registers 2                                    */
+   __IO uint8_t   MA1;                          /**< 0008: Match Address Register 1                                     */
+   __IO uint8_t   MA2;                          /**< 0009: Match Address Register 2                                     */
    __IO uint8_t   C4;                           /**< 000A: Control Register 4                                           */
    __IO uint8_t   C5;                           /**< 000B: Control Register 5                                           */
 } UART_Type;
@@ -4114,7 +4114,7 @@ typedef struct UART_Type {
 #define UART_D_RT(x)                             (((uint8_t)(((uint8_t)(x))<<UART_D_RT_SHIFT))&UART_D_RT_MASK) /**< UART0_D.RT Field                        */
 /** @} */
 
-/** @name MA - Match Address Registers %s */ /** @{ */
+/** @name MA - Match Address Register %s */ /** @{ */
 #define UART_MA_MA_MASK                          (0xFFU)                                             /**< UART0_MA.MA Mask                        */
 #define UART_MA_MA_SHIFT                         (0U)                                                /**< UART0_MA.MA Position                    */
 #define UART_MA_MA(x)                            (((uint8_t)(((uint8_t)(x))<<UART_MA_MA_SHIFT))&UART_MA_MA_MASK) /**< UART0_MA.MA Field                       */

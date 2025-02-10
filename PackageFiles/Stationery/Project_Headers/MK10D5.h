@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2024/02
+ * @date     2025/02
  *
  */
 
@@ -32,13 +32,13 @@ extern "C" {
 typedef enum {
 /* ------------------------  Processor Exceptions Numbers  ------------------------- */
   Reset_IRQn                    = -15,   /**<   1 Reset Vector, invoked on Power up and warm reset                                 */
-  NonMaskableInt_IRQn           = -14,   /**<   2 Non maskable Interrupt, cannot be stopped or preempted                           */
+  NMI_IRQn                      = -14,   /**<   2 Non maskable Interrupt, cannot be stopped or preempted                           */
   HardFault_IRQn                = -13,   /**<   3 Hard Fault, all classes of Fault                                                 */
-  MemoryManagement_IRQn         = -12,   /**<   4 Memory Management, MPU mismatch, including Access Violation and No Match         */
+  MemManage_IRQn                = -12,   /**<   4 Memory Management, MPU mismatch, including Access Violation and No Match         */
   BusFault_IRQn                 = -11,   /**<   5 Bus Fault, Pre-Fetch-, Memory Access Fault, other address/memory related Fault   */
   UsageFault_IRQn               = -10,   /**<   6 Usage Fault, i.e. Undef Instruction, Illegal State Transition                    */
-  SVCall_IRQn                   =  -5,   /**<  11 System Service Call via SVC instruction                                          */
-  DebugMonitor_IRQn             =  -4,   /**<  12 Debug Monitor                                                                    */
+  SVC_IRQn                      =  -5,   /**<  11 System Service Call via SVC instruction                                          */
+  DebugMon_IRQn                 =  -4,   /**<  12 Debug Monitor                                                                    */
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
 /* ----------------------   MK20D5 VectorTable                       ---------------------- */
@@ -5104,7 +5104,7 @@ typedef struct OSC_Type {
 #define PDB_CH_COUNT         1          /**< Number of PDB channels                             */
 #define PDB_DAC_COUNT        0          /**< Number of DAC outputs                              */
 #define PDB_DLY_COUNT        2          /**< Number of Pre-triggers                             */
-#define PDB_POnDLY_COUNT     2          /**< Number of Pulse outputs                            */
+#define PDB_PO_COUNT         2          /**< Number of Pulse outputs                            */
 /**
  * @struct PDB_Type
  * @brief  C Struct allowing access to PDB registers
@@ -5130,7 +5130,7 @@ typedef struct PDB_Type {
          };
          __IO uint32_t  PODLY;                  /**< 0194: Pulse-Out  Delay Register                                    */
       };
-   } POnDLY[PDB_POnDLY_COUNT];                  /**< 0194: (cluster: size=0x0008, 8)                                    */
+   } PO[PDB_PO_COUNT];                          /**< 0194: (cluster: size=0x0008, 8)                                    */
 } PDB_Type;
 
 
@@ -7430,8 +7430,8 @@ typedef struct UART_Type {
    __IO uint8_t   S2;                           /**< 0005: Status Register 2                                            */
    __IO uint8_t   C3;                           /**< 0006: Control Register 3                                           */
    __IO uint8_t   D;                            /**< 0007: Data Register                                                */
-   __IO uint8_t   MA1;                          /**< 0008: Match Address Registers 1                                    */
-   __IO uint8_t   MA2;                          /**< 0009: Match Address Registers 2                                    */
+   __IO uint8_t   MA1;                          /**< 0008: Match Address Register 1                                     */
+   __IO uint8_t   MA2;                          /**< 0009: Match Address Register 2                                     */
    __IO uint8_t   C4;                           /**< 000A: Control Register 4                                           */
    __IO uint8_t   C5;                           /**< 000B: Control Register 5                                           */
    __I  uint8_t   ED;                           /**< 000C: Extended Data Register                                       */
@@ -7646,7 +7646,7 @@ typedef struct UART_Type {
 #define UART_D_RT(x)                             (((uint8_t)(((uint8_t)(x))<<UART_D_RT_SHIFT))&UART_D_RT_MASK) /**< UART0_D.RT Field                        */
 /** @} */
 
-/** @name MA - Match Address Registers %s */ /** @{ */
+/** @name MA - Match Address Register %s */ /** @{ */
 #define UART_MA_MA_MASK                          (0xFFU)                                             /**< UART0_MA.MA Mask                        */
 #define UART_MA_MA_SHIFT                         (0U)                                                /**< UART0_MA.MA Position                    */
 #define UART_MA_MA(x)                            (((uint8_t)(((uint8_t)(x))<<UART_MA_MA_SHIFT))&UART_MA_MA_MASK) /**< UART0_MA.MA Field                       */
@@ -8089,8 +8089,8 @@ typedef struct UART1_Type {
    __IO uint8_t   S2;                           /**< 0005: Status Register 2                                            */
    __IO uint8_t   C3;                           /**< 0006: Control Register 3                                           */
    __IO uint8_t   D;                            /**< 0007: Data Register                                                */
-   __IO uint8_t   MA1;                          /**< 0008: Match Address Registers 1                                    */
-   __IO uint8_t   MA2;                          /**< 0009: Match Address Registers 2                                    */
+   __IO uint8_t   MA1;                          /**< 0008: Match Address Register 1                                     */
+   __IO uint8_t   MA2;                          /**< 0009: Match Address Register 2                                     */
    __IO uint8_t   C4;                           /**< 000A: Control Register 4                                           */
    __IO uint8_t   C5;                           /**< 000B: Control Register 5                                           */
    __I  uint8_t   ED;                           /**< 000C: Extended Data Register                                       */

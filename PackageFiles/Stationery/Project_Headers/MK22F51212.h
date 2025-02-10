@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2024/02
+ * @date     2025/02
  *
  */
 
@@ -32,13 +32,13 @@ extern "C" {
 typedef enum {
 /* ------------------------  Processor Exceptions Numbers  ------------------------- */
   Reset_IRQn                    = -15,   /**<   1 Reset Vector, invoked on Power up and warm reset                                 */
-  NonMaskableInt_IRQn           = -14,   /**<   2 Non maskable Interrupt, cannot be stopped or preempted                           */
+  NMI_IRQn                      = -14,   /**<   2 Non maskable Interrupt, cannot be stopped or preempted                           */
   HardFault_IRQn                = -13,   /**<   3 Hard Fault, all classes of Fault                                                 */
-  MemoryManagement_IRQn         = -12,   /**<   4 Memory Management, MPU mismatch, including Access Violation and No Match         */
+  MemManage_IRQn                = -12,   /**<   4 Memory Management, MPU mismatch, including Access Violation and No Match         */
   BusFault_IRQn                 = -11,   /**<   5 Bus Fault, Pre-Fetch-, Memory Access Fault, other address/memory related Fault   */
   UsageFault_IRQn               = -10,   /**<   6 Usage Fault, i.e. Undef Instruction, Illegal State Transition                    */
-  SVCall_IRQn                   =  -5,   /**<  11 System Service Call via SVC instruction                                          */
-  DebugMonitor_IRQn             =  -4,   /**<  12 Debug Monitor                                                                    */
+  SVC_IRQn                      =  -5,   /**<  11 System Service Call via SVC instruction                                          */
+  DebugMon_IRQn                 =  -4,   /**<  12 Debug Monitor                                                                    */
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
 /* ----------------------   MK22F51212 VectorTable                   ---------------------- */
@@ -5824,6 +5824,9 @@ typedef struct LPUART_Type {
 /** @} */
 
 /** @name STAT - Status Register */ /** @{ */
+#define LPUART_STAT_STAT_MASK                    (0xFFFFFFFFU)                                       /**< LPUART0_STAT.STAT Mask                  */
+#define LPUART_STAT_STAT_SHIFT                   (0U)                                                /**< LPUART0_STAT.STAT Position              */
+#define LPUART_STAT_STAT(x)                      (((uint32_t)(((uint32_t)(x))<<LPUART_STAT_STAT_SHIFT))&LPUART_STAT_STAT_MASK) /**< LPUART0_STAT.STAT Field                 */
 #define LPUART_STAT_MA2F_MASK                    (0x4000U)                                           /**< LPUART0_STAT.MA2F Mask                  */
 #define LPUART_STAT_MA2F_SHIFT                   (14U)                                               /**< LPUART0_STAT.MA2F Position              */
 #define LPUART_STAT_MA2F(x)                      (((uint32_t)(((uint32_t)(x))<<LPUART_STAT_MA2F_SHIFT))&LPUART_STAT_MA2F_MASK) /**< LPUART0_STAT.MA2F Field                 */
@@ -5881,6 +5884,9 @@ typedef struct LPUART_Type {
 /** @} */
 
 /** @name CTRL - Control Register */ /** @{ */
+#define LPUART_CTRL_CTRL_MASK                    (0xFFFFFFFFU)                                       /**< LPUART0_CTRL.CTRL Mask                  */
+#define LPUART_CTRL_CTRL_SHIFT                   (0U)                                                /**< LPUART0_CTRL.CTRL Position              */
+#define LPUART_CTRL_CTRL(x)                      (((uint32_t)(((uint32_t)(x))<<LPUART_CTRL_CTRL_SHIFT))&LPUART_CTRL_CTRL_MASK) /**< LPUART0_CTRL.CTRL Field                 */
 #define LPUART_CTRL_PT_MASK                      (0x1U)                                              /**< LPUART0_CTRL.PT Mask                    */
 #define LPUART_CTRL_PT_SHIFT                     (0U)                                                /**< LPUART0_CTRL.PT Position                */
 #define LPUART_CTRL_PT(x)                        (((uint32_t)(((uint32_t)(x))<<LPUART_CTRL_PT_SHIFT))&LPUART_CTRL_PT_MASK) /**< LPUART0_CTRL.PT Field                   */
@@ -5974,9 +5980,12 @@ typedef struct LPUART_Type {
 #define LPUART_DATA_RXEMPT_MASK                  (0x1000U)                                           /**< LPUART0_DATA.RXEMPT Mask                */
 #define LPUART_DATA_RXEMPT_SHIFT                 (12U)                                               /**< LPUART0_DATA.RXEMPT Position            */
 #define LPUART_DATA_RXEMPT(x)                    (((uint32_t)(((uint32_t)(x))<<LPUART_DATA_RXEMPT_SHIFT))&LPUART_DATA_RXEMPT_MASK) /**< LPUART0_DATA.RXEMPT Field               */
-#define LPUART_DATA_FRETSC_MASK                  (0x2000U)                                           /**< LPUART0_DATA.FRETSC Mask                */
-#define LPUART_DATA_FRETSC_SHIFT                 (13U)                                               /**< LPUART0_DATA.FRETSC Position            */
-#define LPUART_DATA_FRETSC(x)                    (((uint32_t)(((uint32_t)(x))<<LPUART_DATA_FRETSC_SHIFT))&LPUART_DATA_FRETSC_MASK) /**< LPUART0_DATA.FRETSC Field               */
+#define LPUART_DATA_FRAME_MASK                   (0x2000U)                                           /**< LPUART0_DATA.FRAME Mask                 */
+#define LPUART_DATA_FRAME_SHIFT                  (13U)                                               /**< LPUART0_DATA.FRAME Position             */
+#define LPUART_DATA_FRAME(x)                     (((uint32_t)(((uint32_t)(x))<<LPUART_DATA_FRAME_SHIFT))&LPUART_DATA_FRAME_MASK) /**< LPUART0_DATA.FRAME Field                */
+#define LPUART_DATA_TXSPECIAL_MASK               (0x2000U)                                           /**< LPUART0_DATA.TXSPECIAL Mask             */
+#define LPUART_DATA_TXSPECIAL_SHIFT              (13U)                                               /**< LPUART0_DATA.TXSPECIAL Position         */
+#define LPUART_DATA_TXSPECIAL(x)                 (((uint32_t)(((uint32_t)(x))<<LPUART_DATA_TXSPECIAL_SHIFT))&LPUART_DATA_TXSPECIAL_MASK) /**< LPUART0_DATA.TXSPECIAL Field            */
 #define LPUART_DATA_PARITYE_MASK                 (0x4000U)                                           /**< LPUART0_DATA.PARITYE Mask               */
 #define LPUART_DATA_PARITYE_SHIFT                (14U)                                               /**< LPUART0_DATA.PARITYE Position           */
 #define LPUART_DATA_PARITYE(x)                   (((uint32_t)(((uint32_t)(x))<<LPUART_DATA_PARITYE_SHIFT))&LPUART_DATA_PARITYE_MASK) /**< LPUART0_DATA.PARITYE Field              */
@@ -6560,7 +6569,7 @@ typedef struct OSC_Type {
 #define PDB_CH_COUNT         2          /**< Number of PDB channels                             */
 #define PDB_DAC_COUNT        2          /**< Number of DAC outputs                              */
 #define PDB_DLY_COUNT        2          /**< Number of Pre-triggers                             */
-#define PDB_POnDLY_COUNT     2          /**< Number of Pulse outputs                            */
+#define PDB_PO_COUNT         2          /**< Number of Pulse outputs                            */
 /**
  * @struct PDB_Type
  * @brief  C Struct allowing access to PDB registers
@@ -6579,7 +6588,7 @@ typedef struct PDB_Type {
         uint8_t   RESERVED_1[240];              /**< 0060: 0xF0 bytes                                                   */
    struct {
       __IO uint32_t  INTC;                      /**< 0150: DAC Trigger Control Register                                 */
-      __IO uint32_t  INT;                       /**< 0154: DAC Trigger Interval Register                                */
+      __IO uint32_t  INTV;                      /**< 0154: DAC Trigger Interval Register                                */
    } DAC[PDB_DAC_COUNT];                        /**< 0150: (cluster: size=0x0010, 16)                                   */
         uint8_t   RESERVED_3[48];               /**< 0160: 0x30 bytes                                                   */
    __IO uint32_t  POEN;                         /**< 0190: Pulse-Out Enable Register                                    */
@@ -6591,7 +6600,7 @@ typedef struct PDB_Type {
          };
          __IO uint32_t  PODLY;                  /**< 0194: Pulse-Out  Delay Register                                    */
       };
-   } POnDLY[PDB_POnDLY_COUNT];                  /**< 0194: (cluster: size=0x0008, 8)                                    */
+   } PO[PDB_PO_COUNT];                          /**< 0194: (cluster: size=0x0008, 8)                                    */
 } PDB_Type;
 
 
@@ -6697,10 +6706,10 @@ typedef struct PDB_Type {
 #define PDB_INTC_EXT(x)                          (((uint32_t)(((uint32_t)(x))<<PDB_INTC_EXT_SHIFT))&PDB_INTC_EXT_MASK) /**< PDB0_INTC.EXT Field                     */
 /** @} */
 
-/** @name INT - DAC Trigger Interval Register */ /** @{ */
-#define PDB_INT_INT_MASK                         (0xFFFFU)                                           /**< PDB0_INT.INT Mask                       */
-#define PDB_INT_INT_SHIFT                        (0U)                                                /**< PDB0_INT.INT Position                   */
-#define PDB_INT_INT(x)                           (((uint32_t)(((uint32_t)(x))<<PDB_INT_INT_SHIFT))&PDB_INT_INT_MASK) /**< PDB0_INT.INT Field                      */
+/** @name INTV - DAC Trigger Interval Register */ /** @{ */
+#define PDB_INTV_INTV_MASK                       (0xFFFFU)                                           /**< PDB0_INTV.INTV Mask                     */
+#define PDB_INTV_INTV_SHIFT                      (0U)                                                /**< PDB0_INTV.INTV Position                 */
+#define PDB_INTV_INTV(x)                         (((uint32_t)(((uint32_t)(x))<<PDB_INTV_INTV_SHIFT))&PDB_INTV_INTV_MASK) /**< PDB0_INTV.INTV Field                    */
 /** @} */
 
 /** @name POEN - Pulse-Out Enable Register */ /** @{ */
@@ -9138,8 +9147,8 @@ typedef struct UART_Type {
    __IO uint8_t   S2;                           /**< 0005: Status Register 2                                            */
    __IO uint8_t   C3;                           /**< 0006: Control Register 3                                           */
    __IO uint8_t   D;                            /**< 0007: Data Register                                                */
-   __IO uint8_t   MA1;                          /**< 0008: Match Address Registers 1                                    */
-   __IO uint8_t   MA2;                          /**< 0009: Match Address Registers 2                                    */
+   __IO uint8_t   MA1;                          /**< 0008: Match Address Register 1                                     */
+   __IO uint8_t   MA2;                          /**< 0009: Match Address Register 2                                     */
    __IO uint8_t   C4;                           /**< 000A: Control Register 4                                           */
    __IO uint8_t   C5;                           /**< 000B: Control Register 5                                           */
    __I  uint8_t   ED;                           /**< 000C: Extended Data Register                                       */
@@ -9346,7 +9355,7 @@ typedef struct UART_Type {
 #define UART_D_RT(x)                             (((uint8_t)(((uint8_t)(x))<<UART_D_RT_SHIFT))&UART_D_RT_MASK) /**< UART0_D.RT Field                        */
 /** @} */
 
-/** @name MA - Match Address Registers %s */ /** @{ */
+/** @name MA - Match Address Register %s */ /** @{ */
 #define UART_MA_MA_MASK                          (0xFFU)                                             /**< UART0_MA.MA Mask                        */
 #define UART_MA_MA_SHIFT                         (0U)                                                /**< UART0_MA.MA Position                    */
 #define UART_MA_MA(x)                            (((uint8_t)(((uint8_t)(x))<<UART_MA_MA_SHIFT))&UART_MA_MA_MASK) /**< UART0_MA.MA Field                       */
@@ -9678,8 +9687,8 @@ typedef struct UART1_Type {
    __IO uint8_t   S2;                           /**< 0005: Status Register 2                                            */
    __IO uint8_t   C3;                           /**< 0006: Control Register 3                                           */
    __IO uint8_t   D;                            /**< 0007: Data Register                                                */
-   __IO uint8_t   MA1;                          /**< 0008: Match Address Registers 1                                    */
-   __IO uint8_t   MA2;                          /**< 0009: Match Address Registers 2                                    */
+   __IO uint8_t   MA1;                          /**< 0008: Match Address Register 1                                     */
+   __IO uint8_t   MA2;                          /**< 0009: Match Address Register 2                                     */
    __IO uint8_t   C4;                           /**< 000A: Control Register 4                                           */
    __IO uint8_t   C5;                           /**< 000B: Control Register 5                                           */
    __I  uint8_t   ED;                           /**< 000C: Extended Data Register                                       */

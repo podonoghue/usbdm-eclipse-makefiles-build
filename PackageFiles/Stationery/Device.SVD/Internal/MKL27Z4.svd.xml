@@ -7,7 +7,7 @@
 >
    <name>MKL27Z4</name>
    <version>1.6</version>
-   <description>Freescale Kinetis MKL27Z4 Family (MKL27Z128xxx4, MKL27Z256xxx4,MKL27Z256xxx4)(KL27P64M48SF6RM)</description>
+   <description>Freescale Kinetis MKL27Z4 Family (MKL27Z128xxx4, MKL27Z256xxx4)(KL27P64M48SF6RM)</description>
    <cpu>
       <name>CM0PLUS</name>
       <revision>r1p0</revision>

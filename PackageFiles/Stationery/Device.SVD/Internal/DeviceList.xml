@@ -192,8 +192,8 @@
       <device name="MKL16Z128M4"      svdFileName="MKL16Z4"    />
       <device name="MKL16Z256M4"      svdFileName="MKL16Z4"    />
 
-      <device name="MKL17Z32M4"       svdFileName="MKL17Z4"    />
-      <device name="MKL17Z64M4"       svdFileName="MKL17Z4"    />
+      <device name="MKL17Z32M4"       svdFileName="MKL17Z644"  />
+      <device name="MKL17Z64M4"       svdFileName="MKL17Z644"  />
       <device name="MKL17Z128M4"      svdFileName="MKL17Z4"    />
       <device name="MKL17Z256M4"      svdFileName="MKL17Z4"    />
 

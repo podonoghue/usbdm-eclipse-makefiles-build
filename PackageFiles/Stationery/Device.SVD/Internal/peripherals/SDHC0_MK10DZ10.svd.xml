@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral:
+Devices using this peripheral: 
       MK10DZ10
       MK10F12
       MK20DZ10
@@ -1096,10 +1096,10 @@ This bit is self-clearing on completion of 80 clocks to SD card</description>
                <fields>
                   <field>
                      <name>IRQSTAT</name>
+                     <?ignoreOverlap?>
                      <description>Status Flags</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>32</bitWidth>
-                     <?ignoreOverlap?>
                   </field>
                   <field>
                      <name>CC</name>
@@ -1191,24 +1191,7 @@ This bit is self-clearing on completion of 80 clocks to SD card</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>BRR</name>
-                     <description>Buffer Read Ready</description>
-                     <bitOffset>5</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Not ready</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Ready</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="BWR" > <name>BRR</name> <description>Buffer Read Ready</description> <bitOffset>5</bitOffset> <bitWidth>1</bitWidth> </field>
                   <field>
                      <name>CINS</name>
                      <description>Card Insertion</description>
@@ -1350,10 +1333,10 @@ This bit is self-clearing on completion of 80 clocks to SD card</description>
                <fields>
                   <field>
                      <name>IRQSTATEN</name>
+                     <?ignoreOverlap?>
                      <description>Status Flags</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>32</bitWidth>
-                     <?ignoreOverlap?>
                   </field>
                   <field>
                      <name>CCSEN</name>
@@ -1399,10 +1382,10 @@ This bit is self-clearing on completion of 80 clocks to SD card</description>
                <fields>
                   <field>
                      <name>IRQSIGEN</name>
+                     <?ignoreOverlap?>
                      <description>Status Flags</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>32</bitWidth>
-                     <?ignoreOverlap?>
                   </field>
                   <field>
                      <name>CCIEN</name>
@@ -1859,7 +1842,7 @@ This bit is self-clearing on completion of 80 clocks to SD card</description>
                   <field>
                      <name>ADMAES</name>
                      <description>ADMA Error State\n
-Indicates the state of the ADMA when an error has occurred during a data transfer.</description>
+Indicates the state of the ADMA when an error has occurred during a data transfer</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>

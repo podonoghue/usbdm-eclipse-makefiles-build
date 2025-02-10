@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V0.0
- * @date     2024/02
+ * @date     2025/02
  *
  */
 
@@ -4831,7 +4831,7 @@ typedef struct PDB_Type {
    } CH[1];                                     /**< 0010: (cluster: size=0x0010, 16)                                   */
    struct {
       __IO uint32_t  INTC;                      /**< 0020: DAC Interval Trigger n Control Register                      */
-      __IO uint32_t  INT;                       /**< 0024: DAC Interval n Register                                      */
+      __IO uint32_t  INTV;                      /**< 0024: DAC Interval n Register                                      */
    } DAC[1];                                    /**< 0020: (cluster: size=0x0008, 8)                                    */
    __IO uint32_t  POEN;                         /**< 0028: Pulse-Out Enable Register                                    */
    __IO uint32_t  PODLY[1];                     /**< 002C: Pulse-Out  Delay Register                                    */
@@ -4940,10 +4940,10 @@ typedef struct PDB_Type {
 #define PDB_INTC_EXT(x)                          (((uint32_t)(((uint32_t)(x))<<PDB_INTC_EXT_SHIFT))&PDB_INTC_EXT_MASK) /**< PDB0_INTC.EXT Field                     */
 /** @} */
 
-/** @name INT - DAC Interval n Register */ /** @{ */
-#define PDB_INT_INT_MASK                         (0xFFFFU)                                           /**< PDB0_INT.INT Mask                       */
-#define PDB_INT_INT_SHIFT                        (0U)                                                /**< PDB0_INT.INT Position                   */
-#define PDB_INT_INT(x)                           (((uint32_t)(((uint32_t)(x))<<PDB_INT_INT_SHIFT))&PDB_INT_INT_MASK) /**< PDB0_INT.INT Field                      */
+/** @name INTV - DAC Interval n Register */ /** @{ */
+#define PDB_INTV_INTV_MASK                       (0xFFFFU)                                           /**< PDB0_INTV.INTV Mask                     */
+#define PDB_INTV_INTV_SHIFT                      (0U)                                                /**< PDB0_INTV.INTV Position                 */
+#define PDB_INTV_INTV(x)                         (((uint32_t)(((uint32_t)(x))<<PDB_INTV_INTV_SHIFT))&PDB_INTV_INTV_MASK) /**< PDB0_INTV.INTV Field                    */
 /** @} */
 
 /** @name POEN - Pulse-Out Enable Register */ /** @{ */

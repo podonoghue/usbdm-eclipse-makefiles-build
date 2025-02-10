@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral:
+Devices using this peripheral: 
       MK28F15
 -->
       <peripheral>
@@ -179,25 +179,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>ENT_VAL</name>
-                     <description>Entropy Valid</description>
-                     <bitOffset>10</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <access>read-only</access>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Invalid</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Valid</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="FCT_VAL" > <name>ENT_VAL</name> <description>Entropy Valid</description> <bitOffset>10</bitOffset> <bitWidth>1</bitWidth> </field>
                   <field>
                      <name>TST_OUT</name>
                      <description>Test point inside ring oscillator</description>
@@ -1036,42 +1018,8 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>ENT_VAL</name>
-                     <description>Clear Entropy Available flag</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Flag Cleared</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>No Effect</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>FRQ_CT_FAIL</name>
-                     <description>Clear Frequency Count Error flag</description>
-                     <bitOffset>2</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Flag Cleared</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>No Effect</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="HW_ERR" > <name>ENT_VAL</name> <description>Clear Entropy Available flag</description> <bitOffset>1</bitOffset> <bitWidth>1</bitWidth> </field>
+                  <field derivedFrom="HW_ERR" > <name>FRQ_CT_FAIL</name> <description>Clear Frequency Count Error flag</description> <bitOffset>2</bitOffset> <bitWidth>1</bitWidth> </field>
                </fields>
             </register>
             <register>
@@ -1097,42 +1045,8 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>ENT_VAL</name>
-                     <description>Entropy Valid Action</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>No Action</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>FRQ_CT_FAIL</name>
-                     <description>Frequency Count Error Action</description>
-                     <bitOffset>2</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>No Action</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="HW_ERR" > <name>ENT_VAL</name> <description>Entropy Valid Action</description> <bitOffset>1</bitOffset> <bitWidth>1</bitWidth> </field>
+                  <field derivedFrom="HW_ERR" > <name>FRQ_CT_FAIL</name> <description>Frequency Count Error Action</description> <bitOffset>2</bitOffset> <bitWidth>1</bitWidth> </field>
                </fields>
             </register>
             <register>
@@ -1178,24 +1092,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>FRQ_CT_FAIL</name>
-                     <description>Frequency Count Error flag</description>
-                     <bitOffset>2</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>No error</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Error detected</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="HW_ERR" > <name>FRQ_CT_FAIL</name> <description>Frequency Count Error flag</description> <bitOffset>2</bitOffset> <bitWidth>1</bitWidth> <access>read-write</access> </field>
                </fields>
             </register>
             <register>

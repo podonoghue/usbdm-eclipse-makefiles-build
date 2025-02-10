@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2024/02
+ * @date     2025/02
  *
  */
 
@@ -32,32 +32,32 @@ extern "C" {
 typedef enum {
 /* ------------------------  Processor Exceptions Numbers  ------------------------- */
   Reset_IRQn                    = -15,   /**<   1 Reset Vector, invoked on Power up and warm reset                                 */
-  NonMaskableInt_IRQn           = -14,   /**<   2 Non maskable Interrupt, cannot be stopped or preempted                           */
+  NMI_IRQn                      = -14,   /**<   2 Non maskable Interrupt, cannot be stopped or preempted                           */
   HardFault_IRQn                = -13,   /**<   3 Hard Fault, all classes of Fault                                                 */
-  MemoryManagement_IRQn         = -12,   /**<   4 Memory Management, MPU mismatch, including Access Violation and No Match         */
+  MemManage_IRQn                = -12,   /**<   4 Memory Management, MPU mismatch, including Access Violation and No Match         */
   BusFault_IRQn                 = -11,   /**<   5 Bus Fault, Pre-Fetch-, Memory Access Fault, other address/memory related Fault   */
   UsageFault_IRQn               = -10,   /**<   6 Usage Fault, i.e. Undef Instruction, Illegal State Transition                    */
-  SVCall_IRQn                   =  -5,   /**<  11 System Service Call via SVC instruction                                          */
-  DebugMonitor_IRQn             =  -4,   /**<  12 Debug Monitor                                                                    */
+  SVC_IRQn                      =  -5,   /**<  11 System Service Call via SVC instruction                                          */
+  DebugMon_IRQn                 =  -4,   /**<  12 Debug Monitor                                                                    */
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
 /* ----------------------   MK65F18 VectorTable                      ---------------------- */
-  DMA0_Ch0_DMA16_IRQn           =   0,   /**<  16 Direct memory access controller                                                  */
-  DMA0_Ch1_DMA17_IRQn           =   1,   /**<  17 Direct memory access controller                                                  */
-  DMA0_Ch2_DMA18_IRQn           =   2,   /**<  18 Direct memory access controller                                                  */
-  DMA0_Ch3_DMA19_IRQn           =   3,   /**<  19 Direct memory access controller                                                  */
-  DMA0_Ch4_DMA20_IRQn           =   4,   /**<  20 Direct memory access controller                                                  */
-  DMA0_Ch5_DMA21_IRQn           =   5,   /**<  21 Direct memory access controller                                                  */
-  DMA0_Ch6_DMA22_IRQn           =   6,   /**<  22 Direct memory access controller                                                  */
-  DMA0_Ch7_DMA23_IRQn           =   7,   /**<  23 Direct memory access controller                                                  */
-  DMA0_Ch8_DMA24_IRQn           =   8,   /**<  24 Direct memory access controller                                                  */
-  DMA0_Ch9_DMA25_IRQn           =   9,   /**<  25 Direct memory access controller                                                  */
-  DMA0_Ch10_DMA26_IRQn          =  10,   /**<  26 Direct memory access controller                                                  */
-  DMA0_Ch11_DMA27_IRQn          =  11,   /**<  27 Direct memory access controller                                                  */
-  DMA0_Ch12_DMA28_IRQn          =  12,   /**<  28 Direct memory access controller                                                  */
-  DMA0_Ch13_DMA29_IRQn          =  13,   /**<  29 Direct memory access controller                                                  */
-  DMA0_Ch14_DMA30_IRQn          =  14,   /**<  30 Direct memory access controller                                                  */
-  DMA0_Ch15_DMA31_IRQn          =  15,   /**<  31 Direct memory access controller                                                  */
+  DMA0_Ch0_16_IRQn              =   0,   /**<  16 Direct memory access controller                                                  */
+  DMA0_Ch1_17_IRQn              =   1,   /**<  17 Direct memory access controller                                                  */
+  DMA0_Ch2_18_IRQn              =   2,   /**<  18 Direct memory access controller                                                  */
+  DMA0_Ch3_19_IRQn              =   3,   /**<  19 Direct memory access controller                                                  */
+  DMA0_Ch4_20_IRQn              =   4,   /**<  20 Direct memory access controller                                                  */
+  DMA0_Ch5_21_IRQn              =   5,   /**<  21 Direct memory access controller                                                  */
+  DMA0_Ch6_22_IRQn              =   6,   /**<  22 Direct memory access controller                                                  */
+  DMA0_Ch7_23_IRQn              =   7,   /**<  23 Direct memory access controller                                                  */
+  DMA0_Ch8_24_IRQn              =   8,   /**<  24 Direct memory access controller                                                  */
+  DMA0_Ch9_25_IRQn              =   9,   /**<  25 Direct memory access controller                                                  */
+  DMA0_Ch10_26_IRQn             =  10,   /**<  26 Direct memory access controller                                                  */
+  DMA0_Ch11_27_IRQn             =  11,   /**<  27 Direct memory access controller                                                  */
+  DMA0_Ch12_28_IRQn             =  12,   /**<  28 Direct memory access controller                                                  */
+  DMA0_Ch13_29_IRQn             =  13,   /**<  29 Direct memory access controller                                                  */
+  DMA0_Ch14_30_IRQn             =  14,   /**<  30 Direct memory access controller                                                  */
+  DMA0_Ch15_31_IRQn             =  15,   /**<  31 Direct memory access controller                                                  */
   DMA0_Error_IRQn               =  16,   /**<  32 DMA error interrupt all channels                                                 */
   MCM_IRQn                      =  17,   /**<  33 Miscellaneous Control Module                                                     */
   FTFE_Command_IRQn             =  18,   /**<  34 Flash Memory Interface                                                           */
@@ -153,22 +153,22 @@ extern void SVC_Handler(void);                       /**< System Service Call vi
 extern void DebugMon_Handler(void);                  /**< Debug Monitor                                                                    */
 extern void PendSV_Handler(void);                    /**< Pendable request for system service                                              */
 extern void SysTick_Handler(void);                   /**< System Tick Timer                                                                */
-extern void DMA0_Ch0_DMA16_IRQHandler(void);         /**< Direct memory access controller                                                  */
-extern void DMA0_Ch1_DMA17_IRQHandler(void);         /**< Direct memory access controller                                                  */
-extern void DMA0_Ch2_DMA18_IRQHandler(void);         /**< Direct memory access controller                                                  */
-extern void DMA0_Ch3_DMA19_IRQHandler(void);         /**< Direct memory access controller                                                  */
-extern void DMA0_Ch4_DMA20_IRQHandler(void);         /**< Direct memory access controller                                                  */
-extern void DMA0_Ch5_DMA21_IRQHandler(void);         /**< Direct memory access controller                                                  */
-extern void DMA0_Ch6_DMA22_IRQHandler(void);         /**< Direct memory access controller                                                  */
-extern void DMA0_Ch7_DMA23_IRQHandler(void);         /**< Direct memory access controller                                                  */
-extern void DMA0_Ch8_DMA24_IRQHandler(void);         /**< Direct memory access controller                                                  */
-extern void DMA0_Ch9_DMA25_IRQHandler(void);         /**< Direct memory access controller                                                  */
-extern void DMA0_Ch10_DMA26_IRQHandler(void);        /**< Direct memory access controller                                                  */
-extern void DMA0_Ch11_DMA27_IRQHandler(void);        /**< Direct memory access controller                                                  */
-extern void DMA0_Ch12_DMA28_IRQHandler(void);        /**< Direct memory access controller                                                  */
-extern void DMA0_Ch13_DMA29_IRQHandler(void);        /**< Direct memory access controller                                                  */
-extern void DMA0_Ch14_DMA30_IRQHandler(void);        /**< Direct memory access controller                                                  */
-extern void DMA0_Ch15_DMA31_IRQHandler(void);        /**< Direct memory access controller                                                  */
+extern void DMA0_Ch0_16_IRQHandler(void);            /**< Direct memory access controller                                                  */
+extern void DMA0_Ch1_17_IRQHandler(void);            /**< Direct memory access controller                                                  */
+extern void DMA0_Ch2_18_IRQHandler(void);            /**< Direct memory access controller                                                  */
+extern void DMA0_Ch3_19_IRQHandler(void);            /**< Direct memory access controller                                                  */
+extern void DMA0_Ch4_20_IRQHandler(void);            /**< Direct memory access controller                                                  */
+extern void DMA0_Ch5_21_IRQHandler(void);            /**< Direct memory access controller                                                  */
+extern void DMA0_Ch6_22_IRQHandler(void);            /**< Direct memory access controller                                                  */
+extern void DMA0_Ch7_23_IRQHandler(void);            /**< Direct memory access controller                                                  */
+extern void DMA0_Ch8_24_IRQHandler(void);            /**< Direct memory access controller                                                  */
+extern void DMA0_Ch9_25_IRQHandler(void);            /**< Direct memory access controller                                                  */
+extern void DMA0_Ch10_26_IRQHandler(void);           /**< Direct memory access controller                                                  */
+extern void DMA0_Ch11_27_IRQHandler(void);           /**< Direct memory access controller                                                  */
+extern void DMA0_Ch12_28_IRQHandler(void);           /**< Direct memory access controller                                                  */
+extern void DMA0_Ch13_29_IRQHandler(void);           /**< Direct memory access controller                                                  */
+extern void DMA0_Ch14_30_IRQHandler(void);           /**< Direct memory access controller                                                  */
+extern void DMA0_Ch15_31_IRQHandler(void);           /**< Direct memory access controller                                                  */
 extern void DMA0_Error_IRQHandler(void);             /**< DMA error interrupt all channels                                                 */
 extern void MCM_IRQHandler(void);                    /**< Miscellaneous Control Module                                                     */
 extern void FTFE_Command_IRQHandler(void);           /**< Flash Memory Interface                                                           */
@@ -3490,7 +3490,7 @@ typedef struct DMA_Type {
 #define DMA0_BasePtr                   0x40008000UL //!< Peripheral base address
 #define DMA0                           ((DMA_Type *) DMA0_BasePtr) //!< Freescale base pointer
 #define DMA0_BASE_PTR                  (DMA0) //!< Freescale style base pointer
-#define DMA0_IRQS { DMA0_Ch0_DMA16_IRQn, DMA0_Ch1_DMA17_IRQn, DMA0_Ch2_DMA18_IRQn, DMA0_Ch3_DMA19_IRQn, DMA0_Ch4_DMA20_IRQn, DMA0_Ch5_DMA21_IRQn, DMA0_Ch6_DMA22_IRQn, DMA0_Ch7_DMA23_IRQn, DMA0_Ch8_DMA24_IRQn, DMA0_Ch9_DMA25_IRQn, DMA0_Ch10_DMA26_IRQn, DMA0_Ch11_DMA27_IRQn, DMA0_Ch12_DMA28_IRQn, DMA0_Ch13_DMA29_IRQn, DMA0_Ch14_DMA30_IRQn, DMA0_Ch15_DMA31_IRQn, DMA0_Error_IRQn,  }
+#define DMA0_IRQS { DMA0_Ch0_16_IRQn, DMA0_Ch1_17_IRQn, DMA0_Ch2_18_IRQn, DMA0_Ch3_19_IRQn, DMA0_Ch4_20_IRQn, DMA0_Ch5_21_IRQn, DMA0_Ch6_22_IRQn, DMA0_Ch7_23_IRQn, DMA0_Ch8_24_IRQn, DMA0_Ch9_25_IRQn, DMA0_Ch10_26_IRQn, DMA0_Ch11_27_IRQn, DMA0_Ch12_28_IRQn, DMA0_Ch13_29_IRQn, DMA0_Ch14_30_IRQn, DMA0_Ch15_31_IRQn, DMA0_Error_IRQn,  }
 
 
 /** @} */ /* End group DMA0_Peripheral_access_layer_GROUP */
@@ -9210,6 +9210,9 @@ typedef struct LPUART_Type {
 /** @} */
 
 /** @name STAT - Status Register */ /** @{ */
+#define LPUART_STAT_STAT_MASK                    (0xFFFFFFFFU)                                       /**< LPUART0_STAT.STAT Mask                  */
+#define LPUART_STAT_STAT_SHIFT                   (0U)                                                /**< LPUART0_STAT.STAT Position              */
+#define LPUART_STAT_STAT(x)                      (((uint32_t)(((uint32_t)(x))<<LPUART_STAT_STAT_SHIFT))&LPUART_STAT_STAT_MASK) /**< LPUART0_STAT.STAT Field                 */
 #define LPUART_STAT_MA2F_MASK                    (0x4000U)                                           /**< LPUART0_STAT.MA2F Mask                  */
 #define LPUART_STAT_MA2F_SHIFT                   (14U)                                               /**< LPUART0_STAT.MA2F Position              */
 #define LPUART_STAT_MA2F(x)                      (((uint32_t)(((uint32_t)(x))<<LPUART_STAT_MA2F_SHIFT))&LPUART_STAT_MA2F_MASK) /**< LPUART0_STAT.MA2F Field                 */
@@ -9267,6 +9270,9 @@ typedef struct LPUART_Type {
 /** @} */
 
 /** @name CTRL - Control Register */ /** @{ */
+#define LPUART_CTRL_CTRL_MASK                    (0xFFFFFFFFU)                                       /**< LPUART0_CTRL.CTRL Mask                  */
+#define LPUART_CTRL_CTRL_SHIFT                   (0U)                                                /**< LPUART0_CTRL.CTRL Position              */
+#define LPUART_CTRL_CTRL(x)                      (((uint32_t)(((uint32_t)(x))<<LPUART_CTRL_CTRL_SHIFT))&LPUART_CTRL_CTRL_MASK) /**< LPUART0_CTRL.CTRL Field                 */
 #define LPUART_CTRL_PT_MASK                      (0x1U)                                              /**< LPUART0_CTRL.PT Mask                    */
 #define LPUART_CTRL_PT_SHIFT                     (0U)                                                /**< LPUART0_CTRL.PT Position                */
 #define LPUART_CTRL_PT(x)                        (((uint32_t)(((uint32_t)(x))<<LPUART_CTRL_PT_SHIFT))&LPUART_CTRL_PT_MASK) /**< LPUART0_CTRL.PT Field                   */
@@ -9360,9 +9366,12 @@ typedef struct LPUART_Type {
 #define LPUART_DATA_RXEMPT_MASK                  (0x1000U)                                           /**< LPUART0_DATA.RXEMPT Mask                */
 #define LPUART_DATA_RXEMPT_SHIFT                 (12U)                                               /**< LPUART0_DATA.RXEMPT Position            */
 #define LPUART_DATA_RXEMPT(x)                    (((uint32_t)(((uint32_t)(x))<<LPUART_DATA_RXEMPT_SHIFT))&LPUART_DATA_RXEMPT_MASK) /**< LPUART0_DATA.RXEMPT Field               */
-#define LPUART_DATA_FRETSC_MASK                  (0x2000U)                                           /**< LPUART0_DATA.FRETSC Mask                */
-#define LPUART_DATA_FRETSC_SHIFT                 (13U)                                               /**< LPUART0_DATA.FRETSC Position            */
-#define LPUART_DATA_FRETSC(x)                    (((uint32_t)(((uint32_t)(x))<<LPUART_DATA_FRETSC_SHIFT))&LPUART_DATA_FRETSC_MASK) /**< LPUART0_DATA.FRETSC Field               */
+#define LPUART_DATA_FRAME_MASK                   (0x2000U)                                           /**< LPUART0_DATA.FRAME Mask                 */
+#define LPUART_DATA_FRAME_SHIFT                  (13U)                                               /**< LPUART0_DATA.FRAME Position             */
+#define LPUART_DATA_FRAME(x)                     (((uint32_t)(((uint32_t)(x))<<LPUART_DATA_FRAME_SHIFT))&LPUART_DATA_FRAME_MASK) /**< LPUART0_DATA.FRAME Field                */
+#define LPUART_DATA_TXSPECIAL_MASK               (0x2000U)                                           /**< LPUART0_DATA.TXSPECIAL Mask             */
+#define LPUART_DATA_TXSPECIAL_SHIFT              (13U)                                               /**< LPUART0_DATA.TXSPECIAL Position         */
+#define LPUART_DATA_TXSPECIAL(x)                 (((uint32_t)(((uint32_t)(x))<<LPUART_DATA_TXSPECIAL_SHIFT))&LPUART_DATA_TXSPECIAL_MASK) /**< LPUART0_DATA.TXSPECIAL Field            */
 #define LPUART_DATA_PARITYE_MASK                 (0x4000U)                                           /**< LPUART0_DATA.PARITYE Mask               */
 #define LPUART_DATA_PARITYE_SHIFT                (14U)                                               /**< LPUART0_DATA.PARITYE Position           */
 #define LPUART_DATA_PARITYE(x)                   (((uint32_t)(((uint32_t)(x))<<LPUART_DATA_PARITYE_SHIFT))&LPUART_DATA_PARITYE_MASK) /**< LPUART0_DATA.PARITYE Field              */
@@ -10328,7 +10337,7 @@ typedef struct OSC_Type {
 #define PDB_CH_COUNT         2          /**< Number of PDB channels                             */
 #define PDB_DAC_COUNT        2          /**< Number of DAC outputs                              */
 #define PDB_DLY_COUNT        2          /**< Number of Pre-triggers                             */
-#define PDB_POnDLY_COUNT     4          /**< Number of Pulse outputs                            */
+#define PDB_PO_COUNT         4          /**< Number of Pulse outputs                            */
 /**
  * @struct PDB_Type
  * @brief  C Struct allowing access to PDB registers
@@ -10347,7 +10356,7 @@ typedef struct PDB_Type {
         uint8_t   RESERVED_1[240];              /**< 0060: 0xF0 bytes                                                   */
    struct {
       __IO uint32_t  INTC;                      /**< 0150: DAC Interval Trigger n Control Register                      */
-      __IO uint32_t  INT;                       /**< 0154: DAC Interval n Register                                      */
+      __IO uint32_t  INTV;                      /**< 0154: DAC Interval n Register                                      */
    } DAC[PDB_DAC_COUNT];                        /**< 0150: (cluster: size=0x0010, 16)                                   */
         uint8_t   RESERVED_3[48];               /**< 0160: 0x30 bytes                                                   */
    __IO uint32_t  POEN;                         /**< 0190: Pulse-Out Enable Register                                    */
@@ -10359,7 +10368,7 @@ typedef struct PDB_Type {
          };
          __IO uint32_t  PODLY;                  /**< 0194: Pulse-Out  Delay Register                                    */
       };
-   } POnDLY[PDB_POnDLY_COUNT];                  /**< 0194: (cluster: size=0x0010, 16)                                   */
+   } PO[PDB_PO_COUNT];                          /**< 0194: (cluster: size=0x0010, 16)                                   */
 } PDB_Type;
 
 
@@ -10465,10 +10474,10 @@ typedef struct PDB_Type {
 #define PDB_INTC_EXT(x)                          (((uint32_t)(((uint32_t)(x))<<PDB_INTC_EXT_SHIFT))&PDB_INTC_EXT_MASK) /**< PDB0_INTC.EXT Field                     */
 /** @} */
 
-/** @name INT - DAC Interval n Register */ /** @{ */
-#define PDB_INT_INT_MASK                         (0xFFFFU)                                           /**< PDB0_INT.INT Mask                       */
-#define PDB_INT_INT_SHIFT                        (0U)                                                /**< PDB0_INT.INT Position                   */
-#define PDB_INT_INT(x)                           (((uint32_t)(((uint32_t)(x))<<PDB_INT_INT_SHIFT))&PDB_INT_INT_MASK) /**< PDB0_INT.INT Field                      */
+/** @name INTV - DAC Interval n Register */ /** @{ */
+#define PDB_INTV_INTV_MASK                       (0xFFFFU)                                           /**< PDB0_INTV.INTV Mask                     */
+#define PDB_INTV_INTV_SHIFT                      (0U)                                                /**< PDB0_INTV.INTV Position                 */
+#define PDB_INTV_INTV(x)                         (((uint32_t)(((uint32_t)(x))<<PDB_INTV_INTV_SHIFT))&PDB_INTV_INTV_MASK) /**< PDB0_INTV.INTV Field                    */
 /** @} */
 
 /** @name POEN - Pulse-Out Enable Register */ /** @{ */
@@ -11710,9 +11719,9 @@ typedef struct SDHC_Type {
 /** @} */
 
 /** @name CMDRSP - Command Response %s */ /** @{ */
-#define SDHC_CMDRSP_CMDRSP0_MASK                 (0xFFFFFFFFU)                                       /**< SDHC0_CMDRSP.CMDRSP0 Mask               */
-#define SDHC_CMDRSP_CMDRSP0_SHIFT                (0U)                                                /**< SDHC0_CMDRSP.CMDRSP0 Position           */
-#define SDHC_CMDRSP_CMDRSP0(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_CMDRSP_CMDRSP0_SHIFT))&SDHC_CMDRSP_CMDRSP0_MASK) /**< SDHC0_CMDRSP.CMDRSP0 Field              */
+#define SDHC_CMDRSP_CMDRSP_MASK                  (0xFFFFFFFFU)                                       /**< SDHC0_CMDRSP.CMDRSP Mask                */
+#define SDHC_CMDRSP_CMDRSP_SHIFT                 (0U)                                                /**< SDHC0_CMDRSP.CMDRSP Position            */
+#define SDHC_CMDRSP_CMDRSP(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC_CMDRSP_CMDRSP_SHIFT))&SDHC_CMDRSP_CMDRSP_MASK) /**< SDHC0_CMDRSP.CMDRSP Field               */
 /** @} */
 
 /** @name DATPORT - Buffer Data Port Register */ /** @{ */
@@ -11782,6 +11791,9 @@ typedef struct SDHC_Type {
 #define SDHC_PROCTL_EMODE_MASK                   (0x30U)                                             /**< SDHC0_PROCTL.EMODE Mask                 */
 #define SDHC_PROCTL_EMODE_SHIFT                  (4U)                                                /**< SDHC0_PROCTL.EMODE Position             */
 #define SDHC_PROCTL_EMODE(x)                     (((uint32_t)(((uint32_t)(x))<<SDHC_PROCTL_EMODE_SHIFT))&SDHC_PROCTL_EMODE_MASK) /**< SDHC0_PROCTL.EMODE Field                */
+#define SDHC_PROCTL_CDET_MASK                    (0xC0U)                                             /**< SDHC0_PROCTL.CDET Mask                  */
+#define SDHC_PROCTL_CDET_SHIFT                   (6U)                                                /**< SDHC0_PROCTL.CDET Position              */
+#define SDHC_PROCTL_CDET(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_PROCTL_CDET_SHIFT))&SDHC_PROCTL_CDET_MASK) /**< SDHC0_PROCTL.CDET Field                 */
 #define SDHC_PROCTL_CDTL_MASK                    (0x40U)                                             /**< SDHC0_PROCTL.CDTL Mask                  */
 #define SDHC_PROCTL_CDTL_SHIFT                   (6U)                                                /**< SDHC0_PROCTL.CDTL Position              */
 #define SDHC_PROCTL_CDTL(x)                      (((uint32_t)(((uint32_t)(x))<<SDHC_PROCTL_CDTL_SHIFT))&SDHC_PROCTL_CDTL_MASK) /**< SDHC0_PROCTL.CDTL Field                 */
@@ -11851,6 +11863,9 @@ typedef struct SDHC_Type {
 /** @} */
 
 /** @name IRQSTAT - Interrupt Status Register */ /** @{ */
+#define SDHC_IRQSTAT_IRQSTAT_MASK                (0xFFFFFFFFU)                                       /**< SDHC0_IRQSTAT.IRQSTAT Mask              */
+#define SDHC_IRQSTAT_IRQSTAT_SHIFT               (0U)                                                /**< SDHC0_IRQSTAT.IRQSTAT Position          */
+#define SDHC_IRQSTAT_IRQSTAT(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTAT_IRQSTAT_SHIFT))&SDHC_IRQSTAT_IRQSTAT_MASK) /**< SDHC0_IRQSTAT.IRQSTAT Field             */
 #define SDHC_IRQSTAT_CC_MASK                     (0x1U)                                              /**< SDHC0_IRQSTAT.CC Mask                   */
 #define SDHC_IRQSTAT_CC_SHIFT                    (0U)                                                /**< SDHC0_IRQSTAT.CC Position               */
 #define SDHC_IRQSTAT_CC(x)                       (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTAT_CC_SHIFT))&SDHC_IRQSTAT_CC_MASK) /**< SDHC0_IRQSTAT.CC Field                  */
@@ -11908,6 +11923,9 @@ typedef struct SDHC_Type {
 /** @} */
 
 /** @name IRQSTATEN - Interrupt Status Enable Register */ /** @{ */
+#define SDHC_IRQSTATEN_IRQSTATEN_MASK            (0xFFFFFFFFU)                                       /**< SDHC0_IRQSTATEN.IRQSTATEN Mask          */
+#define SDHC_IRQSTATEN_IRQSTATEN_SHIFT           (0U)                                                /**< SDHC0_IRQSTATEN.IRQSTATEN Position      */
+#define SDHC_IRQSTATEN_IRQSTATEN(x)              (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTATEN_IRQSTATEN_SHIFT))&SDHC_IRQSTATEN_IRQSTATEN_MASK) /**< SDHC0_IRQSTATEN.IRQSTATEN Field         */
 #define SDHC_IRQSTATEN_CCSEN_MASK                (0x1U)                                              /**< SDHC0_IRQSTATEN.CCSEN Mask              */
 #define SDHC_IRQSTATEN_CCSEN_SHIFT               (0U)                                                /**< SDHC0_IRQSTATEN.CCSEN Position          */
 #define SDHC_IRQSTATEN_CCSEN(x)                  (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSTATEN_CCSEN_SHIFT))&SDHC_IRQSTATEN_CCSEN_MASK) /**< SDHC0_IRQSTATEN.CCSEN Field             */
@@ -11965,6 +11983,9 @@ typedef struct SDHC_Type {
 /** @} */
 
 /** @name IRQSIGEN - Interrupt Signal Enable Register */ /** @{ */
+#define SDHC_IRQSIGEN_IRQSIGEN_MASK              (0xFFFFFFFFU)                                       /**< SDHC0_IRQSIGEN.IRQSIGEN Mask            */
+#define SDHC_IRQSIGEN_IRQSIGEN_SHIFT             (0U)                                                /**< SDHC0_IRQSIGEN.IRQSIGEN Position        */
+#define SDHC_IRQSIGEN_IRQSIGEN(x)                (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSIGEN_IRQSIGEN_SHIFT))&SDHC_IRQSIGEN_IRQSIGEN_MASK) /**< SDHC0_IRQSIGEN.IRQSIGEN Field           */
 #define SDHC_IRQSIGEN_CCIEN_MASK                 (0x1U)                                              /**< SDHC0_IRQSIGEN.CCIEN Mask               */
 #define SDHC_IRQSIGEN_CCIEN_SHIFT                (0U)                                                /**< SDHC0_IRQSIGEN.CCIEN Position           */
 #define SDHC_IRQSIGEN_CCIEN(x)                   (((uint32_t)(((uint32_t)(x))<<SDHC_IRQSIGEN_CCIEN_SHIFT))&SDHC_IRQSIGEN_CCIEN_MASK) /**< SDHC0_IRQSIGEN.CCIEN Field              */
@@ -12061,6 +12082,12 @@ typedef struct SDHC_Type {
 #define SDHC_HTCAPBLT_VS33_MASK                  (0x1000000U)                                        /**< SDHC0_HTCAPBLT.VS33 Mask                */
 #define SDHC_HTCAPBLT_VS33_SHIFT                 (24U)                                               /**< SDHC0_HTCAPBLT.VS33 Position            */
 #define SDHC_HTCAPBLT_VS33(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC_HTCAPBLT_VS33_SHIFT))&SDHC_HTCAPBLT_VS33_MASK) /**< SDHC0_HTCAPBLT.VS33 Field               */
+#define SDHC_HTCAPBLT_VS30_MASK                  (0x2000000U)                                        /**< SDHC0_HTCAPBLT.VS30 Mask                */
+#define SDHC_HTCAPBLT_VS30_SHIFT                 (25U)                                               /**< SDHC0_HTCAPBLT.VS30 Position            */
+#define SDHC_HTCAPBLT_VS30(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC_HTCAPBLT_VS30_SHIFT))&SDHC_HTCAPBLT_VS30_MASK) /**< SDHC0_HTCAPBLT.VS30 Field               */
+#define SDHC_HTCAPBLT_VS18_MASK                  (0x4000000U)                                        /**< SDHC0_HTCAPBLT.VS18 Mask                */
+#define SDHC_HTCAPBLT_VS18_SHIFT                 (26U)                                               /**< SDHC0_HTCAPBLT.VS18 Position            */
+#define SDHC_HTCAPBLT_VS18(x)                    (((uint32_t)(((uint32_t)(x))<<SDHC_HTCAPBLT_VS18_SHIFT))&SDHC_HTCAPBLT_VS18_MASK) /**< SDHC0_HTCAPBLT.VS18 Field               */
 /** @} */
 
 /** @name WML - Watermark Level Register */ /** @{ */
@@ -12691,9 +12718,6 @@ typedef struct SIM_Type {
 #define SIM_SCGC3_SDHC_MASK                      (0x20000U)                                          /**< SIM_SCGC3.SDHC Mask                     */
 #define SIM_SCGC3_SDHC_SHIFT                     (17U)                                               /**< SIM_SCGC3.SDHC Position                 */
 #define SIM_SCGC3_SDHC(x)                        (((uint32_t)(((uint32_t)(x))<<SIM_SCGC3_SDHC_SHIFT))&SIM_SCGC3_SDHC_MASK) /**< SIM_SCGC3.SDHC Field                    */
-#define SIM_SCGC3_FTM2_MASK                      (0x1000000U)                                        /**< SIM_SCGC3.FTM2 Mask                     */
-#define SIM_SCGC3_FTM2_SHIFT                     (24U)                                               /**< SIM_SCGC3.FTM2 Position                 */
-#define SIM_SCGC3_FTM2(x)                        (((uint32_t)(((uint32_t)(x))<<SIM_SCGC3_FTM2_SHIFT))&SIM_SCGC3_FTM2_MASK) /**< SIM_SCGC3.FTM2 Field                    */
 #define SIM_SCGC3_FTM3_MASK                      (0x2000000U)                                        /**< SIM_SCGC3.FTM3 Mask                     */
 #define SIM_SCGC3_FTM3_SHIFT                     (25U)                                               /**< SIM_SCGC3.FTM3 Position                 */
 #define SIM_SCGC3_FTM3(x)                        (((uint32_t)(((uint32_t)(x))<<SIM_SCGC3_FTM3_SHIFT))&SIM_SCGC3_FTM3_MASK) /**< SIM_SCGC3.FTM3 Field                    */
@@ -12772,9 +12796,6 @@ typedef struct SIM_Type {
 #define SIM_SCGC6_CAN0_MASK                      (0x10U)                                             /**< SIM_SCGC6.CAN0 Mask                     */
 #define SIM_SCGC6_CAN0_SHIFT                     (4U)                                                /**< SIM_SCGC6.CAN0 Position                 */
 #define SIM_SCGC6_CAN0(x)                        (((uint32_t)(((uint32_t)(x))<<SIM_SCGC6_CAN0_SHIFT))&SIM_SCGC6_CAN0_MASK) /**< SIM_SCGC6.CAN0 Field                    */
-#define SIM_SCGC6_RNGA_MASK                      (0x200U)                                            /**< SIM_SCGC6.RNGA Mask                     */
-#define SIM_SCGC6_RNGA_SHIFT                     (9U)                                                /**< SIM_SCGC6.RNGA Position                 */
-#define SIM_SCGC6_RNGA(x)                        (((uint32_t)(((uint32_t)(x))<<SIM_SCGC6_RNGA_SHIFT))&SIM_SCGC6_RNGA_MASK) /**< SIM_SCGC6.RNGA Field                    */
 #define SIM_SCGC6_SPI0_MASK                      (0x1000U)                                           /**< SIM_SCGC6.SPI0 Mask                     */
 #define SIM_SCGC6_SPI0_SHIFT                     (12U)                                               /**< SIM_SCGC6.SPI0 Position                 */
 #define SIM_SCGC6_SPI0(x)                        (((uint32_t)(((uint32_t)(x))<<SIM_SCGC6_SPI0_SHIFT))&SIM_SCGC6_SPI0_MASK) /**< SIM_SCGC6.SPI0 Field                    */
@@ -12811,9 +12832,6 @@ typedef struct SIM_Type {
 #define SIM_SCGC6_RTC_MASK                       (0x20000000U)                                       /**< SIM_SCGC6.RTC Mask                      */
 #define SIM_SCGC6_RTC_SHIFT                      (29U)                                               /**< SIM_SCGC6.RTC Position                  */
 #define SIM_SCGC6_RTC(x)                         (((uint32_t)(((uint32_t)(x))<<SIM_SCGC6_RTC_SHIFT))&SIM_SCGC6_RTC_MASK) /**< SIM_SCGC6.RTC Field                     */
-#define SIM_SCGC6_DAC0_MASK                      (0x80000000U)                                       /**< SIM_SCGC6.DAC0 Mask                     */
-#define SIM_SCGC6_DAC0_SHIFT                     (31U)                                               /**< SIM_SCGC6.DAC0 Position                 */
-#define SIM_SCGC6_DAC0(x)                        (((uint32_t)(((uint32_t)(x))<<SIM_SCGC6_DAC0_SHIFT))&SIM_SCGC6_DAC0_MASK) /**< SIM_SCGC6.DAC0 Field                    */
 /** @} */
 
 /** @name SCGC7 - System Clock Gating Control Register 7 */ /** @{ */
@@ -14207,8 +14225,8 @@ typedef struct UART_Type {
    __IO uint8_t   S2;                           /**< 0005: Status Register 2                                            */
    __IO uint8_t   C3;                           /**< 0006: Control Register 3                                           */
    __IO uint8_t   D;                            /**< 0007: Data Register                                                */
-   __IO uint8_t   MA1;                          /**< 0008: Match Address Registers 1                                    */
-   __IO uint8_t   MA2;                          /**< 0009: Match Address Registers 2                                    */
+   __IO uint8_t   MA1;                          /**< 0008: Match Address Register 1                                     */
+   __IO uint8_t   MA2;                          /**< 0009: Match Address Register 2                                     */
    __IO uint8_t   C4;                           /**< 000A: Control Register 4                                           */
    __IO uint8_t   C5;                           /**< 000B: Control Register 5                                           */
    __I  uint8_t   ED;                           /**< 000C: Extended Data Register                                       */
@@ -14418,7 +14436,7 @@ typedef struct UART_Type {
 #define UART_D_RT(x)                             (((uint8_t)(((uint8_t)(x))<<UART_D_RT_SHIFT))&UART_D_RT_MASK) /**< UART0_D.RT Field                        */
 /** @} */
 
-/** @name MA - Match Address Registers %s */ /** @{ */
+/** @name MA - Match Address Register %s */ /** @{ */
 #define UART_MA_MA_MASK                          (0xFFU)                                             /**< UART0_MA.MA Mask                        */
 #define UART_MA_MA_SHIFT                         (0U)                                                /**< UART0_MA.MA Position                    */
 #define UART_MA_MA(x)                            (((uint8_t)(((uint8_t)(x))<<UART_MA_MA_SHIFT))&UART_MA_MA_MASK) /**< UART0_MA.MA Field                       */
@@ -14750,8 +14768,8 @@ typedef struct UART1_Type {
    __IO uint8_t   S2;                           /**< 0005: Status Register 2                                            */
    __IO uint8_t   C3;                           /**< 0006: Control Register 3                                           */
    __IO uint8_t   D;                            /**< 0007: Data Register                                                */
-   __IO uint8_t   MA1;                          /**< 0008: Match Address Registers 1                                    */
-   __IO uint8_t   MA2;                          /**< 0009: Match Address Registers 2                                    */
+   __IO uint8_t   MA1;                          /**< 0008: Match Address Register 1                                     */
+   __IO uint8_t   MA2;                          /**< 0009: Match Address Register 2                                     */
    __IO uint8_t   C4;                           /**< 000A: Control Register 4                                           */
    __IO uint8_t   C5;                           /**< 000B: Control Register 5                                           */
    __I  uint8_t   ED;                           /**< 000C: Extended Data Register                                       */

@@ -4,10 +4,10 @@
 <!-- llwu_pe4_filt2_mk22f51212.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Leakage Wakeup Unit">
-      
-   <xi:include href="llwu_base.xml"/>   
 
-   <projectActionList id = "llwu_files_mkw41z" >
+   <xi:include href="llwu_base.xml"/>
+
+   <projectActionList id="llwu_files_examples" >
       <copy source="Snippets/llwu-example-mk22f.cpp"   target="Snippets/llwu-example-mk22f.cpp"   overwrite="true" derived="true" />
    </projectActionList>
 

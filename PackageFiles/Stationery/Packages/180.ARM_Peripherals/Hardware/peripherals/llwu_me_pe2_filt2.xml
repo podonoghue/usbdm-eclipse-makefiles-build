@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"
 ?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- llwu_pe2_filt2_mkl05z4..xml -->
+<!-- llwu_me_pe2_filt2.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Leakage Wakeup Unit">
-      
-   <xi:include href="llwu_base.xml"/>   
 
-   <projectActionList id = "llwu_files_examples" >
+   <xi:include href="llwu_base.xml"/>
+
+   <projectActionList id="llwu_files_examples" >
       <copy source="Snippets/llwu-example-mkl25z.cpp"  target="Snippets/llwu-example-mkl25z.cpp"  overwrite="true" derived="true" />
    </projectActionList>
 

@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral:
+Devices using this peripheral: 
       MK24F12
       MK24F25612
       MK63F12
@@ -724,29 +724,18 @@ Reads and writes of this register are also involved in the automatic flag cleari
                </fields>
             </register>
             <register>
-               <name>MA1</name>
-               <description>Match Address Register 1</description>
+               <dim>2</dim>
+               <dimIncrement>1</dimIncrement>
+               <dimIndex>1,2</dimIndex>
+               <name>MA%s</name>
+               <description>Match Address Register %s</description>
                <addressOffset>0x8</addressOffset>
                <size>8</size>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
-                     <name>MA1</name>
-                     <description>Match Address 1</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>MA2</name>
-               <description>Match Address Register 2</description>
-               <addressOffset>0x9</addressOffset>
-               <size>8</size>
-               <resetMask>0xFF</resetMask>
-               <fields>
-                  <field>
-                     <name>MA2</name>
-                     <description>Match Address 2</description>
+                     <name>MA</name>
+                     <description>Match Address</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>

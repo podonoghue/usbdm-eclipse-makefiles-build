@@ -16,7 +16,7 @@ Devices using this peripheral:
          <resetMask>0xFFFFFFFF</resetMask>
          <addressBlock>
             <offset>0x0</offset>
-            <size>0x8</size>
+            <size>0x4</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
@@ -133,13 +133,6 @@ Selects the 32 kHz clock source (ERCLK32K) for RTC and LPTMR. This field is rese
                </fields>
             </register>
             <register>
-               <name>SOPT1CFG</name>
-               <description>SOPT1 Configuration Register</description>
-               <addressOffset>0x4</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-            </register>
-            <register>
                <name>SOPT2</name>
                <description>System Options Register 2</description>
                <addressOffset>0x1004</addressOffset>
@@ -202,24 +195,6 @@ Selects the 32 kHz clock source (ERCLK32K) for RTC and LPTMR. This field is rese
                            <name>0b111</name>
                            <description>IRC48M clock (IRC48M clock can be output to PAD only when chip VDD is 2.7-3.6 V)</description>
                            <value>0b111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>USBSRC</name>
-                     <description>USB clock source select</description>
-                     <bitOffset>18</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>External bypass clock (USB_CLKIN)</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>IRC48M clock</description>
-                           <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -807,7 +782,6 @@ Enables alternative conversion triggers for ADC0</description>
                   </field>
                   <field derivedFrom="I2C0" > <name>I2C1</name> <description>I2C1 Clock Gate Control</description> <bitOffset>7</bitOffset> </field>
                   <field derivedFrom="I2C0" > <name>UART2</name> <description>UART2 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
-                  <field derivedFrom="I2C0" > <name>USBFS</name> <description>USB Clock Gate Control</description> <bitOffset>18</bitOffset> </field>
                   <field derivedFrom="I2C0" > <name>CMP0</name> <description>Comparator Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
                   <field derivedFrom="I2C0" > <name>VREF</name> <description>VREF Clock Gate Control</description> <bitOffset>20</bitOffset> </field>
                   <field derivedFrom="I2C0" > <name>SPI0</name> <description>SPI0 Clock Gate Control</description> <bitOffset>22</bitOffset> </field>
@@ -860,7 +834,6 @@ Enables alternative conversion triggers for ADC0</description>
                   <field derivedFrom="PORTA" > <name>PORTC</name> <description>Port C Clock Gate Control</description> <bitOffset>11</bitOffset> </field>
                   <field derivedFrom="PORTA" > <name>PORTD</name> <description>Port D Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="PORTA" > <name>PORTE</name> <description>Port E Clock Gate Control</description> <bitOffset>13</bitOffset> </field>
-                  <field derivedFrom="PORTA" > <name>SLCD</name> <description>Segment LCD Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
                   <field derivedFrom="PORTA" > <name>LPUART0</name> <description>LPUART0 Clock Gate Control</description> <bitOffset>20</bitOffset> </field>
                   <field derivedFrom="PORTA" > <name>LPUART1</name> <description>LPUART1 Clock Gate Control</description> <bitOffset>21</bitOffset> </field>
                   <field derivedFrom="PORTA" > <name>FLEXIO</name> <description>FlexIO Module</description> <bitOffset>31</bitOffset> </field>

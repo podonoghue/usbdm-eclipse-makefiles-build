@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2024/02
+ * @date     2025/02
  *
  */
 
@@ -32,9 +32,9 @@ extern "C" {
 typedef enum {
 /* ------------------------  Processor Exceptions Numbers  ------------------------- */
   Reset_IRQn                    = -15,   /**<   1 Reset Vector, invoked on Power up and warm reset                                 */
-  NonMaskableInt_IRQn           = -14,   /**<   2 Non maskable Interrupt, cannot be stopped or preempted                           */
+  NMI_IRQn                      = -14,   /**<   2 Non maskable Interrupt, cannot be stopped or preempted                           */
   HardFault_IRQn                = -13,   /**<   3 Hard Fault, all classes of Fault                                                 */
-  SVCall_IRQn                   =  -5,   /**<  11 System Service Call via SVC instruction                                          */
+  SVC_IRQn                      =  -5,   /**<  11 System Service Call via SVC instruction                                          */
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
 /* ----------------------   MKE04Z4 VectorTable                      ---------------------- */
@@ -48,7 +48,7 @@ typedef enum {
   ACMP0_IRQn                    =  16,   /**<  32 Analogue comparator                                                              */
   FTM0_IRQn                     =  17,   /**<  33 FlexTimer Module                                                                 */
   FTM2_IRQn                     =  19,   /**<  35 FlexTimer Module                                                                 */
-  RTC_Alarm_IRQn                =  20,   /**<  36 Real Time Clock                                                                  */
+  RTC_IRQn                      =  20,   /**<  36 Real Time Clock                                                                  */
   ACMP1_IRQn                    =  21,   /**<  37 Analogue comparator                                                              */
   PIT_Ch0_IRQn                  =  22,   /**<  38 Periodic Interrupt Timer                                                         */
   PIT_Ch1_IRQn                  =  23,   /**<  39 Periodic Interrupt Timer                                                         */
@@ -77,7 +77,7 @@ extern void ADC0_IRQHandler(void);                   /**< Analogue to Digital Co
 extern void ACMP0_IRQHandler(void);                  /**< Analogue comparator                                                              */
 extern void FTM0_IRQHandler(void);                   /**< FlexTimer Module                                                                 */
 extern void FTM2_IRQHandler(void);                   /**< FlexTimer Module                                                                 */
-extern void RTC_Alarm_IRQHandler(void);              /**< Real Time Clock                                                                  */
+extern void RTC_IRQHandler(void);                    /**< Real Time Clock                                                                  */
 extern void ACMP1_IRQHandler(void);                  /**< Analogue comparator                                                              */
 extern void PIT_Ch0_IRQHandler(void);                /**< Periodic Interrupt Timer                                                         */
 extern void PIT_Ch1_IRQHandler(void);                /**< Periodic Interrupt Timer                                                         */
@@ -2864,7 +2864,7 @@ typedef struct RTC_Type {
 #define RTC_BasePtr                    0x4003D000UL //!< Peripheral base address
 #define RTC                            ((RTC_Type *) RTC_BasePtr) //!< Freescale base pointer
 #define RTC_BASE_PTR                   (RTC) //!< Freescale style base pointer
-#define RTC_IRQS { RTC_Alarm_IRQn,  }
+#define RTC_IRQS { RTC_IRQn,  }
 
 
 /** @} */ /* End group RTC_Peripheral_access_layer_GROUP */

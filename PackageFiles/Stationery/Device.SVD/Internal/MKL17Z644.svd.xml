@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE device>
+<device
+   schemaVersion="1.1"
+   xmlns:xi="http://www.w3.org/2001/XInclude"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd"
+>
+   <name>MKL17Z644</name>
+   <version>1.6</version>
+   <description>Freescale Kinetis MKL17Z644 Family (MKL17Z32xxx4,MKL17Z64xxx4)(KL17P64M48SF2RM)</description>
+   <cpu>
+      <name>CM0PLUS</name>
+      <revision>r1p0</revision>
+      <endian>little</endian>
+      <mpuPresent>false</mpuPresent>
+      <fpuPresent>false</fpuPresent>
+      <vtorPresent>true</vtorPresent>
+      <nvicPrioBits>2</nvicPrioBits>
+      <vendorSystickConfig>false</vendorSystickConfig>
+   </cpu>
+   <addressUnitBits>8</addressUnitBits>
+   <width>32</width>
+   <peripherals>
+      <xi:include href="peripherals/ADC0_DIFF_A.svd.xml"/>
+      <xi:include href="peripherals/BP_CM0.svd.xml"/>
+      <xi:include href="peripherals/CMP0_PSTM_TRIGM.svd.xml"/>
+      <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
+      <xi:include href="peripherals/CoreDebug.svd.xml"/>
+      <xi:include href="peripherals/DAC0_2DAT_FIFO_MKL17.svd.xml"/>
+      <xi:include href="peripherals/DMA0_MKL.svd.xml"/>
+      <xi:include href="peripherals/DMAMUX0_4CH_TRIG.svd.xml"/>
+      <xi:include href="peripherals/DWT_CM0Plus.svd.xml"/>
+      <xi:include href="peripherals/FLEXIO_4SH_4TMR_0x4005F000.svd.xml"/>
+      <xi:include href="peripherals/FTFA.svd.xml"/>
+      <xi:include href="peripherals/GPIOA_0x400FF000.svd.xml"/>
+      <peripheral derivedFrom="GPIOA"><name>GPIOB</name><baseAddress>0x400FF040</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOC</name><baseAddress>0x400FF080</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOD</name><baseAddress>0x400FF0C0</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOE</name><baseAddress>0x400FF100</baseAddress></peripheral>
+      <xi:include href="peripherals/I2C0_MK28F15.svd.xml"/>
+      <peripheral derivedFrom="I2C0"><name>I2C1</name><baseAddress>0x40067000</baseAddress></peripheral>
+      <xi:include href="peripherals/LLWU_ME_PE4_FILT2.svd.xml"/>
+      <xi:include href="peripherals/LPTMR0.svd.xml"/>
+      <xi:include href="peripherals/LPUART0_MKL03.svd.xml"/>
+      <peripheral derivedFrom="LPUART0"><name>LPUART1</name><baseAddress>0x40055000</baseAddress></peripheral>
+      <xi:include href="peripherals/MCG_LITE_HIRCLPEN.svd.xml"/>
+      <xi:include href="peripherals/MCM_MKL02Z4.svd.xml"/>
+      <xi:include href="peripherals/MTB_MKE15Z7.svd.xml"/>
+      <xi:include href="peripherals/MTBDWT_MKE15Z7.svd.xml"/>
+      <xi:include href="peripherals/NV_MKL5.svd.xml"/>
+      <xi:include href="peripherals/NVIC_CM0.svd.xml"/>
+      <xi:include href="peripherals/OSC0_MK.svd.xml"/>
+      <xi:include href="peripherals/PIT_2CH_CHAIN_LTMR.svd.xml"/>
+      <xi:include href="peripherals/PMC_MK.svd.xml"/>
+      <xi:include href="peripherals/PORTA_MKL_DMA.svd.xml"/>
+      <peripheral derivedFrom="PORTA"><name>PORTB</name><baseAddress>0x4004A000</baseAddress></peripheral>
+      <peripheral derivedFrom="PORTA"><name>PORTC</name><baseAddress>0x4004B000</baseAddress></peripheral>
+      <peripheral derivedFrom="PORTA"><name>PORTD</name><baseAddress>0x4004C000</baseAddress></peripheral>
+      <peripheral derivedFrom="PORTA"><name>PORTE</name><baseAddress>0x4004D000</baseAddress></peripheral>
+      <xi:include href="peripherals/RCM_MKL03Z4.svd.xml"/>
+      <xi:include href="peripherals/RFSYS_0.svd.xml"/>
+      <xi:include href="peripherals/ROM_MKL.svd.xml"/>
+      <xi:include href="peripherals/RTC_WPS_MKL03Z4.svd.xml"/>
+      <xi:include href="peripherals/SCB_CM0.svd.xml"/>
+      <xi:include href="peripherals/SIM_MKL17Z644.svd.xml"/>
+      <xi:include href="peripherals/SMC_ALLS_MKL04Z4.svd.xml"/>
+      <xi:include href="peripherals/SPI0_16Bit_MKL.svd.xml"/>
+      <peripheral derivedFrom="SPI0"><name>SPI1</name><baseAddress>0x40077000</baseAddress><template>#define %n_HAS_FIFO (1)</template></peripheral>
+      <xi:include href="peripherals/SYST.svd.xml"/>
+      <xi:include href="peripherals/TPM0_6CH_POL.svd.xml"/>
+      <xi:include href="peripherals/TPM1_2CH_POL.svd.xml"/>
+      <peripheral derivedFrom="TPM1"><name>TPM2</name><baseAddress>0x4003A000</baseAddress></peripheral>
+      <xi:include href="peripherals/UART2_MKL17Z4_C7816.svd.xml"/>
+      <xi:include href="peripherals/VREF_C.svd.xml"/>
+   </peripherals>
+   <vendorExtensions>
+   <xi:include href="vectorTables/MKL17Z644_VectorTable.svd.xml"/>
+   </vendorExtensions>
+</device>
