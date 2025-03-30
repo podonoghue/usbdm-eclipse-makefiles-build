@@ -1611,8 +1611,6 @@
          \t *
          \t * @param channelMask Mask indicating which channel flags to clear
          \t *                    There is one bit for each channel
-         \t *
-         \t * @note Flags will not be cleared if the channel is configured for DMA
          \t */
          \t%(static)void clearSelectedInterruptFlags(uint32_t channelMask)%(const) {
          \t   // Clear flags (w1c)
@@ -1634,7 +1632,6 @@
          \t *         There is one bit for each channel
          \t *
          \t * @note Only flags captured in the return value are cleared
-         \t * @note Flags will not be cleared if the channel is configured for DMA
          \t */
          \t%(static)unsigned getAndClearInterruptFlags()%(const) {
          \t   // Note - w1c flags

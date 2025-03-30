@@ -1217,6 +1217,11 @@
    <pins>
       <pin name="BANDGAP"      isFixed="true">
          <mux sel="fixed"         signal="ADC0_SE27" />
+         <mux sel="fixed"         signal="CMP0_IN6" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="CMP_DAC"      isFixed="true">
+         <mux sel="fixed"         signal="CMP0_IN7" />
          <reset sel="fixed" />
       </pin>
       <pin name="TEMP_SENSOR"  isFixed="true">
@@ -1536,6 +1541,7 @@
    <packages>
       <package name="FRDM_KL05Z">
          <placement pin="BANDGAP"       location="Internal" />
+         <placement pin="CMP_DAC"       location="Internal" />
          <placement pin="PTA0"          location="SWD_CLK/A3" />
          <placement pin="PTA1"          location="RESET_b" />
          <placement pin="PTA10"         location="D4" />
@@ -1572,6 +1578,7 @@
       </package>
       <package name="MKL05_LQFP32">
          <placement pin="BANDGAP"       location="Internal" />
+         <placement pin="CMP_DAC"       location="Internal" />
          <placement pin="PTA0"          location="p30" />
          <placement pin="PTA1"          location="p31" />
          <placement pin="PTA10"         location="p21" />
@@ -1608,6 +1615,7 @@
       </package>
       <package name="MKL05_LQFP48">
          <placement pin="BANDGAP"       location="Internal" />
+         <placement pin="CMP_DAC"       location="Internal" />
          <placement pin="PTA0"          location="p46" />
          <placement pin="PTA1"          location="p47" />
          <placement pin="PTA10"         location="p33" />
@@ -1660,6 +1668,7 @@
       </package>
       <package name="MKL05_QFN24">
          <placement pin="BANDGAP"       location="Internal" />
+         <placement pin="CMP_DAC"       location="Internal" />
          <placement pin="PTA0"          location="p22" />
          <placement pin="PTA1"          location="p23" />
          <placement pin="PTA12"         location="p20" />
@@ -1690,6 +1699,7 @@
       </package>
       <package name="MKL05_QFN32">
          <placement pin="BANDGAP"       location="Internal" />
+         <placement pin="CMP_DAC"       location="Internal" />
          <placement pin="PTA0"          location="p30" />
          <placement pin="PTA1"          location="p31" />
          <placement pin="PTA10"         location="p21" />

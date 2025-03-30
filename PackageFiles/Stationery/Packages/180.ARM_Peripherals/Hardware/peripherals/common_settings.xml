@@ -86,7 +86,16 @@
    <stringOption name="Ftm2"        key="/HARDWARE/Ftm2"       value="Ftm0::Channel&lt;1&gt;"      description="FTM channel for examples" />
 </category>
 
-<category name="Linker" description="Device Linker information">
+<category name="Linker" description="Device Linker information" toolTip="This information is used to generate linker scripts" >
+   <binaryOption key="RegenerateLinkerFiles"
+      name="Regenerate Linker files!"
+      description="Update linker scripts when code is generated"
+      toolTip="This option is not preserved and must be set each time it is needed"
+      derived="true" >
+      <choice name="Don't modify linker files" value="false" isDefault="true" />
+      <choice name="Update linker files"       value="true" />
+   </binaryOption>
+
    <intOption name="Stack size"    key="/LINKER/stackSize"  value="0" description="RAM allocated to stack (bytes)"  step="4" min="0" />
    <intOption name="Heap size"     key="/LINKER/heapSize"   value="0" description="RAM allocated to heap (bytes)"   step="4" min="0" />
 
@@ -125,11 +134,6 @@
    <constant name="Linker Information"   key="/LINKER/information"  type="String" />
 
    <stringOption name="Vector table template"  key="/LINKER/vectorsFilename"  locked="true" description="File used for target vector table"  />
-
-   <binaryOption key="RegenerateLinkerFiles" name="Regenerate Linker files" description="Causes the linker scripts to be regenerated" >
-      <choice name="Don't modify linker files" value="false" isDefault="true" />
-      <choice name="Update linker files"       value="true" />
-   </binaryOption>
 
    <stringOption name="Linker script template"        key="/LINKER/scriptFilename"   locked="true" description="File used as linker script"       />
    <stringOption name="Linker memory map template"    key="/LINKER/mapFilename"      locked="true" description="File used for target memory map"  />
