@@ -120,12 +120,16 @@
          <graphicItem type="mux"         id="Filter Clock,x-30,y+70"  var="cmp_cr1_se"  params="740, 280, 0"       />
          <graphicItem type="connector"                                                  params="Filter Clock,0, fi,0, x,y"     />
 
-   <if condition="cmp_cr1_trigm_present">
-         <graphicItem type="variableBox" id="Trigger,NONAME"        var="trigger_input" params="350, 450, 70, small" />
-         <graphicItem type="node"        id="Trigger.0,Enable,x+35" var="cmp_cr1_trigm" params="350, 400, is, on"                />
-         <graphicItem type="connector"                                                  params="Trigger,0, Trigger.0,0, x,y"     />
-         <graphicItem type="connector"                              var="trigger_input" params="Trigger.0,0, DAC,1, y-70,x,y"     />
-         <graphicItem type="connector"                              var="trigger_input" params="Trigger.0,0, CMP,2, y-70,x,d,y"     />
+   <if condition="trigger_input" >
+         <graphicItem type="variableBox" id="Trigger In.0"    var="trigger_input"     params="320, 450,  140, small, on"            />
+         <graphicItem type="node"        id="Trigger In,x+35" var="trigger_input"     params="320, 400, is, on"                     />
+         <graphicItem type="connector"                                                params="Trigger In.0,0, Trigger In,0, x,y"    />
+
+         <graphicItem type="node"        id="Trigger,x+35"    var="cmp_cr1_trigm"     params="320, 360, is, on"                     />
+         <graphicItem type="connector"                                                params="Trigger In,0, Trigger,0, (y+20),x,y"  />
+
+         <graphicItem type="connector"                        var="trigger_input"     params="Trigger,0, DAC,1, y-30,d,x,y"         />
+         <graphicItem type="connector"                        var="trigger_input"     params="Trigger,0, CMP,2"                     />
    </if>
 
          <graphicItem type="variableBox" id="Clock Config"   var="cmpClockConfig"       params="590, 450, 320, small" />
