@@ -25,7 +25,7 @@
 
    <variable key="cmp_holder"                   type="String" expression='"Comparitor"' />
    <!-- constant key="window_input" value='"PDB"'   description="External Window input" / -->
-   <!--  constant key="trigger"      value='"LPTMR"'      description="External Trigger input" / -->
+   <!--  constant key="trigger_input"      value='"LPTMR"'      description="External Trigger input" / -->
 
    <stringOption key="window_input"
       enabledBy="cmp_mode==(6,7,8)"
@@ -43,10 +43,10 @@
       value="PDB"
    />
 
-   <stringOption key="trigger"  condition="cmp_cr1_trigm_present"
+   <stringOption key="trigger_input"  condition="/LPTMR0/_present&amp;&amp;cmp_cr1_trigm_present"
+      enabledBy="cmp_cr1_trigm"
       hidden="true"
       derived="true"
-      enabledBy="cmp_cr1_trigm"
       description="External Trigger input"
       value="LPTMR"
    />
@@ -106,18 +106,6 @@
          <graphicItem type="variableBox" id="Speed"         var="cmp_cr1_pmode"       params="400, 255,  140, small"        />
          <graphicItem type="connector"                                                params="Hysteresis,0, CMP,3, x,y"     />
 
-         <if  condition="cmp_cr1_trigm_present" >
-            <graphicItem type="variableBox" id="Trigger In.0"      var="trigger"         params="320, 450,  140, small, on"             />
-            <graphicItem type="connector"                                                params="Trigger In.0,0, Trigger In,0, x,y"       />
-            <graphicItem type="node"        id="Trigger In,NONAME" var="trigger"         params="320, 400, is, on"                      />
-            <graphicItem type="connector"                                                params="Trigger In,0, Trigger,0, (y+20),x,y"     />
-
-            <graphicItem type="variableBox" id="Trigger"       var="cmp_cr1_trigm"       params="320, 360,  140, small,on,is"            />
-            <graphicItem type="connector"                      var="trigger"             params="Trigger,0, DAC,1, y-30,d,x,y"            />
-            <graphicItem type="connector"                      var="trigger"             params="Trigger,0, CMP,2"                      />
-         </if>
-
-
          <graphicItem type="connector"                                                params="Window,0, COS,1, x+10,d,y"     />
          <graphicItem type="connector"                                                params="Filter,0, COS,2, x+10,d,y"     />
          <graphicItem type="mux"         id="COS"            var="cmp_cr1_output"     params="860, 70, 0, normal"       />
@@ -132,12 +120,20 @@
          <graphicItem type="mux"         id="Filter Clock,x-30,y+70"  var="cmp_cr1_se"  params="740, 280, 0"       />
          <graphicItem type="connector"                                                  params="Filter Clock,0, fi,0, x,y"     />
 
-         <graphicItem type="variableBox" id="Clock Config"   var="cmpClockConfig"     params="590, 450, 320, small" />
-         <graphicItem type="variableBox" id="Input Clock.0"  var="input_clock"        params="590, 470, 320, small, on-100" />
-         <graphicItem type="connector"                                                params="Input Clock.0,0, Input Clock,0, x,y"     />
-         <graphicItem type="node"        id="Input Clock,NONAME" var="input_clock"    params="500, 400, is, on"                />
-         <graphicItem type="connector"                                                params="Input Clock,0, Clock Prescaler,0, y,d,x"     />
-         <graphicItem type="connector"                                                params="Input Clock,0, Window,1, (y+30),x,y"     />
+   <if condition="cmp_cr1_trigm_present">
+         <graphicItem type="variableBox" id="Trigger,NONAME"        var="trigger_input" params="350, 450, 70, small" />
+         <graphicItem type="node"        id="Trigger.0,Enable,x+35" var="cmp_cr1_trigm" params="350, 400, is, on"                />
+         <graphicItem type="connector"                                                  params="Trigger,0, Trigger.0,0, x,y"     />
+         <graphicItem type="connector"                              var="trigger_input" params="Trigger.0,0, DAC,1, y-70,x,y"     />
+         <graphicItem type="connector"                              var="trigger_input" params="Trigger.0,0, CMP,2, y-70,x,d,y"     />
+   </if>
+
+         <graphicItem type="variableBox" id="Clock Config"   var="cmpClockConfig"       params="590, 450, 320, small" />
+         <graphicItem type="variableBox" id="Input Clock.0"  var="input_clock"          params="590, 470, 320, small, on-100" />
+         <graphicItem type="connector"                                                  params="Input Clock.0,0, Input Clock,0, x,y"     />
+         <graphicItem type="node"        id="Input Clock,NONAME,x+35" var="input_clock" params="500, 400, is, on"                />
+         <graphicItem type="connector"                                                  params="Input Clock,0, Clock Prescaler,0, y,d,x"     />
+         <graphicItem type="connector"                                                  params="Input Clock,0, Window,1, (y+30),x,y"     />
 
          <graphicItem type="variableBox" id="Window In.0"        var="window_input"   params="830, 450,  120, small, on"    />
          <graphicItem type="variableBox" id="Sample In.0"        var="sample_input"   params="830, 470,  120, small, on"    />
@@ -280,7 +276,7 @@
       generateAsConstants="true"
       description="CMP$(_instance) Positive Input Select"
       toolTip="Selects the $(_Class) positive input source" >
-      <choiceExpansion 
+      <choiceExpansion
             name='@SignalDescriptionFromIndex(%(i),"^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
             condition='SignalExists("CMP$(_instance)_IN%(i)")'
             value="%(i)" enum="%(i)"
@@ -307,7 +303,7 @@
       generateAsConstants="true"
       description="CMP$(_instance) Negative Input Select"
       toolTip="Selects the $(_Class) negative input source" >
-      <choiceExpansion 
+      <choiceExpansion
             name='@SignalDescriptionFromIndex(%(i),"^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
             condition='SignalExists("CMP$(_instance)_IN%(i)")'
             value="%(i)" enum="%(i)"
