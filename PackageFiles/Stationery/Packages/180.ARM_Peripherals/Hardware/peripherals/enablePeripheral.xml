@@ -317,7 +317,7 @@
                      \t"
                   ]]>
                </clipboard>
-      
+
                <choiceOption key='irqLevel_%(irqmodifier)' condition='!irqLevel_%(irqmodifier)'
                   hiddenBy="!irqHandlingMethod||!enablePeripheralSupport"
                   description='IRQ priority level for %(irqmodifier)'
@@ -344,7 +344,7 @@
                   \t"
                ]]>
             </clipboard>
-   
+
             <choiceOption key='irqLevel' condition='!irqLevel'
                hiddenBy="!irqHandlingMethod||!enablePeripheralSupport"
                derived="true"
@@ -372,30 +372,30 @@
                   toolTip="Name of interrupt handler to be used in default settings object.\n
                            This must be a global function matching the expected interrupt handler signature"
                   value=""  />
-                  
-               <variable key='handlerName_%(irqmodifier)' type="String" 
+
+               <variable key='handlerName_%(irqmodifier)' type="String"
                   description="User declared event handler"
                   expression='isBlank(irqHandlerName_%(irqmodifier))?"unhandledCallback":irqHandlerName_%(irqmodifier)' />
-                  
+
                <template key="/$(_BASENAME)/prototypes" >
                   <![CDATA[
                   $(/$(_NAME)/handlerPrototype_%(irqmodifier):// No handler defined for $(_NAME) %(irqmodifier))\n
                   ]]>
                </template>
 
-               <!-- For debug - displays handler information 
-               <stringOption key='_handlerName_%(irqmodifier)' 
+               <!-- For debug - displays handler information
+               <stringOption key='_handlerName_%(irqmodifier)'
                   hiddenBy="!irqHandlingMethod||!enablePeripheralSupport"
                   locked="true"
-                  derived="true" 
+                  derived="true"
                   ref='="handlerName_%(irqmodifier)"' />
-               -->        
+               -->
                <stringOption key='handlerPrototype_%(irqmodifier)'
-                  description="Handler prototype" 
+                  description="Handler prototype"
                   toolTip="Prototype for user callback"
                   hiddenBy="!irqHandlingMethod||!enablePeripheralSupport"
                   locked="true"
-                  derived="true" 
+                  derived="true"
                   ref='isBlank(irqHandlerName_%(irqmodifier))?"// No handler defined for $(_NAME) %(irqmodifier)":"extern void "+irqHandlerName_%(irqmodifier)+"(%(irq_parameters));"' />
             </immediateValue>
          <else/> <!-- !(_userIrqCount>1) -->
@@ -407,29 +407,29 @@
                   toolTip="Name of interrupt handler to be used in default settings object.\n
                            This must be a global function matching the expected interrupt handler signature"
                   value=""  />
-               <variable key='handlerName' type="String" 
+               <variable key='handlerName' type="String"
                   description="User declared event handler"
                   expression='isBlank(irqHandlerName)?"unhandledCallback":irqHandlerName' />
-               
+
                <template key="/$(_BASENAME)/prototypes" >
                   <![CDATA[
                   $(/$(_NAME)/handlerPrototype:// No handler defined for $(_NAME))\n
                   ]]>
                </template>
-               <!-- For debug - displays handler information 
-               <stringOption key='_handlerName' 
+               <!-- For debug - displays handler information
+               <stringOption key='_handlerName'
                   hiddenBy="!irqHandlingMethod||!enablePeripheralSupport"
                   locked="true"
-                  derived="true" 
+                  derived="true"
                   ref='handlerName' />
-               -->        
-               <stringOption key='handlerPrototype' 
-                  description="Handler prototype" 
+               -->
+               <stringOption key='handlerPrototype'
+                  description="Handler prototype"
                   toolTip="Prototype for user callback"
                   hiddenBy="!irqHandlingMethod||!enablePeripheralSupport"
                   locked="true"
-                  derived="true" 
-                  ref='isBlank(irqHandlerName)?"// No handler defined for $(_NAME) ":"extern void "+irqHandlerName+"(%(irq_parameters));"' />        
+                  derived="true"
+                  ref='isBlank(irqHandlerName)?"// No handler defined for $(_NAME) ":"extern void "+irqHandlerName+"(%(irq_parameters));"' />
             </immediateValue>
          </if>
       </for>
@@ -456,7 +456,7 @@
           \t\n
       ]]></variableTemplate>
 
-      <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"  
+      <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
          condition="!suppressIrqArray"
          immediateVariables="irq_parameters" >
       <![CDATA[
@@ -468,7 +468,7 @@
       ]]>
       </template>
 
-      <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"  
+      <template where="basicInfo" codeGenCondition="$(_BasicInfoIrqGuard)"
          condition="!isBlank(@irq_dummy_parameters)&amp;&amp;!suppressIrqArray"
          immediateVariables="irq_dummy_parameters" >
       <![CDATA[
@@ -511,7 +511,7 @@
          valueFormat="%s"
          >
          <choiceExpansion keys="irq" values="=_hardwareIrqNums"
-            value="%(i)" name="Maps to %(irq)" enum='=Prettify(ReplaceAll("%(irq)", "$(_NAME)_([a-z|A-Z|0-9_]+)_IRQn", "$1"))' />
+            value="%(i)" name="Maps to %(irq)" enum='=Prettify(ReplaceAll("%(irq)", "$(_NAME)_([a-z|A-Z|0-9|_]+?)_IRQn", "$1"))' />
       </choiceOption>
 
       <choiceOption where="info" key="irq_enum" condition="!irq_enum&amp;&amp;(@_userIrqCount>1)"
@@ -522,7 +522,7 @@
          valueFormat="%s"
          >
          <choiceExpansion keys="irq" values="=_userIrqNums"
-            value="%(i)" name="Maps to %(irq)" enum='=Prettify(ReplaceAll("%(irq)", "$(_NAME)_([a-z|A-Z|0-9_]+)_IRQn", "$1"))' />
+            value="%(i)" name="Maps to %(irq)" enum='=Prettify(ReplaceAll("%(irq)", "$(_NAME)_([a-z|A-Z|0-9|_]+)_IRQn", "$1"))' />
       </choiceOption>
 
       <!-- IRQ enable/disable when single hardware IRQ is available  -->
@@ -656,7 +656,7 @@
       </template>
 
       <!--  Set callback -->
-      <template codeGenCondition="irqHandlingMethod" 
+      <template codeGenCondition="irqHandlingMethod"
          condition="isBlank(@irq_dummy_parameters)&amp;&amp;!irq_enum||irq_single_handler" >
       <![CDATA[
          \t/** Callback function for $(_Class) */
@@ -664,7 +664,7 @@
          \t\n
       ]]>
       </template>
-      <template codeGenCondition="irqHandlingMethod" 
+      <template codeGenCondition="irqHandlingMethod"
          condition="!isBlank(@irq_dummy_parameters)&amp;&amp;!irq_enum||irq_single_handler" >
       <![CDATA[
          \t/** Callback function for $(_Class) */
@@ -743,11 +743,11 @@
          \tstatic inline CallbackFunction sCallbacks[$(_userIrqCount)] = {\n
       ]]></variableTemplate>
       <for keys="irqName" values="=_userIrqNums" condition="=_userIrqCount>1" >
-         <template codeGenCondition="irqHandlingMethod" 
+         <template codeGenCondition="irqHandlingMethod"
             condition="isBlank(@irq_dummy_parameters)&amp;&amp;irq_enum&amp;&amp;!irq_single_handler" ><![CDATA[
             \t   unhandledCallback,  // %(irqName) \n
          ]]></template>
-         <template codeGenCondition="irqHandlingMethod" 
+         <template codeGenCondition="irqHandlingMethod"
             condition="!isBlank(@irq_dummy_parameters)&amp;&amp;irq_enum&amp;&amp;!irq_single_handler" ><![CDATA[
             \t   $(_Info)::unhandledCallback,  // %(irqName) \n
          ]]></template>
@@ -847,7 +847,7 @@
    <if condition="_hardwareIrqCount&amp;&amp;!suppressIrqArray" >
 
       <for keys="irqName" values="=_hardwareIrqNums" condition="!suppressHardwareIrq&amp;&amp;(@_hardwareIrqCount>1)" >
-         <equation key="prettyIrqNum" value='=Prettify(ReplaceAll("%(irqName)", "$(_NAME)_([a-z|A-Z|0-9_]+)_IRQn", "$1"))' />
+         <equation key="prettyIrqNum" value='=Prettify(ReplaceAll("%(irqName)", "$(_NAME)_([a-z|A-Z|0-9|_]+)_IRQn", "$1"))' />
          <!--
          <printVar key="prettyIrqNum" />
           -->
@@ -914,7 +914,7 @@
 <!--     START BasicInfo::InitVectors class and Init typedef -->
 <!--====================================================================================================== -->
    <if condition="_hardwareIrqCount&amp;&amp;!suppressIrqArray&amp;&amp;!no_initvectors" >
-   
+
       <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount>1)"
          variables="irq_enum"
          immediateVariables="_hardwareIrqCount"

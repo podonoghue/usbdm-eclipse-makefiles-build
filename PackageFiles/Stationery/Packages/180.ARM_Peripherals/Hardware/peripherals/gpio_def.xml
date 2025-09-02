@@ -1108,7 +1108,7 @@
       key="/PCR/set_pcr"
       discardRepeats="true" ><![CDATA[
       \t      // Set PCR register for pin
-      \t      *PCR = %paramExpression;
+      \t      *PCR = static_cast<uint32_t>(%paramExpression);
       \t   }
       \t}\n
    ]]></variableTemplate>
