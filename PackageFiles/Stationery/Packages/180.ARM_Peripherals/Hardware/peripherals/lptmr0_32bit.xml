@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
-<!-- lptmr0_dma.xml -->
+<!-- lptmr0_32bit.xml.xml -->
 
-<!-- Need to add CSR.TDRE Timer DMA Request Enable  -->
+<!-- Need to changes to 32-bit Counter c.f. LPTMR0  -->
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<constant key="counterIs32bit"  type="Boolean" value="true" />
+
 <xi:include href="lptmr0.xml"/>
 </fragment>

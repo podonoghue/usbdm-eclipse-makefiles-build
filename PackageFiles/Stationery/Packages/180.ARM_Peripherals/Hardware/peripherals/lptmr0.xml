@@ -79,7 +79,7 @@
 
    <!-- _________ CMR ______________ -->
 
-   <intOption key="lptmr_cmr_compare" condition="lptmr_cmr_compare_present"
+   <intOption key="lptmr_cmr_compare" condition="lptmr_cnr_counter_present&amp;&amp;!counterIs32bit"
       enabledBy="enablePeripheralSupport"
       description="Timer Compare Value"
       units="ticks"
@@ -90,6 +90,18 @@
                This value determines the period in TimeInterval mode or the event time in Pulse Counting mode\n
                The CMR must only be altered when timer is disabled or when TCF is set."
       value="65535" min="1" max="65535" />
+
+   <intOption key="lptmr_cmr_compare" condition="lptmr_cnr_counter_present&amp;&amp;counterIs32bit"
+      enabledBy="enablePeripheralSupport"
+      description="Timer Compare Value"
+      units="ticks"
+      baseType="uint32_t"
+      toolTip="Comparison value\n
+               The timer comparison flag is set when the counter reaches this value and increments. \n
+               The hardware trigger will assert until the next time the counter increments. \n
+               This value determines the period in TimeInterval mode or the event time in Pulse Counting mode\n
+               The CMR must only be altered when timer is disabled or when TCF is set."
+      value="4294967296" min="1" max="4294967296" />
 
    <choiceOption key="lptmr_psr_pcs" condition="lptmr_psr_pcs_present"
       enabledBy="enablePeripheralSupport"
@@ -153,9 +165,19 @@
       derived="true"
       units="Hz"/>
 
-   <floatOption key="maximumPeriod"
+   <floatOption key="maximumPeriod" condition="lptmr_cnr_counter_present&amp;&amp;!counterIs32bit"
       enabledBy="enablePeripheralSupport&amp;&amp;!lptmr_csr_tms"
       ref="65536/(counterFrequency)"
+      typeName="Seconds"
+      locked="true"
+      description="Maximum period of timer"
+      toolTip="Determined from timer clock source and prescaler"
+      derived="true"
+      units="s"/>
+
+   <floatOption key="maximumPeriod" condition="lptmr_cnr_counter_present&amp;&amp;counterIs32bit"
+      enabledBy="enablePeripheralSupport&amp;&amp;!lptmr_csr_tms"
+      ref="4294967296/(counterFrequency)"
       typeName="Seconds"
       locked="true"
       description="Maximum period of timer"
@@ -252,11 +274,19 @@
 
    <!-- ____ CNR ____ -->
 
-   <intOption key="lptmr_cnr_counter" condition="lptmr_cnr_counter_present"
+   <intOption key="lptmr_cnr_counter" condition="lptmr_cnr_counter_present&amp;&amp;!counterIs32bit"
       hidden="true"
       derived="true"
-      typeName="uint16_t"
       baseType="uint16_t"
+      toolTip="Current counter value\n
+               This is a read-only register."
+      description="Counter Value"
+   />
+
+   <intOption key="lptmr_cnr_counter" condition="lptmr_cnr_counter_present&amp;&amp;counterIs32bit"
+      hidden="true"
+      derived="true"
+      baseType="uint32_t"
       toolTip="Current counter value\n
                This is a read-only register."
       description="Counter Value"
@@ -321,7 +351,7 @@
       \t * @return E_NO_ERROR      => Success
       \t * @return E_ILLEGAL_PARAM => Failed to find suitable values for psr.prescale and psr.pbyp
       \t */
-      \tstatic ErrorCode calculateDurationValues(Seconds duration, uint8_t &psr, uint16_t &cmr) {
+      \tstatic ErrorCode calculateDurationValues(Seconds duration, uint8_t &psr, uint32_t &cmr) {
       \t
       \t   float inputClock = getInputClockFrequency(LptmrClockSel(psr&LPTMR_PSR_PCS_MASK));
       \t
@@ -735,7 +765,7 @@
       \t%(static)ErrorCode setPeriod(Seconds period) %(const){
       \t
       \t   uint8_t  psr = lptmr->PSR;
-      \t   uint16_t cmr;
+      \t   uint32_t cmr;
       \t   ErrorCode rc = LptmrBasicInfo::calculateDurationValues(period, psr, cmr);
       \t   if (rc != E_NO_ERROR) {
       \t      return rc;
@@ -1072,7 +1102,7 @@
              " var                                                    : statement            "
       values="
                lptmr_psr_pcs                                          : %baseType %registerName = init.%registerName   ;
-               lptmr_cmr_compare                                      : %baseType %registerName = init.%registerName   ;
+               lptmr_cmr_compare                                      : uint32_t  %registerName = init.%registerName   ;
                lptmr_cmrPeriod                                        :
                   'if (init.cmrperiod != 0) {
                \n\t      // Calculate values from duration in seconds
