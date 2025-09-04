@@ -169,8 +169,8 @@
       description="ADC Input Clock"
       toolTip="Clock source for the ADC module" >
       <choice name="Bus clock"                  value="0" enum="BusClock"     code="SystemBusClock"            ref="/SIM/system_bus_clock[0]" />
-      <choice name="Bus clock/2"                value="1" enum="BusClockDiv2" code="SystemBusClock/2"          ref="/SIM/system_bus_clock[0]/2" condition="!/SIM/system_irc48m_clock[]" />
-      <choice name="Irc48M clock"               value="1" enum="Irc48mClk"    code="SimInfo::irc48mClock"      ref="/SIM/system_irc48m_clock[]" condition="/SIM/system_irc48m_clock[]"  />
+      <choice name="Bus clock/2"                value="1" enum="BusClockDiv2" code="SystemBusClock/2"          ref="/SIM/system_bus_clock[0]/2"  condition="!/SIM/system_irc48m_clock[]" />
+      <choice name="Irc48M clock"               value="1" enum="Irc48mClk"    code="SimInfo::irc48mClock"      ref="/SIM/system_irc48m_clock[0]" condition="/SIM/system_irc48m_clock[]"  />
       <choice name="Alternate clock (OSCERCLK)" value="2" enum="OscerClk"     code="Osc0Info::getOscerClock()" ref="/OSC0/oscer_clock"        />
       <choice name="Asynchronous clock (ADACK)" value="3" enum="Asynch"       code="$(adcInternalClock)"       ref="adcInternalClock"         isDefault="true" />
    </choiceOption >
