@@ -189,7 +189,7 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
    } > bdts_ram
   
    /* Initialised data in RAM copied from flash */
-   .data : 
+   .data (READONLY) : 
    {
       __data_start__ = .;
       __DATA_RAM = .;
@@ -208,14 +208,14 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
   __data_image_start__ = LOADADDR(.data);
   
    /* Start of not initialised region */
-   .noinit :
+   .noinit (READONLY) :
    {
       . = ALIGN(4);
       *(.noinit)
    } > noinit_ram
    
    /* Start of BSS */
-   .bss :
+   .bss (READONLY) :
    {
       . = ALIGN(4);
       __START_BSS = .;
