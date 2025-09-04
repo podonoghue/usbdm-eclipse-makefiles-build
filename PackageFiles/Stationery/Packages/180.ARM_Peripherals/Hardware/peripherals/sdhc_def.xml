@@ -1014,6 +1014,7 @@ The host driver can clear IRQSTATEN[DTOESEN] to prevent inadvertent time-out eve
       typeName="SdhcStatusFlag"
       enumClass="true"
       baseType="uint32_t"
+      generateOperators="true"
       value="0" >
       <bitField description="DMA Error"             name="DmaError"            bit="28" condition="sdhc_irqstat_dmae_present"  />
       <bitField description="Auto CMD12 Error"      name="AutoCommand12Error"  bit="24" condition="sdhc_irqstat_ac12e_present" />
@@ -1048,6 +1049,7 @@ The host driver can clear IRQSTATEN[DTOESEN] to prevent inadvertent time-out eve
       enumClass="true"
       baseType="uint32_t"
       value="0b10001011111110000000100111111"
+      generateOperators="true"
       >
    </bitfieldOption>
 

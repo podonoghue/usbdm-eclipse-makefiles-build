@@ -257,6 +257,7 @@
       description="SRAM VLLS2 Power-down"
       value="0xFF"
       enumClass="true"
+      generateOperators="true"
       >
       <bitField description="SRAM2 [1FFF_8000-1FFF_FFFF] 32KB not retained"  bit="0" name="SRAM2" />
       <bitField description="SRAM3 [1FFF_0000-1FFF_7FFF] 32KB not retained"  bit="1" name="SRAM3" />
