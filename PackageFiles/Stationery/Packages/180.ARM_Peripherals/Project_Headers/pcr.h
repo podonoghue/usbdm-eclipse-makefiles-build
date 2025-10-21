@@ -309,19 +309,19 @@ enum Ticks : unsigned {
    using Hertz    = float;
    using Percent  = float;
 
-   static inline constexpr Ticks operator+ (const Ticks &left, const Ticks &right) {
+   constexpr Ticks operator+ (const Ticks &left, const Ticks &right) {
       return Ticks(unsigned(left)+unsigned(right));
    }
 
-   static inline constexpr Ticks operator- (const Ticks &left, const Ticks &right) {
+   constexpr Ticks operator- (const Ticks &left, const Ticks &right) {
       return Ticks(unsigned(left)-unsigned(right));
    }
 
-   static inline constexpr Ticks operator* (const Ticks &left, const int &right) {
+   constexpr Ticks operator* (const Ticks &left, const int &right) {
       return Ticks(unsigned(left)*right);
    }
 
-   static inline constexpr Ticks operator* (const int &left, const Ticks &right) {
+   constexpr Ticks operator* (const int &left, const Ticks &right) {
       return Ticks((left)*unsigned(right));
    }
 
@@ -568,35 +568,7 @@ static inline void disablePortClocks(uint32_t pccAddress) {
 #define PORT_PCR_PFE(x) 0
 #endif
 
-/**
- * PCR value
- */
-enum class PcrValue : uint32_t {
-   // Using an ENUM prevents automatic conversions from uint32_t to PcrValue
-};
-
-constexpr uint32_t operator ~(PcrValue pcrValue) {
-   return ~static_cast<uint32_t>(pcrValue);
-}
-
-constexpr uint32_t operator &(PcrValue pcrValue, uint32_t mask) {
-   return static_cast<uint32_t>(pcrValue) & mask;
-}
-
-constexpr bool operator ==(PcrValue pcrValue, uint32_t mask) {
-   return static_cast<uint32_t>(pcrValue) & mask;
-}
-
 $(/PCR/pcr_enums: // /PCR/pcr_enums not found)
-
-
-template<typename ... V>
-constexpr PcrValue pcrOr(const V &... v) {
-  std::common_type_t<PcrValue> result = {};
-  (void)std::initializer_list<uint32_t>{ (result = (result | v), 0U)... };
-  return result;
-}
-
 /**
  * Force a PcrValue to refer to the GPIO function i.e. MUX field = PinMux_Gpio
  *
@@ -605,7 +577,7 @@ constexpr PcrValue pcrOr(const V &... v) {
  * @return  Modified PCR value
  */
 constexpr PcrValue gpioPcrValue(PcrValue op) {
-   return (PcrValue)((op&~PORT_PCR_MUX_MASK)|PinMux_Gpio);
+   return PcrValue((uint32_t(op)&~PORT_PCR_MUX_MASK)|uint32_t(PinMux_Gpio));
 }
 
 /**
@@ -616,7 +588,7 @@ constexpr PcrValue gpioPcrValue(PcrValue op) {
  * @return  Modified PCR value
  */
 constexpr PcrValue analoguePcrValue(PcrValue op) {
-   return (PcrValue)((op&~PORT_PCR_MUX_MASK)|PinMux_Analogue);
+   return PcrValue((uint32_t(op)&~PORT_PCR_MUX_MASK)|uint32_t(PinMux_Analogue));
 }
 
 
@@ -1076,7 +1048,7 @@ public:
    static constexpr uint32_t BITMASK = makeBitMask(BITNUM);
 
    /// Default PCR value including PinMux value for peripheral
-   static constexpr PcrInit defaultPcrValue = defPcrValue;
+   static constexpr PcrValue defaultPcrValue = defPcrValue;
 
    /// Address of associated port
    static constexpr uint32_t portAddress = PcrBase::getPortAddress(mapPinToPort(pinIndex));

@@ -628,93 +628,197 @@
       #define PORT_PCR_DIGITALFILTER_SHIFT (20U)\n\n
    ]]></template>
 
-   <choiceOption key="port_pcr_pfe" condition="/PCR/dfer_register_present"
+   <choiceOption key="/port_pcr_pfe" condition="/PCR/dfer_register_present &amp;&amp; !/port_pcr_pfe"
       typeName="PinFilter"
-      baseType="uint32_t"
+      baseType="PinFilter"
       valueFormat="PORT_PCR_DIGITALFILTER(%s),PORT_PCR_PFE(%s)"
       templateKey="/PCR/pcr_enums"
       description="Pin input filter"
       toolTip="Pin filtering on digital inputs"
+      constantTemplate="__attribute__ ((unused)) static inline constexpr %t %n   = %t(%v);"
       >
+      <preamble>
+      <![CDATA[
+      \tclass %t {
+      \tpublic:
+      \t   const uint32_t value;
+      \t
+      \t   constexpr %t(uint32_t value) : value(value) {
+      \t   }
+      \t   constexpr operator PcrValue() const { return PcrValue(value); }
+      \t};\n
+      ]]>
+      </preamble>
       <choice name="No pin filter"              enum="None"     value="0,0" />
       <choice name="Pin filter enabled"         enum="Passive"  value="0,1" />
       <choice name="Digital pin filter enabled" enum="Digital"  value="1,0" />
    </choiceOption>
 
-   <choiceOption key="port_pcr_pfe" condition="!/PCR/dfer_register_present&amp;&amp;/PCR/pfe_present"
+   <choiceOption key="/port_pcr_pfe" condition="!/PCR/dfer_register_present&amp;&amp;/PCR/pfe_present &amp;&amp; !/port_pcr_pfe"
       typeName="PinFilter"
-      baseType="uint32_t"
+      baseType="PinFilter"
       templateKey="/PCR/pcr_enums"
       description="Pin input filter"
       toolTip="Pin filtering on digital inputs"
+      constantTemplate="__attribute__ ((unused)) static inline constexpr %t %n   = %t(%v);"
       >
+      <preamble>
+      <![CDATA[
+      \tclass %t {
+      \tpublic:
+      \t   const uint32_t value;
+      \t
+      \t   constexpr %t(uint32_t value) : value(value) {
+      \t   }
+      \t   constexpr operator PcrValue() const { return PcrValue(value); }
+      \t};\n
+      ]]>
+      </preamble>
       <choice name="No pin filter"              enum="None"     value="0" />
       <choice name="Pin filter enabled"         enum="Passive"  value="1" />
    </choiceOption>
 
-   <choiceOption key="port_pcr_pd" condition="/PCR/pd_present"
+   <choiceOption key="/port_pcr_pd" condition="/PCR/pd_present &amp;&amp; !/port_pcr_pd"
       typeName="PinPull"
-      baseType="uint32_t"
+      baseType="PinPull"
       templateKey="/PCR/pcr_enums"
       description="Pin pull device"
       toolTip="Pin pull device (up/down/none) on digital inputs"
+      constantTemplate="__attribute__ ((unused)) static inline constexpr %t %n   = %t(%v);"
       >
+      <preamble>
+      <![CDATA[
+      \tclass %t {
+      \tpublic:
+      \t   const uint32_t value;
+      \t
+      \t   constexpr %t(uint32_t value) : value(value) {
+      \t   }
+      \t   constexpr operator PcrValue() const { return PcrValue(value); }
+      \t};\n
+      ]]>
+      </preamble>
       <choice name="No pull device" enum="None"  value="0b00" />
       <choice name="Weak pull-up"   enum="Up"    value="0b11" />
       <choice name="Weak pull-down" enum="Down"  value="0b10" />
    </choiceOption>
 
-   <choiceOption key="port_pcr_dse" condition="/PCR/dse_present"
+   <choiceOption key="/port_pcr_dse" condition="/PCR/dse_present &amp;&amp; !/port_pcr_dse"
       typeName="PinDriveStrength"
-      baseType="uint32_t"
+      baseType="PinDriveStrength"
       templateKey="/PCR/pcr_enums"
       description="Pin drive strength"
       toolTip="Pin drive strength of digital outputs"
+      constantTemplate="__attribute__ ((unused)) static inline constexpr %t %n   = %t(%v);"
       >
+      <preamble>
+      <![CDATA[
+      \tclass %t {
+      \tpublic:
+      \t   const uint32_t value;
+      \t
+      \t   constexpr %t(uint32_t value) : value(value) {
+      \t   }
+      \t   constexpr operator PcrValue() const { return PcrValue(value); }
+      \t};\n
+      ]]>
+      </preamble>
       <choice name="Low drive strength"  enum="Low"   value="0" />
       <choice name="High drive strength" enum="High"  value="1" />
    </choiceOption>
 
-   <choiceOption key="port_pcr_ode" condition="/PCR/ode_present"
+   <choiceOption key="/port_pcr_ode" condition="/PCR/ode_present &amp;&amp; !/port_pcr_ode"
       typeName="PinDriveMode"
-      baseType="uint32_t"
+      baseType="PinDriveMode"
       templateKey="/PCR/pcr_enums"
       description="Pin drive mode"
       toolTip="Pin drive mode (push-pull/open-drain) of digital outputs"
+      constantTemplate="__attribute__ ((unused)) static inline constexpr %t %n   = %t(%v);"
       >
+      <preamble>
+      <![CDATA[
+      \tclass %t {
+      \tpublic:
+      \t   const uint32_t value;
+      \t
+      \t   constexpr %t(uint32_t value) : value(value) {
+      \t   }
+      \t   constexpr operator PcrValue() const { return PcrValue(value); }
+      \t};\n
+      ]]>
+      </preamble>
       <choice name="Push-pull"  enum="PushPull"   value="0" />
       <choice name="Open-drain" enum="OpenDrain"  value="1" />
    </choiceOption>
 
-   <choiceOption key="port_pcr_sre" condition="/PCR/sre_present"
+   <choiceOption key="/port_pcr_sre" condition="/PCR/sre_present &amp;&amp; !/port_pcr_sre"
       typeName="PinSlewRate"
-      baseType="uint32_t"
+      baseType="PinSlewRate"
       templateKey="/PCR/pcr_enums"
       description="Pin slew rate"
       toolTip="Pin slew rate of digital outputs"
+      constantTemplate="__attribute__ ((unused)) static inline constexpr %t %n   = %t(%v);"
       >
+      <preamble>
+      <![CDATA[
+      \tclass %t {
+      \tpublic:
+      \t   const uint32_t value;
+      \t
+      \t   constexpr %t(uint32_t value) : value(value) {
+      \t   }
+      \t   constexpr operator PcrValue() const { return PcrValue(value); }
+      \t};\n
+      ]]>
+      </preamble>
       <choice name="Fast"  enum="*"  value="0" />
       <choice name="Slow"  enum="*"  value="1" />
    </choiceOption>
 
-   <choiceOption key="port_pcr_lk" condition="(/PCR/lk_present)"
+   <choiceOption key="/port_pcr_lk" condition="/PCR/lk_present &amp;&amp; !/port_pcr_lk"
       typeName="PinLock"
-      baseType="uint32_t"
+      baseType="PinLock"
       templateKey="/PCR/pcr_enums"
       description="Pin Control Register (PCR) lock"
       toolTip="Prevents modification of some of the PCR values once set"
+      constantTemplate="__attribute__ ((unused)) static inline constexpr %t %n   = %t(%v);"
       >
+      <preamble>
+      <![CDATA[
+      \tclass %t {
+      \tpublic:
+      \t   const uint32_t value;
+      \t
+      \t   constexpr %t(uint32_t value) : value(value) {
+      \t   }
+      \t   constexpr operator PcrValue() const { return PcrValue(value); }
+      \t};\n
+      ]]>
+      </preamble>
       <choice name="PCR not locked after 1st write" enum="Unlocked"  value="0" />
       <choice name="PCR locked after 1st write"     enum="Locked"    value="1" />
    </choiceOption>
 
-   <choiceOption key="port_pcr_irqc" condition="/PCR/irqc_present"
+   <choiceOption key="/port_pcr_irqc" condition="/PCR/irqc_present &amp;&amp; !/port_pcr_irqc"
       typeName="PinAction"
-      baseType="uint32_t"
+      baseType="PinAction"
       templateKey="/PCR/pcr_enums"
       description="Pin interrupt/DMA actions"
       toolTip="DMA and/or interrupt actions to happen on pin change or level"
+      constantTemplate="__attribute__ ((unused)) static inline constexpr %t %n   = %t(%v);"
       >
+      <preamble>
+      <![CDATA[
+      \tclass %t {
+      \tpublic:
+      \t   const uint32_t value;
+      \t
+      \t   constexpr %t(uint32_t value) : value(value) {
+      \t   }
+      \t   constexpr operator PcrValue() const { return PcrValue(value); }
+      \t};\n
+      ]]>
+      </preamble>
       <choice name="No interrupt or DMA function"         enum="None"       value="0"  />
 
       <choice name="Generate DMA request on rising edge"  enum="DmaRising"  value="1"  />
@@ -728,13 +832,26 @@
       <choice name="Generate IRQ request on high level"   enum="IrqHigh"    value="12" />
    </choiceOption>
 
-   <choiceOption key="port_pcr_mux" condition="/PCR/mux_present"
+   <choiceOption key="/port_pcr_mux" condition="/PCR/mux_present &amp;&amp; !/port_pcr_mux"
       typeName="PinMux"
-      baseType="uint32_t"
+      baseType="PinMux"
       templateKey="/PCR/pcr_enums"
       description="Pin Multiplexor setting"
       toolTip="Which function is mapped to the pin"
+      constantTemplate="__attribute__ ((unused)) static inline constexpr %t %n   = %t(%v);"
       >
+      <preamble>
+      <![CDATA[
+      \tclass %t {
+      \tpublic:
+      \t   const uint32_t value;
+      \t
+      \t   constexpr %t(uint32_t value) : value(value) {
+      \t   }
+      \t   constexpr operator PcrValue() const { return PcrValue(value); }
+      \t};\n
+      ]]>
+      </preamble>
       <choice name="Analogue function (ADC/TSI etc)" enum="Analogue"  value="0" />
       <choice name="Touch Sense Input"               enum="Tsi"       value="0" hidden="true" />
       <choice name="Disabled"                        enum="Disabled"  value="0" hidden="true" />
@@ -753,7 +870,7 @@
       \t *
       \t * @param[in] clockMask Mask for PORTs to enable
       \t */
-      \tstatic inline void enablePortClocks(uint32_t clockMask) {
+      \tinline void enablePortClocks(uint32_t clockMask) {
       \t   SIM->SCGC5 = SIM->SCGC5 | clockMask;
       \t   __DMB();
       \t}
@@ -763,7 +880,7 @@
       \t *
       \t * @param[in] clockMask Mask for PORTs to disable
       \t */
-      \tstatic inline void disablePortClocks(uint32_t clockMask) {
+      \tinline void disablePortClocks(uint32_t clockMask) {
       \t   SIM->SCGC5 = SIM->SCGC5 & ~clockMask;
       \t   __DMB();
       \t}
@@ -775,7 +892,7 @@
       \t *
       \t * @return Bit mask
       \t */
-      \tstatic constexpr uint32_t makeBitMask(int bitNum) {
+      \tconstexpr uint32_t makeBitMask(int bitNum) {
       \t   if (bitNum < 0) {
       \t      // Negative bitNum is used to indicate illegal value - suppress to reduce assert noise.
       \t      return 0;
@@ -786,13 +903,13 @@
       \t}\n\n
    ]]></template>
 
-   <for keys="right" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux" >
+   <for keys="right" values="/port_pcr_pd;/port_pcr_pfe;/port_pcr_dse;/port_pcr_ode;/port_pcr_sre;/port_pcr_lk;/port_pcr_irqc;/port_pcr_mux" >
       <variableTemplate variables="%(right)" key="/PCR/pcr_enums" discardRepeats="true" ><![CDATA[
          \tconstexpr inline PcrValue operator|(PcrValue op1, %paramType op2) { return PcrValue(uint32_t(op1)|uint32_t(op2)); }\n
       ]]></variableTemplate>
    </for>
-   <for keys="left" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux" >
-      <for keys="right" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux">
+   <for keys="left" values="/port_pcr_pd;/port_pcr_pfe;/port_pcr_dse;/port_pcr_ode;/port_pcr_sre;/port_pcr_lk;/port_pcr_irqc;/port_pcr_mux" >
+      <for keys="right" values="/port_pcr_pd;/port_pcr_pfe;/port_pcr_dse;/port_pcr_ode;/port_pcr_sre;/port_pcr_lk;/port_pcr_irqc;/port_pcr_mux">
          <variableTemplate
             variables="%(left),%(right)"
             condition="%(left)&amp;&amp;%(right)"
@@ -869,7 +986,7 @@
       \t\n
    ]]></template>
    <variableTemplate
-      variables="port_pcr_dse,port_pcr_ode,port_pcr_sre"
+      variables="/port_pcr_dse,/port_pcr_ode,/port_pcr_sre"
       key="/PCR/extra_methods"
       discardRepeats="true"
       nonDefaultParams="3" ><![CDATA[
@@ -885,7 +1002,7 @@
       \t\n
    ]]></variableTemplate>
    <variableTemplate
-      variables="port_pcr_pd,port_pcr_pfe,port_pcr_irqc"
+      variables="/port_pcr_pd,/port_pcr_pfe,/port_pcr_irqc"
       key="/PCR/extra_methods"
       discardRepeats="true"
       nonDefaultParams="3" ><![CDATA[
@@ -901,7 +1018,7 @@
       \t\n
    ]]></variableTemplate>
    <variableTemplate
-      variables="port_pcr_dse,port_pcr_ode,port_pcr_sre,port_pcr_pd,port_pcr_pfe,port_pcr_irqc"
+      variables="/port_pcr_dse,/port_pcr_ode,/port_pcr_sre,/port_pcr_pd,/port_pcr_pfe,/port_pcr_irqc"
       key="/PCR/extra_methods"
       discardRepeats="true"
       nonDefaultParams="6" ><![CDATA[
@@ -916,7 +1033,7 @@
       \t   }
       \t\n
    ]]></variableTemplate>
-   <for keys="n" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux">
+   <for keys="n" values="/port_pcr_pd;/port_pcr_pfe;/port_pcr_dse;/port_pcr_ode;/port_pcr_sre;/port_pcr_lk;/port_pcr_irqc;/port_pcr_mux">
       <variableTemplate variables="%(n)" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
          \t   /**
          \t    * Constructor
@@ -942,7 +1059,7 @@
       \n
    ]]></template>
 
-   <for keys="n" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux">
+   <for keys="n" values="/port_pcr_pd;/port_pcr_pfe;/port_pcr_dse;/port_pcr_ode;/port_pcr_sre;/port_pcr_lk;/port_pcr_irqc;/port_pcr_mux">
       <variableTemplate variables="%(n)" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
          \t   constexpr operator         %paramType() const { return %paramType(value&%mask); }
          \t   constexpr operator         %paramType()       { return %paramType(value&%mask); }
@@ -963,7 +1080,7 @@
       \t */
       \tstatic constexpr PcrValue GPIO_DEFAULT_PCR(
    ]]></template>
-   <for keys="v" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc" >
+   <for keys="v" values="/port_pcr_pd;/port_pcr_pfe;/port_pcr_dse;/port_pcr_ode;/port_pcr_sre;/port_pcr_lk;/port_pcr_irqc" >
       <variableTemplate variables="%(v)" key="/PCR/extra_methods" discardRepeats="true" ><![CDATA[
          $(%variable0.enum[])|
       ]]></variableTemplate>
@@ -1073,7 +1190,7 @@
    ]]></template>
 
    <variableTemplate
-      variables="port_pcr_pd,port_pcr_dse,port_pcr_ode,port_pcr_irqc,port_pcr_pfe,port_pcr_sre,port_pcr_mux"
+      variables="/port_pcr_pd,/port_pcr_dse,/port_pcr_ode,/port_pcr_irqc,/port_pcr_pfe,/port_pcr_sre,/port_pcr_mux"
       defaultParamValue="defaultPcrValue"
       key="/PCR/set_pcr"
       discardRepeats="true" ><![CDATA[
@@ -1091,7 +1208,7 @@
       \t\n
    ]]></variableTemplate>
    <variableTemplate
-      variables="port_pcr_pd,port_pcr_dse,port_pcr_ode,port_pcr_irqc,port_pcr_pfe,port_pcr_sre,port_pcr_mux"
+      variables="/port_pcr_pd,/port_pcr_dse,/port_pcr_ode,/port_pcr_irqc,/port_pcr_pfe,/port_pcr_sre,/port_pcr_mux"
       condition="/PCR/dfer_register_present"
       key="/PCR/set_pcr"
       discardRepeats="true" ><![CDATA[
@@ -1104,7 +1221,7 @@
       \t      }\n
    ]]></variableTemplate>
    <variableTemplate
-      variables="port_pcr_pd,port_pcr_dse,port_pcr_ode,port_pcr_irqc,port_pcr_pfe,port_pcr_sre,port_pcr_mux"
+      variables="/port_pcr_pd,/port_pcr_dse,/port_pcr_ode,/port_pcr_irqc,/port_pcr_pfe,/port_pcr_sre,/port_pcr_mux"
       key="/PCR/set_pcr"
       discardRepeats="true" ><![CDATA[
       \t      // Set PCR register for pin
@@ -1114,7 +1231,7 @@
    ]]></variableTemplate>
 
    <variableTemplate
-      variables="port_pcr_dse,port_pcr_ode,port_pcr_sre"
+      variables="/port_pcr_dse,/port_pcr_ode,/port_pcr_sre"
       defaultParamValue="defaultPcrValue"
       key="/PCR/set_output"
       discardRepeats="true" ><![CDATA[
@@ -1154,7 +1271,7 @@
    ]]></variableTemplate>
 
    <variableTemplate
-      variables="port_pcr_pd,port_pcr_irqc,port_pcr_pfe"
+      variables="/port_pcr_pd,/port_pcr_irqc,/port_pcr_pfe"
       defaultParamValue="defaultPcrValue"
       key="/PCR/set_input"
       discardRepeats="true" ><![CDATA[
@@ -1195,7 +1312,7 @@
       \t}\n
    ]]></variableTemplate>
 
-   <for keys="v" values="port_pcr_pd;port_pcr_pfe;port_pcr_dse;port_pcr_ode;port_pcr_sre;port_pcr_lk;port_pcr_irqc;port_pcr_mux" >
+   <for keys="v" values="/port_pcr_pd;/port_pcr_pfe;/port_pcr_dse;/port_pcr_ode;/port_pcr_sre;/port_pcr_lk;/port_pcr_irqc;/port_pcr_mux" >
       <variableTemplate variables="%(v)" key="/PCR/set_pcr_option" discardRepeats="true" ><![CDATA[
          \t/**
          \t * Set %description
@@ -1212,7 +1329,7 @@
    </for>
 
    <variableTemplate
-      variables="port_pcr_pd,port_pcr_dse,port_pcr_ode,port_pcr_irqc,port_pcr_pfe,port_pcr_sre"
+      variables="/port_pcr_pd,/port_pcr_dse,/port_pcr_ode,/port_pcr_irqc,/port_pcr_pfe,/port_pcr_sre"
       key="/GPIO/set_in_out"
       defaultParamValue="defaultPcrValue"
       discardRepeats="true" ><![CDATA[
@@ -1239,7 +1356,7 @@
    ]]></variableTemplate>
 
    <variableTemplate
-      variables="port_pcr_dse,port_pcr_ode,port_pcr_sre"
+      variables="/port_pcr_dse,/port_pcr_ode,/port_pcr_sre"
       key="/GPIO/set_output"
       defaultParamValue="defaultPcrValue"
       discardRepeats="true" ><![CDATA[
@@ -1267,7 +1384,7 @@
    ]]></variableTemplate>
 
    <variableTemplate
-      variables="port_pcr_pd,port_pcr_irqc,port_pcr_pfe"
+      variables="/port_pcr_pd,/port_pcr_irqc,/port_pcr_pfe"
       key="/GPIO/set_input"
       defaultParamValue="defaultPcrValue"
       discardRepeats="true" ><![CDATA[
@@ -1291,7 +1408,7 @@
    ]]></variableTemplate>
 
    <variableTemplate
-      variables="port_pcr_pd,port_pcr_dse,port_pcr_ode,port_pcr_irqc,port_pcr_pfe,port_pcr_sre"
+      variables="/port_pcr_pd,/port_pcr_dse,/port_pcr_ode,/port_pcr_irqc,/port_pcr_pfe,/port_pcr_sre"
       key="/GPIO/field_set_in_out"
       defaultParamValue="defaultPcrValue"
       discardRepeats="true" ><![CDATA[
@@ -1313,7 +1430,7 @@
    ]]></variableTemplate>
 
    <variableTemplate
-      variables="port_pcr_dse,port_pcr_ode,port_pcr_sre"
+      variables="/port_pcr_dse,/port_pcr_ode,/port_pcr_sre"
       key="/GPIO/field_set_output"
       defaultParamValue="defaultPcrValue"
       discardRepeats="true" ><![CDATA[
@@ -1336,7 +1453,7 @@
    ]]></variableTemplate>
 
    <variableTemplate
-      variables="port_pcr_pd,port_pcr_irqc,port_pcr_pfe"
+      variables="/port_pcr_pd,/port_pcr_irqc,/port_pcr_pfe"
       key="/GPIO/field_set_input"
       defaultParamValue="defaultPcrValue"
       discardRepeats="true" ><![CDATA[
