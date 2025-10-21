@@ -478,16 +478,16 @@
             \t/**
             \t * Get %description
             \t *
-            \t * @return Clock frequency in Hz
+            \t * @return %tooltip
             \t */
-            \tstatic uint32_t getFtm%(f)ExternalClock() {
+            \tstatic %returnType getFtm%(f)ExternalClock() {
             \t
             \t   return %paramType(%register&%mask);
-            \t   }
+            \t}
             \t
             \t
             \t/**
-            \t * Get %description
+            \t * Get %description frequency
             \t *
             \t * @return Clock frequency in Hz
             \t */

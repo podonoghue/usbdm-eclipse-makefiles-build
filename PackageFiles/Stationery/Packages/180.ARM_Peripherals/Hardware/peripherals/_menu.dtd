@@ -833,8 +833,11 @@
    <!-- Name of symbol to use for iteration - available as $(<name>) -->
    <!ATTLIST bitFieldExpansion iterationVar         CDATA       #IMPLIED>
    
+<!-- Text content -->
+   <!ELEMENT preamble (#PCDATA)* >
+
 <!-- ____  choiceOption -->
-<!ELEMENT choiceOption ((choice|choiceExpansion)*) >
+<!ELEMENT choiceOption  (preamble|choice|choiceExpansion)* >
    <!-- 
    Where to place generated code<br>
       info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
@@ -929,12 +932,16 @@
    <!ATTLIST choiceOption logging             (true)       #IMPLIED>
    <!-- Generate choice values as constants rather than as an enum -->
    <!ATTLIST choiceOption generateAsConstants (true)       #IMPLIED>
+   <!-- Template for generateAsConstants -->
+   <!ATTLIST choiceOption constantTemplate    CDATA        #IMPLIED>
    <!-- Generate logical operators to combine enum values -->
    <!ATTLIST choiceOption generateOperators   (true)       #IMPLIED>
    <!-- Name of associate signal -->
    <!ATTLIST choiceOption signal              CDATA        #IMPLIED>
    <!-- Suppresses stem on enum values -->
    <!ATTLIST choiceOption noStem              (true)       #IMPLIED>
+   <!-- Extra text pre-pended to the enum declaration -->
+   <!ATTLIST choiceOption preamble            CDATA        #IMPLIED>
 
 <!-- ____  choice -->
 <!ELEMENT choice EMPTY >

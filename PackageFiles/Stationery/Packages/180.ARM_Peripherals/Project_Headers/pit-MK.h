@@ -159,8 +159,8 @@ $(/PIT/publicMethods: // /PIT/publicMethods not found)
    /**
     * Enable/disable channel interrupts
     *
-    * @param[in]  pitChannelNum Channel being modified
-    * @param[in]  enable  True => enable, False => disable
+    * @param[in]  pitChannelNum    Channel being modified
+    * @param[in]  pitChannelAction Action to take on event
     */
    static void setChannelAction(PitChannelNum pitChannelNum, PitChannelAction pitChannelAction) {
       pit->CHANNEL[pitChannelNum].TCTRL = pit->CHANNEL[pitChannelNum].TCTRL | pitChannelAction;

@@ -31,7 +31,7 @@ using namespace USBDM;
 
 static const Spi0::Init configuration {
    {  /* Shared settings            */
-      SpiPeripheralSelectPolarity_All_ActiveHigh, // All PCSs active-high
+      SpiPcsActiveLow_None, // All PCSs active-high
    },
    //                              Speed      Mode        Bit Order           Frame Size
    /* Configuration 0 (CTAR0) */ { 1_MHz, SpiMode_0, SpiBitOrder_MsbFirst, SpiFrameSize_8_bits},
@@ -63,7 +63,7 @@ int main() {
          // Select configuration to use (CTAR & PCS options)
          spi.selectConfiguration(
                SpiCtarSelect_0,                       // Use CTAR0
-               SpiPeripheralSelect_0,                 // PCS0 is asserted during transfer
+               SpiPeripheralSelect_Pcs0,              // PCS0 is asserted during transfer
                SpiPeripheralSelectMode_Transaction    // PCSx goes low between transactions
          );
 
@@ -98,7 +98,7 @@ int main() {
          // Select configuration to use (CTAR & PCS options)
          spi.selectConfiguration(
                SpiCtarSelect_1,                       // Use CTAR1
-               SpiPeripheralSelect_1,                 // PCS1 is asserted during transfer
+               SpiPeripheralSelect_Pcs1,              // PCS1 is asserted during transfer
                SpiPeripheralSelectMode_Transfer       // PCSx goes low between transfer
          );
 

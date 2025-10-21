@@ -1002,6 +1002,7 @@
       \t *
       \t * @note This constructor may be used to create a const instance in ROM
       \t *
+      \t * @code
       \t * Example:
       \t * static const Lptmr$(_instance)::PulseCountingModeInit lptmrInit {
       \t *    LptmrPinSel_Cmp0,           // Timer Pin Select for Pulse Counter mode
@@ -1233,8 +1234,16 @@
       \t */
       \tstatic ErrorCode configure(const TimeIntervalModeInit &init) {
       \t
+      \t   // Ensure no interrupts during configuration
+      \t   disableNvicInterrupts();
+      \t
       \t   // Enable peripheral
       \t   enable();
+      \t
+      \t   ErrorCode rc = $(_BasicInfo)::configure($(_basename), init);
+      \t   if (rc != E_NO_ERROR) {
+      \t      return rc;
+      \t   }
       \t\n
    ]]>
    </template>
@@ -1250,9 +1259,13 @@
    </template>
    <template where="info" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
-      \t   return $(_BasicInfo)::configure($(_basename), init);
+      \t   return rc;
       \t}
-      \t
+      \t\n
+   ]]>
+   </template>
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
       \t/**
       \t * Configure $(_BASENAME) from values specified in init
       \t *

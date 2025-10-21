@@ -35,6 +35,7 @@
    <constant key="ClockSource" value='"SystemBusClock"' condition="!ClockSource" />
 
    <title description="Clocking" />
+   <!--
    <binaryOption key="/$(_BASENAME)/baudSupport"
       enabledBy="$(_BasicInfoGuard)"
       modify="true"
@@ -44,7 +45,7 @@
       <choice value="false" name="Prescale values must be used" isDefault="true" />
       <choice value="true"  name="Speed may be specified in Hertz" />
    </binaryOption>
-
+   -->
    <if condition='=ClockSource=="SystemBusClock"'>
       <choiceOption key="spiClockConfig" condition="/MCG/_present"
          enabledBy="$(_BasicInfoGuard)"
@@ -181,6 +182,7 @@
       valueFormat="SPI_MCR_PCSIS(%s)"
       typeName="SpiPcsActiveLow"
       baseType="uint32_t"
+      generateOperators="true"
       description="Polarity for PCS signals"
       toolTip="Mask to select the polarity of Peripheral Chip Select Lines (PCSx)\n
                Selected PCS signals will be active-low i.e. PCS will go low when accessing the peripheral" >
@@ -386,11 +388,11 @@
       typeName="SpiPeripheralSelectMode"
       baseType="uint8_t"
       valueFormat="(%s)"
-      description="Controls PCS between transfers/transactions"
+      description="Behaviour of peripheral select signals between transfers/transactions"
       toolTip="Select whether Peripheral Select is returned to idle between transfers or transactions" >
-      <choice value="0" name="Negated between each transfer"             enum="Transfer"    />
-      <choice value="1" name="Negated between each transaction"          enum="Transaction" />
-      <choice value="2" name="Asserted until another device is selected" enum="Continuous"  />
+      <choice value="0" name="Asserted for each transfer within transaction" enum="Transfer"    />
+      <choice value="1" name="Asserted for entire transaction"               enum="Transaction" />
+      <choice value="2" name="Asserted until another device is selected"     enum="Continuous"  />
    </choiceOption>
 
    <binaryOption key="spi_pushr_cont"
@@ -398,8 +400,8 @@
       typeName="SpiSelectMode"
       description="Assert PCS between transfers"
       toolTip="Select whether Peripheral Select is returned to idle between transfers" >
-      <choice value="0" name="Idle between transactions"     enum="Idle"       />
-      <choice value="1" name="Asserted between transactions" enum="Continuous" />
+      <choice value="0" name="Idle between transfers"     enum="Idle"       />
+      <choice value="1" name="Asserted between transfers" enum="Continuous" />
    </binaryOption>
 
    <choiceOption key="spi_pushr_pcs_enum"
@@ -408,6 +410,7 @@
       valueFormat="SPI_PUSHR_PCS(%s)"
       typeName="SpiPeripheralSelect"
       baseType="uint32_t"
+      generateOperators="true"
       description="Peripheral Chip Select"
       toolTip="Mask to select which Peripheral Chip Select Line (PCS) to assert during transaction\n
                Note: more than one PCS may be asserted (allows use of an external decoder)" >
@@ -444,6 +447,41 @@
 
 <if condition="!/SPI/SpiBasicInfo_generated" >
    <constant key="/SPI/SpiBasicInfo_generated" type="Boolean" value="true" />
+
+<!--   ========== SpiCalculatedConfiguration class =============================== -->
+
+   <template where="basicInfo" ><![CDATA[
+      \t/**
+      \t * Class used to hold a calculated configuration that may be reused to avoid calculation overhead
+      \t */
+      \tclass SpiCalculatedConfiguration {
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr SpiCalculatedConfiguration(const SpiCalculatedConfiguration &other) = default;
+      \t
+      \t   uint16_t pushrCommand       = 0;   //!<  PUSHR.COMMAND register value for most transfer
+      \t   uint16_t pushrFinalCommand  = 0;   //!<  PUSHR.COMMAND register value for final transfer
+      \t   uint32_t ctar               = 0;   //!<  CTAR register value e.g. Baud, number of bits, timing
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr SpiCalculatedConfiguration() = default;
+      \t
+      \t   /**
+      \t    * Constructor
+      \t    */
+      \t   SpiCalculatedConfiguration(uint16_t pushrCommand, uint16_t pushrFinalCommand, uint32_t ctar) :
+      \t      pushrCommand(pushrCommand),
+      \t      pushrFinalCommand(pushrFinalCommand),
+      \t      ctar(ctar) {
+      \t   }
+      \t}; // class SerialInit\n
+      \t\n
+   ]]></template>
 
 <!--   ========== SPI SerialInit class =============================== -->
 
@@ -517,7 +555,7 @@
          speed[]"
    ><![CDATA[
       \t   ///  Module Configuration Register
-      \t   Hertz speed = 0_Hz;\n\n
+      \t   uint32_t speed = 0_Hz;\n\n
    ]]></variableTemplate>
 
 <!--    SerialInit Constructors -->
@@ -531,6 +569,7 @@
       ><![CDATA[
          \t   /**
          \t    * Constructor for %description
+         \t    * (%variables)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -551,6 +590,7 @@
    ><![CDATA[
       \t   /**
       \t    * Constructor for %description
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -570,6 +610,7 @@
    ><![CDATA[
       \t   /**
       \t    * %description
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -684,6 +725,7 @@
     ><![CDATA[
       \t   /**
       \t    * Constructor for %description
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -708,6 +750,7 @@
       ><![CDATA[
          \t   /**
          \t    * Constructor for %description
+         \t    * (%variables)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -730,6 +773,7 @@
       \t    * Constructor for Active-low PCSx
       \t    * By default PCSx signals are active-high i.e. they are high to indicate a transfers/transactions
       \t    * This constructor changes the given PCSx to active-low i.e. PCSx will go low for transfer
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -756,6 +800,7 @@
    ><![CDATA[
       \t   /**
       \t    * Constructor for initial Peripheral selection
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -784,6 +829,7 @@
    ><![CDATA[
       \t   /**
       \t    * Constructor for initial Peripheral selection
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -812,6 +858,7 @@
    ><![CDATA[
       \t   /**
       \t    * Constructor for initial CTAR selection
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -832,11 +879,12 @@
    ><![CDATA[
       \t   /**
       \t    * Constructor for initial Peripheral selection timing
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
       \t    *
-      \t    * @param %paramExpression PCS timing
+      \t    * @param %paramExpression Behaviour of peripheral select signals between transfers/transactions
       \t    */
       \t   template <typename... Types>
       \t   constexpr Config(%params, Types... rest) : Config(rest...) {
@@ -1002,7 +1050,7 @@
       \t    *
       \t    * @param config  Shared configuration values
       \t    * @param ctar0   Configuration values for CTAR0
-      \t    * @param ctar1   Configuration values for CTAR0
+      \t    * @param ctar1   Configuration values for CTAR1
       \t    */
       \t   template <typename... Types>
       \t   constexpr Init(const Config &config, const SerialInit &ctar0, const SerialInit &ctar1, Types... rest) : Init(rest...) {
@@ -1226,10 +1274,11 @@
       \t
       \t/**
       \t * Set %description
+      \t    * (%variables)
       \t *
       %paramDescription
       \t */
-      \t void setContinousClock(%paramType %paramName) {
+      \tvoid setContinousClock(%paramType %paramName) {
       \t   %fieldAssignment;
       \t}\n\n
    ]]></variableTemplate>
@@ -1238,10 +1287,11 @@
    ><![CDATA[
       \t/**
       \t * Set %description
+      \t * (%variables)
       \t *
       %paramDescription
       \t */
-      \t void setMasterSlave(%paramType %paramName) {
+      \tvoid setMasterSlave(%paramType %paramName) {
       \t   %fieldAssignment;
       \t}\n\n
    ]]></variableTemplate>
@@ -1250,6 +1300,8 @@
    ><![CDATA[
       \t/**
       \t * Set %description
+      \t * Note: All PCSs are affected.
+      \t * (%variables)
       \t *
       %paramDescription
       \t *
@@ -1257,14 +1309,51 @@
       \t * Examples:
       \t * @code
       \t *    // Set PCS0 and PCS3 active-low and all others active-high
-      \t *    setPcsIdleLevels(SpiPcsPolarity_Pcs0_ActiveLow|SpiPcsPolarity_Pcs3_ActiveLow)
+      \t *    setPcsPolarity(SpiPcsActiveLow_Pcs0|SpiPcsActiveLow_Pcs1)
       \t *
       \t *    // Set all PCSx to active high (the most common situation)
-      \t *    setPcsIdleLevels(SpiPcsPolarity_All_ActiveHigh)
+      \t *    setPcsPolarity(SpiPcsActiveLow_None)
       \t * @endcode
       \t */
-      \t void setPcsPolarity(%paramType %paramName) {
+      \tvoid setPcsPolarity(%paramType %paramName) {
       \t   %fieldAssignment;
+      \t}\n\n
+   ]]></variableTemplate>
+
+   <variableTemplate variables="spi_mcr_pcsis,spi_pushr_pcs" key="/SPI/methods" discardRepeats="true"
+   ><![CDATA[
+      \t/**
+      \t * Set %description0 to active-low
+      \t * (%variables)
+      \t *
+      %paramDescription1
+      \t *
+      \t * The mask would be created by ORing together the PCS selection values
+      \t * Example:
+      \t * @code
+      \t *    // Set PCS0 and PCS3 active-low and all others unchanged
+      \t *    setPcsPolarityActiveLow(SpiPeripheralSelect_Pcs0|SpiPeripheralSelect_Pcs3);
+      \t * @endcode
+      \t */
+      \tvoid setPcsPolarityActiveLow(%paramType1 %paramName1) {
+      \t   %register0 = %register0|%paramName1;
+      \t}
+      \t
+      \t/**
+      \t * Set %description0 to active-high
+      \t * (%variables)
+      \t *
+      %paramDescription1
+      \t *
+      \t * The mask would be created by ORing together the PCS selection values
+      \t * Example:
+      \t * @code
+      \t *    // Set PCS0 and PCS3 active-high and all others unchanged
+      \t *    setPcsPolarityActiveHigh(SpiPeripheralSelect_Pcs0|SpiPeripheralSelect_Pcs3);
+      \t * @endcode
+      \t */
+      \tvoid setPcsPolarityActiveHigh(%paramType1 %paramName1) {
+      \t   %register0 = %register0&~%paramName1;
       \t}\n\n
    ]]></variableTemplate>
 
@@ -1294,6 +1383,7 @@
       <copy source="Sources/spi-MK.cpp"                  target="Sources/spi.cpp"                   overwrite="true"  derived="true" />
       <copy source="Snippets/spi-example.cpp"            target="Snippets/spi-example.cpp"          overwrite="true"  derived="true" />
       <copy source="Snippets/spi-N-config-example.cpp"   target="Snippets/spi-N-config-example.cpp" overwrite="true"  derived="true" />
+      <copy source="Snippets/spi-N-device-example.cpp"   target="Snippets/spi-N-device-example.cpp" overwrite="true"  derived="true" />
       <copy source="Snippets/spi-2-config-example.cpp"   target="Snippets/spi-2-config-example.cpp" overwrite="true"  derived="true" />
       <copy source="Snippets/spi-flash-example.cpp"      target="Snippets/spi-flash-example.cpp"    overwrite="true"  derived="true" />
       <copy source="Snippets/at45db041e.h"               target="Snippets/at45db041e.h"             overwrite="true"  derived="true" />

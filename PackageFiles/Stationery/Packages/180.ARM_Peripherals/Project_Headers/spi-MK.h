@@ -34,28 +34,6 @@ namespace USBDM {
  * @{
  */
 $(/SPI/peripheral_h_definition:// $/SPI/peripheral_h_definition not found)
-
-/**
- * Or operation on SpiPeripheralSelect masks
- *
- * @param left    Left operand
- * @param right   Right operand
- *
- * @return  left|right
- */
-static constexpr SpiPeripheralSelect operator| (SpiPeripheralSelect left, SpiPeripheralSelect right) {
-   return (SpiPeripheralSelect)(left|right);
-}
-
-/**
- * Used to hold a calculated configuration that may be reused to avoid calculation overhead
- */
-struct SpiCalculatedConfiguration {
-   uint16_t pushrCommand;      //!<  PUSHR.COMMAND register value for most transfer
-   uint16_t pushrFinalCommand; //!<  PUSHR.COMMAND register value for final transfer
-   uint32_t ctar;              //!<  CTAR register value e.g. Baud, number of bits, timing
-};
-
 /**
  * @brief Base class for representing an SPI interface
  */
@@ -205,33 +183,33 @@ protected:
    }
 
    /**
-    * Set the SPI Selection mode for the next transaction
+    * Calculate SPI selection for a transaction
     *
-    *  @param[in]  spiPeripheralSelectMode  Whether SPI_PCSx signal is returned to idle between transfers/transactions
-    *
-    *  @note This alters existing pushrMask/pushrMaskFinal values
+    * @param[in]  spiCtarSelect           CTAR to select during transfer
+    * @param[in]  spiPeripheralSelect     Peripheral(s) to select for transfer
+    * @param[in]  spiPeripheralSelectMode Behaviour of peripheral select signals between transfers/transactions
+    * @param[out] pushrMask               PUSHR value for intermediate transfers within a transaction
+    * @param[out] pushrMaskFinal          PUSHR value for final transfer in transaction
     */
-   void setPeripheralSelectMode(SpiPeripheralSelectMode spiPeripheralSelectMode) {
-
-      uint32_t pushrTemp = (pushrMask&~SPI_PUSHR_CONT_MASK);
-
-#if 0
-      // Value used for each transfer i.e. controls PCS assertion between transfers
-      pushrMask      = pushrTemp|((spiSelectMode>=1)?SpiSelectMode_Continuous:SpiSelectMode_Idle);
-
-      // Value used for last transfer in each transaction i.e. controls PCS assertion between transactions
-      pushrMaskFinal = pushrTemp|((spiSelectMode>=2)?SpiSelectMode_Continuous:SpiSelectMode_Idle);
-#else
+   static void calculatePeripheralSelect(
+         SpiCtarSelect           spiCtarSelect,
+         SpiPeripheralSelect     spiPeripheralSelect,
+         SpiPeripheralSelectMode spiPeripheralSelectMode,
+         uint32_t                &pushrMask,
+         uint32_t                &pushrMaskFinal
+         ) {
       //                                        Transfer          : Transaction             : Continuous, ;
       static const SpiSelectMode val[]      = {SpiSelectMode_Idle, SpiSelectMode_Continuous, SpiSelectMode_Continuous};
       static const SpiSelectMode valFinal[] = {SpiSelectMode_Idle, SpiSelectMode_Idle,       SpiSelectMode_Continuous};
 
+      // Common bits
+      uint32_t common = SPI_PUSHR_CTAS(spiCtarSelect)|spiPeripheralSelect;
+
       // Value used for each transfer i.e. controls PCS assertion between transfers
-      pushrMask      = pushrTemp|val[spiPeripheralSelectMode];
+      pushrMask      = common|val[spiPeripheralSelectMode];
 
       // Value used for last transfer in each transaction i.e. controls PCS assertion between transactions
-      pushrMaskFinal = pushrTemp|valFinal[spiPeripheralSelectMode];
-#endif
+      pushrMaskFinal = common|valFinal[spiPeripheralSelectMode];
    }
 
    /**
@@ -263,8 +241,8 @@ protected:
     * Sets up hardware peripheral select (SPI_PCSx) for transfer.
     * Also controls which CTAR is used for the transaction.
     *
-    * @param[in]  spiPeripheralSelect     Which peripheral to select using SPI_PCSx signal
-    * @param[in]  spiPeripheralSelectMode Whether SPI_PCSx signal is returned to idle between transfers/transactions
+    * @param[in]  spiPeripheralSelect     Peripheral(s) to select for transfer
+    * @param[in]  spiPeripheralSelectMode Behaviour of peripheral select signals between transfers/transactions
     * @param[in]  spiCtarSelect           Which configuration to use for transaction
     */
    void setPeripheralSelect(
@@ -274,7 +252,7 @@ protected:
 
       pushrMask = spiPeripheralSelect|SPI_PUSHR_CTAS(spiCtarSelect);
 
-      setPeripheralSelectMode(spiPeripheralSelectMode);
+      calculatePeripheralSelect(spiCtarSelect, spiPeripheralSelect, spiPeripheralSelectMode, pushrMask, pushrMaskFinal);
    }
 
    /**
@@ -313,9 +291,27 @@ protected:
       return calculateSpeed(getSpiInputClockFrequency(), spiCtarSelect);
    }
    
-$(/SPI/methods: #error "/SPI/methods not found")
-
 public:
+$(/SPI/methods: #error "/SPI/methods not found")
+   // For debug
+   union Ctar {
+      uint32_t value;
+      struct {
+         unsigned br    :4 ;
+         unsigned dt    :4 ;
+         unsigned asc   :4 ;
+         unsigned cssck :4 ;
+         unsigned pbr   :2 ;
+         unsigned pdt   :2 ;
+         unsigned pasc  :2 ;
+         unsigned pcssck:2 ;
+         unsigned lsbfe :1 ;
+         unsigned cpha  :2 ;
+         unsigned fmsz  :4 ;
+         unsigned dbr   :1 ;
+      };
+   };
+
    /**
     * Calculate communication speed from SPI clock frequency and speed factors
     *
@@ -324,8 +320,8 @@ public:
     *
     * @return Clock frequency of SPI in Hz for these factors
     */
-
    static uint32_t calculateSpeed(uint32_t clockFrequency, uint32_t spiCtarValue);
+   
    /**
     * Calculate CTAR timing related values \n
     * Uses default delays
@@ -335,27 +331,33 @@ public:
     *
     * @return Combined masks for CTAR (BR, PBR, PCSSCK, CSSCK, PDT, DT, PCSSCK and CSSCK)
     */
-
    static uint32_t calculateCtarTiming(uint32_t clockFrequency, uint32_t frequency) {
 
       int bestPrescale, bestDivider;
-      uint32_t ctarValue;
+      Ctar ctarValue;
 
-      // These do a rounding division while maintaining maximum resolution
-      const uint32_t clockPeriodDiv5_ns = (200'000'000+(clockFrequency/2))/clockFrequency;
+      if (frequency==0) {
+         // Prevent /0
+         frequency = 1000;
+      }
 
-      ctarValue = calculateDividers(clockFrequency, frequency);
+      ctarValue.value = calculateDividers(clockFrequency, frequency);
 
-      calculateDelay(clockFrequency, clockPeriodDiv5_ns, bestPrescale, bestDivider);
-      ctarValue |= SPI_CTAR_PCSSCK(bestPrescale)|SPI_CTAR_CSSCK(bestDivider);
+      // Assume we need 1/2 of a transmission clock period for setup and hold times
+      // This is the time in ns (rounded)
+      const uint32_t clockPeriodDiv2_ns = (500'000'000+(frequency/2))/frequency;
 
-      calculateDelay(clockFrequency, clockPeriodDiv5_ns, bestPrescale, bestDivider);
-      ctarValue |= SPI_CTAR_PASC(bestPrescale)|SPI_CTAR_ASC(bestDivider);
+      calculateDelay(clockFrequency, clockPeriodDiv2_ns, bestPrescale, bestDivider);
+      ctarValue.value |= SPI_CTAR_PCSSCK(bestPrescale)|SPI_CTAR_CSSCK(bestDivider);
 
-      calculateDelay(clockFrequency, 5*clockPeriodDiv5_ns, bestPrescale, bestDivider);
-      ctarValue |= SPI_CTAR_PDT(bestPrescale)|SPI_CTAR_DT(bestDivider);
+//      calculateDelay(clockFrequency, clockPeriodDiv2_ns, bestPrescale, bestDivider);
+      ctarValue.value |= SPI_CTAR_PASC(bestPrescale)|SPI_CTAR_ASC(bestDivider);
 
-      return ctarValue;
+      // Assume 1 clock minimum between CS negation and assertion
+      calculateDelay(clockFrequency, 2*clockPeriodDiv2_ns, bestPrescale, bestDivider);
+      ctarValue.value |= SPI_CTAR_PDT(bestPrescale)|SPI_CTAR_DT(bestDivider);
+
+      return ctarValue.value;
    }
 
 $(/SPI/InitMethod: #error "/SPI/InitMethod not found")
@@ -417,7 +419,7 @@ $(/SPI/InitMethod: #error "/SPI/InitMethod not found")
     *
     * @note Uses CTAR[0]
     */
-   int startTransaction(SpiCalculatedConfiguration &configuration, int =0) {
+   int startTransaction(const SpiCalculatedConfiguration &configuration, int =0) {
       spi->MCR = spi->MCR & ~SPI_MCR_HALT_MASK;
       setConfiguration(configuration);
       return 0;
@@ -435,9 +437,9 @@ $(/SPI/InitMethod: #error "/SPI/InitMethod not found")
    /**
     * Select pre-loaded communication parameters
     *
-    * @param spiCtarSelect             Indicates which pre-loaded settings to use (which CTAR)
-    * @param spiPeripheralSelect       Which peripheral is to be accessed (via PCSx)
-    * @param spiPeripheralSelectMode   Selects how PCS is controlled
+    * @param spiCtarSelect            Indicates which pre-loaded settings to use (which CTAR)
+    * @param spiPeripheralSelect      Which peripheral is to be accessed (via PCSx)
+    * @param spiPeripheralSelectMode  Behaviour of peripheral select signals between transfers/transactions
     *
     * @note Typically used with pre-loaded values in CTARs:
     *     constructor(...) or configure(...);   // Load multiple configurations
@@ -449,21 +451,18 @@ $(/SPI/InitMethod: #error "/SPI/InitMethod not found")
    void selectConfiguration(
          SpiCtarSelect             spiCtarSelect,
          SpiPeripheralSelect       spiPeripheralSelect,
-         SpiPeripheralSelectMode   spiPeripheralSelectMode) {
-
-      // Select pre-loade CTAR and PCS
-      pushrMask = spiPeripheralSelect|SPI_PUSHR_CTAS(spiCtarSelect);
+         SpiPeripheralSelectMode   spiPeripheralSelectMode = SpiPeripheralSelectMode_Transaction) {
 
       // Select PCS behaviour
-      setPeripheralSelectMode(spiPeripheralSelectMode);
+      calculatePeripheralSelect(spiCtarSelect, spiPeripheralSelect, spiPeripheralSelectMode, pushrMask, pushrMaskFinal);
    }
 
    /**
     * Set communication parameters
     *
-    * @param spiCtarSettings           Settings to use
-    * @param spiPeripheralSelect       Peripheral to select (PCS to assert)
-    * @param spiPeripheralSelectMode   Controls how PCS is controlled
+    * @param spiCtarSettings         Settings to use
+    * @param spiPeripheralSelect     Peripheral to select (PCS to assert)
+    * @param spiPeripheralSelectMode Behaviour of peripheral select signals between transfers/transactions
     *
     * @note Typically use:
     *     setConfiguration(...);             // This is a time-consuming operation
@@ -476,17 +475,14 @@ $(/SPI/InitMethod: #error "/SPI/InitMethod not found")
    void setConfiguration(
          const SpiBasicInfo::SerialInit &spiCtarSettings,
          SpiPeripheralSelect             spiPeripheralSelect,
-         SpiPeripheralSelectMode         spiPeripheralSelectMode) {
+         SpiPeripheralSelectMode         spiPeripheralSelectMode = SpiPeripheralSelectMode_Transaction) {
 
       // Set up CTAR0
       const uint32_t spiFrequency = getSpiInputClockFrequency();
       spi->CTAR[0] = spiCtarSettings.ctar|calculateCtarTiming(spiFrequency, spiCtarSettings.speed);
 
-      // Select CTAR0 and PCS
-      pushrMask = spiPeripheralSelect|SPI_PUSHR_CTAS(SpiCtarSelect_0);
-
       // Select PCS behaviour
-      setPeripheralSelectMode(spiPeripheralSelectMode);
+      calculatePeripheralSelect(SpiCtarSelect_0, spiPeripheralSelect, spiPeripheralSelectMode, pushrMask, pushrMaskFinal);
    }
 
    /**
@@ -544,19 +540,45 @@ $(/SPI/InitMethod: #error "/SPI/InitMethod not found")
    }
 
    /**
+    * Calculate communication parameters (CTAR and PUSH register values)
+    * Note: These settings will only remain correct if the SPI clock source is unchanged.
+    *
+    * @param spiCtarSettings          Settings to use
+    * @param spiPeripheralSelect      Peripheral(s) to select for transfer
+    * @param spiPeripheralSelectMode  Behaviour of peripheral select signals between transfers/transactions
+    * @param spiCtarSelect            CTAR to use
+    */
+   const SpiCalculatedConfiguration calculateConfiguration(
+         const SerialInit            &spiCtarSettings,
+         SpiPeripheralSelect         spiPeripheralSelect,
+         SpiPeripheralSelectMode     spiPeripheralSelectMode = SpiPeripheralSelectMode_Transaction,
+         SpiCtarSelect               spiCtarSelect           = SpiCtarSelect_0) {
+
+      uint32_t pushrMask, pushrMaskFinal;
+      calculatePeripheralSelect(spiCtarSelect, spiPeripheralSelect, spiPeripheralSelectMode, pushrMask, pushrMaskFinal);
+
+      return SpiCalculatedConfiguration {
+         uint16_t(pushrMask>>16),
+         uint16_t(pushrMaskFinal>>16),
+         spiCtarSettings.ctar|calculateCtarTiming(getSpiInputClockFrequency(), spiCtarSettings.speed)
+      };
+   }
+
+   /**
     *  Transmit and receive a series of values
     *
     *  @tparam T Type for data transfer (may be inferred from parameters)
     *
-    *  @param[in]  dataSize  Number of values to transfer
-    *  @param[in]  txData    Transmit bytes (may be nullptr for Receive only)
-    *  @param[out] rxData    Receive byte buffer (may be nullptr for Transmit only)
+    *  @param[in]  dataSize        Number of values to transfer
+    *  @param[in]  txData          Transmit bytes (may be nullptr for Receive only)
+    *  @param[out] rxData          Receive byte buffer (may be nullptr for Transmit only)
+    *  @param[in]  lastTransaction Indicate last transaction in a transfer
     *
     *  @note: rxData may use same buffer as txData
     *  @note: Size of txData and rxData should be appropriate for transmission size.
     */
    template<typename T>
-   void __attribute__((noinline)) txRx(const uint32_t dataSize, const T *txData, T *rxData) {
+   void __attribute__((noinline)) txRx(const uint32_t dataSize, const T *txData, T *rxData, bool lastTransaction) {
 
       static_assert (((sizeof(T) == 1)||(sizeof(T) == 2)), "Size of data type T must be 8 or 16-bits");
 
@@ -582,7 +604,7 @@ $(/SPI/InitMethod: #error "/SPI/InitMethod not found")
             txDataSize--;
 
             // Push to Tx FIFO
-            if (txDataSize == 0) {
+            if (lastTransaction && (txDataSize == 0)) {
                // Mark last data
                spi->PUSHR = sendData|pushrMaskFinal;
             }
@@ -629,12 +651,13 @@ $(/SPI/InitMethod: #error "/SPI/InitMethod not found")
     *
     *  @param[in]  txData    Transmit bytes (tx-rx size is inferred from this array)
     *  @param[out] rxData    Receive byte buffer
+    *  @param[in]  lastTransaction Indicate last transaction in a transfer
     *
     *  @note: rxData may use same buffer as txData
     */
    template<typename T, unsigned N>
-   void txRx(const T (&txData)[N], T rxData[]) {
-      txRx(N, txData, rxData);
+   void txRx(const T (&txData)[N], T rxData[], bool lastTransaction=true) {
+      txRx(N, txData, rxData, lastTransaction);
    }
 
    /**
@@ -643,82 +666,102 @@ $(/SPI/InitMethod: #error "/SPI/InitMethod not found")
     *  @tparam T Type for data transfer (may be inferred from parameters)
     *  @tparam N Size of arrays (may be inferred from parameters)
     *
-    *  @param[in]  txData    Transmit bytes (tx-rx size is inferred from this array)
-    *  @param[out] rxData    Receive byte buffer
+    *  @param[in]  txData          Transmit bytes (tx-rx size is inferred from this array)
+    *  @param[out] rxData          Receive byte buffer
+    *  @param[in]  lastTransaction Indicate last transaction in a transfer
     *
     *  @note: rxData may use same buffer as txData
     */
    template<typename T, unsigned N>
-   void txRx(const std::array<const T, N> &txData, std::array<T, N> &rxData) {
+   void txRx(const std::array<const T, N> &txData, std::array<T, N> &rxData, bool lastTransaction=true) {
+      txRx(N, txData.data(), rxData.data(), lastTransaction);
+   }
+
+   /**
+    *  Transmit and receive a series of values
+    *
+    *  @tparam T Type for data transfer (may be inferred from parameters)
+    *  @tparam N Size of arrays (may be inferred from parameters)
+    *
+    *  @param[in]  txData           Transmit bytes (tx-rx size is inferred from this array)
+    *  @param[out] rxData           Receive byte buffer
+    *  @param[in]  lastTransaction  Indicate last transaction in a transfer
+    *
+    *  @note: rxData may use same buffer as txData
+    */
+   template<typename T, unsigned N>
+   void txRx(const std::array<T, N> &txData, std::array<T, N> &rxData, bool lastTransaction=true) {
       txRx(N, txData.data(), rxData.data());
    }
 
    /**
+    *  Transmit a series of values
+    *
+    *  @tparam T Type for data transfer (may be inferred from parameters)
+    *  @tparam N Size of arrays (may be inferred from parameters)
+    *
+    *  @param[in]  txData           Transmit bytes (tx size is inferred from this array)
+    *  @param[in]  lastTransaction  Indicate last transaction in a transfer
+    */
+   template<typename T, unsigned N>
+   void tx(const std::array<const T, N> &txData, bool lastTransaction=true) {
+      txRx(N, txData.data(), (T*)nullptr, lastTransaction);
+   }
+
+   /**
+    *  Transmit a series of values
+    *
+    *  @tparam T Type for data transfer (may be inferred from parameters)
+    *  @tparam N Size of arrays (may be inferred from parameters)
+    *
+    *  @param[in]  txData           Transmit bytes (tx size is inferred from this array)
+    *  @param[in]  lastTransaction  Indicate last transaction in a transfer
+    */
+   template<typename T, unsigned N>
+   void tx(const std::array<T, N> &txData, bool lastTransaction=true) {
+      txRx(N, txData.data(), (T*)nullptr, lastTransaction);
+   }
+
+   /**
+    *  Transmit a series of values
+    *
+    *  @tparam T Type for data transfer (may be inferred from parameters)
+    *  @tparam N Size of arrays (may be inferred from parameters)
+    *
+    *  @param[in]  txData           Transmit bytes (tx size is inferred from this array)
+    *  @param[in]  lastTransaction  Indicate last transaction in a transfer
+    */
+   template<typename T, unsigned N>
+   void tx(const T (&txData)[N], bool lastTransaction=true) {
+      txRx(N, txData, (T*)nullptr, lastTransaction);
+   }
+
+   /**
+    *  Transmit a series of values
+    *
+    *  @tparam T Type for data transfer (may be inferred from parameters)
+    *
+    *  @param[in]  dataSize         Number of values to transfer
+    *  @param[in]  txData           Transmit bytes (tx size is inferred from this array)
+    *  @param[in]  lastTransaction  Indicate last transaction in a transfer
+    */
+   template<typename T>
+   void tx(uint32_t dataSize, const T *txData, bool lastTransaction=true) {
+      txRx(dataSize, txData, (T*)nullptr, lastTransaction);
+   }
+
+   /**
     *  Transmit and receive a series of values
     *
     *  @tparam T Type for data transfer (may be inferred from parameters)
     *  @tparam N Size of arrays (may be inferred from parameters)
     *
-    *  @param[in]  txData    Transmit bytes (tx-rx size is inferred from this array)
-    *  @param[out] rxData    Receive byte buffer
-    *
-    *  @note: rxData may use same buffer as txData
+    *  @param[out] rxData           Receive byte buffer (rx size is inferred from this array)
+    *  @param[in]  lastTransaction  Indicate last transaction in a transfer
     */
    template<typename T, unsigned N>
-   void txRx(const std::array<T, N> &txData, std::array<T, N> &rxData) {
-      txRx(N, txData.data(), rxData.data());
-   }
-
-   /**
-    *  Transmit a series of values
-    *
-    *  @tparam T Type for data transfer (may be inferred from parameters)
-    *  @tparam N Size of arrays (may be inferred from parameters)
-    *
-    *  @param[in]  txData    Transmit bytes (tx size is inferred from this array)
-    */
-   template<typename T, unsigned N>
-   void tx(const std::array<const T, N> &txData) {
-      txRx(N, txData.data(), (T*)nullptr);
-   }
-
-   /**
-    *  Transmit a series of values
-    *
-    *  @tparam T Type for data transfer (may be inferred from parameters)
-    *  @tparam N Size of arrays (may be inferred from parameters)
-    *
-    *  @param[in]  txData    Transmit bytes (tx size is inferred from this array)
-    */
-   template<typename T, unsigned N>
-   void tx(const std::array<T, N> &txData) {
-      txRx(N, txData.data(), (T*)nullptr);
-   }
-
-   /**
-    *  Transmit a series of values
-    *
-    *  @tparam T Type for data transfer (may be inferred from parameters)
-    *  @tparam N Size of arrays (may be inferred from parameters)
-    *
-    *  @param[in]  txData    Transmit bytes (tx size is inferred from this array)
-    */
-   template<typename T, unsigned N>
-   void tx(const T (&txData)[N]) {
-      txRx(N, txData, (T*)nullptr);
-   }
-
-   /**
-    *  Transmit and receive a series of values
-    *
-    *  @tparam T Type for data transfer (may be inferred from parameters)
-    *  @tparam N Size of arrays (may be inferred from parameters)
-    *
-    *  @param[out] rxData    Receive byte buffer (rx size is inferred from this array)
-    */
-   template<typename T, unsigned N>
-   void rx(T (&rxData)[N]) {
-      txRx(N, (T*)nullptr, rxData );
+   void rx(T (&rxData)[N], bool lastTransaction=true) {
+      txRx(N, (T*)nullptr, rxData, lastTransaction);
    }
 
    /**
@@ -1310,7 +1353,7 @@ public:
     *
     * @note The USBDM error code will also be set on error
     */
-   virtual osStatus startTransaction(SpiCalculatedConfiguration &configuration, int milliseconds=osWaitForever) override {
+   virtual osStatus startTransaction(const SpiCalculatedConfiguration &configuration, int milliseconds=osWaitForever) override {
       // Obtain mutex
       osStatus status = mutex().wait(milliseconds);
       if (status == osOK) {

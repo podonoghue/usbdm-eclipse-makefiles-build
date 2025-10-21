@@ -14,8 +14,6 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
-#include <climits>
-#include <cstddef>
 #include "pin_mapping.h"
 #include "gpio.h"
 
@@ -58,7 +56,7 @@ protected:
     * @param adcAddress  ADC address
     * @param channel     ADC channel to use
     */
-   constexpr AdcChannel(uint32_t adcAddress, uint8_t channel) : AdcBasicInfo((volatile ADC_Type *)adcAddress), sc1Value(channel) {}
+   constexpr AdcChannel(volatile ADC_Type *adcAddress, uint8_t channel) : AdcBasicInfo(adcAddress), sc1Value(channel) {}
 
 public:
    /**

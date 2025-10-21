@@ -503,6 +503,23 @@
 <!--     START BasicInfo Class      -->
 <!-- ====================================================================================================== -->
 
+   <template where="definitions" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Combine two ADC register bit-fields
+      \t * (Just to quieten warnings in C++20)
+      \t *
+      \t * @param adcPower
+      \t * @param adcClockRange
+      \t *
+      \t * @return Combined fields
+      \t */
+      \tconstexpr uint8_t  operator|(AdcPower adcPower, AdcClockRange adcClockRange) {
+      \t   return uint8_t(adcPower)|uint8_t(adcClockRange);
+      \t}
+      \t\n
+   ]]></template>
+
    <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
       \t// Channel number used for PGA

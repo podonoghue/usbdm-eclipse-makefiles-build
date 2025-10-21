@@ -23,7 +23,7 @@
       <constant key="/SYSTEM/$pcrPattern"          type="String"  value='""'   />
       <!-- Standard Gpio format
           * %i = port instance e.g."A"
-          * %n = bit number
+          * %b = bit number
           * %p = polarity
           * e.g. Gpio%i<%b,%p>
       -->

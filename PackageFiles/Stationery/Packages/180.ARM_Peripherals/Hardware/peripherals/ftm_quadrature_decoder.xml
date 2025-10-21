@@ -323,7 +323,7 @@
          \t/**
          \t * Configure QuadDecoder from values specified in init
          \t
-         \t * @param quadInit Class containing initialisation values
+         \t * @param init Class containing initialisation values
          \t */
          \tstatic ErrorCode configure(const QuadInit &init) {
          \t

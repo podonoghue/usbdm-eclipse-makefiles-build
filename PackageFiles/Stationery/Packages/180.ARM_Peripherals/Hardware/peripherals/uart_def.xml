@@ -2193,15 +2193,11 @@ of a parity error or receiver buffer overruns before the host processor is notif
    <!-- ____ Getters and Setters ____________ -->
 
    <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
-      variables="uart_txempty_action"
-      linePadding="xxx" >
+      variables="uart_txempty_action" >
    <![CDATA[
       \t/**
       \t * Set %description
       \t * (%variables)
-      \t *
-      \t * @tparam   Types
-      \t * @param    rest
       \t *
       %paramDescription
       \t */
@@ -2213,15 +2209,11 @@ of a parity error or receiver buffer overruns before the host processor is notif
    ]]>
    </variableTemplate>
    <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
-      variables="uart_rxfull_action"
-      linePadding="xxx" >
+      variables="uart_rxfull_action" >
    <![CDATA[
       \t/**
       \t * Set for %description
       \t * (%variables)
-      \t *
-      \t * @tparam   Types
-      \t * @param    rest
       \t *
       %paramDescription
       \t */

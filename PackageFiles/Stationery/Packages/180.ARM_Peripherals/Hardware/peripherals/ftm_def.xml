@@ -4,14 +4,14 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude" >
 
-   <constant key="definitionsInHeader" value="true" type="Boolean" />
-
    <!-- ____ Class Declaration ________ -->
    <constant key="_basicInfo_declaration" type="String" value='"$(_BasicInfo) : public $(_Baseclass)CommonInfo"' />
 
    <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
-   <constant key = "disable_peripheral"      value = '"ftm->SC = FTM_SC_CLKS(0);"' type="String"  />
+   <constant key="definitionsInHeader" value="true" type="Boolean" />
+
+   <constant key="disable_peripheral"      value='"ftm->SC = FTM_SC_CLKS(0);"' type="String"  />
 
    <equation key="no_initvectors"             value="true"      />
    <equation key="irq_parameters"             value=""  />

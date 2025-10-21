@@ -42,7 +42,7 @@ int main() {
    spi.setConfiguration(configuration1);
 
    // Peripheral settings to use with above configuration
-   spi.selectConfiguration(SpiCtarSelect_0, SpiPeripheralSelect_0, SpiPeripheralSelectMode_Transaction);
+   spi.selectConfiguration(SpiCtarSelect_0, SpiPeripheralSelect_Pcs0, SpiPeripheralSelectMode_Transaction);
 
    // Save the derived configuration
    SpiCalculatedConfiguration configurationOdd = spi.getConfiguration();
@@ -53,7 +53,7 @@ int main() {
    spi.setConfiguration(configuration2);
 
    // Peripheral settings to use with above configuration
-   spi.selectConfiguration(SpiCtarSelect_0, SpiPeripheralSelect_1, SpiPeripheralSelectMode_Transfer);
+   spi.selectConfiguration(SpiCtarSelect_0, SpiPeripheralSelect_Pcs1, SpiPeripheralSelectMode_Transfer);
 
    // Save the derived configuration
    SpiCalculatedConfiguration configurationEven = spi.getConfiguration();

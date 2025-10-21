@@ -31,7 +31,7 @@ using MyAdcChannel       = Adc0::Channel<Adc0ChannelNum_Analogue_A1>;  // Intern
 constexpr AdcResolution adcResolution = AdcResolution_16bit_se;
 
 void reportChipTemperature() {
-   using TemperatureChannel    = Adc0::Channel<Adc0ChannelNum_TEMP_SENSOR>;  // Internal temp sensor
+   using TemperatureChannel    = Adc0::Channel<Adc0ChannelNum_Temp_sensor>;  // Internal temp sensor
    constexpr float VREF_H      = 3.3;                                        // External Vref voltage ~ Vcc
 
    unsigned tMeasure        = TemperatureChannel::readAnalogue();

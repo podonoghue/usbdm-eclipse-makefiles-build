@@ -96,7 +96,7 @@
 
 
    <!-- ************* SCGCx Bus clock enables ****************** -->
-   <!-- Create list of clock enable fields -->
+   <!-- Create list of clock enable fields for all SCGC fields-->
    <equation key="clockEnables" value='=""' />
    <for keys="peripheral"
       values="adc;can;cmp;cmt;crc;dac;dma;dmamux;enet;ewm;flexio;ftf;ftfa;ftfe;ftfl;ftm;flexbus;
@@ -142,7 +142,7 @@
             typeName="Sim%(Name)Clock"
             description="%(Name) Clock Gate Control"
             toolTip="This clock gate must be enabled to access %(Name). \n
-                     This may be done here or when the individual peripheral is configured." >
+                     This may be done when configuring the SIM or when the individual peripheral is configured." >
             <choice name="%(Name) Clock disabled"  value="0" enum="Disabled"/>
             <choice name="%(Name) Clock enabled"   value="1" enum="Enabled" isDefault="%(isDefault)" />
          </binaryOption >

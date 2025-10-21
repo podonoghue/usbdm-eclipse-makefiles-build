@@ -2336,7 +2336,6 @@
       <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(r)"
          linePadding="xxx"
-         multipleParamsOnNewline="true"
          nonDefaultParams="2"
       ><![CDATA[
          \t   /**

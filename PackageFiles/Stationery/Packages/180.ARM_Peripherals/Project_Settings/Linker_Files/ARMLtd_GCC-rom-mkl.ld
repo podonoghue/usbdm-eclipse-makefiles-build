@@ -214,7 +214,7 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
       *(.noinit)
    } > noinit_ram
    
-   /* Start of BSS */
+   /* BSS */
    .bss (READONLY) :
    {
       . = ALIGN(4);
@@ -228,7 +228,7 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
       __END_BSS = .;
    } > bss_ram
     
-   /* Start of HEAP - usually from top of BSS */
+   /* HEAP */
    .heap :
    {
       . = ALIGN(4);
@@ -238,16 +238,16 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
       __HeapBase = .;
       __heap_addr = .;
       . = . + __heap_size__;
-      /* Heap limit is at Top of ram_low or bottom of stack */
-      __HeapLimit = MIN( ABSOLUTE(ORIGIN(heap_ram)+LENGTH(heap_ram)-1), __StackLimit);
+      __HeapLimit = .;
+    /*  __HeapLimit = MIN( ABSOLUTE(ORIGIN(heap_ram)+LENGTH(heap_ram)-1), __StackLimit); */
    } > heap_ram
 
-   /* STACK space - between HEAP and end of RAM (or bitband_bytes) */
+   /* STACK */
    PROVIDE ( __sram_u_size = 0 );
    .stack :
    {
       /* Make sure location doesn't move backwards as causes cryptic messages */
-      . = MAX( ., ABSOLUTE(ORIGIN(stack_ram) + LENGTH(stack_ram) - __stack_size__ - __sram_u_size - 3));
+/*      . = MAX( ., ABSOLUTE(ORIGIN(stack_ram) + LENGTH(stack_ram) - __stack_size__ - __sram_u_size - 3)); */
       . = ALIGN(4);
       __StackLimit = .;
       . = . + __stack_size__;

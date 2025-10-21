@@ -24,7 +24,7 @@ using namespace USBDM;
 using MyAdc        = Adc0;
 
 // ADC channel to use
-using MyAdcChannel = Analogue_Diff1; //MyAdc::DiffChannel<Adc0ChannelNum_Diff1>;
+using MyAdcChannel = Analogue_Diff0; //MyAdc::DiffChannel<Adc0ChannelNum_Diff0>;
 
 // Resolution to use for ADC
 constexpr AdcResolution adcResolution = AdcResolution_9bit_diff;

@@ -48,7 +48,7 @@ int main(void) {
       AdcTrigger_Software ,               // (adc_sc2_adtrg)   Conversion Trigger Select
       AdcAveraging_4 ,                    // (adc_sc3_avg)     Hardware Average Select
       AdcSample_4cycles ,                 // (adc_sample)      Long Sample Time Select
-      AdcContinuous_Enabled ,             // (adc_sc3_adco)    Continuous conversions
+      AdcOperation_Continuous ,           // (adc_sc3_adco)    Continuous conversions
 
       // Software configuration - Trigger conversions on channel with interrupts
       AdcPretrigger_0, MyAdcChannel::CHANNEL, AdcAction_Interrupt,

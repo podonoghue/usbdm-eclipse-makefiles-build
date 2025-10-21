@@ -224,7 +224,7 @@ public:
     * Configure touch sensing interrupts
     *
     * @param[in] tsiEventSource     Selects End-of-Scan or Out-of-Range interrupt behaviour
-    * @param[in] tsiErrorInterrupt  Selects error interrupt behaviour
+    * @param[in] tsiErrorAction     Selects action on event
     */
    static void enableTsiInterrupts(
          TsiEventSource    tsiEventSource,

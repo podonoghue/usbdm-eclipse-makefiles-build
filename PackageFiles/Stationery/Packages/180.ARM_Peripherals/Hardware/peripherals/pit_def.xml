@@ -6,7 +6,7 @@
 
    <constant key="definitionsInHeader" value="true" type="Boolean" />
 
-<!-- 
+<!--
    <if condition="=(_hardwareIrqCount==pit_channel_dim)">
       <for keys="irqNum" values="=_hardwareIrqNums" iterationVar="ch" >
          <choiceOption key="irqLevel_Ch%(ch)"
@@ -439,9 +439,9 @@
          #endif
          \t
          \t   /**
-         \t    * Enable/disable channel interrupts
+         \t    * Set action to take on event
          \t    *
-         \t    * @param[in]  enable  True => enable, False => disable
+         \t    * @param[in]  pitChannelAction Action to take on event
          \t    */
          \t   %(static) void setChannelAction(PitChannelAction pitChannelAction) %(const) {
          \t      PitBase_T<Info>::setChannelAction(%(chan), pitChannelAction);
@@ -1092,8 +1092,8 @@
       \t * This version allows the channel number to be explicitly given to allow
       \t * sharing of an init class for channels requiring the same configuration.
       \t *
-      \t * @param channeNum Number of channel to initialise
-      \t * @param init      Class containing initialisation values (channel number is ignored)
+      \t * @param channelNum Number of channel to initialise
+      \t * @param init       Class containing initialisation values (channel number is ignored)
       \t */
       \tstatic void configure(PitChannelNum channelNum, const ChannelInit &init) {
       \t

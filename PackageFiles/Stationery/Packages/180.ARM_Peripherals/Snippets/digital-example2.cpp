@@ -27,14 +27,22 @@ using Switch =   $(/HARDWARE/Switch1:GpioD<5,ActiveLow>);
 using Led    =   $(/HARDWARE/Led1:GpioA<2,ActiveLow>);
 
 int main(void) {
-   Led::setOutput(
-         PinDriveStrength_High,
-         PinDriveMode_PushPull,
-         PinSlewRate_Slow);
-   Switch::setInput(
-         PinPull_Up,
-         PinAction_None,
-         PinFilter_Passive);
+
+   // Shared GPIO initialisation value
+   static constexpr PcrInit GpioInit {
+      // Output options
+      PinDriveStrength_High,
+      PinDriveMode_PushPull,
+      PinSlewRate_Slow,
+
+      // Input options
+      PinPull_Up,
+      PinAction_None,
+      PinFilter_Passive
+   };
+
+   Led::setOutput(GpioInit);
+   Switch::setInput(GpioInit);
 
    for(;;) {
       Led::write(!Switch::read());

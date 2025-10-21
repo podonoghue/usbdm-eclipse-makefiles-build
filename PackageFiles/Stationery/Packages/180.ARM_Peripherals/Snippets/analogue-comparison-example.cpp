@@ -62,7 +62,7 @@ int main() {
       ADC_RESOLUTION ,                    // (adc_cfg1_mode) ADC Resolution
       AdcTrigger_Software ,               // (adc_sc2_adtrg) Conversion Trigger Select
       AdcAveraging_4 ,                    // (adc_sc3_avg) Hardware Average Select
-      AdcContinuous_Enabled ,             // (adc_sc3_adco) Single or continuous conversion
+      AdcOperation_Continuous ,           // (adc_sc3_adco) Single or continuous conversion
       AdcSample_4cycles ,                 // (adc_sample) Long Sample Time Select
       AdcCompare_OutsideRangeExclusive ,  // (adc_sc2_compare) Compare function
       LOWER_THRESHOLD ,                   // (adc_cv1) ADC CV low value

@@ -437,7 +437,7 @@
    \t * @return  Size of array in elements
    \t */
    \ttemplate<typename T, size_t N>
-   \t   consteval size_t sizeofArray(T (&)[N]) {
+   \t   constexpr size_t sizeofArray(T (&)[N]) {
    \t      return N;
    \t   }
 
