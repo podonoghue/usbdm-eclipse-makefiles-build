@@ -1,10 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- cmt_0.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Carrier Modulator Transmitter" >
 
+   <option key="debugGuards" value="true" />
+
+   <equation key="individual_clock_source" value='=Exists("/SIM/system_$(_name)_clock[]")'     />
+   <equation key="shared_clock_source"     value='=Exists("/SIM/system_$(_basename)_clock[]")' />
+
+   <!-- printVar key="individual_clock_source" />
+   <printVar key="shared_clock_source"     / -->
+
    <!-- ____ Class Declarations ________ -->
+   <constant key="_basicInfo_declaration" type="String" value='"$(_BasicInfo)"' />
+
    <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
 
    <constant key="definitionsInHeader" value="true" type="Boolean" />
@@ -24,14 +34,36 @@
    <binaryOption key="cmt_msc_mcgen" condition="cmt_msc_mcgen_present"
       hidden="true"
       derived="true"
-      typeName="CmtModulatorAndCarrierEnable"
+      typeName="bool"
       baseType="uint8_t"
-      toolTip="Setting MCGEN will initialize the carrier generator and modulator and will enable all clocks"
+      toolTip="Setting MCGEN will initialise the carrier generator and modulator\n
+               Clearing MCGEN will disable operation of the CMT"
       description="Modulator and Carrier Enable" >
       <choice name="Disabled"    value="0" enum="Disabled" />
       <choice name="Enabled"     value="1" enum="Enabled" />
-   </binaryOption >
+   </binaryOption>
 
+   <!-- binaryOption key="cmt_msc_base" condition="cmt_msc_base_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CmtBasebandOperationEnable"
+      baseType="uint8_t"
+      toolTip="When set, BASE disables the carrier generator and forces the carrier output high for generation of baseband protocols.\n
+               When BASE is cleared, the carrier generator is enabled and the carrier output toggles at the frequency determined \n
+               by values stored in the carrier data"
+      description="Baseband Operation Enable" >
+      <choice name="Disabled"    value="0" enum="Disabled" />
+      <choice name="Enabled"     value="1" enum="Enabled" />
+   </binaryOption -->
+
+   <!-- binaryOption key="cmt_msc_fsk" condition="cmt_msc_fsk_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="CmtFskModeSelect"
+      baseType="uint8_t"
+      toolTip=""
+      description="FSK Mode Select\nEnables FSK operation" >
+      <choice name="Time or Baseband mode"  value="0" enum="TimeOrBasebandMode" />
+      <choice name="FSK mode"               value="1" enum="FskMode" />
+   </binaryOption -->
 
    <choiceOption key="cmt_msc_mode"
       enabledBy="enablePeripheralSupport"
@@ -54,7 +86,7 @@
                   Mark/Space time is controlled by setMarkSpacePeriods()."
       />
       <choice name="FreqShiftKeying"  value="1,0,1"  enum="FreqShiftKeying"
-         toolTip="Waveform changes between two modulation frequencies(mark) separated by idle time (space) i.e.\n
+         toolTip="Waveform changes between two modulation frequencies(mark) separated by idle times (space) i.e.\n
                    (Primary modulation - idle - Secondary modulation - idle) repeated.\n
                    Modulation waveforms are controlled by setPrimaryTiming() and setSecondaryTiming().\n
                    Mark/Space time is controlled by setMarkSpacePeriods().\n
@@ -63,24 +95,26 @@
    </choiceOption>
 
    <binaryOption key="cmt_msc_eocf" condition="cmt_msc_eocf_present"
-      enabledBy="enablePeripheralSupport"
       hidden="true"
+      derived="true"
       typeName="CmtStatus"
       baseType="uint8_t"
       toolTip="Sets when:\n
                - The modulator is not currently active and MCGEN is set\n
                - At the end of each modulation cycle while MCGEN is set\n
-               Cleared by:\n
-               - Calling getStatus() followed by calling getMarkPeriod(), setSpacePeriod() or setMarkSpacePeriods().\n
-               - A DMA cycle"
+               Cleared in polling mode by:\n
+                  - Calling getEndOfCycleFlag() followed by accessing mark or space periods, or\n
+                  - Calling clearEndOfCycleFlag()\n
+               Cleared in DMA mode by:\n
+                  - A DMA cycle"
       description="End Of Cycle Status Flag" >
-      <choice name="Cycle not completed"  value="0" enum="CycleIncomplete"/>
+      <choice name="Cycle incomplete"     value="0" enum="CycleIncomplete"/>
       <choice name="Cycle completed"      value="1" enum="CycleCompleted"/>
    </binaryOption >
 
-   <!-- _____ OC _____ -->
+   <!-- ____ OC ____ -->
 
-   <choiceOption key="cmt_oc_output" condition="cmt_oc_cmtpol_present"
+   <choiceOption key="cmt_oc_output" condition="cmt_oc_cmtpol_present&amp;&amp;cmt_oc_iropen_present"
       enabledBy="enablePeripheralSupport"
       valueFormat="CMT_OC_IROPEN(%s),CMT_OC_CMTPOL(%s)"
       typeName="CmtOutput"
@@ -97,12 +131,13 @@
    </choiceOption>
 
    <binaryOption  key="cmt_oc_irol" condition="cmt_oc_irol_present"
-      enabledBy="(cmt_oc_output>0)"
+      enabledBy="(cmt_oc_output>0)&amp;&amp;(cmt_msc_mode==0)"
       typeName="CmtOutputLevel"
       baseType="uint8_t"
       description="IRO Latch Control"
-      toolTip="Reads the state of the IRO latch.\n
-               The value written controls the state of the IRO signal when MSC[MCGEN] is cleared and IROPEN is set"
+      toolTip="On reads provides the state of the IRO latch.\n
+               The value written controls the state of the IRO signal when mode[MSC_MODE]\n
+               is direct and output[OC_OUTPUT] is not disabled"
       >
       <choice value="0" name="Low"  enum="Low"  />
       <choice value="1" name="High" enum="High" />
@@ -116,7 +151,7 @@
       baseType="uint8_t"
       toolTip="Divides the CMT clock to generate the Intermediate Frequency clock\n
                to the secondary prescaler.\n
-               This should be chosen to produce a nominal 8MHz frequency from the CMT input clock."
+               This should be chosen to produce a nominal 8MHz frequency from the CMT intermediate frequency."
       description="Primary Prescaler Divider"
       enumText="
       \t   CmtClockPrescaler_Auto              = 0xFF,               ///&lt; Calculate divider to generate 8MHz based on input clock"
@@ -139,42 +174,62 @@
       <choice name="Bus clock / 16"  value="15" enum="BusClockDivBy16" />
    </choiceOption >
 
-   <intOption key="clockFrequency"
+   <intOption key="intermediateFrequency"
       description="Intermediate frequency (nominally 8MHz)"
       ref="(/SIM/system_bus_clock[0])/(cmt_pps_ppsdiv+1)"
       derived="true"
       units="Hz"
+      locked="true"
    />
    <choiceOption key="cmt_msc_cmtdiv" condition="cmt_msc_cmtdiv_present"
+      target="clockFrequency"
       enabledBy="enablePeripheralSupport"
       typeName="CmtIntermediatePrescaler"
       baseType="uint8_t"
       toolTip="Causes the CMT to be clocked at the Intermediate frequency divided by 1, 2, 4, or 8"
       description="Intermediate frequency Prescaler"
       >
-      <choice name="Intermediate frequency /1" value="0" enum="DivBy1" />
-      <choice name="Intermediate frequency /2" value="1" enum="DivBy2" />
-      <choice name="Intermediate frequency /4" value="2" enum="DivBy4" />
-      <choice name="Intermediate frequency /8" value="3" enum="DivBy8" />
+      <choice name="Intermediate frequency /1" value="0" enum="DivBy1" ref="intermediateFrequency" />
+      <choice name="Intermediate frequency /2" value="1" enum="DivBy2" ref="intermediateFrequency/2" />
+      <choice name="Intermediate frequency /4" value="2" enum="DivBy4" ref="intermediateFrequency/4" />
+      <choice name="Intermediate frequency /8" value="3" enum="DivBy8" ref="intermediateFrequency/8" />
    </choiceOption >
+
+   <intOption key="clockFrequency"
+      description="Clock frequency"
+      derived="true"
+      units="Hz"
+      locked="true"
+      origin="Intermediate frequency divided by cmtdiv"
+   />
 
    <binaryOption key="cmt_msc_exspc" condition="cmt_msc_exspc_present"
       hidden="true"
       enabledBy="enablePeripheralSupport"
-      baseType="uint8_t"
       typeName="CmtExtendedSpace"
-      toolTip="Enables the extended space operation."
+      baseType="uint8_t"
+      toolTip="In either Time, Baseband, or FSK mode, allows the space period                         \n
+               to be made longer than the maximum possible value of the space period register.        \n
+               Setting MSC[EXSPC] will force the modulator to treat the next modulation period,       \n
+               beginning with the next load of the counter and space period registers, as a space     \n
+               period equal in length to the mark and space counts combined.                          \n
+               Subsequent modulation periods will consist entirely of these extended space periods    \n
+               with no mark periods.                                                                  \n
+               Clearing MSC[EXSPC] will return the modulator to standard operation at the beginning   \n
+               of the next modulation period."
       description="Extended Space Enable" >
       <choice name="Disabled"    value="0" enum="Disabled" />
       <choice name="Enabled"     value="1" enum="Enabled" />
    </binaryOption >
+
+   <!-- _____ IRQ/DMA _____ -->
 
    <choiceOption key="cmt_dma_irq" condition="cmt_msc_eocie_present&amp;&amp;cmt_dma_dma_present"
       enabledBy="enablePeripheralSupport"
       valueFormat="CMT_MSC_EOCIE(%s),CMT_DMA_DMA(%s)"
       typeName="CmtEndOfCycleAction"
       baseType="uint8_t"
-      toolTip="Enables a Interrupt or DMA request when EOCIE is set"
+      toolTip="Enables Interrupt or DMA request on end of cycle (when EOCIE set)"
       description="End of Cycle Event handling" >
       <choice value="0,0" name="No Action"             enum="None"        />
       <choice value="1,0" name="Interrupt Request"     enum="Interrupt"   />
@@ -182,36 +237,31 @@
    </choiceOption>
 
    <binaryOption key="cmt_msc_eocie" condition="cmt_msc_eocie_present"
-      enabledBy="enablePeripheralSupport"
       hidden="true"
-      typeName="CmtInterruptEnable"
       baseType="uint8_t"
-      toolTip="Requests to enable a CPU interrupt when EOCF is set if EOCIE is high"
+      toolTip="Controlled by cmt_dma_irq"
       description="End of Cycle Interrupt Enable" >
       <choice name="Interrupt disabled"  value="0" enum="Disabled"/>
       <choice name="Interrupt enabled"   value="1" enum="Enabled"/>
-   </binaryOption >
-
-   <!-- _____ DMA _____ -->
+   </binaryOption>
 
    <binaryOption key="cmt_dma_dma" condition="cmt_dma_dma_present"
-      enabledBy="enablePeripheralSupport"
       hidden="true"
-      typeName="CmtDma"
       baseType="uint8_t"
-      toolTip=""
+      toolTip="Controlled by cmt_dma_irq"
       description="DMA Transfer Enable" >
       <choice name="DMA disabled"  value="0" enum="Disabled"/>
       <choice name="DMA enabled"   value="1" enum="Enabled"/>
-   </binaryOption >
+   </binaryOption>
 
-   <!-- _____ CGH1 _____ -->
+   <!-- _____ CGH1/CGL1 _____ -->
+
+   <title description="Primary Carrier"  hiddenBy="cmt_msc_mode==0"/>
 
    <intOption key="cmt_cgh1_ph" condition="cmt_cgh1_ph_present"
-      enabledBy="enablePeripheralSupport"
-      baseType="uint8_t"
+      hiddenBy="cmt_msc_mode==0"
       typeName="CmtPrimaryCarrierHighTime"
-      description="Primary Carrier High Time Data Value"
+      baseType="uint8_t"
       toolTip="Contains the number of input clocks required to generate the carrier high time period.\n
                When operating in Time mode, this register is always selected.\n
                When operating in FSK mode, this register and the secondary register pair are\n
@@ -219,16 +269,24 @@
                The primary carrier high time value is undefined out of reset.\n
                This register must be written to nonzero values before the carrier \n
                generator is enabled to avoid spurious results."
+      description="Primary Carrier High Time Data Value"
       value="0"
+      min="1" max="255"
    />
 
-   <!-- _____ CGL1 _____ -->
+   <floatOption key="cmt_cgh1_ph_value" condition="cmt_cgh1_ph_present"
+      ref="(1.0*cmt_cgh1_ph)/(clockFrequency)"
+      hiddenBy="cmt_msc_mode==0"
+      locked="true"
+      derived="true"
+      description="Primary Carrier High Time"
+      units="s"
+   />
 
    <intOption key="cmt_cgl1_pl" condition="cmt_cgl1_pl_present"
-      enabledBy="enablePeripheralSupport"
-      baseType="uint8_t"
+      hiddenBy="cmt_msc_mode==0"
       typeName="CmtPrimaryCarrierLowTime"
-      description="Primary Carrier Low Time Data Value"
+      baseType="uint8_t"
       toolTip="Contains the number of input clocks required to generate the carrier low time period.\n
                When operating in Time mode, this register is always selected.\n
                When operating in FSK mode, this register and the secondary register pair are\n
@@ -236,16 +294,36 @@
                The primary carrier low time value is undefined out of reset.\n
                This register must be written to nonzero values before the carrier generator\n
                is enabled to avoid spurious results."
-      value="0"
+      description="Primary Carrier Low Time Data Value"
+      min="1" max="255"
    />
 
-   <!-- _____ CGH2 _____ -->
+   <floatOption key="cmt_cgl1_pl_value" condition="cmt_cgl1_pl_present"
+      ref="(1.0*cmt_cgl1_pl)/(clockFrequency)"
+      hiddenBy="cmt_msc_mode==0"
+      locked="true"
+      derived="true"
+      description="Primary Carrier Low Time"
+      units="s"
+   />
+
+   <floatOption key="cmt_cg1_period" condition="cmt_cgl1_pl_present"
+      ref="cmt_cgh1_ph_value+cmt_cgl1_pl_value"
+      hiddenBy="cmt_msc_mode==0"
+      locked="true"
+      derived="true"
+      description="Primary Carrier Period"
+      units="s"
+   />
+
+   <!-- ____ CGH2/CGL2 ____ -->
+
+   <title description="Secondary Carrier"  hiddenBy="cmt_msc_mode!=3"/>
 
    <intOption key="cmt_cgh2_sh" condition="cmt_cgh2_sh_present"
-      enabledBy="enablePeripheralSupport"
-      baseType="uint8_t"
+      hiddenBy="cmt_msc_mode!=3"
       typeName="CmtSecondaryCarrierHighTime"
-      description="Secondary Carrier High Time Data Value"
+      baseType="uint8_t"
       toolTip="Contains the number of input clocks required to generate the carrier high time period.\n
                When operating in Time mode, this register is never selected.\n
                When operating in FSK mode, this register and the primary register pair are\n
@@ -253,16 +331,23 @@
                The secondary carrier high time value is undefined out of reset.\n
                This register must be written to nonzero values before the carrier generator\n
                is enabled when operating in FSK mode."
-      value="0"
+      description="Secondary Carrier High Time Data Value"
+      min="1" max="255"
    />
 
-   <!-- _____ CGL2 _____ -->
+   <floatOption key="cmt_cgh2_sh_value" condition="cmt_cgh2_sh_present"
+      ref="(1.0*cmt_cgh2_sh)/(clockFrequency)"
+      hiddenBy="cmt_msc_mode!=3"
+      locked="true"
+      derived="true"
+      description="Secondary Carrier High Time"
+      units="s"
+   />
 
    <intOption key="cmt_cgl2_sl" condition="cmt_cgl2_sl_present"
-      enabledBy="enablePeripheralSupport"
-      baseType="uint8_t"
+      hiddenBy="cmt_msc_mode!=3"
       typeName="CmtSecondaryCarrierLowTime"
-      description="Secondary Carrier Low Time Data Value"
+      baseType="uint8_t"
       toolTip="Contains the number of input clocks required to generate the carrier low time period.\n
                When operating in Time mode, this register is never selected.\n
                When operating in FSK mode, this register and the primary register pair are\n
@@ -270,31 +355,118 @@
                The secondary carrier low time value is undefined out of reset.\n
                This register must be written to nonzero values before the carrier generator\n
                is enabled when operating in FSK mode."
-      value="0"
+      description="Secondary Carrier Low Time Data Value"
+      min="1" max="255"
    />
 
-   <!-- _____ CMD1/CMD2 _____ -->
+   <floatOption key="cmt_cgl2_sl_value" condition="cmt_cgl2_sl_present"
+      ref="(1.0*cmt_cgl2_sl)/(clockFrequency)"
+      hiddenBy="cmt_msc_mode!=3"
+      locked="true"
+      derived="true"
+      description="Secondary Carrier Low Time"
+      units="s"
+   />
+
+   <floatOption key="cmt_cg2_period" condition="cmt_cgl2_sl_present"
+      ref="cmt_cgh2_sh_value+cmt_cgl2_sl_value"
+      hiddenBy="cmt_msc_mode!=3"
+      locked="true"
+      derived="true"
+      description="Secondary Carrier Period"
+      units="s"
+   />
+
+   <!-- ____ CMD1/CMD2 ____ -->
+
+   <title description="Mark/Space Control"  hiddenBy="cmt_msc_mode==0"/>
+
+   <intOption key="cmt_cmd2_mb" condition="cmt_cmd2_mb_present"
+      hidden="true"
+      baseType="uint8_t"
+      toolTip=""
+      description="Controls the lower mark periods of the modulator for all modes"
+      value="0"
+      min="0" max="255"
+   />
 
    <intOption key="cmt_mark" condition="cmt_cmd1_mb_present"
-      enabledBy="enablePeripheralSupport"
-      valueFormat="%s"
-      baseType="uint16_t"
+      hiddenBy="cmt_msc_mode==0"
       typeName="CmtMarkPeriod"
-      description="Mark period"
+      baseType="uint16_t"
       toolTip="Controls the mark period of the modulator for all modes"
+      description="Mark period value"
+      valueFormat="%s"
       value="0"
+      min="0" max="65535"
    />
 
-   <!-- _____ CMD3/CMD4 _____ -->
+   <floatOption key="cmt_mark_value" condition="cmt_mark"
+      ref="(cmt_mark+1)/(clockFrequency/8.0)"
+      hiddenBy="(cmt_msc_mode==(0,3))"
+      locked="true"
+      derived="true"
+      description="Mark period"
+      units="s"
+   />
+
+   <floatOption key="cmt_mark_value_fsk1" condition="cmt_mark"
+      ref="(cmt_mark+1)*cmt_cg1_period"
+      hiddenBy="(cmt_msc_mode!=3)"
+      locked="true"
+      derived="true"
+      description="Mark period FSK #1"
+      units="s"
+   />
+
+   <floatOption key="cmt_mark_value_fsk2" condition="cmt_mark"
+      ref="(cmt_mark+1)*cmt_cg2_period"
+      hiddenBy="(cmt_msc_mode!=3)"
+      locked="true"
+      derived="true"
+      description="Mark period FSK #2"
+      units="s"
+   />
+
+   <!-- ____ CMD3/CMD4 ____ -->
 
    <intOption key="cmt_space" condition="cmt_cmd3_sb_present"
-      enabledBy="enablePeripheralSupport"
-      valueFormat="%s"
-      baseType="uint16_t"
+      hiddenBy="cmt_msc_mode==0"
       typeName="CmtSpacePeriod"
-      description="Space period"
+      baseType="uint16_t"
       toolTip="Controls the space periods of the modulator for all modes"
+      description="Space period value"
+      valueFormat="%s"
       value="0"
+      min="0" max="65535"
+   />
+
+   <floatOption key="cmt_space_value" condition="cmt_space"
+      ref="cmt_space/(clockFrequency/8.0)"
+      hiddenBy="(cmt_msc_mode==(0,3))"
+      enabledBy="cmt_msc_mode!=0"
+      locked="true"
+      derived="true"
+      description="Space period"
+      units="s"
+   />
+
+   <floatOption key="cmt_space_value_fsk1" condition="cmt_space"
+      ref="cmt_space*cmt_cg1_period"
+      hiddenBy="(cmt_msc_mode!=3)"
+      locked="true"
+      derived="true"
+      description="Mark period FSK #1"
+      units="s"
+   />
+
+   <floatOption key="cmt_space_value_fsk2" condition="cmt_space"
+      ref="cmt_space*cmt_cg2_period"
+      hiddenBy="(cmt_msc_mode!=3)"
+      locked="true"
+      derived="true"
+      description="Mark period FSK #2"
+      units="s"
    />
 
 <!-- ====================================================================================================== -->
@@ -322,6 +494,22 @@
       \t\n
    ]]></template>
 
+   <!-- BasicInfo Clock methods  -->
+   <!-- Shared clock selection -->
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Get input clock frequency
+      \t * (Shared by all peripherals)
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic inline uint32_t getInputClockFrequency() {
+      \t   return SystemBusClock;
+      \t}
+      \t\n
+   ]]></template>
+
    <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="cmt_pps_ppsdiv"
       nonDefaultParams="0"
@@ -335,9 +523,10 @@
       \tstatic CmtClockPrescaler calculateClockPrescaler(%params) {
       \t
       \t   if (%paramName == %paramType_Auto) {
-      \t      // Calculate a prescaler an 8MHz clock based on clock available
-      \t      %paramName = CmtClockPrescaler(((SystemBusClock+4000000)/8000000)-1);
+      \t      // Calculate a prescaler for a 8MHz clock based on clock available
+      \t      %paramName = CmtClockPrescaler(((getInputClockFrequency()+4000000)/8000000)-1);
       \t   }
+      \t   // Return divider specified
       \t   return %paramName;
       \t}
       \t\n
@@ -355,15 +544,15 @@
 
    <!-- ____ Getters and Setters ____________ -->
 
-   <for keys="field           : get   : set   : clear : genCode                 : name"
+   <for keys="field                     : get   : set   : maskset : maskclear : genCode                 : name"
         values="
-         cmt_oc_irol          : true  : true  : false : enableGettersAndSetters : OutputState;
-         cmt_msc_mode         : true  : true  : false : enableGettersAndSetters : Mode;
-         cmt_msc_eocf         : true  : false : false : %(guard)                : EndOfCycleFlag;
-         cmt_msc_cmtdiv       : true  : true  : false : enableGettersAndSetters : Prescaler;
-         cmt_msc_exspc        : true  : true  : false : %(guard)                : ExtendedSpace;
-         cmt_oc_output        : false : true  : false : enableGettersAndSetters : OutputControl;
-         cmt_dma_dma          : true  : true  : false : enableGettersAndSetters : DmaControl" >
+         cmt_oc_irol                    : true  : true  : false   : false     : enableGettersAndSetters : OutputState;
+         cmt_msc_mode                   : true  : true  : false   : false     : enableGettersAndSetters : Mode;
+         cmt_msc_eocf                   : true  : false : false   : false     : %(guard)                : EndOfCycleFlag;
+         cmt_msc_cmtdiv                 : true  : true  : false   : false     : enableGettersAndSetters : Prescaler;
+         cmt_msc_exspc                  : true  : true  : false   : false     : %(guard)                : ExtendedSpace;
+         cmt_oc_output                  : false : true  : false   : false     : enableGettersAndSetters : OutputControl" >
+
       <variableTemplate location="%(where)" condition="%(set)" codeGenCondition="%(genCode)&amp;&amp;%(guard)"
          variables="%(field)" >
       <![CDATA[
@@ -394,24 +583,24 @@
          \t\n
       ]]>
       </variableTemplate>
-      <variableTemplate location="%(where)" condition='="(%variables)"=="%(clear)"' codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+      <variableTemplate location="%(where)" condition="%(maskset)" codeGenCondition="%(genCode)&amp;&amp;%(guard)"
          variables="%(field)"
          tooltipPadding="x*x" >
       <![CDATA[
          \t/**
-         \t * Clear %description
+         \t * Set %description
          \t * (%variables)
          \t *
-         %paramDescription
+         \t * %tooltip
          \t */
-         \t%(static)void clear%(name)(%params) %(const){
-         \t   // w1c and mixed register
-         \t   %register = %register|%paramExpression;
+         \t%(static)void set%(name)() %(const){
+         \t   // Set field
+         \t   %register = %register|%mask;
          \t}
          \t\n
       ]]>
       </variableTemplate>
-      <variableTemplate location="%(where)" condition='="w1cIm"=="%(clear)"' codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+      <variableTemplate location="%(where)" condition="%(maskclear)" codeGenCondition="%(genCode)&amp;&amp;%(guard)"
          variables="%(field)"
          tooltipPadding="x*x" >
       <![CDATA[
@@ -422,13 +611,85 @@
          \t * %tooltip
          \t */
          \t%(static)void clear%(name)() %(const){
-         \t   // w1c and mixed register
-         \t   %register = %register|%mask;
+         \t   // Clear field
+         \t   %register = %register&~%mask;
          \t}
          \t\n
       ]]>
       </variableTemplate>
    </for>
+
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)"
+      variables="cmt_msc_mcgen"
+         tooltipPadding="x*x"  >
+   <![CDATA[
+      \t/**
+      \t * Set %description
+      \t * (%variables)
+      \t *
+      \t * %tooltip
+      \t */
+      \t%(static)void start() %(const){
+      \t   // Set field
+      \t   %register = %register|%mask;
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)"
+      variables="cmt_msc_mcgen"
+         tooltipPadding="x*x"  >
+   <![CDATA[
+      \t/**
+      \t * Clear %description
+      \t * (%variables)
+      \t *
+      \t * %tooltip
+      \t */
+      \t%(static)void stop() %(const){
+      \t   // Clear field
+      \t   %register = %register&~%mask;
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)"
+      variables="cmt_msc_eocf, cmt_cmd2_mb"
+         tooltipPadding="x*x"  >
+   <![CDATA[
+      \t/**
+      \t * Clear %description0
+      \t * (%variables)
+      \t *
+      \t * %tooltip0
+      \t */
+      \t%(static)void clearEndOfCycleFlag() %(const){
+      \t   // Read fields in order to clear flag
+      \t   (void)%register0;
+      \t   (void)%register1;
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <variableTemplate location="%(where)" codeGenCondition="%(guard)"
+      variables="cmt_msc_mcgen"
+         tooltipPadding="x*x"  >
+   <![CDATA[
+      \t/**
+      \t * Get %description
+      \t * (%variables)
+      \t *
+      \t * @return %tooltip
+      \t */
+      \t%(static)%returnType isEnabled() %(const){
+      \t   return %fieldExtract;
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
 
    <variableTemplate location="%(where)" codeGenCondition="%(guard)"
       variables="cmt_dma_irq" >
@@ -440,8 +701,8 @@
       \t */
       \t%(static)void setEndOfCycleAction(%params) %(const){
       \t
-      \t   cmt->MSC = (cmt->MSC&~CMT_MSC_EOCIE_MASK)|CMT_MSC_EOCIE(%paramName);
-      \t   cmt->DMA = (cmt->DMA&~CMT_DMA_DMA_MASK)  |CMT_DMA_DMA(%paramName);
+      \t   cmt->MSC = (cmt->MSC&~CMT_MSC_EOCIE_MASK)|(CMT_MSC_EOCIE_MASK&%paramName);
+      \t   cmt->DMA = (cmt->DMA&~CMT_DMA_DMA_MASK)  |(CMT_DMA_DMA_MASK&%paramName);
       \t}
       \t
       \t/**
@@ -611,18 +872,17 @@
       \t *
       \t *   // Setup values
       \t *
-      \t *   CmtMode_Direct ,                    // Mode of operation - Direct
-      \t *   CmtClockPrescaler_BusClockDivBy1 ,  // Primary Prescaler Divider - Bus clock / 1
-      \t *   CmtIntermediatePrescaler_DivBy1 ,   // Intermediate frequency Prescaler - Intermediate frequency /1
-      \t *   CmtOutput_Disabled ,                // Output Control - Disabled
-      \t *   CmtMscEocie_InterruptDisabled ,     // End of Cycle Interrupt Enable - Interrupt disabled
-      \t *   CmtDmaDma_DmaDisabled ,             // DMA Transfer Enable - DMA disabled
-      \t *   CmtPrimaryCarrierHighTime(0) ,      // Primary Carrier High Time Data Value
-      \t *   CmtPrimaryCarrierLowTime(0) ,       // Primary Carrier Low Time Data Value
-      \t *   CmtSecondaryCarrierHighTime(0) ,    // Secondary Carrier High Time Data Value
-      \t *   CmtSecondaryCarrierLowTime(0) ,     // Secondary Carrier Low Time Data Value
-      \t *   CmtMarkPeriod(0) ,                  // Mark period
-      \t *   CmtSpacePeriod(0),                  // Space period
+      \t *   CmtMode_Time ,                         // (cmt_msc_mode)             Mode of operation - Time
+      \t *   CmtClockPrescaler_BusClockDivBy6 ,     // (cmt_pps_ppsdiv)           Primary Prescaler Divider - Bus clock / 6
+      \t *   CmtIntermediatePrescaler_DivBy2 ,      // (cmt_msc_cmtdiv)           Intermediate frequency Prescaler - Intermediate frequency /2
+      \t *   CmtOutput_ActiveHigh ,                 // (cmt_oc_output)            Output Control - Active-high
+      \t *   CmtEndOfCycleAction_None ,             // (cmt_dma_irq)              End of Cycle Event handling - No Action
+      \t *   CmtPrimaryCarrierHighTime(100) ,       // (cmt_cgh1_ph)              Primary Carrier High Time Data Value
+      \t *   CmtPrimaryCarrierLowTime(200) ,        // (cmt_cgl1_pl)              Primary Carrier Low Time Data Value
+      \t *   CmtSecondaryCarrierHighTime(100) ,     // (cmt_cgh2_sh)              Secondary Carrier High Time Data Value
+      \t *   CmtSecondaryCarrierLowTime(200) ,      // (cmt_cgl2_sl)              Secondary Carrier Low Time Data Value
+      \t *   CmtMarkPeriod(50) ,                    // (cmt_mark)                 Mark period
+      \t *   CmtSpacePeriod(75),                    // (cmt_space)                Space period
       \t *
       \t *   // Optional base value to start with (must be last parameter)
       \t *   $(_Class)::DefaultInitValue   // Used as base value modified by above
@@ -663,12 +923,8 @@
                %baseType   : cmt_cgh2_sh                                          :   0      ;
                %baseType   : cmt_cgl2_sl                                          :   0      ;
                %baseType   : cmt_oc_irol,cmt_oc_cmtpol,cmt_oc_iropen              :   0      ;
-               %baseType   : cmt_msc_cmtdiv,cmt_msc_exspc,cmt_msc_base,
-                             cmt_msc_fsk,cmt_msc_eocie,cmt_msc_mcgen              :   0      ;
-               %baseType   : cmt_cmd1_mb                                          :   0      ;
-               %baseType   : cmt_cmd2_mb                                          :   0      ;
-               %baseType   : cmt_cmd3_sb                                          :   0      ;
-               %baseType   : cmt_cmd4_sb                                          :   0      ;
+               %baseType   : cmt_msc_cmtdiv,cmt_msc_exspc,
+                             cmt_msc_fsk,cmt_dma_irq,cmt_msc_mode                 :   0      ;
                %baseType   : cmt_dma_dma                                          :   0      ;
                %returnType : cmt_pps_ppsdiv                                       :   %returnType(0) ;
                %baseType   : cmt_mark                                             :   0      ;
@@ -790,21 +1046,18 @@
       \t * Configure $(_BASENAME) from values specified in init
       \t * This routine does not configure pins or interrupt handlers
       \t *
-      \t * @param $(_basename)           Hardware instance pointer
-      \t * @param clockFrequency Clock frequency
-      \t * @param init Class containing initialisation values
+      \t * @param $(_basename)             Hardware instance pointer
+      \t * @param init            Class containing initialisation values
       \t */
       \tstatic void configure(
       \t               volatile $(_Type) *$(_basename),
       \t               const Init    &init) {
-      \t
-      \t   //clockInitialise($(_basename), clockFrequency, init.clockFrequency);
       \t\n
    ]]>
    </template>
    <for keys=
              " var                                                    : statement            "
-      values=" cmt_msc_mcgen                                          : %register = 0;
+      values=" cmt_msc_mode                                           : %register = 0;
                cmt_cgh1_ph                                            : %configRegAssignment  ;
                cmt_cgl1_pl                                            : %configRegAssignment  ;
                cmt_cgh2_sh                                            : %configRegAssignment  ;
@@ -817,7 +1070,7 @@
                cmt_space                                              : cmt->CMD4    = uint8_t(init.%registerName)    ;
                cmt_pps_ppsdiv                                         : %register    = calculateClockPrescaler(init.%registerName)  ;
                cmt_msc_cmtdiv,cmt_msc_exspc,cmt_msc_base,
-               cmt_msc_fsk,cmt_msc_eocie,cmt_msc_mcgen                : %configRegAssignment  " >
+               cmt_msc_fsk,cmt_msc_eocie,cmt_msc_mode                : %configRegAssignment  " >
       <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(var)"
          linePadding="xxx" >
@@ -858,26 +1111,29 @@
 <!-- ====================================================================================================== -->
 <!--     START Info class      -->
 <!-- ====================================================================================================== -->
+
    <!-- ____ Info constructors ________ -->
 
    <template where="info" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
-      \t// Output pin
+      \t// Pins associated with peripheral
+      \ttypedef GpioTable_T<$(_Info), 0, ActiveHigh> IroPin;
+      \t
+      \t// PCRs associated with peripheral pins
       \ttypedef PcrTable_T<$(_Info), 0> OutputPin;
       \t\n
-   ]]>
-   </template>
-   
+   ]]></template>
+
    <template where="info" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
-      \t/*
+      \t/**
       \t *   Default Constructor
       \t */
       \t$(_Info)() : $(_BasicInfo)($(_basename)) {
       \t   defaultConfigure();
       \t}
       \t
-      \t/*
+      \t/**
       \t *   Constructor
       \t */
       \t$(_Info)(const Init &init) : $(_BasicInfo)($(_basename)) {
@@ -952,10 +1208,10 @@
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr $(_BasicInfo)::Init DefaultInitValue = {\n
+      \tstatic constexpr Init DefaultInitValue = {\n
    ]]>
    </template>
-
+   <xi:include href="irqHandlingInit.xml"    />
    <variableTemplate where="info" codeGenCondition="$(_InfoGuard)"
       separator=","
       terminator=","
@@ -974,11 +1230,13 @@
             cmt_space
          " >
    <![CDATA[
-      \t%initExpression
+      \t%initExpression\n
+   ]]></variableTemplate>
+   <template codeGenCondition="$(_InfoGuard)"
+   ><![CDATA[
       \t};
       \t\n
-   ]]>
-   </variableTemplate>
+   ]]></template>
 
 <!-- ====================================================================================================== -->
 <!--     END Info class      -->
@@ -1017,9 +1275,12 @@
    </validate>
 
    <projectActionList id="cmt_files" >
-      <copy source="Project_Headers/cmt.h"          target="Project_Headers/cmt.h"          overwrite="true" derived="true" />
-      <copy source="Snippets/cmt-example.cpp"       target="Snippets/cmt-example.cpp"       overwrite="true" derived="true" />
-      <copy source="Snippets/cmt-sirc-example.cpp"  target="Snippets/cmt-sirc-example.cpp"  overwrite="true" derived="true" />
+      <copy source="Project_Headers/cmt.h"           target="Project_Headers/cmt.h"           overwrite="true" derived="true" />
+      <copy source="Snippets/cmt-example.cpp"        target="Snippets/cmt-example.cpp"        overwrite="true" derived="true" />
+      <copy source="Snippets/cmt-sirc-example.cpp"   target="Snippets/cmt-sirc-example.cpp"   overwrite="true" derived="true" />
+      <copy source="Snippets/cmt-remote.h"           target="Snippets/cmt-remote.h"           overwrite="true" derived="true" />
+      <copy source="Snippets/cmt-remote.cpp"         target="Snippets/cmt-remote.cpp"         overwrite="true" derived="true" />
+      <copy source="Snippets/cmt-remote-example.cpp" target="Snippets/cmt-remote-example.cpp" overwrite="true" derived="true" />
    </projectActionList>
 
    <!-- ____ Startup ____ -->
@@ -1036,7 +1297,13 @@
 
    <!-- ____ SIM configuration ____ -->
 
-   <category name="Advanced" description="SIM configuration">
+   <category name="Advanced" description="SIM configuration"
+      toolTip="These settings only have effect if the SIM configuration is enabled" >
+      <title description="$(_BASENAME) Shared" />
+      <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+      <title description="$(_NAME) Specific" />
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
       <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />

@@ -45,12 +45,17 @@ using namespace USBDM;
 
 // Constant describing transmission
 static constexpr unsigned SONY_CARRIER    = 40000;        //!< Sony SIRC carrier frequency (Hz)
+
+// Following are in CMT ticks = 1us
+static constexpr Ticks SONY_START_TIME    =  2400_ticks;  //!< Sony SIRC on time (us) for start
+
 static constexpr Ticks SONY_ONE_TIME      =  1200_ticks;  //!< Sony SIRC on time (us) for '1'
 static constexpr Ticks SONY_ZERO_TIME     =   600_ticks;  //!< Sony SIRC on time (us) for '0'
-static constexpr Ticks SONY_START_TIME    =  2400_ticks;  //!< Sony SIRC on time (us) for start
-static constexpr Ticks SONY_OFF_TIME      =   600_ticks;  //!< Sony SIRC off time (us)
+static constexpr Ticks SONY_OFF_TIME      =   600_ticks;  //!< Sony SIRC off time (us) everywhere
+
 static constexpr Ticks SONY_REPEAT_TIME   = 45000_ticks;  //!< Sony SIRC repeat packet time (us)
-static constexpr unsigned SONY_REPEATS    =     4;        //!< How many times to repeat packet in transmission
+
+static constexpr unsigned SONY_REPEATS    =     3;        //!< How many times to repeat packet in transmission
 
 /** Carrier half period in CMT clock cycles (Based on 8MHz CMT clock) */
 static constexpr Ticks  PrimaryCarrierHalfTime = Ticks((8000000UL/SONY_CARRIER)/2);
@@ -72,48 +77,62 @@ static volatile unsigned repeatCount;
  *
  * This processes each bit for transmission.
  */
-static void cmtCallback() {
+void cmtCallback() {
    /** Command/address/extended value being transmitted */
    static uint32_t shiftReg;
 
    /** Time since start of current packet */
-   static Ticks repeatTime;
+   static Ticks progress;
+
+   if (Cmt::getEndOfCycleFlag()) {
 
 //   DebugLed::toggle();
-   if (Cmt::getEndOfCycleFlag()) {
       if(bitNum==0) {
-         if (repeatCount++ >= SONY_REPEATS) {
-            // Completed entire sequence of repeats
-
-            // Clear Interrupt flag
-            Cmt::getMarkPeriod();
-
-            // Disable entire CMT
-            Cmt::disable();
-            return;
-         }
-         // Start of new packet transmission
-         shiftReg   = data;
-         repeatTime = 0_ticks;
-         Cmt::setExtendedSpace(CmtExtendedSpace_Disabled);
+         // Currently sending start bit
+         // Set up new data transmission
+         shiftReg = data;
+         progress = SONY_START_TIME+SONY_OFF_TIME;
       }
       if (bitNum<packetLength) {
+         // Currently sending start or data bit
+         // Set up first/next bit
+
          // LSB first
          if (shiftReg&0b1) {
             Cmt::setMarkPeriod(SONY_ONE_TIME);
-            repeatTime = repeatTime + SONY_ONE_TIME+SONY_OFF_TIME;
+            progress = progress + SONY_ONE_TIME+SONY_OFF_TIME;
          }
          else {
             Cmt::setMarkPeriod(SONY_ZERO_TIME);
-            repeatTime = repeatTime + SONY_ZERO_TIME+SONY_OFF_TIME;
+            progress = progress + SONY_ZERO_TIME+SONY_OFF_TIME;
          }
          bitNum++;
          shiftReg >>= 1;
       }
-      else {
+      else if (bitNum == packetLength) {
+         // Currently sending last bit
+         // Set up minimum trailer space (mark time is forced to space)
          Cmt::setExtendedSpace(CmtExtendedSpace_Enabled);
-         Cmt::setMarkPeriod(SONY_REPEAT_TIME-SONY_OFF_TIME-repeatTime);
+         Cmt::setMarkPeriod(SONY_REPEAT_TIME-SONY_OFF_TIME-progress);
+         bitNum++;
+      }
+      else {
+         // Currently sending trailing space
+
+         // Set up for next packet
+         Cmt::setExtendedSpace(CmtExtendedSpace_Disabled);
+         Cmt::setMarkPeriod(SONY_START_TIME);
          bitNum = 0;
+
+         if (++repeatCount >= SONY_REPEATS) {
+            // Completed entire sequence of repeats
+
+            // Disable CMT
+            Cmt::stop();
+
+            // Clear Interrupt flag
+            Cmt::clearEndOfCycleFlag();
+         }
       }
    }
 //   DebugLed::off();
@@ -151,7 +170,7 @@ static void configureCmtTime() {
  * @return True if busy
  */
 bool isBusy() {
-   return (repeatCount <= SONY_REPEATS);
+   return (repeatCount < SONY_REPEATS);
 }
 
 /**
@@ -191,13 +210,17 @@ enum CmtCommand {
    CmtCommand_digit8                       =  7,
    CmtCommand_digit9                       =  8,
    CmtCommand_digit0                       =  9,
-   CmtCommand_enter                        = 11,
+   //   CmtCommand_digit11                      = 10, // 11
+   CmtCommand_enter                        = 11, // 12
+   CmtCommand_one__                        = 12, // 13
+   CmtCommand_two__                        = 13, // 14
+   CmtCommand_clear                        = 15,
    CmtCommand_channelUp                    = 16,
    CmtCommand_channelDown                  = 17,
    CmtCommand_volumeUp                     = 18,
    CmtCommand_volumeDown                   = 19,
    CmtCommand_mute                         = 20,
-   CmtCommand_power                        = 21,
+   CmtCommand_powerToggle                  = 21,
    CmtCommand_resetTv                      = 22,
    CmtCommand_audioMode                    = 23,
    CmtCommand_contrastUp                   = 24,
@@ -214,9 +237,14 @@ enum CmtCommand {
    CmtCommand_balanceRight                 = 39,
    CmtCommand_surroundOnOff                = 41,
    CmtCommand_auxAnt                       = 42,
-   CmtCommand_standby                      = 47,
+   CmtCommand_powerOn                      = 21,
+   CmtCommand_powerOff                     = 47, // Standby
 
    CmtCommand_timeDisplay                  = 48,
+   CmtCommand_up                           = 49,
+   CmtCommand_down                         = 50,
+   CmtCommand_right                        = 51,
+   CmtCommand_left                         = 52,
    CmtCommand_sleepTimer                   = 54,
    CmtCommand_channelDisplay               = 58,
    CmtCommand_channelJump                  = 59,
@@ -224,6 +252,11 @@ enum CmtCommand {
    CmtCommand_selectInputVideo_1           = 64,
    CmtCommand_selectInputVideo_2           = 65,
    CmtCommand_selectInputVideo_3           = 66,
+   CmtCommand_selectInputVideo_RGB1        = 67,
+   CmtCommand_selectInputVideo_RGB2        = 68,
+   CmtCommand_selectInputVideo_4           = 71,
+   CmtCommand_selectInputVideo_5           = 72,
+   CmtCommand_selectInputVideo_6           = 73,
    CmtCommand_noiseReductionOnOff          = 74,
    CmtCommand_cableBroadcast               = 78,
    CmtCommand_notchFilterOnOff             = 79,
@@ -237,6 +270,7 @@ enum CmtCommand {
    CmtCommand_videoSetup                   = 97,
    CmtCommand_AudioSetup                   = 98,
    CmtCommand_ExitSetup                    = 99,
+   CmtCommand_select                       = 101, // Return, Select, Enter (menu select key)
    CmtCommand_AutoProgram                  = 107,
    CmtCommand_TrebleUp                     = 112,
    CmtCommand_TrebleDown                   = 113,
@@ -296,41 +330,74 @@ void help() {
          "v   - Volume Down\n"
          "C   - Channel Up\n"
          "c   - Channel Down\n"
+         "e   - Enter\n"
+         "s   - Select\n"
          "m   - Mute/unmute\n"
-         "s   - Stand-by\n"
+         "P   - Power-on\n"
+         "p   - Power-off\n"
+         "t   - Power-toggle\n"
          "h   - Help\n\n";
    console.write(helpMessage);
 }
 
 int main() {
 
+   constexpr  PcrInit PinInitValue {
+      PinPull_Up,
+      PinDriveStrength_High,
+      PinDriveMode_PushPull,
+      PinSlewRate_Slow,
+   };
+
    // Activity LED connection - indicates command being sent
    using ActivityLed   = GpioA<2,ActiveLow>;
 
-   // Debug LED
-//   DebugLed::setOutput(
-//         PinDriveStrength_High,
-//         PinDriveMode_PushPull,
-//         PinSlewRate_Fast);
+//   using BlueButton    = Digital_A0;
+//   using GreenButton   = Digital_A1;
+//   using RedButton     = Digital_A2;
+
+   ActivityLed::setOutput(PinInitValue);
+
+//   DebugLed::setOutput(PinInitValue);
+
+//   BlueButton::setInput(PinInitValue);
+//   GreenButton::setInput(PinInitValue);
+//   RedButton::setInput(PinInitValue);
 
    console.writeln("Starting\n");
    console.writeln("SystemCoreClock = ", SystemCoreClock);
    console.writeln("SystemBusClock  = ", SystemBusClock);
 
-   ActivityLed::setOutput(
-         PinDriveStrength_High,
-         PinDriveMode_PushPull,
-         PinSlewRate_Slow);
 
    console.setEcho(EchoMode_Off);
+   console.setBlocking(BlockingMode_Off);
 
    bool CommandDone = true;
    for(int count = 0;;count++) {
-      console.write("\n0-9,v,c,m,s,h ? ");
-      // Assume OK input
-      CommandDone = true;
+
+      if (CommandDone) {
+         console.write("\n0-9,v,c,m,p,e,t,h ? ");
+      }
+      CommandDone = false;
 
       int ch = console.readChar();
+      if (ch>0) {
+         // OK key
+      }
+//      else if (BlueButton::isPressed()) {
+//         ch = 't';
+//      }
+//      else if (GreenButton::isPressed()) {
+//         ch = 'C';
+//      }
+//      else if (RedButton::isPressed()) {
+//         ch = 'c';
+//      }
+      else {
+         continue;
+      }
+      // Assume OK command
+      CommandDone = true;
 
       // Send pattern
       switch(ch) {
@@ -348,10 +415,15 @@ int main() {
          case 'v': send12(CmtAddress_tv, CmtCommand_volumeDown  );      break;
          case 'C': send12(CmtAddress_tv, CmtCommand_channelUp   );      break;
          case 'c': send12(CmtAddress_tv, CmtCommand_channelDown );      break;
+         case 'E':
+         case 'e': send12(CmtAddress_tv, CmtCommand_enter       );      break;
+         case 'S':
+         case 's': send12(CmtAddress_tv, CmtCommand_select      );      break;
          case 'M':
          case 'm': send12(CmtAddress_tv, CmtCommand_mute        );      break;
-         case 'S':
-         case 's': send12(CmtAddress_tv, CmtCommand_standby     );      break;
+         case 'P': send12(CmtAddress_tv, CmtCommand_powerOn     );      break;
+         case 'p': send12(CmtAddress_tv, CmtCommand_powerOff    );      break;
+         case 't': send12(CmtAddress_tv, CmtCommand_powerToggle );      break;
          case 'h': help(); CommandDone = false;                         break;
          default:
             // Not recognized command
@@ -368,6 +440,7 @@ int main() {
          // Minimum delay between transmissions
          waitMS(100);
       }
+      CommandDone = true;
    }
    return 0;
 }

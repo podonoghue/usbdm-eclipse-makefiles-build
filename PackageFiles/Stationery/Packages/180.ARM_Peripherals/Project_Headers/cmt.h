@@ -21,6 +21,11 @@ $(/CMT/prototypes:// $/CMT/prototypes not found)
 
 namespace USBDM {
 
+/**
+ * @addtogroup CMT_Group CMT, Carrier Modulator Transmitter
+ * @brief Abstraction for Carrier Modulator Transmitter
+ * @{
+ */
 $(/CMT/peripheral_h_definition:// $/CMT/peripheral_h_definition not found)
 $(/CMT/declarations: // No declaration found)
 /**
