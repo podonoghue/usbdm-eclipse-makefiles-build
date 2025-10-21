@@ -1818,7 +1818,7 @@ public:
    /**
     * Controls echoing of input characters
     *
-    * @param echoMode
+    * @param blockingMode Controls blocking behaviour
     *
     * @return Reference to self
     */

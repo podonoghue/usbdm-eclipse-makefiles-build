@@ -2,7 +2,7 @@
 <!DOCTYPE root SYSTEM "../package.dtd">
 
 <root version="1.0" >
-   <projectActionList id="CPP-abstraction-OLED-SSD1306" >
+   <projectActionList id="CPP-abstraction-weact-stdio-1-54-epaper" >
       <applyWhen>
          <and>
             <or>
@@ -11,7 +11,7 @@
                <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
                <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
             </or>
-            <variableRef idRef="cpp.peripheral.internal.i2c" />
+            <variableRef idRef="cpp.peripheral.internal.spi" />
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
@@ -19,30 +19,29 @@
          <applyWhen>
             <variableRef idRef="projectOptionValue.CPP-abstraction" condition="isTrue"/>
          </applyWhen>
-         <variable id="projectOptionValue.CPP-abstraction-OLED-SSD1306"
-            name="SSD1306 based OLED interface"
-            description="Adds a CPP abstraction layer for a SSD1306 OLED"
-            checkGroup="group-i2c-peripheral-options" >
+         <variable id="projectOptionValue.CPP-abstraction-weact-stdio-1-54-epaper"
+            name='1.54" WeAct Studio Epaper interface'
+            description="Adds a CPP abstraction layer for an epaper display"
+            checkGroup="group-spi-peripheral-options" >
          </variable>
 
-         <!-- OLED CPP abstraction layer -->
+         <!-- EPD CPP abstraction layer -->
          <projectActionList>
             <projectActionList>
                <applyWhen >
-                  <variableRef idRef="projectOptionValue.CPP-abstraction-OLED-SSD1306" />
+                  <variableRef idRef="projectOptionValue.CPP-abstraction-weact-stdio-1-54-epaper" />
                </applyWhen>
                <copy source="Fonts"                                     target="Fonts"                                     overwrite="true"/>
                <copy source="Snippets/fonts.h"                          target="Sources/fonts.h"                           overwrite="true"/>
-               <copy source="Snippets/FrameBuffer.h"                    target="Sources/FrameBuffer.h"                     overwrite="true"/>
-               <copy source="Snippets/oled-example-SSD1306.cpp"         target="Sources/oled-example-SSD1306.cpp"          overwrite="true" />
-               <copy source="Snippets/oled_SSD1306.h"                   target="Sources/oled_SSD1306.h"                    overwrite="true" />
-               <excludeSourceFile target="Sources/oled-example-SSD1306.cpp"  />
-               <excludeSourceFile target="Sources/oled_SSD1306.cpp" />
+               <copy source="Snippets/FrameBuffer.h"                    target="Sources/FrameBuffer.h"                     overwrite="true" macroReplacement="false"/>
+               <copy source="Snippets/epaper-example-WeAct-1in54.cpp"   target="Sources/epaper-example-WeAct-1in54.cpp"    overwrite="true"/>
+               <copy source="Snippets/EPD_1in54_GDEM0154I61.h"          target="Sources/EPD_1in54_GDEM0154I61.h"           overwrite="true"/>
+               <excludeSourceFile target="Sources/epaper-example-WeAct-1in54.cpp" />
                <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
-                  <value>OLED_AVAILABLE</value>
+                  <value>EPAPER_AVAILABLE</value>
                </projectOption>
                <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
-                  <value>OLED_AVAILABLE</value>
+                  <value>EPAPER_AVAILABLE</value>
                </projectOption>
             </projectActionList>
          </projectActionList>

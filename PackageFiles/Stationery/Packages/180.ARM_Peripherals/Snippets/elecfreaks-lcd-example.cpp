@@ -77,30 +77,30 @@ int main() {
    lcd.drawCircle(CENTRE_X, CENTRE_Y, 40, WHITE);
 
    // Set LCD defaults
-   lcd.setFont(fontSmall).setForeground(FOREGROUND_COLOUR).setBackground(BACKGROUND_COLOUR);
+   lcd.setFont(font8x16).setForeground(FOREGROUND_COLOUR).setBackground(BACKGROUND_COLOUR);
 
    // Simple text with position and default font and colours
    lcd.putStr("Some Circles", 0, 10);
 
    // Change LCD defaults
-   lcd.setFont(fontLarge).setForeground(BLUE).setBackground(WHITE);
+   lcd.setFont(font14x20).setForeground(BLUE).setBackground(WHITE);
 
    // Move to top of screen
    lcd.moveXY(0, LCD_Y_MAX);
 
    // Formatted write to LCD using current defaults
-   lcd.moveXY(0, lcd.getY()-fontLarge.height);
+   lcd.moveXY(0, lcd.getY()-font14x20.height);
    lcd.write("max-X=", LCD_X_MAX, " ");
-   lcd.moveXY(0, lcd.getY()-fontLarge.height);
+   lcd.moveXY(0, lcd.getY()-font14x20.height);
    lcd.write("max-Y=", LCD_Y_MAX, " ");
 
    // Change LCD defaults
-   lcd.setFont(fontMedium).setForeground(BLACK).setBackground(GRAY);
+   lcd.setFont(font8x8).setForeground(BLACK).setBackground(GRAY);
 
    // Formatted write to LCD using current defaults
-   lcd.moveXY(0, lcd.getY()-fontMedium.height);
+   lcd.moveXY(0, lcd.getY()-font8x8.height);
    lcd.write("max-X=", LCD_X_MAX, " ");
-   lcd.moveXY(0, lcd.getY()-fontMedium.height);
+   lcd.moveXY(0, lcd.getY()-font8x8.height);
    lcd.write("max-Y=", LCD_Y_MAX, " ");
 
    // Cursor position on screen

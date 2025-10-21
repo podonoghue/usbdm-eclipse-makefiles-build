@@ -101,27 +101,6 @@ void LcdBase::init() {
 
    reset();
 
-   // Lock SPI
-   spi.startTransaction();
-
-   // 10 MHz
-   spi.setSpeed(10000000);
-
-   // Mode 0, MSB first
-   spi.setMode(SpiMode_0, SpiOrder_MsbFirst);
-
-   // Use 9-bit transfers
-   spi.setFrameSize(SpiFrameSize_9);
-
-   // Use software selection of peripheral
-   spi.setPeripheralSelect(SpiPeripheralSelect_None, ActiveLow, SpiSelectMode_Idle);
-
-   // Save configuration
-   spiConfig = spi.getConfiguration();
-
-   // Release SPI
-   spi.endTransaction();
-
 #ifdef PHILIPS
    txCommand(P_SWRESET);                 // Software reset
 

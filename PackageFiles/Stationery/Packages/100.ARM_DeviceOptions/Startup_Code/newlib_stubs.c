@@ -245,7 +245,7 @@ __attribute__((__weak__))
 void _exit(int rc __attribute__((unused))) {
    for(;;) {
       /*
-       * If you end up here it probably means you fell of the end of main() or
+       * If you end up here it probably means you fell off the end of main() or
        * failed an assertion!
        *
        * Check console output to see description of failed assertions and

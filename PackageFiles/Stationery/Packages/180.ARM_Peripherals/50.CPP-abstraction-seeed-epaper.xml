@@ -21,18 +21,20 @@
             <variableRef idRef="projectOptionValue.CPP-abstraction" condition="isTrue"/>
          </and>
          </applyWhen>
-         <variable id="projectOptionValue.CPP-abstraction-EPAPER" 
-            name="e-Paper C++ interface" 
-            description="Adds a CPP abstraction layer for Seeed Studio e-Paper displays" 
+         <variable id="projectOptionValue.CPP-abstraction-EPAPER"
+            name="e-Paper C++ interface"
+            description="Adds a CPP abstraction layer for Seeed Studio e-Paper displays"
             checkGroup="group-spi-peripheral-options" >
          </variable>
-   
+
          <!-- LCD CPP abstraction layer -->
          <projectActionList>
             <projectActionList>
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-EPAPER" />
                </applyWhen>
+               <copy source="Fonts"                                     target="Fonts"                                     overwrite="true"/>
+               <copy source="Snippets/fonts.h"                          target="Sources/fonts.h"                           overwrite="true"/>
                <copy source="Snippets/seeed-epaper-example.cpp"     target="Snippets/seeed-epaper-example.cpp" overwrite="true"/>
                <copy source="Snippets/epaper.h"                     target="Snippets/epaper.h"                 overwrite="true"/>
                <copy source="Snippets/epd.h"                        target="Snippets/epd.h"                    overwrite="true"/>
