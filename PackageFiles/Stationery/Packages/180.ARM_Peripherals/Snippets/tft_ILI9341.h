@@ -371,35 +371,19 @@ public:
    }
 
    /**
-    * Create TFT interface
+    * Create and initialise the TFT interface
     *
     * @param [in] spi  SPI to use
     * @param [in] font Initial font to use
+    *
+    * @note The back-light is turned off to allow screen clearing before enabling
+    *
     */
    TFT_ILI9341(Spi &spi, const Font *font=&font8x8) :
       spi(spi),
       dataConfiguration(spi.calculateConfiguration(serialInitValue, SpiPeripheralSelect_TftCs, SpiPeripheralSelectMode_Transaction)),
       commandConfiguration(spi.calculateConfiguration(serialInitValue, SpiPeripheralSelect_TftCs|SpiPeripheralSelect_TftDc, SpiPeripheralSelectMode_Transaction)),
       font(font) {
-
-      // Set CS and CD polarities
-      spi.setPcsPolarityActiveLow(SpiPeripheralSelect_TftDc|SpiPeripheralSelect_TftCs);
-
-      // GPIOs
-      static constexpr PcrInit pcrValue {
-         PinPull_Up,
-         PinAction_None,
-         PinDriveStrength_Low,
-         PinDriveMode_PushPull,
-         PinFilter_None,
-      };
-//      TftBusyPin::setInput(pcrValue);
-
-      TftReset::setOutput(pcrValue);
-      TftReset::high();
-
-      TftBacklight::setOutput(pcrValue);
-      TftBacklight::on();
 
       initialise();
    }
@@ -600,6 +584,25 @@ public:
     * Initialise the Display
     */
    void initialise() {
+
+      // Set CS and CD polarities
+      spi.setPcsPolarityActiveLow(SpiPeripheralSelect_TftDc|SpiPeripheralSelect_TftCs);
+
+      // GPIOs
+      static constexpr PcrInit pcrValue {
+         PinPull_None,
+         PinAction_None,
+         PinDriveStrength_Low,
+         PinDriveMode_PushPull,
+         PinFilter_None,
+      };
+//      TftBusyPin::setInput(pcrValue);
+
+      TftReset::setOutput(pcrValue);
+      TftReset::high();
+
+      TftBacklight::setOutput(pcrValue);
+
 
       static constexpr uint8_t initSequence[] = {
 

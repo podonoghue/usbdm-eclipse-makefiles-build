@@ -37,25 +37,25 @@
 using namespace USBDM;
 
 // Define clock modes to use
-static ClockConfig RUN_CLOCK_CONFIG    = ClockConfig_PEE_48MHz;
-static ClockConfig VLPR_CLOCK_CONFIG   = ClockConfig_BLPE_4MHz;
+static ClockConfig RUN_CLOCK_CONFIG    = ClockConfig_RUN_PEE_48MHz;
+static ClockConfig VLPR_CLOCK_CONFIG   = ClockConfig_VLPR_BLPI_4MHz;
 
 // May need reduced baud rate for slow clocks
-static constexpr int BAUD_RATE = 115200;
+static constexpr UartBaudRate BAUD_RATE = UartBaudRate_9600;
 
 // Using LEDs rather defeats VLLSx mode!
-using RedLED    = RedLed;
-using GreenLED  = GreenLed;
-using BlueLED   = BlueLed;
+using RedLED    = RGB_Red;
+using GreenLED  = RGB_Green;
+using BlueLED   = RGB_Blue;
 
 // Timer to use for timed wake-up
 using WakeupTimer = Lptmr0;
 
 // LLWU Pin Filter to use
-static constexpr LlwuFilterNum FILTER_NUM = LlwuFilterNum_0;
+static constexpr LlwuFilterNum FILTER_NUM = LlwuFilterNum_1;
 
 // LLWU Pin to use for wake-up
-using WakeupPin = Llwu::Pin<LlwuPin_Ptc1>;
+using WakeupPin = Llwu::Pin<LlwuPin_Wakeup_A1>;
 
 /** Possible tests - must be in this order */
 enum Test {
@@ -98,7 +98,7 @@ void disableWakeupInterruptSources() {
    Llwu::disableNvicInterrupts();
 
    // Disable wake-up pin
-   WakeupPin::disableNvicInterrupts();
+   WakeupPin::disableNvicPinInterrupts();
 }
 
 /**
@@ -107,17 +107,16 @@ void disableWakeupInterruptSources() {
 static void wakeupTimerCallback() {
    // We could also put code here that would execute on LPTMR event
    preservedData.timerHandlerRan = true;
-   WakeupTimer::clearInterruptFlag();
-   WakeupTimer::enableInterrupts(false);
+   WakeupTimer::clearEventFlag();
+   WakeupTimer::enableNvicInterrupts();
    __asm__("nop");
 }
 
 /**
  * Call-back for direct pin interrupt
- *
- * @param[in] status 32-bit value from ISFR (each bit indicates a pin interrupt source)
  */
-static void pinCallback(uint32_t status __attribute__((unused))) {
+static void pinCallback() {
+   uint32_t status = WakeupPin::getPinEventFlags();
    usbdm_assert(status & (WakeupPin::BITMASK), "Unexpected pin interrupt");
 
    if (status & (WakeupPin::BITMASK)) {
@@ -132,8 +131,8 @@ static void llwuCallback() {
    preservedData.llwuHandlerRan = true;
    if (Llwu::isPeripheralWakeupSource(LlwuPeripheral_Lptmr0)) {
       // Wake-up from LPTMR
-      WakeupTimer::clearInterruptFlag();
-      WakeupTimer::enableInterrupts(false);
+      WakeupTimer::clearEventFlag();
+      WakeupTimer::disableNvicInterrupts();
    }
    if (Llwu::isPinWakeupSource(WakeupPin::pin)) {
       // Wake-up from pin
@@ -246,7 +245,7 @@ static void enablePin(const PreservedData preservedData) {
          LlwuPinMode_Disabled);
 
    // Disable wake-up pin interrupts
-   WakeupPin::disableNvicInterrupts();
+   WakeupPin::disableNvicPinInterrupts();
    WakeupPin::setInput(
          PinPull_Up,
          PinAction_None,
@@ -254,7 +253,7 @@ static void enablePin(const PreservedData preservedData) {
 //   WakeupPin::disablePortClock();
 
    if (preservedData.enablePin) {
-      if (preservedData.test>=LLS2) {
+      if (preservedData.test>=LLS) {
 
          // Use LLWU in most Low-leakage modes
          Llwu::clearAllFlags();
@@ -289,14 +288,14 @@ static void enablePin(const PreservedData preservedData) {
                PinAction_IrqFalling,
                PinFilter_Passive);
 
-         WakeupPin::clearPinInterruptFlag();
+         WakeupPin::clearPinEventFlag();
          WakeupPin::setPinCallback(pinCallback);
-         WakeupPin::enableNvicInterrupts(NvicPriority_Normal);
+         WakeupPin::enableNvicPinInterrupts(NvicPriority_Normal);
       }
    }
    else {
       // Disable pin
-      WakeupPin::disableNvicInterrupts();
+      WakeupPin::disableNvicPinInterrupts();
       WakeupPin::setPinCallback(pinCallback);
       WakeupPin::disablePin();
    }
@@ -315,13 +314,15 @@ static void enableTimer(const PreservedData preservedData) {
 
       console.writeln("Configuring timer interrupt").flushOutput();
 
-      WakeupTimer::configureTimeCountingMode(
-            LptmrResetOn_Compare,
-            LptmrInterrupt_Enabled,
-            LptmrClockSel_Lpoclk);
-      WakeupTimer::setPeriod(preservedData.timerDelay*1_s);
-      WakeupTimer::setCallback(wakeupTimerCallback);
-      WakeupTimer::enableNvicInterrupts(NvicPriority_Normal);
+      WakeupTimer::TimeIntervalModeInit timerInit {
+         wakeupTimerCallback,
+         NvicPriority_Normal,
+         LptmrCounterActionOnEvent_Reset,
+         LptmrEventAction_Interrupt,
+         LptmrClockSel_Lpoclk,
+         Ticks(preservedData.timerDelay*1_s),
+      };
+      WakeupTimer::configure(timerInit);
 
       if (preservedData.test>=LLS) {
 
@@ -329,7 +330,7 @@ static void enableTimer(const PreservedData preservedData) {
          Llwu::clearAllFlags();
 
          console.writeln("Configuring timer LLWU wake-up").flushOutput();
-         Llwu::configurePeripheralSource(LlwuPeripheral_Lptmr0);
+         Llwu::configurePeripheralSource(LlwuPeripheral_Lptmr0, LlwuPeripheralWakeup_Enabled);
       }
    }
    else {
@@ -426,15 +427,13 @@ static SmcStatus changeRunMode() {
    console.flushOutput();
    if (smcStatus == SmcStatus_RUN) {
       // RUN->VLPR
-      Mcg::clockTransition(Mcg::clockInfo[VLPR_CLOCK_CONFIG]);
-      Smc::enterRunMode(SmcRunMode_VeryLowPower);
+      Smc::enterRunMode(VLPR_CLOCK_CONFIG);
       console.setBaudRate(BAUD_RATE);
       console.writeln("Changed to VLPR mode").flushOutput();
    }
    else if (smcStatus == SmcStatus_VLPR) {
       // VLPR->RUN mode
-      Smc::enterRunMode(SmcRunMode_Normal);
-      Mcg::clockTransition(Mcg::clockInfo[RUN_CLOCK_CONFIG]);
+      Smc::enterRunMode(RUN_CLOCK_CONFIG);
       console.setBaudRate(BAUD_RATE);
       console.writeln("Changed to RUN mode").flushOutput();
    }
@@ -514,12 +513,16 @@ int main() {
 
    // Enable all power modes
    Smc::enablePowerModes(
-         SmcVeryLowPower_Enabled,
-         SmcLowLeakageStop_Enabled,
-         SmcVeryLowLeakageStop_Enabled);
+         SmcAllowVeryLowPower_Enabled,
+         SmcAllowLowLeakageStop_Enabled,
+         SmcAllowVeryLowLeakageStop_Enabled);
 
    //Errata e4481 STOP mode recovery unstable
-   Pmc::configureBandgapOperation(PmcBandgapBuffer_Off, PmcBandgapLowPowerEnable_On);
+   Pmc::Init pmcInit {
+      PmcBandgapBuffer_Enabled,
+      PmcBandgapOperationInLowPower_Enabled,
+   };
+   Pmc::configure(pmcInit);
 
    checkError();
 
@@ -537,8 +540,8 @@ int main() {
    for(;;) {
       SmcStatus smcStatus = Smc::getStatus();
       if (refresh) {
-         console.writeln("SystemCoreClock  = ", ::SystemCoreClock/1000000.0).writeln(" MHz");
-         console.writeln("SystemBusClock   = ", ::SystemBusClock/1000000.0).writeln(" MHz");
+         console.writeln("SystemCoreClock  = ", SystemCoreClock/1000000.0, " MHz");
+         console.writeln("SystemBusClock   = ", SystemBusClock/1000000.0, " MHz");
 
          switch(smcStatus) {
             default:
@@ -580,19 +583,19 @@ int main() {
          }
          refresh = false;
       }
-      console.write("\rE/X - Execute(", Smc::getSmcStatusName(), ":", Mcg::getClockModeName(), "@", ::SystemCoreClock);
+      console.write("\rE/X - Execute(", Smc::getSmcStatusName(), ":", Mcg::getClockModeName(), "@", SystemCoreClock);
 #ifdef SMC_PMCTRL_LPWUI_MASK
       console.write(lpwui?", LPWUI":"       ");
 #endif
       console.write(preservedData.continuousTest?", Cont":"      ");
       console.write(preservedData.enablePin?", Pin":"     ");
       if (preservedData.enableTimer&&(preservedData.test!=VLLS0)) {
-         console.write(", Timer(").setWidth(2).setPadding(Padding_LeadingSpaces).write(preservedData.timerDelay, "s)");
+         IntegerFormat fmt {Width_2, Padding_LeadingSpaces};
+         console.write(", Timer(", preservedData.timerDelay, fmt, "s)");
       }
       else {
          console.write("           ");
       }
-      console.resetFormat();
       console.write(", Test=", TestNames[preservedData.test], ") :   ").flushOutput();
       console.setEcho(EchoMode_Off);
       int command = toupper(console.readChar());
@@ -642,7 +645,7 @@ int main() {
          case 'I':
             if (smcStatus==SmcStatus_RUN) {
                lpwui = !lpwui;
-               Smc::setExitVeryLowPowerOnInterrupt(lpwui?SmcExitVeryLowPowerOnInt_Enabled:SmcExitVeryLowPowerOnInt_Disabled);
+               Smc::setExitVeryLowPowerOnInterrupt(lpwui?SmcExitLowPowerOnInt_Enabled:SmcExitLowPowerOnInt_Disabled);
             }
             break;
 #endif

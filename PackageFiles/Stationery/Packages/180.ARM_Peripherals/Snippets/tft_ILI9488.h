@@ -3,9 +3,10 @@
  *
  *  Requires declarations for the following in Configure.usbdmProject
  *
- *  TftCs       TFT CS as SPI Peripheral select e.g. PCS0 (D7)
- *  TftDc       TFT DC as SPI Peripheral select e.g. PCS2 (A3)
- *  TftResetPin TFT Reset pin as GPIO e.g. GpioB.1 (A4)
+ *  TftCs        TFT CS as SPI Peripheral select e.g. PCS0 (D7)
+ *  TftDc        TFT DC as SPI Peripheral select e.g. PCS2 (A3)
+ *  TftReset     TFT Reset pin as GPIO e.g. GpioB.1 (A4)
+ *  TftBacklight TFT Back-light control
  *
  *  Fixed SPI specific connections
  *  SDA         SOUT (D11)
@@ -33,9 +34,13 @@
 #include <memory.h>
 
 #include "hardware.h"
-#include "spi.h"
-#include "formatted_io.h"
+#include "../Project_Headers/spi.h"
+#include "../Project_Headers/formatted_io.h"
 #include "fonts.h"
+#include "console.h"
+
+#pragma GCC push_options
+#pragma GCC optimize("O3")
 
 namespace USBDM {
 
@@ -89,17 +94,24 @@ class TFT_ILI9488 : public FormattedIO {
 
 protected:
 
-   static constexpr unsigned widths[]  = { 320, 480, 320, 480, 320, 480, 320, 480, };
-   static constexpr unsigned heights[] = { 480, 320, 480, 320, 480, 320, 480, 320, };
+static constexpr unsigned Width()  {
+   constexpr unsigned widths[]  = { 320, 480, 320, 480, 320, 480, 320, 480, };
+   return widths[orientation>>5];
+ }
+ 
+static constexpr unsigned Height() {
+   constexpr unsigned heights[] = { 480, 320, 480, 320, 480, 320, 480, 320, };
+   return heights[orientation>>5]; 
+}
 
 public:
 
    static constexpr Orientation ORIENTATION = orientation;
 
    // Fixed
-   static constexpr unsigned WIDTH  = widths[orientation>>5];
-   static constexpr unsigned HEIGHT = heights[orientation>>5];
-
+   static constexpr unsigned WIDTH  = Width();
+   static constexpr unsigned HEIGHT = Height();
+   
 protected:
 
    /// TFT commands
@@ -182,7 +194,8 @@ protected:
    static constexpr SpiPeripheralSelect SpiPeripheralSelect_TftDc = USBDM::SpiPeripheralSelect_TftDc; // Data=high, Command=Low
 
    /* TFT GPIOs */
-   using TftResetPin = USBDM::TftResetPin;    // Low=active
+   using TftReset     = USBDM::TftReset;        // Low=active
+   using TftBacklight = USBDM::TftBacklight;
 //   using TftBusyPin  = USBDM::TftBusyPin;     // High=busy
 
    // Communication settings
@@ -353,31 +366,19 @@ public:
    }
 
    /**
-    * Create TFT interface
+    * Create and initialise the TFT interface
     *
     * @param [in] spi  SPI to use
     * @param [in] font Initial font to use
+    *
+    * @note The back-light is turned off to allow screen clearing before enabling
+    *
     */
    TFT_ILI9488(Spi &spi, const Font *font=&font8x8) :
       spi(spi),
       dataConfiguration(spi.calculateConfiguration(serialInitValue, SpiPeripheralSelect_TftCs, SpiPeripheralSelectMode_Transaction)),
       commandConfiguration(spi.calculateConfiguration(serialInitValue, SpiPeripheralSelect_TftCs|SpiPeripheralSelect_TftDc, SpiPeripheralSelectMode_Transaction)),
       font(font) {
-
-      // Set CS and CD polarities
-      spi.setPcsPolarityActiveLow(SpiPeripheralSelect_TftDc|SpiPeripheralSelect_TftCs);
-
-      // GPIOs
-      static constexpr PcrInit pcrValue {
-         PinPull_Up,
-         PinAction_None,
-         PinDriveStrength_Low,
-         PinDriveMode_PushPull,
-         PinFilter_None,
-      };
-      TftResetPin::setOutput(pcrValue);
-//      TftBusyPin::setInput(pcrValue);
-      TftResetPin::high();
 
       initialise();
    }
@@ -388,8 +389,8 @@ public:
    virtual ~TFT_ILI9488() {
 
       sleep();
-
-      TftResetPin::low();
+      TftBacklight::off();
+      TftReset::low();
    }
 
 protected:
@@ -411,11 +412,11 @@ protected:
     */
    void hardwareReset() {
 
-      TftResetPin::high();
+      TftReset::high();
       waitMS(5);
-      TftResetPin::low();
+      TftReset::low();
       waitMS(20);
-      TftResetPin::high();
+      TftReset::high();
       waitMS(150);
    }
 
@@ -574,10 +575,31 @@ protected:
       sendData(data);
    }
 
+public:
    /**
     * Initialise the Display
+    *
+    * @note The back-light is turned off to allow screen clearing before enabling
     */
    void initialise() {
+
+      // Set CS and CD polarities
+      spi.setPcsPolarityActiveLow(SpiPeripheralSelect_TftDc|SpiPeripheralSelect_TftCs);
+
+      // GPIOs
+      static constexpr PcrInit pcrValue {
+         PinPull_None,
+         PinAction_None,
+         PinDriveStrength_Low,
+         PinDriveMode_PushPull,
+         PinFilter_None,
+      };
+//      TftBusyPin::setInput(pcrValue);
+
+      TftReset::setOutput(pcrValue);
+      TftReset::high();
+
+      TftBacklight::setOutput(pcrValue);
 
       static constexpr uint8_t initSequence[] = {
 
@@ -703,37 +725,200 @@ protected:
 
 public:
    /**
-    * Clear display screen
+    * Send block of data to display using DMA
+    *
+    * @param paddedData       Data to send
+    * @param numberOfElements Number of elements in paddedData
+    * @param numberOfpixels   Number of pixels to write
+    *
+    * @note If number of pixels requires more data that array provides, then the data sent wraps
+    *       around within array. This allows clearing an screen area with a small colour array
+    * @note paddedData is modified!
+    *
+    * Example:
+    * @code
+    *    // Size of paddedData array matches number of pixels
+    *    uint32_t paddedData[3*16/2]; // Holds colours for 16 pixels
+    *    sendDataBlock(paddedData, sizeofArray(paddedData), 2*sizeofArray(paddedData)/3)
+    *
+    *    // paddedData array is reused for multiple pixels
+    *    uint32_t paddedData[3];     // Holds single colour used for all 16 pixels
+    *    sendDataBlock(paddedData, sizeofArray(paddedData), 16)
+    * @endcode
     */
-   void clear(unsigned x=0, unsigned y=0, unsigned w=WIDTH, unsigned h=HEIGHT) {
+   void sendDataBlock(uint32_t *paddedData, unsigned numberOfElements, int numberOfpixels) {
 
-      // Convert RGB565 to padded 24-bit format
-      const uint8_t b1 = uint8_t(backgroundColour>>(6+5-3)&0b1111'1000);
-      const uint8_t b2 = uint8_t(backgroundColour>>(5-2)&0b1111'1100);
-      const uint8_t b3 = uint8_t(backgroundColour<<(8-5)&0b1111'1000);
+      DebugLed::on();
 
-      uint8_t filler[] = {
-            b1,b2,b3,
-            b1,b2,b3,
-            b1,b2,b3,
-            b1,b2,b3,
-            b1,b2,b3,
+      // 3 entries => 2 pixels
+      // size must be multiple of 3 but can be rounded up as window clips extra data sent
+      const int pixelsDonePerIteration = 2*((numberOfElements+2)/3);
+
+      static const DmaTcd tcdSkeleton = {
+            DmaInfo {                                                              // * = dynamic
+               /* Source address                 */ 0,                             // * Source array
+               /* Source offset                  */ sizeof(uint32_t),              //   Source address advances 1 element for each request
+               /* Source size                    */ DmaSize_32bit,                 //   32-bit read from source address
+               /* Last source adjustment         */ 0,                             // * Reset source address
+               /* Source modulo                  */ DmaModulo_Disabled,            //   Disabled
+            },
+
+            DmaInfo {
+               /* Destination address            */ 0,                             // * Destination is SPI PUSHR register
+               /* Destination offset             */ 0,                             //   Destination address no change
+               /* Destination size               */ DmaSize_32bit,                 //   32-bit write to destination address
+               /* Last destination adjustment    */ 0,                             //   Destination address no change
+               /* Destination modulo             */ DmaModulo_Disabled,            //   Disabled
+            },
+
+            /* Minor loop byte count             */ dmaNBytes(sizeof(uint32_t)),   //   Total transfer in one minor-loop
+            /* Major loop count                  */ 0,                             // * Transfer size - dynamic
+
+            DmaTcdCsr {
+               /* Start channel                  */ DmaStart_Hardware,             // Not started (triggered by hardware)
+               /* Disable Req. on major complete */ DmaStopOnComplete_Enabled,     // Clear hardware request when major loop completed
+               /* Interrupt on major complete    */ DmaIntMajor_Disabled,          // No interrupt on completion of Major-loop
+               /* Interrupt on half complete     */ DmaIntHalf_Disabled,           // No interrupt
+               /* Bandwidth (speed) Control      */ DmaSpeed_NoStalls,             // Full speed
+               /* Channel Linking                */ DmaMajorLink_Disabled,         // No linking
+               /* Scatter/Gather                 */ DmaScatterGather_Disabled,     // No scatter-gather
+            },
       };
 
-      setWindow(x,y,w,h);
-      sendCommand(Command_MemoryWriteStart);
+      // Set up TCD from skeleton and modify dynamic values
+      DmaTcd tcd{tcdSkeleton};
 
-      unsigned remaining = w*h*3;
-      while (remaining>0) {
-         unsigned size = remaining;
-         if (size > sizeof(filler)) {
-            size = sizeof(filler);
+      // Destination address SPI PUSHR register
+      tcd.DADDR = uint32_t(&spi.spi->PUSHR);
+
+      // Source address is padded array
+      tcd.SADDR = uint32_t(paddedData);
+
+      // Reset source address after each transfer
+      tcd.SLAST = -(numberOfElements*sizeof(uint32_t));
+
+      // Major loop count = # of entries to send on each transfer
+      tcd.CITER = dmaCiter(numberOfElements);
+
+      DmaChannelNum txDmaChannel;
+
+      do {
+
+         txDmaChannel = Dma0::allocateChannel();
+         if (txDmaChannel == DmaChannelNum_None) {
+            break;
          }
-         sendData(size, (uint8_t*)filler);
-         remaining -= size;
+
+         // Configure the transfer
+         Dma0::configureTransfer(txDmaChannel, tcd);
+
+         spi.setFifoAction(SpiTxFifoAction_None, SpiRxFifoAction_None);
+
+         spi.clearFifos(SpiClearFifo_Both);
+
+         const Dmamux0::Init dmamux0Init {
+            txDmaChannel,
+            DmamuxSlot_SPI0_Transmit,   // Mapping of DMA slot to DMA channel - SPI0
+            DmamuxMode_Continuous ,     // DMA Channel Enable - Channel enabled
+         };
+         // Connect DMA channel to SPI
+         Dmamux0::enable();
+         Dmamux0::configure(dmamux0Init);
+
+         Spi::SpiCalculatedConfiguration dataConfiguration(this->dataConfiguration);
+         dataConfiguration.setFrameSize(SpiFrameSize_16_bits);
+
+         spi.startTransaction(dataConfiguration);
+
+         spi.setFifoAction(SpiTxFifoAction_Dma, SpiRxFifoAction_Dma);
+
+         // Number of pixels to write
+         int pixelsRemaining = numberOfpixels;
+
+         while(pixelsRemaining>0) {
+
+            if (pixelsRemaining <= pixelsDonePerIteration) {
+               // Last iteration
+               // Tell SPI to halt at last entry
+               paddedData[numberOfElements-1] |= SPI_PUSHR_EOQ_MASK;
+            }
+
+            DebugLed::on();
+
+            // Enable hardware requests
+            Dma0::enableRequest(txDmaChannel);
+
+            // Wait while DMA busy
+            DebugLed::off();
+            Dma0::waitUntilComplete(txDmaChannel);
+
+            pixelsRemaining -= pixelsDonePerIteration;
+         }
+
+         // Wait for SPI to finish last Tx
+         while(!(spi.getStatusFlags()&SpiStatusFlag_EndOfQueueFlag)) {
+         }
+      } while (false);
+
+      // Cleanup
+      // Stop SPI requests
+      spi.endTransaction();
+
+      if (txDmaChannel != DmaChannelNum_None) {
+         Dma0::freeChannel(txDmaChannel);
       }
-      x = 0;
-      y = 0;
+
+      DebugLed::off();
+   }
+
+   /**
+    * Clear area of display screen
+    *
+    * @param colour  Fill colour
+    * @param x       Top-left X
+    * @param y       Top-right Y
+    * @param w       Width
+    * @param h       Height
+    */
+   void fill(Colour colour, unsigned x, unsigned y, unsigned w, unsigned h) {
+
+//      DebugLed::on();
+
+      // Convert RGB565 to padded 24-bit format
+      const uint8_t R = uint8_t(colour>>(6+5-3)&0b1111'1000);
+      const uint8_t G = uint8_t(colour>>(5-2)&0b1111'1100);
+      const uint8_t B = uint8_t(colour<<(8-5)&0b1111'1000);
+
+      Spi::SpiCalculatedConfiguration dataConfiguration {
+         this->dataConfiguration,
+      };
+      dataConfiguration.setFrameSize(SpiFrameSize_16_bits);
+
+      // 3 entries = 2 pixels of colour
+      static uint32_t paddedData[6];
+      paddedData[0] = dataConfiguration.firstValue((R<<8)|G);
+      paddedData[1] = dataConfiguration.middleValue((B<<8)|R);
+      paddedData[2] = dataConfiguration.middleValue((G<<8)|B);
+      paddedData[3] = dataConfiguration.firstValue((R<<8)|G);
+      paddedData[4] = dataConfiguration.middleValue((B<<8)|R);
+      paddedData[5] = dataConfiguration.middleValue((G<<8)|B);
+
+      setWindow(x,y,x+w-1,y+h-1);
+      sendCommand(Command_MemoryWriteStart);
+      sendDataBlock(paddedData, sizeofArray(paddedData), w*h);
+   }
+
+   /**
+    * Clear screen
+    *
+    * The cursor is set to (0,0)
+    */
+   void clear() {
+
+      fill(backgroundColour, 0, 0, WIDTH, HEIGHT);
+
+      this->x = x;
+      this->y = y;
    }
 
    /**
@@ -741,6 +926,8 @@ public:
     */
    void sleep() {
 
+      TftBacklight::off();
+      TftReset::setIn();
       sendCommand(Command_EnterSleep);  // Enter sleep
       inHibernation = true;
       waitMS(5);
@@ -753,7 +940,23 @@ public:
 
       sendCommand(Command_ExitSleep);  // Exit sleep
       inHibernation = false;
+      TftBacklight::on();
+      TftReset::setOut();
       waitMS(120);
+   }
+
+   /**
+    * Turn back-light on
+    */
+   void backlightOn() {
+      TftBacklight::on();
+   }
+
+   /**
+    * Turn back-light off
+    */
+   void backlightOff() {
+      TftBacklight::off();
    }
 
    void drawPixel(unsigned x, unsigned y, Colour colour) {
@@ -762,7 +965,7 @@ public:
          // Off screen
          return;
       }
-      setWindow(x, y, x+1, y+1);
+      setWindow(x, y, x, y);
       sendCommand(Command_MemoryWriteStart);
       sendColour(colour);
    }
@@ -780,12 +983,16 @@ public:
          // Clip to width
          x1 = WIDTH-1;
       }
-      setWindow(x0, y0, x1, y0);
-
-      sendCommand(Command_MemoryWriteStart);
-      while (x0++<=x1) {
-         sendColour(colour);
+      if (x1<=x0) {
+         return;
       }
+      fill(colour, x0, y0, x1-x0, 1);
+//      setWindow(x0, y0, x1, y0);
+//
+//      sendCommand(Command_MemoryWriteStart);
+//      while (x0++<=x1) {
+//         sendColour(colour);
+//      }
    }
 
 
@@ -802,12 +1009,16 @@ public:
          // Clip to height
          y1 = HEIGHT-1;
       }
-      setWindow(x0, y0, x0, y1);
-
-      sendCommand(Command_MemoryWriteStart);
-      while (y0++<=y1) {
-         sendColour(colour);
+      if (y1<=y0) {
+         return;
       }
+      fill(colour, x0, y0, 1, y1-y0);
+//      setWindow(x0, y0, x0, y1);
+//
+//      sendCommand(Command_MemoryWriteStart);
+//      while (y0++<=y1) {
+//         sendColour(colour);
+//      }
    }
 
    /**
@@ -864,10 +1075,16 @@ public:
     * @param y1  Bottom-right Y
     */
    void drawRect(unsigned x0, unsigned y0, unsigned x1, unsigned y1) {
-
-      for (unsigned y=y0; y<=y1; y++) {
-         drawHorizontalLine(x0, y, x1);
+      if (y1<y0) {
+         return;
       }
+      if (x1<x0) {
+         return;
+      }
+      fill(colour, x0, y0, x1-x0, y1-y0);
+//      for (unsigned y=y0; y<=y1; y++) {
+//         drawHorizontalLine(x0, y, x1);
+//      }
    }
 
    /**
@@ -969,108 +1186,277 @@ public:
       }
    }
 
+//   /**
+//    * Draw an image to display
+//    *
+//    * @param img  Image with 16-bit colours
+//    * @param x    Top-left X
+//    * @param y    Top-left Y
+//    * @param w    Width
+//    * @param h    Height
+//    */
+//   void drawImage(const uint8_t* img, uint16_t x, uint16_t y, uint16_t w, uint16_t h) {
+//
+//      // rudimentary clipping (drawChar w/big text requires this)
+//      if((x >= WIDTH) || (y >= HEIGHT)) {
+//         // Clipped
+//         return;
+//      }
+//      if((x + w - 1) >= (int)WIDTH)  {
+//         // Clip on edge
+//         w = WIDTH  - x;
+//      }
+//      if((y + h - 1) >= (int)HEIGHT) {
+//         // Clip on edge
+//         h = HEIGHT - y;
+//      }
+//
+//      uint32_t buffer[3*w];
+//
+//#if 1
+//      setWindow(x, y, x+w-1, y+h-1);
+//
+//      unsigned count = 0;
+//      for (unsigned row=0; row<h; row++) {
+//
+//         // Process each row to buffer and send
+//         unsigned pixelCount = 0;
+//
+//         for (unsigned col=0; col<w; col++) {
+//
+//            // 2 bytes of image -> 3 byte colour on display
+//            uint8_t b1 = img[count++];
+//            uint8_t b2 = img[count++];
+//            uint16_t colour = b1 << 8 | b2;
+//            linebuff[pixelCount++] = (colour & 0xF800) >> (11-3);
+//            linebuff[pixelCount++] = (colour & 0x07E0) >> (5-2);
+//            linebuff[pixelCount++] = (colour & 0x001F) << (8-3);
+//         }
+//         sendData(3*w, linebuff);
+//      }
+//#else
+//      setWindow(x, y, x+w-1, y+h-1);
+//      sendCommand(Command_MemoryWriteStart);
+//
+//      uint8_t linebuff[w*3+1];
+//      unsigned count = 0;
+//
+//      for (unsigned row=0; row<h; row++) {
+//
+//         // Process each row to buffer and send
+//         unsigned pixelCount = 0;
+//
+//         for (unsigned col=0; col<w; col++) {
+//
+//            // 2 bytes of image -> 3 byte colour on display
+//            uint8_t b1 = img[count++];
+//            uint8_t b2 = img[count++];
+//            uint16_t colour = b1 << 8 | b2;
+//            linebuff[pixelCount++] = (colour & 0xF800) >> (11-3);
+//            linebuff[pixelCount++] = (colour & 0x07E0) >> (5-2);
+//            linebuff[pixelCount++] = (colour & 0x001F) << (8-3);
+//         }
+//         sendData(3*w, linebuff);
+//      }
+//#endif
+//   }
+//
    /**
     * Draw an image to display
     *
-    * @param img  Image with 16-bit colours
-    * @param x    Top-left X
-    * @param y    Top-left Y
-    * @param w    Width
-    * @param h    Height
+    * @param img     Bitmap image 8-pixels/byte
+    * @param x       Top-left X
+    * @param y       Top-left Y
+    * @param width   Width of image (before scaling)
+    * @param height  Height of image (before scaling)
+    * @param scale   Scale to use
     */
-   void drawImage(const uint8_t* img, uint16_t x, uint16_t y, uint16_t w, uint16_t h) {
+   void drawBitmap(const uint8_t* img, uint16_t x, uint16_t y, uint16_t width, uint16_t height, unsigned scale=1) {
 
-      // rudimentary clipping (drawChar w/big text requires this)
+      // Rudimentary clipping (drawChar w/big text requires this)
       if((x >= WIDTH) || (y >= HEIGHT)) {
          // Clipped
          return;
       }
-      if((x + w - 1) >= (int)WIDTH)  {
+      unsigned w = width;
+      if((x + w*scale - 1) >= (int)WIDTH)  {
          // Clip on edge
-         w = WIDTH  - x;
+         w = (WIDTH  - x)/scale;
       }
-      if((y + h - 1) >= (int)HEIGHT) {
+      unsigned h = height;
+      if((y + h*scale - 1) >= (int)HEIGHT) {
          // Clip on edge
-         h = HEIGHT - y;
+         h = (HEIGHT - y)/scale;
       }
 
-      setWindow(x, y, x+w-1, y+h-1);
-      sendCommand(Command_MemoryWriteStart);
+//      console.writeln("drawBitmap(", x, ", ", y, ", ", w, ", ", h, ", ", scale, ")");
 
-      uint8_t linebuff[w*3+1];
-      unsigned count = 0;
+#if 0
+      // Works but upsets Touch controller
+      // Needs work
+
+
+      // Must be a multiple of 3 so pixels pack evenly
+      // 2 pixels -> 3 entries, array represents 2*(3*8)/3 = 16 pixels
+      constexpr unsigned BUF_SIZE = 3*8;
+      uint32_t  elementBuffer[BUF_SIZE];
+
+      // Counter for elementBuffer
+      unsigned elementCount = 0;
+
+      // Mask to extract B/W pixels from bitmap
+      uint8_t  bitMask  = 0;
+
+      Spi::SpiCalculatedConfiguration dataConfiguration {
+         this->dataConfiguration,
+      };
+      dataConfiguration.setFrameSize(SpiFrameSize_16_bits);
 
       for (unsigned row=0; row<h; row++) {
 
          // Process each row to buffer and send
-         unsigned pixelCount = 0;
 
-         for (unsigned col=0; col<w; col++) {
-
-            // 2 bytes of image -> 3 byte colour on display
-            uint8_t b1 = img[count++];
-            uint8_t b2 = img[count++];
-            uint16_t colour = b1 << 8 | b2;
-            linebuff[pixelCount++] = (colour & 0xF800) >> (11-3);
-            linebuff[pixelCount++] = (colour & 0x07E0) >> (5-2);
-            linebuff[pixelCount++] = (colour & 0x001F) << (8-3);
-         }
-         sendData(3*w, linebuff);
-      }
-   }
-
-   /**
-    * Draw an image to display
-    *
-    * @param img  Bitmap image 8-pixels/byte
-    * @param x    Top-left X
-    * @param y    Top-left Y
-    * @param w    Width
-    * @param h    Height
-    */
-   void drawBitmap(const uint8_t* img, uint16_t x, uint16_t y, uint16_t w, uint16_t h) {
-
-      // rudimentary clipping (drawChar w/big text requires this)
-      if((x >= WIDTH) || (y >= HEIGHT)) {
-         // Clipped
-         return;
-      }
-      if((x + w - 1) >= (int)WIDTH)  {
-         // Clip on edge
-         w = WIDTH  - x;
-      }
-      if((y + h - 1) >= (int)HEIGHT) {
-         // Clip on edge
-         h = HEIGHT - y;
-      }
-
-      setWindow(x, y, x+w-1, y+h-1);
-      sendCommand(Command_MemoryWriteStart);
-
-      uint8_t  linebuff[w*3+1];
-      unsigned count   = 0;
-
-      for (unsigned row=0; row<h; row++) {
-
-         // Process each row to buffer and send
-         unsigned pixcount = 0;
-         uint8_t  bitMask  = 0;
+         // Current byte being unpacked
          uint8_t  byte;
 
-         for (unsigned col=0; col<w; col++) {
-            if (bitMask==0) {
-               bitMask = 0b1000'0000;
-               byte    = img[count++];
+         // Start of current row in image
+         const uint8_t *rowStart = img+row*((width+7)/8);
+
+         // Send entire row 'scale' times
+         // 1 row -> scale lines of display
+         for (unsigned l=0; l<scale; l++) {
+
+            // Reset to start of row in image
+            const uint8_t *currentByte = rowStart;
+
+//            console.writeln("row = ", row, ", l = ", l);
+
+            // 1-line window
+            setWindow(x, y+scale*row+l, x+w*scale-1, y+scale*row+l);
+//            console.writeln("setWindow(", x, ", ", y+scale*row+l, ", ", x+w*scale-1, ", ", y+scale*row+l, ")");
+
+            // Start data write
+            sendCommand(Command_MemoryWriteStart);
+//            console.writeln("Command_MemoryWriteStart()");
+
+            // Odd/even packing of pixels
+            bool odd = true;
+
+            // Packs a pixel R, G or B value into elementBuffer
+            auto packer = [&](uint8_t colour) {
+
+               static uint16_t dataValue;
+
+               // Pack 2 pixels per array entry
+               if (odd) {
+                  dataValue = colour<<8;
+               }
+               else {
+                  elementBuffer[elementCount++] = dataConfiguration.middleValue(dataValue|colour);
+               }
+               odd = !odd;
+            };
+
+            // Flush data to SPI
+            auto flush = [&]() {
+
+//               console.writeln("sendDataBlock(...,", elementCount, ", ", (2*elementCount)/3, ")");
+               sendDataBlock(elementBuffer, elementCount, (2*elementCount)/3);
+               elementCount = 0;
+               odd = true;
+            };
+
+            for (unsigned col=0; col<w; col++) {
+
+               if (bitMask==0) {
+                  // Set up next byte
+
+                  bitMask = 0b1000'0000;
+                  byte    = *currentByte++;
+               }
+
+               // 1 bit of image -> 3 byte colour on display
+               Colour c = (byte&bitMask)?colour:backgroundColour;
+               uint8_t R = uint8_t(c>>(6+5-3)&0b1111'1000);
+               uint8_t G = uint8_t(c>>(5-2)&0b1111'1100);
+               uint8_t B = uint8_t(c<<(8-5)&0b1111'1000);
+
+               // Send colour 'scale' times
+               for (unsigned s=0; s<scale; s++) {
+
+                  // Packs 2 pixels per array entry
+                  packer(R);
+                  packer(G);
+                  packer(B);
+
+                  if (elementCount>=BUF_SIZE) {
+                     // Buffer full - flush partial line
+                     flush();
+                  }
+               }
+               bitMask >>= 1;
             }
-            // 1 bit of image -> 3 byte colour on display
-            Colour c = (byte&bitMask)?colour:backgroundColour;
-            linebuff[pixcount++] = uint8_t(c>>(6+5-3)&0b1111'1000);
-            linebuff[pixcount++] = uint8_t(c>>(5-2)&0b1111'1100);
-            linebuff[pixcount++] = uint8_t(c<<(8-5)&0b1111'1000);
-            bitMask >>= 1;
+            if (elementCount>0) {
+               // Flush remainder of line
+               flush();
+            }
          }
-         sendData(3*w, linebuff);
       }
+#else
+      setWindow(x, y, x+w*scale-1, y+h*scale-1);
+      sendCommand(Command_MemoryWriteStart);
+
+      // Must be a multiple of 3 so pixels pack evenly
+      // 2 pixels -> 3 entries, array represents 16 pixels
+      constexpr unsigned BUF_SIZE = 3*8;
+      uint8_t  elementBuffer[BUF_SIZE];
+
+      unsigned elementCount = 0;
+
+      uint8_t  bitMask  = 0;
+
+      for (unsigned row=0; row<h; row++) {
+
+         // Process each row to buffer and send
+         uint8_t  byte;
+         const uint8_t *rowStart = img+row*((width+7)/8);
+
+         // Send entire line 'scale' times
+         for (unsigned l=0; l<scale; l++) {
+
+            // Reset to start of row in image
+            const uint8_t *currentByte = rowStart;
+
+            for (unsigned col=0; col<w; col++) {
+               if (bitMask==0) {
+                  bitMask = 0b1000'0000;
+                  byte    = *currentByte++;
+               }
+               // 1 bit of image -> 3 byte colour on display
+               Colour c = (byte&bitMask)?colour:backgroundColour;
+               uint8_t c1 = uint8_t(c>>(6+5-3)&0b1111'1000);
+               uint8_t c2 = uint8_t(c>>(5-2)&0b1111'1100);
+               uint8_t c3 = uint8_t(c<<(8-5)&0b1111'1000);
+
+               // Send colour 'scale' times
+               for (unsigned s=0; s<scale; s++) {
+                  elementBuffer[elementCount++] = c1;
+                  elementBuffer[elementCount++] = c2;
+                  elementBuffer[elementCount++] = c3;
+                  if (elementCount>=BUF_SIZE) {
+                     sendData(elementCount, elementBuffer);
+                     elementCount = 0;
+                  }
+               }
+               bitMask >>= 1;
+            }
+         }
+      }
+      if (elementCount>0) {
+         // Flush remainder
+         sendData(elementCount, elementBuffer);
+      }
+#endif
    }
 
    /**
@@ -1082,7 +1468,7 @@ public:
     *
     * @return Reference to self
     */
-   TFT_ILI9488 &putCustomChar(const uint8_t *image, unsigned width, unsigned height) {
+   SELF &putCustomChar(const uint8_t *image, unsigned width, unsigned height) {
 
       drawBitmap(image, x, y, width, height);
       x += width;
@@ -1098,7 +1484,7 @@ public:
     *
     * @return Reference to self
     */
-   TFT_ILI9488 &putSpace(int width) {
+   SELF &putSpace(int width) {
 
       while (width>0) {
          int t = font->width;
@@ -1119,7 +1505,7 @@ public:
     *
     * @param[in]  ch - character to write
     */
-   void _writeChar(char ch) {
+   void _writeChar(char ch) override {
 
       unsigned width  = font->width;
       unsigned height = font->height;
@@ -1145,5 +1531,7 @@ public:
 };
 
 } // end namespace USBDM
+
+#pragma GCC pop_options
 
 #endif // INCLUDE_USBDM_ILI9488_H

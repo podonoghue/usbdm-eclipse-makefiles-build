@@ -387,16 +387,16 @@ public:
       static const PcrInit gpioInit {
          PinPull_Up,
          PinAction_IrqFalling,
-         PinFilter_Passive
+         PinFilter_Passive,
+         PinStatusFlag_ClearEvent,
       };
 
       // Configure Touch interface for wake-up
       sendCommand(Last);
 
       // Configure IRQ pin
-      TouchIrq::clearInterruptFlag();
-      TouchIrq::enableNvicPinInterrupts(NvicPriority_Normal);
       TouchIrq::setInput(gpioInit);
+      TouchIrq::enableNvicPinInterrupts(NvicPriority_Normal);
    }
 
    /**
@@ -406,15 +406,15 @@ public:
    void disableTouchInterrupt() {
 
       static const PcrInit gpioInit {
-         PinPull_Up,
+         PinPull_None,
          PinAction_None,
          PinFilter_Passive,
+         PinStatusFlag_ClearEvent,
       };
 
       // Disable IRQ pin
       TouchIrq::setInput(gpioInit);
       TouchIrq::disableNvicPinInterrupts();
-      TouchIrq::clearInterruptFlag();
    }
 
 };
