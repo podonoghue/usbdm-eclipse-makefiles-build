@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MK20D5
       MK64F12
 -->
@@ -379,7 +379,6 @@ Write 1 to clear the flag</description>
             </register>
             <register>
                <name>MF</name>
-               <?hide?>
                <description>Module Flag Register\n
 Contains the flags indicating if an internal wakeup source caused the MCU to exit VLLS mode.\n
 This flag reflects the flag in the related peripheral.\n
