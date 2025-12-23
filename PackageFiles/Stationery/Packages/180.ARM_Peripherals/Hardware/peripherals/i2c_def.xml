@@ -624,6 +624,7 @@
          hidden="true"
          typeName="I2cSclLowTimeout"
          baseType="uint8_t"
+         enumOr="auto"
          toolTip="This flag sets when an SCL low timeout occurs"
          description="SCL Low Timeout Flag" >
          <choice name="No timeout occurs"  value="0" enum="NoTimeoutOccurs" />
@@ -647,6 +648,7 @@
          derived="true"
          typeName="I2cSclHighTimeout"
          baseType="uint8_t"
+         enumOr="auto"
          toolTip="This bit sets when SCL is held high and SDA is held low more than LoValue/512 clock cycles.\n
                   Software clears this bit by writing a 1 to it"
          description="SCL High Timeout Flag 2" >
@@ -1595,16 +1597,6 @@
 <!--     END BasicInfo::Init class      -->
 <!-- ====================================================================================================== -->
 
-   <template where="info" codeGenCondition="$(_InfoGuard)" >
-   <![CDATA[
-      \t// I2C SCL (clock) Pin index in Info table
-      \tstatic constexpr unsigned sclInfoIndex = 0;
-      \t
-      \t// I2C SDA (data) Pin index in Info table
-      \tstatic constexpr unsigned sdaInfoIndex = 1;
-      \t\n
-   ]]></template>
-
    <template where="info" codeGenCondition="$(_InfoIrqGuard)" >
    <![CDATA[
       \t/**
@@ -1794,11 +1786,11 @@ public:
    </template>
    <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)" >
    <![CDATA[
-      \t   // Configure call-back
-      \t   if (init.callbacks[0] != nullptr) {
-      \t      setCallback(init.callbacks[0]);
-      \t      enableNvicInterrupts(init.priorities[0]);
-      \t   }
+      \t   // Disable call-back
+      \t   disableNvicInterrupts();
+      \t
+      \t   // Install call-back
+      \t   setCallback(init.callbacks[0]);
       \t\n
    ]]>
    </template>
@@ -1807,11 +1799,11 @@ public:
       immediateVariables="_hardwareIrqCount">
    <![CDATA[
       \t   for(int index=0; index<$(_hardwareIrqCount); index++) {
-      \t      if (init.callbacks[index] != nullptr) {
-      \t         // Configure call-back
-      \t         setCallback(%returnType0(index), init.callbacks[index]);
-      \t         enableNvicInterrupts(%returnType0(index), init.priorities[index]);
-      \t      }
+      \t      // Disable call-back
+      \t      disableNvicInterrupts(%returnType0(index));
+      \t
+      \t      // Install call-back
+      \t      setCallback(%returnType0(index), init.callbacks[index]);
       \t   }
       \t\n
    ]]>
@@ -1820,19 +1812,45 @@ public:
          immediateVariables="ClockSource" >
    <![CDATA[
       \t   $(_BasicInfo)::configure($(_basename), $(ClockSource), init);
-      \t}
       \t\n
    ]]>
    </template>
    <template where="info" codeGenCondition="$(_InfoGuard)" condition="=shared_clock_source" >
    <![CDATA[
       \t   $(_BasicInfo)::configure($(_basename), getInputClockFrequency(), init);
+      \t\n
+   ]]>
+   </template>
+   <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)" >
+   <![CDATA[
+      \t   // Enable call-back
+      \t   enableNvicInterrupts(init.priorities[0]);
+      \t\n
+   ]]>
+   </template>
+   <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount>1)"
+      variables="irq_enum"
+      immediateVariables="_hardwareIrqCount">
+   <![CDATA[
+      \t   for(int index=0; index<$(_hardwareIrqCount); index++) {
+      \t      // Enable call-back
+      \t      enableNvicInterrupts(%returnType0(index), init.priorities[index]);
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
       \t}
       \t\n
    ]]>
    </template>
 
-   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <equation key="sclInfoIndex" value='=IndexOfSignal("$(_NAME)_SCL")'  />
+   <equation key="sdaInfoIndex" value='=IndexOfSignal("$(_NAME)_SDA")'  />
+
+   <template where="info" codeGenCondition="$(_InfoGuard)"
+     immediateVariables="sclInfoIndex,sdaInfoIndex">
    <![CDATA[
       \t/**
       \t * Clear bus hang
@@ -1840,20 +1858,20 @@ public:
       \t * Generates I2C_SCL clock until I2C_SDA goes high followed by I2C STOP. \n
       \t * This is useful if a slave is part-way through a transaction when the master goes away!
       \t */
-      \tvirtual void busHangReset() {
+      \tvirtual void busHangReset() override {
       \t
 #if $(/PCR/_present:false) // /PCR/_present
       \t   // I2C SCL (clock) Pin
-      \t   using SclGpio = GpioTable_T<$(_Info), sclInfoIndex, ActiveHigh>;
+      \t   typedef GpioTable_T<$(_Info), $(sclInfoIndex), ActiveHigh> SclGpio;
       \t
       \t   // I2C SDA (data) Pin
-      \t   using SdaGpio = GpioTable_T<$(_Info), sdaInfoIndex, ActiveHigh>;
+      \t   typedef GpioTable_T<$(_Info), $(sdaInfoIndex), ActiveHigh> SdaGpio;
 #else
       \t// I2C SCL (clock) Pin
-      \t   using SclGpio = Gpio_T<sclPinIndex, ActiveHigh>;
+      \t   typedef Gpio_T<sclPinIndex, ActiveHigh> SclGpio;
       \t
       \t   // I2C SDA (data) Pin
-      \t   using SdaGpio = Gpio_T<sdaPinIndex, ActiveHigh>;
+      \t   typedef Gpio_T<sdaPinIndex, ActiveHigh> SdaGpio;
 #endif
       \t
       \t   // Re-map pins to GPIOs initially 3-state
@@ -1937,7 +1955,7 @@ public:
    <variableTemplate where="info" codeGenCondition="$(_InfoGuard)"
       separator=","
       terminator=","
-      padToComments="40"
+      padToComments="50"
       variables="
             i2c_c2_adext,
             i2c_slaveaddress,
@@ -1956,13 +1974,13 @@ public:
             i2c_flt_flt
             " >
    <![CDATA[
-      \t%initExpression
+      \t %initExpression
    ]]>
    </variableTemplate>
    <variableTemplate where="info" codeGenCondition="$(_InfoGuard)&amp;&amp;/$(_BASENAME)/smbOptionsAvailable"
       separator=","
       terminator=","
-      padToComments="40"
+      padToComments="50"
       variables="
             i2c_smb_fack,
             i2c_smb_alerten,
@@ -2008,45 +2026,45 @@ public:
    </validate>
 
    <projectActionList id="i2c_files" >
-      <copy source="Project_Headers/i2c.h"            target="Project_Headers/i2c.h"            overwrite="true"  derived="true" />
-      <copy source="Sources/i2c.cpp"                  target="Sources/i2c.cpp"                  overwrite="true"  derived="true" />
+      <copy source="Project_Headers/i2c.h"            target="Project_Headers/i2c.h"            overwrite="always"  derived="true" />
+      <copy source="Sources/i2c.cpp"                  target="Sources/i2c.cpp"                  overwrite="always"  derived="true" />
 
-      <copy source="Snippets/i2c-example.cpp"         target="Snippets/i2c-example.cpp"         overwrite="true"  derived="true" />
+      <copy source="Snippets/i2c-example.cpp"         target="Snippets/i2c-example.cpp"         overwrite="always"  derived="true" />
 
-      <copy source="Snippets/fxos8700cq.h"            target="Snippets/fxos8700cq.h"            overwrite="true"  derived="true" />
-      <copy source="Snippets/fxos8700cq.cpp"          target="Snippets/fxos8700cq.cpp"          overwrite="true"  derived="true" />
-      <copy source="Snippets/fxos8700cq-example.cpp"  target="Snippets/fxos8700cq-example.cpp"  overwrite="true"  derived="true" />
+      <copy source="Snippets/fxos8700cq.h"            target="Snippets/fxos8700cq.h"            overwrite="always"  derived="true" />
+      <copy source="Snippets/fxos8700cq.cpp"          target="Snippets/fxos8700cq.cpp"          overwrite="always"  derived="true" />
+      <copy source="Snippets/fxos8700cq-example.cpp"  target="Snippets/fxos8700cq-example.cpp"  overwrite="always"  derived="true" />
 
-      <copy source="Snippets/hmc5883l.h"              target="Snippets/hmc5883l.h"              overwrite="true"  derived="true" />
-      <copy source="Snippets/hmc5883l.cpp"            target="Snippets/hmc5883l.cpp"            overwrite="true"  derived="true" />
-      <copy source="Snippets/hmc5883l-example.cpp"    target="Snippets/hmc5883l-example.cpp"    overwrite="true"  derived="true" />
+      <copy source="Snippets/hmc5883l.h"              target="Snippets/hmc5883l.h"              overwrite="always"  derived="true" />
+      <copy source="Snippets/hmc5883l.cpp"            target="Snippets/hmc5883l.cpp"            overwrite="always"  derived="true" />
+      <copy source="Snippets/hmc5883l-example.cpp"    target="Snippets/hmc5883l-example.cpp"    overwrite="always"  derived="true" />
 
-      <copy source="Snippets/mag3310.h"               target="Snippets/mag3310.h"               overwrite="true"  derived="true" />
-      <copy source="Snippets/mag3310.cpp"             target="Snippets/mag3310.cpp"             overwrite="true"  derived="true" />
-      <copy source="Snippets/mag3310-example.cpp"     target="Snippets/mag3310-example.cpp"     overwrite="true"  derived="true" />
+      <copy source="Snippets/mag3310.h"               target="Snippets/mag3310.h"               overwrite="always"  derived="true" />
+      <copy source="Snippets/mag3310.cpp"             target="Snippets/mag3310.cpp"             overwrite="always"  derived="true" />
+      <copy source="Snippets/mag3310-example.cpp"     target="Snippets/mag3310-example.cpp"     overwrite="always"  derived="true" />
 
-      <copy source="Snippets/vector.h"                target="Snippets/vector.h"                overwrite="true"  derived="true" />
-      <copy source="Snippets/lsm303dlh.h"             target="Snippets/lsm303dlh.h"             overwrite="true"  derived="true" />
-      <copy source="Snippets/lsm303dlh.cpp"           target="Snippets/lsm303dlh.cpp"           overwrite="true"  derived="true" />
-      <!--copy source="Snippets/lsm303dlh-example.cpp"   target="Snippets/mma845x-example.cpp"    overwrite="true"  derived="true" / -->
+      <copy source="Snippets/vector.h"                target="Snippets/vector.h"                overwrite="always"  derived="true" />
+      <copy source="Snippets/lsm303dlh.h"             target="Snippets/lsm303dlh.h"             overwrite="always"  derived="true" />
+      <copy source="Snippets/lsm303dlh.cpp"           target="Snippets/lsm303dlh.cpp"           overwrite="always"  derived="true" />
+      <!--copy source="Snippets/lsm303dlh-example.cpp"   target="Snippets/mma845x-example.cpp"    overwrite="always"  derived="true" / -->
 
-      <copy source="Snippets/mma845x.h"               target="Snippets/mma845x.h"               overwrite="true"  derived="true" />
-      <copy source="Snippets/mma845x.cpp"             target="Snippets/mma845x.cpp"             overwrite="true"  derived="true" />
-      <copy source="Snippets/mma845x-example.cpp"     target="Snippets/mma845x-example.cpp"     overwrite="true"  derived="true" />
+      <copy source="Snippets/mma845x.h"               target="Snippets/mma845x.h"               overwrite="always"  derived="true" />
+      <copy source="Snippets/mma845x.cpp"             target="Snippets/mma845x.cpp"             overwrite="always"  derived="true" />
+      <copy source="Snippets/mma845x-example.cpp"     target="Snippets/mma845x-example.cpp"     overwrite="always"  derived="true" />
 
-      <copy source="Snippets/mma8491q.h"              target="Snippets/mma8491q.h"              overwrite="true"  derived="true" />
-      <copy source="Snippets/mma8491q.cpp"            target="Snippets/mma8491q.cpp"            overwrite="true"  derived="true" />
-      <copy source="Snippets/mma8491q-example.cpp"    target="Snippets/mma8491q-example.cpp"    overwrite="true"  derived="true" />
+      <copy source="Snippets/mma8491q.h"              target="Snippets/mma8491q.h"              overwrite="always"  derived="true" />
+      <copy source="Snippets/mma8491q.cpp"            target="Snippets/mma8491q.cpp"            overwrite="always"  derived="true" />
+      <copy source="Snippets/mma8491q-example.cpp"    target="Snippets/mma8491q-example.cpp"    overwrite="always"  derived="true" />
 
-      <copy source="Snippets/pca9685.h"               target="Snippets/pca9685.h"               overwrite="true"  derived="true" />
-      <copy source="Snippets/pca9685.cpp"             target="Snippets/pca9685.cpp"             overwrite="true"  derived="true" />
-      <copy source="Snippets/pca9685-example.cpp"     target="Snippets/pca9685-example.cpp"     overwrite="true"  derived="true" />
+      <copy source="Snippets/pca9685.h"               target="Snippets/pca9685.h"               overwrite="always"  derived="true" />
+      <copy source="Snippets/pca9685.cpp"             target="Snippets/pca9685.cpp"             overwrite="always"  derived="true" />
+      <copy source="Snippets/pca9685-example.cpp"     target="Snippets/pca9685-example.cpp"     overwrite="always"  derived="true" />
    </projectActionList>
 
    <!-- ____ Startup ____ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

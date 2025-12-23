@@ -19,6 +19,7 @@
  */
 #include <stddef.h>
 #include "derivative.h"
+#include "pin_mapping.h"
 #ifdef RELEASE_BUILD
 #include "bitband.h"
 #endif
@@ -388,7 +389,7 @@ private:
 public:
    constexpr Gpio_T() : Gpio(gpioAddress, bitNum, polarity) {};
 
-   static constexpr PcrInit defaultPcrValue = gpioPcrValue(defPcrValue);
+   static constexpr PcrValue defaultPcrValue = defPcrValue;
 
    // IRQ index for this GPIO
    static constexpr PortIrqNum IRQ_INDEX = PcrBase::getIrqIndex(mapPinToPort(pinIndex));
@@ -427,14 +428,14 @@ public:
     *
     * @note Resets the pin output value to the inactive state
     *
-    * @param[in] pcrValue PCR value to use in configuring pin (excluding MUX value). See pcrValue()
+    * @param[in] pcrValue PCR value to use in configuring pin (excluding MUX value).
     */
    static void setInOut() {
       // Make input initially
       setIn();
       // Set inactive pin state (if later made output)
       setInactive();
-      Pcr::setPCR(defaultPcrValue.value);
+      Pcr::setPCR(defaultPcrValue);
    }
    /**
     * Set pin as digital I/O.
@@ -444,7 +445,7 @@ public:
     * @note Resets the Pin Control Register value (PCR value).
     * @note Resets the pin output value to the inactive state
     *
-    * @param[in] pcrInit PCR value to use in configuring pin (excluding MUX value). See pcrValue()
+    * @param[in] pcrValue PCR value to use in configuring pin (excluding MUX value).
     */
    static void setInOut(const PcrValue &pcrValue) {
       // Make input initially
@@ -496,7 +497,7 @@ $(/GPIO/set_in_out: // /GPIO/set_in_out not found)
     * @note Resets the pin value to the inactive state
     * @note Use setOut() for a lightweight change of direction without affecting other pin settings.
     *
-    * @param[in] pcrInit PCR value to use in configuring port (excluding MUX value). See pcrValue()
+    * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value).
     */
    static void setOutput(const PcrValue &pcrValue) {
       // Set initial level before enabling pin drive
@@ -534,7 +535,7 @@ $(/GPIO/set_output: // /GPIO/set_output not found)
       // Make pin an input
       setIn();
       // Configure pin
-      Pcr::setPCR(defaultPcrValue.value);
+      Pcr::setPCR(defaultPcrValue);
    }
 
    /**
@@ -545,7 +546,7 @@ $(/GPIO/set_output: // /GPIO/set_output not found)
     * @note Resets the Pin Control Register value (PCR value).
     * @note Use setIn() for a lightweight change of direction without affecting other pin settings.
     *
-    * @param[in] pcrInit PCR value to use in configuring port (excluding MUX value)
+    * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value)
     */
    static void setInput(const PcrValue &pcrValue) {
       // Make pin an input
@@ -798,11 +799,11 @@ $(/GPIO/set_input: // /GPIO/set_input not found)
    }
 
    /**
-    * Get interrupt state
+    * Get interrupt flag
     *
     * @return true/false reflecting interrupt flag in PCR
     */
-   static bool getInterruptState() {
+   static bool getInterruptFlag() {
 
       static constexpr HardwarePtr<uint32_t> PCR = PcrBase::getPcrAddress(pinIndex);
       
@@ -810,9 +811,9 @@ $(/GPIO/set_input: // /GPIO/set_input not found)
    }
 
    /**
-    * Clear interrupt state in PCR
+    * Clear interrupt flag in PCR
     */
-   static void clearInterruptState() {
+   static void clearInterruptFlag() {
 
       static constexpr HardwarePtr<uint32_t> PCR = PcrBase::getPcrAddress(pinIndex);
       
@@ -821,11 +822,11 @@ $(/GPIO/set_input: // /GPIO/set_input not found)
    }
    
    /**
-    * Get and clear interrupt state
+    * Get and clear interrupt flag
     *
     * @return true/false reflecting original interrupt flag in PCR
     */
-   static bool getAndClearInterruptState() {
+   static bool getAndClearInterruptFlag() {
 
       static constexpr HardwarePtr<uint32_t> PCR = PcrBase::getPcrAddress(pinIndex);
       
@@ -1040,7 +1041,7 @@ private:
     */
    GpioField_T(const GpioField_T&) = delete;
    GpioField_T(GpioField_T&&) = delete;
-   static constexpr PcrInit defaultPcrValue = gpioPcrValue(defPcrValue);
+   static constexpr PcrValue defaultPcrValue = defPcrValue;
 
    static_assert((Left>=Right), "left must be >= right in GpioField");
 
@@ -1183,7 +1184,7 @@ $(/GPIO/field_set_in_out: // /GPIO/field_set_in_out not found)
     * @note PCR value is taken from the value set in Configure.usbdmProject
     */
    static void setOutput() {
-      setInOut(defaultPcrValue.pcrValue());
+      setInOut(defaultPcrValue);
       gpio->PDDR = gpio->PDDR | BITMASK;
    }
 
@@ -1220,7 +1221,7 @@ $(/GPIO/field_set_output: // /GPIO/field_set_output not found)
     * @note PCR value is taken from the value set in Configure.usbdmProject
     */
    static void setInput() {
-      setInOut(defaultPcrValue.pcrValue());
+      setInOut(defaultPcrValue);
    }
 
    /**
@@ -1363,9 +1364,41 @@ $(/GPIO/field_set_input: // /GPIO/field_set_input not found)
     *       It is necessary to identify the originating pin in the callback
     * @note This is a convenience function for Pcr::setPinCallback(callback)
     */
-   static ErrorCode setPinCallback(PinCallbackFunction callback) {
+   static void setPinCallback(PinCallbackFunction callback) {
       static_assert(Port::HANDLER_INSTALLED, "Gpio containing GpioField not configured for interrupts - Modify Configure.usbdm");
-      return Port::setPinCallback(callback);
+      Port::setPinCallback(callback);
+   }
+
+   /**
+    * Get interrupt flags as bit mask
+    *
+    * @return Bitmask containing interrupt flags for the pins in bitfield
+    */
+   static uint32_t getInterruptFlags() {
+      return (Port::port->ISFR&BITMASK)>>RIGHT;
+   }
+
+   /**
+    * Clear interrupt flags
+    */
+   static void clearInterruptFlags() {
+      Port::port->ISFR = BITMASK;
+   }
+
+   /**
+    * Get and clear interrupt flags
+    *
+    * @return Bitmask containing original interrupt flags for the pins in bitfield
+    */
+   static bool getAndClearInterruptFlags() {
+
+      // Capture state
+      uint32_t state = Port::port->ISFR;
+
+      // Clear captured flags
+      Port::port->ISFR = state;
+
+      return (state&BITMASK)>>RIGHT;
    }
 
    /**

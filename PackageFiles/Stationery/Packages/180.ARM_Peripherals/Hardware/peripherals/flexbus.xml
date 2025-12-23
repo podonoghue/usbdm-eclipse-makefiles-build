@@ -98,8 +98,8 @@
    </validate>
 
    <projectActionList id="flexbus_files" >
-      <copy source="Project_Headers/flexbus.h"            target="Project_Headers/flexbus.h"            overwrite="true"  derived="true" />
-      <copy source="Snippets/flexbus-example.cpp"         target="Snippets/flexbus-example.cpp"         overwrite="true"  derived="true" />
+      <copy source="Project_Headers/flexbus.h"            target="Project_Headers/flexbus.h"            overwrite="always"  derived="true" />
+      <copy source="Snippets/flexbus-example.cpp"         target="Snippets/flexbus-example.cpp"         overwrite="always"  derived="true" />
    </projectActionList>
 
    <!-- ************* SIM configuration ****************** -->

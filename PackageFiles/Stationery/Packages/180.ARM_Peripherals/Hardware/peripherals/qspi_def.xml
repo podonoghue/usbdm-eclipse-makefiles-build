@@ -37,10 +37,10 @@
    </validate>
 
    <projectActionList id="qspi_files" >
-      <copy source="Project_Headers/qspi.h"     target="Project_Headers/qspi.h"     overwrite="true" derived="true" />
-      <copy source="Snippets/qspi-example.cpp"  target="Snippets/qspi-example.cpp"  overwrite="true" derived="true" />
-      <copy source="Snippets/mt25qu256aba.h"    target="Snippets/mt25qu256aba.h"    overwrite="true" derived="true" />
-      <copy source="Snippets/mx25u3235fzni.h"   target="Snippets/mx25u3235fzni.h"   overwrite="true" derived="true" />
+      <copy source="Project_Headers/qspi.h"     target="Project_Headers/qspi.h"     overwrite="always" derived="true" />
+      <copy source="Snippets/qspi-example.cpp"  target="Snippets/qspi-example.cpp"  overwrite="always" derived="true" />
+      <copy source="Snippets/mt25qu256aba.h"    target="Snippets/mt25qu256aba.h"    overwrite="always" derived="true" />
+      <copy source="Snippets/mx25u3235fzni.h"   target="Snippets/mx25u3235fzni.h"   overwrite="always" derived="true" />
    </projectActionList>
 
    <!-- ************* SIM configuration ****************** -->

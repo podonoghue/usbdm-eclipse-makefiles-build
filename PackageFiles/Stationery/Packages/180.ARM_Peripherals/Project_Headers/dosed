@@ -17,8 +17,8 @@ read -d '' TOx <<EOF
       \</for\> 
 EOF
 
-FROM='/irqHandlingMethod'
-TO='/_CommonInfoIrqGuard'
+FROM='<derivative.h>'
+TO='"derivative.h"'
 
 #FROM='\"&quot;&quot;\"'
 #TO=\'\"\"\'

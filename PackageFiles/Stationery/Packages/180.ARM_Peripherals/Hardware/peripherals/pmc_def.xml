@@ -592,14 +592,9 @@
    </template>
    <template codeGenCondition="irqHandlingMethod" condition="irqHandlingMethod" >
    <![CDATA[
-      \t   // Configure call-backs
-      \t   setCallback(init.callbackFunction);\n
-   ]]>
-   </template>
-   <template codeGenCondition="enablePeripheralSupport" >
-   <![CDATA[
-      \t   enableNvicInterrupts(init.irqlevel);
-      \t
+      \t   // Disable call-backs
+      \t   disableNvicInterrupts();
+      \t\n
    ]]>
    </template>
    <for keys=
@@ -615,9 +610,20 @@
       ><![CDATA[
          \t
          %multilineDescription
-         \t   %(statement);\n
+         \t   %(statement);
+         \t\n
       ]]></variableTemplate>
    </for>
+   <template codeGenCondition="irqHandlingMethod" condition="irqHandlingMethod" >
+   <![CDATA[
+      \t   // Install call-back handler
+      \t   setCallback(init.callbackFunction);
+      \t
+      \t   // Enable call-backs
+      \t   enableNvicInterrupts(init.irqlevel);
+      \t\n
+   ]]>
+   </template>
    <template codeGenCondition="enablePeripheralSupport" >
    <![CDATA[
       \t}
@@ -667,14 +673,14 @@
    </validate>
 
    <projectActionList id="pmc_files" >
-      <copy source="Project_Headers/pmc.h"     target="Project_Headers/pmc.h"     overwrite="true" derived="true" />
-      <copy source="Snippets/pmc-example.cpp"  target="Snippets/pmc-example.cpp"  overwrite="true" derived="true" />
+      <copy source="Project_Headers/pmc.h"     target="Project_Headers/pmc.h"     overwrite="always" derived="true" />
+      <copy source="Snippets/pmc-example.cpp"  target="Snippets/pmc-example.cpp"  overwrite="always" derived="true" />
    </projectActionList>
 
    <!-- ____ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

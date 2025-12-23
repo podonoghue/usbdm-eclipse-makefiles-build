@@ -31,9 +31,9 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-PCA9685" />
                </applyWhen>
-               <copy source="Snippets/pca9685-example.cpp"     target="Snippets/pca9685-example.cpp"  overwrite="true" />
-               <copy source="Snippets/pca9685.h"               target="Sources/pca9685.h"             overwrite="true" />
-               <copy source="Snippets/pca9685.cpp"             target="Sources/pca9685.cpp"           overwrite="true" />
+               <copy source="Snippets/pca9685-example.cpp"     target="Snippets/pca9685-example.cpp"  overwrite="always" />
+               <copy source="Snippets/pca9685.h"               target="Sources/pca9685.h"             overwrite="always" />
+               <copy source="Snippets/pca9685.cpp"             target="Sources/pca9685.cpp"           overwrite="always" />
             </projectActionList>
          </projectActionList>
       </projectActionList>

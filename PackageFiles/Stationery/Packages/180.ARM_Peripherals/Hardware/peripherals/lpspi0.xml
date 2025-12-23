@@ -34,8 +34,8 @@
    />
    
    <projectActionList id = "lpspi_files" >
-      <copy source="Project_Headers/lpspi.h"  target="Project_Headers/lpspi.h"            overwrite="true"  derived="true" />
-      <copy source="Sources/lpspi.cpp"        target="Sources/lpspi.cpp"                  overwrite="true"  derived="true" />
+      <copy source="Project_Headers/lpspi.h"  target="Project_Headers/lpspi.h"            overwrite="always"  derived="true" />
+      <copy source="Sources/lpspi.cpp"        target="Sources/lpspi.cpp"                  overwrite="always"  derived="true" />
    </projectActionList>
     
    <signals/>

@@ -203,6 +203,7 @@
       enabledBy="cmp_cr1_en"
       typeName="CmpHysteresis"
       baseType="uint8_t"
+      enumOr="auto"
       description="Comparator hard block hysteresis control"
       toolTip="Defines the programmable hysteresis level.\n
                The hysteresis values associated with each level are device specific">
@@ -218,6 +219,7 @@
       enabledBy="cmp_cr1_en"
       typeName="CmpPower"
       baseType="uint8_t"
+      enumOr="auto"
       description="Power Mode Select"
       toolTip="Selects trade-off between speed and power consumption">
       <choice value="0" name="Low-Speed"  enum="LowSpeed"  />
@@ -228,6 +230,7 @@
       enabledBy="cmp_cr1_en"
       typeName="CmpPolarity"
       baseType="uint8_t"
+      enumOr="auto"
       description="Comparator Invert"
       toolTip="Allows selection of the polarity of the analog comparator function">
       <choice value="0" name="Not inverted" enum="Normal"   />
@@ -238,6 +241,7 @@
       enabledBy="cmp_cr1_en"
       typeName="CmpTrigger"
       baseType="uint8_t"
+      enumOr="auto"
       description="Trigger Mode Enable"
       toolTip="CMP and DAC are configured to CMP Trigger mode.  \n
               CMP Trigger mode depends on an external timer resource to periodically enable \n
@@ -251,6 +255,7 @@
       enabledBy="cmp_cr1_en"
       typeName="CmpOutput"
       baseType="uint8_t"
+      enumOr="auto"
       valueFormat="CMP_CR1_OPE(%s),CMP_CR1_COS(%s)"
       description="Comparator output pin source"
       toolTip="Selects whether the output pin is driven by the filtered or unfiltered comparator output">
@@ -261,23 +266,28 @@
 
 <!-- =================================================================================== -->
 
-   <choiceOption key="cmp_muxcr_psel_base" condition="cmp_muxcr_psel_present"
+   <choiceOption key="/CMP/cmp_muxcr_psel_base" condition="cmp_muxcr_psel_present&amp;&amp;!/CMP/cmp_muxcr_psel_base"
       valueFormat="CMP_MUXCR_PSEL(%s)"
       hidden="true"
       derived="true"
+      enumOr="auto"
+      templateKey="/$(_BASENAME)/peripheral_h_types"
+      enumClass="true"
       typeName="CmpInputPlus"
       baseType="uint8_t"
       description="CMP Positive Input Select"
       toolTip="Selects the positive input source" >
-      <choiceExpansion name="External input %(i)" value="%(i)" enum="%(i)" keys="i" dim="8" />
+      <choiceExpansion name="Cmp input %(i)" value="%(i)" enum="%(i)" keys="i" dim="8" />
    </choiceOption >
 
    <choiceOption key="cmp_muxcr_psel" condition="cmp_muxcr_psel_present"
       valueFormat="CmpInputPlus_%s"
       enabledBy="cmp_cr1_en"
       typeName="Cmp$(_instance)InputPlus"
+      templateKey="/$(_BASENAME)/peripheral_h_types"
       baseType="CmpInputPlus"
-      generateAsConstants="true"
+      generateEnum="false"
+      constantTemplate="\tinline constexpr %b %n   = %b::%v; ///&lt; %c"
       description="CMP$(_instance) Positive Input Select"
       toolTip="Selects the $(_Class) positive input source" >
       <choiceExpansion
@@ -288,23 +298,28 @@
             signal="CMP$(_instance)_IN%(i)" />
    </choiceOption>
 
-   <choiceOption key="cmp_muxcr_msel_base" condition="cmp_muxcr_msel_present"
+   <choiceOption key="/CMP/cmp_muxcr_msel_base" condition="cmp_muxcr_msel_present&amp;&amp;!/CMP/cmp_muxcr_msel_base"
       valueFormat="CMP_MUXCR_MSEL(%s)"
       hidden="true"
+      templateKey="/$(_BASENAME)/peripheral_h_types"
       derived="true"
+      enumOr="auto"
+      enumClass="true"
       typeName="CmpInputMinus"
       baseType="uint8_t"
       description="CMP Negative Input Select"
       toolTip="Selects the negative input source" >
-      <choiceExpansion name="External input %(i)" value="%(i)" enum="%(i)" keys="i" dim="8" />
+      <choiceExpansion name="Cmp input %(i)" value="%(i)" enum="%(i)" keys="i" dim="8" />
    </choiceOption >
 
    <choiceOption key="cmp_muxcr_msel" condition="cmp_muxcr_msel_present"
       valueFormat="CmpInputMinus_%s"
       enabledBy="cmp_cr1_en"
+      templateKey="/$(_BASENAME)/peripheral_h_types"
       typeName="Cmp$(_instance)InputMinus"
       baseType="CmpInputMinus"
-      generateAsConstants="true"
+      generateEnum="false"
+      constantTemplate="\tinline constexpr %b %n   = %b::%v; ///&lt; %c"
       description="CMP$(_instance) Negative Input Select"
       toolTip="Selects the $(_Class) negative input source" >
       <choiceExpansion
@@ -439,6 +454,7 @@
       enabledBy="cmp_mode>0"
       typeName="CmpEnable"
       baseType="uint8_t"
+      enumOr="auto"
       description="Comparator Enable"
       toolTip="Enable comparator"
       disabledValue="false"
@@ -452,6 +468,7 @@
       enabledBy="cmp_cr1_en"
       typeName="CmpWindowEnable"
       baseType="uint8_t"
+      enumOr="auto"
       description="Windowing Enable"
       toolTip="Enable the use of an external signal to qualify the comparator output (before filtering).\n
                The comparator output is held when the external signal is inactive and\n
@@ -468,6 +485,7 @@
       enabledBy="cmp_mode==(2,3,4,5,7,8)"
       typeName="CmpSampleEnable"
       baseType="uint8_t"
+      enumOr="auto"
       description="Sample Enable"
       toolTip="Select between the divided bus clock and an external clock for the filter block"
       disabledValue="false"
@@ -508,6 +526,7 @@
       unlockedBy="cmp_mode==(4,5,8)"
       enabledBy="cmp_cr1_en"
       valueFormat="CMP_CR0_FILTER_CNT(%s)"
+      enumOr="auto"
       typeName="CmpFilterSamples"
       baseType="uint8_t"
       description="Filter Sample Count"
@@ -739,8 +758,8 @@
          cmp_daccr_vrsel      : true  : true  : false : enableGettersAndSetters : DacReferenceSelect;
          cmp_daccr_vosel      : true  : true  : false : true                    : DacLevel;
 
-         cmp_muxcr_psel_base  : true  : true  : false : enableGettersAndSetters : PlusSelect;
-         cmp_muxcr_msel_base  : true  : true  : false : enableGettersAndSetters : MinusSelect" >
+         /CMP/cmp_muxcr_psel_base  : true  : true  : false : enableGettersAndSetters : PlusSelect;
+         /CMP/cmp_muxcr_msel_base  : true  : true  : false : enableGettersAndSetters : MinusSelect" >
       <variableTemplate location="%(where)" condition="%(set)" codeGenCondition="%(genCode)&amp;&amp;%(guard)"
          variables="%(field)" >
       <![CDATA[
@@ -1051,7 +1070,7 @@
                %baseType   : cmp_scr_dmaen,cmp_scr_interrupt,cmp_scr_cfr,
                              cmp_scr_cff                                          :   0      ;
                %baseType   : cmp_daccr_dacen,cmp_daccr_vrsel,cmp_daccr_vosel      :   0      ;
-               %baseType   : cmp_muxcr_psel_base,cmp_muxcr_msel_base              :   0      ;
+               %baseType   : /CMP/cmp_muxcr_psel_base,/CMP/cmp_muxcr_msel_base              :   0      ;
                %baseType   : cmp_filterPeriod                                     :   0_s       " >
       <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
          variables="%(variables)"
@@ -1071,7 +1090,7 @@
             cmp_cr1_pmode;cmp_cr1_inv;cmp_cr1_output;
             cmp_cr0_hystctr;
             cmp_scr_dmaen;cmp_scr_interrupt;
-            cmp_muxcr_psel_base;cmp_muxcr_msel_base;
+            /CMP/cmp_muxcr_psel_base;/CMP/cmp_muxcr_msel_base;
             cmp_cr0_filter_cnt;cmp_fpr_filt_per;cmp_filterPeriod;
             cmp_daccr_dacen;cmp_daccr_vrsel;cmp_daccr_vosel
             " >
@@ -1355,9 +1374,9 @@
       \t\n
    ]]>
    </template>
-
+   
    <variableTemplate where="info" codeGenCondition="$(_InfoGuard)"
-      variables="/GPIOA/port_pcr_dse,/GPIOA/port_pcr_ode,/GPIOA/port_pcr_sre"
+      variables="/port_pcr_dse,/port_pcr_ode,/port_pcr_sre"
       defaultParamValue="OutputPin::defaultPcrValue" >
    <![CDATA[
       \t/**
@@ -1388,7 +1407,7 @@
       \t * (%variables)
       \t */
       \tstatic void setOutput() {
-      \t   setOutput(OutputPin::defaultPcrValue.value);
+      \t   setOutput(OutputPin::defaultPcrValue);
       \t}
       \t
       \t/**
@@ -1408,7 +1427,7 @@
    </variableTemplate>
 
    <variableTemplate where="info" codeGenCondition="$(_InfoGuard)"
-      variables="cmp_muxcr_psel,cmp_muxcr_msel"
+      variables="/CMP/cmp_muxcr_psel_base,/CMP/cmp_muxcr_msel_base"
       nonDefaultParams="2"
    ><![CDATA[
       \t/**
@@ -1431,7 +1450,7 @@
       \t */
       \ttemplate<CmpInputMinus cmpInput>
       \tclass Pin {
-      \t   using Pcr = PcrTable_T<Cmp$(_instance)Info,cmpInput>;
+      \t   using Pcr = PcrTable_T<Cmp$(_instance)Info,int(cmpInput)>;
       \t
       \tpublic:
       \t   static constexpr CmpInputPlus  plusPin  = CmpInputPlus(CMP_MUXCR_PSEL(cmpInput));
@@ -1454,14 +1473,14 @@
 
    <template where="info" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
-      \t/*
+      \t/**
       \t *   Default Constructor
       \t */
       \t$(_Info)() : $(_BasicInfo)($(_basename)) {
       \t   defaultConfigure();
       \t}
       \t
-      \t/*
+      \t/**
       \t *   Constructor
       \t */
       \t$(_Info)(const Init &init) : $(_BasicInfo)($(_basename)) {
@@ -1498,11 +1517,11 @@
    </template>
    <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)" >
    <![CDATA[
-      \t   // Configure call-back
-      \t   if (init.callbacks[0] != nullptr) {
-      \t      setCallback(init.callbacks[0]);
-      \t      enableNvicInterrupts(init.priorities[0]);
-      \t   }
+      \t   // Disable call-back
+      \t   disableNvicInterrupts();
+      \t
+      \t   // Install call-back
+      \t   setCallback(init.callbacks[0]);
       \t\n
    ]]>
    </template>
@@ -1511,11 +1530,11 @@
       immediateVariables="_hardwareIrqCount">
    <![CDATA[
       \t   for(int index=0; index<$(_hardwareIrqCount); index++) {
-      \t      if (init.callbacks[index] != nullptr) {
-      \t         // Configure call-back
-      \t         setCallback(%returnType0(index), init.callbacks[index]);
-      \t         enableNvicInterrupts(%returnType0(index), init.priorities[index]);
-      \t      }
+      \t      // Disable call-back
+      \t      disableNvicInterrupts(%returnType0(index));
+      \t
+      \t      // Install call-back
+      \t      setCallback(%returnType0(index), init.callbacks[index]);
       \t   }
       \t\n
    ]]>
@@ -1523,6 +1542,29 @@
    <template where="info" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
       \t   $(_BasicInfo)::configure($(_basename), init);
+      \t\n
+   ]]>
+   </template>
+   <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)" >
+   <![CDATA[
+      \t   // Enable call-back
+      \t   enableNvicInterrupts(init.priorities[0]);
+      \t\n
+   ]]>
+   </template>
+   <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount>1)"
+      variables="irq_enum"
+      immediateVariables="_hardwareIrqCount">
+   <![CDATA[
+      \t   for(int index=0; index<$(_hardwareIrqCount); index++) {
+      \t      // Enable call-back
+      \t      enableNvicInterrupts(%returnType0(index), init.priorities[index]);
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
       \t}
       \t\n
    ]]>
@@ -1583,14 +1625,14 @@
    </validate>
 
    <projectActionList id="cmp_files" >
-      <copy source="Project_Headers/cmp.h"    target="Project_Headers/cmp.h"    overwrite="true" derived="true"/>
-      <copy source="Snippets/cmp-example.cpp" target="Snippets/cmp-example.cpp" overwrite="true" derived="true"/>
+      <copy source="Project_Headers/cmp.h"    target="Project_Headers/cmp.h"    overwrite="always" derived="true"/>
+      <copy source="Snippets/cmp-example.cpp" target="Snippets/cmp-example.cpp" overwrite="always" derived="true"/>
    </projectActionList>
 
    <!-- ____ Startup ____ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

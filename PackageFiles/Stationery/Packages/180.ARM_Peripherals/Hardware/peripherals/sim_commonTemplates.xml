@@ -734,11 +734,13 @@
         values="=clockEnables" stripSemicolon="true" >
 
       <variableTemplate codeGenCondition="enablePeripheralSupport"
+         initExpressionOnSameLine="true"
          separator=","
          terminator=","
+         padToComments="40"
          variables="sim_scgc%(reg)_%(name)"
       ><![CDATA[
-         %initExpression\n
+         \t   %initExpression\n
       ]]>
       </variableTemplate >
 
@@ -962,6 +964,7 @@
          \t{ // $(/MCG/ClockConfig[%(n)]) ($(/MCG/mcgClockMode[%(n)].enum[]))\n
       ]]></template>
       <variableTemplate  codeGenCondition="/MCG/enableClockConfiguration[%(n)]"
+         padToComments="50"
          variables="
             sim_sopt2_pllfllsel[%(n)],
             sim_sopt2_usbsrc[%(n)],
@@ -983,7 +986,7 @@
          terminator=","
          separator=","
       ><![CDATA[
-         %initExpression\n
+         \t   %initExpression\n
       ]]></variableTemplate>
       <for keys="m" values="'';0;1;2;3;4">
          <for keys="v"
@@ -994,6 +997,7 @@
             <variableTemplate   codeGenCondition="/MCG/enableClockConfiguration[%(n)]"
                terminator=","
                separator=","
+               padToComments="50"
                variables="%(v)"
                ><![CDATA[
                %initExpression\n
@@ -2170,7 +2174,7 @@
       \tstatic constexpr Init DefaultInitValue {\n
    ]]></template>
    <variableTemplate
-      padToComments="45"
+      padToComments="50"
       variables="
          sim_sopt2_pllfllsel[],
          sim_sopt2_sdhcsrc[],
@@ -2205,6 +2209,7 @@
          <variableTemplate
             terminator=","
             separator=","
+            padToComments="50"
             variables="%(v)"
             ><![CDATA[
             %initExpression\n
@@ -2222,6 +2227,7 @@
             <variableTemplate
                terminator=","
                separator=","
+            padToComments="50"
                variables="%(v)"
             ><![CDATA[
                %initExpression\n
@@ -2235,6 +2241,7 @@
          <variableTemplate
             terminator=","
             separator=","
+            padToComments="50"
             variables="%(v)"
          ><![CDATA[
             %initExpression\n
@@ -2253,6 +2260,7 @@
          <variableTemplate
             terminator=","
             separator=","
+            padToComments="50"
             variables="%(v)"
          ><![CDATA[
             %initExpression\n
@@ -2263,6 +2271,7 @@
       <variableTemplate
          terminator=","
          separator=","
+         padToComments="50"
          variables="sim_sopt7_adc%(p)trigger,sim_sopt7_adc%(p)trgsel"
        ><![CDATA[
          %initExpression\n
@@ -2287,6 +2296,7 @@
          <variableTemplate
             terminator=","
             separator=","
+            padToComments="50"
             variables="sim_sopt9_tpm%(p)%(fn)"
             ><![CDATA[
             %initExpression\n

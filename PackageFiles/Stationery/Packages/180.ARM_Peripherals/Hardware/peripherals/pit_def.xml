@@ -603,11 +603,10 @@
       \t
       \t   auto &channel = pit->CHANNEL[pitIrqNum];
       \t
+      \t   auto handler = sCallbacks[pitIrqNum];
+      \t
       \t   // Clear interrupt flag
       \t   channel.TFLG = PIT_TFLG_TIF_MASK;
-      \t
-      \t   // Call handler
-      \t   sCallbacks[pitIrqNum]();
       \t
       \t   // If a one-shot then stop channel
       \t   if (clearOnEvent&(1<<pitIrqNum)) {
@@ -615,6 +614,9 @@
       \t      sCallbacks[pitIrqNum] = unhandledCallback;
       \t      clearOnEvent &= ~(1<<pitIrqNum);
       \t   }
+      \t
+      \t   // Call handler
+      \t   handler();
       \t}
       \t\n
    ]]>
@@ -1334,17 +1336,17 @@
    </validate>
 
    <projectActionList id = "pit_files" >
-      <copy source="Snippets/pit-example1.cpp"       target="Snippets/pit-example1.cpp" overwrite="true" derived="true" />
-      <copy source="Snippets/pit-example2-MK.cpp"    target="Snippets/pit-example2.cpp" overwrite="true" derived="true" />
-      <copy source="Snippets/pit-example3-MK.cpp"    target="Snippets/pit-example3.cpp" overwrite="true" derived="true" />
-      <copy source="Snippets/timer-inline-handler-example.cpp" target="Snippets/timer-inline-handler-example.cpp"   overwrite="true" derived="true" />
-      <copy source="Project_Headers/pit-MK.h"        target="Project_Headers/pit.h"     overwrite="true" derived="true" />
+      <copy source="Snippets/pit-example1.cpp"       target="Snippets/pit-example1.cpp" overwrite="always" derived="true" />
+      <copy source="Snippets/pit-example2-MK.cpp"    target="Snippets/pit-example2.cpp" overwrite="always" derived="true" />
+      <copy source="Snippets/pit-example3-MK.cpp"    target="Snippets/pit-example3.cpp" overwrite="always" derived="true" />
+      <copy source="Snippets/timer-inline-handler-example.cpp" target="Snippets/timer-inline-handler-example.cpp"   overwrite="always" derived="true" />
+      <copy source="Project_Headers/pit-MK.h"        target="Project_Headers/pit.h"     overwrite="always" derived="true" />
    </projectActionList>
 
    <!-- ____ Startup ________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

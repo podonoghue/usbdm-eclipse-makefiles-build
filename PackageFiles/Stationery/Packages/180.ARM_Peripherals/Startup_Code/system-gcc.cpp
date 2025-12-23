@@ -6,7 +6,7 @@
  *  Created on: 25/5/2017
  */
 #include <stdlib.h>
-#include "pin_mapping.h"
+#include "../Project_Headers/pin_mapping.h"
 
 /* Prevents the exception handling name demangling code getting pulled in */
 namespace __gnu_cxx {

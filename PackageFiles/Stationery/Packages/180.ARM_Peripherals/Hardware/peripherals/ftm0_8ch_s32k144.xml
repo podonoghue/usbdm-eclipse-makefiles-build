@@ -212,13 +212,13 @@
    </validate>
 
    <projectActionList id = "ftm_files" >
-      <copy source="Project_Headers/ftm_s32k14x.h"        target="Project_Headers/ftm.h"                overwrite="true" derived="true" />
-      <copy source="Snippets/ftm-pwm-example.cpp"         target="Snippets/ftm-pwm-example.cpp"         overwrite="true" derived="true" />
-      <copy source="Snippets/ftm-ic-example.cpp"          target="Snippets/ftm-ic-example.cpp"          overwrite="true" derived="true" />
-      <copy source="Snippets/ftm-oc-example.cpp"          target="Snippets/ftm-oc-example.cpp"          overwrite="true" derived="true" />
-      <copy source="Snippets/ftm-servo-example.cpp"       target="Snippets/ftm-servo-example.cpp"       overwrite="true" derived="true" />
-      <copy source="Snippets/ftm-quadrature-example.cpp"  target="Snippets/ftm-quadrature-example.cpp"  overwrite="true" derived="true" />
-      <copy source="Snippets/neopixel-example.cpp"        target="Snippets/neopixel-example.cpp"        overwrite="true" derived="true" />
+      <copy source="Project_Headers/ftm_s32k14x.h"        target="Project_Headers/ftm.h"                overwrite="always" derived="true" />
+      <copy source="Snippets/ftm-pwm-example.cpp"         target="Snippets/ftm-pwm-example.cpp"         overwrite="always" derived="true" />
+      <copy source="Snippets/ftm-ic-example.cpp"          target="Snippets/ftm-ic-example.cpp"          overwrite="always" derived="true" />
+      <copy source="Snippets/ftm-oc-example.cpp"          target="Snippets/ftm-oc-example.cpp"          overwrite="always" derived="true" />
+      <copy source="Snippets/ftm-servo-example.cpp"       target="Snippets/ftm-servo-example.cpp"       overwrite="always" derived="true" />
+      <copy source="Snippets/ftm-quadrature-example.cpp"  target="Snippets/ftm-quadrature-example.cpp"  overwrite="always" derived="true" />
+      <copy source="Snippets/neopixel-example.cpp"        target="Snippets/neopixel-example.cpp"        overwrite="always" derived="true" />
    </projectActionList>
 
    <template><![CDATA[

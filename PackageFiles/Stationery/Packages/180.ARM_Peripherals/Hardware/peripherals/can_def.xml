@@ -21,7 +21,7 @@
    ]]></template>
 
    <projectActionList id = "can_files" >
-      <copy source="Project_Headers/can.h"                    target="Project_Headers/can.h"                    overwrite="true"  derived="true" />
+      <copy source="Project_Headers/can.h"                    target="Project_Headers/can.h"                    overwrite="always"  derived="true" />
    </projectActionList>
    
 </peripheralPage>

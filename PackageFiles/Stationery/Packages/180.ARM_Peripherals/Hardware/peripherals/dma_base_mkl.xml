@@ -875,16 +875,16 @@
    </validate>
 
    <projectActionList id="dma_files" >
-      <copy source="Project_Headers/dma-MKL.h"                    target="Project_Headers/dma.h"                        overwrite="true"  derived="true" />
-      <copy source="Snippets/dma-memory-example-mkl.cpp"          target="Snippets/dma-memory-example-mkl.cpp"          overwrite="true"  derived="true" />
-      <copy source="Snippets/dma-memory-template-example-mkl.cpp" target="Snippets/dma-memory-template-example-mkl.cpp" overwrite="true"  derived="true" />
-      <copy source="Snippets/dma-uart-example-mkl25.cpp"          target="Snippets/dma-uart-example-mkl25.cpp"          overwrite="true"  derived="true" />
+      <copy source="Project_Headers/dma-MKL.h"                    target="Project_Headers/dma.h"                        overwrite="always"  derived="true" />
+      <copy source="Snippets/dma-memory-example-mkl.cpp"          target="Snippets/dma-memory-example-mkl.cpp"          overwrite="always"  derived="true" />
+      <copy source="Snippets/dma-memory-template-example-mkl.cpp" target="Snippets/dma-memory-template-example-mkl.cpp" overwrite="always"  derived="true" />
+      <copy source="Snippets/dma-uart-example-mkl25.cpp"          target="Snippets/dma-uart-example-mkl25.cpp"          overwrite="always"  derived="true" />
    </projectActionList>
 
    <!-- ____ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

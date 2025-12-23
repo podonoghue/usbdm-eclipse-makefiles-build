@@ -15,7 +15,7 @@
    <xi:include href="irqOption.xml"/>
    
    <projectActionList id = "lcd_files" >
-      <copy source="Project_Headers/lcd.h"                    target="Project_Headers/lcd.h"                    overwrite="true"  derived="true" />
+      <copy source="Project_Headers/lcd.h"                    target="Project_Headers/lcd.h"                    overwrite="always"  derived="true" />
    </projectActionList>
    
 </peripheralPage>

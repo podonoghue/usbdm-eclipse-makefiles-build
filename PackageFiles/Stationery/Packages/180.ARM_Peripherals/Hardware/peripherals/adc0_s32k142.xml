@@ -202,12 +202,12 @@
    </validate -->
 
    <projectActionList id = "adc_files" >
-      <copy source="Project_Headers/adc_S32.h"                    target="Project_Headers/adc.h"                    overwrite="true"  derived="true" />
-      <copy source="Snippets/analogue-comparison-example.cpp" target="Snippets/analogue-comparison-example.cpp" overwrite="true"  derived="true" />
-      <copy source="Snippets/analogue-example.cpp"            target="Snippets/analogue-example.cpp"            overwrite="true"  derived="true" />
-      <copy source="Snippets/analogue-diff-example.cpp"       target="Snippets/analogue-diff-example.cpp"       overwrite="true"  derived="true" />
-      <copy source="Snippets/analogue-interrupt-example.cpp"  target="Snippets/analogue-interrupt-example.cpp"  overwrite="true"  derived="true" />
-      <copy source="Snippets/analogue-joystick-example.cpp"   target="Snippets/analogue-joystick-example.cpp"   overwrite="true"  derived="true" />
+      <copy source="Project_Headers/adc_S32.h"                    target="Project_Headers/adc.h"                    overwrite="always"  derived="true" />
+      <copy source="Snippets/analogue-comparison-example.cpp" target="Snippets/analogue-comparison-example.cpp" overwrite="always"  derived="true" />
+      <copy source="Snippets/analogue-example.cpp"            target="Snippets/analogue-example.cpp"            overwrite="always"  derived="true" />
+      <copy source="Snippets/analogue-diff-example.cpp"       target="Snippets/analogue-diff-example.cpp"       overwrite="always"  derived="true" />
+      <copy source="Snippets/analogue-interrupt-example.cpp"  target="Snippets/analogue-interrupt-example.cpp"  overwrite="always"  derived="true" />
+      <copy source="Snippets/analogue-joystick-example.cpp"   target="Snippets/analogue-joystick-example.cpp"   overwrite="always"  derived="true" />
    </projectActionList>
    
 </peripheralPage>

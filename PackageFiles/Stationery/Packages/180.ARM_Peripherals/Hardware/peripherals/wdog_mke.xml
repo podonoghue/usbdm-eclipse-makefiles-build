@@ -716,13 +716,13 @@
    </validate>
 
    <projectActionList id="wdog_files" >
-      <copy source="Project_Headers/wdog-MKE.h"  target="Project_Headers/wdog.h"  overwrite="true"  derived="true" />
+      <copy source="Project_Headers/wdog-MKE.h"  target="Project_Headers/wdog.h"  overwrite="always"  derived="true" />
    </projectActionList>
 
    <!-- ************* Startup ****************** -->
 
    <template key="/SYSTEM/Includes" codeGenCondition="configurePeripheralInStartUp" ><![CDATA[
-      #include "$(_basename).h"\n
+      #include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/WatchdogInitialise" codeGenCondition="configurePeripheralInStartUp&amp;&amp;!fullCodeSupport" ><![CDATA[

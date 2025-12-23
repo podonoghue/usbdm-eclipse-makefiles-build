@@ -18,16 +18,16 @@
       derived="true"
       typeName="PinIndex" />
 
-   <if condition="!/SYSTEM/$pcrPattern">
+   <if condition="!/GPIO/$pcrPattern">
       <!-- PCRs not used -->
-      <constant key="/SYSTEM/$pcrPattern"          type="String"  value='""'   />
+      <constant key="/GPIO/$pcrPattern"          type="String"  value='""'   />
       <!-- Standard Gpio format
           * %i = port instance e.g."A"
           * %b = bit number
           * %p = polarity
           * e.g. Gpio%i<%b,%p>
       -->
-      <constant key="/SYSTEM/$gpioPattern"         type="String"  value="&quot;USBDM::Gpio%i&lt;%n,%p&gt;&quot;"                />
+      <constant key="/GPIO/$gpioPattern"         type="String"  value="&quot;USBDM::Gpio%i&lt;%n,%p&gt;&quot;"                />
       <!-- Specialised GpioField
              * %i = port instance e.g."A"
              * %l = left bit number
@@ -35,7 +35,7 @@
              * %p = polarity
              * e.g. Gpio%iField<%l,%r,%p>
       -->
-      <constant key="/SYSTEM/$gpioFieldPattern"    type="String"  value="&quot;USBDM::WideGpioField%i&lt;%l,%r,%p&gt;&quot;"    />
+      <constant key="/GPIO/$gpioFieldPattern"    type="String"  value="&quot;USBDM::WideGpioField%i&lt;%l,%r,%p&gt;&quot;"    />
    </if>
 
    <template key="/GPIO/getGpioAddress" >
@@ -375,7 +375,7 @@
 
 
    <projectActionList id = "fgpio_files" >
-      <copy source="Project_Headers/gpio-MKE.h"  target="Project_Headers/gpio.h"  overwrite="true"  derived="true" />
+      <copy source="Project_Headers/gpio-MKE.h"  target="Project_Headers/gpio.h"  overwrite="always"  derived="true" />
    </projectActionList>
 
    <signals enabledBy="enablePeripheralSupport" />

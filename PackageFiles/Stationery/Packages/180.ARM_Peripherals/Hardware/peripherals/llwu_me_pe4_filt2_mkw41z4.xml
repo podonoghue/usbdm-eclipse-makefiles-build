@@ -8,7 +8,7 @@
    <xi:include href="llwu_base.xml"/>
 
    <projectActionList id="llwu_files_examples" >
-      <copy source="Snippets/llwu-example-mkw41z.cpp"  target="Snippets/llwu-example-mkw41z.cpp"  overwrite="true" derived="true" />
+      <copy source="Snippets/llwu-example-mkw41z.cpp"  target="Snippets/llwu-example-mkw41z.cpp"  overwrite="always" derived="true" />
    </projectActionList>
 
 </peripheralPage>

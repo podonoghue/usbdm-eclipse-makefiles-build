@@ -7,8 +7,8 @@
  *  Created on: 5 Nov 2015
  *      Author: podonoghue
  */
-#include "math.h"
-#include "delay.h"
+#include <math.h>
+#include "../Project_Headers/delay.h"
 
 #ifdef __CMSIS_RTOS
 #include "cmsis_os.h"  // CMSIS RTX

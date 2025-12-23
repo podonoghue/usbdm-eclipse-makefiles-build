@@ -22,7 +22,22 @@
                   
 <!ENTITY % general_items    "dynamicSignalMapping|dialogue|graphic|category|categoryOption|aliasCategoryOption|if|for|immediateValue|%simple_items;" >
 
-<!ENTITY % where_items     "(all|usbdm|definitions|commonInfo|basicInfo|info|static)" >
+<!-- 
+Where to place generated code                                                                                                                          <br>
+                                                                                                                                                       <br>
+where       namespace    key                      discardRepeats                                                                                       <br>  
+===========+============+========================+========================+============================================================================<br>
+commonInfo | commonInfo | -                      | base-name e.g. FTM     | Within peripheral common info class e.g. FtmCommonInfo                     <br>
+basicInfo  | basicInfo  | -                      | struct-name+_BascicInfo| Within peripheral basic info class e.g. FtmBasicInfo (moded by struct name)<br>
+info       | info       | -                      | false                  | Within peripheral info class e.g. Ftm1Info (default if not provided)       <br>
+definitions| definitions| -                      | -                      | Before peripheral class (USBDM namespace)                                  <br>
+usbdm      | usbdm      | -                      | -                      | Before peripheral class (USBDM namespace)                                  <br>
+static     | all        | /HARDWARE/StaticObjects| -                      | Static objects in hardware.cpp                                             <br>
+all        | all        | required               | -                      | Explicitly available anywhere controlled by key substitution               <br>
+forceInfo  | info       | -                      | false                  | Forces info namespace and clears key                                       <br>
+===========+============+========================+========================+============================================================================<br>
+-->
+<!ENTITY % where_items     "(all|usbdm|definitions|commonInfo|basicInfo|info|static|forceInfo)" >
   
 <!-- ____  dialogue -->
 <!ELEMENT dialogue (%dialogue_items;)*>
@@ -409,7 +424,8 @@
    <!ATTLIST intOption logging       (true)       #IMPLIED>
    <!-- Name of associate signal -->
    <!ATTLIST intOption signal        CDATA        #IMPLIED>
-   
+   <!-- Adds enum OR operator between different type enums (CDATA name that ties enums together, or auto to use common  register) -->
+   <!ATTLIST intOption enumOr        CDATA        #IMPLIED>
   
 <!-- ____  bitmaskOption -->
 <!ELEMENT bitmaskOption EMPTY >
@@ -446,7 +462,7 @@
    <!ATTLIST bitmaskOption value          CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption disabledValue  CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption derivedFrom    CDATA        #IMPLIED>
-   <!-- Use 'enum class' for enums and generate operator|() -->
+   <!-- Use 'enum class' for enums -->
    <!ATTLIST bitmaskOption enumClass     (true)       #IMPLIED>
    <!-- Type for bitmask -->
    <!ATTLIST bitmaskOption typeName       CDATA        #IMPLIED>
@@ -478,6 +494,8 @@
    <!ATTLIST bitmaskOption signal          CDATA #IMPLIED>
    <!-- Generate choice values as constants rather than as an enum -->
    <!ATTLIST bitmaskOption generateAsConstants (true)  #IMPLIED>
+   <!-- Prettify enum values e.g. PTA3 -> Pta3 -->
+   <!ATTLIST bitmaskOption prettifyEnums       (true)  #IMPLIED>
 
 <!-- ____  floatOption -->
 <!ELEMENT floatOption EMPTY >
@@ -697,15 +715,7 @@
    
 <!-- ____  bitfieldOption -->
 <!ELEMENT bitfieldOption ((bitField|bitFieldExpansion)*) >
-   <!-- 
-   Where to place generated code<br>
-      info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
-      definitions - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
-      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
-      all   - Explicitly available anywhere controlled by key substitution<br>
-      forceInfo - forces Info namespace and clears key and discardRepeats
-      baseClass - In base class for peripheral (causes discard repeats using StructName as key)
-   -->
+   <!-- Where to place generated code -->
    <!ATTLIST bitfieldOption where        %where_items;  #IMPLIED >
    <!-- Visible name of option - also used for key if not provided -->
    <!ATTLIST bitfieldOption name                CDATA        #IMPLIED>
@@ -747,7 +757,7 @@
    <!ATTLIST bitfieldOption tableType            CDATA        #IMPLIED>
    <!-- Structure for elements of the table associated with this choice -->
    <!ATTLIST bitfieldOption bitmask              CDATA        #IMPLIED>
-   <!-- Use 'enum class' for enums and generate operator|() -->
+   <!-- Use 'enum class' for enums -->
    <!ATTLIST bitfieldOption enumClass           (true)       #IMPLIED>
    <!-- Name for enum and first part of enum values -->
    <!ATTLIST bitfieldOption typeName            CDATA        #IMPLIED>
@@ -786,10 +796,16 @@
    <!-- Generate choice values as constants rather than as an enum -->
    <!ATTLIST bitfieldOption generateAsConstants (true)       #IMPLIED>
    <!-- Generate logical operators to combine enum values -->
-   <!ATTLIST bitfieldOption generateOperators        (true)       #IMPLIED>
+   <!ATTLIST bitfieldOption generateOperators   (true)       #IMPLIED>
+   <!-- Suppresses stem on enum values -->
+   <!ATTLIST bitfieldOption noStem              (true)       #IMPLIED>
    <!-- Name of associate signal -->
    <!ATTLIST bitfieldOption signal              CDATA        #IMPLIED>
-   
+   <!-- Generate bitfiled values as constants rather than as an enum -->
+   <!ATTLIST bitfieldOption generateAsConstants (true)       #IMPLIED>
+   <!-- Used to control generation of enum (default is true) -->
+   <!ATTLIST bitfieldOption generateEnum       (false)      #IMPLIED>
+
 <!ELEMENT bitField EMPTY >
    <!-- Reference to a variable to obtain information from -->
    <!ATTLIST bitField condition      CDATA        #IMPLIED>
@@ -833,20 +849,18 @@
    <!-- Name of symbol to use for iteration - available as $(<name>) -->
    <!ATTLIST bitFieldExpansion iterationVar         CDATA       #IMPLIED>
    
-<!-- Text content -->
+<!-- Preamble text content i.e. Text to appear before item generated -->
    <!ELEMENT preamble (#PCDATA)* >
 
+<!-- Postamble text content i.e. Text to appear after item generated -->
+   <!ELEMENT postamble (#PCDATA)* >
+
+<!-- Body text content i.e. Text to appear within item generated -->
+   <!ELEMENT bodyText  (#PCDATA)* >
+
 <!-- ____  choiceOption -->
-<!ELEMENT choiceOption  (preamble|choice|choiceExpansion)* >
-   <!-- 
-   Where to place generated code<br>
-      info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
-      definitions - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
-      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
-      all   - Explicitly available anywhere controlled by key substitution<br>
-      forceInfo - forces Info namespace and clears key and discardRepeats
-      baseClass - In base class for peripheral (causes discard repeats using StructName as key)
-   -->
+<!ELEMENT choiceOption  (preamble|postamble|bodyText|choice|choiceExpansion)* >
+   <!-- Where to place generated code -->
    <!ATTLIST choiceOption where        %where_items;  #IMPLIED >
    <!-- Visible name of option - also used for key if not provided -->
    <!ATTLIST choiceOption name                CDATA        #IMPLIED>
@@ -884,17 +898,7 @@
    <!ATTLIST choiceOption tableType            CDATA        #IMPLIED>
    <!-- Structure for elements of the table associated with this choice -->
    <!ATTLIST choiceOption tableDefinition      CDATA        #IMPLIED>
-   <!-- 
-   Where to place generated code<br>
-      info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
-      definitions - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
-      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
-      all   - Explicitly available anywhere controlled by key substitution<br>
-      forceInfo - forces Info namespace and clears key and discardRepeats
-      baseClass - In base class for peripheral (causes discard repeats using StructName as key)
-   -->
-   <!ATTLIST choiceOption where           %where_items;        #IMPLIED >
-   <!-- Use 'enum class' for enums and generate operator|() -->
+   <!-- Use 'enum class' for enums -->
    <!ATTLIST choiceOption enumClass          (true)       #IMPLIED>
    <!-- Name for enum and first part of enum values -->
    <!ATTLIST choiceOption typeName            CDATA        #IMPLIED>
@@ -932,6 +936,8 @@
    <!ATTLIST choiceOption logging             (true)       #IMPLIED>
    <!-- Generate choice values as constants rather than as an enum -->
    <!ATTLIST choiceOption generateAsConstants (true)       #IMPLIED>
+   <!-- Used to control generation of enum (default is true) -->
+   <!ATTLIST choiceOption generateEnum       (false)      #IMPLIED>
    <!-- Template for generateAsConstants -->
    <!ATTLIST choiceOption constantTemplate    CDATA        #IMPLIED>
    <!-- Generate logical operators to combine enum values -->
@@ -942,6 +948,8 @@
    <!ATTLIST choiceOption noStem              (true)       #IMPLIED>
    <!-- Extra text pre-pended to the enum declaration -->
    <!ATTLIST choiceOption preamble            CDATA        #IMPLIED>
+   <!-- Adds enum OR operator between different type enums (CDATA name that ties enums together, or auto to use common  register) -->
+   <!ATTLIST choiceOption enumOr              CDATA        #IMPLIED>
 
 <!-- ____  choice -->
 <!ELEMENT choice EMPTY >
@@ -999,16 +1007,8 @@
    
 <!-- ____  binaryOption -->
 <!ELEMENT binaryOption (choice?, choice?) >
-   <!-- 
-   Where to place generated code<br>
-      info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
-      definitions - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
-      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
-      all   - Explicitly available anywhere controlled by key substitution<br>
-      forceInfo - forces Info namespace and clears key and discardRepeats
-      baseClass - In base class for peripheral (causes discard repeats using StructName as key)
-   -->
-   <!ATTLIST choiceOption where        %where_items;  #IMPLIED >
+   <!-- Where to place generated code -->
+   <!ATTLIST binaryOption where        %where_items;  #IMPLIED >
    <!-- Visible name of option - also used for key if not provided -->
    <!ATTLIST binaryOption name                CDATA        #IMPLIED>
    <!-- Key for option - also used as visible name if not provided -->
@@ -1049,16 +1049,7 @@
    <!ATTLIST binaryOption tableType            CDATA        #IMPLIED>
    <!-- Structure for elements of the table associated with this choice -->
    <!ATTLIST binaryOption tableDefinition      CDATA        #IMPLIED>
-   <!-- 
-   Where to place generated code<br>
-      info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
-      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
-      all   - Explicitly available anywhere controlled by key substitution<br>
-      forceInfo - forces Info namespace and clears key and discardRepeats
-      baseClass - In base class for peripheral (causes discard repeats using StructName as key)
-   -->
-   <!ATTLIST binaryOption where           %where_items;                   #IMPLIED >
-   <!-- Use 'enum class' for enums and generate operator|() -->
+   <!-- Use 'enum class' for enums -->
    <!ATTLIST binaryOption enumClass          (true)       #IMPLIED>
    <!-- Name for enum and first part of enum values -->
    <!ATTLIST binaryOption typeName            CDATA        #IMPLIED>
@@ -1094,6 +1085,12 @@
    <!ATTLIST binaryOption signal              CDATA #IMPLIED>
    <!-- Suppresses stem on enum values -->
    <!ATTLIST binaryOption noStem              (true)       #IMPLIED>
+   <!-- Adds enum OR operator between different type enums (CDATA name that ties enums together, or auto to use common  register) -->
+   <!ATTLIST binaryOption enumOr              CDATA        #IMPLIED>
+   <!-- Used to control generation of enum (default is true) -->
+   <!ATTLIST binaryOption generateEnum   (false|empty)     #IMPLIED>
+   <!-- Generate logical operators to combine enum values -->
+   <!ATTLIST binaryOption generateOperators   (true)       #IMPLIED>
 
 <!-- ____  irqOption -->
 <!ELEMENT irqOption EMPTY >
@@ -1218,14 +1215,7 @@
 <!ELEMENT template (#PCDATA)* >
    <!-- Where to place generated code -->
    <!ATTLIST template location     CDATA  #IMPLIED >
-   <!-- 
-   Where to place generated code<br>
-      info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
-      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
-      all   - Explicitly available anywhere controlled by key substitution<br>
-      forceInfo - forces Info namespace and clears key and discardRepeats
-      baseClass - In base class for peripheral (causes discard repeats using StructName as key)
-   -->
+   <!-- Where to place generated code -->
    <!ATTLIST template where                 %where_items;                   #IMPLIED >
    <!-- Key for template -->
    <!ATTLIST template key                       CDATA                   #IMPLIED >
@@ -1237,23 +1227,18 @@
    <!ATTLIST template discardRepeats            (true)                  #IMPLIED>
    <!-- Padding applied to lines generated -->
    <!ATTLIST template linePadding               CDATA                   #IMPLIED>
-   <!-- Variables that will be available for immediate substitution -->
+   <!-- Variables that will be available for immediate substitution, comma separated -->
    <!ATTLIST template immediateVariables       CDATA                   #IMPLIED>
    <!-- Indicates parameters should start on a new line if there are multiple -->
    <!ATTLIST template multipleParamsOnNewline  (false)                   #IMPLIED >
+   <!-- Priority affecting order of generation of templates from a particular config file -->
+   <!ATTLIST template priority                 CDATA                   #IMPLIED >
 
 <!-- ____  variableTemplate -->
 <!ELEMENT variableTemplate (#PCDATA)* >
    <!-- Where to place generated code -->
    <!ATTLIST variableTemplate location     CDATA  #IMPLIED >
-   <!-- 
-   Where to place generated code<br>
-      info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
-      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
-      all   - Explicitly available anywhere controlled by key substitution<br>
-      forceInfo - forces Info namespace and clears key and discardRepeats
-      baseClass - In base class for peripheral (causes discard repeats using StructName as key)
-   -->
+   <!-- Where to place generated code -->
    <!ATTLIST variableTemplate where                 %where_items;                   #IMPLIED >
    <!-- Key for template -->
    <!ATTLIST variableTemplate key                       CDATA                   #IMPLIED >
@@ -1285,7 +1270,7 @@
    <!ATTLIST variableTemplate paramTypes                CDATA                   #IMPLIED>
    <!-- %symbolicExpression will use the primitive value rather than symbolic e.g. FTM_OUTINIT_CHOI(0x0) -->
    <!ATTLIST variableTemplate useDefinitions            CDATA                   #IMPLIED>
-   <!-- Variables that will be available for immediate substitution -->
+   <!-- Variables that will be available for immediate substitution, comma separated -->
    <!ATTLIST variableTemplate immediateVariables        CDATA                   #IMPLIED>
    <!-- Indicates parameters should start on a new line if there are multiple -->
    <!ATTLIST variableTemplate multipleParamsOnNewline  (false)                   #IMPLIED >
@@ -1293,19 +1278,14 @@
    <!ATTLIST variableTemplate context                  CDATA                    #IMPLIED >
    <!-- Pad initExpressions and initNonDefaultExpressions to this width -->
    <!ATTLIST variableTemplate padToComments            CDATA                    #IMPLIED >
+   <!-- Priority affecting order of generation of templates from a particular config file -->
+   <!ATTLIST variableTemplate priority                 CDATA                   #IMPLIED >
    
 <!-- ____ clockCodeTemplate -->
 <!ELEMENT clockCodeTemplate (#PCDATA)* >
    <!-- Where to place generated code -->
    <!ATTLIST clockCodeTemplate location     CDATA  #IMPLIED >
-   <!-- 
-   Where to place generated code<br>
-      info  - Within peripheral info class in pinmapping.h (default if not provided)<br>
-      usbdm - Before peripheral class in pinmapping.h  (USBDM namespace)<br>
-      all   - Explicitly available anywhere controlled by key substitution<br>
-      forceInfo - forces Info namespace and clears key and discardRepeats
-      baseClass - In base class for peripheral (causes discard repeats using StructName as key)
-   -->
+   <!-- Where to place generated code -->
    <!ATTLIST clockCodeTemplate where                 %where_items;                  #IMPLIED >
    <!-- Key for template -->
    <!ATTLIST clockCodeTemplate key                       CDATA                   #IMPLIED >
@@ -1329,10 +1309,12 @@
    <!ATTLIST clockCodeTemplate codeGenCondition          CDATA                   #IMPLIED>
    <!-- %symbolicExpression will use the primitive value rather than symbolic e.g. FTM_OUTINIT_CHOI(0x0) -->
    <!ATTLIST clockCodeTemplate useDefinitions            CDATA                   #IMPLIED>
-   <!-- Variables that will be available for immediate substitution -->
+   <!-- Variables that will be available for immediate substitution, comma separated -->
    <!ATTLIST clockCodeTemplate immediateVariables       CDATA                   #IMPLIED>
    <!-- Indicates parameters should start on a new line if there are multiple -->
-   <!ATTLIST clockCodeTemplate multipleParamsOnNewline  (false)                   #IMPLIED >
+   <!ATTLIST clockCodeTemplate multipleParamsOnNewline  (false)                 #IMPLIED >
+   <!-- Priority affecting order of generation of templates from a particular config file -->
+   <!ATTLIST clockCodeTemplate priority                 CDATA                   #IMPLIED >
 
 <!-- ____ validate -->
 <!ELEMENT validate (param*) >
@@ -1408,8 +1390,8 @@
    <!ATTLIST copy sourcePathType       (absolute|relative|unknown) #IMPLIED>
    <!-- Replace macros ($(name)) when copy file  -->
    <!ATTLIST copy macroReplace         (true|false) "true">
-   <!-- Target file may be overwritten without error -->
-   <!ATTLIST copy overwrite            (true|false) #IMPLIED>
+   <!-- Action if target file exists: never=no action, always=overwrite, error=error abort -->
+   <!ATTLIST copy overwrite            (never|always|error) #IMPLIED>
    <!-- Target file will be marked as derived -->
    <!ATTLIST copy derived              (true|false) #IMPLIED>
    

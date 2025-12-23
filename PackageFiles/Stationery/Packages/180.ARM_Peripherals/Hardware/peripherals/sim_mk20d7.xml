@@ -333,7 +333,7 @@
             typeName="SimFtm1Ch0Src"
             description="FTM 1 channel 0 input capture source"
             toolTip="Source for FTM channel 0 input capture\n
-               NOTE: When the FTM is not in input capture mode, clear this field" >
+               @note When the FTM is not in input capture mode, clear this field" >
             <choice value="0" name="FTM1_CH0 signal"          enum="IcPin"  isDefault="true"/>
             <choice value="1" name="CMP0 output"              enum="Cmp0"     />
             <choice value="2" name="CMP1 output"              enum="Cmp1"     />
@@ -346,7 +346,7 @@
             typeName="SimFtm2Ch0Src"
             description="FTM2 channel 0 input capture source"
             toolTip="Source for FTM channel 0 input capture\n
-               NOTE: When the FTM is not in input capture mode, clear this field" >
+               @note When the FTM is not in input capture mode, clear this field" >
             <choice value="0" name="FTM2_CH0 signal"  enum="IcPin"  isDefault="true"/>
             <choice value="1" name="CMP0 output"      enum="Cmp0" />
             <choice value="2" name="CMP1 output"      enum="Cmp1" />
@@ -1001,7 +1001,7 @@
    <!-- _____________ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/StartupEarly" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

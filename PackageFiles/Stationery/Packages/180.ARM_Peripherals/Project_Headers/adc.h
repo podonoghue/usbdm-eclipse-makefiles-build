@@ -20,9 +20,9 @@
 #if $(/ADC/_BasicInfoGuard) // /ADC/_BasicInfoGuard
 
 namespace USBDM {
-// Forward declaration
-enum AdcChannelNum : uint8_t;
-}
+   // Forward declaration
+   enum class AdcChannelNum : uint8_t;
+}; // namespace USBDM
 
 $(/ADC/prototypes:// $/ADC/prototypes not found)
 namespace USBDM {
@@ -277,9 +277,9 @@ public:
    template<AdcChannelNum channel>
    class Channel : public ChannelCommon<channel>  {
    private:
-      static constexpr AdcBasicInfo::CheckPinExistsAndIsMapped<Info, channel> check{};
+      static constexpr AdcBasicInfo::CheckPinExistsAndIsMapped<Info, int(channel)> check{};
 #if $(/ADC0/adc_sc1_diff_present:false) // adc_sc1_diff_present
-      static_assert(((channel<AdcChannelNum_DiffFirst)||(channel>AdcChannelNum_DiffLast)), "Illegal channel number");
+      static_assert(((channel<AdcChannelNum::AdcChannelNum_DiffFirst)||(channel>AdcChannelNum::AdcChannelNum_DiffLast)), "Illegal channel number");
 #endif
    public:
       /** The PCR associated with this channel (Not all channels have an associated PCR!) */
@@ -287,7 +287,7 @@ public:
 
       /** GPIO pin associated with this channel (Not all channels have an associated GPIO!) */
       template<Polarity polarity=ActiveHigh>
-      class GpioPin : public GpioTable_T<Info, channel, polarity> {
+      class GpioPin : public GpioTable_T<Info, int(channel), polarity> {
          static_assert((Info::info[channel].pinIndex >= PinIndex::MIN_PIN_INDEX),
                "ADC channel does not have corresponding GPIO pin");
       };
@@ -369,7 +369,7 @@ public:
    template<AdcChannelNum channel>
    class DiffChannel : public ChannelCommon<channel> {
 
-      static_assert((channel>=AdcChannelNum_DiffFirst)&&(channel<=AdcChannelNum_DiffLast), "Illegal differential channel number");
+      static_assert((channel>=AdcChannelNum::AdcChannelNum_DiffFirst)&&(channel<=AdcChannelNum::AdcChannelNum_DiffLast), "Illegal differential channel number");
 
    private:
       /**
@@ -378,17 +378,17 @@ public:
       DiffChannel(const DiffChannel&) = delete;
       DiffChannel(DiffChannel&&) = delete;
 
-      static constexpr AdcBasicInfo::CheckPinExistsAndIsMapped<Info, channel>   checkPos{};
-      static constexpr AdcBasicInfo::CheckPinExistsAndIsMapped<Info, channel+8> checkNeg{};
+      static constexpr AdcBasicInfo::CheckPinExistsAndIsMapped<Info, int(channel)>   checkPos{};
+      static constexpr AdcBasicInfo::CheckPinExistsAndIsMapped<Info, int(channel)+8> checkNeg{};
 
    public:
       constexpr DiffChannel() : ChannelCommon<AdcChannelNum(channel)>() {}
 
       /** PCR associated with plus channel */
-      using PcrP = PcrTable_T<Info, channel>;
+      using PcrP = PcrTable_T<Info, int(channel)>;
 
       /** PCR associated with minus channel */
-      using PcrM = PcrTable_T<Info, channel>;
+      using PcrM = PcrTable_T<Info, int(channel)>;
 
       /** The ADC that owns this channel */
       using Owner = AdcBase_T;
@@ -397,7 +397,7 @@ public:
       using AdcInfo = Info;
 
       /** Channel number */
-      static constexpr int CHANNEL=channel;
+      static constexpr int CHANNEL=int(channel);
 
       /**
        * Configure the pins associated with this ADC channel.
@@ -406,8 +406,8 @@ public:
        */
       static void setInput() {
          // Map pins to ADC
-         PcrP::setPCR(Info::info[channel].pcrValue);
-         PcrM::setPCR(Info::info[channel].pcrValue);
+         PcrP::setPCR(Info::info[unsigned(channel)].pcrValue);
+         PcrM::setPCR(Info::info[unsigned(channel)].pcrValue);
       }
 
       /**

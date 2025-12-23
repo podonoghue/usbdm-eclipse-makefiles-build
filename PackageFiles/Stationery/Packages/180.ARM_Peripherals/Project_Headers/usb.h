@@ -111,7 +111,7 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
-#if $(/USB0/_BasicInfoGuard) // /USB0/_BasicInfoGuard
+#if $(/USB0/enablePeripheralSupport) // /USB0/enablePeripheralSupport
 
 #include <cstring>
 #include "pin_mapping.h"
@@ -302,7 +302,9 @@ protected:
    static void utf8ToStringDescriptor(volatile uint8_t *to, volatile const uint8_t *from, unsigned maxSize);
 
    /** Magic string for MS driver feature */
-   static const uint8_t fMsOsStringDescriptor[];
+   static inline const uint8_t fMsOsStringDescriptor[] = {
+         18, DT_STRING, 'M',0,'S',0,'F',0,'T',0,'1',0,'0',0,'0',0,GET_MS_FEATURE_DESCRIPTOR,0x00
+   };
 
    /** End-points in use */
    static Endpoint *fEndPoints[];
@@ -331,28 +333,28 @@ private:
 
 protected:
    /** USB Control endpoint - always EP0 */
-   static ControlEndpoint<Info, EP0_SIZE>fControlEndpoint;
+   static inline ControlEndpoint<Info, EP0_SIZE>fControlEndpoint;
 
    /** USB connection state */
-   static volatile DeviceConnectionStates fConnectionState;
+   static inline volatile DeviceConnectionStates fConnectionState;
 
    /** Active USB configuration */
-   static uint8_t fDeviceConfiguration;
+   static inline uint8_t fDeviceConfiguration;
 
    /** USB Device status */
-   static DeviceStatus fDeviceStatus;
+   static inline DeviceStatus fDeviceStatus;
 
    /** Buffer for EP0 data from Setup transaction (copied from USB RAM) */
-   static SetupPacket fEp0SetupBuffer;
+   static inline SetupPacket fEp0SetupBuffer;
 
    /** USB activity indicator */
-   static bool fActivityFlag;
+   static inline bool fActivityFlag = false;
 
    /**
     * Unhandled SETUP callback \n
     * This function is called for unhandled SETUP transactions
     */
-   static SetupCallbackFunction fUnhandledSetupCallback;
+   static inline SetupCallbackFunction fUnhandledSetupCallback = (SetupCallbackFunction)unsetSetupPacketCallback;;
 
    /**
     * User event callback \n
@@ -362,7 +364,7 @@ protected:
     *  @return     E_NOERROR if handled
     *  @return     Else stalls endpoint
     */
-   static UserCallbackFunction fUserCallbackFunction;
+   static inline UserCallbackFunction fUserCallbackFunction = defaultUserCallback;
 
    /**
     * USB SOF call-back\n
@@ -372,7 +374,7 @@ protected:
     *
     * @return  Error code
     */
-   static SOFCallbackFunction fSofCallbackFunction;
+   static inline SOFCallbackFunction fSofCallbackFunction = unsetSOFHandlerCallback;;
 
 protected:
 
@@ -736,59 +738,6 @@ public:
    static void irqHandler();
 
 };
-
-/**
- * USB SOF call-back\n
- * This function is call for SOF transactions
- *
- * @param frameNumber Frame number from SOF token
- *
- * @return  Error code
- */
-template<class Info, int EP0_SIZE>
-UsbBase::SOFCallbackFunction UsbBase_T<Info, EP0_SIZE>::fSofCallbackFunction = unsetSOFHandlerCallback;
-
-/**
- * User event callback \n
- * This function is called whenever the 'user' code needs to be notified of an event
- *
- *  @param[in]  event Reason for callback
- *  @return     E_NOERROR if handled
- *  @return     Else stalls endpoint
- */
-template<class Info, int EP0_SIZE>
-UsbBase::UserCallbackFunction UsbBase_T<Info, EP0_SIZE>::fUserCallbackFunction = defaultUserCallback;
-
-/**
- * Unhandled SETUP callback \n
- * This function is called for unhandled SETUP transactions
- */
-template<class Info, int EP0_SIZE>
-UsbBase::SetupCallbackFunction UsbBase_T<Info, EP0_SIZE>::fUnhandledSetupCallback = (SetupCallbackFunction)unsetSetupPacketCallback;
-
-/** USB connection state */
-template<class Info, int EP0_SIZE>
-volatile DeviceConnectionStates UsbBase_T<Info, EP0_SIZE>::fConnectionState;
-
-/** Active USB configuration */
-template<class Info, int EP0_SIZE>
-uint8_t UsbBase_T<Info, EP0_SIZE>::fDeviceConfiguration;
-
-/** USB Device status */
-template<class Info, int EP0_SIZE>
-UsbBase::DeviceStatus UsbBase_T<Info, EP0_SIZE>::fDeviceStatus;
-
-/** Buffer for EP0 Setup transaction (copied from USB RAM) */
-template<class Info, int EP0_SIZE>
-SetupPacket UsbBase_T<Info, EP0_SIZE>::fEp0SetupBuffer;
-
-/** USB activity indicator */
-template<class Info, int EP0_SIZE>
-bool UsbBase_T<Info, EP0_SIZE>::fActivityFlag = false;
-
-/** USB Control endpoint - always EP0 */
-template <class Info, int EP0_SIZE>
-ControlEndpoint<Info, EP0_SIZE> UsbBase_T<Info, EP0_SIZE>::fControlEndpoint;
 
 } // End namespace USBDM
 
@@ -1591,6 +1540,6 @@ void UsbBase_T<Info, EP0_SIZE>::irqHandler() {
  */
 
 } // End namespace USBDM
-#endif // /USB0/_BasicInfoGuard
+#endif // /USB0/enablePeripheralSupport
 
 #endif /* HEADER_USB_H */

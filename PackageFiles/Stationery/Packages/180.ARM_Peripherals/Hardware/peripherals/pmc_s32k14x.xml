@@ -100,8 +100,8 @@
    </validate>
 
    <projectActionList id = "pmc_files" >
-      <copy source="Project_Headers/pmc.h"     target="Project_Headers/pmc.h"     overwrite="true" derived="true" />
-      <copy source="Snippets/pmc-example.cpp"  target="Snippets/pmc-example.cpp"       overwrite="true" derived="true" />
+      <copy source="Project_Headers/pmc.h"     target="Project_Headers/pmc.h"     overwrite="always" derived="true" />
+      <copy source="Snippets/pmc-example.cpp"  target="Snippets/pmc-example.cpp"       overwrite="always" derived="true" />
    </projectActionList>
          
 </peripheralPage>

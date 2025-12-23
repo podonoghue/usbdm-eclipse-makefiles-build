@@ -33,16 +33,16 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-EPAPER" />
                </applyWhen>
-               <copy source="Fonts"                                     target="Fonts"                                     overwrite="true"/>
-               <copy source="Snippets/fonts.h"                          target="Sources/fonts.h"                           overwrite="true"/>
-               <copy source="Snippets/seeed-epaper-example.cpp"     target="Snippets/seeed-epaper-example.cpp" overwrite="true"/>
-               <copy source="Snippets/epaper.h"                     target="Snippets/epaper.h"                 overwrite="true"/>
-               <copy source="Snippets/epd.h"                        target="Snippets/epd.h"                    overwrite="true"/>
-               <copy source="Snippets/seeed_sld00200p.h"            target="Snippets/seeed_sld00200p.h"        overwrite="true"/>
-               <copy source="Snippets/gt20l16.h"                    target="Snippets/gt20l16.h"                overwrite="true"/>
-               <copy source="Snippets/epaper.cpp"                   target="Snippets/epaper.cpp"               overwrite="true"/>
-               <copy source="Snippets/epd.cpp"                      target="Snippets/epd.cpp"                  overwrite="true"/>
-               <copy source="Snippets/gt20l16.cpp"                  target="Snippets/gt20l16.cpp"              overwrite="true"/>
+               <copy source="Fonts"                                     target="Fonts"                                     overwrite="always"/>
+               <copy source="Snippets/fonts.h"                          target="Sources/fonts.h"                           overwrite="always"/>
+               <copy source="Snippets/seeed-epaper-example.cpp"     target="Snippets/seeed-epaper-example.cpp" overwrite="always"/>
+               <copy source="Snippets/epaper.h"                     target="Snippets/epaper.h"                 overwrite="always"/>
+               <copy source="Snippets/epd.h"                        target="Snippets/epd.h"                    overwrite="always"/>
+               <copy source="Snippets/seeed_sld00200p.h"            target="Snippets/seeed_sld00200p.h"        overwrite="always"/>
+               <copy source="Snippets/gt20l16.h"                    target="Snippets/gt20l16.h"                overwrite="always"/>
+               <copy source="Snippets/epaper.cpp"                   target="Snippets/epaper.cpp"               overwrite="always"/>
+               <copy source="Snippets/epd.cpp"                      target="Snippets/epd.cpp"                  overwrite="always"/>
+               <copy source="Snippets/gt20l16.cpp"                  target="Snippets/gt20l16.cpp"              overwrite="always"/>
                <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
                   <value>EPAPER_AVAILABLE</value>
                </projectOption>

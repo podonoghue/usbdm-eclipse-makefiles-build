@@ -1633,7 +1633,7 @@
    <!-- _____________ Common __________________ -->
 
    <template key="/MCG/Includes"  ><![CDATA[
-   #include "osc.h"\n
+   #include "../Project_Headers/osc.h\n
    ]]></template>
 
    <template key="/$(_BASENAME)/ClockStartup" ><![CDATA[
@@ -1643,9 +1643,9 @@
    <!-- Validator is in parent file -->
 
    <projectActionList id="mcg_files" >
-      <copy source="Project_Headers/mcg.h"                target="Project_Headers/mcg.h"                 overwrite="true"  derived="true" />
-      <copy source="Startup_Code/mcg_no_pll.cpp"          target="Startup_Code/mcg_no_pll.cpp"           overwrite="true"  derived="true" />
-      <copy source="Snippets/mcg-test.cpp"                target="Snippets/mcg-test.cpp"                 overwrite="true"  derived="true" />
+      <copy source="Project_Headers/mcg.h"                target="Project_Headers/mcg.h"                 overwrite="always"  derived="true" />
+      <copy source="Startup_Code/mcg_no_pll.cpp"          target="Startup_Code/mcg_no_pll.cpp"           overwrite="always"  derived="true" />
+      <copy source="Snippets/mcg-test.cpp"                target="Snippets/mcg-test.cpp"                 overwrite="always"  derived="true" />
       <deleteResource target="Project_Headers/clock_configure.h" />
       <deleteResource target="Startup_Code/clock.c" />
    </projectActionList>

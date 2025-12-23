@@ -1673,7 +1673,7 @@
       ><![CDATA[
          \t/**
          \t * Set action on event
-         \t * (%variable)
+         \t * (%variables)
          \t *
          %paramDescription
          \t */
@@ -1820,7 +1820,7 @@
       \t
       \t   /**
       \t    * Set %description
-      \t    * (%variable)
+      \t    * (%variables)
       \t    *
       %paramDescription
       \t    *
@@ -1843,7 +1843,7 @@
       \t
       \t   /**
       \t    * Set %description
-      \t    * (%variable)
+      \t    * (%variables)
       \t    *
       %paramDescription
       \t
@@ -2813,7 +2813,7 @@
    ><![CDATA[
       \t   /**
       \t    * Constructor for %description
-      \t    * (%variable)
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -2918,7 +2918,7 @@
    ><![CDATA[
       \t   /**
       \t    * Constructor for %description
-      \t    * (%variable)
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -3349,17 +3349,17 @@
    </validate>
 
    <projectActionList id="tpm_files" >
-      <copy source="Project_Headers/tpm.h"            target="Project_Headers/tpm.h"            overwrite="true" derived="true" />
-      <copy source="Snippets/tpm-pwm-example.cpp"     target="Snippets/tpm-pwm-example.cpp"     overwrite="true" derived="true"/>
-      <copy source="Snippets/tpm-ic-example.cpp"      target="Snippets/tpm-ic-example.cpp"      overwrite="true" derived="true"/>
-      <copy source="Snippets/tpm-oc-example.cpp"      target="Snippets/tpm-oc-example.cpp"      overwrite="true" derived="true"/>
-      <copy source="Snippets/tpm-oc-init-example.cpp" target="Snippets/tpm-oc-init-example.cpp" overwrite="true" derived="true"/>
+      <copy source="Project_Headers/tpm.h"            target="Project_Headers/tpm.h"            overwrite="always" derived="true" />
+      <copy source="Snippets/tpm-pwm-example.cpp"     target="Snippets/tpm-pwm-example.cpp"     overwrite="always" derived="true"/>
+      <copy source="Snippets/tpm-ic-example.cpp"      target="Snippets/tpm-ic-example.cpp"      overwrite="always" derived="true"/>
+      <copy source="Snippets/tpm-oc-example.cpp"      target="Snippets/tpm-oc-example.cpp"      overwrite="always" derived="true"/>
+      <copy source="Snippets/tpm-oc-init-example.cpp" target="Snippets/tpm-oc-init-example.cpp" overwrite="always" derived="true"/>
    </projectActionList>
 
    <!-- ____ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

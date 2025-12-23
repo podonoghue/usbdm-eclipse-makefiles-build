@@ -5,10 +5,10 @@
  *      Author: pgo
  */
 
-#include "derivative.h"
-#include "system.h"
-#include "pin_mapping.h"
-#include "console.h"
+#include "../Project_Headers/derivative.h"
+#include "../Project_Headers/system.h"
+#include "../Project_Headers/pin_mapping.h"
+#include "../Project_Headers/console.h"
 
  /*
   * *****************************
@@ -34,7 +34,7 @@ void log_error(const char *msg) {
 }
 
 /**
- * @addtogroup CONSOLE_Group Console
+ * @addtogroup CONSOLE_Group Console, Console Interface
  * @brief Console serial interface
  * @{
  */

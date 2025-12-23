@@ -121,22 +121,23 @@
 
 <!-- Setters and getters -->
 
-   <for keys="field                   : get   : set   : genCode                 : name"
+   <for keys="field                                          : get                        : set                        : genCode                 : name"
         values="
-         dmamux_chcfg_mode[]          : true  : true  : enableGettersAndSetters : ChannelMode  ;
-         dmamux_chcfg_source[]        : true  : true  : enableGettersAndSetters : Source       ;
-         dmamux_chcfg_low_source[]    : true  : true  : enableGettersAndSetters : LowSource    ;
-         dmamux_chcfg_high_source[16] : true  : true  : enableGettersAndSetters : HighSource   "
+         /DMA0/dma_channel_num, dmamux_chcfg_mode[]          : true                       : true                       : enableGettersAndSetters : ChannelMode  ;
+         /DMA0/dma_channel_num, dmamux_chcfg_source[]        : true                       : true                       : enableGettersAndSetters : Source       ;
+         /DMA0/dma_channel_num, dmamux_chcfg_low_source[]    : dmamux_chcfg_low_source[]  : dmamux_chcfg_low_source[]  : enableGettersAndSetters : LowSource    ;
+         /DMA0/dma_channel_num, dmamux_chcfg_high_source[16] : dmamux_chcfg_high_source[] : dmamux_chcfg_high_source[] : enableGettersAndSetters : HighSource   "
           >
       <variableTemplate variables="%(field)" condition="%(set)" codeGenCondition="%(genCode)"
       ><![CDATA[
          \t/**
          \t * Set %description
+         \t * (%variables)
          \t *
          %paramDescription
          \t */
-         \tstatic void set%(name)(DmaChannelNum dmaChannelNum, %params) {
-         \t   %register[dmaChannelNum] = (%register[dmaChannelNum]&~%mask) | %paramExpression;
+         \tstatic void set%(name)(%params) {
+         \t   %register[%paramName0] = (%register1[%paramName0]&~%mask1) | %paramExpression;
          \t}
          \t\n
       ]]></variableTemplate>
@@ -144,11 +145,13 @@
       ><![CDATA[
          \t/**
          \t * Get %description
+         \t * (%variables)
          \t *
-         \t * @return %tooltip
+         %paramDescription0
+         \t * @return %tooltip1
          \t */
-         \tstatic %paramType get%(name)(DmaChannelNum dmaChannelNum) {
-         \t   return %paramType((%register[dmaChannelNum]&~%mask));
+         \tstatic %paramType get%(name)(%param0) {
+         \t   return %paramType((%register1[%paramName0]&~%mask1));
          \t}
          \t\n
       ]]></variableTemplate>
@@ -173,8 +176,8 @@
       \t
       \t   // DmaSlots 0-63 must associate with DMA channels 0-15
       \t   // DmaSlots 64-128 must associate with DMA channels 15-31
-      \t   usbdm_assert(((dmaChannelNum<16)||(dmaSlot>=64))&&((dmaChannelNum>=16)||(dmaSlot<64)),
-      \t         "Illegal LPIT channel");
+      \t   usbdm_assert(((dmaChannelNum<16)&&(dmaSlot<64))||((dmaChannelNum>=16)&&(dmaSlot>=64)),
+      \t         "Illegal DMA channel");
       \t
       \t   // Enable clock to peripheral
       \t   enableClock();
@@ -292,6 +295,7 @@
    <![CDATA[
       \t   /**
       \t    * Constructor for Dma ChannelNum
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -317,6 +321,7 @@
    <![CDATA[
       \t   /**
       \t    * Constructor for Dma ChannelNum
+      \t    * (%variables)
       \t    *
       \t    * @tparam   Types
       \t    * @param    rest
@@ -346,6 +351,7 @@
       <![CDATA[
          \t   /**
          \t    * Constructor for %description
+         \t    * (%variables)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -558,7 +564,7 @@
    <!-- ************* Startup ****************** -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "dma.h"\n
+      <![CDATA[#include "../Project_Headers/dma.h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

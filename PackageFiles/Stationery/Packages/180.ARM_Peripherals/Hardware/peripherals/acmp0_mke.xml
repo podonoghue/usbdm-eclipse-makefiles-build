@@ -658,14 +658,14 @@
    </validate>
 
    <projectActionList id="acmp_files" >
-      <copy source="Project_Headers/acmp-MKE.h"  target="Project_Headers/acmp.h"  overwrite="true"  derived="true" />
-      <copy source="Snippets/cmp-example.cpp" target="Snippets/cmp-example.cpp" overwrite="true" derived="true" />
+      <copy source="Project_Headers/acmp-MKE.h"  target="Project_Headers/acmp.h"  overwrite="always"  derived="true" />
+      <copy source="Snippets/cmp-example.cpp" target="Snippets/cmp-example.cpp" overwrite="always" derived="true" />
    </projectActionList>
 
    <!-- ____ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

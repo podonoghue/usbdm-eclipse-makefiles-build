@@ -4,7 +4,9 @@
  * @version  V4.12.1.210
  * @date     13 April 2016
  */
-#include "spi.h"
+#include "../Project_Headers/spi.h"
+
+#if $(/SPI/_BasicInfoGuard) // /SPI/_BasicInfoGuard
 
 /*
  * *****************************
@@ -27,7 +29,7 @@ static const uint16_t brFactors[] {2,4,6,8,16,32,64,128,256,512,1024,2048,4096,8
  *
  * @return Clock frequency of SPI in Hz for these factors
  */
-uint32_t Spi::calculateSpeed(uint32_t clockFrequency, uint32_t spiCtarValue) {
+uint32_t SpiBasicInfo::calculateSpeed(uint32_t clockFrequency, uint32_t spiCtarValue) {
    int pbr = (spiCtarValue&SPI_CTAR_PBR_MASK)>>SPI_CTAR_PBR_SHIFT;
    int br  = (spiCtarValue&SPI_CTAR_BR_MASK)>>SPI_CTAR_BR_SHIFT;
    uint32_t frequency = clockFrequency/(pbrFactors[pbr]*brFactors[br]);
@@ -48,7 +50,7 @@ uint32_t Spi::calculateSpeed(uint32_t clockFrequency, uint32_t spiCtarValue) {
  *
  * Note: Determines bestPrescaler and bestDivider for the smallest delay that is not less than delay.
  */
-void Spi::calculateDelay(uint32_t clockFrequency, uint32_t delay_ns, int &bestPrescale, int &bestDivider) {
+void SpiBasicInfo::calculateDelay(uint32_t clockFrequency, uint32_t delay_ns, int &bestPrescale, int &bestDivider) {
 
    const uint32_t clockPeriod_ns = (1'000'000'000+clockFrequency/2)/clockFrequency;
 
@@ -84,7 +86,7 @@ void Spi::calculateDelay(uint32_t clockFrequency, uint32_t delay_ns, int &bestPr
  *
  * Note: Chooses the highest speed that is not greater than frequency.
  */
-uint32_t Spi::calculateDividers(uint32_t clockFrequency, uint32_t frequency) {
+uint32_t SpiBasicInfo::calculateDividers(uint32_t clockFrequency, uint32_t frequency) {
 
    if (clockFrequency <= (2*(unsigned)frequency)) {
       // Use highest possible rate
@@ -126,9 +128,10 @@ uint32_t Spi::calculateDividers(uint32_t clockFrequency, uint32_t frequency) {
  *
  * @return Data received
  */
-uint32_t Spi::txRxRaw(uint32_t data) {
+uint32_t SpiBasicInfo::txRxRaw(uint32_t data) {
 
-   spi->SR = SPI_SR_TCF_MASK;
+   clearStatusFlags();
+
    spi->PUSHR = data;
    while ((spi->SR & SPI_SR_TCF_MASK)==0) {
    }
@@ -138,3 +141,5 @@ uint32_t Spi::txRxRaw(uint32_t data) {
 }
 
 } // End namespace USBDM
+
+#endif //SPI/_BasicInfoGuard

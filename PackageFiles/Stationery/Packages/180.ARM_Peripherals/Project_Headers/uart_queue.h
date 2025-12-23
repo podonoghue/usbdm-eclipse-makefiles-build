@@ -8,6 +8,7 @@
 #ifndef INCLUDE_USBDM_UART_QUEUE_H_
 #define INCLUDE_USBDM_UART_QUEUE_H_
 
+#include "pin_mapping.h"
 #include "system.h"
 
 namespace USBDM {

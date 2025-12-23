@@ -42,8 +42,8 @@
          <copy source="fatfs"                        target="fatfs"    macroReplace="false" />
          <excludeSourceFolder                        target="fatfs/documents" />
 
-         <copy source="Snippets/fatfs_example1.cpp"  target="Snippets/fatfs_example1.cpp" overwrite="true" />
-         <copy source="Snippets/fatfs_example2.cpp"  target="Snippets/fatfs_example2.cpp" overwrite="true" />
+         <copy source="Snippets/fatfs_example1.cpp"  target="Snippets/fatfs_example1.cpp" overwrite="always" />
+         <copy source="Snippets/fatfs_example2.cpp"  target="Snippets/fatfs_example2.cpp" overwrite="always" />
 
       </projectActionList>
    </projectActionList>

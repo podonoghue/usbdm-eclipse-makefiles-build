@@ -31,10 +31,10 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-TFT-ST7735" />
                </applyWhen>
-               <copy source="Fonts"                                     target="Fonts"                                     overwrite="true"/>
-               <copy source="Snippets/fonts.h"                          target="Sources/fonts.h"                           overwrite="true"/>
-               <copy source="Snippets/tft_ST7735.h"                     target="Sources/tft_ST7735.h"           overwrite="true"/>
-               <copy source="Snippets/tft-example-ST7735.cpp"           target="Sources/tft-example-ST7735.cpp"   overwrite="true"/>
+               <copy source="Fonts"                                     target="Fonts"                                     overwrite="always"/>
+               <copy source="Snippets/fonts.h"                          target="Sources/fonts.h"                           overwrite="always"/>
+               <copy source="Snippets/tft_ST7735.h"                     target="Sources/tft_ST7735.h"           overwrite="always"/>
+               <copy source="Snippets/tft-example-ST7735.cpp"           target="Sources/tft-example-ST7735.cpp"   overwrite="always"/>
                <excludeSourceFile target="Sources/tft-example-ST7735.cpp"  />
                <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
                   <value>EPAPER_AVAILABLE</value>

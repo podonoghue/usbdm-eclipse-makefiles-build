@@ -16,6 +16,7 @@
  */
 #include <stdint.h>
 #include "derivative.h"
+#include "gpio.h"
 #include "pin_mapping.h"
 
 $(/I2S/prototypes:// $/I2S/prototypes not found)

@@ -923,16 +923,16 @@
 
    <!-- _____________ Common __________________ -->
    <projectActionList id = "spi_files" >
-      <copy source="Project_Headers/spi-MKL.h"           target="Project_Headers/spi.h"               overwrite="true"      derived="true" />
-      <copy source="Sources/spi-MKL.cpp"                 target="Sources/spi.cpp"                     overwrite="true"      derived="true" />
-      <copy source="Snippets/spi-example-MKL.cpp"        target="Snippets/spi-example-MKL.cpp"        overwrite="true"      derived="true" />
-      <copy source="Snippets/spi-example-cmsis-MKL.cpp"  target="Snippets/spi-example-cmsis-MKL.cpp"  overwrite="true"      derived="true" />
+      <copy source="Project_Headers/spi-MKL.h"           target="Project_Headers/spi.h"               overwrite="always"      derived="true" />
+      <copy source="Sources/spi-MKL.cpp"                 target="Sources/spi.cpp"                     overwrite="always"      derived="true" />
+      <copy source="Snippets/spi-example-MKL.cpp"        target="Snippets/spi-example-MKL.cpp"        overwrite="always"      derived="true" />
+      <copy source="Snippets/spi-example-cmsis-MKL.cpp"  target="Snippets/spi-example-cmsis-MKL.cpp"  overwrite="always"      derived="true" />
    </projectActionList>
 
    <!-- _____________ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

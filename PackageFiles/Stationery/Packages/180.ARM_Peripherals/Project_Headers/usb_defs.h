@@ -575,14 +575,14 @@ struct CdcLineState {
 };
 
 // Bit masks for CdcLineState
-static constexpr uint8_t USB_CDC_STATE_DCD_MASK        = 1<<0;
-static constexpr uint8_t USB_CDC_STATE_DSR_MASK        = 1<<1;
-static constexpr uint8_t USB_CDC_STATE_BREAK_IN_MASK   = 1<<2;
-static constexpr uint8_t USB_CDC_STATE_RI_MASK         = 1<<3;
-static constexpr uint8_t USB_CDC_STATE_FRAME_MASK      = 1<<4;
-static constexpr uint8_t USB_CDC_STATE_PARITY_MASK     = 1<<5;
-static constexpr uint8_t USB_CDC_STATE_OVERRUN_MASK    = 1<<6;
-static constexpr uint8_t USB_CDC_STATE_CHANGE_MASK     = 1<<7;
+constexpr uint8_t USB_CDC_STATE_DCD_MASK        = 1<<0;
+constexpr uint8_t USB_CDC_STATE_DSR_MASK        = 1<<1;
+constexpr uint8_t USB_CDC_STATE_BREAK_IN_MASK   = 1<<2;
+constexpr uint8_t USB_CDC_STATE_RI_MASK         = 1<<3;
+constexpr uint8_t USB_CDC_STATE_FRAME_MASK      = 1<<4;
+constexpr uint8_t USB_CDC_STATE_PARITY_MASK     = 1<<5;
+constexpr uint8_t USB_CDC_STATE_OVERRUN_MASK    = 1<<6;
+constexpr uint8_t USB_CDC_STATE_CHANGE_MASK     = 1<<7;
 
 /**
  * Structure representing USB STAT register value

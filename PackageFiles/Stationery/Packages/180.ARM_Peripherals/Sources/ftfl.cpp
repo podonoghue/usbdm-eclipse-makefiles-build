@@ -7,9 +7,9 @@
  */
 #include <string.h>
 
-#include "system.h"
-#include "derivative.h"
-#include "ftfl.h"
+#include "../Project_Headers/system.h"
+#include "../Project_Headers/derivative.h"
+#include "../Project_Headers/ftfl.h"
 
 namespace USBDM {
 

@@ -31,10 +31,10 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-Touch-XPT2046" />
                </applyWhen>
-               <copy source="Fonts"                               target="Fonts"                               overwrite="true"/>
-               <copy source="Snippets/fonts.h"                    target="Sources/fonts.h"                     overwrite="true"/>
-               <copy source="Snippets/touch_XPT2046.h"            target="Sources/touch_XPT2046.h"             overwrite="true"/>
-               <copy source="Snippets/touch-example-XPT2046.cpp"  target="Sources/touch-example-XPT2046.cpp"   overwrite="true"/>
+               <copy source="Fonts"                               target="Fonts"                               overwrite="always"/>
+               <copy source="Snippets/fonts.h"                    target="Sources/fonts.h"                     overwrite="always"/>
+               <copy source="Snippets/touch_XPT2046.h"            target="Sources/touch_XPT2046.h"             overwrite="always"/>
+               <copy source="Snippets/touch-example-XPT2046.cpp"  target="Sources/touch-example-XPT2046.cpp"   overwrite="always"/>
                <excludeSourceFile target="Sources/touch-example-XPT2046.cpp"  />
                <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
                   <value>EPAPER_AVAILABLE</value>

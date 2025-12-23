@@ -108,6 +108,7 @@
       target="inputClockFrequency"
       typeName="LptmrClockSel"
       baseType="uint8_t"
+      enumOr="auto"
       description="Clock source for LPTMR"
       toolTip="Selects the clock source for LPTMR\n
                Should only be altered when timer is disabled." >
@@ -136,6 +137,7 @@
       valueFormat="LPTMR_PSR_PBYP(%s),LPTMR_PSR_PRESCALE(%s)"
       typeName="LptmrPrescale"
       baseType="uint8_t"
+      enumOr="auto"
       toolTip="Configures the size of the Prescaler in Time Interval mode\n
                Should only be altered when timer is disabled." >
       <choice value="1,0"  name="Prescaler = 1"      ref="(inputClockFrequency)"        enum="Direct"       />
@@ -215,6 +217,7 @@
       valueFormat="LPTMR_PSR_PBYP(%s),LPTMR_PSR_PRESCALE(%s)"
       typeName="LptmrGlitchFilter"
       baseType="uint8_t"
+      enumOr="auto"
       toolTip="Configures the size of the glitch filter in Pulse Counting mode\n
                Should only be altered when timer is disabled." >
       <choice value="1,0"  name="No glitch filter"                 ref="0."                         enum="Direct"       />
@@ -248,6 +251,7 @@
       enabledBy="enablePeripheralSupport&amp;&amp;lptmr_csr_tms"
       typeName="LptmrInput"
       baseType="uint8_t"
+      enumOr="auto"
       description="Input Pin"
       toolTip="Input source to be used in Pulse Counter mode\n
                Should only be altered when timer is disabled." >
@@ -264,6 +268,7 @@
       enabledBy="enablePeripheralSupport&amp;&amp;lptmr_csr_tms"
       typeName="LptmrInputEdge"
       baseType="uint8_t"
+      enumOr="auto"
       description="Pin Polarity"
       toolTip="Polarity of the input source in Pulse Counter mode\n
                Should only be altered when timer is disabled." >
@@ -839,6 +844,45 @@
    ]]></clockCodeTemplate>
 </for>
 
+<for keys="   pinName       : name        : function     : pcrFunction"
+     values=" $(_NAME)_ALT1 : LptmrAlt1In : setAlt1Input : setInput ;
+              $(_NAME)_ALT2 : LptmrAlt2In : setAlt2Input : setInput" >
+
+   <equation key="index" value='=IndexOfSignal("%(pinName)")'  />
+   <!-- printVar key="index" / -->
+   <template where="info" codeGenCondition='$(_InfoGuard)&amp;&amp;SignalIsMapped("%(pinName)")'
+         immediateVariables="index" >
+   <![CDATA[
+      \t/// GPIO associated with $(_NAME) pin (%(pinName))
+      \t//typedef GpioTable_T<$(_Info), $(index), ActiveHigh> Gpio%(name);
+      \t
+      \t/// Allow access to PCR of $(_NAME) pin (%(pinName))
+      \ttypedef PcrTable_T<$(_Info), $(index)> %(name)Pin;
+      \t
+      \t/**
+      \t * Enable %(pinName) pin and connects to $(_NAME).
+      \t * Configures all Pin Control Register (PCR) values to device default.
+      \t */
+      \tstatic void %(function)() {
+      \t
+      \t   %(name)Pin::%(pcrFunction)();
+      \t}
+      \t
+      \t/**
+      \t * Enable %(pinName) pin and connects to $(_NAME).
+      \t * Configures all Pin Control Register (PCR) values.
+      \t *
+      \t * @param pcrValue  PCR value controlling pin characteristics
+      \t */
+      \tstatic void %(function)(PcrValue pcrValue) {
+      \t
+      \t   %(name)Pin::%(pcrFunction)(pcrValue);
+      \t}
+      \t\n
+   ]]>
+   </template>
+</for>
+
 <!-- ====================================================================================================== -->
 <!--     START BasicInfo::Init class      -->
 <!-- ====================================================================================================== -->
@@ -1250,10 +1294,8 @@
    <template where="info" codeGenCondition="$(_InfoIrqGuard)" >
    <![CDATA[
       \t   // Configure call-back
-      \t   if (init.callbacks[0] != nullptr) {
-      \t      setCallback(init.callbacks[0]);
-      \t      enableNvicInterrupts(init.priorities[0]);
-      \t   }
+      \t   setCallback(init.callbacks[0]);
+      \t   enableNvicInterrupts(init.priorities[0]);
       \t\n
    ]]>
    </template>
@@ -1395,16 +1437,16 @@
    </validate>
 
    <projectActionList id="lptmr_files" >
-      <copy source="Project_Headers/lptmr.h"                   target="Project_Headers/lptmr.h"                      overwrite="true" derived="true" />
-      <copy source="Snippets/lptmr-example.cpp"                target="Snippets/lptmr-example.cpp"                   overwrite="true" derived="true" />
-      <copy source="Snippets/lptmr-reaction-time.cpp"          target="Snippets/lptmr-reaction-time.cpp"             overwrite="true" derived="true" />
-      <copy source="Snippets/timer-inline-handler-example.cpp" target="Snippets/timer-inline-handler-example.cpp"    overwrite="true" derived="true" />
+      <copy source="Project_Headers/lptmr.h"                   target="Project_Headers/lptmr.h"                      overwrite="always" derived="true" />
+      <copy source="Snippets/lptmr-example.cpp"                target="Snippets/lptmr-example.cpp"                   overwrite="always" derived="true" />
+      <copy source="Snippets/lptmr-reaction-time.cpp"          target="Snippets/lptmr-reaction-time.cpp"             overwrite="always" derived="true" />
+      <copy source="Snippets/timer-inline-handler-example.cpp" target="Snippets/timer-inline-handler-example.cpp"    overwrite="always" derived="true" />
    </projectActionList>
 
    <!-- ____ Startup ____ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

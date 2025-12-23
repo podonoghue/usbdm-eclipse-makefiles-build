@@ -821,12 +821,17 @@
 <!--     START enable/disable methods -->
 <!--====================================================================================================== -->
 
+   <if condition="_virtualEnable" >
+      <equation key="_namePrefix" value="_"/>
+   <else/>
+      <equation key="_namePrefix" value="" />
+   </if>
    <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
       \t/**
       \t * Basic enable of $(_Class)
       \t * Includes enabling clock and configuring all mapped pins if mapPinsOnEnable is selected in configuration
       \t */
-      \tstatic void enable() {\n
+      \tstatic void $(_namePrefix)enable() {\n
    ]]></template>
    <template codeGenCondition="enablePeripheralSupport" condition="clock_data" ><![CDATA[
       \t   enableClock();\n
@@ -840,7 +845,7 @@
       \t/**
       \t * Disables $(_Class)
       \t */
-      \tstatic void disable() {
+      \tstatic void $(_namePrefix)disable() {
       \t
       \t   $(disable_peripheral: )\n
    ]]></template>
@@ -858,7 +863,6 @@
             \t   disableNvicInterrupts(IrqNum_$(prettyIrqNum));\n
          ]]></template>
       </for>
-
       <template codeGenCondition="enablePeripheralSupport" condition="!suppressHardwareIrq&amp;&amp;(@_hardwareIrqCount==1)" >
       <![CDATA[
          \t   disableNvicInterrupts();\n
@@ -871,6 +875,24 @@
       \t   disableClock();\n
    ]]></template>
    <template codeGenCondition="enablePeripheralSupport" ><![CDATA[
+      \t}
+      \t\n
+   ]]></template>
+
+   <template codeGenCondition="enablePeripheralSupport" condition="_virtualEnable"><![CDATA[
+      \t/**
+      \t * Basic enable of $(_Class)
+      \t * Includes enabling clock and configuring all mapped pins if mapPinsOnEnable is selected in configuration
+      \t */
+      \tvoid enable() const override {
+      \t   _enable();
+      \t}
+      \t
+      \t/**
+      \t * Disables $(_Class)
+      \t */
+      \tvoid disable() const override {
+      \t   _disable();
       \t}
       \t\n
    ]]></template>

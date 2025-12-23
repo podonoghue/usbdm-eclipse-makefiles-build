@@ -15,7 +15,8 @@
  * Any manual changes will be lost.
  */
 #include "derivative.h"
-#include "hardware.h"
+#include "pin_mapping.h"
+#include "gpio.h"
 
 $(/EWM/prototypes:// $/EWM/prototypes not found)
 

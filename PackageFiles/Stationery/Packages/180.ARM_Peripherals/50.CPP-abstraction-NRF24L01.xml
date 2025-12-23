@@ -33,9 +33,9 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-NRF24L01" />
                </applyWhen>
-               <copy source="Snippets/nrf24l01-example.cpp"       target="Snippets/nrf24l01-example.cpp"  overwrite="true"/>
-               <copy source="Snippets/nrf24l01.h"                 target="Snippets/nrf24l01.h"            overwrite="true"/>
-               <copy source="Snippets/nrf24l01.cpp"               target="Snippets/nrf24l01.cpp"          overwrite="true"/>
+               <copy source="Snippets/nrf24l01-example.cpp"       target="Snippets/nrf24l01-example.cpp"  overwrite="always"/>
+               <copy source="Snippets/nrf24l01.h"                 target="Snippets/nrf24l01.h"            overwrite="always"/>
+               <copy source="Snippets/nrf24l01.cpp"               target="Snippets/nrf24l01.cpp"          overwrite="always"/>
             </projectActionList>
          </projectActionList>
       </projectActionList>

@@ -175,7 +175,7 @@
       toolTip="As the channel completes the major loop, this option enables the linking to another channel. \n
                The link target channel initiates a channel service request via an internal mechanism that sets the \n
                TCDn_CSR[START] bit of the specified channel. \n
-               NOTE: To support the dynamic linking coherency model, the DMA_CSR_MAJORELINK field is forced to zero when \n
+               @note To support the dynamic linking coherency model, the DMA_CSR_MAJORELINK field is forced to zero when \n
                written to while the TCDn_CSR[DONE] bit is set" >
       <choice value="0,0"  name="Channel-to-channel linking is disabled" enum="Disabled" />
       <choiceExpansion keys="ch" dim="=NumChannels" value="1,%(ch)" name="Link to channel %(ch)" enum="Ch_%(ch)" />
@@ -188,7 +188,7 @@
       toolTip="If selected, scatter/gather processing occurs when the channel completes the major loop. \n
                The eDMA engine uses DLASTSGA as a memory pointer to a 0-modulo-32 address containing a 32-byte \n
                data structure loaded as the transfer control descriptor into the local memory. \n
-               NOTE: To support the dynamic scatter/gather coherency model, this field is forced to zero when written \n
+               @note To support the dynamic scatter/gather coherency model, this field is forced to zero when written \n
                to while the TCDn_CSR[DONE] bit is set" >
       <choice value="0" name="TCD is normal format"                  enum="Disabled" />
       <choice value="1" name="TCD specifies a scatter gather format" enum="Enabled"  />
@@ -213,7 +213,7 @@
                performed by the eDMA engine is (CITER == (BITER >> 1)). This halfway point interrupt request is \n
                provided to support double-buffered, also known as ping-pong, schemes or other types of data movement \n
                where the processor needs an early indication of the transfer’s progress. \n
-               NOTE: If BITER = 1, do not use INTHALF. Use INTMAJOR instead" >
+               @note If BITER = 1, do not use INTHALF. Use INTMAJOR instead" >
       <choice value="0" name="The half-point interrupt is disabled" enum="Disabled" />
       <choice value="1" name="The half-point interrupt is enabled"  enum="Enabled"  />
    </binaryOption>
@@ -263,7 +263,9 @@
    <!-- ************* DCHPRI ****************** -->
 
    <binaryOption key="dma_dchpri_ecp" condition="dma_dchpri_ecp_present"
+      enumOr="auto"
       hidden="true"
+      templateKey="/$(_BASENAME)/peripheral_h_types"
       typeName="DmaCanBePreempted"
       toolTip="Allows suspension of this channel by a higher priority channel"
       description="Enable Channel Preemption" >
@@ -272,7 +274,9 @@
    </binaryOption >
 
    <binaryOption key="dma_dchpri_dpa" condition="dma_dchpri_dpa_present"
+      enumOr="auto"
       hidden="true"
+      templateKey="/$(_BASENAME)/peripheral_h_types"
       typeName="DmaCanPreemptLower"
       toolTip="Disallows the channel to suspend lower priority channels"
       description="Disable Preempt Ability" >
@@ -281,7 +285,9 @@
    </binaryOption >
 
    <choiceOption key="dma_dchpri_chpri" condition="dma_dchpri_chpri_present"
+      enumOr="auto"
       hidden="true"
+      templateKey="/$(_BASENAME)/peripheral_h_types"
       typeName="DmaPriority"
       toolTip="Channel priority when fixed-priority arbitration is enabled\n
                Lower values are higher priority."
@@ -335,7 +341,9 @@
       \t   /**
       \t    * Copy Constructor
       \t    */
-      \t   constexpr DmaTcdCsr(const DmaTcdCsr &other) = default;
+      \t   constexpr DmaTcdCsr(const DmaTcdCsr &other) {
+      \t      csr = other.csr;
+      \t   }
       \t
       \t   /**
       \t    * Default Constructor
@@ -599,20 +607,20 @@
    </validate>
 
    <projectActionList id="dma_files" >
-      <copy source="Project_Headers/dma-MK.h"                   target="Project_Headers/dma.h"                      overwrite="true"  derived="true" />
-      <copy source="Snippets/dma-memory-example.cpp"            target="Snippets/dma-memory-example.cpp"            overwrite="true"  derived="true" />
-      <copy source="Snippets/dma-memory-template-example.cpp"   target="Snippets/dma-memory-template-example.cpp"   overwrite="true"  derived="true" />
-      <copy source="Snippets/dma-uart-example-mk20.cpp"         target="Snippets/dma-uart-example-mk20.cpp"         overwrite="true"  derived="true" />
-      <copy source="Snippets/dma-uart-example-mk22f.cpp"        target="Snippets/dma-uart-example-mk22f.cpp"        overwrite="true"  derived="true" />
-      <copy source="Snippets/dma-uart-example-mk28f.cpp"        target="Snippets/dma-uart-example-mk28f.cpp"        overwrite="true"  derived="true" />
-      <copy source="Snippets/dma-spi-example.cpp"               target="Snippets/dma-spi-example.cpp"               overwrite="true"  derived="true" />
-      <copy source="Snippets/pit-adc-dma-example.cpp"           target="Snippets/pit-adc-dma-example.cpp"           overwrite="true"  derived="true" />
+      <copy source="Project_Headers/dma-MK.h"                   target="Project_Headers/dma.h"                      overwrite="always"  derived="true" />
+      <copy source="Snippets/dma-memory-example.cpp"            target="Snippets/dma-memory-example.cpp"            overwrite="always"  derived="true" />
+      <copy source="Snippets/dma-memory-template-example.cpp"   target="Snippets/dma-memory-template-example.cpp"   overwrite="always"  derived="true" />
+      <copy source="Snippets/dma-uart-example-mk20.cpp"         target="Snippets/dma-uart-example-mk20.cpp"         overwrite="always"  derived="true" />
+      <copy source="Snippets/dma-uart-example-mk22f.cpp"        target="Snippets/dma-uart-example-mk22f.cpp"        overwrite="always"  derived="true" />
+      <copy source="Snippets/dma-uart-example-mk28f.cpp"        target="Snippets/dma-uart-example-mk28f.cpp"        overwrite="always"  derived="true" />
+      <copy source="Snippets/dma-spi-example.cpp"               target="Snippets/dma-spi-example.cpp"               overwrite="always"  derived="true" />
+      <copy source="Snippets/pit-adc-dma-example.cpp"           target="Snippets/pit-adc-dma-example.cpp"           overwrite="always"  derived="true" />
    </projectActionList>
 
    <!-- ************* Startup ****************** -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

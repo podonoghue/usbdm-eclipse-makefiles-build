@@ -13,10 +13,10 @@
          </and>
       </applyWhen>
       <!-- Clock -->
-      <copy source="Startup_Code/clock-MCG-MKxxM12-DualPLL.c"              target="Startup_Code/clock.c"              overwrite="true" />
-      <copy source="Project_Headers/clock_configure-MCG-MKxxM12-DualPLL.h" target="Project_Headers/clock_configure.h" overwrite="true" />
+      <copy source="Startup_Code/clock-MCG-MKxxM12-DualPLL.c"              target="Startup_Code/clock.c"              overwrite="always" />
+      <copy source="Project_Headers/clock_configure-MCG-MKxxM12-DualPLL.h" target="Project_Headers/clock_configure.h" overwrite="always" />
       <!-- Console -->
-      <copy source="Startup_Code/console-mk.c" target="Startup_Code/console.c"    overwrite="true" />
-      <copy source="Project_Headers/console.h" target="Project_Headers/console.h" overwrite="true" />
+      <copy source="Startup_Code/console-mk.c" target="Startup_Code/console.c"    overwrite="always" />
+      <copy source="Project_Headers/console.h" target="Project_Headers/console.h" overwrite="always" />
    </projectActionList>
 </root>

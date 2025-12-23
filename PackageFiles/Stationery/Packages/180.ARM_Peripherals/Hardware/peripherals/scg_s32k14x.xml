@@ -901,8 +901,8 @@
    </validate>
    
    <projectActionList id = "scg_files" >
-      <copy source="Startup_Code/scg.cpp"       target="Startup_Code/scg.cpp"   overwrite="true"  derived="true" />
-      <copy source="Project_Headers/scg.h"      target="Project_Headers/scg.h"  overwrite="true"  derived="true" />
+      <copy source="Startup_Code/scg.cpp"       target="Startup_Code/scg.cpp"   overwrite="always"  derived="true" />
+      <copy source="Project_Headers/scg.h"      target="Project_Headers/scg.h"  overwrite="always"  derived="true" />
       <deleteResource target="Project_Headers/clock_configure.h" />
       <deleteResource target="Startup_Code/clock.c" />
    </projectActionList>

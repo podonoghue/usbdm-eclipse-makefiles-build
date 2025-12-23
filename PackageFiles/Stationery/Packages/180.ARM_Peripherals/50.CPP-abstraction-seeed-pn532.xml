@@ -33,9 +33,9 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-PN532" />
                </applyWhen>
-               <copy source="Snippets/seeed-pn532-example.cpp"     target="Snippets/seeed-pn532-example.cpp" overwrite="true" />
-               <copy source="Snippets/pn532.h"                     target="Snippets/pn532.h"                 overwrite="true" />
-               <copy source="Snippets/pn532.cpp"                   target="Snippets/pn532.cpp"               overwrite="true" />
+               <copy source="Snippets/seeed-pn532-example.cpp"     target="Snippets/seeed-pn532-example.cpp" overwrite="always" />
+               <copy source="Snippets/pn532.h"                     target="Snippets/pn532.h"                 overwrite="always" />
+               <copy source="Snippets/pn532.cpp"                   target="Snippets/pn532.cpp"               overwrite="always" />
             </projectActionList>
          </projectActionList>
       </projectActionList>

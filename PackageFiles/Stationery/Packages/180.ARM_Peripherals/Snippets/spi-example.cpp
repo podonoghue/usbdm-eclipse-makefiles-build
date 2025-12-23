@@ -49,37 +49,40 @@ static constexpr SpiFrameSize frameSize = SpiFrameSize_8_bits; // 4-8
 #endif
 #endif
 
-// Single configuration
-static const Spi0::Init configuration {
-   {
-      // Shared configuration - not usually modified after initial configuration
-      SpiPcsActiveLow_None,                 // All PCSs active-high
-      SpiFreeze_Enabled,                    // Freeze in debug
-      SpiDoze_Enabled,                      // Doze in sleep
+// SPI base configuration
+static const Spi0::Init baseConfiguration {
+   // Shared configuration - not usually modified after initial configuration
+   SpiPcsActiveLow_Pcs0,                 // PCS0 active-low, others active-high
+   SpiFreeze_Enabled,                    // Freeze in debug
+   SpiDoze_Enabled,                      // Doze in sleep
 
-      // These are initial transfer settings. Can be changed using selectConfiguration().
-      SpiCtarSelect_0,                       // Use CTAR0
-      SpiPeripheralSelect_Pcs1,              // PCS0 is asserted during transfer
-      SpiPeripheralSelectMode_Transaction    // PCSx negated between transactions
-   },
-   //                                 Speed   Mode       Frame Size
-   /* Configuration (all CTARs)  */ { 10_MHz, SpiMode_3, frameSize},
+   // These are initial transfer settings.
+   // Can be changed using selectConfiguration(...) or startTransaction(...)
+   SpiCtarSelect_0,                       // Use CTAR0
+   SpiPeripheralSelect_Pcs0,              // PCS1 is asserted during transfer
+   SpiPeripheralSelectMode_Transaction,   // PCSx negated between transactions
+};
+
+// SPI communication configuration
+static const Spi::SerialInit serialInit {
+   1_MHz ,                 // Speed of interface
+   SpiMode_0 ,             // Mode - Mode 0: CPOL=0, CPHA=0
+   frameSize ,             // SPI Frame sizes - 8 bits/transfer
+   SpiBitOrder_LsbFirst,   // Transmission order - LSB sent first
 };
 
 int main() {
-   // Create SPI with above configuration
-   Spi0 spi(configuration);
 
-   // Select configuration to use (CTAR & PCS options)
-   // This can be used to change the defaults set up in the above configuration
-//   spi.selectConfiguration(
-//         SpiCtarSelect_0,                       // Use CTAR0
-//         SpiPeripheralSelect_0,                 // PCS0 is asserted during transfer
-//         SpiPeripheralSelectMode_Transaction    // PCSx goes low between transactions
-//   );
+   // Create SPI with above baseConfiguration
+   Spi0 spi(baseConfiguration);
 
-   //   auto cconfig = spi.getConfiguration();
-   //   spi.setConfiguration(cconfig);
+   // Set polarity of User PCS
+   // Done above
+//   spi.setPcsPolarityActiveLow(SpiPeripheralSelect_UserPcs);
+
+   // Calculate communication baseConfiguration
+   auto communicationConfiguration = spi.calculateConfiguration(serialInit,
+         SpiPeripheralSelect_UserPcs, SpiPeripheralSelectMode_Transaction, SpiCtarSelect_0);
 
    for(int count=0;;count++) {
       /*
@@ -105,8 +108,8 @@ int main() {
       }
 #endif
 
-      spi.startTransaction();
-      spi.txRx(txDataA, rxData1);          // N items tx-rx
+      spi.startTransaction(communicationConfiguration);
+      spi.txRx(txDataA, rxData1, false);   // N items tx-rx
       spi.txRx(txDataA, rxData2);          // N items tx-rx
       rxData3 = spi.txRx(txDataA[0]);      // 1 item tx-rx
       rxData4 = spi.txRxFinal(txDataA[1]); // 1 item tx-rx

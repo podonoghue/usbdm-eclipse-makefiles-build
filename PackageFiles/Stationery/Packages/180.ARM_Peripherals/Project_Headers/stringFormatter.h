@@ -15,7 +15,7 @@
 #ifndef PROJECT_HEADERS_STRINGFORMATTER_H_
 #define PROJECT_HEADERS_STRINGFORMATTER_H_
 
-#include <formatted_io.h>
+#include "formatted_io.h"
 
 namespace USBDM {
 

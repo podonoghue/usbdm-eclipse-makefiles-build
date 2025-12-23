@@ -34,8 +34,8 @@
    />
    
    <projectActionList id = "lpi2c_files" >
-      <copy source="Project_Headers/lpi2c.h"  target="Project_Headers/lpi2c.h"            overwrite="true"  derived="true" />
-      <copy source="Sources/lpi2c.cpp"        target="Sources/lpi2c.cpp"                  overwrite="true"  derived="true" />
+      <copy source="Project_Headers/lpi2c.h"  target="Project_Headers/lpi2c.h"            overwrite="always"  derived="true" />
+      <copy source="Sources/lpi2c.cpp"        target="Sources/lpi2c.cpp"                  overwrite="always"  derived="true" />
    </projectActionList>
     
    <signals/>

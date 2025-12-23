@@ -4,11 +4,24 @@
  */
 #include "cmt-remote.h"
 #include "hardware.h"
+#include "pit.h"
 
 using namespace USBDM;
 
-// Debug LED connection - change as required
-using DebugLed = Digital_D1;
+/**
+ * Callback from CMT.
+ *
+ * This processes each timing interval of the transmission.
+ */
+void IrRemote::pitCallback() {
+
+   DebugLed::off();
+
+//   intCount++;
+
+   console.writeln("IrRemote: Delay complete");
+   busyFlag = false;
+}
 
 /**
  * Callback from CMT.
@@ -29,9 +42,11 @@ void IrRemote::cmtCallback() {
    /** Time since start of current packet */
    static Ticks progress;
 
+   /*
+    * Note initial bit transmission (start bit) occurs before 1st interrupt so
+    * s_Start starts with 1st data bit
+    */
    if (Cmt::getEndOfCycleFlag()) {
-
-      DebugLed::on();
 
       // This switch uses state from the last action
       switch(state) {
@@ -76,8 +91,8 @@ void IrRemote::cmtCallback() {
             if (bitNum==parameters.packetLength) {
                // Currently sending last bit
                if (protocol == p_SONY_TV) {
-                  // Done - set up for next packet
-                  state = s_Complete;
+                  // Done - do trailer
+                  state = s_SpaceTrailer;
                }
                else {
                   // Set up stop bit
@@ -88,10 +103,15 @@ void IrRemote::cmtCallback() {
 
          case s_Stop:
             // Currently sending stop bit
-            state = s_Trailer;
+            state = s_SpaceTrailer;
             break;
 
-         case s_Trailer:
+         case s_SpaceTrailer:
+            // Currently sending trailing space
+            state = s_Complete;
+            break;
+
+         case s_MarkTrailer:
             // Currently sending trailing space
             state = s_Complete;
             break;
@@ -141,32 +161,56 @@ void IrRemote::cmtCallback() {
             progress = progress + parameters.zeroHigh+parameters.zeroLow;
             break;
 
-         case s_Trailer:
-            // Set up trailer
+         case s_MarkTrailer:
+            // Set up high trailer
             remainingTimeSplit = Ticks((parameters.repeatTime-progress)/2);
-            Cmt::setExtendedSpace(CmtExtendedSpace_Disabled);
+            Cmt::setOutputControl(CmtOutput_Disabled);
+            Cmt::setMarkSpacePeriods(remainingTimeSplit, remainingTimeSplit);
+            break;
+
+
+         case s_SpaceTrailer:
+            // Set up low trailer
+            remainingTimeSplit = Ticks((parameters.repeatTime-progress)/2);
+            Cmt::setExtendedSpace(CmtExtendedSpace_Enabled);
             Cmt::setMarkSpacePeriods(remainingTimeSplit, remainingTimeSplit);
             break;
 
          case s_Complete:
-            // Set up for next packet
-            Cmt::setExtendedSpace(CmtExtendedSpace_Disabled);
-            Cmt::setMarkSpacePeriods(parameters.startHigh, parameters.startLow);
 
             if (++repeatCount >= parameters.repeats) {
                // Completed entire sequence of repeats
+
+               // Set up for next packet
+               Cmt::setExtendedSpace(CmtExtendedSpace_Disabled);
+               Cmt::setOutputControl(CmtOutput_ActiveHigh);
+               Cmt::setMarkSpacePeriods(parameters.startHigh, parameters.startLow);
 
                // Disable CMT
                Cmt::stop();
 
                // Clear Interrupt flag
                Cmt::clearEndOfCycleFlag();
+
+               if (delayInMilliseconds == 0) {
+                  busyFlag = false;
+                  return;
+               }
+               // Set up PIT call-back
+               Pit::enable();
+               Pit::enableNvicInterrupts(Pit::IrqNum_Ch0);
+               Pit::defaultConfigureIfNeeded();
+               Pit::oneShotInMilliseconds(PitChannelNum_0, pitCallback, delayInMilliseconds);
+               DebugLed::on();
             }
             else {
+               // Set up for repeat packet
+               Cmt::setExtendedSpace(CmtExtendedSpace_Disabled);
+               Cmt::setOutputControl(CmtOutput_ActiveHigh);
+               Cmt::setMarkSpacePeriods(parameters.repeatHigh, parameters.repeatLow);
                state = s_Start;
             }
             break;
       }
    }
-   DebugLed::off();
 }

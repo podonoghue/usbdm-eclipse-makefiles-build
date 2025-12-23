@@ -4,30 +4,173 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Serial Peripheral Interface" >
 
+   <option key="debugGuards" value="true" />
+
+   <!-- ____ Class Declarations ________ -->
+   <constant key="_basicInfo_declaration" type="String" value='"$(_BasicInfo)"' />
+
+   <!-- ____ Class Declaration ________ -->
+   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_BasicInfo)"' />
+
    <constant key="definitionsInHeader" value="true" type="Boolean" />
 
-   <equation key="no_initvectors"             value="true"      />
-   <equation key="suppressIrqHandler"         value="" />
-   <equation key="irq_parameters"             value="ErrorCode errorcode"  />
-   <equation key="irq_dummy_parameters"       value="ErrorCode"            />
-   <equation key="irq_call_parameters"        value="E_NO_ERROR"           />
-   <equation key="generateDefault"            value="false"         />
-   <equation key="configureInStartupDefault"  value="false"         />
+   <!-- ____ Instance control ________ -->
+   <constant key="_can_create_instance" value="true" type="Boolean" />
+
+   <equation key="_virtualEnable"             value="true" />
+
+   <equation key="irq_parameters"             value=""          />
+   <equation key="irq_dummy_parameters"       value=""          />
+   <equation key="irq_call_parameters"        value=""          />
+   <equation key="generateDefault"            value="false"     />
+   <equation key="configureInStartupDefault"  value="false"     />
    <xi:include href="enablePeripheral.xml"    />
+   <title />
 
-   <!-- _____________ Class Declaration __________________ -->
-   <constant key="_class_declaration" type="String" value='"$(_Info) : public $(_Baseclass)BasicInfo"' />
+   <!-- ____ TCR ____ -->
+   <intOption key="spi_tcr_spi_tcnt" condition="spi_tcr_spi_tcnt_present"
+      hidden="true"
+      typeName="SpiTransferCounter"
+      baseType="uint16_t"
+      toolTip=""
+      description="Transfer Counter"
+      value="0"
+      min="0" max="65535"
+   />
 
-   <template><![CDATA[
-      \t//! Pin number in Info table for SCK if mapped to a pin
-      \tstatic constexpr int sckPin  = 0;
+   <!-- ____ SR ____ -->
+   <binaryOption key="spi_sr_tcf" condition="spi_sr_tcf_present"
+      hidden="true"
+      typeName="SpiTransferFlag"
+      baseType="uint32_t"
+      toolTip=""
+      description="Transfer Complete Flag" >
+      <choice name="Transfer not complete"  value="0" enum="NotComplete" />
+      <choice name="Transfer complete"      value="1" enum="Complete" />
+   </binaryOption >
 
-      \t//! Pin number in Info table for SIN if mapped to a pin
-      \tstatic constexpr int sinPin  = 1;
+   <binaryOption key="spi_sr_txrxs" condition="spi_sr_txrxs_present"
+      hidden="true"
+      typeName="SpiTxAndRxStatus"
+      baseType="uint32_t"
+      toolTip="Indicates the status of transmit and receive operations"
+      description="TX and RX Status" >
+      <choice name="Tx/Rx disabled"  value="0" enum="TxRxDisabled" />
+      <choice name="Tx/Rx enabled"   value="1" enum="TxRxEnabled" />
+   </binaryOption >
 
-      \t//! Pin number in Info table for SOUT if mapped to a pin
-      \tstatic constexpr int soutPin  = 2;\n\n
-   ]]></template>
+   <binaryOption key="spi_sr_eoqf" condition="spi_sr_eoqf_present"
+      hidden="true"
+      typeName="SpiEndOfQueueFlag"
+      baseType="uint32_t"
+      toolTip="Indicates if EOQ is set in the executing command"
+      description="End of Queue Flag" >
+      <choice name="EOQ not set"  value="0" enum="EoqNotSet" />
+      <choice name="EOQ set"      value="1" enum="EoqSet" />
+   </binaryOption >
+
+   <binaryOption key="spi_sr_tfuf" condition="spi_sr_tfuf_present"
+      hidden="true"
+      typeName="SpiTransmitFifoUnderflowFlag"
+      baseType="uint32_t"
+      toolTip=""
+      description="Transmit FIFO Underflow Flag" >
+      <choice name="No Tx FIFO underflow"  value="0" enum="NoTxFifoUnderflow" />
+      <choice name="Tx FIFO underflow"     value="1" enum="TxFifoUnderflow" />
+   </binaryOption >
+
+   <binaryOption key="spi_sr_tfff" condition="spi_sr_tfff_present"
+      hidden="true"
+      typeName="SpiTransmitFifoFillFlag"
+      baseType="uint32_t"
+      toolTip=""
+      description="Transmit FIFO Fill Flag" >
+      <choice name="Tx FIFO is full"      value="0" enum="TxFifoIsFull" />
+      <choice name="Tx FIFO is not full"  value="1" enum="TxFifoIsNotFull" />
+   </binaryOption >
+
+   <binaryOption key="spi_sr_rfof" condition="spi_sr_rfof_present"
+      hidden="true"
+      typeName="SpiReceiveFifoOverflowFlag"
+      baseType="uint32_t"
+      toolTip="Indicates an overflow condition in the RX FIFO.\n
+               The field is set when the RX FIFO and shift register are full and a transfer is initiated.\n
+               The bit remains set until it is cleared by writing a 1 to it"
+      description="Receive FIFO Overflow Flag" >
+      <choice name="No Rx FIFO overflow"            value="0" enum="NoRxFifoOverflow" />
+      <choice name="Rx FIFO overflow has occurred"  value="1" enum="RxFifoOverflowHasOccurred" />
+   </binaryOption >
+
+   <binaryOption key="spi_sr_rfdf" condition="spi_sr_rfdf_present"
+      hidden="true"
+      typeName="SpiReceiveFifoDrainFlag"
+      baseType="uint32_t"
+      toolTip="Provides a method for the SPI to request that entries be removed from the RX FIFO.\n
+               The bit is set while the RX FIFO is not empty.\n
+               The RFDF bit can be cleared by writing 1"
+      description="Receive FIFO Drain Flag" >
+      <choice name="Rx FIFO is empty"      value="0" enum="RxFifoIsEmpty" />
+      <choice name="Rx FIFO is not empty"  value="1" enum="RxFifoIsNotEmpty" />
+   </binaryOption >
+
+   <bitfieldOption key="spi_sr_stat"
+      hidden="true"
+      derived="true"
+      valueFormat="(%s)"
+      bitmask="0xDA0A0000"
+      generateOperators="true"
+      typeName="SpiStatusFlag"
+      baseType="uint32_t"
+      toolTip="These masks may be used to test or modify the status flags"
+      description="Status Flags" >
+      <bitField var="spi_sr_tcf"    bit="31"    condition="spi_sr_tcf_present"   />
+      <bitField var="spi_sr_txrxs"  bit="30"    condition="spi_sr_txrxs_present" />
+      <bitField var="spi_sr_eoqf"   bit="28"    condition="spi_sr_eoqf_present"  />
+      <bitField var="spi_sr_tfuf"   bit="27"    condition="spi_sr_tfuf_present"  />
+      <bitField var="spi_sr_tfff"   bit="25"    condition="spi_sr_tfff_present"  />
+      <bitField var="spi_sr_rfof"   bit="19"    condition="spi_sr_rfof_present"  />
+      <bitField var="spi_sr_rfdf"   bit="17"    condition="spi_sr_rfdf_present"  />
+      <bitField name="NoFlags"      bit="none"  description="No flags"           />
+      <bitField name="AllFlags"     bit="all"   description="All flags"          />
+   </bitfieldOption>
+
+   <intOption key="spi_sr_txctr" condition="spi_sr_txctr_present"
+      hidden="true"
+      derived="true"
+      typeName="uint32_t"
+      toolTip="Indicates the number of valid entries in the TX FIFO.\n
+               The TXCTR is incremented every time the PUSHR is written.\n
+               The TXCTR is decremented every time an SPI command is executed and the SPI data is transferred to the shift register"
+      description="TX FIFO Counter"
+   />
+
+   <intOption key="spi_sr_txnxtptr" condition="spi_sr_txnxtptr_present"
+      hidden="true"
+      derived="true"
+      typeName="uint32_t"
+      toolTip="Indicates which TX FIFO entry is transmitted during the next transfer.\n
+               The TXNXTPTR field is updated every time SPI data is transferred from the TX FIFO to the shift register"
+      description="Transmit Next Pointer"
+   />
+
+   <intOption key="spi_sr_rxctr" condition="spi_sr_rxctr_present"
+      hidden="true"
+      derived="true"
+      typeName="uint32_t"
+      toolTip="Indicates the number of entries in the RX FIFO.\n
+               The RXCTR is decremented every time the POPR is read.\n
+               The RXCTR is incremented every time data is transferred from the shift register to the RX FIFO"
+      description="RX FIFO Counter"
+   />
+
+   <intOption key="spi_sr_popnxtptr" condition="spi_sr_popnxtptr_present"
+      hidden="true"
+      derived="true"
+      typeName="uint32_t"
+      toolTip="Contains a pointer to the RX FIFO entry to be returned when the POPR is read.\n
+               The POPNXTPTR is updated when the POPR is read"
+      description="Pop Next Pointer"
+   />
 
 <!-- Clocking -->
 
@@ -104,77 +247,73 @@
       />
 
    <!-- DMA/Interrupt Request Select and Enable Register (RSER) register -->
-   <choiceOption key="spi_rser_txfifo"
-      hidden="true"
-      typeName="SpiTxFifoRequest"
+   <title description="DMA/Interrupt Request" />
+
+   <binaryOption key="spi_rser_tcf_re" condition="spi_rser_tcf_re_present"
+      enabledBy="$(_BasicInfoIrqGuard)"
+      typeName="SpiTxCompleteAction"
+      baseType="uint32_t"
+      toolTip="Enables TCF flag in the SR to generate an interrupt request"
+      description="Tx complete action" >
+      <choice value="0" name="No requests"             enum="None"       />
+      <choice value="1" name="Interrupt on completion" enum="Interrupt"  />
+   </binaryOption>
+
+   <binaryOption key="spi_rser_eoqf_re" condition="spi_rser_eoqf_re_present"
+      enabledBy="$(_BasicInfoIrqGuard)"
+      typeName="SpiEndOfQueueAction"
+      baseType="uint32_t"
+      toolTip="Enables the EOQF flag in the SR to generate an interrupt request"
+      description="EOQ action" >
+      <choice value="0" name="No requests"               enum="None" />
+      <choice value="1" name="Interrupt on end of queue" enum="Interrupt"  />
+   </binaryOption>
+
+   <binaryOption key="spi_rser_tfuf_re" condition="spi_rser_tfuf_re_present"
+      enabledBy="$(_BasicInfoIrqGuard)"
+      typeName="SpiTxFifoUnderflowAction"
+      baseType="uint32_t"
+      toolTip="Enables the TFUF flag in the SR to generate an interrupt request"
+      description="TxFIFO Underflow action" >
+      <choice value="0" name="No requests"             enum="None" />
+      <choice value="1" name="Interrupt on underflow"  enum="Interrupt"  />
+   </binaryOption>
+
+   <choiceOption key="spi_rser_txfifo" condition="spi_rser_tfff_re_present&amp;&amp;spi_rser_tfff_dirs_present"
+      enabledBy="$(_BasicInfoIrqGuard)"
+      typeName="SpiTxFifoAction"
       valueFormat="SPI_RSER_TFFF_RE(%s),SPI_RSER_TFFF_DIRS(%s)"
-      description="Transmit FIFO Fill Request interrupt/DMA enable"
-      toolTip="Enable DMA or interrupts requests on Transmit FIFO space" >
-      <choice value="0,0" name="No requests" enum="Disabled"  isDefault="true" />
+      description="Transmit FIFO Fill Request action"
+      toolTip="Transmit FIFO space action" >
+      <choice value="0,0" name="No requests" enum="None"      isDefault="true" />
       <choice value="1,0" name="Interrupt"   enum="Interrupt" />
       <choice value="1,1" name="DMA"         enum="Dma"       />
    </choiceOption>
+
+   <binaryOption key="spi_rser_rfof_re" condition="spi_rser_rfof_re_present"
+      enabledBy="$(_BasicInfoIrqGuard)"
+      typeName="SpiRxFifoOverflowAction"
+      baseType="uint32_t"
+      toolTip="Enables the RFOF flag in the SR to generate an interrupt request"
+      description="RxFIFO Overflow action" >
+      <choice value="0" name="No requests"            enum="None"       />
+      <choice value="1" name="Interrupt on overflow"  enum="Interrupt"  />
+   </binaryOption>
 
    <choiceOption key="spi_rser_rxfifo"
-      hidden="true"
-      typeName="SpiRxFifoRequest"
+      enabledBy="$(_BasicInfoIrqGuard)"
+      typeName="SpiRxFifoAction"
       valueFormat="SPI_RSER_RFDF_RE(%s),SPI_RSER_RFDF_DIRS(%s)"
-      description="Receive FIFO Drain Request interrupt/DMA enable"
-      toolTip="Enable DMA or interrupts requests on Receive FIFO data" >
-      <choice value="0,0" name="No requests" enum="Disabled"  isDefault="true" />
+      description="Receive FIFO Drain Request action"
+      toolTip="Receive FIFO action" >
+      <choice value="0,0" name="No requests" enum="None"      isDefault="true" />
       <choice value="1,0" name="Interrupt"   enum="Interrupt" />
       <choice value="1,1" name="DMA"         enum="Dma"       />
    </choiceOption>
 
-   <binaryOption key="spi_rser_tfuf_re"
-      hidden="true"
-      typeName="SpiTxFifoUnderflowInterrupt"
-      description="TxFIFO Underflow interrupts"
-      toolTip="Controls Transmit FIFO Underflow interrupts (on TFUF flag)" >
-      <choice value="0" name="No requests"             enum="Disabled" />
-      <choice value="1" name="Interrupt on underflow"  enum="Enabled"  />
-   </binaryOption>
-
-   <binaryOption key="spi_rser_rfof_re"
-      hidden="true"
-      typeName="SpiRxFifoOverflowInterrupt"
-      description="RxFIFO Overflow interrupts"
-      toolTip="Receive FIFO Overflow interrupts (on RFOF flag)" >
-      <choice value="0" name="No requests"            enum="Disabled" />
-      <choice value="1" name="Interrupt on overflow"  enum="Enabled"  />
-   </binaryOption>
-
-   <binaryOption key="spi_rser_tcf_re"
-      hidden="true"
-      typeName="SpiTxCompleteInterrupt"
-      description="Tx complete interrupts"
-      toolTip="Transmit complete interrupts (TCF Flag)" >
-      <choice value="0" name="No requests"             enum="Disabled" />
-      <choice value="1" name="Interrupt on completion" enum="Enabled"  />
-   </binaryOption>
-
-   <binaryOption key="spi_rser_eoqf_re"
-      hidden="true"
-      typeName="SpiEndOfQueueInterrupt"
-      description="EOQ interrupts"
-      toolTip="End of Queue interrupts (EOQF flag)" >
-      <choice value="0" name="No requests"               enum="Disabled" />
-      <choice value="1" name="Interrupt on end of queue" enum="Enabled"  />
-   </binaryOption>
-
-
-<!-- Common Options -->
+<!-- Common Options (MCR) -->
 
    <title description="Common Options" toolTip="Options applied to whole peripheral" />
-
-   <binaryOption key="/$(_STRUCTNAME)/dmaSupport"
-      enabledBy="$(_BasicInfoIrqGuard)"
-      modify="true"
-      description="Enable use of DMA"
-      toolTip="This creates some structes to support DMA transfers using the SPI (EXPERIMENTAL)" >
-      <choice value="false" name="Not supported" isDefault="true" />
-      <choice value="true"  name="Supported" />
-   </binaryOption>
 
    <choiceOption key="spi_mcr_pcsis_enum" condition="spi_mcr_pcsis_present"
       hidden="true"
@@ -182,6 +321,7 @@
       valueFormat="SPI_MCR_PCSIS(%s)"
       typeName="SpiPcsActiveLow"
       baseType="uint32_t"
+      enumOr="true"
       generateOperators="true"
       description="Polarity for PCS signals"
       toolTip="Mask to select the polarity of Peripheral Chip Select Lines (PCSx)\n
@@ -192,14 +332,17 @@
    </choiceOption>
 
    <bitmaskOption key="spi_mcr_pcsis" condition="spi_mcr_pcsis_present"
+      enabledBy="enablePeripheralSupport"
       derivedFrom="spi_mcr_pcsis_enum"
       bitmask="0x0"
-      bitList='@SignalList("^SPI\d_(PCS\d)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
+      prettifyEnums="true"
+      bitList='@SignalList("^SPI\d_(PCS\d)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$1")'
       value="0"
-      bitDescription='@"PCS%i is active-low"'
+      bitDescription='@SignalList("^SPI\d_(PCS\d)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
    />
 
    <binaryOption key="spi_mcr_pcsse" condition="spi_mcr_pcsse_present||/SPI1/spi_mcr_pcsse_present||/SPI2/spi_mcr_pcsse_present"
+      enabledBy="enablePeripheralSupport"
       typeName="SpiPcsMode"
       description="PCS_5/PCSS* pin mode"
       toolTip="Select use of PCS_5/PCSS as PCS_5 or PCS strobe*\n
@@ -209,66 +352,48 @@
       <choice value="1" name="Pin is used as a strobe for PCSx" enum="PCSx_Strobe" />
    </binaryOption>
 
-<!--
-   <stringOption
-      hidden="true"
-      derived="true"
-      description="Polarity for PCS signals"
-      valueFormat="%s"
-      key="spi_mcr_pcsis"
-      value="(SpiPcsPolarity)0"
-      />
-
-   <choiceOption key="spi_mcr_pcsis"
-      typeName="SpiPcsPolarity"
-      description="Peripheral Chip Select Polarity"
-      toolTip="Mask to select the polarity of Peripheral Chip Select Lines (PCSx)" >
-      <choice value="0"          name="All PCSx active-high" enum="All_ActiveHigh"  isDefault="true" />
-      <choice value="1&lt;&lt;0" name="PCS 0 Active-low"     enum="0_ActiveLow" />
-      <choice value="1&lt;&lt;1" name="PCS 1 Active-low"     enum="1_ActiveLow" />
-      <choice value="1&lt;&lt;2" name="PCS 2 Active-low"     enum="2_ActiveLow" />
-      <choice value="1&lt;&lt;3" name="PCS 3 Active-low"     enum="3_ActiveLow" />
-      <choice value="1&lt;&lt;4" name="PCS 4 Active-low"     enum="4_ActiveLow" />
-      <choice value="1&lt;&lt;5" name="PCS 5 Active-low"     enum="5_ActiveLow" />
-      <choice value="1&lt;&lt;6" name="PCS 6 Active-low"     enum="6_ActiveLow" />
-      <choice value="1&lt;&lt;7" name="PCS 7 Active-low"     enum="7_ActiveLow" />
-   </choiceOption>
--->
-
-   <choiceOption key="spi_mcr_clr_fifox"
-      hidden="true"
-      valueFormat="SPI_MCR_CLR_TXF(%s),SPI_MCR_CLR_RXF(%s)"
-      typeName="SpiClearFifo"
-      description="Clear selected FIFOs"
-      toolTip="Selectively clear transmit or receive FIFOs" >
-      <choice value="0,0"  name="FIFOs not affected"       enum="None" />
-      <choice value="0,1"  name="Clear Rx FIFO"            enum="Rx" />
-      <choice value="1,0"  name="Clear Tx FIFO"            enum="Tx" />
-      <choice value="1,1"  name="Clear Rx &amp; Tx FIFOs"  enum="Both" />
-   </choiceOption>
-
-   <choiceOption key="spi_mcr_dis_fifox"
-      hidden="true"
-      valueFormat="SPI_MCR_DIS_TXF(%s),SPI_MCR_DIS_RXF(%s)"
-      typeName="SpiEnableFifo"
-      description="Enable selected FIFOs"
-      toolTip="Selectively enable transmit or receive FIFOs" >
-      <choice value="0,0"  name="Rx and Tx FIFOs enabled"    enum="Both" isDefault="true" />
-      <choice value="0,1"  name="Enable Rx FIFO"             enum="Rx"   />
-      <choice value="1,0"  name="Enable Tx FIFO"             enum="Tx"   />
-      <choice value="1,1"  name="Disable Rx &amp; Tx FIFOs"  enum="None" />
-   </choiceOption>
-
-   <binaryOption key="spi_mcr_mstr"
+   <binaryOption key="spi_mcr_mstr" condition="spi_mcr_mstr_present"
       hidden="true"
       typeName="SpiMasterSlave"
-      description="Master or Slave operation"
-      toolTip="Whether to operate as Master or Slave device" >
+      baseType="uint32_t"
+      toolTip="Whether to operate as Master or Slave device"
+      description="Master or Slave operation" >
       <choice value="0" name="Operate as Master" enum="Slave"   />
-      <choice value="1" name="Operate as Slave"  enum="Master"  />
+      <choice value="1" name="Operate as Slave"  enum="Master" isDefault="true" />
    </binaryOption>
 
-   <choiceOption key="spi_mcr_mtfe"
+   <binaryOption key="spi_mcr_cont_scke" condition="spi_mcr_cont_scke_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SpiContinuousClock"
+      baseType="uint32_t"
+      toolTip="Whether the Serial Communication Clock (SCK) runs continuously"
+      description="Continuous SCK Enable" >
+      <choice value="0" name="Clock during transfers only" enum="Disable" />
+      <choice value="1" name="Continuous clock "           enum="Enable"  />
+   </binaryOption>
+
+   <binaryOption key="spi_mcr_frz" condition="spi_mcr_frz_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SpiFreeze"
+      baseType="uint32_t"
+      toolTip="Enable transfers to be stopped on the next frame boundary when the device enters Debug mode."
+      description="Controls SPI operation while in debug mode" >
+      <choice value="0" name="Continue in debug"  enum="Disabled" />
+      <choice value="1" name="Suspend in debug"   enum="Enabled"  isDefault="true" />
+   </binaryOption>
+
+   <binaryOption key="spi_mcr_doze" condition="spi_mcr_doze_present"
+      enabledBy="enablePeripheralSupport"
+      typeName="SpiDoze"
+      baseType="uint32_t"
+      toolTip="Controls the module operation in dose mode"
+      description="Enables Doze mode (when processor is waiting?)" >
+      <choice value="0" name="Ignore doze"      enum="Disabled" />
+      <choice value="1" name="Suspend in doze"  enum="Enabled"  isDefault="true" />
+   </binaryOption>
+
+   <choiceOption key="spi_mcr_mtfe" condition="spi_mcr_mtfe_present&amp;&amp;spi_mcr_smpl_pt_present"
+      enabledBy="enablePeripheralSupport"
       valueFormat="SPI_MCR_MTFE(%s),SPI_MCR_SMPL_PT(%s)"
       typeName="SpiModifiedTiming"
       description="Modified Timing Format"
@@ -280,43 +405,67 @@
       <choice value="1,2"  name="2 clocks from SCK edge to SIN sample"  enum="2_Clocks" />
    </choiceOption>
 
-   <binaryOption key="spi_mcr_rooe"
+   <choiceOption key="spi_mcr_clr_fifox" condition="spi_mcr_clr_txf_present&amp;&amp;spi_mcr_clr_rxf_present"
+      hidden="true"
+      valueFormat="SPI_MCR_CLR_TXF(%s),SPI_MCR_CLR_RXF(%s)"
+      typeName="SpiClearFifo"
+      description="Clear selected FIFOs"
+      toolTip="Selectively clear transmit or receive FIFOs" >
+      <choice value="0,0"  name="FIFOs not affected"       enum="None" />
+      <choice value="0,1"  name="Clear Rx FIFO"            enum="Rx" />
+      <choice value="1,0"  name="Clear Tx FIFO"            enum="Tx" />
+      <choice value="1,1"  name="Clear Rx &amp; Tx FIFOs"  enum="Both" />
+   </choiceOption>
+
+   <binaryOption key="spi_mcr_rooe" condition="spi_mcr_rooe_present"
+      enabledBy="enablePeripheralSupport"
       typeName="SpiRxOverflowHandling"
-      description="Handling of Rx Overflow Data"
-      toolTip="Discard incoming data or overwite previous data on RxFIFO overflow " >
+      baseType="uint32_t"
+      toolTip="Discard incoming data or overwite previous data on RxFIFO overflow "
+      description="Handling of Rx Overflow Data" >
       <choice value="0" name="Ignore incoming"      enum="Ignore"    />
       <choice value="1" name="Overwrite existing"   enum="Overwrite" />
    </binaryOption>
 
-   <binaryOption key="spi_mcr_doze"
-      typeName="SpiDoze"
-      description="Enables Doze mode (when processor is waiting?)"
-      toolTip="Enables Doze mode (when processor is waiting?)" >
-      <choice value="0" name="Ignore doze"      enum="Disabled" />
-      <choice value="1" name="Suspend in doze"  enum="Enabled"  isDefault="true" />
-   </binaryOption>
+   <binaryOption key="spi_mcr_mdis" condition="spi_mcr_mdis_present"
+      hidden="true"
+      typeName="SpiClock"
+      baseType="uint32_t"
+      toolTip="Allows the clock to be stopped to the non-memory mapped logic of the SPI\n
+               effectively putting the SPI in a software-controlled power-saving state"
+      description="Module Disable" >
+      <choice name="Enabled"     value="0" enum="Enabled"  />
+      <choice name="Disabled"    value="1" enum="Disabled" />
+   </binaryOption >
 
-   <binaryOption key="spi_mcr_frz"
-      typeName="SpiFreeze"
-      description="Controls SPI operation while in debug mode"
-      toolTip="Enable transfers to be stopped on the next frame boundary when the device enters Debug mode." >
-      <choice value="0" name="Continue in debug"  enum="Disabled" />
-      <choice value="1" name="Suspend in debug"   enum="Enabled"  isDefault="true" />
-   </binaryOption>
+   <choiceOption key="spi_mcr_dis_fifox" condition="spi_mcr_dis_txf_present&amp;&amp;spi_mcr_dis_rxf_present"
+      hidden="true"
+      valueFormat="SPI_MCR_DIS_TXF(%s),SPI_MCR_DIS_RXF(%s)"
+      typeName="SpiEnableFifo"
+      toolTip="Selectively enable transmit or receive FIFOs"
+      description="Enable selected FIFOs" >
+      <choice value="0,0"  name="Enable Rx &amp; Tx FIFOs"   enum="Both" isDefault="true" />
+      <choice value="0,1"  name="Enable Tx FIFO"             enum="Tx"   />
+      <choice value="1,0"  name="Enable Rx FIFO"             enum="Rx"   />
+      <choice value="1,1"  name="Disable Rx &amp; Tx FIFOs"  enum="None" />
+   </choiceOption>
 
-   <binaryOption key="spi_mcr_cont_scke"
-      typeName="SpiContinuousClock"
-      description="Continuous SCK Enable"
-      toolTip="Whether the Serial Communication Clock (SCK) runs continuously" >
-      <choice value="0" name="Clock during transfers only" enum="Disable" />
-      <choice value="1" name="Continuous clock "           enum="Enable"  />
-   </binaryOption>
+   <binaryOption key="spi_mcr_halt" condition="spi_mcr_halt_present"
+      hidden="true"
+      typeName="SpiHalt"
+      baseType="uint32_t"
+      toolTip="Starts and stops SPI transfers"
+      description="Halt" >
+      <choice name="Start transfers"  value="0" enum="StartTransfers" />
+      <choice name="Stop transfers"   value="1" enum="StopTransfers" isDefault="true" />
+   </binaryOption >
 
    <for keys="c" dim="=spi_ctar_dim" >
 
       <title description="CTAR %(c)" toolTip="Clock and Transfer Attributes #%(c)" />
 
       <intOption key="speed[%(c)]"
+         enabledBy="enablePeripheralSupport"
          description="Speed of interface"
          toolTip="Speed of transmission"
          valueFormat="%s"
@@ -325,9 +474,11 @@
          min="0" max="10000000" />
 
       <choiceOption key="spi_ctar_mode[%(c)]"
+         enabledBy="enablePeripheralSupport"
          typeName="SpiMode"
          valueFormat="SPI_CTAR_CPOL(%s),SPI_CTAR_CPHA(%s)"
          description="Mode"
+         enumOr="auto"
          toolTip="Communication mode\n
                   0: Active-high clock (idles low), Data is captured on leading edge of SCK and changes on the following edge.\n
                   1: Active-high clock (idles low), Data changes on leading edge of SCK and is captured on the following edge.\n
@@ -340,7 +491,8 @@
          <choice value="1,1" name="Mode 3: CPOL=1, CPHA=1" enum="3" />
       </choiceOption>
 
-      <choiceOption key="spi_ctar_fmsz[%(c)]"
+      <choiceOption key="spi_ctar_fmsz[%(c)]" condition="spi_ctar_fmsz_present"
+         enabledBy="enablePeripheralSupport"
          typeName="SpiFrameSize"
          description="SPI Frame sizes"
          toolTip="Transfers are from 4 to 16 bits in size" >
@@ -360,7 +512,9 @@
       </choiceOption>
 
       <binaryOption key="spi_ctar_lsbfe[%(c)]"
+         enabledBy="enablePeripheralSupport"
          typeName="SpiBitOrder"
+         enumOr="auto"
          description="Transmission order"
          toolTip="Transmission order" >
          <choice value="0" name="MSB sent first" enum="MsbFirst" />
@@ -371,10 +525,11 @@
 
    <title description="Initial device options"
       toolTip="Device and CTAR choice after default configuration\n
-               These options can be changed by selectConfiguration(...)"
+               These options can be selected by selectSharedConfiguration(...)"
       />
 
    <choiceOption key="spi_ctar_sel"
+      enabledBy="enablePeripheralSupport"
       baseType="uint8_t"
       typeName="SpiCtarSelect"
       valueFormat="%s"
@@ -385,6 +540,7 @@
    </choiceOption>
 
    <choiceOption key="PeripheralSelectMode"
+      enabledBy="enablePeripheralSupport"
       typeName="SpiPeripheralSelectMode"
       baseType="uint8_t"
       valueFormat="(%s)"
@@ -398,10 +554,39 @@
    <binaryOption key="spi_pushr_cont"
       hidden="true"
       typeName="SpiSelectMode"
+      baseType="uint32_t"
       description="Assert PCS between transfers"
       toolTip="Select whether Peripheral Select is returned to idle between transfers" >
       <choice value="0" name="Idle between transfers"     enum="Idle"       />
       <choice value="1" name="Asserted between transfers" enum="Continuous" />
+   </binaryOption>
+
+   <choiceOption key="spi_pushr_ctas"
+      hidden="true"
+      typeName="SpiCtar"
+      baseType="uint32_t"
+      description="CTAR selection for frame within DMA data buffer"
+      toolTip="Selects which CTAR is used to specify the transfer attributes for a SPI frame" >
+      <choice value="1" name="CTAR for DMA" enum="Dma"  />
+   </choiceOption>
+
+   <binaryOption key="spi_pushr_eoq"
+      hidden="true"
+      typeName="SpiEndOfQueue"
+      description="End Of Queue for frame within DMA data buffer"
+      toolTip="Indicates to the SPI that the current transfer is the last in a queue\n
+               At the end of the transfer, the EOQF bit in the SR is set" >
+      <choice value="1" name="Is end-of-queue"  enum="Assert"   />
+   </binaryOption>
+
+   <binaryOption key="spi_pushr_ctcnt"
+      hidden="true"
+      typeName="SpiCountAction"
+      description="Clear Transfer Counter for frame within DMA data buffer"
+      toolTip="Clears the TCNT field in the TCR register. \n
+               The TCNT field is cleared before the SPI starts transmitting the current SPI frame.\n
+               The counter increments every time the last bit of an SPI frame is transmitted" >
+      <choice value="1" name="Clear counter"  enum="Clear"     />
    </binaryOption>
 
    <choiceOption key="spi_pushr_pcs_enum"
@@ -414,7 +599,14 @@
       description="Peripheral Chip Select"
       toolTip="Mask to select which Peripheral Chip Select Line (PCS) to assert during transaction\n
                Note: more than one PCS may be asserted (allows use of an external decoder)" >
-      <choiceExpansion name="Assert PCS%(c) during transaction" value="1U&lt;&lt;%(c)" enum="Pcs%(c)" keys="c" dim="6" />
+      <choiceExpansion
+            name="Assert PCS%(c) during transaction"
+            value="1U&lt;&lt;%(c)"
+            enum="Pcs%(c)"
+            signal="$(_NAME)_PCS%(c)"
+            condition='@SignalExists("$(_NAME)_PCS%(c)")'
+            keys="c"
+            dim="6" />
       <choice          name="PCSx not asserted" value="0"  enum="None" />
    </choiceOption>
 
@@ -426,68 +618,465 @@
       bitDescription='@"Assert PCS%i during transaction"'
    />
 
-   <!--binaryOption key="spi_pushr_eoq"
-      hidden="true"
-      typeName="SpiEndOfQueue"
-      description="Mark data value as End of Queue"
-      toolTip="Indicates the associated data value is End of Queue, the Transmit and
-               Receive operations will be disabled after this item completes transmission" >
-      <choice value="0" name="Not end of queue data item" enum="Disable"  />
-      <choice value="1" name="End of Queue data item"     enum="Enable"   />
-   </binaryOption-->
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo Class      -->
+<!-- ====================================================================================================== -->
 
-   <!--binaryOption key="spi_pushr_ctcnt"
-      hidden="true"
-      typeName="SpiClearCounter"
-      description="Mark data value to clear transmit count"
-      toolTip="The transmit counter will be cleared before transmission of the associated data" >
-      <choice value="0" name="Transmission counter is not cleared" enum="Disable"  />
-      <choice value="1" name="Transmission counter is cleared"     enum="Enable"   />
-   </binaryOption-->
+   <!-- BasicInfo Instance pointer and Constructors  -->
 
-<if condition="!/SPI/SpiBasicInfo_generated" >
-   <constant key="/SPI/SpiBasicInfo_generated" type="Boolean" value="true" />
-
-<!--   ========== SpiCalculatedConfiguration class =============================== -->
-
-   <template where="basicInfo" ><![CDATA[
-      \t/**
-      \t * Class used to hold a calculated configuration that may be reused to avoid calculation overhead
-      \t */
-      \tclass SpiCalculatedConfiguration {
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      protected:
       \t
-      \tpublic:
-      \t   /**
-      \t    * Copy Constructor
-      \t    */
-      \t   constexpr SpiCalculatedConfiguration(const SpiCalculatedConfiguration &other) = default;
+      \tunion __attribute__((packed,aligned(2))) Ctar {
+      \t   uint32_t value;
+      \t   struct {
+      \t      unsigned br    :4 ;
+      \t      unsigned dt    :4 ;
+      \t      unsigned asc   :4 ;
+      \t      unsigned cssck :4 ;
+      \t      unsigned pbr   :2 ;
+      \t      unsigned pdt   :2 ;
+      \t      unsigned pasc  :2 ;
+      \t      unsigned pcssck:2 ;
+      \t      unsigned lsbfe :1 ;
+      \t      unsigned cpha  :2 ;
+      \t      unsigned fmsz  :4 ;
+      \t      unsigned dbr   :1 ;
+      \t   };
       \t
-      \t   uint16_t pushrCommand       = 0;   //!<  PUSHR.COMMAND register value for most transfer
-      \t   uint16_t pushrFinalCommand  = 0;   //!<  PUSHR.COMMAND register value for final transfer
-      \t   uint32_t ctar               = 0;   //!<  CTAR register value e.g. Baud, number of bits, timing
-      \t
-      \t   /**
-      \t    * Default Constructor
-      \t    */
-      \t   constexpr SpiCalculatedConfiguration() = default;
-      \t
-      \t   /**
-      \t    * Constructor
-      \t    */
-      \t   SpiCalculatedConfiguration(uint16_t pushrCommand, uint16_t pushrFinalCommand, uint32_t ctar) :
-      \t      pushrCommand(pushrCommand),
-      \t      pushrFinalCommand(pushrFinalCommand),
-      \t      ctar(ctar) {
+      \t   constexpr Ctar(uint32_t value) : value(value) {
       \t   }
-      \t}; // class SerialInit\n
+      \t
+      \t   constexpr Ctar() : value(0) {
+      \t   }
+      \t};
+      \tunion __attribute__((packed,aligned(2))) PushrCommand {
+      \t   uint16_t value;
+      \t   struct {
+      \t      unsigned pcs   :6 ;
+      \t      unsigned       :4 ;
+      \t      unsigned ctcnt :1 ;
+      \t      unsigned eoq   :1 ;
+      \t      unsigned ctas  :3 ;
+      \t      unsigned cont  :1 ;
+      \t   };
+      \t
+      \t   constexpr PushrCommand(uint16_t value) : value(value) {
+      \t   }
+      \t
+      \t   constexpr PushrCommand() : value(0) {
+      \t   }
+      \t};
+      \t
+      \tunion __attribute__((packed,aligned(2))) Pushr {
+      \t   uint32_t value;
+      \t   struct {
+      \t      uint16_t txData;
+      \t      union __attribute__((packed,aligned(2))){
+      \t         uint16_t command;
+      \t         struct {
+      \t            unsigned pcs   :6 ;
+      \t            unsigned       :4 ;
+      \t            unsigned ctcnt :1 ;
+      \t            unsigned eoq   :1 ;
+      \t            unsigned ctas  :3 ;
+      \t            unsigned cont  :1 ;
+      \t         };
+      \t      };
+      \t   };
+      \t
+      \t   constexpr Pushr(uint32_t value) : value(value) {
+      \t   }
+      \t
+      \t   constexpr Pushr() : value(0) {
+      \t   }
+      \t};
+      \t
+      \t/**
+      \t * Value to combine with transmit data
+      \t * Controls which device (PCS), configuration (CTAR) and PCS assertion between transfers (CONT)
+      \t */
+      \tPushr  pushrMask = 0;
+      \t
+      \t/**
+      \t * Value to combine with transmit data
+      \t * Controls which device (PCS), configuration (CTAR) and PCS assertion between transactions (CONT)
+      \t */
+      \tPushr  pushrMaskFinal = 0;
+      \t\n
+   ]]>
+   </template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \ttemplate<unsigned itemCount>
+      \tfriend class SpiDmaHandlerBase;
       \t\n
    ]]></template>
 
-<!--   ========== SPI SerialInit class =============================== -->
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      public:
+      \t// Pointer to $(_BASENAME) hardware instance
+      \tvolatile $(_Type) * const $(_basename);
+      \t\n
+   ]]></template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Basic enable of SPI
+      \t * Includes enabling clock and configuring all pins if mapPinsOnEnable is selected in configuration
+      \t */
+      \tvirtual void enable() const = 0;
+      \t
+      \t/**
+      \t * Disables the clock to SPI and disable all mappable pins
+      \t */
+      \tvirtual void disable() const = 0;
+      \t\n
+   ]]>
+   </template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Constructor
+      \t *
+      \t * @param $(_basename) $(_BASENAME) hardware instance
+      \t */
+      \tconstexpr $(_BasicInfo)(volatile $(_Type) * $(_basename)) : $(_basename)($(_basename)) {
+      \t}
+      \t
+      \t/**
+      \t * Destructor
+      \t */
+      \tvirtual ~$(_BasicInfo)() = default;
+      \t\n
+   ]]></template>
+
+   <!-- Shared clock selection -->
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Get input clock frequency
+      \t * (Shared by all peripheral instances)
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic inline uint32_t getInputClockFrequency() {
+      \t   return SystemBusClock;
+      \t}
+      \t\n
+   ]]></template>
+
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo/Info duplicated methods -->
+<!-- ====================================================================================================== -->
+
+   <for
+      keys="   static    : const    : where     : guard                                      "
+      values=" ''        : 'const ' : basicInfo : $(_BasicInfoGuard)                         ;
+               'static ' : ''       : info      : $(_InfoGuard)                              "  >
+
+      <!-- ____ Getters and Setters ____________ -->
+
+      <for keys="field                      : set   : get   : clear : genCode                 : name"
+           values="
+
+            spi_mcr_cont_scke               : true  : true  : false : enableGettersAndSetters : ContinuousClock;
+            spi_mcr_frz                     : true  : true  : false : enableGettersAndSetters : Freeze;
+            spi_mcr_rooe                    : true  : true  : false : enableGettersAndSetters : RxOverflow;
+            spi_mcr_doze                    : true  : true  : false : enableGettersAndSetters : Doze;
+            spi_mcr_mdis                    : true  : true  : false : enableGettersAndSetters : ModuleDisable;
+            spi_mcr_dis_fifox               : true  : true  : false : enableGettersAndSetters : EnableFifos;
+            spi_mcr_clr_fifox               : true  : false : false : enableGettersAndSetters : ClearFifos;
+            spi_mcr_mtfe                    : true  : true  : false : enableGettersAndSetters : SamplePoint;
+            spi_mcr_halt                    : true  : true  : false : enableGettersAndSetters : Halt;
+
+            spi_tcr_spi_tcnt                : true  : true  : false : enableGettersAndSetters : TransferCounter;
+
+            spi_sr_tcf                      : false : true  : w1c   : enableGettersAndSetters : TransferCompleteFlag;
+            spi_sr_txrxs                    : false : true  : w1c   : enableGettersAndSetters : TxAndRxStatus;
+            spi_sr_eoqf                     : false : true  : w1c   : enableGettersAndSetters : EndOfQueueFlag;
+            spi_sr_tfuf                     : false : true  : w1c   : enableGettersAndSetters : TransmitFifoUnderflowFlag;
+            spi_sr_tfff                     : false : true  : w1c   : enableGettersAndSetters : TransmitFifoFillFlag;
+            spi_sr_rfof                     : false : true  : w1c   : enableGettersAndSetters : ReceiveFifoOverflowFlag;
+            spi_sr_rfdf                     : false : true  : w1c   : enableGettersAndSetters : ReceiveFifoDrainFlag;
+            spi_sr_txctr                    : false : true  : false : enableGettersAndSetters : TxFifoCounter;
+            spi_sr_txnxtptr                 : false : true  : false : enableGettersAndSetters : TransmitNextPointer;
+            spi_sr_rxctr                    : false : true  : false : enableGettersAndSetters : RxFifoCounter;
+            spi_sr_popnxtptr                : false : true  : false : enableGettersAndSetters : PopNextPointer;
+
+            spi_rser_tcf_re                 : true  : true  : false : enableGettersAndSetters : TxCompleteAction;
+            spi_rser_eoqf_re                : true  : true  : false : enableGettersAndSetters : EndOfQueueAction;
+            spi_rser_tfuf_re                : true  : true  : false : enableGettersAndSetters : TxFifoUnderflowAction;
+            spi_rser_txfifo                 : true  : true  : false : enableGettersAndSetters : TxFifoAction;
+            spi_rser_rfof_re                : true  : true  : false : enableGettersAndSetters : RxFifoOverflowAction;
+            spi_rser_rxfifo                 : true  : true  : false : enableGettersAndSetters : RxFifoAction;
+            spi_rser_txfifo,spi_rser_rxfifo : true  : false : false : true                    : FifoAction" >
+         <variableTemplate location="%(where)" condition="%(set)" codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+            variables="%(field)"
+            nonDefaultParams="2" >
+         <![CDATA[
+            \t/**
+            \t * Set %description
+            \t * (%variables)
+            \t *
+            %paramDescription
+            \t */
+            \t%(static)void set%(name)(%params) %(const){
+            \t   %fieldAssignment;
+            \t}
+            \t\n
+         ]]>
+         </variableTemplate>
+         <variableTemplate location="%(where)" condition="%(get)" codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+            variables="%(field)" >
+         <![CDATA[
+            \t/**
+            \t * Get %description
+            \t * (%variables)
+            \t *
+            \t * @return %tooltip
+            \t */
+            \t%(static)%returnType get%(name)() %(const){
+            \t   return %fieldExtract;
+            \t}
+            \t\n
+         ]]>
+         </variableTemplate>
+         <variableTemplate location="%(where)" condition='="w1c"=="%(clear)"' codeGenCondition="%(genCode)&amp;&amp;%(guard)"
+            variables="%(field)"
+            tooltipPadding="x*x" >
+         <![CDATA[
+            \t/**
+            \t * Clear %description
+            \t * (%variables)
+            \t */
+            \t%(static)void clear%(name)() %(const){
+            \t   // w1c and mixed register
+            \t   %register = %mask;
+            \t}
+            \t\n
+         ]]>
+         </variableTemplate>
+      </for>
+
+      <variableTemplate location="%(where)" codeGenCondition="enableGettersAndSetters&amp;&amp;%(guard)"
+         variables="spi_mcr_pcsis,spi_pushr_pcs"
+         tooltipPadding="x*x" >
+         <![CDATA[
+         \t/**
+         \t * Sets communication speed for SPI
+         \t *
+         \t * @param[in]  frequency      Communication frequency in Hz
+         \t * @param[in]  spiCtarSelect  Configuration to modify
+         \t *
+         \t * @note Chooses the highest speed that is not greater than frequency.
+         \t */
+         \t%(static) void setSpeed(uint32_t frequency, SpiCtarSelect spiCtarSelect=SpiCtarSelect_0) %(const){
+         \t   spi->CTAR[spiCtarSelect] =
+         \t         (spi->CTAR[spiCtarSelect] & (SPI_CTAR_FMSZ_MASK|SPI_CTAR_MODE_MASK|SPI_CTAR_LSBFE_MASK)) |
+         \t         calculateCtarTiming(getInputClockFrequency(), frequency);
+         \t}
+         \t
+         \t/**
+         \t * Get communication speed
+         \t *
+         \t * @param[in]  spiCtarSelect   Configuration to use
+         \t *
+         \t * @return Clock frequency of SPI in Hz for these factors
+         \t */
+         \t%(static) uint32_t getSpeed(SpiCtarSelect spiCtarSelect=SpiCtarSelect_0) %(const){
+         \t   return calculateSpeed(getInputClockFrequency(), spi->CTAR[spiCtarSelect]);
+         \t}
+         \t\n
+      ]]></variableTemplate>
+
+      <variableTemplate location="%(where)" codeGenCondition="enableGettersAndSetters&amp;&amp;%(guard)"
+         variables="spi_ctar_sel" >
+      <![CDATA[
+         \t/**
+         \t * Set SPI.CTAR0 value
+         \t * (%variables)
+         \t *
+         \t * @param[in]  ctar 32-bit CTAR value
+         \t */
+         \t%(static)void setCtar0Value(uint32_t ctar) %(const){
+         \t   spi->CTAR[0] = ctar;
+         \t}
+         \t
+         \t/**
+         \t * Set SPI.CTAR1 value
+         \t * (%variables)
+         \t *
+         \t * @param[in]  ctar 32-bit CTAR value
+         \t */
+         \t%(static)void setCtar1Value(uint32_t ctar) %(const){
+         \t   spi->CTAR[1] = ctar;
+         \t}
+         \t
+         \t/**
+         \t * Get SPI.CTAR0 value
+         \t * (%variables)
+         \t *
+         \t * @return ctar 32-bit CTAR value
+         \t */
+         \t%(static)uint32_t getCtar0Value() %(const){
+         \t   return spi->CTAR[0];
+         \t}
+         \t
+         \t/**
+         \t * Get SPI.CTAR1 value
+         \t * (%variables)
+         \t *
+         \t * @return ctar 32-bit CTAR value
+         \t */
+         \t%(static)uint32_t getCtar1Value() %(const){
+         \t   return spi->CTAR[1];
+         \t}
+         \t\n
+         ]]>
+      </variableTemplate>
+
+      <variableTemplate location="%(where)" codeGenCondition="enableGettersAndSetters&amp;&amp;%(guard)"
+         variables="spi_ctar_sel" >
+      <![CDATA[
+         \t/**
+         \t * Sets Communication mode for SPI
+         \t *
+         \t * @param[in] spiMode       Controls clock polarity and the timing relationship between clock and data
+         \t * @param[in] spiBitOrder   Bit transmission order (LSB/MSB first)
+         \t * @param[in] spiCtarSelect Configuration to modify
+         \t */
+         \t%(static)void setMode(SpiMode spiMode=SpiMode_0, SpiBitOrder spiBitOrder=SpiBitOrder_MsbFirst, SpiCtarSelect spiCtarSelect=SpiCtarSelect_0) %(const){
+         \t
+         \t   spi->CTAR[spiCtarSelect] =
+         \t      (spiMode|spiBitOrder)|
+         \t      (spi->CTAR[spiCtarSelect]&~(SPI_CTAR_MODE_MASK|SPI_CTAR_LSBFE_MASK));
+         \t}
+         \t
+         \t/**
+         \t * Sets Frame size for SPI
+         \t *
+         \t * @param[in]  spiFrameSize  Number of bits in each transfer
+         \t * @param[in]  spiCtarSelect Configuration to modify
+         \t */
+         \t%(static)void setFrameSize(SpiFrameSize spiFrameSize, SpiCtarSelect spiCtarSelect=SpiCtarSelect_0) %(const){
+         \t   // Sets the frame size in CTAR
+         \t   spi->CTAR[spiCtarSelect] = (spi->CTAR[spiCtarSelect]&~(SPI_CTAR_FMSZ_MASK)) | spiFrameSize;
+         \t}
+         \t\n
+         ]]>
+      </variableTemplate>
+
+      <variableTemplate location="%(where)" codeGenCondition="%(guard)"
+         variables="spi_sr_stat" >
+      <![CDATA[
+         \t/**
+         \t * Get %description
+         \t * (%variables)
+         \t *
+         \t * @return %tooltip
+         \t */
+         \t%(static)%returnType getStatusFlags() %(const){
+         \t
+         \t   return %returnType(%register&%mask);
+         \t}
+         \t
+         \t/**
+         \t * Clear %description
+         \t * (%variables)
+         \t *
+            %paramDescription
+         \t */
+         \t%(static)void clearStatusFlags(%params) %(const){
+         \t
+         \t   // w1c and mixed register
+         \t   %register = %baseType(%paramName);
+         \t}
+         \t
+         \t/**
+         \t * Clear all %description
+         \t * (%variables)
+         \t */
+         \t%(static)void clearStatusFlags() %(const){
+         \t
+         \t   // w1c and mixed register
+         \t   %register = %baseType(%mask);
+         \t}
+         \t
+         \t/**
+         \t * Get and clear active %description
+         \t * (%variables)
+         \t */
+         \t%(static)%returnType getAndClearStatusFlags() %(const){
+         \t   // w1c and mixed register
+         \t
+         \t   // Capture status
+         \t   %baseType t = %register&%mask;
+         \t
+         \t   // Clear only those captured
+         \t   %register = t;
+         \t
+         \t   // Return captured flags
+         \t   return %returnType(t);
+         \t}
+         \t\n
+      ]]>
+      </variableTemplate>
+
+      <variableTemplate location="%(where)" codeGenCondition="%(guard)"
+         variables="spi_mcr_pcsis,spi_pushr_pcs"
+         tooltipPadding="x*x" >
+      <![CDATA[
+         \t/**
+         \t * Set %description0 to active-low
+         \t * (%variables)
+         \t *
+         %paramDescription1
+         \t *
+         \t * The mask would be created by ORing together the PCS selection values
+         \t * Example:
+         \t * @code
+         \t *    // Set PCS0 and PCS3 active-low and all others unchanged
+         \t *    setPcsPolarityActiveLow(SpiPeripheralSelect_Pcs0|SpiPeripheralSelect_Pcs3);
+         \t * @endcode
+         \t */
+         \t%(static) void setPcsPolarityActiveLow(%paramType1 %paramName1) %(const){
+         \t   %register0 = %register0|%paramName1;
+         \t}
+         \t
+         \t/**
+         \t * Set %description0 to active-high
+         \t * (%variables)
+         \t *
+         %paramDescription1
+         \t *
+         \t * The mask would be created by ORing together the PCS selection values
+         \t * Example:
+         \t * @code
+         \t *    // Set PCS0 and PCS3 active-high and all others unchanged
+         \t *    setPcsPolarityActiveHigh(SpiPeripheralSelect_Pcs0|SpiPeripheralSelect_Pcs3);
+         \t * @endcode
+         \t */
+         \t%(static) void setPcsPolarityActiveHigh(%paramType1 %paramName1) %(const){
+         \t   %register0 = %register0&~%paramName1;
+         \t}
+         \t\n
+      ]]></variableTemplate>
+
+   </for>
+
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo::SerialInit class      -->
+<!-- ====================================================================================================== -->
 
    <template where="basicInfo" ><![CDATA[
       \t/**
-      \t * Class used to do initialisation of a CTAR in $(_Class)
+      \t * Class used to do initialisation of communication parameters (CTAR) in $(_BASENAME)
       \t *
       \t * This class has a templated constructor that accepts various values:
       \t *
@@ -501,7 +1090,6 @@
       \t *
       \t *    // Omitted parameters are take to be zero unless a base value is given
       \t *
-      \t *    SpiCtarSelect_1,        // CTAR 1 initialisation
       \t *    1_MHz ,                 // Speed of interface
       \t *    SpiMode_o ,             // Mode - Mode 0: CPOL=0, CPHA=0
       \t *    SpiFrameSize_8_bits ,   // SPI Frame sizes - 8 bits/transfer
@@ -522,6 +1110,10 @@
       \t    * Copy Constructor
       \t    */
       \t   constexpr SerialInit(const SerialInit &other) = default;
+      \t   /**
+      \t    * Assignment operator
+      \t    */
+      \t   constexpr SerialInit& operator=(const SerialInit& t) = default;
       \t
       \t   /**
       \t    * Default Constructor
@@ -534,20 +1126,12 @@
 
    <variableTemplate where="basicInfo"
       variables="
-         spi_ctar_sel"
-   ><![CDATA[
-      \t   ///  CTAR Selection
-      \t   SpiCtarSelect ctarNum = SpiCtarSelect_0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate where="basicInfo"
-      variables="
          spi_ctar_mode[],
          spi_ctar_fmsz[],
          spi_ctar_lsbfe[]"
    ><![CDATA[
       \t   ///  Clock and Transfer Attributes Register
-      \t   uint32_t %registerName = 0;\n\n
+      \t   Ctar %registerName = 0;\n\n
    ]]></variableTemplate>
 
    <variableTemplate where="basicInfo"
@@ -579,7 +1163,7 @@
          \t   template <typename... Types>
          \t   constexpr SerialInit(%params, Types... rest) : SerialInit(rest...) {
          \t
-         \t      %registerName = (%registerName&~%mask) | %paramExpression;
+         \t      %registerName.value = (%registerName.value&~%mask) | %paramExpression;
          \t   }
          \t\n
       ]]></variableTemplate>
@@ -605,149 +1189,243 @@
       \t\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" variables="spi_ctar_sel"
-      linePadding="xxx"
-   ><![CDATA[
-      \t   /**
-      \t    * %description
-      \t    * (%variables)
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr SerialInit(%params, Types... rest) : SerialInit(rest...) {
-      \t
-      \t      ctarNum = %paramExpression;
-      \t   }
-      \t\n
-   ]]></variableTemplate>
-
-<!--   ========== SerialInit class - end =============================== -->
+<!--   ========== BasicInfo::SerialInit class - end =============================== -->
 
    <template where="basicInfo" ><![CDATA[
-      \t}; // class SerialInit\n
+      \t}; // class SerialInit
+      \t\n
    ]]></template>
 
-<!--   ========== SPI Init class =============================== -->
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo::SpiCalculatedConfiguration class      -->
+<!-- ====================================================================================================== -->
 
    <template where="basicInfo" ><![CDATA[
       \t/**
-      \t * Class used to do initialisation of shared settings for $(_Class)
-      \t *
-      \t * This class has a templated constructor that accepts various values:
-      \t *
-      \t * @note This constructor may be used to create a const instance in ROM
-      \t *
-      \t * Example:
-      \t * @code
-      \t * // Initialisation values for $(_Class)
-      \t * // Options available vary with device - See $(_Class)::DefaultConfigValue for example
-      \t * static const $(_Class)::Config spiConfig {
-      \t *
-      \t *    // Omitted parameters are take to be zero unless a base value is given
-      \t *
-      \t *    // Common setting that are seldom changed
-      \t *    SpiModifiedTiming_Normal ,                   // Modified Timing Format - Normal Timing
-      \t *    SpiPcsMode_PCS5 ,                            // PCS5/PCSS* pin mode - PCS5/PCSS normal operation (PCS5)
-      \t *    SpiDoze_Enabled ,                            // Enables Doze mode (when processor is waiting?) - Suspend in doze
-      \t *    SpiFreeze_Enabled ,                          // Controls SPI operation while in debug mode - Suspend in debug
-      \t *    SpiRxOverflowHandling_Overwrite ,            // Handling of Rx Overflow Data - Overwrite existing
-      \t *    SpiContinuousClock_Disable,                  // Continuous SCK Enable - Clock during transfers only
-      \t *    SpiPcsPolarity_3_ActiveLow,                  // Polarity for PCS signals (similar lines may be repeated)
-      \t *
-      \t *    // The following are initial settings that would commonly be changed by selectConfiguration()
-      \t *    SpiPeripheralSelect_Ptc4 ,              // Peripheral to select
-      \t *    SpiCtarSelect_1,                        // CTAR to use
-      \t *    SpiPeripheralSelectMode_Transaction     // Peripheral select mode
-      \t *
-      \t *    // Optional base value to start with (must be last parameter)
-      \t *    $(_Class)::DefaultValue
-      \t * };
-      \t *
-      \t * @endcode
+      \t * Class used to hold a calculated configuration that may be reused to avoid calculation overhead
       \t */
-      \tclass Config {
+      \tclass SpiCalculatedConfiguration {
       \t
       \tpublic:
       \t   /**
       \t    * Copy Constructor
       \t    */
-      \t   constexpr Config(const Config &other) = default;
+      \t   constexpr SpiCalculatedConfiguration(const SpiCalculatedConfiguration &other) = default;
+      \t
+      \t   PushrCommand pushrCommand       = 0;   //!<  PUSHR.COMMAND register value for most transfer
+      \t   PushrCommand pushrFinalCommand  = 0;   //!<  PUSHR.COMMAND register value for final transfer
+      \t   Ctar         ctar               = 0;   //!<  CTAR register value e.g. Baud, number of bits, timing
       \t
       \t   /**
       \t    * Default Constructor
       \t    */
-      \t   constexpr Config() = default;
+      \t   constexpr SpiCalculatedConfiguration() = default;
+      \t
+      \t   /**
+      \t    * Constructor
+      \t    *
+      \t    * @param pushrCommand        Modifier for PUSH register value within transaction
+      \t    * @param pushrFinalCommand   Modifier for final PUSH register value in a transaction
+      \t    * @param ctar                CTAR value (Communication settings)
+      \t    *
+      \t    * @note This constructor may be used to create a const instance in ROM
+      \t    */
+      \t   constexpr SpiCalculatedConfiguration(uint16_t pushrCommand, uint16_t pushrFinalCommand, uint32_t ctar) :
+      \t      pushrCommand(pushrCommand),
+      \t      pushrFinalCommand(pushrFinalCommand),
+      \t      ctar(ctar) {
+      \t   }
+      \t
+      \t   uint32_t firstValue(uint16_t data) const {
+      \t      return (pushrCommand.value<<16)|data|SpiCountAction_Clear;
+      \t   }
+      \t   uint32_t middleValue(uint16_t data) const {
+      \t      return (pushrCommand.value<<16)|data;
+      \t   }
+      \t   uint32_t lastValue(uint16_t data) const {
+      \t      return (pushrFinalCommand.value<<16)|data|SpiEndOfQueue_Assert;
+      \t   }
+      \t
+      \t   /**
+      \t    * Set SPI Frame size
+      \t    * (spi_ctar_fmsz)
+      \t    *
+      \t    * @tparam   Types
+      \t    * @param    rest
+      \t    *
+      \t    * @param spiFrameSize Transfers are from 4 to 16 bits in size
+      \t    */
+      \t   void setFrameSize(SpiFrameSize spiFrameSize) {
+      \t
+      \t      ctar.value = (ctar.value&~SPI_CTAR_FMSZ_MASK) | spiFrameSize;
+      \t   }
+      \t
+      \t}; // class SpiCalculatedConfiguration\n
       \t\n
    ]]></template>
 
-<!--   Member variables -->
+<!-- ====================================================================================================== -->
+<!--     START BasicInfo::Init class      -->
+<!-- ====================================================================================================== -->
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Class used to do shared initialisation of the $(_BASENAME)
+      \t *
+      \t * This class has a templated constructor that accepts various values.
+      \t * Parameters available may vary with device - see $(_Class)::DefaultInitValue for relevant example.
+      \t * Omitted parameters default to zero (disabled) or unchanged if initialiser is provided as last parameter.
+      \t *
+      \t * @note This constructor may be used to create a const instance in Flash
+      \t *
+      \t * Example:
+      \t * @code
+      \t * static const $(_Class)::Init $(_name)Init {
+      \t *
+      \t *
+      \t *    NvicPriority_Normal ,               // (irqLevel)          IRQ priority level - Normal
+      \t *    unhandledCallback,                  // (handlerName)       User declared event handler
+      \t *
+      \t *    SpiMasterSlave_Slave ,              // (spi_mcr_mstr)      Master or Slave operation - Operate as Master
+      \t *    SpiContinuousClock_Disable ,        // (spi_mcr_cont_scke) Continuous SCK Enable - Clock during transfers only
+      \t *    SpiFreeze_Enabled ,                 // (spi_mcr_frz)       Controls SPI operation while in debug mode - Suspend in debug
+      \t *    SpiModifiedTiming_Normal ,          // (spi_mcr_mtfe)      Modified Timing Format - Normal Timing
+      \t *    SpiRxOverflowHandling_Ignore ,      // (spi_mcr_rooe)      Handling of Rx Overflow Data - Ignore incoming
+      \t *    SpiPcsActiveLow(0) ,                // (spi_mcr_pcsis)     Polarity for PCS signals
+      \t *    SpiDoze_Enabled ,                   // (spi_mcr_doze)      Enables Doze mode (when processor is waiting?) - Suspend in doze
+      \t *    SpiClock_Enabled ,                  // (spi_mcr_mdis)      Module Disable - Enabled
+      \t *    SpiEnableFifo_Both ,                // (spi_mcr_dis_fifox) Enable selected FIFOs - Enable Rx & Tx FIFOs
+      \t *    SpiClearFifo_None ,                 // (spi_mcr_clr_fifox) Clear selected FIFOs - FIFOs not affected
+      \t *    SpiHalt_StartTransfers ,            // (spi_mcr_halt)      Halt - Start transfers
+      \t *    SpiTransferCounter(0) ,             // (spi_tcr_spi_tcnt)  Transfer Counter
+      \t *    SpiTxCompleteAction_Interrupt ,     // (spi_rser_tcf_re)   Tx complete action - Interrupt on completion
+      \t *    SpiEndOfQueueAction_Interrupt ,     // (spi_rser_eoqf_re)  EOQ action - Interrupt on end of queue
+      \t *    SpiTxFifoUnderflowAction_Interrupt ,// (spi_rser_tfuf_re)  TxFIFO Underflow action - Interrupt on underflow
+      \t *    SpiTxFifoAction_Dma ,               // (spi_rser_txfifo)   Transmit FIFO Fill Request action - DMA
+      \t *    SpiRxFifoOverflowAction_Interrupt , // (spi_rser_rfof_re)  RxFIFO Overflow action - Interrupt on overflow
+      \t *    SpiRxFifoAction_Dma,                // (spi_rser_rxfifo)   Receive FIFO Drain Request action - DMA
+      \t *
+      \t *    // The following are initial settings that would commonly be selected by selectSharedConfiguration()
+      \t *    SpiPcsPolarity_3_ActiveLow,         // TODO Polarity for PCS signals (similar lines may be repeated)
+      \t *    SpiPeripheralSelect_Ptc4 ,              // Peripheral to select
+      \t *    SpiCtarSelect_1,                        // CTAR to use
+      \t *    SpiPeripheralSelectMode_Transaction     // Peripheral select mode
+      \t *
+      \t *   // Optional base value to start with (must be last parameter)
+      \t *   $(_Class)::DefaultInitValue   // Used as base value modified by above
+      \t * };
+      \t *
+      \t * // Initialise $(_Class) from values specified above
+      \t * $(_Class)::configure($(_name)Init)
+      \t * @endcode
+      \t */
+      \tclass Init {
+      \t
+      \tprivate:
+      \t   /**
+      \t    * Prevent implicit parameter conversions
+      \t    */
+      \t   template <typename... Types>
+      \t   constexpr Init(Types...) = delete;
+      \t
+      \tpublic:
+      \t   /**
+      \t    * Copy Constructor
+      \t    */
+      \t   constexpr Init(const Init &other) = default;
+      \t
+      \t   /**
+      \t    * Assignment operator
+      \t    */
+      \t   constexpr Init& operator=(const Init& t) = default;
+      \t
+      \t   /**
+      \t    * Default Constructor
+      \t    */
+      \t   constexpr Init() = default;
+      \t\n
+   ]]>
+   </template>
 
-   <variableTemplate where="basicInfo" variables="irqHandlingMethod" codeGenCondition="irqHandlingMethod"
-    ><![CDATA[
-      \t   /// %description
-      \t   %params = nullptr;\n\n
-   ]]></variableTemplate>
+   <!-- ____ BasicInfo::Init class Member variables ________ -->
 
-   <variableTemplate where="basicInfo"
-      variables="
-         spi_mcr_mtfe,
-         spi_mcr_pcsse,
-         spi_mcr_doze,
-         spi_mcr_frz,
-         spi_mcr_rooe,
-         spi_mcr_cont_scke"
-   ><![CDATA[
-      \t   ///  Module Configuration Register
-      \t   uint32_t %registerName = 0;\n\n
-   ]]></variableTemplate>
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         variables="spi_mcr_mstr" >
+      <![CDATA[
+      \t   union Mcr {
+      \t      %baseType value;
+      \t      struct {
+      \t         unsigned halt      : 1;
+      \t         unsigned           : 7;
+      \t         unsigned smpl_pt   : 2;
+      \t         unsigned clr_rxf   : 1;
+      \t         unsigned clr_txf   : 1;
+      \t         unsigned dis_rxf   : 1;
+      \t         unsigned dis_txf   : 1;
+      \t         unsigned mdis      : 1;
+      \t         unsigned doze      : 1;
+      \t         unsigned pcsis     : 5;
+      \t         unsigned           : 3;
+      \t         unsigned rooe      : 1;
+      \t         unsigned           : 1;
+      \t         unsigned mtfe      : 1;
+      \t         unsigned frz       : 1;
+      \t         unsigned dconf     : 2;
+      \t         unsigned cont_scke : 1;
+      \t         unsigned mstr      : 1;
+      \t      };
+      \t      constexpr Mcr(%baseType v) : value(v) {}
+      \t   };
+      \t\n
+      ]]>
+   </variableTemplate>
+   <for keys=" type        : variables                                            : init    "
+       values="Mcr         : spi_mcr_mstr,spi_mcr_cont_scke,spi_mcr_frz,
+                             spi_mcr_mtfe,spi_mcr_rooe,spi_mcr_pcsis,spi_mcr_doze,
+                             spi_mcr_mdis,spi_mcr_dis_fifox,
+                             spi_mcr_clr_fifox,
+                             spi_mcr_halt     : SpiMasterSlave_Master|SpiHalt_StopTransfers ;
+               %baseType   : spi_rser_tcf_re,spi_rser_eoqf_re,spi_rser_tfuf_re,
+                             spi_rser_txfifo,spi_rser_rfof_re,
+                             spi_rser_rxfifo                  :   0      " >
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         variables="%(variables)"
+         linePadding="xxx" >
+      <![CDATA[
+         %multilineDescription
+         \t   %(type) %registerName = %(init);\n\n
+      ]]>
+      </variableTemplate>
+   </for>
 
-   <variableTemplate where="basicInfo"
+   <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="
          spi_ctar_sel,
          spi_pushr_pcs,
          PeripheralSelectMode"
+         linePadding="xxx"
    ><![CDATA[
-      \t   ///  PUSHR values
-      \t   uint32_t pushr      = 0;
-      \t   uint32_t pushrFinal = 0;
+      \t   // PUSHR base values
+         %multilineDescription
+      \t   PushrCommand pushr      = 0;
+      \t   PushrCommand pushrFinal = 0;
       \t\n
    ]]></variableTemplate>
 
-<!--  Constructors -->
+   <!-- ____ BasicInfo::Init class Constructors ____________ -->
 
-   <variableTemplate where="basicInfo" codeGenCondition="irqHandlingMethod"
-      variables="irqHandlingMethod"
-      linePadding="xxx"
-    ><![CDATA[
-      \t   /**
-      \t    * Constructor for %description
-      \t    * (%variables)
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      %paramDescription
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Config(%params, Types... rest) : Config(rest...) {
-      \t
-      \t      this->%paramName0 = %paramExpression;
-      \t   }\n\n
-   ]]></variableTemplate>
-
-   <for keys="r" values="
-         spi_mcr_mtfe;
-         spi_mcr_pcsse;
-         spi_mcr_doze;
-         spi_mcr_frz;
-         spi_mcr_rooe;
-         spi_mcr_cont_scke" >
-      <variableTemplate where="basicInfo" variables="%(r)"
-         linePadding="xxx"
-      ><![CDATA[
+   <for keys="r"
+      values="
+            spi_mcr_mstr;spi_mcr_cont_scke;spi_mcr_frz;
+            spi_mcr_mtfe;spi_mcr_rooe;spi_mcr_doze;
+            spi_mcr_mdis;spi_mcr_dis_fifox;
+            spi_mcr_clr_fifox;
+            spi_mcr_halt
+            " >
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         variables="%(r)"
+         linePadding="xxx" >
+      <![CDATA[
          \t   /**
          \t    * Constructor for %description
          \t    * (%variables)
@@ -758,15 +1436,45 @@
          %paramDescription
          \t    */
          \t   template <typename... Types>
-         \t   constexpr Config(%params, Types... rest) : Config(rest...) {
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
+         \t
+         \t      %registerName.value = (%registerName.value&~%mask) | %paramExpression;
+         \t   }
+         \t\n
+      ]]>
+      </variableTemplate>
+   </for>
+
+   <for keys="r"
+      values="
+            spi_rser_tcf_re;spi_rser_eoqf_re;spi_rser_tfuf_re;
+            spi_rser_txfifo;spi_rser_rfof_re;
+            spi_rser_rxfifo
+            " >
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         variables="%(r)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t   /**
+         \t    * Constructor for %description
+         \t    * (%variables)
+         \t    *
+         \t    * @tparam   Types
+         \t    * @param    rest
+         \t    *
+         %paramDescription
+         \t    */
+         \t   template <typename... Types>
+         \t   constexpr Init(%params, Types... rest) : Init(rest...) {
          \t
          \t      %registerName = (%registerName&~%mask) | %paramExpression;
          \t   }
          \t\n
-      ]]></variableTemplate>
+      ]]>
+      </variableTemplate>
    </for>
 
-   <variableTemplate where="basicInfo" variables="spi_mcr_pcsis"
+   <variableTemplate where="basicInfo" variables="spi_mcr_pcsis_enum"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -783,48 +1491,19 @@
       \t    *                         SpiPcsActiveLow_PCSn values are cumulative
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Config(%params, Types... rest) : Config(rest...) {
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
       \t      if (%paramExpression == SpiPcsActiveLow_None) {
-      \t         %registerName &= ~%mask;
+      \t         %registerName.value &= ~%mask;
       \t      }
       \t      else {
-      \t         %registerName |= %paramName;
+      \t         %registerName.value |= %paramName;
       \t      }
       \t   }
       \t\n
    ]]></variableTemplate>
 
-   <!-- variableTemplate where="basicInfo" variables="spi_pushr_pcs"
-      linePadding="xxx"
-   ><![CDATA[
-      \t   /**
-      \t    * Constructor for initial Peripheral selection
-      \t    * (%variables)
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      \t    * @param %paramExpression PCS signal to assert during transfers
-      \t    *                SpiPeripheralSelect_None clears all selections
-      \t    *                SpiPeripheralSelect_XXXX values are cumulative
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Config(%params, Types... rest) : Config(rest...) {
-      \t
-      \t      if (%paramExpression == SpiPeripheralSelect_None) {
-      \t         pushr      &= ~%mask;
-      \t         pushrFinal &= ~%mask;
-      \t      }
-      \t      else {
-      \t         pushr      |= %paramExpression;
-      \t         pushrFinal |= %paramExpression;
-      \t      }
-      \t   }
-      \t\n
-   ]]></variableTemplate -->
-
-   <variableTemplate where="basicInfo" variables="spi_pushr_pcs"
+   <variableTemplate where="basicInfo" variables="spi_pushr_pcs_enum"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -839,15 +1518,15 @@
       \t    *                SpiPeripheralSelect_XXXX values are cumulative
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Config(%params, Types... rest) : Config(rest...) {
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
       \t      if (%paramName == SpiPeripheralSelect_None) {
-      \t         pushr      &= ~%mask;
-      \t         pushrFinal &= ~%mask;
+      \t         pushr.value      &= ~%mask;
+      \t         pushrFinal.value &= ~%mask;
       \t      }
       \t      else {
-      \t         pushr      |= %paramName;
-      \t         pushrFinal |= %paramName;
+      \t         pushr.value      |= %paramName;
+      \t         pushrFinal.value |= %paramName;
       \t      }
       \t   }
       \t\n
@@ -866,10 +1545,10 @@
       \t    * @param %paramExpression CTAR to use during transfers
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Config(%params, Types... rest) : Config(rest...) {
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t      pushr      = (pushr      & ~SPI_PUSHR_CTAS_MASK)|SPI_PUSHR_CTAS(%paramExpression);
-      \t      pushrFinal = (pushrFinal & ~SPI_PUSHR_CTAS_MASK)|SPI_PUSHR_CTAS(%paramExpression);
+      \t      pushr.value      = (pushr.value      & ~SPI_PUSHR_CTAS_MASK)|SPI_PUSHR_CTAS(%paramExpression);
+      \t      pushrFinal.value = (pushrFinal.value & ~SPI_PUSHR_CTAS_MASK)|SPI_PUSHR_CTAS(%paramExpression);
       \t   }
       \t\n
    ]]></variableTemplate>
@@ -887,509 +1566,1089 @@
       \t    * @param %paramExpression Behaviour of peripheral select signals between transfers/transactions
       \t    */
       \t   template <typename... Types>
-      \t   constexpr Config(%params, Types... rest) : Config(rest...) {
+      \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t      pushr      |= (%paramExpression>=1)?SPI_PUSHR_CONT_MASK:0;
-      \t      pushrFinal |= (%paramExpression>=2)?SPI_PUSHR_CONT_MASK:0;
+      \t      pushr.value      |= (%paramExpression>=1)?SPI_PUSHR_CONT_MASK:0;
+      \t      pushrFinal.value |= (%paramExpression>=2)?SPI_PUSHR_CONT_MASK:0;
       \t   }
       \t\n
    ]]></variableTemplate>
 
-<!--   ========== Config class - end =============================== -->
-
-   <template where="basicInfo" ><![CDATA[
-      \t}; // class Config\n
-   ]]></template>
-
-<!--   ========== Config class - start =============================== -->
-
-   <template where="basicInfo" ><![CDATA[
-      \t/**
-      \t * Class used to do initialisation of $(_Class)
-      \t *
-      \t * This class has multiple constructors that accepts various values:
-      \t *
-      \t * @note This constructor may be used to create a const instance in ROM
-      \t *
-      \t * Example1:
-      \t * This example breaks the initialisation into several constants which may allow re-use
-      \t * @code
-      \t * // Shared init values
-      \t * static constexpr Config SharedConfigValue = {
-      \t *    // Common setting that are seldom changed
-      \t *    SpiModifiedTiming_Normal ,                   // Modified Timing Format - Normal Timing
-      \t *    SpiPcsMode_PCS5 ,                            // PCS5/PCSS* pin mode - PCS5/PCSS normal operation (PCS5)
-      \t *    SpiDoze_Enabled ,                            // Enables Doze mode (when processor is waiting?) - Suspend in doze
-      \t *    SpiFreeze_Enabled ,                          // Controls SPI operation while in debug mode - Suspend in debug
-      \t *    SpiRxOverflowHandling_Overwrite ,            // Handling of Rx Overflow Data - Overwrite existing
-      \t *    SpiContinuousClock_Disable,                  // Continuous SCK Enable - Clock during transfers only
-      \t *    SpiPcsPolarity_3_ActiveLow,                  // Polarity for PCS signals (similar lines may be repeated)
-      \t *
-      \t *    // The following are initial settings that would commonly be changed by selectConfiguration()
-      \t *    SpiPeripheralSelect_Ptc4 ,              // Peripheral to select
-      \t *    SpiCtarSelect_1,                        // CTAR to use
-      \t *    SpiPeripheralSelectMode_Transaction     // Peripheral select mode
-      \t * };
-      \t *
-      \t * static constexpr SerialInit SerialInitValue0 = {
-      \t *       SpiCtarSelect_0,        // CTAR 0 initialisation
-      \t *       10_MHz ,                // Speed of interface
-      \t *       SpiMode_0 ,             // Mode - Mode 0: CPOL=0, CPHA=0
-      \t *       SpiFrameSize_8_bits ,   // SPI Frame sizes - 8 bits/transfer
-      \t *       SpiBitOrder_MsbFirst,   // Transmission order - MSB sent first
-      \t *
-      \t *       // Optional base value to start with (must be last parameter)
-      \t *       Spi1::DefaultSerialInitValue,
-      \t * };
-      \t *
-      \t * static constexpr SerialInit SerialInitValue1 = {
-      \t *       SpiCtarSelect_1,        // CTAR 1 initialisation
-      \t *       1_MHz ,                 // Speed of interface
-      \t *       SpiMode_o ,             // Mode - Mode 0: CPOL=0, CPHA=0
-      \t *       SpiFrameSize_8_bits ,   // SPI Frame sizes - 8 bits/transfer
-      \t *       SpiBitOrder_LsbFirst,   // Transmission order - LSB sent first
-      \t *
-      \t *       // Optional base value to start with (must be last parameter)
-      \t *       Spi1::DefaultSerialInitValue,
-      \t * };
-      \t *
-      \t * // Initialisation values for $(_Class)
-      \t * static const $(_Class)::Init spiInit {
-      \t *    SharedConfigValue,
-      \t *    SerialInitValue0,
-      \t *    SerialInitValue1
-      \t * };
-      \t *
-      \t * // Initialise SPI from values specified above
-      \t * $(_Class)::configure(spiInit);
-      \t * @endcode
-      \t *
-      \t * Example2:
-      \t * This example shows an all-in-one intialisation
-      \t * @code
-      \t * // Initialisation values for $(_Class)
-      \t * // Options available vary with device - See $(_Class)::DefaultInitValue for example
-      \t * static const $(_Class)::Init spiInit {
-      \t *
-      \t *    // Omitted parameters are take to be zero unless a base value is given
-      \t *    {
-      \t *    // Common setting that are seldom changed
-      \t *    SpiModifiedTiming_Normal ,                   // Modified Timing Format - Normal Timing
-      \t *    SpiPcsMode_PCS5 ,                            // PCS5/PCSS* pin mode - PCS5/PCSS normal operation (PCS5)
-      \t *    SpiDoze_Enabled ,                            // Enables Doze mode (when processor is waiting?) - Suspend in doze
-      \t *    SpiFreeze_Enabled ,                          // Controls SPI operation while in debug mode - Suspend in debug
-      \t *    SpiRxOverflowHandling_Overwrite ,            // Handling of Rx Overflow Data - Overwrite existing
-      \t *    SpiContinuousClock_Disable,                  // Continuous SCK Enable - Clock during transfers only
-      \t *    SpiPcsPolarity_3_ActiveLow,                  // Polarity for PCS signals (similar lines may be repeated)
-      \t *
-      \t *    // The following are initial settings that would commonly be changed by selectConfiguration()
-      \t *    SpiPeripheralSelect_Ptc4 ,              // Peripheral to select
-      \t *    SpiCtarSelect_1,                        // CTAR to use
-      \t *    SpiPeripheralSelectMode_Transaction     // Peripheral select mode
-      \t *    },
-      \t *    {
-      \t *       // CTAR 0 initialisation
-      \t *       10_MHz ,                // Speed of interface
-      \t *       SpiMode_0 ,             // Mode - Mode 0: CPOL=0, CPHA=0
-      \t *       SpiFrameSize_8_bits ,   // SPI Frame sizes - 8 bits/transfer
-      \t *       SpiBitOrder_MsbFirst,   // Transmission order - MSB sent first
-      \t *    },
-      \t *    {
-      \t *       // CTAR 1 initialisation - May be ommited
-      \t *       1_MHz ,                 // Speed of interface
-      \t *       SpiMode_0 ,             // Mode - Mode 0: CPOL=0, CPHA=0
-      \t *       SpiFrameSize_8_bits ,   // SPI Frame sizes - 8 bits/transfer
-      \t *       SpiBitOrder_MsbFirst,   // Transmission order - MSB sent first
-      \t *    },
-      \t *
-      \t *    // Optional base value to start with (must be last parameter)
-      \t *    $(_Class)::DefaultValue
-      \t * };
-      \t *
-      \t * // Initialise SPI from values specified above
-      \t * $(_Class)::configure(spiInit);
-      \t * @endcode
-      \t */
-      \tclass Init {
-      \t
-      \tpublic:
-      \t   /**
-      \t    * Copy Constructor
-      \t    */
-      \t   constexpr Init(const Init &other) = default;
-      \t
-      \t   /**
-      \t    * Default Constructor
-      \t    */
-      \t   constexpr Init() = default;
-      \t\n
-   ]]></template>
-
-<!--   Config Member variables -->
-
-   <template where="basicInfo"
-    ><![CDATA[
-      \t   ///  Used to construct CTARx values
-      \t   SerialInit ctars[2];
-      \t
-      \t   /// Common configuration
-      \t   Config config;
-      \t\n
-   ]]></template>
-
-<!--    Config Constructors -->
-
-   <template where="basicInfo"
-      linePadding="xxx"
-   ><![CDATA[
-      \t   /**
-      \t    * Constructor for CTAR0, CTAR1 values
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      \t    * @param config  Shared configuration values
-      \t    * @param ctar0   Configuration values for CTAR0
-      \t    * @param ctar1   Configuration values for CTAR1
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(const Config &config, const SerialInit &ctar0, const SerialInit &ctar1, Types... rest) : Init(rest...) {
-      \t
-      \t      this->config     = config;
-      \t      ctars[0]         = ctar0;
-      \t      ctars[0].ctarNum = SpiCtarSelect_0;
-      \t      ctars[1]         = ctar1;
-      \t      ctars[1].ctarNum = SpiCtarSelect_1;
-      \t   }
-      \t\n
-   ]]></template>
-
-   <template where="basicInfo"
-      linePadding="xxx"
-   ><![CDATA[
-      \t   /**
-      \t    * Constructor for CTAR0, CTAR1 values
-      \t    *
-      \t    * @tparam   Types
-      \t    * @param    rest
-      \t    *
-      \t    * @param config  Shared configuration values
-      \t    * @param ctar    Configuration values for all CTARs
-      \t    */
-      \t   template <typename... Types>
-      \t   constexpr Init(const Config &config, const SerialInit &ctar, Types... rest) : Init(rest...) {
-      \t
-      \t      this->config     = config;
-      \t      ctars[0]         = ctar;
-      \t      ctars[0].ctarNum = SpiCtarSelect_0;
-      \t      ctars[1]         = ctar;
-      \t      ctars[1].ctarNum = SpiCtarSelect_1;
-      \t   }
-      \t\n
-   ]]></template>
-
-<!--  Init Configure methods -->
-
-   <template discardRepeats="true" key="/SPI/InitMethod" ><![CDATA[
-      /* Template /SPI/InitMethod - start */
-      \t
-      \t/**
-      \t * Configure SPI from values specified in init
-      \t *
-      \t * @param init Class containing initialisation values
-      \t */
-      \tvoid configure(const typename SpiBasicInfo::Init &init) {
-      \t/*
-      \t   if constexpr (Info::irqHandlerInstalled) {
-      \t      // Only set call-back if feature enabled
-      \t      setCallback(init.callbackFunction);
-      \t      enableNvicInterrupts(init.irqlevel);
-      \t   }
-      \t*/
-      \t   enable();
-      \t
-      \t   spi->MCR =
-      \t         init.config.mcr |
-      \t         SpiClearFifo_Both|         // Clear FIFOs
-      \t         SPI_MCR_HALT(1)|           // Halt transfers initially
-      \t         SPI_MCR_MSTR(1);           // Master mode
-      \t
-      \t   const uint32_t spiFrequency = getSpiInputClockFrequency();
-      \t
-      \t   // CTAR 0
-      \t   spi->CTAR[0] = init.ctars[0].ctar|calculateCtarTiming(spiFrequency, init.ctars[0].speed);
-      \t
-      \t   // CTAR 1
-      \t   spi->CTAR[1] = init.ctars[1].ctar|calculateCtarTiming(spiFrequency, init.ctars[1].speed);
-      \t
-      \t   // PUSHR values for intermediate and last transfer in transaction
-      \t   pushrMask      = init.config.pushr;
-      \t   pushrMaskFinal = init.config.pushrFinal;
-      \t}
-      \t\n
-   ]]></template>
-
-<!--   ========== Init class - end =============================== -->
-
-   <template where="basicInfo" ><![CDATA[
-      \t}; // class Init
-      \t\n
-   ]]></template>
-
-</if>
-
-<!--    Default Initialisation values -->
-
-   <template><![CDATA[
-      \t/**
-      \t * Default initialisation value for $(_Class)
-      \t * This value is created from Configure.usbdmProject settings
-      \t */
-      \tstatic constexpr SpiBasicInfo::SerialInit DefaultSerialInitValue[] = {\n
-   ]]></template>
-   <for keys="c" dim="=spi_ctar_dim" >
-      <variableTemplate
-         separator=","
-         terminator=","
-         padToComments="35"
-         variables="
-            speed[%(c)],
-            spi_ctar_mode[%(c)],
-            spi_ctar_fmsz[%(c)],
-            spi_ctar_lsbfe[%(c)]
-            "
-      ><![CDATA[
-         \t{
-         \t   SpiCtarSelect_%(c),
-         %initExpression\n\t},\n
-      ]]></variableTemplate>
-   </for>
-   <template><![CDATA[
-      \t};
-      \t\n
-      ]]></template>
-
-   <variableTemplate
-      separator=","
-      terminator=","
-      padToComments="35"
-      variables="
-         spi_mcr_mtfe,
-         spi_mcr_pcsse,
-         spi_mcr_doze,
-         spi_mcr_frz,
-         spi_mcr_rooe,
-         spi_mcr_cont_scke,
-         spi_ctar_sel,
-         PeripheralSelectMode
-         "
-   ><![CDATA[
-      \t/**
-      \t * Default initialisation value for $(_Class)
-      \t * This value is created from Configure.usbdmProject settings
-      \t */
-      \tstatic constexpr SpiBasicInfo::Config DefaultConfigValue = {%initNonZeroValues
-      \t\n
-   ]]></variableTemplate>
-   <for keys="pcs" dim="6" >
-      <template codeGenCondition="(spi_mcr_pcsis&amp;(1&lt;&lt;%(pcs)))!=0"><![CDATA[
-         \t   SpiPcsActiveLow_Pcs%(pcs),     // (spi_mcr_pcsis.b%(pcs)) PCS%(pcs) is active-low\n
-      ]]></template>
-   </for>
-   <for keys="pcs" dim="6" >
-      <template codeGenCondition="(spi_pushr_pcs&amp;(1&lt;&lt;%(pcs)))!=0"><![CDATA[
-         \t   SpiPeripheralSelect_Pcs%(pcs), // (spi_pushr_pcs.b%(pcs)) PCS%(pcs) is asserted during transfer\n
-      ]]></template>
-   </for>
-   <template>
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
-      \t};\n\n
+      \t}; // class $(_BasicInfo)::Init
+      \t\n
    ]]>
    </template>
 
-   <template><![CDATA[
+<!-- ====================================================================================================== -->
+<!--     END BasicInfo::Init class      -->
+<!-- ====================================================================================================== -->
+
+   <!-- ____ BasicInfo class Configure methods ____ -->
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      linePadding="xxx" >
+   <![CDATA[
+      protected:
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t * This routine does not configure pins or interrupt handlers
+      \t *
+      \t * @param $(_basename)            Hardware instance pointer
+      \t * @param clockFrequency  Clock frequency
+      \t * @param init            Class containing initialisation values
+      \t */
+      \tstatic void configure(
+      \t               volatile $(_Type) *$(_basename),
+      \t               const    Init     &init) {\n
+   ]]>
+   </template>
+   <for keys=
+             " var                                                    : statement            "
+      values=" spi_mcr_mstr,spi_mcr_cont_scke,spi_mcr_frz,
+               spi_mcr_mtfe,spi_mcr_rooe,spi_mcr_pcsis,spi_mcr_doze,
+               spi_mcr_mdis,spi_mcr_dis_fifox,
+               spi_mcr_clr_fifox,
+               spi_mcr_halt       : %register = init.%registerName.value|SpiClearFifo_Both ;
+               spi_sr_tcf,spi_sr_txrxs,spi_sr_eoqf,spi_sr_tfuf,
+               spi_sr_tfff,spi_sr_rfof,spi_sr_rfdf                    : %register = %mask  ;
+               spi_rser_tcf_re,spi_rser_eoqf_re,spi_rser_tfuf_re,
+               spi_rser_txfifo,spi_rser_rfof_re,
+               spi_rser_rxfifo                                        : %configRegAssignment  " >
+      <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+         variables="%(var)"
+         linePadding="xxx" >
+      <![CDATA[
+         \t
+         %multilineDescription
+         \t   %(statement);\n
+      ]]>
+      </variableTemplate>
+   </for>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
+      linePadding="xxx" >
+   <![CDATA[
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      public:
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t * This routine configure pins but not interrupt handlers
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tvoid configure(const Init &init) const {
+      \t
+      \t   enable();
+      \t   configure($(_basename), init);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
+<!--  Transferred routines -->
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      protected:
+      \t/**
+      \t * Calculate communication speed from SPI clock frequency and speed factors
+      \t *
+      \t * @param[in]  clockFrequency  Clock frequency of SPI in Hz
+      \t * @param[in]  spiCtarSelect   CTAR selection providing SPI_CTAR_BR, SPI_CTAR_PBR fields
+      \t *
+      \t * @return Clock frequency of SPI in Hz for these factors
+      \t */
+      \tuint32_t calculateSpeed(uint32_t clockFrequency, SpiCtarSelect spiCtarSelect) {
+      \t   return calculateSpeed(clockFrequency, spi->CTAR[spiCtarSelect]);
+      \t}
+      \t
+      \t/**
+      \t * Calculate Delay factors
+      \t * Used for ASC, DT and CSSCK
+      \t *
+      \t * @param[in]  clockFrequency Clock frequency of SPI in Hz
+      \t * @param[in]  delay_ns       Desired delay in nanoseconds
+      \t * @param[out] bestPrescale   Best prescaler value (0=>/1, 1=>/3, 2=/5, 3=>/7)
+      \t * @param[out] bestDivider    Best divider value (N=>/(2**(N+1)))
+      \t *
+      \t * Note: Determines bestPrescaler and bestDivider for the smallest delay that is not less than delay.
+      \t */
+      \tstatic void calculateDelay(uint32_t clockFrequency, uint32_t delay_ns, int &bestPrescale, int &bestDivider);
+      \t
+      \t/**
+      \t * Calculate communication speed factors for SPI
+      \t *
+      \t * @param[in]  clockFrequency Clock frequency of SPI in Hz
+      \t * @param[in]  frequency      Communication frequency in Hz
+      \t *
+      \t * @return CTAR register value (only including BR and PBR)
+      \t *
+      \t * Note: Chooses the highest speed that is not greater than frequency.
+      \t */
+      \tstatic uint32_t calculateDividers(uint32_t clockFrequency, uint32_t frequency);
+      \t
+      \t/**
+      \t * Calculate SPI selection for a transaction
+      \t *
+      \t * @param[in]  spiCtarSelect           CTAR to select during transfer
+      \t * @param[in]  spiPeripheralSelect     Peripheral(s) to select for transfer
+      \t * @param[in]  spiPeripheralSelectMode Behaviour of peripheral select signals between transfers/transactions
+      \t * @param[out] pushrMask               PUSHR value for intermediate transfers within a transaction
+      \t * @param[out] pushrMaskFinal          PUSHR value for final transfer in transaction
+      \t */
+      \tstatic void calculatePeripheralSelect(
+      \t      SpiCtarSelect           spiCtarSelect,
+      \t      SpiPeripheralSelect     spiPeripheralSelect,
+      \t      SpiPeripheralSelectMode spiPeripheralSelectMode,
+      \t      Pushr                   &pushrMask,
+      \t      Pushr                   &pushrMaskFinal
+      \t      ) {
+      \t   //                                        Transfer          : Transaction             : Continuous, ;
+      \t   static const SpiSelectMode val[]      = {SpiSelectMode_Idle, SpiSelectMode_Continuous, SpiSelectMode_Continuous};
+      \t   static const SpiSelectMode valFinal[] = {SpiSelectMode_Idle, SpiSelectMode_Idle,       SpiSelectMode_Continuous};
+      \t
+      \t   // Common bits
+      \t   uint32_t common = SPI_PUSHR_CTAS(spiCtarSelect)|spiPeripheralSelect;
+      \t
+      \t   // Value used for each transfer i.e. controls PCS assertion between transfers
+      \t   pushrMask.value      = common|val[spiPeripheralSelectMode];
+      \t
+      \t   // Value used for last transfer in each transaction i.e. controls PCS assertion between transactions
+      \t   pushrMaskFinal.value = common|valFinal[spiPeripheralSelectMode]|SPI_PUSHR_EOQ_MASK;
+      \t}
+      \t
+      \t/**
+      \t * Calculate communication speed from SPI clock frequency and speed factors
+      \t *
+      \t * @param[in]  clockFrequency  Clock frequency of SPI in Hz
+      \t * @param[in]  spiCtarValue    Configuration providing SPI_CTAR_BR, SPI_CTAR_PBR fields
+      \t *
+      \t * @return Clock frequency of SPI in Hz for these factors
+      \t */
+      \tstatic uint32_t calculateSpeed(uint32_t clockFrequency, uint32_t spiCtarValue);
+      \t
+      \t/**
+      \t * Calculate CTAR timing related values
+      \t * Uses default delays
+      \t *
+      \t * @param[in]  clockFrequency Clock frequency of SPI in Hz
+      \t * @param[in]  frequency      Communication frequency in Hz
+      \t *
+      \t * @return Combined masks for CTAR (PBR, BR, PCSSCK, CSSCK, PDT, DT, PCSSCK and CSSCK)
+      \t */
+      \tstatic uint32_t calculateCtarTiming(uint32_t clockFrequency, uint32_t frequency) {
+      \t
+      \t   int bestPrescale, bestDivider;
+      \t   Ctar ctarValue;
+      \t
+      \t   if (frequency==0) {
+      \t      // Prevent /0
+      \t      frequency = 1000;
+      \t   }
+      \t
+      \t   ctarValue.value = calculateDividers(clockFrequency, frequency);
+      \t
+      \t   // Assume we need 1/2 of a transmission clock period for setup and hold times
+      \t   // This is the time in ns (rounded)
+      \t   const uint32_t clockPeriodDiv2_ns = (500'000'000+(frequency/2))/frequency;
+      \t
+      \t   calculateDelay(clockFrequency, clockPeriodDiv2_ns, bestPrescale, bestDivider);
+      \t   ctarValue.value |= SPI_CTAR_PCSSCK(bestPrescale)|SPI_CTAR_CSSCK(bestDivider);
+      \t
+      \t//      calculateDelay(clockFrequency, clockPeriodDiv2_ns, bestPrescale, bestDivider);
+      \t   ctarValue.value |= SPI_CTAR_PASC(bestPrescale)|SPI_CTAR_ASC(bestDivider);
+      \t
+      \t   // Assume 1 clock minimum between CS negation and assertion
+      \t   calculateDelay(clockFrequency, 2*clockPeriodDiv2_ns, bestPrescale, bestDivider);
+      \t   ctarValue.value |= SPI_CTAR_PDT(bestPrescale)|SPI_CTAR_DT(bestDivider);
+      \t
+      \t   return ctarValue.value;
+      \t}
+      \t
+      public:
+      \t\n
+   ]]></template>
+
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Select pre-loaded communication parameters (CTAR)
+      \t *
+      \t * @param spiCtarSelect            Indicates which pre-loaded settings to use (which CTAR)
+      \t * @param spiPeripheralSelect      Which peripheral is to be accessed (via PCSx)
+      \t * @param spiPeripheralSelectMode  Behaviour of peripheral select signals between transfers/transactions
+      \t *
+      \t * @note Typically used with pre-loaded values in CTARs:
+      \t * @code
+      \t *     setSharedConfiguration(spiCtarSelect_0, ...); // Load multiple configurations
+      \t *     setSharedConfiguration(spiCtarSelect_1, ...);
+      \t *
+      \t *     selectSharedConfiguration(spiCtarSelect_0, ...) // Use one of above settings
+      \t *     startTransaction();
+      \t *     endTransaction();
+      \t * @endcode
+      \t */
+      \tvoid selectSharedConfiguration(
+      \t      SpiCtarSelect             spiCtarSelect,
+      \t      SpiPeripheralSelect       spiPeripheralSelect,
+      \t      SpiPeripheralSelectMode   spiPeripheralSelectMode = SpiPeripheralSelectMode_Transaction) {
+      \t
+      \t   // Select PCS behaviour
+      \t   calculatePeripheralSelect(spiCtarSelect, spiPeripheralSelect, spiPeripheralSelectMode, pushrMask, pushrMaskFinal);
+      \t}
+      \t
+      \t/**
+      \t * Set communication parameters for later use
+      \t *
+      \t * @param spiCtarSelect      Indicates which pre-loaded settings to use (which CTAR)
+      \t * @param spiCtarSettings    Settings to use
+      \t *
+      \t * @note For typical use see selectSharedConfiguration()
+      \t */
+      \tvoid setSharedConfiguration(
+      \t      SpiCtarSelect      spiCtarSelect,
+      \t      const SerialInit  &spiCtarSettings) {
+      \t
+      \t   // Set up CTAR0
+      \t   const uint32_t spiFrequency = getInputClockFrequency();
+      \t   spi->CTAR[spiCtarSelect] = spiCtarSettings.ctar.value|calculateCtarTiming(spiFrequency, spiCtarSettings.speed);
+      \t}
+      \t
+      \t/**
+      \t *  Get calculated SPI configuration
+      \t *  This includes timing settings, word length and transmit order
+      \t *  This value may be reused by @ref setConfiguration()
+      \t *
+      \t * @return Current communication configuration
+      \t *
+      \t * @note Determines which CTAR is in use from configuration
+      \t */
+      \tSpiCalculatedConfiguration getConfiguration() {
+      \t
+      \t   SpiCtarSelect spiCtarSelect = SpiCtarSelect(((pushrMask.value&SPI_PUSHR_CTAS_MASK)>>SPI_PUSHR_CTAS_SHIFT));
+      \t
+      \t   return SpiCalculatedConfiguration{(uint16_t)(pushrMask.value>>16), (uint16_t)(pushrMaskFinal.value>>16), spi->CTAR[spiCtarSelect]};
+      \t}
+      \t
+      \t/**
+      \t *  Set configuration for the next transaction using pre-calculated settings
+      \t *  This includes timing settings, word length and transmit order etc.
+      \t *  Assumes the interface is already acquired through startTransaction
+      \t *
+      \t * @param[in]  configuration Communication configuration value
+      \t *
+      \t * @note Typically use:
+      \t *     static constexpr Spi0::SerialInit serialInitValue {...};
+      \t *     auto config = calculateConfiguration(serialInitValue);  // Create configuration (slow operation)
+      \t *     ...
+      \t *     setConfiguration(config);          // Re-use pre-calculated settings
+      \t *
+      \t * @note Determines which CTAR to use from configuration.pushrCommand
+      \t */
+      \tvoid setConfiguration(const SpiCalculatedConfiguration &configuration) {
+      \t
+      \t    pushrMask.command           = configuration.pushrCommand.value;
+      \t    pushrMaskFinal.command      = configuration.pushrFinalCommand.value;
+      \t    SpiCtarSelect spiCtarSelect = SpiCtarSelect(((pushrMask.value&SPI_PUSHR_CTAS_MASK)>>SPI_PUSHR_CTAS_SHIFT));
+      \t    spi->CTAR[spiCtarSelect]    = configuration.ctar.value;
+      \t}
+      \t
+      \t/**
+      \t * Calculate communication parameters (CTAR and PUSH register values)
+      \t * Note: These settings will only remain correct if the SPI clock source is unchanged.
+      \t *
+      \t * @param spiCtarSettings          Settings to use
+      \t * @param spiPeripheralSelect      Peripheral(s) to select for transfer
+      \t * @param spiPeripheralSelectMode  Behaviour of peripheral select signals between transfers/transactions
+      \t * @param spiCtarSelect            CTAR to use
+      \t */
+      \tstatic SpiCalculatedConfiguration calculateConfiguration(
+      \t      const SerialInit            &spiCtarSettings,
+      \t      SpiPeripheralSelect         spiPeripheralSelect,
+      \t      SpiPeripheralSelectMode     spiPeripheralSelectMode = SpiPeripheralSelectMode_Transaction,
+      \t      SpiCtarSelect               spiCtarSelect           = SpiCtarSelect_0) {
+      \t
+      \t   Pushr pushrMask, pushrMaskFinal;
+      \t   calculatePeripheralSelect(spiCtarSelect, spiPeripheralSelect, spiPeripheralSelectMode, pushrMask, pushrMaskFinal);
+      \t
+      \t   return SpiCalculatedConfiguration {
+      \t      uint16_t(pushrMask.value>>16),
+      \t      uint16_t(pushrMaskFinal.value>>16),
+      \t      spiCtarSettings.ctar.value|calculateCtarTiming(getInputClockFrequency(), spiCtarSettings.speed)
+      \t   };
+      \t}
+      \t
+      \t/**
+      \t * Start SPI transaction sequence
+      \t */
+      \tint startTransaction() {
+      \t   spi->MCR = spi->MCR & ~SPI_MCR_HALT_MASK;
+      \t   clearStatusFlags();
+      \t   return 0;
+      \t}
+      \t
+      \t/**
+      \t * Start SPI transaction sequence with new configuration
+      \t *  - Configuration set
+      \t *  - Status flags cleared
+      \t *  - SPI 'unhalted'
+      \t *
+      \t * @param[in] configuration The configuration values to set for the transaction.
+      \t *
+      \t * @note Determines which CTAR to use from configuration
+      \t */
+      \tint startTransaction(const SpiCalculatedConfiguration &configuration) {
+      \t   setConfiguration(configuration);
+      \t   spi->MCR = spi->MCR & ~SPI_MCR_HALT_MASK;
+      \t   clearStatusFlags();
+      \t   return 0;
+      \t}
+      \t
+      \t/**
+      \t * Release SPI
+      \t */
+      \tint endTransaction() {
+      \t   spi->MCR = spi->MCR | SPI_MCR_HALT_MASK;
+      \t   return 0;
+      \t}
+      \t
+      \t#pragma GCC push_options
+      \t#pragma GCC optimize("O3")
+      \t/**
+      \t *  Transmit and receive a series of values
+      \t *
+      \t *  @tparam T Type for data transfer (may be inferred from parameters)
+      \t *
+      \t *  @param[in]  dataSize        Number of values to transfer
+      \t *  @param[in]  txData          Transmit bytes (may be nullptr for Receive only)
+      \t *  @param[out] rxData          Receive byte buffer (may be nullptr for Transmit only)
+      \t *  @param[in]  lastTransaction Indicate last transaction in a transfer
+      \t *
+      \t *  @note: rxData may use same buffer as txData
+      \t *  @note: Size of txData and rxData should be appropriate for transmission size.
+      \t */
+      \ttemplate<typename T>
+      \tvoid __attribute__((noinline)) txRx(const uint32_t dataSize, const T *txData, T *rxData, bool lastTransaction) {
+      \t
+      \t   static_assert (((sizeof(T) == 1)||(sizeof(T) == 2)), "Size of data type T must be 8 or 16-bits");
+      \t
+      \t   // Clear FIFOs just in case they are corrupted
+      \t   clearFifos(SpiClearFifo_Both);
+      \t
+      \t   clearStatusFlags();
+      \t
+      \t   uint32_t rxDataSize = dataSize;
+      \t   uint32_t txDataSize = dataSize;
+      \t   do {
+      \t      // Keep Tx FIFO full while monitoring Rx FIFO
+      \t
+      \t      // Clear Tx FIFO fill flag (it will remain set if Tx FIFO still has space available)
+      \t      spi->SR = SPI_SR_TFFF_MASK;
+      \t
+      \t      while ((txDataSize>0) && ((spi->SR&SPI_SR_TFFF_MASK)!=0)) {
+      \t
+      \t         // Send data value (may be dummy)
+      \t         uint32_t sendData = 0xFFFF;
+      \t         if (txData != nullptr) {
+      \t            sendData = (uint16_t)*txData++;
+      \t         }
+      \t
+      \t         txDataSize--;
+      \t
+      \t         // Push to Tx FIFO
+      \t         if (lastTransaction && (txDataSize == 0)) {
+      \t            // Mark last data
+      \t            spi->PUSHR = sendData|pushrMaskFinal.value;
+      \t         }
+      \t         else {
+      \t            // Keep SPI_PCS control
+      \t            spi->PUSHR = sendData|pushrMask.value;
+      \t         }
+      \t
+      \t         // Clear Rx FIFO drain flag (it will remain set if Rx FIFO still not empty)
+      \t         spi->SR = SPI_SR_RFDF_MASK|SPI_SR_TFFF_MASK;
+      \t
+      \t         // Check Rx FIFO
+      \t         if ((spi->SR&SPI_SR_RFDF_MASK)!=0) {
+      \t
+      \t            // Get Rx data (may be discarded)
+      \t            uint32_t receiveData = spi->POPR;
+      \t            if (rxData != nullptr) {
+      \t               *rxData++ = receiveData;
+      \t            }
+      \t            rxDataSize--;
+      \t         }
+      \t      }
+      \t      // Drain Rx FIFO of remaining data
+      \t
+      \t      // Clear Rx FIFO drain flag (it will remain set if there is still data)
+      \t      spi->SR = SPI_SR_RFDF_MASK;
+      \t      if ((spi->SR&SPI_SR_RFDF_MASK)!=0) {
+      \t
+      \t         // Get Rx data (may be discarded)
+      \t         uint32_t receiveData = spi->POPR;
+      \t         if (rxData != nullptr) {
+      \t            *rxData++ = receiveData;
+      \t         }
+      \t         rxDataSize--;
+      \t      }
+      \t   } while(rxDataSize>0);
+      \t}
+      \t#pragma GCC pop_options
+      \t
+      \t/**
+      \t *  Transmit and receive a series of values
+      \t *
+      \t *  @tparam T Type for data transfer (may be inferred from parameters)
+      \t *  @tparam N Size of arrays (may be inferred from parameters)
+      \t *
+      \t *  @param[in]  txData    Transmit bytes (tx-rx size is inferred from this array)
+      \t *  @param[out] rxData    Receive byte buffer
+      \t *  @param[in]  lastTransaction Indicate last transaction in a transfer
+      \t *
+      \t *  @note: rxData may use same buffer as txData
+      \t */
+      \ttemplate<typename T, unsigned N>
+      \tvoid txRx(const T (&txData)[N], T rxData[], bool lastTransaction=true) {
+      \t   txRx(N, txData, rxData, lastTransaction);
+      \t}
+      \t
+      \t/**
+      \t *  Transmit and receive a series of values
+      \t *
+      \t *  @tparam T Type for data transfer (may be inferred from parameters)
+      \t *  @tparam N Size of arrays (may be inferred from parameters)
+      \t *
+      \t *  @param[in]  txData          Transmit bytes (tx-rx size is inferred from this array)
+      \t *  @param[out] rxData          Receive byte buffer
+      \t *  @param[in]  lastTransaction Indicate last transaction in a transfer
+      \t *
+      \t *  @note: rxData may use same buffer as txData
+      \t */
+      \ttemplate<typename T, unsigned N>
+      \tvoid txRx(const std::array<const T, N> &txData, std::array<T, N> &rxData, bool lastTransaction=true) {
+      \t   txRx(N, txData.data(), rxData.data(), lastTransaction);
+      \t}
+      \t
+      \t/**
+      \t *  Transmit and receive a series of values
+      \t *
+      \t *  @tparam T Type for data transfer (may be inferred from parameters)
+      \t *  @tparam N Size of arrays (may be inferred from parameters)
+      \t *
+      \t *  @param[in]  txData           Transmit bytes (tx-rx size is inferred from this array)
+      \t *  @param[out] rxData           Receive byte buffer
+      \t *  @param[in]  lastTransaction  Indicate last transaction in a transfer
+      \t *
+      \t *  @note: rxData may use same buffer as txData
+      \t */
+      \ttemplate<typename T, unsigned N>
+      \tvoid txRx(const std::array<T, N> &txData, std::array<T, N> &rxData, bool lastTransaction=true) {
+      \t   txRx(N, txData.data(), rxData.data(), lastTransaction);
+      \t}
+      \t
+      \t/**
+      \t *  Transmit a series of values
+      \t *
+      \t *  @tparam T Type for data transfer (may be inferred from parameters)
+      \t *  @tparam N Size of arrays (may be inferred from parameters)
+      \t *
+      \t *  @param[in]  txData           Transmit bytes (tx size is inferred from this array)
+      \t *  @param[in]  lastTransaction  Indicate last transaction in a transfer
+      \t */
+      \ttemplate<typename T, unsigned N>
+      \tvoid tx(const std::array<const T, N> &txData, bool lastTransaction=true) {
+      \t   txRx(N, txData.data(), (T*)nullptr, lastTransaction);
+      \t}
+      \t
+      \t/**
+      \t *  Transmit a series of values
+      \t *
+      \t *  @tparam T Type for data transfer (may be inferred from parameters)
+      \t *  @tparam N Size of arrays (may be inferred from parameters)
+      \t *
+      \t *  @param[in]  txData           Transmit bytes (tx size is inferred from this array)
+      \t *  @param[in]  lastTransaction  Indicate last transaction in a transfer
+      \t */
+      \ttemplate<typename T, unsigned N>
+      \tvoid tx(const std::array<T, N> &txData, bool lastTransaction=true) {
+      \t   txRx(N, txData.data(), (T*)nullptr, lastTransaction);
+      \t}
+      \t
+      \t/**
+      \t *  Transmit a series of values
+      \t *
+      \t *  @tparam T Type for data transfer (may be inferred from parameters)
+      \t *  @tparam N Size of arrays (may be inferred from parameters)
+      \t *
+      \t *  @param[in]  txData           Transmit bytes (tx size is inferred from this array)
+      \t *  @param[in]  lastTransaction  Indicate last transaction in a transfer
+      \t */
+      \ttemplate<typename T, unsigned N>
+      \tvoid tx(const T (&txData)[N], bool lastTransaction=true) {
+      \t   txRx(N, txData, (T*)nullptr, lastTransaction);
+      \t}
+      \t
+      \t/**
+      \t *  Transmit a series of values
+      \t *
+      \t *  @tparam T Type for data transfer (may be inferred from parameters)
+      \t *
+      \t *  @param[in]  dataSize         Number of values to transfer
+      \t *  @param[in]  txData           Transmit bytes (tx size is inferred from this array)
+      \t *  @param[in]  lastTransaction  Indicate last transaction in a transfer
+      \t */
+      \ttemplate<typename T>
+      \tvoid tx(uint32_t dataSize, const T *txData, bool lastTransaction=true) {
+      \t   txRx(dataSize, txData, (T*)nullptr, lastTransaction);
+      \t}
+      \t
+      \t/**
+      \t *  Transmit and receive a series of values
+      \t *
+      \t *  @tparam T Type for data transfer (may be inferred from parameters)
+      \t *  @tparam N Size of arrays (may be inferred from parameters)
+      \t *
+      \t *  @param[out] rxData           Receive byte buffer (rx size is inferred from this array)
+      \t *  @param[in]  lastTransaction  Indicate last transaction in a transfer
+      \t */
+      \ttemplate<typename T, unsigned N>
+      \tvoid rx(T (&rxData)[N], bool lastTransaction=true) {
+      \t   txRx(N, (T*)nullptr, rxData, lastTransaction);
+      \t}
+      \t
+      \t/**
+      \t * Transmit and receive a value over SPI
+      \t *
+      \t * @param[in] data - Data to send (4-16 bits) <br>
+      \t *                   May include other control bits as for PUSHR
+      \t *
+      \t * @return Data received
+      \t */
+      \tuint32_t txRxRaw(uint32_t data);
+      \t
+      \t/**
+      \t * Transmit and receive a value over SPI\n
+      \t * This routine is intended for start or middle bytes of a transfer
+      \t *
+      \t * @param[in] data - Data to send (4-16 bits)
+      \t *
+      \t * @return Data received
+      \t */
+      \tuint16_t txRx(uint16_t data) {
+      \t   return txRxRaw(data|pushrMask.value);
+      \t}
+      \t
+      \t/**
+      \t * Transmit and receive a value over SPI\n
+      \t * This routine is intended for the last byte of a transfer
+      \t *
+      \t * @param[in] data - Data to send (4-16 bits)
+      \t *
+      \t * @return Data received
+      \t */
+      \tuint16_t txRxFinal(uint16_t data) {
+      \t   return txRxRaw(data|pushrMaskFinal.value);
+      \t}
+      \t
+      \t/**
+      \t * Clear Transmit and/or Receive FIFOs
+      \t *
+      \t * @param spiClearFifo  Which FIFOs to clear
+      \t */
+      \tvoid clearFifos(SpiClearFifo spiClearFifo=SpiClearFifo_Both) {
+      \t   spi->MCR = spi->MCR | spiClearFifo;
+      \t}
+      \t
+      \t/**
+      \t * Starts and stops the SPI transfers.
+      \t *
+      \t * @param[in] enable true to enable
+      \t */
+      \tvoid enableTransfer(bool enable=true) {
+      \t   if (enable) {
+      \t      spi->MCR = spi->MCR & ~SPI_MCR_HALT_MASK;
+      \t   }
+      \t   else {
+      \t      spi->MCR = spi->MCR | SPI_MCR_HALT_MASK;
+      \t   }
+      \t}
+      \t
+      #if true
+      \t
+      \tstatic inline const DmaTcd tcdSkeleton = {
+      \t   DmaInfo {
+      \t      /* Source address                 */ 0U,                            //* Source array
+      \t      /* Source offset                  */ sizeof(uint32_t),              // Source address advances 1 element for each request
+      \t      /* Source size                    */ DmaSize_32bit,                 // 32-bit read from source address
+      \t      /* Last source adjustment         */ 0,                             // Reset source address - not used
+      \t      /* Source modulo                  */ DmaModulo_Disabled,            // Disabled
+      \t   },
+      \t
+      \t   DmaInfo {
+      \t      /* Destination address            */ 0,                             //* Destination is SPI PUSHR register
+      \t      /* Destination offset             */ 0,                             // Destination address no change
+      \t      /* Destination size               */ DmaSize_32bit,                 // 32-bit write to destination address
+      \t      /* Last destination adjustment    */ 0,                             // Destination address no change
+      \t      /* Destination modulo             */ DmaModulo_Disabled,            // Disabled
+      \t   },
+      \t
+      \t   /* Minor loop byte count             */ dmaNBytes(sizeof(uint32_t)),   // Total transfer in one minor-loop
+      \t   /* Major loop count                  */ 0,                             // *Transfer size - dynamic
+      \t
+      \t   DmaTcdCsr {
+      \t      /* Start channel                  */ DmaStart_Hardware,             // Not started (triggered by hardware)
+      \t      /* Disable Req. on major complete */ DmaStopOnComplete_Enabled,     // Clear hardware request when major loop completed
+      \t      /* Interrupt on major complete    */ DmaIntMajor_Enabled,           // Generate interrupt on completion of Major-loop
+      \t      /* Interrupt on half complete     */ DmaIntHalf_Disabled,           // No interrupt
+      \t      /* Bandwidth (speed) Control      */ DmaSpeed_NoStalls,             // Full speed
+      \t      /* Channel Linking                */ DmaMajorLink_Disabled,         // No linking
+      \t      /* Scatter/Gather                 */ DmaScatterGather_Disabled,     // No scatter-gather
+      \t   },
+      \t};
+      \t
+      \t/**
+      \t * Configure DMA for SPI Transmit
+      \t *
+      \t * @param dmaChannel  DMA channel to use
+      \t * @param paddedData  SPI padded data i.e. 32-bit values with spi-config/data
+      \t * @param size        Number of elements in paddedData
+      \t */
+      \tvoid initialiseTxDma(DmaChannelNum dmaChannel, const uint32_t paddedData[], unsigned size) {
+      \t
+      \t   // Set up TCD from skeleton and modify dynamic values
+      \t   DmaTcd tcd{tcdSkeleton};
+      \t
+      \t   // Source address
+      \t   tcd.SADDR = uint32_t(paddedData);
+      \t
+      \t   // Source size
+      \t   tcd.CITER = dmaCiter(size);
+      \t
+      \t   // Destination address
+      \t   tcd.DADDR = uint32_t(&spi->PUSHR);
+      \t
+      \t   // Configure the transfer
+      \t   Dma0::configureTransfer(dmaChannel, tcd);
+      \t
+      \t   // Enable hardware requests
+      \t   Dma0::enableRequest(dmaChannel);
+      \t
+      \t   // Enable channel interrupt requests
+      \t//   Dma0::enableErrorInterrupts(dmaChannel);
+      \t}
+      \t
+      \tstatic inline DmaChannelNum txDmaChannel;
+      \t
+      \t/**
+      \t * Do DMA driven SPI transfer
+      \t *
+      \t * @param dataConfiguration   Communication settings
+      \t * @param paddedData          SPI padded data i.e. 32-bit values consisting of spi-config+data
+      \t * @param size                Number of elements in paddedData
+      \t */
+      \tErrorCode dmaTx(SpiCalculatedConfiguration dataConfiguration, const uint32_t paddedData[], unsigned size) {
+      \t
+      \t   setFifoAction(SpiTxFifoAction_None, SpiRxFifoAction_None);
+      \t
+      \t   clearFifos(SpiClearFifo_Both);
+      \t
+      \t   do {
+      \t      txDmaChannel = Dma0::allocateChannel();
+      \t      if (txDmaChannel == DmaChannelNum_None) {
+      \t         break;
+      \t      }
+      \t      initialiseTxDma(txDmaChannel, paddedData, size);
+      \t
+      \t      const Dmamux0::Init dmamux0Init {
+      \t         txDmaChannel,
+      \t         DmamuxSlot_SPI0_Transmit,   // Mapping of DMA slot to DMA channel - SPI0
+      \t         DmamuxMode_Continuous ,     // DMA Channel Enable - Channel enabled
+      \t      };
+      \t      // Connect DMA channel to SPI
+      \t      Dmamux0::enable();
+      \t      Dmamux0::configure(dmamux0Init);
+      \t
+      \t      startTransaction(dataConfiguration);
+      \t
+      \t      setFifoAction(SpiTxFifoAction_Dma, SpiRxFifoAction_Dma);
+      \t
+      \t      // Wait while SPI busy
+      \t      while (getStatusFlags()&SpiStatusFlag_TxAndRxStatus) {
+      \t         __asm__("nop");
+      \t      }
+      \t
+      \t   } while (false);
+      \t
+      \t   // Cleanup
+      \t   // Stop SPI requests
+      \t   endTransaction();
+      \t
+      \t   if (txDmaChannel != DmaChannelNum_None) {
+      \t      Dma0::freeChannel(txDmaChannel);
+      \t   }
+      \t   return getError();
+      \t}
+      \t
+      \ttemplate<size_t N>
+      \tErrorCode dmaTx(SpiCalculatedConfiguration dataConfiguration, const uint32_t (&paddedData)[N]) {
+      \t   return dmaTx(dataConfiguration, paddedData, N);
+      \t}
+      \t
+      \t/**
+      \t * Class to pack data for SPI transmission
+      \t *
+      \t * @tparam dataType        Type of data to send - data must packed evenly into 16-bit words
+      \t * @tparam frameSize       Size of transmission frame (4 to 16-bits)
+      \t * @tparam bufferSize      Number of entries in internal buffer
+      \t */
+      \ttemplate<typename dataType, unsigned frameSize=16, uint8_t bufferSize=20>
+      \tclass PackAndSendData {
+      \t
+      \tpublic:
+      \t   static constexpr unsigned dataSize = 8*sizeof(dataType);
+      \t
+      \t   SpiBasicInfo &spi;
+      \t   const SpiCalculatedConfiguration &dataConfiguration;
+      \t   uint8_t  lastByte   = 0;
+      \t   uint8_t  count      = 0;
+      \t   bool     oddByte:8  = true;
+      \t   std::array<uint32_t, bufferSize>buffer;
+      \t
+      \t   void flush() {
+      \t      buffer[count-1] |= SPI_PUSHR_EOQ_MASK;
+      \t      spi.dmaTx(dataConfiguration, buffer.data(), count);
+      \t      count=0;
+      \t      oddByte = true;
+      \t      checkError();
+      \t   }
+      \t
+      \tpublic:
+      \t   PackAndSendData(SpiBasicInfo &spi, const SpiCalculatedConfiguration &dataConfiguration) :
+      \t      spi(spi),
+      \t      dataConfiguration(dataConfiguration) {
+      \t
+      \t      std::fill(buffer.begin(), buffer.end(), dataConfiguration.middleValue(0));
+      \t
+      \t        //console.writeln("size of dataType = ", 8*sizeof(dataType), "-bits, frameSize = ", frameSize, "-bits");
+      \t
+      \t      usbdm_assert((dataSize == 8)||(dataSize == 16),   "Invalid dataType");
+      \t      usbdm_assert((4 <= frameSize)&&(frameSize <= 16), "Invalid transmission size");
+      \t   }
+      \t
+      \t   void sendValue(dataType value) {
+      \t
+      \t      uint16_t newValue = value;
+      \t
+      \t      if constexpr (frameSize > dataSize) {
+      \t         // Pack 2 bytes -> 1 entry in buffer
+      \t         if (oddByte) {
+      \t            lastByte = value;
+      \t            oddByte = false;
+      \t            return;
+      \t         }
+      \t         else {
+      \t            newValue = (lastByte<<8)|uint8_t(newValue);
+      \t            oddByte = true;
+      \t         }
+      \t      }
+      \t      if (count == 0) {
+      \t         buffer[count++] = dataConfiguration.firstValue(newValue);
+      \t      }
+      \t      else {
+      \t         buffer[count++] = dataConfiguration.middleValue(newValue);
+      \t      }
+      \t      if (count>=buffer.size()) {
+      \t         flush();
+      \t      }
+      \t   }
+      \t
+      \t   void sendLastValue(dataType value) {
+      \t
+      \t      uint16_t newValue = value;
+      \t      if constexpr (frameSize > dataSize) {
+      \t         usbdm_assert(!oddByte, "unpaired 8-bit value");
+      \t         newValue = (lastByte<<8)|uint8_t(newValue);
+      \t         oddByte = false;
+      \t      }
+      \t      buffer[count++] = dataConfiguration.lastValue(newValue);
+      \t      flush();
+      \t   }
+      \t};
+      #endif
+      \t\n
+   ]]>
+   </template>
+
+<!-- ====================================================================================================== -->
+<!--     END BasicInfo class      -->
+<!-- ====================================================================================================== -->
+<!-- ====================================================================================================== -->
+<!--     START Info class      -->
+<!-- ====================================================================================================== -->
+
+   <for keys="   pinName       : name  : function      : pcrFunction"
+        values=" $(_NAME)_PCS0 : Pcs0  : setPcs0Output : setOutput ;
+                 $(_NAME)_PCS1 : Pcs1  : setPcs1Output : setOutput ;
+                 $(_NAME)_PCS2 : Pcs2  : setPcs2Output : setOutput ;
+                 $(_NAME)_PCS3 : Pcs3  : setPcs3Output : setOutput ;
+                 $(_NAME)_PCS4 : Pcs4  : setPcs4Output : setOutput ;
+                 $(_NAME)_SCK  : Sck   : setSckOutput  : setOutput ;
+                 $(_NAME)_SIN  : Sin   : setSinInput   : setOutput ;
+                 $(_NAME)_SOUT : Sout  : setSoutOutput : setOutput " >
+
+      <continue condition='=!SignalExists("%(pinName)")' />
+      
+      <equation key="index" value='=IndexOfSignal("%(pinName)")'  />
+      
+      <!--print text='pinName = "%(pinName)"' />
+      <printVar key="index" / -->
+      
+      <template where="info" codeGenCondition='$(_InfoGuard)'
+            immediateVariables="index" >
+      <![CDATA[
+         \tstatic constexpr int %(name)PinIndex = $(index);
+         \t\n
+      ]]>
+      </template>
+      <template where="info" codeGenCondition='$(_InfoGuard)&amp;&amp;SignalIsMapped("%(pinName)")'
+            immediateVariables="index" >
+      <![CDATA[
+         \t/// GPIO associated with $(_NAME) pin (%(pinName))
+         \t//typedef GpioTable_T<$(_Info), $(index), ActiveHigh> Gpio%(name);
+         \t
+         \t/// Allow access to PCR of $(_NAME) pin (%(pinName))
+         \ttypedef PcrTable_T<$(_Info), $(index)> %(name)Pin;
+         \t
+         \t/**
+         \t * Enable %(pinName) pin and connects to $(_NAME).
+         \t * Configures all Pin Control Register (PCR) values to device default.
+         \t */
+         \tstatic void %(function)() {
+         \t
+         \t   %(name)Pin::%(pcrFunction)();
+         \t}
+         \t
+         \t/**
+         \t * Enable %(pinName) pin and connects to $(_NAME).
+         \t * Configures all Pin Control Register (PCR) values.
+         \t *
+         \t * @param pcrValue  PCR value controlling pin characteristics
+         \t */
+         \tstatic void %(function)(PcrValue pcrValue) {
+         \t
+         \t   %(name)Pin::%(pcrFunction)(pcrValue);
+         \t}
+         \t\n
+      ]]>
+      </template>
+   </for>
+
+   <!-- ____ Info constructors ________ -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/** Base address of SPI hardware as uint32_t */
+      \tstatic constexpr uint32_t spiBase   = baseAddress;
+      \t/** Address of SPI.MCR register as uint32_t */
+      \tstatic constexpr uint32_t spiMCR    = baseAddress + offsetof(SPI_Type, MCR);
+      \t/** Address of SPI.CR register as uint32_t */
+      \tstatic constexpr uint32_t spiCR     = baseAddress + offsetof(SPI_Type, TCR);
+      \t/** Address of SPI.CTAR[n] register as uint32_t */
+      \tstatic constexpr uint32_t spiCTAR(unsigned index) {return baseAddress + offsetof(SPI_Type, CTAR) + index * sizeof(SPI_Type::CTAR[0]) ; }
+      \t/** Address of SPI.SR register as uint32_t */
+      \tstatic constexpr uint32_t spiSR     = baseAddress + offsetof(SPI_Type, SR);
+      \t/** Address of SPI.PUSHR register as uint32_t */
+      \tstatic constexpr uint32_t spiPUSHR  = baseAddress + offsetof(SPI_Type, PUSHR);
+      \t/** Address of SPI.POPR register as uint32_t */
+      \tstatic constexpr uint32_t spiPOPR   = baseAddress + offsetof(SPI_Type, POPR);
+      \t\n
+   ]]>
+   </template>
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/** SPI SCK (clock) Pin */
+      \tusing sckGpio  = GpioTable_T<$(_BasicInfo), 0, ActiveHigh>;
+      \t
+      \t/** SPI SIN (data in = usually MISO) Pin */
+      \tusing sinGpio  = GpioTable_T<$(_BasicInfo), 1, ActiveHigh>;
+      \t
+      \t/** SPI SOUT (data out = usually MOSI) Pin */
+      \tusing soutGpio = GpioTable_T<$(_BasicInfo), 2, ActiveHigh>;
+      \t\n
+   ]]>
+   </template>
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t *   Default Constructor
+      \t */
+      \t$(_Info)() : $(_BasicInfo)($(_basename)) {
+      \t   defaultConfigure();
+      \t}
+      \t
+      \t/**
+      \t *   Constructor
+      \t */
+      \t$(_Info)(const Init &init) : $(_BasicInfo)($(_basename)) {
+      \t   configure(init);
+      \t   static_assert(info[SckPinIndex].pinIndex  != PinIndex::UNMAPPED_PCR, "SPIx_SCK has not been assigned to a pin - Modify Configure.usbdm");
+      \t   static_assert(info[SinPinIndex].pinIndex  != PinIndex::UNMAPPED_PCR, "SPIx_SIN has not been assigned to a pin - Modify Configure.usbdm");
+      \t   static_assert(info[SoutPinIndex].pinIndex != PinIndex::UNMAPPED_PCR, "SPIx_SOUT has not been assigned to a pin - Modify Configure.usbdm");
+      \t}
+      \t
+      \t/**
+      \t *   Destructor
+      \t */
+      \tvirtual ~$(_Info)() = default;
+      \t\n
+   ]]>
+   </template>
+
+   <!-- Init configure methods -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Configure with default settings.
+      \t * Configuration determined from Configure.usbdmProject
+      \t */
+      \tstatic void defaultConfigure() {
+      \t
+      \t   configure(DefaultInitValue);
+      \t}
+      \t
+      \t/**
+      \t * Configure $(_BASENAME) from values specified in init
+      \t *
+      \t * @param init Class containing initialisation values
+      \t */
+      \tstatic void configure(const Init &init) {
+      \t
+      \t   // Enable peripheral
+      \t   _enable();
+      \t\n
+   ]]>
+   </template>
+   <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)" >
+   <![CDATA[
+      \t   // Configure call-back
+      \t   if (init.callbacks[0] != nullptr) {
+      \t      setCallback(init.callbacks[0]);
+      \t      enableNvicInterrupts(init.priorities[0]);
+      \t   }
+      \t\n
+   ]]>
+   </template>
+   <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount>1)"
+      variables="irq_enum"
+      immediateVariables="_hardwareIrqCount">
+   <![CDATA[
+      \t   for(int index=0; index<$(_hardwareIrqCount); index++) {
+      \t      if (init.callbacks[index] != nullptr) {
+      \t         // Configure call-back
+      \t         setCallback(%returnType0(index), init.callbacks[index]);
+      \t         enableNvicInterrupts(%returnType0(index), init.priorities[index]);
+      \t      }
+      \t   }
+      \t
+      \t   $(_BasicInfo)::configure($(_basename), getInputClockFrequency(), init);
+      \t}
+      \t\n
+   ]]>
+   </variableTemplate>
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t   SpiBasicInfo::configure(spi, init);
+      \t};
+      \t\n
+   ]]>
+   </template>
+
+   <!-- ____  Default Initialisation value ____ -->
+
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
       \t/**
       \t * Default initialisation value for $(_Class)
       \t * This value is created from Configure.usbdmProject settings
       \t */
-      \tstatic constexpr SpiBasicInfo::Init DefaultInitValue = {
-      \t   DefaultConfigValue,\n
-   ]]></template>
-   <for keys="c" dim="=spi_ctar_dim" >
-      <template><![CDATA[
-         \t   DefaultSerialInitValue[%(c)],\n
-      ]]></template>
-   </for>
-   <template><![CDATA[
-      \t};\n\n
-   ]]></template>
-
-   <template key="/SPI/declarations"  ><![CDATA[
-   // $(_NAME) mappings
-   $(/$(_NAME)/InputMapping:   // No user mappings found for $(_NAME))
-   \t/**
-   \t * Class representing $(_NAME) interface
-   \t *
-   \t * <b>Example</b>
-   \t * @code
-   \t * // Initialisation values for Spi
-   \t * static const $(_Class)::Init spiInit {
-   \t *
-   \t *    {
-   \t *       // Shared configuration
-   \t *       SpiModifiedTiming_Normal ,        // Modified Timing Format - Normal Timing
-   \t *       SpiDoze_Enabled ,                 // Enables Doze mode (when processor is waiting?) - Suspend in Doze
-   \t *       SpiFreeze_Enabled ,               // Controls SPI operation while in debug mode - Suspend in debug
-   \t *       SpiRxOverflowHandling_Overwrite , // Handling of Rx Overflow Data - Overwrite existing
-   \t *       SpiContinuousClock_Enable,        // Continuous SCK Enable - Continuous clock
-   \t *
-   \t *       SpiPeripheralSelect_0,            // PCS0 is Active-low (others are active-high)
-   \t *    },
-   \t *    {
-   \t *       // CTAR 0 initialisation
-   \t *       10_MHz ,                // Speed of interface
-   \t *       SpiMode_0 ,             // Mode - Mode 0: CPOL=0, CPHA=0
-   \t *       SpiFrameSize_8_bits ,   // SPI Frame sizes - 8 bits/transfer
-   \t *       SpiBitOrder_MsbFirst,   // Transmission order - MSB sent first
-   \t *    },
-   \t * };
-   \t *
-   \t * Spi0 spi(spiInit);
-   \t * ...
-   \t *
-   \t * uint8_t txData[] = {1,2,3};
-   \t * uint8_t rxData[10];
-   \t *
-   \t * spi.txRxBytes(sizeof(txData), txData, rxData);
-   \t * ...
-   \t * @endcode
-   \t */
-   \tusing $(_Class) = $(_Baseclass)Base_T<$(_Info)>;
-   \t\n
-   ]]></template>
-
-   <variableTemplate variables="spi_mcr_cont_scke" key="/SPI/methods" discardRepeats="true"
-   ><![CDATA[
-      /* Template /SPI/methods - start */
-      \t
-      \t/**
-      \t * Set %description
-      \t    * (%variables)
-      \t *
-      %paramDescription
-      \t */
-      \tvoid setContinousClock(%paramType %paramName) {
-      \t   %fieldAssignment;
-      \t}\n\n
+      \tstatic constexpr Init DefaultInitValue = {\n
+   ]]>
+   </template>
+   <xi:include href="irqHandlingInit.xml"    />
+   <variableTemplate where="info" codeGenCondition="$(_InfoGuard)"
+      separator=","
+      terminator=","
+      padToComments="45"
+      variables="
+            spi_mcr_mstr,spi_mcr_cont_scke,spi_mcr_frz,
+            spi_mcr_mtfe,spi_mcr_rooe,spi_mcr_pcsis,spi_mcr_doze,
+            spi_mcr_mdis,spi_mcr_dis_fifox,
+            spi_mcr_clr_fifox,
+            spi_mcr_halt,
+            spi_rser_tcf_re,spi_rser_eoqf_re,spi_rser_tfuf_re,
+            spi_rser_txfifo,spi_rser_rfof_re,
+            spi_rser_rxfifo,PeripheralSelectMode
+            " >
+   <![CDATA[
+      \t%initExpression\n
    ]]></variableTemplate>
-
-   <variableTemplate variables="spi_mcr_mstr" key="/SPI/methods" discardRepeats="true"
+   <template codeGenCondition="$(_InfoGuard)"
    ><![CDATA[
-      \t/**
-      \t * Set %description
-      \t * (%variables)
-      \t *
-      %paramDescription
-      \t */
-      \tvoid setMasterSlave(%paramType %paramName) {
-      \t   %fieldAssignment;
-      \t}\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate variables="spi_mcr_pcsis" key="/SPI/methods" discardRepeats="true"
-   ><![CDATA[
-      \t/**
-      \t * Set %description
-      \t * Note: All PCSs are affected.
-      \t * (%variables)
-      \t *
-      %paramDescription
-      \t *
-      \t * The mask would be created by ORing together the <b>active-low</b> PCS selection values
-      \t * Examples:
-      \t * @code
-      \t *    // Set PCS0 and PCS3 active-low and all others active-high
-      \t *    setPcsPolarity(SpiPcsActiveLow_Pcs0|SpiPcsActiveLow_Pcs1)
-      \t *
-      \t *    // Set all PCSx to active high (the most common situation)
-      \t *    setPcsPolarity(SpiPcsActiveLow_None)
-      \t * @endcode
-      \t */
-      \tvoid setPcsPolarity(%paramType %paramName) {
-      \t   %fieldAssignment;
-      \t}\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate variables="spi_mcr_pcsis,spi_pushr_pcs" key="/SPI/methods" discardRepeats="true"
-   ><![CDATA[
-      \t/**
-      \t * Set %description0 to active-low
-      \t * (%variables)
-      \t *
-      %paramDescription1
-      \t *
-      \t * The mask would be created by ORing together the PCS selection values
-      \t * Example:
-      \t * @code
-      \t *    // Set PCS0 and PCS3 active-low and all others unchanged
-      \t *    setPcsPolarityActiveLow(SpiPeripheralSelect_Pcs0|SpiPeripheralSelect_Pcs3);
-      \t * @endcode
-      \t */
-      \tvoid setPcsPolarityActiveLow(%paramType1 %paramName1) {
-      \t   %register0 = %register0|%paramName1;
-      \t}
-      \t
-      \t/**
-      \t * Set %description0 to active-high
-      \t * (%variables)
-      \t *
-      %paramDescription1
-      \t *
-      \t * The mask would be created by ORing together the PCS selection values
-      \t * Example:
-      \t * @code
-      \t *    // Set PCS0 and PCS3 active-high and all others unchanged
-      \t *    setPcsPolarityActiveHigh(SpiPeripheralSelect_Pcs0|SpiPeripheralSelect_Pcs3);
-      \t * @endcode
-      \t */
-      \tvoid setPcsPolarityActiveHigh(%paramType1 %paramName1) {
-      \t   %register0 = %register0&~%paramName1;
-      \t}\n\n
-   ]]></variableTemplate>
-
-   <template key="/SPI/handlerSlot" ><![CDATA[
-      \t{nullptr}, // $(_NAME)\n
+      \t};
+      \t\n
    ]]></template>
 
-   <template codeGenCondition="enablePeripheralSupport" immediateVariables="ClockSource" ><![CDATA[
-      \t/**
-      \t * Get SPI input clock frequency
-      \t *
-      \t * @return Frequency in Hz
-      \t */
-      \tstatic uint32_t getClockFrequency() {
-      \t   return $(ClockSource);
-      \t}\n\n
-   ]]></template>
+<!-- ====================================================================================================== -->
+<!--     END Info class      -->
+<!-- ====================================================================================================== -->
+<!-- ====================================================================================================== -->
+<!--     Common      -->
+<!-- ====================================================================================================== -->
 
+   <template key="/$(_BASENAME)/declarations" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
+      \t/**
+      \t * Class representing any $(_STRUCTNAME) instance
+      \t */
+      \ttypedef $(_BasicInfo) $(_Structname);
+      \t/**
+      \t * Class representing $(_NAME)
+      \t */
+      \ttypedef $(_Info) $(_Class);
+      \t\n
+   ]]>
+   </template>
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
    </validate>
 
    <!-- _____________ Common __________________ -->
-   <projectActionList id = "spi_files" >
-      <copy source="Project_Headers/spi-MK.h"            target="Project_Headers/spi.h"             overwrite="true"  derived="true" />
-      <copy source="Sources/spi-MK.cpp"                  target="Sources/spi.cpp"                   overwrite="true"  derived="true" />
-      <copy source="Snippets/spi-example.cpp"            target="Snippets/spi-example.cpp"          overwrite="true"  derived="true" />
-      <copy source="Snippets/spi-N-config-example.cpp"   target="Snippets/spi-N-config-example.cpp" overwrite="true"  derived="true" />
-      <copy source="Snippets/spi-N-device-example.cpp"   target="Snippets/spi-N-device-example.cpp" overwrite="true"  derived="true" />
-      <copy source="Snippets/spi-2-config-example.cpp"   target="Snippets/spi-2-config-example.cpp" overwrite="true"  derived="true" />
-      <copy source="Snippets/spi-flash-example.cpp"      target="Snippets/spi-flash-example.cpp"    overwrite="true"  derived="true" />
-      <copy source="Snippets/at45db041e.h"               target="Snippets/at45db041e.h"             overwrite="true"  derived="true" />
+   <projectActionList id="spi_files" >
+      <copy source="Project_Headers/spi-MK.h"            target="Project_Headers/spi.h"             overwrite="always"  derived="true" />
+      <copy source="Sources/spi-MK.cpp"                  target="Sources/spi.cpp"                   overwrite="always"  derived="true" />
+      <copy source="Snippets/spi-example.cpp"            target="Snippets/spi-example.cpp"          overwrite="always"  derived="true" />
+      <copy source="Snippets/spi-N-config-example.cpp"   target="Snippets/spi-N-config-example.cpp" overwrite="always"  derived="true" />
+      <copy source="Snippets/spi-N-device-example.cpp"   target="Snippets/spi-N-device-example.cpp" overwrite="always"  derived="true" />
+      <copy source="Snippets/spi-2-config-example.cpp"   target="Snippets/spi-2-config-example.cpp" overwrite="always"  derived="true" />
+      <copy source="Snippets/spi-flash-example.cpp"      target="Snippets/spi-flash-example.cpp"    overwrite="always"  derived="true" />
+      <copy source="Snippets/at45db041e.h"               target="Snippets/at45db041e.h"             overwrite="always"  derived="true" />
    </projectActionList>
 
-   <!-- _____________ Startup __________________ -->
+   <!-- ____ Startup ____ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
       <![CDATA[#include "$(_basename).h"\n
@@ -1401,15 +2660,22 @@
       \tUSBDM::$(_Class)::defaultConfigure();\n
    ]]></template>
 
-   <!-- _____________ SIM configuration __________________ -->
-   <category name="Advanced" description="SIM configuration">
+   <!-- ____ SIM configuration ____ -->
+
+   <category name="Advanced" description="SIM configuration"
+      toolTip="These settings only have effect if the SIM configuration is enabled" >
+      <title description="$(_BASENAME) Shared" />
+      <for keys="v" values="=/SIM/$(_Baseclass)ExternalItems" condition="/SIM/$(_Baseclass)ExternalItems" >
+         <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
+      </for>
+      <title description="$(_NAME) Specific" />
       <aliasOption key="=_scgc_clock" locked="false" condition="_scgc_clock" />
       <for keys="v" values="=/SIM/$(_Class)ExternalItems" condition="/SIM/$(_Class)ExternalItems" >
          <aliasOption key="/SIM/%(v)"           optional="true" locked="false" />
       </for>
    </category>
 
-   <!-- _____________ Signal mapping __________________ -->
-   <signals enabledBy="enablePeripheralSupport" />
+   <!--  ____ Signal mapping ____ -->
+   <signals enabledBy="enablePeripheralSupport" locked="!/PCR/_present" />
 
 </peripheralPage>

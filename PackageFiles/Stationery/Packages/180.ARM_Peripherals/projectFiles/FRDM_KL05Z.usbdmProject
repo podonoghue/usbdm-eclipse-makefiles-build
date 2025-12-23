@@ -113,6 +113,8 @@
    <item key="/PIT/pit_ldval"                              value="10000" />
    <item key="/RTC/EnableRtc"                              value="true" />
    <item key="/RTC/rtc_cr_osce"                            value="true" />
+   <item key="/SIM/configurePeripheralInStartUp"           value="true" />
+   <item key="/SIM/enablePeripheralSupport"                value="true" />
    <item key="/SIM/sim_clkdiv1_outdiv1[0]"                 value="0" />
    <item key="/SIM/sim_clkdiv1_outdiv1[1]"                 value="0" />
    <item key="/SIM/sim_clkdiv1_outdiv1[2]"                 value="0" />

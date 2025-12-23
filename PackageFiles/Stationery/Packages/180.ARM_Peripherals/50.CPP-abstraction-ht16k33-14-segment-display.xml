@@ -31,9 +31,9 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-ht16k33-14-segment" />
                </applyWhen>
-               <copy source="Snippets/ht16k33_14_SegmentDisplay.h"            target="Sources/ht16k33_14_SegmentDisplay.h"             overwrite="true"/>
-               <copy source="Snippets/ht16k33_14_SegmentDisplay.cpp"          target="Sources/ht16k33_14_SegmentDisplay.cpp"           overwrite="true"/>
-               <copy source="Snippets/ht16k33_14_SegmentDisplay-example.cpp"  target="Snippets/ht16k33_14_SegmentDisplay-example.cpp"  overwrite="true"/>
+               <copy source="Snippets/ht16k33_14_SegmentDisplay.h"            target="Sources/ht16k33_14_SegmentDisplay.h"             overwrite="always"/>
+               <copy source="Snippets/ht16k33_14_SegmentDisplay.cpp"          target="Sources/ht16k33_14_SegmentDisplay.cpp"           overwrite="always"/>
+               <copy source="Snippets/ht16k33_14_SegmentDisplay-example.cpp"  target="Snippets/ht16k33_14_SegmentDisplay-example.cpp"  overwrite="always"/>
             </projectActionList>
          </projectActionList>
       </projectActionList>

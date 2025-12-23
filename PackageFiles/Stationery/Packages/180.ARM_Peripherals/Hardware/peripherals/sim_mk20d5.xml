@@ -377,7 +377,7 @@
             typeName="SimFtm1Ch0Src"
             description="FTM 1 channel 0 input capture source"
             toolTip="Source for FTM channel 0 input capture\n
-               NOTE: When the FTM is not in input capture mode, clear this field" >
+               @note When the FTM is not in input capture mode, clear this field" >
             <choice value="0" name="FTM1_CH0 signal"          enum="IcPin"  isDefault="true"/>
             <choice value="1" name="CMP0 output"              enum="Cmp0"     />
             <choice value="2" name="CMP1 output"              enum="Cmp1"     />
@@ -390,7 +390,7 @@
             typeName="SimFtm2Ch0Src"
             description="FTM2 channel 0 input capture source"
             toolTip="Source for FTM channel 0 input capture\n
-               NOTE: When the FTM is not in input capture mode, clear this field" >
+               @note When the FTM is not in input capture mode, clear this field" >
             <choice value="0" name="FTM2_CH0 signal"  enum="IcPin"  isDefault="true"/>
             <choice value="1" name="CMP0 output"      enum="Cmp0" />
             <choice value="2" name="CMP1 output"      enum="Cmp1" />
@@ -514,6 +514,7 @@
                addToVar="%(Name)ExternalItems"
                enabledBy="enablePeripheralSupport"
                typeName="Sim%(Name)RxSrc"
+               enumOr="auto"
                description="%(NAME) receive data source"
                toolTip="Source for the %(NAME) receive data" >
                <choice value="0" name="Rx pin"        enum="RxPin"  isDefault="true" />
@@ -525,6 +526,7 @@
                addToVar="%(Name)ExternalItems,FtmExternalItems"
                enabledBy="enablePeripheralSupport"
                typeName="Sim%(Name)TxSrc"
+               enumOr="auto"
                description="%(NAME) transmit data source"
                toolTip="Source for the %(NAME) transmit data" >
                <choice value="0" name="Tx pin" isDefault="true"             enum="Direct" />
@@ -544,6 +546,7 @@
             enabledBy="enablePeripheralSupport"
             typeName="SimAdc%(adc)TriggerMode"
             valueFormat="SIM_SOPT7_ADC%(adc)ALTTRGEN(%s),SIM_SOPT7_ADC%(adc)PRETRGSEL(%s)"
+            enumOr="auto"
             description="ADC%(adc) trigger mode"
             toolTip="Alternative conversion triggers for ADC\n
                _Pdb              - ADC is triggered by PDB\n
@@ -558,6 +561,7 @@
             addToVar="Adc%(adc)ExternalItems"
             enabledBy="enablePeripheralSupport"
             typeName="SimAdc%(adc)TriggerSrc"
+            enumOr="auto"
             description="ADC%(adc) trigger source"
             toolTip="ADC Trigger source in STOP and VLPS modes, or when ADC Alternative Trigger is active" >
             <choice value="0"  name="External trigger pin input (PDB0_EXTRG)" enum="External"     isDefault="true" />
@@ -591,6 +595,7 @@
             <choiceOption key="sim_sopt2_clkoutsel[%(n)]" condition="sim_sopt2_clkoutsel_present"
                target="clockOut[%(n)]"
                typeName="SimClkoutSel"
+               enumOr="auto"
                description="CLKOUT pin clock"
                toolTip="Clock to output on the CLKOUT pin" >
                <choice value="0"  name="FlexBus CLKOUT"      ref="system_flexbus_clock[%(n)]"       enum="FlexBusClk"  condition="sim_sopt2_fbsl_present"  />
@@ -903,7 +908,7 @@
          <intOption key="system_core_clock[%(n)]" condition="sim_clkdiv1_outdiv1_present"
             ref="(/MCG/system_mcgoutclk_clock[%(n)])/((sim_clkdiv1_outdiv1[%(n)])+1)"
             enabledBy="(%(n)==0)||/MCG/enableClockConfiguration[%(n)]"
-            derived="true"
+            enumOr="auto"
             isNamedClock="true"
             units="Hz"
             description="System Core Clock"
@@ -926,7 +931,7 @@
          <intOption key="system_flexbus_clock[%(n)]" condition="sim_clkdiv1_outdiv3_present"
             enabledBy="(%(n)==0)||/MCG/enableClockConfiguration[%(n)]"
             ref="(/MCG/system_mcgoutclk_clock[%(n)])/((sim_clkdiv1_outdiv3[%(n)])+1)"
-            derived="true"
+            enumOr="auto"
             isNamedClock="true"
             units="Hz"
             description="System Flexbus Clock"
@@ -952,10 +957,12 @@
    <!-- ____ CLKDIV1 __________________ -->
 
          <category name="CLKDIV1" description="System Clock Dividers" >
+
             <choiceOption key="sim_clkdiv1_outdiv1[%(n)]"  condition="sim_clkdiv1_outdiv1_present"
                enabledBy="(%(n)==0)||/MCG/enableClockConfiguration[%(n)]"
                typeName="SimCoreClkDivider"
                locked="true"
+               enumOr="auto"
                description="Core &amp; System Clock Divider (OUTDIV1) - Divide by [1-16]"
                toolTip="Clocks the ARM Cortex-M4 core and bus masters\n
                         Divides MCGOUTCLK Clock to generate system_core_clock." >
@@ -980,6 +987,7 @@
             <choiceOption key="sim_clkdiv1_outdiv2[%(n)]"  condition="sim_clkdiv1_outdiv2_present"
                enabledBy="(%(n)==0)||/MCG/enableClockConfiguration[%(n)]"
                locked="true"
+               enumOr="auto"
                derivedFrom="sim_clkdiv1_outdiv1[%(n)]"
                typeName="SimBusClkDivider"
                description="Bus Clock Divider (OUTDIV2) - Divide by [1-16]"
@@ -989,6 +997,7 @@
             <choiceOption key="sim_clkdiv1_outdiv3[%(n)]" condition="sim_clkdiv1_outdiv3_present"
                enabledBy="(%(n)==0)||/MCG/enableClockConfiguration[%(n)]"
                locked="true"
+               enumOr="auto"
                derivedFrom="sim_clkdiv1_outdiv1[%(n)]"
                typeName="SimFlexbusClkDivider"
                description="Flexbus Clock Divider (OUTDIV3) - Divide by [1-16]"
@@ -998,6 +1007,7 @@
             <choiceOption key="sim_clkdiv1_outdiv4[%(n)]"  condition="sim_clkdiv1_outdiv4_present"
                enabledBy="(%(n)==0)||/MCG/enableClockConfiguration[%(n)]"
                locked="true"
+               enumOr="auto"
                derivedFrom="sim_clkdiv1_outdiv1[%(n)]"
                typeName="SimFlashClkDivider"
                description="Flash Clock Divider (OUTDIV4) - Divide by [1-16]"
@@ -1053,7 +1063,7 @@
    <!-- ____ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/StartupEarly" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

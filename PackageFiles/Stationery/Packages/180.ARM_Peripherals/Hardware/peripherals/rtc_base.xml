@@ -317,6 +317,7 @@
          enabledBy="enablePeripheralSupport"
          typeName="RtcRarIerr"
          baseType="uint8_t"
+         enumOr="auto"
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Interrupt Enable Register Read" >
@@ -328,6 +329,7 @@
          enabledBy="enablePeripheralSupport"
          typeName="RtcRarLrr"
          baseType="uint8_t"
+         enumOr="auto"
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Lock Register Read" >
@@ -339,6 +341,7 @@
          enabledBy="enablePeripheralSupport"
          typeName="RtcRarSrr"
          baseType="uint8_t"
+         enumOr="auto"
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Status Register Read" >
@@ -350,6 +353,7 @@
          enabledBy="enablePeripheralSupport"
          typeName="RtcRarCrr"
          baseType="uint8_t"
+         enumOr="auto"
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Control Register Read" >
@@ -361,6 +365,7 @@
          enabledBy="enablePeripheralSupport"
          typeName="RtcRarTcrr"
          baseType="uint8_t"
+         enumOr="auto"
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Time Compensation Register Read" >
@@ -372,6 +377,7 @@
          enabledBy="enablePeripheralSupport"
          typeName="RtcRarTarr"
          baseType="uint8_t"
+         enumOr="auto"
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Time Alarm Register Read" >
@@ -383,6 +389,7 @@
          enabledBy="enablePeripheralSupport"
          typeName="RtcRarTprr"
          baseType="uint8_t"
+         enumOr="auto"
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Time Prescaler Register Read" >
@@ -394,6 +401,7 @@
          enabledBy="enablePeripheralSupport"
          typeName="RtcRarTsrr"
          baseType="uint8_t"
+         enumOr="auto"
          toolTip="Once cleared, this bit is only set by system reset.\n
                   It is not affected by VBAT POR or software reset"
          description="Time Seconds Register Read" >
@@ -709,6 +717,44 @@
          <aliasOption key="rtc_rar_tsrr" optional="true" />
       </category>
    </category>
+
+<for keys="   pinName         : name       : function     : pcrFunction"
+     values=" $(_NAME)_CLKOUT : RtcClkOut  : setClkOutput : setOutput" >
+
+   <equation key="index" value='=IndexOfSignal("%(pinName)")'  />
+   <!-- printVar key="index" / -->
+   <template where="info" codeGenCondition='$(_InfoGuard)&amp;&amp;SignalIsMapped("%(pinName)")'
+         immediateVariables="index" >
+   <![CDATA[
+      \t/// GPIO associated with $(_NAME) pin (%(pinName))
+      \t//typedef GpioTable_T<$(_Info), $(index), ActiveHigh> Gpio%(name);
+      \t
+      \t/// Allow access to PCR of $(_NAME) pin (%(pinName))
+      \ttypedef PcrTable_T<$(_Info), $(index)> %(name)Pin;
+      \t
+      \t/**
+      \t * Enable %(pinName) pin and connects to $(_NAME).
+      \t * Configures all Pin Control Register (PCR) values to device default.
+      \t */
+      \tstatic void %(function)() {
+      \t
+      \t   %(name)Pin::%(pcrFunction)();
+      \t}
+      \t
+      \t/**
+      \t * Enable %(pinName) pin and connects to $(_NAME).
+      \t * Configures all Pin Control Register (PCR) values.
+      \t *
+      \t * @param pcrValue  PCR value controlling pin characteristics
+      \t */
+      \tstatic void %(function)(PcrValue pcrValue) {
+      \t
+      \t   %(name)Pin::%(pcrFunction)(pcrValue);
+      \t}
+      \t\n
+   ]]>
+   </template>
+</for>
 
 <!--
 ======================================================================================================
@@ -1266,7 +1312,7 @@
      START Info class
 ======================================================================================================
  -->
- <!-- 
+ <!--
    <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)"
       variables="irq_enum"
       immediateVariables="_hardwareIrqCount"
@@ -1363,11 +1409,11 @@
    </template>
    <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)" >
    <![CDATA[
-      \t   // Configure call-back
-      \t   if (init.callbacks[0] != nullptr) {
-      \t      setCallback(init.callbacks[0]);
-      \t      enableNvicInterrupts(init.priorities[0]);
-      \t   }
+      \t   // Disable call-back
+      \t   disableNvicInterrupts();
+      \t
+      \t   // Install call-back
+      \t   setCallback(init.callbacks[0]);
       \t\n
    ]]>
    </template>
@@ -1376,11 +1422,11 @@
       immediateVariables="_hardwareIrqCount">
    <![CDATA[
       \t   for(int index=0; index<$(_hardwareIrqCount); index++) {
-      \t      if (init.callbacks[index] != nullptr) {
-      \t         // Configure call-back
-      \t         setCallback(%returnType0(index), init.callbacks[index]);
-      \t         enableNvicInterrupts(%returnType0(index), init.priorities[index]);
-      \t      }
+      \t      // Disable call-back
+      \t      disableNvicInterrupts(%returnType0(index));
+      \t
+      \t      // Install call-back
+      \t      setCallback(%returnType0(index), init.callbacks[index]);
       \t   }
       \t\n
    ]]>
@@ -1388,6 +1434,29 @@
    <template where="info" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
       \t   $(_BasicInfo)::configure($(_basename), init, fullConfig);
+      \t\n
+   ]]>
+   </template>
+   <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)" >
+   <![CDATA[
+      \t   // Enable call-back
+      \t   enableNvicInterrupts(init.priorities[0]);
+      \t\n
+   ]]>
+   </template>
+   <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount>1)"
+      variables="irq_enum"
+      immediateVariables="_hardwareIrqCount">
+   <![CDATA[
+      \t   for(int index=0; index<$(_hardwareIrqCount); index++) {
+      \t      // Enable call-back
+      \t      enableNvicInterrupts(%returnType0(index), init.priorities[index]);
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
       \t}
       \t\n
    ]]>
@@ -1398,7 +1467,7 @@
    <template where="usbdm" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
       } // End namespace USBDM
-      
+
       // User declared handlers for RTC
       $(/RTC/prototypes:// $/RTC/prototypes not found)
       namespace USBDM {
@@ -1462,15 +1531,15 @@
    </validate>
 
    <projectActionList id="rtc_files" >
-      <copy source="Project_Headers/rtc.h"       target="Project_Headers/rtc.h"      overwrite="true"  derived="true" />
-      <copy source="Startup_Code/rtc.cpp"        target="Startup_Code/rtc.cpp"       overwrite="true"  derived="true" />
-      <copy source="Snippets/rtc-example.cpp"    target="Snippets/rtc-example.cpp"   overwrite="true"  derived="true" />
+      <copy source="Project_Headers/rtc.h"       target="Project_Headers/rtc.h"      overwrite="always"  derived="true" />
+      <copy source="Startup_Code/rtc.cpp"        target="Startup_Code/rtc.cpp"       overwrite="always"  derived="true" />
+      <copy source="Snippets/rtc-example.cpp"    target="Snippets/rtc-example.cpp"   overwrite="always"  derived="true" />
    </projectActionList>
 
    <!-- ____ Startup ____ -->
 
    <template key="/MCG/Includes"  >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/MCG/Initialisation"  ><![CDATA[
@@ -1478,7 +1547,7 @@
    ]]></template>
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

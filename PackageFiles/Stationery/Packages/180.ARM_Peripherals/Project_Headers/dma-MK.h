@@ -27,6 +27,7 @@ namespace USBDM {
  * @brief Support for DMA operations
  * @{
  */
+$(/DMA/peripheral_h_types:// $/DMA/peripheral_h_types not found)
 $(/DMA/peripheral_h_definition:// $/PIT/peripheral_h_definition not found)
 $(/DMAMUX/peripheral_h_definition:// $/PIT/peripheral_h_definition not found)
 
@@ -349,9 +350,9 @@ struct __attribute__((__packed__)) DmaTcd {
 
    DmaTcd &operator=(const DmaTcd &other) = default;
 
-   void operator=(const DmaTcd &other) volatile {
-         *(DmaTcd *)this = other;
-   };
+//   void operator=(const DmaTcd &other) volatile {
+//         *(DmaTcd *)this = other;
+//   };
 
    /**
     * Constructor.
@@ -550,7 +551,7 @@ public:
 
       // Clear call-backs
       for (unsigned channel=0; channel<Info::NumVectors; channel++) {
-         Info::sCallbacks[channel] = Info::unhandledCallback;
+         Info::sCallbacks[channel] = unhandledCallback;
       }
 #ifndef NDEBUG
       // Clear the TCDs
@@ -664,7 +665,7 @@ $(/DMA/Setters:#error "/DMA/Setters not found" )
     * This is only used if DmaArbitration_Fixed is used.
     *
     * @param[in] dmaChannelNum      Channel to modify
-    * @param[in] priority           Priority for the channel
+    * @param[in] dmaPriority        Priority for the channel
     * @param[in] dmaCanBePreempted  Controls whether the channel can be suspended by a higher priority channel
     * @param[in] dmaCanPreemptLower Controls whether the channel can suspend a lower priority channel
     *

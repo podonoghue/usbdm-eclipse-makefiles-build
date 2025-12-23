@@ -1445,13 +1445,13 @@
    </validate>
 
    <projectActionList id="trng_files" >
-      <copy source="Project_Headers/trng.h"         target="Project_Headers/trng.h"          overwrite="true" derived="true" />
+      <copy source="Project_Headers/trng.h"         target="Project_Headers/trng.h"          overwrite="always" derived="true" />
    </projectActionList>
 
    <!-- ____ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

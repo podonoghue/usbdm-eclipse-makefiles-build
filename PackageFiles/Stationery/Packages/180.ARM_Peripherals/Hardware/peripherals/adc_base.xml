@@ -22,11 +22,20 @@
    <equation key="configureInStartupDefault"  value="false"     />
    <xi:include href="enablePeripheral.xml"    />
 
+   <!--
+       *  %i  => instance;   => FTM0 => 0, PTA => A
+       *  %pn => pin name;   =>  Diff0, Se4b, PgaChannel
+   -->
+   <constant key="/ADC/$adcInstanceTemplate"     type="String"  value='"Adc%i::Channel&lt;Adc%iChannelNum_%pn&gt;"'      condition="!/ADC/$adcInstanceTemplate" />
+   <constant key="/ADC/$adcDiffInstanceTemplate" type="String"  value='"Adc%i::DiffChannel&lt;Adc%iChannelNum_%pn&gt;"'  condition="!/ADC/$adcDiffInstanceTemplate" />
+
    <!-- ____ SC1 ____ -->
+   <!-- Channel number applicable to all ADCs -->
    <choiceOption key="adc_sc1_channel" condition="adc_sc1_adch_present"
       valueFormat="%s"
       hidden="true"
       derived="true"
+      enumClass="true"
       typeName="AdcChannelNum"
       baseType="uint8_t"
       toolTip="Selects an ADC channel"
@@ -55,25 +64,28 @@
       <choice          value="4"                   name="AFirst"             enum="AFirst"     />
    </choiceOption >
 
-   <choiceOption key="adc$(_instance)_sc1_channel" condition="adc_sc1_adch_present"
+   <!-- Channel numbers for channels implemented on this ADC -->
+   <choiceOption key="adc$(_instance)_sc1_channel" condition="adc_sc1_adch_present&amp;&amp;!adc$(_instance)_sc1_channel"
       hidden="true"
       derived="true"
       valueFormat="%s"
       typeName="Adc$(_instance)ChannelNum"
       baseType="AdcChannelNum"
-      toolTip="Selects an ADC channel"
-      description="ADC Channel number"
+      toolTip="Selects an ADC$(_instance) channel"
+      description="ADC$(_instance) Channel number"
+      generateEnum="false"
+      constantTemplate="\tinline constexpr %b %n   = %v; ///&lt; %c"
       generateAsConstants="true" >
       <choiceExpansion keys="sig" values='=SignalList("^($(_NAME)_SE.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$1")'
          signal="%(sig)"
          name='@SignalDescription("%(sig)","^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
          enum='=Prettify(ToUppercase(ReplaceAll("%(sig)","^$(_NAME)_(.*)$","$1")))' delimiter="," condition='="%(sig)"!="-"'
-         value='="AdcChannelNum_"+Prettify(ToUppercase(ReplaceAll("%(sig)","^$(_NAME)_(.*)$","$1")))' />
+         value='="AdcChannelNum::AdcChannelNum_"+Prettify(ToUppercase(ReplaceAll("%(sig)","^$(_NAME)_(.*)$","$1")))' />
       <choiceExpansion keys="sig" values='=SignalList("^($(_NAME)_DP.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$1")'
          signal="%(sig)"
          name='@SignalDescription("%(sig)","^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
          enum='=Prettify(ToUppercase(ReplaceAll("%(sig)","^$(_NAME)_DP(.*)$","Diff$1")))' delimiter="," condition='="%(sig)"!="-"'
-         value='="AdcChannelNum_"+Prettify(ToUppercase(ReplaceAll("%(sig)","^$(_NAME)_DP(.*)$","Diff$1")))' />
+         value='="AdcChannelNum::AdcChannelNum_"+Prettify(ToUppercase(ReplaceAll("%(sig)","^$(_NAME)_DP(.*)$","Diff$1")))' />
    </choiceOption >
 
    <binaryOption key="adc_sc1_aien" condition="adc_sc1_aien_present"
@@ -477,12 +489,14 @@
 
       <choiceOption key="adc_sc1[%(pretrigger)]_adch"
          derivedFrom="adc$(_instance)_sc1_channel"
-         hiddenBy="(%(pretrigger)!=0)&amp;&amp;!adc_sc2_adtrg" >
+         hiddenBy="(%(pretrigger)!=0)&amp;&amp;!adc_sc2_adtrg"
+         generateEnum="false" >
       </choiceOption >
 
       <binaryOption key="adc_sc1[%(pretrigger)]_aien"
          derivedFrom="adc_sc1_aien"
-         hiddenBy="(%(pretrigger)!=0)&amp;&amp;!adc_sc2_adtrg" >
+         hiddenBy="(%(pretrigger)!=0)&amp;&amp;!adc_sc2_adtrg"
+         generateEnum="false" >
       </binaryOption >
    </for>
 
@@ -502,23 +516,6 @@
 <!-- ====================================================================================================== -->
 <!--     START BasicInfo Class      -->
 <!-- ====================================================================================================== -->
-
-   <template where="definitions" codeGenCondition="$(_BasicInfoGuard)" >
-   <![CDATA[
-      \t/**
-      \t * Combine two ADC register bit-fields
-      \t * (Just to quieten warnings in C++20)
-      \t *
-      \t * @param adcPower
-      \t * @param adcClockRange
-      \t *
-      \t * @return Combined fields
-      \t */
-      \tconstexpr uint8_t  operator|(AdcPower adcPower, AdcClockRange adcClockRange) {
-      \t   return uint8_t(adcPower)|uint8_t(adcClockRange);
-      \t}
-      \t\n
-   ]]></template>
 
    <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
@@ -700,17 +697,17 @@
    \tstatic constexpr int mapChannelNumToPhysicalChannelNum(AdcChannelNum adcChannelNum) {
    \t
    #if $(adc_sc1_diff_present:false) // adc_sc1_diff_present
-   \t   if (adcChannelNum<=AdcChannelNum_DiffLast) {
+   \t   if (adcChannelNum<=AdcChannelNum::AdcChannelNum_DiffLast) {
    \t      // channels SE0-SE4,SE4a-SE7a,SE8-SE31,DIFF0-DIFF4
    \t      return int(adcChannelNum);
    \t   }
    #else
-   \t   if (adcChannelNum<=AdcChannelNum_Disabled) {
+   \t   if (adcChannelNum<=AdcChannelNum::AdcChannelNum_Disabled) {
    \t      // channels SE0-SE4,SE4a-SE7a,SE8-SE31
    \t      return int(adcChannelNum);
    \t   }
    #endif
-   \t   if (adcChannelNum<=AdcChannelNum_BLast) {
+   \t   if (adcChannelNum<=AdcChannelNum::AdcChannelNum_BLast) {
    \t      // channels SE4b-SE7b
    \t      return int(adcChannelNum)&ADC_SC1_ADCH_MASK;
    \t   }
@@ -799,14 +796,11 @@
       \t * @return Index limited to permitted range
       \t */
       \ttemplate<class Info>
-      \tstatic inline constexpr int limitIndex(int channel) {
-      \t   if (channel<0) {
-      \t      return 0;
-      \t   }
-      \t   if (channel>(Info::numSignals-1)) {
+      \tstatic inline constexpr int limitIndex(AdcChannelNum channel) {
+      \t   if (int(channel)>(Info::numSignals-1)) {
       \t      return Info::numSignals-1;
       \t   }
-      \t   return channel;
+      \t   return int(channel);
       \t}
       \t
       \t/** Class to static check channel exists and is mapped to an input pin */
@@ -838,9 +832,9 @@ protected:
    \t%(static)void startConversion(int sc1Value) %(const){
    \t
    \t   // Select A/B Mux
-   \t   if ((sc1Value&~ADC_SC1_AIEN_MASK)>=AdcChannelNum_BFirst) {
+   \t   if (AdcChannelNum(sc1Value&~ADC_SC1_AIEN_MASK)>=AdcChannelNum::AdcChannelNum_BFirst) {
    \t      adc->CFG2 = adc->CFG2|ADC_CFG2_MUXSEL_MASK;
-   \t      sc1Value -= AdcChannelNum_BFirst-4;
+   \t      sc1Value -= uint8_t(AdcChannelNum::AdcChannelNum_BFirst)-4;
    \t   }
    \t   else {
    \t      adc->CFG2 = adc->CFG2&~ADC_CFG2_MUXSEL_MASK;
@@ -954,8 +948,8 @@ public:
    \t   adc->SC2 = (adc->SC2)|ADC_SC2_ADTRG_MASK;
    \t
    \t   // Configure channel to use for hardware trigger input
-   \t   if ((sc1Value&~ADC_SC1_AIEN_MASK)>=AdcChannelNum_BFirst) {
-   \t      sc1Value -= AdcChannelNum_BFirst-4;
+   \t   if (AdcChannelNum(sc1Value&~ADC_SC1_AIEN_MASK)>=AdcChannelNum::AdcChannelNum_BFirst) {
+   \t      sc1Value -= uint8_t(AdcChannelNum::AdcChannelNum_BFirst)-4;
    \t   }
    \t   adc->SC1[adcPretrigger] = sc1Value;
    \t}
@@ -1419,7 +1413,7 @@ public:
    <for keys="i" dim="=adc_sc1_dim">
       <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" condition="adc_sc2_adtrg" >
       <![CDATA[
-         \t      AdcChannelNum_Disabled,\n
+         \t      uint8_t(AdcChannelNum::AdcChannelNum_Disabled),\n
       ]]></template>
    </for>
    <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" condition="adc_sc2_adtrg" ><![CDATA[
@@ -1446,10 +1440,10 @@ public:
       \t   template <typename... Types>
       \t   constexpr Init(%params, Types... rest) : Init(rest...) {
       \t
-      \t      if ((adcChannelNum>=AdcChannelNum_AFirst)&&(adcChannelNum<=AdcChannelNum_ALast)) {
+      \t      if ((adcChannelNum>=AdcChannelNum::AdcChannelNum_AFirst)&&(adcChannelNum<=AdcChannelNum::AdcChannelNum_ALast)) {
       \t         cfg2 &= ~ADC_CFG2_MUXSEL_MASK;
       \t      }
-      \t      else if ((adcChannelNum>=AdcChannelNum_BFirst)&&(adcChannelNum<=AdcChannelNum_BLast)) {
+      \t      else if ((adcChannelNum>=AdcChannelNum::AdcChannelNum_BFirst)&&(adcChannelNum<=AdcChannelNum::AdcChannelNum_BLast)) {
       \t         cfg2 |= ADC_CFG2_MUXSEL_MASK;
       \t      }
       \t      %registerName1[%paramName0] = mapChannelNumToPhysicalChannelNum(%paramName1)|%paramName2;
@@ -1712,11 +1706,11 @@ public:
    </template>
    <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)" >
    <![CDATA[
-      \t   // Configure call-back
-      \t   if (init.callbacks[0] != nullptr) {
-      \t      setCallback(init.callbacks[0]);
-      \t      enableNvicInterrupts(init.priorities[0]);
-      \t   }
+      \t   // Disable call-back
+      \t   disableNvicInterrupts();
+      \t
+      \t   // Install call-back
+      \t   setCallback(init.callbacks[0]);
       \t\n
    ]]>
    </template>
@@ -1725,11 +1719,11 @@ public:
       immediateVariables="_hardwareIrqCount">
    <![CDATA[
       \t   for(int index=0; index<$(_hardwareIrqCount); index++) {
-      \t      if (init.callbacks[index] != nullptr) {
-      \t         // Configure call-back
-      \t         setCallback(%returnType0(index), init.callbacks[index]);
-      \t         enableNvicInterrupts(%returnType0(index), init.priorities[index]);
-      \t      }
+      \t      // Disable call-back
+      \t      disableNvicInterrupts(%returnType0(index));
+      \t
+      \t      // Install call-back
+      \t      setCallback(%returnType0(index), init.callbacks[index]);
       \t   }
       \t\n
    ]]>
@@ -1737,6 +1731,29 @@ public:
    <template where="info" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
       \t   $(_BasicInfo)::configure($(_basename), init);
+      \t\n
+   ]]>
+   </template>
+   <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)" >
+   <![CDATA[
+      \t   // Enable call-back
+      \t   enableNvicInterrupts(init.priorities[0]);
+      \t\n
+   ]]>
+   </template>
+   <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount>1)"
+      variables="irq_enum"
+      immediateVariables="_hardwareIrqCount">
+   <![CDATA[
+      \t   for(int index=0; index<$(_hardwareIrqCount); index++) {
+      \t      // Enable call-back
+      \t      enableNvicInterrupts(%returnType0(index), init.priorities[index]);
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
       \t}
       \t\n
    ]]>
@@ -1912,18 +1929,18 @@ public:
    </validate>
 
    <projectActionList id="adc_files" >
-      <copy source="Project_Headers/adc.h"                    target="Project_Headers/adc.h"                    overwrite="true"  derived="true" />
-      <copy source="Snippets/analogue-comparison-example.cpp" target="Snippets/analogue-comparison-example.cpp" overwrite="true"  derived="true" />
-      <copy source="Snippets/analogue-example.cpp"            target="Snippets/analogue-example.cpp"            overwrite="true"  derived="true" />
-      <copy source="Snippets/analogue-diff-example.cpp"       target="Snippets/analogue-diff-example.cpp"       overwrite="true"  derived="true" />
-      <copy source="Snippets/analogue-interrupt-example.cpp"  target="Snippets/analogue-interrupt-example.cpp"  overwrite="true"  derived="true" />
-      <copy source="Snippets/analogue-joystick-example.cpp"   target="Snippets/analogue-joystick-example.cpp"   overwrite="true"  derived="true" />
+      <copy source="Project_Headers/adc.h"                    target="Project_Headers/adc.h"                    overwrite="always"  derived="true" />
+      <copy source="Snippets/analogue-comparison-example.cpp" target="Snippets/analogue-comparison-example.cpp" overwrite="always"  derived="true" />
+      <copy source="Snippets/analogue-example.cpp"            target="Snippets/analogue-example.cpp"            overwrite="always"  derived="true" />
+      <copy source="Snippets/analogue-diff-example.cpp"       target="Snippets/analogue-diff-example.cpp"       overwrite="always"  derived="true" />
+      <copy source="Snippets/analogue-interrupt-example.cpp"  target="Snippets/analogue-interrupt-example.cpp"  overwrite="always"  derived="true" />
+      <copy source="Snippets/analogue-joystick-example.cpp"   target="Snippets/analogue-joystick-example.cpp"   overwrite="always"  derived="true" />
    </projectActionList>
 
    <!-- ____ Startup ____ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

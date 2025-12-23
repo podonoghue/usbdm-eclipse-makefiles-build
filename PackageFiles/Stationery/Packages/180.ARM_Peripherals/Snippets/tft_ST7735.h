@@ -3,9 +3,10 @@
  *
  *  Requires declarations for the following in Configure.usbdmProject
  *
- *  TftCs       TFT CS as SPI Peripheral select e.g. PCS0 (D7)
- *  TftDc       TFT DC as SPI Peripheral select e.g. PCS2 (A3)
- *  TftResetPin TFT Reset pin as GPIO e.g. GpioB.1 (A4)
+ *  TftCs        TFT CS as SPI Peripheral select e.g. PCS0 (D7)
+ *  TftDc        TFT DC as SPI Peripheral select e.g. PCS2 (A3)
+ *  TftReset     TFT Reset pin as GPIO e.g. GpioB.1 (A4)
+ *  TftBacklight TFT Back-light control
  *
  *  Fixed SPI specific connections
  *  SDA         SOUT (D11)
@@ -33,9 +34,12 @@
 #include <memory.h>
 
 #include "hardware.h"
-#include "spi.h"
-#include "formatted_io.h"
+#include "../Project_Headers/spi.h"
+#include "../Project_Headers/formatted_io.h"
 #include "fonts.h"
+
+#pragma GCC push_options
+#pragma GCC optimize("O3")
 
 namespace USBDM {
 
@@ -103,8 +107,8 @@ protected:
    enum Command {
       Command_NOP                            = 0x00,
       Command_SoftReset                      = 0x01,
-      Command_ReadDisplayIdentity            = 0x04,
-      Command_ReadDisplayStatus              = 0x09,
+      Command_GetDisplayIdentity             = 0x04,
+      Command_GetDisplayStatus               = 0x09,
       Command_GetDisplayPowerMode            = 0x0A,
       Command_GetMemoryAccessControl         = 0x0B,
       Command_GetPixelFormat                 = 0x0C,
@@ -122,7 +126,7 @@ protected:
       Command_DisplayOff                     = 0x28,
       Command_DisplayOn                      = 0x29,
       Command_SetColumnAddress               = 0x2A,
-      Command_SetRowAddress                  = 0x2B, // == CommandSetgeAddressSet
+      Command_SetRowAddress                  = 0x2B,
       Command_MemoryWriteStart               = 0x2C,
       Command_MemoryReadStart                = 0x2E,
       Command_SetPartialArea                 = 0x30,
@@ -140,7 +144,7 @@ protected:
       Command_SetFrameRatePartialMode        = 0xB3,
       Command_SetDisplayInversionControl     = 0xB4,
       Command_BlankingPorchControl           = 0xB5,
-      Command_DisplayFunctionSet5            = 0xB6,
+      Command_DisplayFunctionControl         = 0xB6,
       Command_SetEntryMode                   = 0xB7,
       Command_PowerControl1                  = 0xC0,
       Command_PowerControl2                  = 0xC1,
@@ -156,7 +160,7 @@ protected:
       Command_AdjustControl6                 = 0xFC,
    };
 
-   // Possible values of pixel data format
+   // Possible values of internal pixel data format 
    enum McuPixelFormat {
       McuPixelFormat_RBG444                = 0b011,    // Pixel format RGB444 = 12 bpp
       McuPixelFormat_RBG565                = 0b101,    // Pixel format RGB565 = 16 bpp
@@ -168,7 +172,8 @@ protected:
    static constexpr SpiPeripheralSelect SpiPeripheralSelect_TftDc = USBDM::SpiPeripheralSelect_TftDc; // Data=high, Command=Low
 
    /* TFT GPIOs */
-   using TftResetPin = USBDM::TftResetPin;    // Low=active
+   using TftReset     = USBDM::TftReset;        // Low=active
+   using TftBacklight = USBDM::TftBacklight;
 //   using TftBusyPin  = USBDM::TftBusyPin;     // High=busy
 
    // Communication settings
@@ -361,9 +366,13 @@ public:
          PinDriveMode_PushPull,
          PinFilter_None,
       };
-      TftResetPin::setOutput(pcrValue);
 //      TftBusyPin::setInput(pcrValue);
-      TftResetPin::high();
+
+      TftReset::setOutput(pcrValue);
+      TftReset::high();
+
+      TftBacklight::setOutput(pcrValue);
+      TftBacklight::on();
 
       initialise();
    }
@@ -374,8 +383,8 @@ public:
    virtual ~TFT_ST7735() {
 
       sleep();
-
-      TftResetPin::low();
+      TftBacklight::off();
+      TftReset::low();
    }
 
 protected:
@@ -397,11 +406,11 @@ protected:
     */
    void hardwareReset() {
 
-      TftResetPin::high();
+      TftReset::high();
       waitMS(5);
-      TftResetPin::low();
+      TftReset::low();
       waitMS(20);
-      TftResetPin::high();
+      TftReset::high();
       waitMS(150);
    }
 
@@ -553,15 +562,13 @@ protected:
    void sendColour(Colour colour) {
 
       const uint8_t data[] = {
-            //         (uint8_t)(colour>>(11-3)&0b1111'1000),
-            //         (uint8_t)(colour>>(5-2)&0b1111'1100),
-            //         (uint8_t)(colour<<(8-5)&0b1111'1000),
             (uint8_t) (colour>>8),
             (uint8_t) colour,
       };
       sendData(data);
    }
 
+public:
    /**
     * Initialise the Display
     */
@@ -629,7 +636,7 @@ protected:
             1, Command_SetMemoryAccessControl,
             ORIENTATION,                  //     Depends on orientation
 
-            2, Command_DisplayFunctionSet5,
+            2, Command_DisplayFunctionControl,
             0x15,                         //  1  clk cycle non-overlap, 2 cycle gate rise, 3 cycle osc equalise
             0x02,                         //     Fix on VTL
 
@@ -695,22 +702,22 @@ protected:
     */
    void setWindow(uint16_t Xstart, uint16_t Ystart, uint16_t Xend, uint16_t Yend) {
 
-   //   static constexpr struct {
-   //      unsigned sx;   ///< Start X
-   //      unsigned ex;   ///< End X
-   //      unsigned sy;   ///< Start Y
-   //      unsigned ey;   ///< End Y
-   //   } offsets[] {
-   //         // sx ex sy ey
-   //         {  2, 2, 1, 1 },  // Normal
-   //         {  1, 1, 2, 2 },  // Mirrored across X=Y axis
-   //         {  2, 2, 1, 1 },  // Mirrored across Y Axis
-   //         {  1, 1, 2, 2 },  // Rotated 270 degrees
-   //         {  2, 2, 3, 3 },  // Mirrored across X Axis
-   //         {  3, 3, 2, 2 },  // Rotated 90 degrees
-   //         {  2, 2, 3, 3 },  // Rotated 180 degrees
-   //         {  3, 3, 2, 2 },  // Mirrored across X=-Y axis
-   //   };
+      //   static constexpr struct {
+      //      unsigned sx;   ///< Start X
+      //      unsigned ex;   ///< End X
+      //      unsigned sy;   ///< Start Y
+      //      unsigned ey;   ///< End Y
+      //   } offsets[] {
+      //         // sx ex sy ey
+      //         {  2, 2, 1, 1 },  // Normal
+      //         {  1, 1, 2, 2 },  // Mirrored across X=Y axis
+      //         {  2, 2, 1, 1 },  // Mirrored across Y Axis
+      //         {  1, 1, 2, 2 },  // Rotated 270 degrees
+      //         {  2, 2, 3, 3 },  // Mirrored across X Axis
+      //         {  3, 3, 2, 2 },  // Rotated 90 degrees
+      //         {  2, 2, 3, 3 },  // Rotated 180 degrees
+      //         {  3, 3, 2, 2 },  // Mirrored across X=-Y axis
+      //   };
       static constexpr unsigned sx = 0; // offsets[ORIENTATION>>5].sx;
       static constexpr unsigned ex = 0; // offsets[ORIENTATION>>5].ex;
       static constexpr unsigned sy = 0; // offsets[ORIENTATION>>5].sy;
@@ -722,7 +729,13 @@ protected:
 
 public:
    /**
-    * Clear display screen
+    * Clear area of display screen
+    * @note The cursor is set to (x,y)
+    *
+    * @param x    Top-left X (defaults to 0)
+    * @param y    Top-right Y (defaults to 0)
+    * @param w    Width (defaults to full screen width)
+    * @param h    Height (defaults to full screen height)
     */
    void clear(unsigned x=0, unsigned y=0, unsigned w=WIDTH, unsigned h=HEIGHT) {
 
@@ -732,7 +745,7 @@ public:
 
       std::fill_n(filler, MAX_BLOCK, Colour(((backgroundColour>>8)&0xFF)|(backgroundColour<<8)));
 
-      setWindow(x,y,w,h);
+      setWindow(x,y,x+w,y+h);
       sendCommand(Command_MemoryWriteStart);
 
       unsigned remaining = (w+3)*(h+3)*sizeof(Colour);
@@ -744,8 +757,8 @@ public:
          sendData(size, (uint8_t*)filler);
          remaining -= size;
       }
-      x = 0;
-      y = 0;
+      this->x = x;
+      this->y = y;
    }
 
    /**
@@ -753,6 +766,7 @@ public:
     */
    void sleep() {
 
+      TftBacklight::off();
       sendCommand(Command_EnterSleep);  // Enter sleep
       inHibernation = true;
       waitMS(5);
@@ -765,6 +779,7 @@ public:
 
       sendCommand(Command_ExitSleep);  // Exit sleep
       inHibernation = false;
+      TftBacklight::on();
       waitMS(120);
    }
 
@@ -1034,53 +1049,79 @@ public:
    /**
     * Draw an image to display
     *
-    * @param img  Bitmap image 8-pixels/byte
-    * @param x    Top-left X
-    * @param y    Top-left Y
-    * @param w    Width
-    * @param h    Height
+    * @param img     Bitmap image 8-pixels/byte
+    * @param x       Top-left X
+    * @param y       Top-left Y
+    * @param width   Width of image (before scaling)
+    * @param height  Height of image (before scaling)
+    * @param scale   Scale to use
     */
-   void drawBitmap(const uint8_t* img, uint16_t x, uint16_t y, uint16_t w, uint16_t h) {
+   void drawBitmap(const uint8_t* img, uint16_t x, uint16_t y, uint16_t width, uint16_t height, unsigned scale=1) {
 
       // rudimentary clipping (drawChar w/big text requires this)
       if((x >= WIDTH) || (y >= HEIGHT)) {
          // Clipped
          return;
       }
-      if((x + w - 1) >= (int)WIDTH)  {
+      unsigned w = width;
+      if((x + w*scale - 1) >= (int)WIDTH)  {
          // Clip on edge
-         w = WIDTH  - x;
+         w = (WIDTH  - x)/scale;
       }
-      if((y + h - 1) >= (int)HEIGHT) {
+      unsigned h = height;
+      if((y + h*scale - 1) >= (int)HEIGHT) {
          // Clip on edge
-         h = HEIGHT - y;
+         h = (HEIGHT - y)/scale;
       }
 
-      setWindow(x, y, x+w-1, y+h-1);
+      setWindow(x, y, x+w*scale-1, y+h*scale-1);
       sendCommand(Command_MemoryWriteStart);
 
-      uint8_t  linebuff[w*2+1];
-      unsigned count   = 0;
+      constexpr unsigned BUF_SIZE = 2*8;
+      uint8_t  linebuff[BUF_SIZE];
+
+      unsigned pixcount = 0;
+
+      uint8_t  bitMask  = 0;
 
       for (unsigned row=0; row<h; row++) {
 
          // Process each row to buffer and send
-         unsigned pixcount = 0;
-         uint8_t  bitMask  = 0;
          uint8_t  byte;
+         const uint8_t *rowStart = img+row*((width+7)/8);
 
-         for (unsigned col=0; col<w; col++) {
-            if (bitMask==0) {
-               bitMask = 0b1000'0000;
-               byte    = img[count++];
+         // Send entire line 'scale' times
+         for (unsigned l=0; l<scale; l++) {
+
+            // Reset to start of row in image
+            const uint8_t *currentByte = rowStart;
+
+            for (unsigned col=0; col<w; col++) {
+               if (bitMask==0) {
+                  bitMask = 0b1000'0000;
+                  byte    = *currentByte++;
+               }
+               // 1 bit of image -> 2 byte colour on display
+               Colour c = (byte&bitMask)?colour:backgroundColour;
+               uint8_t c1 = uint8_t(c >> 8);
+               uint8_t c2 = uint8_t(c);
+
+               // Send colour 'scale' times
+               for (unsigned s=0; s<scale; s++) {
+                  linebuff[pixcount++] = c1;
+                  linebuff[pixcount++] = c2;
+                  if (pixcount>=BUF_SIZE) {
+                     sendData(pixcount, linebuff);
+                     pixcount = 0;
+                  }
+               }
+               bitMask >>= 1;
             }
-            // 1 bit of image -> 2 byte colour on display
-            Colour c = (byte&bitMask)?colour:backgroundColour;
-            linebuff[pixcount++] = uint8_t(c >> 8);
-            linebuff[pixcount++] = uint8_t(c);
-            bitMask >>= 1;
          }
-         sendData(2*w, linebuff);
+      }
+      if (pixcount>0) {
+         // Flush reaminder
+         sendData(pixcount, linebuff);
       }
    }
 
@@ -1093,7 +1134,7 @@ public:
     *
     * @return Reference to self
     */
-   TFT_ST7735 &putCustomChar(const uint8_t *image, unsigned width, unsigned height) {
+   SELF &putCustomChar(const uint8_t *image, unsigned width, unsigned height) {
 
       drawBitmap(image, x, y, width, height);
       x += width;
@@ -1109,7 +1150,7 @@ public:
     *
     * @return Reference to self
     */
-   TFT_ST7735 &putSpace(int width) {
+   SELF &putSpace(int width) {
 
       while (width>0) {
          int t = font->width;
@@ -1130,7 +1171,7 @@ public:
     *
     * @param[in]  ch - character to write
     */
-   void _writeChar(char ch) {
+   void _writeChar(char ch) override {
 
       unsigned width  = font->width;
       unsigned height = font->height;
@@ -1156,5 +1197,7 @@ public:
 };
 
 } // end namespace USBDM
+
+#pragma GCC pop_options
 
 #endif // INCLUDE_USBDM_ST7735_H

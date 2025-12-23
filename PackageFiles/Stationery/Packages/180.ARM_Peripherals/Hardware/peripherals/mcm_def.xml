@@ -11,7 +11,6 @@
    <equation key="irq_dummy_parameters"       value=""          />
    <equation key="irq_call_parameters"        value=""          />
    <equation key="generateDefault"            value="false"     />
-   <equation key="configureInStartupDefault"  value="false"     />
    <xi:include href="enablePeripheral.xml"    />
 
    <!-- ____ Class Declaration ________ -->
@@ -768,13 +767,13 @@
    </validate>
 
    <projectActionList id="mcm_files" >
-      <copy source="Project_Headers/mcm.h"         target="Project_Headers/mcm.h"          overwrite="true" derived="true" />
+      <copy source="Project_Headers/mcm.h"         target="Project_Headers/mcm.h"          overwrite="always" derived="true" />
    </projectActionList>
 
    <!-- _____________ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

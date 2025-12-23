@@ -524,7 +524,6 @@
       \t * Configure $(_BASENAME) from values specified in init
       \t *
       \t * @param $(_basename)           Hardware instance pointer
-      \t * @param clockFrequency Clock frequency
       \t * @param init Class containing initialisation values
       \t */
       \tstatic void configure(
@@ -723,14 +722,14 @@
    </validate>
 
    <projectActionList id="crc_files" >
-      <copy source="Project_Headers/crc.h"         target="Project_Headers/crc.h"          overwrite="true" derived="true" />
-      <copy source="Snippets/crc-example.cpp"      target="Snippets/crc-example.cpp"       overwrite="true" derived="true" />
+      <copy source="Project_Headers/crc.h"         target="Project_Headers/crc.h"          overwrite="always" derived="true" />
+      <copy source="Snippets/crc-example.cpp"      target="Snippets/crc-example.cpp"       overwrite="always" derived="true" />
    </projectActionList>
 
    <!-- ____ Startup ____ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

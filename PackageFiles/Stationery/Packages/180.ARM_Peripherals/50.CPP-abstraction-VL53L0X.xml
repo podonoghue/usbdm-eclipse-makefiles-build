@@ -31,9 +31,9 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-VL53L0X" />
                </applyWhen>
-               <copy source="Snippets/vl53l0x-example.cpp"     target="Snippets/vl53l0x-example.cpp"  overwrite="true" />
-               <copy source="Snippets/vl53l0x.h"               target="Sources/vl53l0x.h"             overwrite="true" />
-               <copy source="Snippets/vl53l0x.cpp"             target="Sources/vl53l0x.cpp"           overwrite="true" />
+               <copy source="Snippets/vl53l0x-example.cpp"     target="Snippets/vl53l0x-example.cpp"  overwrite="always" />
+               <copy source="Snippets/vl53l0x.h"               target="Sources/vl53l0x.h"             overwrite="always" />
+               <copy source="Snippets/vl53l0x.cpp"             target="Sources/vl53l0x.cpp"           overwrite="always" />
             </projectActionList>
          </projectActionList>
       </projectActionList>

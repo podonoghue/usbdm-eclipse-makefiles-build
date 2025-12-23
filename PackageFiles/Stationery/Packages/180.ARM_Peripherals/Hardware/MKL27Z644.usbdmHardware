@@ -894,6 +894,15 @@
          <param type="BooleanVariable"        name="llwu_me_wume5_present"          value="true"             key="/LLWU/llwu_me_wume5_present" />
          <param type="BooleanVariable"        name="llwu_me_wume6_present"          value="true"             key="/LLWU/llwu_me_wume6_present" />
          <param type="BooleanVariable"        name="llwu_me_wume7_present"          value="true"             key="/LLWU/llwu_me_wume7_present" />
+         <param type="BooleanVariable"        name="llwu_mf_mwuf0_present"          value="true"             key="/LLWU/llwu_mf_mwuf0_present" />
+         <param type="BooleanVariable"        name="llwu_mf_mwuf1_present"          value="true"             key="/LLWU/llwu_mf_mwuf1_present" />
+         <param type="BooleanVariable"        name="llwu_mf_mwuf2_present"          value="true"             key="/LLWU/llwu_mf_mwuf2_present" />
+         <param type="BooleanVariable"        name="llwu_mf_mwuf3_present"          value="true"             key="/LLWU/llwu_mf_mwuf3_present" />
+         <param type="BooleanVariable"        name="llwu_mf_mwuf4_present"          value="true"             key="/LLWU/llwu_mf_mwuf4_present" />
+         <param type="BooleanVariable"        name="llwu_mf_mwuf5_present"          value="true"             key="/LLWU/llwu_mf_mwuf5_present" />
+         <param type="BooleanVariable"        name="llwu_mf_mwuf6_present"          value="true"             key="/LLWU/llwu_mf_mwuf6_present" />
+         <param type="BooleanVariable"        name="llwu_mf_mwuf7_present"          value="true"             key="/LLWU/llwu_mf_mwuf7_present" />
+         <param type="BooleanVariable"        name="llwu_mf_present"                value="true"             key="/LLWU/llwu_mf_present" />
          <param type="BooleanVariable"        name="llwu_pe1_present"               value="true"             key="/LLWU/llwu_pe1_present" />
          <param type="BooleanVariable"        name="llwu_pe1_wupe0_present"         value="true"             key="/LLWU/llwu_pe1_wupe0_present" />
          <param type="BooleanVariable"        name="llwu_pe1_wupe1_present"         value="true"             key="/LLWU/llwu_pe1_wupe1_present" />

@@ -41,15 +41,15 @@
          <copy source="Snippets/digital-example2.cpp"                          target="Snippets/digital-example2.cpp" />
          <excludeSourceFolder target="Snippets" />
          
-         <copy source="Startup_Code/system-gcc.cpp"                            target="Startup_Code/system-gcc.cpp"            overwrite="true"  derived="true" />
-         <copy source="Project_Headers/USBDM_Documentation_&DEVICE_FAMILY;.h"  target="Project_Headers/USBDM_Documentation.h"  overwrite="true"  derived="true" />
-         <copy source="Project_Headers/pcr-&DEVICE_FAMILY;.h"                  target="Project_Headers/pcr.h"                  overwrite="true"  derived="true" />
-         <copy source="Project_Headers/gpio-&DEVICE_FAMILY;.h"                 target="Project_Headers/gpio.h"                 overwrite="true"  derived="true" />
-         <copy source="Project_Headers/hardware.h"                             target="Project_Headers/hardware.h"             overwrite="true"  derived="true" />
-         <copy source="Project_Headers/pin_mapping-Generic-&DEVICE_FAMILY;.h"  target="Project_Headers/pin_mapping.h"          overwrite="true"  derived="true" />
+         <copy source="Startup_Code/system-gcc.cpp"                            target="Startup_Code/system-gcc.cpp"            overwrite="always"  derived="true" />
+         <copy source="Project_Headers/USBDM_Documentation_&DEVICE_FAMILY;.h"  target="Project_Headers/USBDM_Documentation.h"  overwrite="always"  derived="true" />
+         <copy source="Project_Headers/pcr-&DEVICE_FAMILY;.h"                  target="Project_Headers/pcr.h"                  overwrite="always"  derived="true" />
+         <copy source="Project_Headers/gpio-&DEVICE_FAMILY;.h"                 target="Project_Headers/gpio.h"                 overwrite="always"  derived="true" />
+         <copy source="Project_Headers/hardware.h"                             target="Project_Headers/hardware.h"             overwrite="always"  derived="true" />
+         <copy source="Project_Headers/pin_mapping-Generic-&DEVICE_FAMILY;.h"  target="Project_Headers/pin_mapping.h"          overwrite="always"  derived="true" />
          
-         <copy source="Sources/usbdmError.cpp"                                 target="Sources/usbdmError.cpp"                 overwrite="true"  derived="true" />
-         <copy source="Sources/main.cpp"                                       target="Sources/main.cpp"                       overwrite="true" />
+         <copy source="Sources/usbdmError.cpp"                                 target="Sources/usbdmError.cpp"                 overwrite="always"  derived="true" />
+         <copy source="Sources/main.cpp"                                       target="Sources/main.cpp"                       overwrite="always" />
 
       </projectActionList>
    </projectActionList>

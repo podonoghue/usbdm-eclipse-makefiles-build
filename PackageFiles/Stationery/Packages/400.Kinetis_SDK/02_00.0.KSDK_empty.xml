@@ -14,8 +14,8 @@
          <applyWhen>
             <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
          </applyWhen>
-         <variable id="projectOptionValue.KSDK-empty" 
-               name="Minimal Project" 
+         <variable id="projectOptionValue.KSDK-empty"
+               name="Minimal Project"
                description="Empty Project"
                radioGroup="group-ksdk-demo" >
          </variable>
@@ -24,15 +24,15 @@
                <variableRef idRef="projectOptionValue.KSDK-empty" />
             </applyWhen>
             <!-- Basic 'empty' project -->
-            <copy source="Sources/main-empty.c"          target="Sources/main.c"        overwrite="true"/>
-            <copy source="Sources/hardware_init-empty.c" target="board/hardware_init.c" overwrite="true"/>
+            <copy source="Sources/main-empty.c"          target="Sources/main.c"        overwrite="always"/>
+            <copy source="Sources/hardware_init-empty.c" target="board/hardware_init.c" overwrite="always"/>
             <projectActionList>
                <applyWhen>
                   <variableRef idRef="demo.KDS.useblinky" />
                </applyWhen>
                <!-- KDS Blinky example -->
-               <copy source="Sources/main-blinky.c"          target="Sources/main.c"        overwrite="true"/>
-               <copy source="Sources/hardware_init-blinky.c" target="board/hardware_init.c" overwrite="true"/>
+               <copy source="Sources/main-blinky.c"          target="Sources/main.c"        overwrite="always"/>
+               <copy source="Sources/hardware_init-blinky.c" target="board/hardware_init.c" overwrite="always"/>
             </projectActionList>
          </projectActionList>
       </projectActionList>

@@ -65,10 +65,10 @@
    </validate -->
 
    <projectActionList id = "lpit_files" >
-      <copy source="Snippets/lpit-example1.cpp"    target="Snippets/lpit-example1.cpp" overwrite="true" derived="true" />
-      <copy source="Snippets/lpit-example2.cpp"    target="Snippets/lpit-example2.cpp" overwrite="true" derived="true" />
-      <copy source="Snippets/lpit-example3.cpp"    target="Snippets/lpit-example3.cpp" overwrite="true" derived="true" />
-      <copy source="Project_Headers/lpit.h"        target="Project_Headers/lpit.h"     overwrite="true" derived="true" />
+      <copy source="Snippets/lpit-example1.cpp"    target="Snippets/lpit-example1.cpp" overwrite="always" derived="true" />
+      <copy source="Snippets/lpit-example2.cpp"    target="Snippets/lpit-example2.cpp" overwrite="always" derived="true" />
+      <copy source="Snippets/lpit-example3.cpp"    target="Snippets/lpit-example3.cpp" overwrite="always" derived="true" />
+      <copy source="Project_Headers/lpit.h"        target="Project_Headers/lpit.h"     overwrite="always" derived="true" />
    </projectActionList>
          
    <template><![CDATA[

@@ -31,11 +31,11 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-weact-stdio-1-54-epaper" />
                </applyWhen>
-               <copy source="Fonts"                                     target="Fonts"                                     overwrite="true"/>
-               <copy source="Snippets/fonts.h"                          target="Sources/fonts.h"                           overwrite="true"/>
-               <copy source="Snippets/FrameBuffer.h"                    target="Sources/FrameBuffer.h"                     overwrite="true" macroReplacement="false"/>
-               <copy source="Snippets/epaper-example-WeAct-1in54.cpp"   target="Sources/epaper-example-WeAct-1in54.cpp"    overwrite="true"/>
-               <copy source="Snippets/EPD_1in54_GDEM0154I61.h"          target="Sources/EPD_1in54_GDEM0154I61.h"           overwrite="true"/>
+               <copy source="Fonts"                                     target="Fonts"                                     overwrite="always"/>
+               <copy source="Snippets/fonts.h"                          target="Sources/fonts.h"                           overwrite="always"/>
+               <copy source="Snippets/FrameBuffer.h"                    target="Sources/FrameBuffer.h"                     overwrite="always" macroReplacement="false"/>
+               <copy source="Snippets/epaper-example-WeAct-1in54.cpp"   target="Sources/epaper-example-WeAct-1in54.cpp"    overwrite="always"/>
+               <copy source="Snippets/EPD_1in54_GDEM0154I61.h"          target="Sources/EPD_1in54_GDEM0154I61.h"           overwrite="always"/>
                <excludeSourceFile target="Sources/epaper-example-WeAct-1in54.cpp" />
                <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
                   <value>EPAPER_AVAILABLE</value>

@@ -31,8 +31,8 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-sht14-humidity" />
                </applyWhen>
-               <copy source="Snippets/sht14.h"            target="Sources/sht14.h"             overwrite="true"/>
-               <copy source="Snippets/sht14-example.cpp"  target="Snippets/sht14-example.cpp"  overwrite="true"/>
+               <copy source="Snippets/sht14.h"            target="Sources/sht14.h"             overwrite="always"/>
+               <copy source="Snippets/sht14-example.cpp"  target="Snippets/sht14-example.cpp"  overwrite="always"/>
             </projectActionList>
          </projectActionList>
       </projectActionList>

@@ -367,32 +367,32 @@ union Seconds_Ticks {
    /*
     * Allows writing numbers with units e.g. 100_ms
     */
-   consteval auto operator"" _ticks(unsigned long long int num) { return static_cast<Ticks>((unsigned)num); };
-   consteval auto operator"" _ticks(long double num)            { return static_cast<Ticks>((float)num); };
+   consteval auto operator""_ticks(unsigned long long int num) { return static_cast<Ticks>((unsigned)num); };
+   consteval auto operator""_ticks(long double num)            { return static_cast<Ticks>((float)num); };
 
-   consteval auto operator"" _s(unsigned long long int num)     { return static_cast<Seconds>((double)num); };
-   consteval auto operator"" _s(long double num)                { return static_cast<Seconds>((double)num); };
+   consteval auto operator""_s(unsigned long long int num)     { return static_cast<Seconds>((double)num); };
+   consteval auto operator""_s(long double num)                { return static_cast<Seconds>((double)num); };
 
-   consteval auto operator"" _ms(unsigned long long int num)    { return static_cast<Seconds>((double)(num*0.001)); };
-   consteval auto operator"" _ms(long double num)               { return static_cast<Seconds>((double)(num*0.001)); };
+   consteval auto operator""_ms(unsigned long long int num)    { return static_cast<Seconds>((double)(num*0.001)); };
+   consteval auto operator""_ms(long double num)               { return static_cast<Seconds>((double)(num*0.001)); };
 
-   consteval auto operator"" _us(unsigned long long int num)    { return static_cast<Seconds>((double)(num*0.000001)); };
-   consteval auto operator"" _us(long double num)               { return static_cast<Seconds>((double)(num*0.000001)); };
+   consteval auto operator""_us(unsigned long long int num)    { return static_cast<Seconds>((double)(num*0.000001)); };
+   consteval auto operator""_us(long double num)               { return static_cast<Seconds>((double)(num*0.000001)); };
 
-   consteval auto operator"" _ns(unsigned long long int num)    { return static_cast<Seconds>((double)(num*0.000000001)); };
-   consteval auto operator"" _ns(long double num)               { return static_cast<Seconds>((double)(num*0.000000001)); };
+   consteval auto operator""_ns(unsigned long long int num)    { return static_cast<Seconds>((double)(num*0.000000001)); };
+   consteval auto operator""_ns(long double num)               { return static_cast<Seconds>((double)(num*0.000000001)); };
 
-   consteval auto operator"" _Hz(unsigned long long int num)    { return static_cast<Hertz>((double)num); };
-   consteval auto operator"" _Hz(long double num)               { return static_cast<Hertz>((double)num); };
+   consteval auto operator""_Hz(unsigned long long int num)    { return static_cast<Hertz>((double)num); };
+   consteval auto operator""_Hz(long double num)               { return static_cast<Hertz>((double)num); };
 
-   consteval auto operator"" _kHz(unsigned long long int num)   { return static_cast<Hertz>((double)(num*1000)); };
-   consteval auto operator"" _kHz(long double num)              { return static_cast<Hertz>((double)(num*1000)); };
+   consteval auto operator""_kHz(unsigned long long int num)   { return static_cast<Hertz>((double)(num*1000)); };
+   consteval auto operator""_kHz(long double num)              { return static_cast<Hertz>((double)(num*1000)); };
 
-   consteval auto operator"" _MHz(unsigned long long int num)   { return static_cast<Hertz>((double)(num*1000000)); };
-   consteval auto operator"" _MHz(long double num)              { return static_cast<Hertz>((double)(num*1000000)); };
+   consteval auto operator""_MHz(unsigned long long int num)   { return static_cast<Hertz>((double)(num*1000000)); };
+   consteval auto operator""_MHz(long double num)              { return static_cast<Hertz>((double)(num*1000000)); };
 
-   consteval auto operator"" _percent(unsigned long long int num)  { return static_cast<Percent>((num)*0.01); };
-   consteval auto operator"" _percent(long double num)             { return static_cast<Percent>((num)*0.01); };
+   consteval auto operator""_percent(unsigned long long int num)  { return static_cast<Percent>((num)*0.01); };
+   consteval auto operator""_percent(long double num)             { return static_cast<Percent>((num)*0.01); };
 
 $(/PCR/nvicPriority: // /PCR/nvicPriority not found)
 /**

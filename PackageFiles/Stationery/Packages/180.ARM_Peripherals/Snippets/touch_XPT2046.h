@@ -23,11 +23,34 @@
 #ifndef USBDM_TOUCH_XPT2046_H_
 #define USBDM_TOUCH_XPT2046_H_
 #include "hardware.h"
-#include "spi.h"
+#include "../Project_Headers/spi.h"
 
 namespace USBDM {
 
-class TouchInterface {
+enum TouchOrientation : uint8_t {
+   //                                                +----- Mirror row
+   //                                                |+---- Mirror col
+   //                                                ||+--- Row-col exchange
+   //                                                |||
+   //                                                vvv
+   TouchOrientation_Normal                       = 0b000, // RGB + Normal
+   TouchOrientation_Mirrored_XequalsY            = 0b001, // RGB + Mirrored across X=Y axis
+   TouchOrientation_Mirrored_YAxis               = 0b010, // RGB + Mirrored across Y Axis
+   TouchOrientation_Rotated_270                  = 0b011, // RGB + Rotated 270 degrees
+   TouchOrientation_Mirrored_XAxis               = 0b100, // RGB + Mirrored across X Axis
+   TouchOrientation_Rotated_90                   = 0b101, // RGB + Rotated 90 degrees
+   TouchOrientation_Rotated_180                  = 0b110, // RGB + Rotated 180 degrees
+   TouchOrientation_Mirrored_XequalsMinusY       = 0b111, // RGB + Mirrored across X=-Y axis
+};
+
+/**
+ *
+ * @tparam orientation  Orientation of display
+ * @tparam width        Width of display after re-orientation
+ * @tparam height       Height of display after re-orientation
+ */
+template<TouchOrientation orientation, unsigned width, unsigned height>
+class Touch_XPT2046 {
 
 protected:
 
@@ -39,7 +62,7 @@ protected:
 
    // Communication settings
    static constexpr Spi0::SerialInit serialInitValue {
-      2.5_MHz ,               // (speed[0])                 Speed of interface
+      2.5_MHz ,              // (speed[0])                 Speed of interface
       SpiMode_0 ,            // (spi_ctar_mode[0])         Mode - Mode 0: CPOL=0, CPHA=0
       SpiFrameSize_8_bits ,  // (spi_ctar_fmsz[0])         SPI Frame sizes - 8 bits/transfer
       SpiBitOrder_MsbFirst,  // (spi_ctar_lsbfe[0])        Transmission order - MSB sent first
@@ -52,12 +75,20 @@ protected:
    const Spi::SpiCalculatedConfiguration commandConfiguration;
 
 public:
-   TouchInterface(Spi &spi) :
+   Touch_XPT2046(Spi &spi) :
       spi(spi),
       commandConfiguration(spi.calculateConfiguration(serialInitValue, SpiPeripheralSelect_TouchCs , SpiPeripheralSelectMode_Transaction)) {
 
+      initialise();
+   }
+
+   ~Touch_XPT2046() = default;
+
+   void initialise() {
+
       // Set CS polarities
       spi.setPcsPolarityActiveLow(SpiPeripheralSelect_TouchCs);
+
       // GPIOs
       static constexpr PcrInit pcrValue {
          PinPull_Up,
@@ -66,11 +97,12 @@ public:
          PinDriveMode_PushPull,
          PinFilter_None,
       };
+
+      // Touch IRQ pin
       TouchIrq::setInput(pcrValue);
    }
 
-   ~TouchInterface() = default;
-
+protected:
    /**
     * Send a command to display
     *
@@ -93,10 +125,9 @@ public:
     *  1   0   Enabled  Reference is on and ADC is off.
     *  1   1   Disabled Device is always powered. Reference is on and ADC is on.
     */
-
    enum Power {
 
-      Start     = 0b1'000'0'0'00,
+      Start                = 0b1'000'0'0'00,
 
       Address_Y            = 0b0'001'0'0'00,
       Address_Z1           = 0b0'011'0'0'00,
@@ -130,7 +161,51 @@ public:
    static constexpr uint8_t Y       = Start|Address_Y |Conversion_Diff|Mode_12Bits|Power_FullPower;      // 0b1'001'0'0'01 = 91
    static constexpr uint8_t Last    = Start|Power_MinPower_Irq;                                          // 0b1'000'0'0'00 = 80
 
-   static constexpr unsigned Z_THRESHOLD = 300;
+   static constexpr unsigned Z_THRESHOLD = 500;
+
+
+   class Map {
+
+   public:
+
+      int raw;
+      int mapped;
+
+      Map() : raw(0), mapped(0) {
+      }
+
+      Map(int raw, int mapped) : raw(raw), mapped(mapped) {
+      }
+   };
+
+
+   static inline const Map xPoints[] = {
+         {528, 310, },
+         {1332, 235, },
+         {2156, 160, },
+         {3044, 85, },
+         {3781, 10, },
+   };
+   static inline const Map yPoints[] = {
+         {437, 10, },
+         {1238, 125, },
+         {2117, 240, },
+         {2976, 355, },
+         {3800, 470, },
+   };
+
+   static void findPoints(const Map points[], unsigned n, int value, Map &left, Map &right) {
+
+      right = points[0];
+      for (unsigned sub=1; sub<n; sub++) {
+         left = right;
+         right = points[sub];
+         if (right.raw > value) {
+            break;
+         }
+      }
+      return;
+   }
 
    /**
     * Scale raw X measurements to pixels
@@ -141,10 +216,21 @@ public:
     */
    static constexpr unsigned scaleX(unsigned rawX) {
 
-      constexpr unsigned xMax   = 3910;
-      constexpr unsigned xWidth = 320;
+      constexpr unsigned max = width-1;
 
-      return (rawX*xWidth)/xMax;
+      Map left;
+      Map right;
+
+      findPoints(xPoints, sizeof(xPoints)/sizeof(xPoints[0]), rawX, left, right);
+
+      int scaledValue = left.mapped + ((int(rawX)-left.raw)*(left.mapped-right.mapped))/(left.raw-right.raw);
+      if (scaledValue<0) {
+         scaledValue = 0;
+      }
+      if (scaledValue>int(max)) {
+         scaledValue = max;
+      }
+      return unsigned(scaledValue);
    }
 
    /**
@@ -156,14 +242,46 @@ public:
     */
    static constexpr unsigned scaleY(unsigned rawY) {
 
-      constexpr unsigned yMax   = 3934;
-      constexpr unsigned yWidth = 480;
+      constexpr unsigned max = height-1;
 
-      return (rawY*yWidth)/yMax;
+      Map left;
+      Map right;
+
+      findPoints(yPoints, sizeof(yPoints)/sizeof(yPoints[0]), rawY, left, right);
+
+      int scaledValue = left.mapped + ((int(rawY)-left.raw)*(left.mapped-right.mapped))/(left.raw-right.raw);
+      if (scaledValue<0) {
+         scaledValue = 0;
+      }
+      if (scaledValue>int(max)) {
+         scaledValue = max;
+      }
+      return unsigned(scaledValue);
    }
 
+   static void constexpr scale(unsigned &x, unsigned &y) {
 
-   bool checkTouch(unsigned &x, unsigned &y) {
+      console.write("(",x,",",y,") -> ");
+      x = scaleX(x);
+      y = scaleY(y);
+      console.writeln("(",x,",",y,")");
+
+      if constexpr (orientation & 0b001) {
+         // Row-Col exchange
+         unsigned t = x; x = y; y = t;
+      }
+      if constexpr (orientation & 0b010) {
+         // Mirror col
+         x = width - x;
+      }
+      if constexpr (orientation & 0b100) {
+         // Mirror row
+         y = height - y;
+      }
+   }
+
+public:
+   bool checkRawTouch(unsigned &x, unsigned &y) {
 
       static constexpr IntegerFormat decimalFormat(Padding_LeadingSpaces, Width_6, Radix_10);
       static constexpr IntegerFormat hex2Format(Padding_LeadingZeroes, Width_2, Radix_16);
@@ -183,14 +301,15 @@ public:
 
       uint16_t xResults[4];
       uint16_t yResults[4];
-      uint16_t xResult;
-      uint16_t yResult;
 
       // Completes previous sequence
       static const uint8_t txData2[] = { /* X, */ 0, X,0, X,0, X,0, Y,0, Y,0, Y,0, Y,0, Last, };
       uint8_t rxData2[sizeof(txData2)];
 
+//      console.write("Z1 = ", z1, ", Z2 = ", z2, ", Z = ", z);
+
       if (z>Z_THRESHOLD) {
+//         console.write(", Z = ", z, ", (> ", Z_THRESHOLD, ")");
 
          spi.txRx(txData2, rxData2);
          spi.endTransaction();
@@ -204,14 +323,15 @@ public:
          yResults[2] = uint16_t((rxData2[12]<<8u)|rxData2[13])>>3;  // X3
          yResults[3] = uint16_t((rxData2[14]<<8u)|rxData2[15])>>3;  // Y3
 
-         xResult = scaleX((xResults[0]+xResults[1]+xResults[2]+xResults[3])>>2);
-         yResult = scaleY((yResults[0]+yResults[1]+yResults[2]+yResults[3])>>2);
+         x = ((xResults[0]+xResults[1]+xResults[2]+xResults[3])>>2);
+         y = ((yResults[0]+yResults[1]+yResults[2]+yResults[3])>>2);
       }
       else {
          // Completes previous sequence (discards X value)
          spi.txRxFinal(Last);
          spi.endTransaction();
       }
+//      console.writeln();
       //   console.setFormat(decimalFormat);
       //   console.writeln("                                 z1 = ", z1, ", z2=", z2, ", z=", z);
 
@@ -222,15 +342,79 @@ public:
          //      console.setFormat(hex4Format);
          //      console.writeArray(xResults, Radix_16).writeln(" x=", xResult);
          //      console.writeArray(yResults, Radix_16).writeln(" y=", yResult);
-//         console.setFormat(decimalFormat);
-//         console.writeln("X = ", xResult, ", Y = ", yResult);
-
-         x = xResult;
-         y = yResult;
-
+         //         console.setFormat(decimalFormat);
+         //         console.writeln("X = ", xResult, ", Y = ", yResult);
          return true;
       }
       return false;
+   }
+
+public:
+   /**
+    * Check for touch event
+    *
+    * @param xResult X-coordinate of touch
+    * @param yResult Y-coordinate of touch
+    *
+    * @return True on event
+    */
+   bool checkTouch(unsigned &xResult, unsigned &yResult) {
+
+      if (checkRawTouch(xResult, yResult)) {
+         scale(xResult, yResult);
+         return true;
+      }
+      return false;
+   }
+
+   /**
+    * Install the touch interrupt handler
+    *
+    * @param handler
+    */
+   void setInterruptHandler(void (*handler)()) {
+
+      TouchIrq::setPinCallback(nullptr);
+      TouchIrq::setPinCallback(handler);
+   }
+
+   /**
+    * Enable touch interrupts
+    * Should only be done when not polling for touches
+    */
+   void enableTouchInterrupt() {
+
+      static const PcrInit gpioInit {
+         PinPull_Up,
+         PinAction_IrqFalling,
+         PinFilter_Passive
+      };
+
+      // Configure Touch interface for wake-up
+      sendCommand(Last);
+
+      // Configure IRQ pin
+      TouchIrq::clearInterruptFlag();
+      TouchIrq::enableNvicPinInterrupts(NvicPriority_Normal);
+      TouchIrq::setInput(gpioInit);
+   }
+
+   /**
+    * Disable touch interrupts
+    * Should be done before polling for touches
+    */
+   void disableTouchInterrupt() {
+
+      static const PcrInit gpioInit {
+         PinPull_Up,
+         PinAction_None,
+         PinFilter_Passive,
+      };
+
+      // Disable IRQ pin
+      TouchIrq::setInput(gpioInit);
+      TouchIrq::disableNvicPinInterrupts();
+      TouchIrq::clearInterruptFlag();
    }
 
 };

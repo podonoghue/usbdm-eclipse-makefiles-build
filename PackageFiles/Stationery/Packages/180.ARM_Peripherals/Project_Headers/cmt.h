@@ -16,6 +16,7 @@
  */
 #include "derivative.h"
 #include "pin_mapping.h"
+#include "gpio.h"
 
 $(/CMT/prototypes:// $/CMT/prototypes not found)
 

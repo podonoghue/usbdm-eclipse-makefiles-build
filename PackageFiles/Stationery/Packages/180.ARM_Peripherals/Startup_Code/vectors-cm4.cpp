@@ -12,8 +12,8 @@
  */
 #include <stdint.h>
 #include <string.h>
-#include "derivative.h"
-#include "hardware.h"
+#include "../Project_Headers/derivative.h"
+#include "../Sources/hardware.h"
 
 $(VectorsIncludeFiles)
 
@@ -24,7 +24,7 @@ using namespace USBDM;
  */
 typedef void( *const intfunc )( void );
 
-#define WEAK_DEFAULT_HANDLER __attribute__ ((__nothrow__, __weak__, alias("Default_Handler")))
+#define WEAK_DEFAULT_HANDLER __attribute__ ((__weak__, nothrow, alias("Default_Handler")))
 /**
  * Default handler for interrupts
  *
@@ -77,7 +77,7 @@ typedef struct {
  *
  *  See http://www.freertos.org/Debugging-Hard-Faults-On-Cortex-M-Microcontrollers.html
  */
-__attribute__((__naked__, __weak__, __interrupt__))
+__attribute__((__naked__, __interrupt__))
 void HardFault_Handler(void) {
 #if defined(DEBUG_BUILD) && $(/HARDWARE/extendedHardFaultInformation:false)
    /*
@@ -94,10 +94,9 @@ void HardFault_Handler(void) {
      __asm__ volatile ( "  b     _HardFault_Handler  \n");  // Go to C handler
 
 #else
-   while (1) {
-      // Stop here for debugger
-      __asm__("bkpt");
-   }
+   // Stop here for debugger
+   __asm__("1: bkpt");
+   __asm__("   b 1b");
 #endif
 }
 #pragma GCC diagnostic pop

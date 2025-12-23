@@ -31,8 +31,8 @@
       <copy source="Project_Headers/utilities.h"                               target="Project_Headers/utilities.h" />
       <copy source="Project_Headers/core_cfv1.h"                               target="Project_Headers/core_cfv1.h" />
 
-      <copy source="$(externalVectorTable)"                                    target="Startup_Code/vectors.c" overwrite="true" />
-      <copy source="$(externalHeaderFile)"                                     target="Project_Headers/$(targetDevice).h" overwrite="true" />
+      <copy source="$(externalVectorTable)"                                    target="Startup_Code/vectors.c" overwrite="always" />
+      <copy source="$(externalHeaderFile)"                                     target="Project_Headers/$(targetDevice).h" overwrite="always" />
 
       <projectActionList>
          <applyWhen>

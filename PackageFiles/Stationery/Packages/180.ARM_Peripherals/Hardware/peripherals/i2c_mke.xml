@@ -2011,17 +2011,17 @@ public:
    </validate>
 
    <projectActionList id="i2c_files" >
-      <copy source="Project_Headers/i2c-MKE.h"        target="Project_Headers/i2c.h"            overwrite="true"  derived="true" />
-      <copy source="Sources/i2c.cpp"                  target="Sources/i2c.cpp"                  overwrite="true"  derived="true" />
+      <copy source="Project_Headers/i2c-MKE.h"        target="Project_Headers/i2c.h"            overwrite="always"  derived="true" />
+      <copy source="Sources/i2c.cpp"                  target="Sources/i2c.cpp"                  overwrite="always"  derived="true" />
 
-      <copy source="Snippets/i2c-example.cpp"         target="Snippets/i2c-example.cpp"         overwrite="true"  derived="true" />
+      <copy source="Snippets/i2c-example.cpp"         target="Snippets/i2c-example.cpp"         overwrite="always"  derived="true" />
 
    </projectActionList>
 
    <!-- _____________ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

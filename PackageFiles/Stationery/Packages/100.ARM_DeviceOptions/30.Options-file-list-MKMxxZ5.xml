@@ -14,14 +14,14 @@
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
-      <copy source="Startup_Code/vectors-cm0.c"         target="Startup_Code/vectors.c"  overwrite="true" />
+      <copy source="Startup_Code/vectors-cm0.c"         target="Startup_Code/vectors.c"  overwrite="always" />
       <!-- Security -->
-      <copy source="Startup_Code/security-mkm.c"        target="Startup_Code/security.c" overwrite="true" />
+      <copy source="Startup_Code/security-mkm.c"        target="Startup_Code/security.c" overwrite="always" />
       <!-- Clock -->
-      <copy source="Startup_Code/clock-MCG-MKMxx.c"              target="Startup_Code/clock.c"              overwrite="true" />
-      <copy source="Project_Headers/clock_configure-MCG-MKMxx.h" target="Project_Headers/clock_configure.h" overwrite="true" />
+      <copy source="Startup_Code/clock-MCG-MKMxx.c"              target="Startup_Code/clock.c"              overwrite="always" />
+      <copy source="Project_Headers/clock_configure-MCG-MKMxx.h" target="Project_Headers/clock_configure.h" overwrite="always" />
       <!-- Console -->
-      <copy source="Startup_Code/console-mkm.c"    target="Startup_Code/console.c"    overwrite="true" />
-      <copy source="Project_Headers/console.h"     target="Project_Headers/console.h" overwrite="true" />
+      <copy source="Startup_Code/console-mkm.c"    target="Startup_Code/console.c"    overwrite="always" />
+      <copy source="Project_Headers/console.h"     target="Project_Headers/console.h" overwrite="always" />
    </projectActionList>
 </root>

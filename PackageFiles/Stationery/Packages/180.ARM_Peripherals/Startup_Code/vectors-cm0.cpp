@@ -10,8 +10,8 @@
  */
 #include <stdint.h>
 #include <string.h>
-#include "derivative.h"
-#include "hardware.h"
+#include "../Project_Headers/derivative.h"
+#include "../Sources/hardware.h"
 
 $(VectorsIncludeFiles)
 
@@ -22,7 +22,7 @@ using namespace USBDM;
  */
 typedef void( *const intfunc )( void );
 
-#define WEAK_DEFAULT_HANDLER __attribute__ ((__nothrow__, __weak__, alias("Default_Handler")))
+#define WEAK_DEFAULT_HANDLER __attribute__ ((__weak__, alias("Default_Handler")))
 /**
  * Default handler for interrupts
  *
@@ -40,7 +40,7 @@ typedef void( *const intfunc )( void );
 extern "C" {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wattributes"
-__attribute__((__interrupt__))
+__attribute__((__interrupt__,__weak__))
 void Default_Handler(void) {
 
 #ifdef SCB
@@ -100,10 +100,9 @@ void HardFault_Handler(void) {
    __asm__ volatile ("       handler_addr_const: .word _HardFault_Handler  \n");
 
 #else
-   while (1) {
-      // Stop here for debugger
-      __asm__("bkpt");
-   }
+   // Stop here for debugger
+   __asm__("1: bkpt");
+   __asm__("   b 1b");
 #endif
 }
 #pragma GCC diagnostic pop

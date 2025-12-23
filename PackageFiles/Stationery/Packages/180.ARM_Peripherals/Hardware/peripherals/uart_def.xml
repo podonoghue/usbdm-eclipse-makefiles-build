@@ -484,6 +484,7 @@ condition can set the IDLE flag.\n
       typeName="UartStatusFlag"
       baseType="uint32_t"
       enumClass="true"
+      noStem="true"
       toolTip="These masks may be used to test or modify the status flags"
       description="Status Flags" >
       <bitField var="uart_s1_pf"       condition="uart_s1_pf_present"         />
@@ -612,7 +613,7 @@ condition can set the IDLE flag.\n
       baseType="uint8_t"
       toolTip="T8 is the ninth data bit transmitted when the UART is configured for 9-bit data format,\n
                that is, if C1[M] = 1 or C4[M10] = 1.\n
-               NOTE: If the value of T8 is the same as in the previous transmission, T8 does not\n
+               Note: If the value of T8 is the same as in the previous transmission, T8 does not\n
                have to be rewritten. The same value is transmitted until T8 is rewritten."
       description="Transmit Bit 8" >
       <choice name="Data 0"  value="0" enum="0" />
@@ -647,7 +648,7 @@ condition can set the IDLE flag.\n
                by short low pulse in the middle of a bit time remaining idle high for a one for\n
                inverted polarity.This field is automatically set when C7816[INIT] and C7816[ISO7816E]\n
                are enabled and an initial character is detected in T = 0 protocol mode.\n
-               NOTE: Setting TXINV inverts all transmitted values, including idle, break, start, and stop bits.\n
+               Note: Setting TXINV inverts all transmitted values, including idle, break, start, and stop bits.\n
                In loop mode, if TXINV is set, the receiver gets the transmit inversion bit when RXINV is disabled.\n
                When C7816[ISO7816E] is set/enabled then only the transmitted data bits and parity bit are inverted."
       description="Transmit Data Inversion" >
@@ -2024,7 +2025,7 @@ of a parity error or receiver buffer overruns before the host processor is notif
       \t * - Framing error flag
       \t * - Parity error flag
       \t */
-      \t void clearError() const {
+      \tvoid clearError() const {
       \t
       \t   // Flags are cleared by reading status and then data
       \t   (void)uart->S1;
@@ -2032,6 +2033,46 @@ of a parity error or receiver buffer overruns before the host processor is notif
       \t}
       \t\n
    ]]></template>
+
+   <template codeGenCondition="$(_InfoGuard)" condition="@status_is_w1c" >
+   <![CDATA[
+      \t/**
+      \t * Clear UART status \n
+      \t * This includes:
+      \t * - Idle detect flag
+      \t * - Overrun flag
+      \t * - Noise flag
+      \t * - Framing error flag
+      \t * - Parity error flag
+      \t */
+      \tstatic void clearError() {
+      \t
+      \t   // Flags are w1c
+      \t   uart->S1 = uart->S1 | (UART_S1_IDLE_MASK|UART_S1_OR_MASK|UART_S1_NF_MASK|UART_S1_FE_MASK|UART_S1_PF_MASK);
+      \t}
+      \t\n
+   ]]></template>
+
+   <template codeGenCondition="$(_InfoGuard)" condition="!@status_is_w1c" >
+   <![CDATA[
+      \t/**
+      \t * Clear UART status \n
+      \t * This includes:
+      \t * - Idle detect flag
+      \t * - Overrun flag
+      \t * - Noise flag
+      \t * - Framing error flag
+      \t * - Parity error flag
+      \t */
+      \tstatic void clearError() {
+      \t
+      \t   // Flags are cleared by reading status and then data
+      \t   (void)uart->S1;
+      \t   (void)uart->D;
+      \t}
+      \t\n
+   ]]></template>
+
 
    <!-- ____  BAUD rate calculations ______ -->
 
@@ -2615,7 +2656,7 @@ XXXXXXXXXXXXXXXXXXXXXX
                              uart_cfifo_txofe,uart_cfifo_rxufe                    :   0      ;
                %baseType   : uart_sfifo_rxof,uart_sfifo_txof,uart_sfifo_rxuf      :   0      ;
                %baseType   : uart_twfifo_txwater                                  :   0      ;
-               %baseType   : uart_rwfifo_rxwater                                  :   0      ;
+               %baseType   : uart_rwfifo_rxwater                                  :   1      ;
                %baseType   : uart_c7816_onack,uart_c7816_anack,uart_c7816_init,
                              uart_c7816_ttype,uart_c7816_iso_7816e                :   0      ;
                %baseType   : uart_ie7816_wte,uart_ie7816_cwte,uart_ie7816_bwte,
@@ -2976,7 +3017,7 @@ XXXXXXXXXXXXXXXXXXXXXX
    ]]>
    </template>
 
-   <variableTemplate where="info" codeGenCondition="$(_InfoGuard)"
+   <variableTemplate where="info" codeGenCondition="$(_InfoGuard)" condition="=individual_clock_source"
       variables="uart_baudrate" >
    <![CDATA[
       \t/**
@@ -2984,9 +3025,9 @@ XXXXXXXXXXXXXXXXXXXXXX
       \t *
       %paramDescription
       \t */
-      \tvoid setBaudRate(%params) {
+      \tstatic void setBaudRate(%params) {
       \t
-      \t   $(_BasicInfo)::setBaudRate($(_basename), getInputClockFrequency(), %paramName);
+      \t   $(_BasicInfo)::setBaudRate($(_basename),  SimInfo::get$(_Class)Clock(), %paramName);
       \t}
       \t\n
    ]]>
@@ -3173,15 +3214,15 @@ XXXXXXXXXXXXXXXXXXXXXX
    </validate>
 
    <projectActionList id="uart_files" >
-      <copy source="Snippets/uart-example.cpp"     target="Snippets/uart-example.cpp"     overwrite="true"  derived="true" />
-      <copy source="Project_Headers/uart-MK.h"     target="Project_Headers/uart.h"        overwrite="true"  derived="true" macroReplace="true" />
-      <copy source="Project_Headers/uart_queue.h"  target="Project_Headers/uart_queue.h"  overwrite="true"  derived="true" />
+      <copy source="Snippets/uart-example.cpp"     target="Snippets/uart-example.cpp"     overwrite="always"  derived="true" />
+      <copy source="Project_Headers/uart-MK.h"     target="Project_Headers/uart.h"        overwrite="always"  derived="true" macroReplace="true" />
+      <copy source="Project_Headers/uart_queue.h"  target="Project_Headers/uart_queue.h"  overwrite="always"  derived="true" />
    </projectActionList>
 
    <!-- ____ Startup ____ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

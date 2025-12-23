@@ -13,7 +13,6 @@
    <equation key="irq_dummy_parameters"       value=""  />
    <equation key="irq_call_parameters"        value=""  />
    <equation key="generateDefault"            value="false"         />
-   <equation key="configureInStartupDefault"  value="false"         />
    <xi:include href="enablePeripheral.xml"    />
    <title />
 
@@ -136,17 +135,17 @@
    </validate>
 
    <projectActionList id="flash_files" >
-      <copy source="Project_Headers/flash.h"                 target="Project_Headers/flash.h"                 overwrite="true"  derived="true" />
-      <copy source="Project_Headers/ftfe.h"                  target="Project_Headers/ftfe.h"                  overwrite="true"  derived="true" />
-      <copy source="Sources/ftfe.cpp"                        target="Sources/ftfe.cpp"                        overwrite="true"  derived="true" />
-      <copy source="Snippets/nonvolatile-example.cpp"        target="Snippets/nonvolatile-example.cpp"        overwrite="true"  derived="true" />
-      <copy source="Snippets/flash-programming-example.cpp"  target="Snippets/flash-programming-example.cpp"  overwrite="true"  derived="true" />
+      <copy source="Project_Headers/flash.h"                 target="Project_Headers/flash.h"                 overwrite="always"  derived="true" />
+      <copy source="Project_Headers/ftfe.h"                  target="Project_Headers/ftfe.h"                  overwrite="always"  derived="true" />
+      <copy source="Sources/ftfe.cpp"                        target="Sources/ftfe.cpp"                        overwrite="always"  derived="true" />
+      <copy source="Snippets/nonvolatile-example.cpp"        target="Snippets/nonvolatile-example.cpp"        overwrite="always"  derived="true" />
+      <copy source="Snippets/flash-programming-example.cpp"  target="Snippets/flash-programming-example.cpp"  overwrite="always"  derived="true" />
    </projectActionList>
 
    <!-- _____________ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

@@ -385,7 +385,7 @@ XXXXXXXXXXXXXXXXXXXXXX
    </validate>
 
    <projectActionList id="crc_files" >
-      <copy source="Project_Headers/crc-MKE.h"  target="Project_Headers/crc.h"  overwrite="true"  derived="true" />
+      <copy source="Project_Headers/crc-MKE.h"  target="Project_Headers/crc.h"  overwrite="always"  derived="true" />
    </projectActionList>
 
    <!-- ____ Startup __________________ -->

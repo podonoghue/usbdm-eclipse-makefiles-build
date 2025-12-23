@@ -26,8 +26,8 @@
    <signals/>
 
    <projectActionList id="llwu_files_examples" >
-      <copy source="Project_Headers/llwu.h"            target="Project_Headers/llwu.h"            overwrite="true" derived="true" />
-      <copy source="Snippets/llwu-example-mk22f.cpp"   target="Snippets/llwu-example-mk22f.cpp"  overwrite="true" derived="true" />
+      <copy source="Project_Headers/llwu.h"            target="Project_Headers/llwu.h"            overwrite="always" derived="true" />
+      <copy source="Snippets/llwu-example-mk22f.cpp"   target="Snippets/llwu-example-mk22f.cpp"  overwrite="always" derived="true" />
    </projectActionList>
 
 </peripheralPage>

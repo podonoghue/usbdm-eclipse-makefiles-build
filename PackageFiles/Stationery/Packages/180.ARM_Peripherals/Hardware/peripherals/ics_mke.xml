@@ -976,9 +976,9 @@
    </validate>
 
    <projectActionList id="ics_files" >
-      <copy source="Project_Headers/ics-mke.h"         target="Project_Headers/ics.h"                 overwrite="true"  derived="true" />
-      <copy source="Startup_Code/ics.cpp"              target="Startup_Code/ics.cpp"                  overwrite="true"  derived="true" />
-      <copy source="Snippets/ics-test.cpp"             target="Snippets/ics-test.cpp"                 overwrite="true"  derived="true" />
+      <copy source="Project_Headers/ics-mke.h"         target="Project_Headers/ics.h"                 overwrite="always"  derived="true" />
+      <copy source="Startup_Code/ics.cpp"              target="Startup_Code/ics.cpp"                  overwrite="always"  derived="true" />
+      <copy source="Snippets/ics-test.cpp"             target="Snippets/ics-test.cpp"                 overwrite="always"  derived="true" />
       <deleteResource target="Project_Headers/clock_configure.h" />
       <deleteResource target="Startup_Code/clock.c" />
    </projectActionList>

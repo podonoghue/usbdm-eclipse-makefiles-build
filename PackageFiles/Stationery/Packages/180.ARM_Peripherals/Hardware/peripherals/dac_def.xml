@@ -276,6 +276,7 @@
       valueFormat="%s"
       enumClass="true"
       baseType="uint8_t"
+      noStem="true"
       generateOperators="true"
       typeName="DacStatus"
       description="Status bits from DAC"
@@ -842,11 +843,11 @@
    </template>
    <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)" >
    <![CDATA[
-      \t   // Configure call-back
-      \t   if (init.callbacks[0] != nullptr) {
-      \t      setCallback(init.callbacks[0]);
-      \t      enableNvicInterrupts(init.priorities[0]);
-      \t   }
+      \t   // Disable call-back
+      \t   disableNvicInterrupts();
+      \t
+      \t   // Install call-back
+      \t   setCallback(init.callbacks[0]);
       \t\n
    ]]>
    </template>
@@ -855,11 +856,11 @@
       immediateVariables="_hardwareIrqCount">
    <![CDATA[
       \t   for(int index=0; index<$(_hardwareIrqCount); index++) {
-      \t      if (init.callbacks[index] != nullptr) {
-      \t         // Configure call-back
-      \t         setCallback(%returnType0(index), init.callbacks[index]);
-      \t         enableNvicInterrupts(%returnType0(index), init.priorities[index]);
-      \t      }
+      \t      // Disable call-back
+      \t      disableNvicInterrupts(%returnType0(index));
+      \t
+      \t      // Install call-back
+      \t      setCallback(%returnType0(index), init.callbacks[index]);
       \t   }
       \t\n
    ]]>
@@ -867,6 +868,29 @@
    <template where="info" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
       \t   $(_BasicInfo)::configure($(_basename), init);
+      \t\n
+   ]]>
+   </template>
+   <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)" >
+   <![CDATA[
+      \t   // Enable call-back
+      \t   enableNvicInterrupts(init.priorities[0]);
+      \t\n
+   ]]>
+   </template>
+   <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount>1)"
+      variables="irq_enum"
+      immediateVariables="_hardwareIrqCount">
+   <![CDATA[
+      \t   for(int index=0; index<$(_hardwareIrqCount); index++) {
+      \t      // Enable call-back
+      \t      enableNvicInterrupts(%returnType0(index), init.priorities[index]);
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
       \t}
       \t\n
    ]]>
@@ -883,27 +907,6 @@
       \tstatic constexpr $(_BasicInfo)::Init DefaultInitValue = {\n
    ]]>
    </template>
-   <!-- Interrupt information -->
-<!--
-   <for keys="irqName" values="=_hardwareIrqNums">
-      <equation key="irqEnum" value='=ReplaceAll("%(irqName)","^(.*?)_(.*)_IRQn$","IrqNum_$2")' />
-      <equation key="var"     value='=ReplaceAll("%(irqName)","^(.*?)_(.*)_IRQn$","irqLevel_$2")' />
-      <print text="(irqName) = %(irqName)"/>
-      <printVar key="irqEnum" />
-      <printVar key="var" />
-      <variableTemplate where="info" codeGenCondition='$(_InfoIrqGuard)&amp;&amp;!IsZero(@var)'
-         variables='=var'
-         separator=","
-         terminator=","
-         padToComments="40"
-         immediateVariables="irqEnum" >
-      <![CDATA[
-         \t   $(irqEnum), %initExpression,
-         \t   unhandledCallback,\n
-      ]]>
-      </variableTemplate>
-   </for>
--->
    <variableTemplate where="info" codeGenCondition="$(_InfoGuard)"
       separator=","
       terminator=","
@@ -960,19 +963,19 @@
    </validate>
 
    <projectActionList id="dac_files" >
-      <copy source="Project_Headers/dac.h"                         target="Project_Headers/dac.h"                         overwrite="true" derived="true" />
-      <copy source="Snippets/dac-example.cpp"                      target="Snippets/dac-example.cpp"                      overwrite="true" derived="true" />
-      <copy source="Snippets/dac-dma-pdb-example.cpp"              target="Snippets/dac-dma-pdb-example.cpp"              overwrite="true" derived="true" />
-      <copy source="Snippets/dac-dma-pitThrottled-example.cpp"     target="Snippets/dac-dma-pitThrottled-example.cpp"     overwrite="true" derived="true" />
-      <copy source="Snippets/dac-hardwareTrigger-dma-example.cpp"  target="Snippets/dac-hardwareTrigger-dma-example.cpp"  overwrite="true" derived="true" />
-      <copy source="Snippets/dac-hardwareTrigger-example.cpp"      target="Snippets/dac-hardwareTrigger-example.cpp"      overwrite="true" derived="true" />
-      <copy source="Snippets/dac-softwareTrigger-example.cpp"      target="Snippets/dac-softwareTrigger-example.cpp"      overwrite="true" derived="true" />
+      <copy source="Project_Headers/dac.h"                         target="Project_Headers/dac.h"                         overwrite="always" derived="true" />
+      <copy source="Snippets/dac-example.cpp"                      target="Snippets/dac-example.cpp"                      overwrite="always" derived="true" />
+      <copy source="Snippets/dac-dma-pdb-example.cpp"              target="Snippets/dac-dma-pdb-example.cpp"              overwrite="always" derived="true" />
+      <copy source="Snippets/dac-dma-pitThrottled-example.cpp"     target="Snippets/dac-dma-pitThrottled-example.cpp"     overwrite="always" derived="true" />
+      <copy source="Snippets/dac-hardwareTrigger-dma-example.cpp"  target="Snippets/dac-hardwareTrigger-dma-example.cpp"  overwrite="always" derived="true" />
+      <copy source="Snippets/dac-hardwareTrigger-example.cpp"      target="Snippets/dac-hardwareTrigger-example.cpp"      overwrite="always" derived="true" />
+      <copy source="Snippets/dac-softwareTrigger-example.cpp"      target="Snippets/dac-softwareTrigger-example.cpp"      overwrite="always" derived="true" />
    </projectActionList>
 
    <!-- ____ Startup ____ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

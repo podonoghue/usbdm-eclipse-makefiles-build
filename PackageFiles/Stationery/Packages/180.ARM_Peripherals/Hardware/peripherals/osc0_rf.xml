@@ -74,7 +74,7 @@
    </validate>
 
    <projectActionList id = "osc_files" >
-      <copy source="Project_Headers/osc_rf.h"  target="Project_Headers/osc.h"  overwrite="true"  derived="true" />
+      <copy source="Project_Headers/osc_rf.h"  target="Project_Headers/osc.h"  overwrite="always"  derived="true" />
    </projectActionList>
 
    <variableTemplate variables="rsim_control_rf_osc_en"
@@ -148,7 +148,7 @@
    ]]></template>
 
    <template key="/MCG/Includes"  ><![CDATA[
-   #include "osc.h"\n
+   #include "../Project_Headers/osc.h\n
    ]]></template>
 
    <template key="/MCG/Initialisation"  ><![CDATA[

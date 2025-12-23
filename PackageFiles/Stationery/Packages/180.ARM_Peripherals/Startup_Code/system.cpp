@@ -7,8 +7,8 @@
  */
 
 #include <stdint.h>
-#include "derivative.h"
-#include "pmc.h"
+#include "../Project_Headers/derivative.h"
+#include "../Project_Headers/pmc.h"
 $(/SYSTEM/Includes: )
 
 /* This definition is overridden if Clock initialisation is provided */
@@ -16,11 +16,11 @@ __attribute__((__weak__))
 void SystemCoreClockUpdate(void) {
 }
 
-$(/SYSTEM/Clocks)
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+$(/SYSTEM/Clocks)
 
 /* Actual Vector table */
 extern int const __vector_table[];

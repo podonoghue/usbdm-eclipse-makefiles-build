@@ -31,13 +31,13 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-LCD" />
                </applyWhen>
-               <copy source="Fonts"                                     target="Fonts"                                     overwrite="true"/>
-               <copy source="Snippets/fonts.h"                          target="Sources/fonts.h"                           overwrite="true"/>
-               <copy source="Snippets/lcd.h"                            target="Sources/lcd.h"                             overwrite="true"/>
-               <copy source="Snippets/lcd_private.h"                    target="Sources/lcd_private.h"                     overwrite="true"/>
-               <copy source="Snippets/lcd.cpp"                          target="Sources/lcd.cpp"                           overwrite="true"/>
-               <copy source="Snippets/elecfreaks-lcd-example.cpp"       target="Snippets/elecfreaks-lcd-example.cpp"       overwrite="true" />
-               <copy source="Snippets/elecfreaks-lcd-text-example.cpp"  target="Snippets/elecfreaks-lcd-text-example.cpp"  overwrite="true" />
+               <copy source="Fonts"                                     target="Fonts"                                     overwrite="always"/>
+               <copy source="Snippets/fonts.h"                          target="Sources/fonts.h"                           overwrite="always"/>
+               <copy source="Snippets/lcd.h"                            target="Sources/lcd.h"                             overwrite="always"/>
+               <copy source="Snippets/lcd_private.h"                    target="Sources/lcd_private.h"                     overwrite="always"/>
+               <copy source="Snippets/lcd.cpp"                          target="Sources/lcd.cpp"                           overwrite="always"/>
+               <copy source="Snippets/elecfreaks-lcd-example.cpp"       target="Snippets/elecfreaks-lcd-example.cpp"       overwrite="always" />
+               <copy source="Snippets/elecfreaks-lcd-text-example.cpp"  target="Snippets/elecfreaks-lcd-text-example.cpp"  overwrite="always" />
                <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
                   <value>LCD_AVAILABLE</value>
                </projectOption>

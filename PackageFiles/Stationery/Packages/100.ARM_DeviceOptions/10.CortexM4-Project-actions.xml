@@ -34,8 +34,8 @@ Cortex-M4
 
       <copy source="Project_Settings/Debug_USBDM.launch"                      target="Project_Settings/$(projectName)_Debug_USBDM.launch" />
 
-      <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk-sramu.ld" target="Project_Settings/Linker_Files/Linker-rom.ld" overwrite="true" />
-      <copy source="Project_Settings/Linker_Files/MemoryMap-mk-sramu.ld"      target="Project_Settings/Linker_Files/MemoryMap.ld"  overwrite="true" />
+      <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk-sramu.ld" target="Project_Settings/Linker_Files/Linker-rom.ld" overwrite="always" />
+      <copy source="Project_Settings/Linker_Files/MemoryMap-mk-sramu.ld"      target="Project_Settings/Linker_Files/MemoryMap.ld"  overwrite="always" />
 
       <copy source="Project_Headers/derivative.h"                             target="Project_Headers/derivative.h"    derived="true" />
       <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(externalHeaderFilename)"  derived="true" />
@@ -47,7 +47,7 @@ Cortex-M4
       <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h"  derived="true" />
       <copy source="Project_Headers/utilities-mk.h"                           target="Project_Headers/utilities.h"  derived="true" />
 
-      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(externalHeaderFilename)" overwrite="true"  derived="true" />
+      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(externalHeaderFilename)" overwrite="always"  derived="true" />
 
       <projectActionList>
          <applyWhen>

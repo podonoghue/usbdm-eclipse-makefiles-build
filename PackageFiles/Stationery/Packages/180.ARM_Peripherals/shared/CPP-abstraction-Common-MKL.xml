@@ -26,7 +26,7 @@
    <createFolder        target="Snippets" />
    <excludeSourceFolder target="Snippets" />
 
-   <copy source="Startup_Code/vectors-cm0.cpp"           target="Startup_Code/vectors.cpp"               overwrite="true"  derived="true" macroReplace="false"  />
+   <copy source="Startup_Code/vectors-cm0.cpp"           target="Startup_Code/vectors.cpp"               overwrite="always"  derived="true" macroReplace="false"  />
 
-   <copy source="Sources/main.cpp"                       target="Sources/main.cpp"                       overwrite="true" />
+   <copy source="Sources/main.cpp"                       target="Sources/main.cpp"                       overwrite="always" />
 </projectActionList>

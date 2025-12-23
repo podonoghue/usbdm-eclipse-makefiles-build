@@ -331,7 +331,7 @@
    </validate>
 
    <projectActionList id="usbphy_files">
-      <copy source="Project_Headers/usbphy.h"                   target="Project_Headers/usbphy.h"                     overwrite="true"  derived="true" />
+      <copy source="Project_Headers/usbphy.h"                   target="Project_Headers/usbphy.h"                     overwrite="always"  derived="true" />
    </projectActionList>
 
    <!-- ************* Signal mapping ****************** -->

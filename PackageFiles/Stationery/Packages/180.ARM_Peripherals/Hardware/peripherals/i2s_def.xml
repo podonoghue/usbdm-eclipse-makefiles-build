@@ -1076,7 +1076,7 @@
       \t/**
       \t * Get %description1
       \t *
-      %paramDescription
+      %paramDescription0
       \t */
       \tstatic int getTransmitFifoWritePointer(%param0) {
       \t   return %paramType(%register[%paramName0]&%mask1)>>%macro1_SHIFT;
@@ -1091,7 +1091,7 @@
       \t/**
       \t * Get %description1
       \t *
-      %paramDescription
+      %paramDescription0
       \t */
       \tstatic int getTransmitFifoReadPointer(%param0) {
       \t   return %paramType(%register[%paramName0]&%mask1)>>%macro1_SHIFT;
@@ -1107,7 +1107,7 @@
       \t/**
       \t * Read %description1
       \t *
-      %paramDescription
+      %paramDescription0
       \t */
       \tstatic %paramType1 readData(%params) {
       \t   return %paramType1(%register1[%paramName0]);
@@ -1122,7 +1122,7 @@
       \t/**
       \t * Get %description1
       \t *
-      %paramDescription
+      %paramDescription0
       \t */
       \tstatic int getReceiveFifoWritePointer(%param0) {
       \t   return %paramType(%register[%paramName0]&%mask1)>>%macro1_SHIFT;
@@ -1137,7 +1137,7 @@
       \t/**
       \t * Get %description1
       \t *
-      %paramDescription
+      %paramDescription0
       \t */
       \tstatic int getReceiveFifoReadPointer(%param0) {
       \t   return %paramType(%register[%paramName0]&%mask1)>>%macro1_SHIFT;
@@ -1719,13 +1719,13 @@
    </validate>
 
    <projectActionList id="i2s_files" >
-      <copy source="Project_Headers/i2s.h"            target="Project_Headers/i2s.h"            overwrite="true"  derived="true" />
+      <copy source="Project_Headers/i2s.h"            target="Project_Headers/i2s.h"            overwrite="always"  derived="true" />
    </projectActionList>
 
    <!-- _____ Startup _____ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

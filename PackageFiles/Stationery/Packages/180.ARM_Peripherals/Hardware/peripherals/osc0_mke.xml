@@ -381,13 +381,13 @@
    </validate>
 
    <projectActionList id="osc0_files" >
-      <copy source="Project_Headers/osc-MKE.h"  target="Project_Headers/osc.h"  overwrite="true"  derived="true" />
+      <copy source="Project_Headers/osc-MKE.h"  target="Project_Headers/osc.h"  overwrite="always"  derived="true" />
    </projectActionList>
 
    <!-- ____ Startup __________________ -->
    <!-- Already included -->
    <!-- template key="/ICS/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template -->
 
    <template key="/ICS/ClockStartupBefore" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

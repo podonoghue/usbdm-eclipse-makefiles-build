@@ -49,6 +49,7 @@
       enabledBy="fullCodeSupport"
       typeName="WdogEnable"
       baseType="uint16_t"
+      enumOr="auto"
       toolTip="Main enable for WDOG\n
       When disabled, the watchdog timer is kept in the reset state, but the other exception conditions can \n
       still trigger a reset/interrupt"
@@ -100,6 +101,7 @@
    <binaryOption key="wdog_stctrlh_allowupdate" condition="wdog_stctrlh_allowupdate_present"
       enabledBy="fullCodeSupport"
       baseType="uint16_t"
+      enumOr="auto"
       typeName="WdogAllowUpdate"
       toolTip="Enables updates to watchdog write-once registers, after \n
                the reset-triggered initial configuration window closes\n
@@ -287,7 +289,7 @@
       \t      Seconds_Ticks &window,
       \t      uint16_t      &presc) {
       \t
-      \t   float constexpr maxCount = ~1UL;
+      \t   float constexpr maxCount = float(~1UL);
       \t
       \t   if ((int)window.toTicks()>(int)timeout.toTicks()) {
       \t      return E_ILLEGAL_PARAM;
@@ -893,14 +895,14 @@
    </validate>
 
    <projectActionList id="wdog_files" >
-      <copy source="Project_Headers/wdog.h"         target="Project_Headers/wdog.h"          overwrite="true" derived="true" />
-      <copy source="Snippets/wdog-example.cpp"      target="Snippets/wdog-example.cpp"       overwrite="true" derived="true" />
+      <copy source="Project_Headers/wdog.h"         target="Project_Headers/wdog.h"          overwrite="always" derived="true" />
+      <copy source="Snippets/wdog-example.cpp"      target="Snippets/wdog-example.cpp"       overwrite="always" derived="true" />
    </projectActionList>
 
    <!-- _____________ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" codeGenCondition="configurePeripheralInStartUp" ><![CDATA[
-      #include "$(_basename).h"\n
+      #include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/WatchdogInitialise" codeGenCondition="configurePeripheralInStartUp&amp;&amp;!fullCodeSupport" ><![CDATA[

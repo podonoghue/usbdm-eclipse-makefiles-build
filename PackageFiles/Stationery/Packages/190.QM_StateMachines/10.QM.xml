@@ -45,7 +45,7 @@
          <copy source="/opt/qp/qpcpp/src/qv"                target="qv"  type="link"  sourcePathType="absolute" />
          <copy source="/opt/qp/qpcpp/ports/arm-cm/qv/gnu"   target="gnu" type="link"  sourcePathType="absolute" />
          <copy source="QM_settings.qm"                      target="QM_settings.qm"   />
-         <copy source="Sources/main.cpp"                    target="Sources/main.cpp" overwrite="true" />
+         <copy source="Sources/main.cpp"                    target="Sources/main.cpp" overwrite="always" />
 
       </projectActionList>
    </projectActionList>

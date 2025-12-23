@@ -13,7 +13,7 @@
    <!-- ************* Common ****************** -->
 
    <projectActionList id = "fgpio_files" >
-      <copy source="Project_Headers/gpio-MKE.h"  target="Project_Headers/gpio.h"  overwrite="true"  derived="true" />
+      <copy source="Project_Headers/gpio-MKE.h"  target="Project_Headers/gpio.h"  overwrite="always"  derived="true" />
    </projectActionList>
 
    <signals enabledBy="enablePeripheralSupport" />

@@ -25,7 +25,7 @@
 
          <copy source="Sources/FreeRTOSConfig.cfg"   target="Sources/FreeRTOSConfig.cfg" />
 	 
-         <copy source="Startup_Code/FreeRtosStubs.c" target="Startup_Code/FreeRtosStubs.c" overwrite="true"  derived="true" />
+         <copy source="Startup_Code/FreeRtosStubs.c" target="Startup_Code/FreeRtosStubs.c" overwrite="always"  derived="true" />
          <copy source="${usbdm_resource_path}/Stationery/Packages/FreeRTOS/FreeRTOS_Reference_Manual_V10.0.0.pdf" target="FreeRTOS.pdf" type="link" sourcePathType="absolute"/>
 
          <createFolder target="FreeRTOS" />
@@ -35,9 +35,9 @@
          <copy source="../FreeRTOS/Source/portable/GCC/ARM_CM3/port.c"         target="FreeRTOS/Source/port.c"  derived="true" macroReplace="false" />
          <copy source="../FreeRTOS/Source/portable/GCC/ARM_CM3/portmacro.h"    target="FreeRTOS/Source/portmacro.h"  derived="true" macroReplace="false" />
 
-         <copy source="Snippets/FreeRTOS-queue-1P1C-example.cpp"           target="Snippets/FreeRTOS-queue-1P1C-example.cpp"         overwrite="true" />
-         <copy source="Snippets/FreeRTOS-semaphore-1P1C-example.cpp"       target="Snippets/FreeRTOS-semaphore-1P1C-example.cpp"     overwrite="true" />
-         <copy source="Snippets/FreeRTOS-queue-pointer-1P1C-example.cpp"   target="Snippets/FreeRTOS-queue-pointer-1P1C-example.cpp" overwrite="true" />
+         <copy source="Snippets/FreeRTOS-queue-1P1C-example.cpp"           target="Snippets/FreeRTOS-queue-1P1C-example.cpp"         overwrite="always" />
+         <copy source="Snippets/FreeRTOS-semaphore-1P1C-example.cpp"       target="Snippets/FreeRTOS-semaphore-1P1C-example.cpp"     overwrite="always" />
+         <copy source="Snippets/FreeRTOS-queue-pointer-1P1C-example.cpp"   target="Snippets/FreeRTOS-queue-pointer-1P1C-example.cpp" overwrite="always" />
          
          <excludeSourceFolder target="FreeRTOS/Source/portable" />
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
@@ -72,7 +72,7 @@
             <applyWhen>
                <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
             </applyWhen>
-            <copy source="Sources/main.c" target="Sources/main.c" overwrite="true" />
+            <copy source="Sources/main.c" target="Sources/main.c" overwrite="always" />
          </projectActionList>
       </projectActionList>
       
@@ -84,21 +84,21 @@
                <variableRef idRef="projectOptionValue.CPP-abstraction"  defaultValue="false" />
             </and>
          </applyWhen>
-         <copy source="FreeRTOS/FreeRTOS_CPP.h" target="FreeRTOS/FreeRTOS_CPP.h"          overwrite="true"  derived="true" />
-         <copy source="FreeRTOS/Lock.h"         target="FreeRTOS/Lock.h"                  overwrite="true"  derived="true" />
-         <copy source="FreeRTOS/Lock.cpp"       target="FreeRTOS/Lock.cpp"                overwrite="true"  derived="true" />
-         <copy source="FreeRTOS/MutexCPP.h"     target="FreeRTOS/MutexCPP.h"              overwrite="true"  derived="true" />
-         <copy source="FreeRTOS/QueueCPP.h"     target="FreeRTOS/QueueCPP.h"              overwrite="true"  derived="true" />
-         <copy source="FreeRTOS/SemaphoreCPP.h" target="FreeRTOS/SemaphoreCPP.h"          overwrite="true"  derived="true" />
-         <copy source="FreeRTOS/TaskCPP.h"      target="FreeRTOS/TaskCPP.h"               overwrite="true"  derived="true" />
-         <copy source="FreeRTOS/TimerCPP.h"     target="FreeRTOS/TimerCPP.h"              overwrite="true"  derived="true" />
-         <copy source="FreeRTOS/License.txt"    target="FreeRTOS/FreeRTOSCpp_License.txt" overwrite="true"  derived="true" />
+         <copy source="FreeRTOS/FreeRTOS_CPP.h" target="FreeRTOS/FreeRTOS_CPP.h"          overwrite="always"  derived="true" />
+         <copy source="FreeRTOS/Lock.h"         target="FreeRTOS/Lock.h"                  overwrite="always"  derived="true" />
+         <copy source="FreeRTOS/Lock.cpp"       target="FreeRTOS/Lock.cpp"                overwrite="always"  derived="true" />
+         <copy source="FreeRTOS/MutexCPP.h"     target="FreeRTOS/MutexCPP.h"              overwrite="always"  derived="true" />
+         <copy source="FreeRTOS/QueueCPP.h"     target="FreeRTOS/QueueCPP.h"              overwrite="always"  derived="true" />
+         <copy source="FreeRTOS/SemaphoreCPP.h" target="FreeRTOS/SemaphoreCPP.h"          overwrite="always"  derived="true" />
+         <copy source="FreeRTOS/TaskCPP.h"      target="FreeRTOS/TaskCPP.h"               overwrite="always"  derived="true" />
+         <copy source="FreeRTOS/TimerCPP.h"     target="FreeRTOS/TimerCPP.h"              overwrite="always"  derived="true" />
+         <copy source="FreeRTOS/License.txt"    target="FreeRTOS/FreeRTOSCpp_License.txt" overwrite="always"  derived="true" />
 	 
-         <copy source="Sources/main.cpp"        target="Sources/main.cpp"                 overwrite="true" />
+         <copy source="Sources/main.cpp"        target="Sources/main.cpp"                 overwrite="always" />
          
-         <copy source="Snippets/FreeRTOS-cpp-flasher-example.cpp"            target="Snippets/FreeRTOS-cpp-flasher-example.cpp"           overwrite="true" />
-         <copy source="Snippets/FreeRTOS-cpp-producer-consumer-example.cpp"  target="Snippets/FreeRTOS-cpp-producer-consumer-example.cpp" overwrite="true" />         
-         <copy source="Snippets/FreeRTOS-cpp-task-example.cpp"               target="Snippets/FreeRTOS-cpp-task-example.cpp"              overwrite="true" />
+         <copy source="Snippets/FreeRTOS-cpp-flasher-example.cpp"            target="Snippets/FreeRTOS-cpp-flasher-example.cpp"           overwrite="always" />
+         <copy source="Snippets/FreeRTOS-cpp-producer-consumer-example.cpp"  target="Snippets/FreeRTOS-cpp-producer-consumer-example.cpp" overwrite="always" />         
+         <copy source="Snippets/FreeRTOS-cpp-task-example.cpp"               target="Snippets/FreeRTOS-cpp-task-example.cpp"              overwrite="always" />
       </projectActionList>
       
    </projectActionList>

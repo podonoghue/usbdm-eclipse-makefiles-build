@@ -68,9 +68,9 @@
 
 <binaryOption name="Debug definitions" key="/HARDWARE/generateDebugDefinitions"
    description="Generate some debug definintions"
-   toolTip="These definitions are used to control testing">
-   <choice value="No definitions"         name="Don't Generate definitions" isDefault="true"/>
-   <choice value="Definitions generated"  name="Generate definitions" />
+   toolTip="These definitions are used for testing">
+   <choice value="No debug information"         name="NoDebug" isDefault="true"/>
+   <choice value="Debug information generated"  name="Debug"  />
 </binaryOption>
 
 <category name="Examples" description="Pin mapping for examples">
@@ -153,9 +153,9 @@
          <choice value="flexNVM"     name="Flex NVM Flash" />
       </choiceOption>
 
-      <choiceOption name="Code (apart from startup)"        key="/LINKER/text_rom"   derivedFrom="/LINKER/startup_rom" toolTip="Text (code), vtables etc in Flash" />
-      <choiceOption name="Read-only data"                   key="/LINKER/rodata_rom" derivedFrom="/LINKER/startup_rom" toolTip="const data in Flash" />
-      <choiceOption name="Flash image for initialised data" key="/LINKER/data_rom"   derivedFrom="/LINKER/startup_rom" toolTip="Initialised data in Flash which is copied to ram on startup" />
+      <choiceOption name="Code (apart from startup)"        locked="false" key="/LINKER/text_rom"   derivedFrom="/LINKER/startup_rom" toolTip="Text (code), vtables etc in Flash" />
+      <choiceOption name="Read-only data"                   locked="false" key="/LINKER/rodata_rom" derivedFrom="/LINKER/startup_rom" toolTip="const data in Flash" />
+      <choiceOption name="Flash image for initialised data" locked="false" key="/LINKER/data_rom"   derivedFrom="/LINKER/startup_rom" toolTip="Initialised data in Flash which is copied to ram on startup" />
    </category>
 
    <category name="Section placement in RAM" description="How regions are mapped to available RAM"
@@ -304,8 +304,8 @@
    \t   /**
    \t    * Information describing the priority and callback function for each interrupt
    \t    */
-   \t    std::array<CallbackFunction, NumVectors> callbacks = {};
-   \t    std::array<NvicPriority,     NumVectors> priorities = {};
+   \t    std::array<CallbackFunction, NumVectors> callbacks = {};  // = nullptr
+   \t    std::array<NvicPriority,     NumVectors> priorities = {}; // = NvicPriority_Disabled
    \t
    \t}; // class InitVectors
    \t\n
@@ -319,7 +319,7 @@
    \t/**
    \t *  Enables mapping of all allocated pins during startup using mapAllPins()
    \t */
-   \tstatic constexpr bool MapAllPinsOnStartup = $(/HARDWARE/mapAllPins);
+   \tconstexpr bool MapAllPinsOnStartup = $(/HARDWARE/mapAllPins);
    \t
    \t/**
    \t * Controls forcing all pins to be locked in mapAllPins()
@@ -340,20 +340,20 @@
    \t * Enables mapping of all allocated pins during startup using mapAllPins()
    \t * Not available on this MCU
    \t */
-   \tstatic constexpr bool MapAllPinsOnStartup = false;
+   \tconstexpr bool MapAllPinsOnStartup = false;
 
    \t/**
    \t * Controls forcing all pins to be locked in mapAllPins()
    \t * Not available on this MCU
    \t */
-   \tstatic constexpr uint32_t ForceLockedPins = 0;
-   \tstatic constexpr uint32_t PinLock_Locked  = 0;
+   \tconstexpr uint32_t ForceLockedPins = 0;
+   \tconstexpr uint32_t PinLock_Locked  = 0;
 
    \t/**
    \t * Enables forcing unbonded pins to analogue function in mapAllPins()
    \t * Not available on this MCU
    \t */
-   \tstatic constexpr bool ForceLockoutUnbondedPins = false;
+   \tconstexpr bool ForceLockoutUnbondedPins = false;
    \t\n
 ]]></template>
 
@@ -456,7 +456,7 @@
    \t * exitCriticalSection(cpuSR);
    \t * @endcode
    \t */
-   \tstatic inline void enterCriticalSection(uint8_t &cpuSR) {
+   \tinline void enterCriticalSection(uint8_t &cpuSR) {
    \t   __asm__ volatile (
    \t         "  MRS   r0, PRIMASK       \n"   // Copy flags
    \t         // It may be possible for a ISR to run here but it
@@ -473,7 +473,7 @@
    \t *
    \t * @param cpuSR Variable to holding interrupt state to be restored
    \t */
-   \tstatic inline void exitCriticalSection(uint8_t &cpuSR) {
+   \tinline void exitCriticalSection(uint8_t &cpuSR) {
    \t   __asm__ volatile (
    \t         "  LDRB r0, %[input]    \n"  // Retrieve original flags
    \t         "  MSR  PRIMASK,r0;     \n"  // Restore
@@ -538,15 +538,17 @@
 ]]></template>
 
 <projectActionList id="common_files_always" >
-   <copy source="Sources/delay.cpp"                                        target="Sources/delay.cpp"                            overwrite="true"  derived="true" />
-   <copy source="Project_Headers/delay.h"                                  target="Project_Headers/delay.h"                      overwrite="true"  derived="true" />
-   <copy source="Snippets/bitband-example.cpp"                             target="Snippets/bitband-example.cpp"                 overwrite="true"  derived="true" />
-   <copy source="Startup_Code/$(/LINKER/vectorsFilename)"                  target="Startup_Code/vectors.cpp"                     overwrite="true"  derived="true" />
+   <copy source="Sources/delay.cpp"                         target="Sources/delay.cpp"             overwrite="always"  derived="true" />
+   <copy source="Project_Headers/delay.h"                   target="Project_Headers/delay.h"       overwrite="always"  derived="true" />
+   <copy source="Snippets/bitband-example.cpp"              target="Snippets/bitband-example.cpp"  overwrite="always"  derived="true" />
+   <copy source="Startup_Code/$(/LINKER/vectorsFilename)"   target="Startup_Code/vectors.cpp"      overwrite="always"  derived="true" />
+   <!--copy source=".clangd"                                   target=".clangd"                       overwrite="never" derived="false" />
+   <copy source=".clang-format"                             target=".clang-format"                 overwrite="never" derived="false" / -->
 </projectActionList>
 
 <projectActionList id="common_files_conditional" codeGenCondition='Exists("Initial_Build")||RegenerateLinkerFiles'>
-   <copy source="Project_Settings/Linker_Files/$(/LINKER/scriptFilename)"  target="Project_Settings/Linker_Files/Linker-rom.ld"  overwrite="true"  derived="true" />
-   <copy source="Project_Settings/Linker_Files/$(/LINKER/mapFilename)"     target="Project_Settings/Linker_Files/MemoryMap.ld"   overwrite="true"  derived="true" />
+   <copy source="Project_Settings/Linker_Files/$(/LINKER/scriptFilename)"  target="Project_Settings/Linker_Files/Linker-rom.ld"  overwrite="always"  derived="true" />
+   <copy source="Project_Settings/Linker_Files/$(/LINKER/mapFilename)"     target="Project_Settings/Linker_Files/MemoryMap.ld"   overwrite="always"  derived="true" />
 </projectActionList>
 
 </peripheralPage>

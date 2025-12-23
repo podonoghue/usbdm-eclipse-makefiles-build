@@ -76,7 +76,7 @@
    ><![CDATA[
       \t/**
       \t * Wait for  %description complete
-      \t * (%variable)
+      \t * (%variables)
       \t */
       \tstatic void waitForSyncComplete() {
       \t   while(%fieldExtract) {
@@ -84,7 +84,7 @@
       \t}
       \t\n
    ]]></variableTemplate>
-   
+
    <for keys="field                     : set   : get   : clear : genCode                 : context                 : name"
         values="
 

@@ -28,7 +28,7 @@
          <constant id="demo.cpp.led"        value="GpioC&lt;3,ActiveLow&gt;" /> <!-- Digital I/O generic LED -->
 	 
          <!-- Custom settings file -->
-         <copy source="projectFiles/&DEVICE_NAME;.usbdmProject"  target="Configure.usbdmProject"  overwrite="true" />
+         <copy source="projectFiles/&DEVICE_NAME;.usbdmProject"  target="Configure.usbdmProject"  overwrite="always" />
 	 
       </projectActionList>
    </projectActionList>

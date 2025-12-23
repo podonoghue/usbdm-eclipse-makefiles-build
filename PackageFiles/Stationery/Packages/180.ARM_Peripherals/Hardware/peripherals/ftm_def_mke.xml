@@ -1807,7 +1807,7 @@
          \t}
          \t\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(key)" namespace="%(namespace)" discardRepeats="true" condition="ftm_exttrig_inittrigen_present&amp;&amp;%(isStatic)" ><![CDATA[
+      <template key="/$(_BASENAME)/%(key)" location="%(namespace)" discardRepeats="true" condition="ftm_exttrig_inittrigen_present&amp;&amp;%(isStatic)" ><![CDATA[
          \t/**
          \t * Enables/disable external trigger generation by a channel comparison or initialisation event
          \t *
@@ -1837,7 +1837,7 @@
          \t\n
       ]]></template>
 
-      <template key="/$(_BASENAME)/%(key)" namespace="%(namespace)" discardRepeats="true" condition="ftm_mode_faultie_present" ><![CDATA[
+      <template key="/$(_BASENAME)/%(key)" location="%(namespace)" discardRepeats="true" condition="ftm_mode_faultie_present" ><![CDATA[
          \t/**
          \t * Enable fault interrupts
          \t */
@@ -1884,7 +1884,7 @@
          \t      uint32_t filterDelay  = FTM_FLTCTRL_FFVAL_MASK>>(FTM_FLTCTRL_FFVAL_SHIFT+1))%(const) {
          \t\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(key)" namespace="%(namespace)" condition="/PCR/_present&amp;&amp;ftm_mode_faultie_present" codeGenCondition="%(isStatic)" ><![CDATA[
+      <template key="/$(_BASENAME)/%(key)" location="%(namespace)" condition="/PCR/_present&amp;&amp;ftm_mode_faultie_present" codeGenCondition="%(isStatic)" ><![CDATA[
          #ifdef DEBUG_BUILD
          \t   static_assert((inputNum<InfoFAULT::numSignals), "FtmBase_T: Illegal fault channel");
          \t   static_assert((inputNum>=InfoFAULT::numSignals)||(InfoFAULT::info[inputNum].pinIndex != PinIndex::UNMAPPED_PCR), "FtmBase_T: Fault signal is not mapped to a pin - Modify Configure.usbdm");
@@ -1893,11 +1893,11 @@
          #endif
          \t\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(key)" namespace="%(namespace)" condition="/PCR/_present&amp;&amp;ftm_mode_faultie_present" codeGenCondition="%(isStatic)" ><![CDATA[
+      <template key="/$(_BASENAME)/%(key)" location="%(namespace)" condition="/PCR/_present&amp;&amp;ftm_mode_faultie_present" codeGenCondition="%(isStatic)" ><![CDATA[
          \t   PcrTable_T<InfoFAULT, inputNum>::setPCR();
          \t\n
       ]]></template>
-      <template key="/$(_BASENAME)/%(key)" namespace="%(namespace)" discardRepeats="true" condition="ftm_mode_faultie_present" ><![CDATA[
+      <template key="/$(_BASENAME)/%(key)" location="%(namespace)" discardRepeats="true" condition="ftm_mode_faultie_present" ><![CDATA[
          \t   if (polarity) {
          \t      // Set active high
          \t      ftm->FLTPOL = ftm->FLTPOL & ~(1<<inputNum);
@@ -1921,7 +1921,7 @@
          \t}\n\n
       ]]></template>
 
-      <variableTemplate key="/$(_BASENAME)/%(key)" namespace="%(namespace)" discardRepeats="true"
+      <variableTemplate key="/$(_BASENAME)/%(key)" location="%(namespace)" discardRepeats="true"
          variables="ftm_pol_pol" ><![CDATA[
          \t/**
          \t * Set polarity of all channels
@@ -3654,20 +3654,20 @@
    </validate>
 
    <projectActionList id="ftm_common_files" >
-      <copy source="Project_Headers/ftm.h"                target="Project_Headers/ftm.h"                overwrite="true" derived="true" />
-      <copy source="Snippets/ftm-pwm-example.cpp"         target="Snippets/ftm-pwm-example.cpp"         overwrite="true" derived="true" />
-      <copy source="Snippets/ftm-ic-example.cpp"          target="Snippets/ftm-ic-example.cpp"          overwrite="true" derived="true" />
-      <copy source="Snippets/ftm-oc-example.cpp"          target="Snippets/ftm-oc-example.cpp"          overwrite="true" derived="true" />
-      <copy source="Snippets/ftm-oc-init-example.cpp"     target="Snippets/ftm-oc-init-example.cpp"     overwrite="true" derived="true" />
-      <copy source="Snippets/ftm-servo-example.cpp"       target="Snippets/ftm-servo-example.cpp"       overwrite="true" derived="true" />
-      <copy source="Snippets/ftm-quadrature-example.cpp"  target="Snippets/ftm-quadrature-example.cpp"  overwrite="true" derived="true" />
-      <copy source="Snippets/neopixel-example.cpp"        target="Snippets/neopixel-example.cpp"        overwrite="true" derived="true" />
+      <copy source="Project_Headers/ftm.h"                target="Project_Headers/ftm.h"                overwrite="always" derived="true" />
+      <copy source="Snippets/ftm-pwm-example.cpp"         target="Snippets/ftm-pwm-example.cpp"         overwrite="always" derived="true" />
+      <copy source="Snippets/ftm-ic-example.cpp"          target="Snippets/ftm-ic-example.cpp"          overwrite="always" derived="true" />
+      <copy source="Snippets/ftm-oc-example.cpp"          target="Snippets/ftm-oc-example.cpp"          overwrite="always" derived="true" />
+      <copy source="Snippets/ftm-oc-init-example.cpp"     target="Snippets/ftm-oc-init-example.cpp"     overwrite="always" derived="true" />
+      <copy source="Snippets/ftm-servo-example.cpp"       target="Snippets/ftm-servo-example.cpp"       overwrite="always" derived="true" />
+      <copy source="Snippets/ftm-quadrature-example.cpp"  target="Snippets/ftm-quadrature-example.cpp"  overwrite="always" derived="true" />
+      <copy source="Snippets/neopixel-example.cpp"        target="Snippets/neopixel-example.cpp"        overwrite="always" derived="true" />
    </projectActionList>
 
    <!-- ____ Startup __________________ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

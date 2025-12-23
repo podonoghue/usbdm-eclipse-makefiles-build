@@ -250,16 +250,16 @@
    </validate>
 
    <projectActionList id="can_files" >
-      <copy source="Project_Headers/can-MK.h"                    target="Project_Headers/can.h"                    overwrite="true"  derived="true" />
-      <copy source="Snippets/can-mailbox-example.cpp"         target="Snippets/can-mailbox-example.cpp"         overwrite="true"  derived="true" />
-      <copy source="Snippets/can-sw-led-example.cpp"          target="Snippets/can-sw-led-example.cpp"          overwrite="true"  derived="true" />
-      <copy source="Snippets/can-fifo-example.cpp"            target="Snippets/can-fifo-example.cpp"            overwrite="true"  derived="true" />
+      <copy source="Project_Headers/can-MK.h"                    target="Project_Headers/can.h"                    overwrite="always"  derived="true" />
+      <copy source="Snippets/can-mailbox-example.cpp"         target="Snippets/can-mailbox-example.cpp"         overwrite="always"  derived="true" />
+      <copy source="Snippets/can-sw-led-example.cpp"          target="Snippets/can-sw-led-example.cpp"          overwrite="always"  derived="true" />
+      <copy source="Snippets/can-fifo-example.cpp"            target="Snippets/can-fifo-example.cpp"            overwrite="always"  derived="true" />
    </projectActionList>
 
    <!-- ************* Startup ****************** -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

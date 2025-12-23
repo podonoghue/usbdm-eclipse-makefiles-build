@@ -16,6 +16,7 @@
  */
 #include <stddef.h>
 #include <cmath>
+#include "derivative.h"
 #include "pin_mapping.h"
 #include "gpio.h"
 
@@ -148,7 +149,7 @@ protected:
    // Empty constructor
    constexpr FtmChannel(uint32_t baseAddress, FtmChannelNum channelNum) :
    FtmBase(baseAddress),
-   channelRegs((uint32_t)(ftm->CONTROLS+channelNum)),
+   channelRegs(uint32_t(baseAddress+offsetof(FTM_Type, CONTROLS)+channelNum*sizeof(FTM_Type().CONTROLS[0]))),
    CHANNEL(channelNum),
    CHANNEL_MASK(1<<channelNum) {
    }
@@ -415,14 +416,9 @@ $(/FTM_CHANNEL/static_functions:  // /FTM_CHANNEL/static_functions not found)
     * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
     * Assumes clock to the port has already been enabled
     *
-    * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
-    * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain
-    * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast
+    * @param[in] pcrValue   PCR Value controlling pin configuration as an output
     */
-   static void setOutput(
-         PinDriveStrength  pinDriveStrength  = Pcr::defaultPcrValue,
-         PinDriveMode      pinDriveMode      = Pcr::defaultPcrValue,
-         PinSlewRate       pinSlewRate       = Pcr::defaultPcrValue) {
+   static void setOutput(PcrValue pcrValue = Pcr::defaultPcrValue) {
 
       FtmBase::CheckPinExistsAndIsMapped<Info, channel>::check();
 
@@ -430,7 +426,7 @@ $(/FTM_CHANNEL/static_functions:  // /FTM_CHANNEL/static_functions not found)
       // Enable output pin in FTM
       ftm->SC = ftm->SC | (1<<(channel+FTM_SC_PWMEN0_SHIFT));
 #endif
-      Pcr::setPCR(pinDriveStrength|pinDriveMode|pinSlewRate);
+      Pcr::setPCR(pcrValue);
    }
 #elif defined(PORT_PCR_ODE_ASK)
    /**

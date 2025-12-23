@@ -15,7 +15,7 @@
  * Any manual changes will be lost.
  */
 /* *************************************************************
- * NOTE - Can't use other objects here as initialisation of
+ * Note - Can't use other objects here as initialisation of
  *        Flash is done very early (including writeln())
  ************************************************************* */
 

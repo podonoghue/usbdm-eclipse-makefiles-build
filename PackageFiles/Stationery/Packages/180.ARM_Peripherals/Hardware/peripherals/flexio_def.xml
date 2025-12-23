@@ -32,8 +32,8 @@
    </validate>
 
    <projectActionList id="flexio_files" >
-      <copy source="Project_Headers/flexio.h"          target="Project_Headers/flexio.h"          overwrite="true" derived="true" />
-      <copy source="Snippets/flexio-uart-example.cpp"  target="Snippets/flexio-uart-example.cpp"  overwrite="true" derived="true" />
+      <copy source="Project_Headers/flexio.h"          target="Project_Headers/flexio.h"          overwrite="always" derived="true" />
+      <copy source="Snippets/flexio-uart-example.cpp"  target="Snippets/flexio-uart-example.cpp"  overwrite="always" derived="true" />
    </projectActionList>
 
    <!-- ************* SIM configuration ****************** -->

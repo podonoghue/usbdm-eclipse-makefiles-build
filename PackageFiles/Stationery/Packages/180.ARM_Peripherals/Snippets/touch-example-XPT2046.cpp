@@ -11,19 +11,25 @@
  *  TouchIrq    XPT2046 IRQ as GPIO
  *
  *  Fixed SPI specific connections
+ *  --------------------------------
+ *  XPT2046 CS      PCS0      - D7   (example)
  *  XPT2046 SIN     MOSI/SOUT - D11
  *  XPT2046 SOUT    MISO/SIN  - D12
  *  XPT2046 SCK     SCK       - D13
- *
+ *  XPT2046 IRQ     GPIO      - A5   (example)
  *  Power
+ *  ------
  *  GND
  *  VCC
  ******************************************************************************/
 #include "hardware.h"
 #include "touch_XPT2046.h"
+#include "smc.h"
 
 // Allow access to USBDM methods without USBDM:: prefix
 using namespace USBDM;
+
+using TouchInterface = Touch_XPT2046<320, 480>;
 
 static const Spi0::Init spiConfig {
    {
@@ -41,13 +47,10 @@ static const Spi0::Init spiConfig {
 
 // Shared SPI to use
 Spi0 spi(spiConfig);
+TouchInterface ti(spi);
 
-int main() {
+void testTouch() {
    static constexpr IntegerFormat decimalFormat(Padding_LeadingSpaces, Width_4, Radix_10);
-
-   console.writeln("\nStarting");
-
-   TouchInterface ti(spi);
    for(;;) {
       unsigned x,y;
       if (ti.checkTouch(x, y)) {
@@ -55,5 +58,42 @@ int main() {
          console.writeln("X = ", x, ", Y = ", y);
       }
    }
+}
+
+static volatile bool wakeUp = false;
+
+void touchHandler() {
+   console.writeln("Touch Irq");
+   ti.disableTouchInterrupt();
+   wakeUp = true;
+}
+
+void testTouchWakeup() {
+
+   DebugLed::setOutput();
+   ti.setInterruptHandler(touchHandler);
+   static constexpr IntegerFormat decimalFormat(Padding_LeadingSpaces, Width_4, Radix_10);
+
+   for(;;) {
+      DebugLed::off();
+      ti.enableTouchInterrupt();
+      console.writeln("Entering low power mode...");
+      Smc::enterWaitMode();
+      if (!wakeUp) {
+         console.writeln("False Alarm");
+         continue;
+      }
+      DebugLed::on();
+      console.writeln("Awake!...");
+      waitMS(200);
+   }
+}
+
+int main() {
+
+   console.writeln("\nStarting");
+//   testTouch();
+   testTouchWakeup();
+
    return 0;
 }

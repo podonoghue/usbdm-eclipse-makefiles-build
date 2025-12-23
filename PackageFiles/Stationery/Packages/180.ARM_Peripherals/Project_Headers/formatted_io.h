@@ -194,8 +194,12 @@ public:
    /**
     * Copy Constructor
     */
-   constexpr IntegerFormat(const IntegerFormat &other) = default;
-
+   constexpr IntegerFormat(const IntegerFormat &other)        = default;
+   /**
+    * Assignment operator
+    */
+   constexpr IntegerFormat& operator=(const IntegerFormat& t) = default;
+   
    /**
     * Default Constructor
     */
@@ -258,7 +262,11 @@ public:
    /**
     * Copy Constructor
     */
-   constexpr FloatFormat(const FloatFormat &other) = default;
+   constexpr FloatFormat(const FloatFormat &other)        = default;
+   /**
+    * Assignment operator
+    */
+   constexpr FloatFormat& operator=(const FloatFormat& t) = default;
 
    /**
     * Default Constructor

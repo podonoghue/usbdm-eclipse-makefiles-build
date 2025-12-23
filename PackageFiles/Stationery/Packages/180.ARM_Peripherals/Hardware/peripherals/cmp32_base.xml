@@ -145,8 +145,8 @@
 
 
    <projectActionList id = "cmp_files" >
-      <copy source="Project_Headers/cmp32.h"     target="Project_Headers/cmp.h"     overwrite="true"  derived="true" />
-      <copy source="Snippets/cmp-example.cpp"  target="Snippets/cmp-example.cpp"  overwrite="true"  derived="true" />
+      <copy source="Project_Headers/cmp32.h"     target="Project_Headers/cmp.h"     overwrite="always"  derived="true" />
+      <copy source="Snippets/cmp-example.cpp"  target="Snippets/cmp-example.cpp"  overwrite="always"  derived="true" />
    </projectActionList>
 
    <validate

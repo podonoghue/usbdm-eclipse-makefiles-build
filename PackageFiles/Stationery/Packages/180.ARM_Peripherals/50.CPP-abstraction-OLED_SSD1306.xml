@@ -31,11 +31,11 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-OLED-SSD1306" />
                </applyWhen>
-               <copy source="Fonts"                                     target="Fonts"                                     overwrite="true"/>
-               <copy source="Snippets/fonts.h"                          target="Sources/fonts.h"                           overwrite="true"/>
-               <copy source="Snippets/FrameBuffer.h"                    target="Sources/FrameBuffer.h"                     overwrite="true"/>
-               <copy source="Snippets/oled-example-SSD1306.cpp"         target="Sources/oled-example-SSD1306.cpp"          overwrite="true" />
-               <copy source="Snippets/oled_SSD1306.h"                   target="Sources/oled_SSD1306.h"                    overwrite="true" />
+               <copy source="Fonts"                                     target="Fonts"                                     overwrite="always"/>
+               <copy source="Snippets/fonts.h"                          target="Sources/fonts.h"                           overwrite="always"/>
+               <copy source="Snippets/FrameBuffer.h"                    target="Sources/FrameBuffer.h"                     overwrite="always"/>
+               <copy source="Snippets/oled-example-SSD1306.cpp"         target="Sources/oled-example-SSD1306.cpp"          overwrite="always" />
+               <copy source="Snippets/oled_SSD1306.h"                   target="Sources/oled_SSD1306.h"                    overwrite="always" />
                <excludeSourceFile target="Sources/oled-example-SSD1306.cpp"  />
                <excludeSourceFile target="Sources/oled_SSD1306.cpp" />
                <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">

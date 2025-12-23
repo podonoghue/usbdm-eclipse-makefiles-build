@@ -501,14 +501,14 @@
    </validate>
 
    <projectActionList id="rnga_files" >
-      <copy source="Project_Headers/rnga.h"         target="Project_Headers/rnga.h"          overwrite="true" derived="true" />
-      <copy source="Snippets/rnga-example.cpp"      target="Snippets/rnga-example.cpp"       overwrite="true" derived="true" />
+      <copy source="Project_Headers/rnga.h"         target="Project_Headers/rnga.h"          overwrite="always" derived="true" />
+      <copy source="Snippets/rnga-example.cpp"      target="Snippets/rnga-example.cpp"       overwrite="always" derived="true" />
    </projectActionList>
 
    <!-- ************* Startup ****************** -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

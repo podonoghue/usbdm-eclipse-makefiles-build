@@ -22,7 +22,7 @@
    </validate>
 
    <projectActionList id="usbhs_files">
-      <copy source="Project_Headers/usbhs.h"                   target="Project_Headers/usbhs.h"                     overwrite="true"  derived="true" />
+      <copy source="Project_Headers/usbhs.h"                   target="Project_Headers/usbhs.h"                     overwrite="always"  derived="true" />
    </projectActionList>
 
    <!-- ************* SIM configuration ****************** -->

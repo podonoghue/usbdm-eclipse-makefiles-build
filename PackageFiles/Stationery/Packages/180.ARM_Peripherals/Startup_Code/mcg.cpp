@@ -8,15 +8,15 @@
  *  Created on: 04/03/2012
  *      Author: podonoghue
  */
-#include "string.h"
-#include "derivative.h"
-#include "system.h"
-#include "stdbool.h"
-#include "pin_mapping.h"
-#include "sim.h"
+#include <string.h>
+#include "../Project_Headers/derivative.h"
+#include "../Project_Headers/system.h"
+#include <stdbool.h>
+#include "../Project_Headers/pin_mapping.h"
+#include "../Project_Headers/sim.h"
 $(/MCG/Includes:// No extra includes found)
-#include "smc.h"
-#include "mcg.h"
+#include "../Project_Headers/smc.h"
+#include "../Project_Headers/mcg.h"
 #ifdef MCG_C11_PLLCS_MASK
 #include "usbphy.h"
 #endif

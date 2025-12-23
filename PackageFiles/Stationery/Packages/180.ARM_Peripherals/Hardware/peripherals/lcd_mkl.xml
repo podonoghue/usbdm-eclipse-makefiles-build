@@ -148,9 +148,9 @@
    </validate>
 
    <projectActionList id = "lcd_files" >
-      <copy source="Project_Headers/segment_lcd.h"         target="Project_Headers/segment_lcd.h"         overwrite="true"  derived="true" />
-      <copy source="Sources/segment_lcd.cpp"               target="Sources/segment_lcd.cpp"               overwrite="true"  derived="true" />
-      <copy source="Snippets/segment-lcd-example.cpp"      target="Snippets/segment-lcd-example.cpp"      overwrite="true"  derived="true" />
+      <copy source="Project_Headers/segment_lcd.h"         target="Project_Headers/segment_lcd.h"         overwrite="always"  derived="true" />
+      <copy source="Sources/segment_lcd.cpp"               target="Sources/segment_lcd.cpp"               overwrite="always"  derived="true" />
+      <copy source="Snippets/segment-lcd-example.cpp"      target="Snippets/segment-lcd-example.cpp"      overwrite="always"  derived="true" />
    </projectActionList>
 
    <template key="lcdPins" ><![CDATA[

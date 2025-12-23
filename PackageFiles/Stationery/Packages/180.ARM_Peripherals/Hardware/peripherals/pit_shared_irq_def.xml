@@ -392,10 +392,10 @@
    </validate>
 
    <projectActionList id = "pit_files" >
-      <copy source="Snippets/pit-example1.cpp"       target="Snippets/pit-example1.cpp" overwrite="true" derived="true" />
-      <copy source="Snippets/pit-example2-MKL.cpp"   target="Snippets/pit-example2.cpp" overwrite="true" derived="true" />
-      <copy source="Project_Headers/pit-MKL.h"       target="Project_Headers/pit.h"     overwrite="true" derived="true" />
-      <copy source="Snippets/timer-inline-handler-example.cpp" target="Snippets/timer-inline-handler-example.cpp"   overwrite="true" derived="true" />
+      <copy source="Snippets/pit-example1.cpp"       target="Snippets/pit-example1.cpp" overwrite="always" derived="true" />
+      <copy source="Snippets/pit-example2-MKL.cpp"   target="Snippets/pit-example2.cpp" overwrite="always" derived="true" />
+      <copy source="Project_Headers/pit-MKL.h"       target="Project_Headers/pit.h"     overwrite="always" derived="true" />
+      <copy source="Snippets/timer-inline-handler-example.cpp" target="Snippets/timer-inline-handler-example.cpp"   overwrite="always" derived="true" />
    </projectActionList>
 
    <!-- condition="pit_ltmr64l_lth"  -->

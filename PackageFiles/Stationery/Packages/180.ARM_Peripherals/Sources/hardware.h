@@ -17,10 +17,11 @@
 #ifndef INCLUDE_USBDM_HARDWARE_H_
 #define INCLUDE_USBDM_HARDWARE_H_
 
-#include "error.h"
-#include "pin_mapping.h"
-#include "delay.h"
-#include "console.h"
+#include "../Project_Headers/error.h"
+#include "../Project_Headers/pin_mapping.h"
+#include "../Project_Headers/delay.h"
+#include "../Project_Headers/console.h"
+#include "../Project_Headers/gpio.h"
 
 $(/HARDWARE_H/IncludeFiles:       // No header file inclusions found)
 

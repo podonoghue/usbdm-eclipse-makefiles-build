@@ -2,9 +2,10 @@
 ?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- smc_mk10d5.xml -->
- 
+
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Mode Controller">
- 
+
+   <constant key="smc_noOption_llsm_present" value="true" type="Boolean" />
    <xi:include href="smc_base.xml"/>
 
 </peripheralPage>

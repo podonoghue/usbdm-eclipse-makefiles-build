@@ -275,7 +275,7 @@
         values="
          ewm_clkprescaler_clk_div : true  : true  : enableGettersAndSetters : Prescaler" >
       <variableTemplate location="%(where)" condition="%(set)"  codeGenCondition="%(genCode)&amp;&amp;%(guard)"
-         variables="%(field)" > 
+         variables="%(field)" >
       <![CDATA[
          \t/**
          \t * Set %description
@@ -303,9 +303,9 @@
          \t\n
       ]]></variableTemplate>
    </for>
-   
+
    <variableTemplate location="%(where)" codeGenCondition="%(guard)"
-      variables="ewm_cmpl_comparel,ewm_cmph_compareh" 
+      variables="ewm_cmpl_comparel,ewm_cmph_compareh"
       params="min,max"
       nonDefaultParams="2"
       multipleParamsOnNewline="false" >
@@ -322,9 +322,9 @@
          \t}
          \t\n
    ]]></variableTemplate>
-   
+
    <variableTemplate location="%(where)" codeGenCondition="%(guard)"
-      variables="ewm_serv_service,ewm_serv_service" 
+      variables="ewm_serv_service,ewm_serv_service"
       params="ewmService1,ewmService2"
       nonDefaultParams="2"
       multipleParamsOnNewline="false" >
@@ -355,59 +355,44 @@
    ]]></variableTemplate>
 </for>
 
-   <template where="info" codeGenCondition='$(_InfoGuard)&amp;&amp;SignalIsMapped("EWM_IN")' >
+<for keys="   pinName        : name      : function"
+     values=" $(_NAME)_IN    : EwmIn     : setInput   ;
+              $(_NAME)_OUT_b : EwmOut    : setOutput  " >
+
+   <equation key="index" value='=IndexOfSignal("%(pinName)")'  />
+   <!-- printVar key="index" / -->
+   <template where="info" codeGenCondition='$(_InfoGuard)&amp;&amp;SignalIsMapped("%(pinName)")'
+         immediateVariables="index" >
    <![CDATA[
-      \t//! Pin number in Info table for EWM input if mapped to a pin
-      \tstatic constexpr int inputPin  = 0;
+      \t/// GPIO associated with $(_NAME) pin (%(pinName))
+      \ttypedef GpioTable_T<$(_Info), $(index), ActiveHigh> Gpio%(name);
       \t
-      \t/** Allow access to PCR of input pin */
-      \tusing InputPin  = PcrTable_T<$(_Info), inputPin>;
+      \t/// Allow access to PCR of $(_NAME) pin (%(pinName))
+      \ttypedef PcrTable_T<$(_Info), $(index)> %(name)Pin;
       \t
       \t/**
-      \t * Enable EWM_in pin as input and connected to EWM.
+      \t * Enable %(pinName) pin and connects to $(_NAME).
+      \t * Configures all Pin Control Register (PCR) values to device default.
+      \t */
+      \tstatic void %(function)() {
+      \t
+      \t   %(name)Pin::%(function)();
+      \t}
+      \t
+      \t/**
+      \t * Enable %(pinName) pin and connects to $(_NAME).
       \t * Configures all Pin Control Register (PCR) values.
       \t *
-      \t * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
-      \t * @param[in] pinAction        One of PinAction_None, etc (defaults to PinAction_None)
-      \t * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
+      \t * @param pcrValue  PCR value controlling pin characteristics
       \t */
-      \tstatic void setInput(
-      \t      PinPull           pinPull           = InputPin::defaultPcrValue,
-      \t      PinAction         pinAction         = InputPin::defaultPcrValue,
-      \t      PinFilter         pinFilter         = InputPin::defaultPcrValue
-      \t      ) {
-      \t   InputPin::setInput(pinPull, pinAction, pinFilter);
+      \tstatic void %(function)(PcrValue pcrValue) {
+      \t
+      \t   %(name)Pin::%(function)(pcrValue);
       \t}
       \t\n
    ]]>
    </template>
-   
-   <template where="info" codeGenCondition='$(_InfoGuard)&amp;&amp;SignalIsMapped("EWM_OUT_b")' >
-   <![CDATA[
-      \t//! Pin number in Info table for EWM output if mapped to a pin
-      \tstatic constexpr int outputPin  = 1;
-      \t
-      \t/** Allow access to PCR of output pin */
-      \tusing OutputPin = PcrTable_T<$(_Info), outputPin>;
-      \t
-      \t/**
-      \t * Enable EWM_out pin as output and connected to EWM.
-      \t * Configures all Pin Control Register (PCR) values.
-      \t *
-      \t * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
-      \t * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
-      \t * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
-      \t */
-      \tstatic void setOutput(
-      \t      PinDriveStrength  pinDriveStrength  = OutputPin::defaultPcrValue,
-      \t      PinDriveMode      pinDriveMode      = OutputPin::defaultPcrValue,
-      \t      PinSlewRate       pinSlewRate       = OutputPin::defaultPcrValue
-      \t      ) {
-      \t   OutputPin::setOutput(pinDriveStrength, pinDriveMode, pinSlewRate);
-      \t}
-      \t\n
-   ]]>
-   </template>
+</for>
 
 <!-- ====================================================================================================== -->
 <!--     START BasicInfo::Init class      -->
@@ -701,19 +686,56 @@
       \t\n
    ]]>
    </template>
-   <template where="info" codeGenCondition="$(_InfoIrqGuard)" >
+   <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)" >
    <![CDATA[
-      \t   // Configure call-back
-      \t   if (init.callbacks[0] != nullptr) {
-      \t      setCallback(init.callbacks[0]);
-      \t      enableNvicInterrupts(init.priorities[0]);
-      \t   }
+      \t   // Disable call-back
+      \t   disableNvicInterrupts();
+      \t
+      \t   // Install call-back
+      \t   setCallback(init.callbacks[0]);
       \t\n
    ]]>
    </template>
+   <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount>1)"
+      variables="irq_enum"
+      immediateVariables="_hardwareIrqCount">
+   <![CDATA[
+      \t   for(int index=0; index<$(_hardwareIrqCount); index++) {
+      \t      // Disable call-back
+      \t      disableNvicInterrupts(%returnType0(index));
+      \t
+      \t      // Install call-back
+      \t      setCallback(%returnType0(index), init.callbacks[index]);
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
    <template where="info" codeGenCondition="$(_InfoGuard)" >
    <![CDATA[
       \t   $(_BasicInfo)::configure($(_basename), init);
+      \t\n
+   ]]>
+   </template>
+   <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)" >
+   <![CDATA[
+      \t   // Enable call-back
+      \t   enableNvicInterrupts(init.priorities[0]);
+      \t\n
+   ]]>
+   </template>
+   <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount>1)"
+      variables="irq_enum"
+      immediateVariables="_hardwareIrqCount">
+   <![CDATA[
+      \t   for(int index=0; index<$(_hardwareIrqCount); index++) {
+      \t      // Enable call-back
+      \t      enableNvicInterrupts(%returnType0(index), init.priorities[index]);
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
       \t}
       \t\n
    ]]>
@@ -775,14 +797,14 @@
    </validate>
 
    <projectActionList id="ewm_files" >
-      <copy source="Project_Headers/ewm.h"          target="Project_Headers/ewm.h"          overwrite="true" derived="true" />
-      <copy source="Snippets/ewm-example.cpp"       target="Snippets/ewm-example.cpp"       overwrite="true" derived="true" />
+      <copy source="Project_Headers/ewm.h"          target="Project_Headers/ewm.h"          overwrite="always" derived="true" />
+      <copy source="Snippets/ewm-example.cpp"       target="Snippets/ewm-example.cpp"       overwrite="always" derived="true" />
    </projectActionList>
 
    <!-- ____ Startup ____ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >

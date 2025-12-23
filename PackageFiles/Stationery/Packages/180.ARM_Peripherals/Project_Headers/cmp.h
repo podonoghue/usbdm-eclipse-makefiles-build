@@ -33,9 +33,13 @@ namespace USBDM {
  * @brief Pins used for Analogue Comparator
  * @{
  */
-
+// /CMP/peripheral_h_types
+$(/CMP/peripheral_h_types:// $/CMP/peripheral_h_types not found)
+///CMP/peripheral_h_definition
 $(/CMP/peripheral_h_definition:// $/CMP/peripheral_h_definition not found)
+///CMP/InputMapping
 $(/CMP/InputMapping:   // /CMP/InputMapping None Found)
+///CMP/declarations
 $(/CMP/declarations:   // /CMP/declarations None Found)
 
 /**
@@ -44,6 +48,6 @@ $(/CMP/declarations:   // /CMP/declarations None Found)
  */
 } // End namespace USBDM
 
-#endif // /ACMP/_BasicInfoGuard
+#endif // /CMP/_BasicInfoGuard
 
 #endif /* PROJECT_HEADERS_CMP_H_ */

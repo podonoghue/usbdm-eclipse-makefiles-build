@@ -36,7 +36,7 @@
          </applyWhen>
          <copy source="Startup_Code/uart.c"                         target="Startup_Code/uart.c" />
          <copy source="Project_Headers/console.h"                   target="Project_Headers/console.h" />
-         <copy source="Sources/main-printf.c"                       target="Sources/main.c" overwrite="true"/>
+         <copy source="Sources/main-printf.c"                       target="Sources/main.c" overwrite="always"/>
       </projectActionList>
    </projectActionList>
 

@@ -778,7 +778,7 @@
 
 
    <projectActionList id = "port_files" >
-      <copy source="Project_Headers/port_MKE.h"  target="Project_Headers/port.h"  overwrite="true"  derived="true" />
+      <copy source="Project_Headers/port_MKE.h"  target="Project_Headers/port.h"  overwrite="always"  derived="true" />
    </projectActionList>
 
 </peripheralPage>

@@ -216,7 +216,7 @@ This register configures various CAN bus timing parameters" />
       typeName="CanSynchronizationJumpWidth"
       baseType="uint8_t"
       toolTip="The synchronization jump width defines the maximum number of time quanta (Tq) clock cycles a bit can\n
-               be shortened or lengthened to achieve resynchronization to data transitions on the CAN bus" 
+               be shortened or lengthened to achieve resynchronization to data transitions on the CAN bus"
       description="Baud Rate Prescaler" >
       <choice value="0b00" name="1 Tq clock cycle"  enum="1cycle" />
       <choice value="0b01" name="2 Tq clock cycles" enum="2cycles" />
@@ -1104,11 +1104,11 @@ XXXXXXXXXXXXXXXXXXXXXX
    </template>
    <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)" >
    <![CDATA[
-      \t   // Configure call-back
-      \t   if (init.callbacks[0] != nullptr) {
-      \t      setCallback(init.callbacks[0]);
-      \t      enableNvicInterrupts(init.priorities[0]);
-      \t   }
+      \t   // Disable call-back
+      \t   disableNvicInterrupts();
+      \t
+      \t   // Install call-back
+      \t   setCallback(init.callbacks[0]);
       \t\n
    ]]>
    </template>
@@ -1117,11 +1117,11 @@ XXXXXXXXXXXXXXXXXXXXXX
       immediateVariables="_hardwareIrqCount">
    <![CDATA[
       \t   for(int index=0; index<$(_hardwareIrqCount); index++) {
-      \t      if (init.callbacks[index] != nullptr) {
-      \t         // Configure call-back
-      \t         setCallback(%returnType0(index), init.callbacks[index]);
-      \t         enableNvicInterrupts(%returnType0(index), init.priorities[index]);
-      \t      }
+      \t      // Disable call-back
+      \t      disableNvicInterrupts(%returnType0(index));
+      \t
+      \t      // Install call-back
+      \t      setCallback(%returnType0(index), init.callbacks[index]);
       \t   }
       \t\n
    ]]>
@@ -1129,13 +1129,35 @@ XXXXXXXXXXXXXXXXXXXXXX
    <template where="info" codeGenCondition="$(_InfoGuard)" condition="=individual_clock_source" >
    <![CDATA[
       \t   $(_BasicInfo)::configure($(_basename), SimInfo::get$(_Class)Clock(), init);
-      \t}
       \t\n
    ]]>
    </template>
    <template where="info" codeGenCondition="$(_InfoGuard)" condition="=shared_clock_source" >
    <![CDATA[
       \t   $(_BasicInfo)::configure($(_basename), getInputClockFrequency(), init);
+      \t\n
+   ]]>
+   </template>
+   <template where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount==1)" >
+   <![CDATA[
+      \t   // Enable call-back
+      \t   enableNvicInterrupts(init.priorities[0]);
+      \t\n
+   ]]>
+   </template>
+   <variableTemplate where="info" codeGenCondition="$(_InfoIrqGuard)" condition="=(_hardwareIrqCount>1)"
+      variables="irq_enum"
+      immediateVariables="_hardwareIrqCount">
+   <![CDATA[
+      \t   for(int index=0; index<$(_hardwareIrqCount); index++) {
+      \t      // Enable call-back
+      \t      enableNvicInterrupts(%returnType0(index), init.priorities[index]);
+      \t   }
+      \t\n
+   ]]>
+   </variableTemplate>
+   <template where="info" codeGenCondition="$(_InfoGuard)" >
+   <![CDATA[
       \t}
       \t\n
    ]]>
@@ -1218,13 +1240,13 @@ XXXXXXXXXXXXXXXXXXXXXX
    </validate>
 
    <projectActionList id="can_files" >
-      <copy source="Project_Headers/can-MKE.h"  target="Project_Headers/can.h"  overwrite="true"  derived="true" />
+      <copy source="Project_Headers/can-MKE.h"  target="Project_Headers/can.h"  overwrite="always"  derived="true" />
    </projectActionList>
 
    <!-- ____ Startup ____ -->
 
    <template key="/SYSTEM/Includes" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
-      <![CDATA[#include "$(_basename).h"\n
+      <![CDATA[#include "../Project_Headers/$(_basename).h"\n
    ]]></template>
 
    <template key="/SYSTEM/Startup" condition="configurePeripheralInStartUp" codeGenCondition="configurePeripheralInStartUp" >
