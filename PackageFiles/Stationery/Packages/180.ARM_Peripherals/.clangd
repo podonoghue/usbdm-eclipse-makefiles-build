@@ -1,0 +1,25 @@
+CompileFlags:
+   CompilationDatabase: Debug
+   Remove: [ -fcallgraph-info=su ]
+   BuiltinHeaders: QueryDriver
+
+Diagnostics:
+  UnusedIncludes: None
+  
+Completion:
+  AllScopes: Yes
+  ArgumentLists: None
+  HeaderInsertion: IWYU
+  CodePatterns: None
+
+InlayHints:
+  BlockEnd: false
+  Designators: true
+  Enabled: true
+  ParameterNames: false
+  DeducedTypes: true
+  DefaultArguments: true
+  TypeNameLimit: 24
+       
+#Documentation:
+# CommentFormat: Doxygen  
