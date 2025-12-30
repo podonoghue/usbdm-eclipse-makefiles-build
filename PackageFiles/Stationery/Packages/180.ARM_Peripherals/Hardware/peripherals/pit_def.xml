@@ -89,7 +89,11 @@
 
    <template><![CDATA[
       \t//! Number of PIT channels
-      \tstatic constexpr uint32_t NumChannels  = $(NumChannels);\n\n
+      \tstatic constexpr uint32_t NumChannels  = $(NumChannels);
+      \t
+      \t/** Bit-mask of allocated channels */
+      \tstatic inline uint32_t allocatedChannels = (1<<NumChannels)-1;
+      \t\n
    ]]></template>
 
    <!-- ____ Class Declaration ________________ -->
@@ -545,6 +549,40 @@
       </template>
    </for>
 
+   <template codeGenCondition="irqHandlingMethod" >
+   <![CDATA[
+      \t/**
+      \t * Enable interrupts in NVIC
+      \t *
+      \t * @param pitChannelNum Select amongst interrupts associated with the peripheral
+      \t */
+      \tstatic void enableNvicInterrupts(PitChannelNum pitChannelNum) {
+      \t   NVIC_EnableIRQ(irqNums[pitChannelNum]);
+      \t}
+      \t
+      \t/**
+      \t * Enable and set priority of interrupts in NVIC
+      \t * Any pending NVIC interrupts are first cleared.
+      \t *
+      \t * @param pitChannelNum Select amongst interrupts associated with the peripheral
+      \t * @param nvicPriority  Interrupt priority
+      \t */
+      \tstatic void enableNvicInterrupts(PitChannelNum pitChannelNum, NvicPriority nvicPriority) {
+      \t   enableNvicInterrupt(irqNums[pitChannelNum], nvicPriority);
+      \t}
+      \t
+      \t/**
+      \t * Disable interrupts in NVIC
+      \t *
+      \t * @param pitChannelNum Select amongst interrupts associated with the peripheral
+      \t */
+      \tstatic void disableNvicInterrupts(PitChannelNum pitChannelNum) {
+      \t   NVIC_DisableIRQ(irqNums[pitChannelNum]);
+      \t}
+      \t\n
+   ]]>
+   </template>
+
    <!--   ____ Interrupt handler ________________ -->
 
    <template codeGenCondition="irqHandlingMethod" condition="=(_hardwareIrqCount==1)">
@@ -628,9 +666,6 @@
 <!-- ====================================================================================================== -->
    <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
-      \t/** Bit-mask of allocated channels */
-      \tstatic inline uint32_t allocatedChannels = 0;
-      \t
       \t/**
       \t * Class used to do initialisation of the $(_Baseclass)
       \t *
@@ -801,7 +836,7 @@
       \t   pit->MCR    = init.mcr;
       \t
       \t   // Clear channel reservations
-      \t   allocatedChannels = -1;
+      \t   allocatedChannels = (1<<NumChannels)-1;
       \t}
       \t
       \t/**
@@ -833,7 +868,7 @@
       \t */
       \tstatic void defaultConfigureIfNeeded() {
       \t
-      \t    enable();
+      \t   enable();
       \t
       \t   // Check if disabled and configure if so
       \t   if ((pit->MCR & PIT_MCR_MDIS_MASK) != 0) {
