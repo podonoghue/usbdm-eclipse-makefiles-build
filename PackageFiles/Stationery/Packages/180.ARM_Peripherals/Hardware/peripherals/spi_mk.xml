@@ -1892,6 +1892,7 @@
       \tint startTransaction() {
       \t   spi->MCR = spi->MCR & ~SPI_MCR_HALT_MASK;
       \t   clearStatusFlags();
+      \t   clearFifos(SpiClearFifo_Both);
       \t   return 0;
       \t}
       \t
@@ -1909,6 +1910,7 @@
       \t   setConfiguration(configuration);
       \t   spi->MCR = spi->MCR & ~SPI_MCR_HALT_MASK;
       \t   clearStatusFlags();
+      \t   clearFifos(SpiClearFifo_Both);
       \t   return 0;
       \t}
       \t
@@ -2406,12 +2408,12 @@
                  $(_NAME)_SOUT : Sout  : setSoutOutput : setOutput " >
 
       <continue condition='=!SignalExists("%(pinName)")' />
-      
+
       <equation key="index" value='=IndexOfSignal("%(pinName)")'  />
-      
+
       <!--print text='pinName = "%(pinName)"' />
       <printVar key="index" / -->
-      
+
       <template where="info" codeGenCondition='$(_InfoGuard)'
             immediateVariables="index" >
       <![CDATA[
