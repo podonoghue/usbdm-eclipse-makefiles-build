@@ -1,0 +1,82 @@
+;------------------------------------------------------------------------------
+; usbdm_cdc_interface.inf
+; USB - CDC INF file for USBDM
+;
+; Copyright pgo
+;------------------------------------------------------------------------------
+[Strings]
+DeviceName         = "USBDM Serial Port"
+VendorName         = "pgo"
+Provider           = "pgo"
+DeviceID0          = "VID_16D0&PID_0567&MI_01"
+DeviceID1          = "VID_16D0&PID_06A5&MI_01"
+ServiceName        = "USB RS-232 Emulation Driver"
+SerEnumServiceName = "SerEnum Filter Driver"
+
+[Version]
+Signature   =  "$Windows NT$"
+Class       =  Ports
+ClassGuid   =  {4D36E978-E325-11CE-BFC1-08002BE10318}
+Provider    =  %Provider%
+CatalogFile =  usbdm_cdc_interface.cat
+DriverVer   =  11/04/2016,2.4.0.0
+
+
+[Manufacturer]
+%VendorName% = DeviceList, NT, NTx86, NTamd64
+
+[DestinationDirs]
+FakeModemCopyFileSection=12
+DefaultDestDir=12
+
+[DeviceList.NT]
+%DeviceName%=DriverInstall, USB\%DeviceID0%
+%DeviceName%=DriverInstall, USB\%DeviceID1%
+
+[DeviceList.NTx86]
+%DeviceName%=DriverInstall, USB\%DeviceID0%
+%DeviceName%=DriverInstall, USB\%DeviceID1%
+
+[DeviceList.NTamd64]
+%DeviceName%=DriverInstall, USB\%DeviceID0%
+%DeviceName%=DriverInstall, USB\%DeviceID1%
+
+;------------------------------------------------------------------------------
+;             Windows Support
+;------------------------------------------------------------------------------
+[DriverInstall]
+include     = mdmcpq.inf
+CopyFiles   = FakeModemCopyFileSection
+AddReg      = SerialPropertyPage_AddReg,DriverInstall_AddReg
+
+; This adds the serial port property tab to the device properties dialog
+[SerialPropertyPage_AddReg]
+HKR,,EnumPropPages32,,"MsPorts.dll,SerialPortPropPageProvider"
+
+[DriverInstall_AddReg]
+HKR,,DevLoader,,*ntkern 
+HKR,,NTMPDriver,,usbser.sys 
+HKR,,"UpperFilters",0x00010000,"serenum"
+
+[DriverInstall.Services]
+AddService = usbser,0x00000002,DriverService
+AddService = serenum,,SerEnumDriverService
+
+[DriverService]
+DisplayName=%ServiceName%
+; SERVICE_KERNEL_DRIVER
+ServiceType=1
+; SERVICE_DEMAND_START
+StartType=3
+; SERVICE_ERROR_NORMAL
+ErrorControl=1
+ServiceBinary=%12%\usbser.sys
+LoadOrderGroup=Base
+
+[SerEnumDriverService]
+DisplayName=%SerEnumServiceName%
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%12%\serenum.sys
+LoadOrderGroup=PNP Filter

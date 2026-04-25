@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'
+     xmlns:difx='http://schemas.microsoft.com/wix/DifxAppExtension'>
+
+   <?define Manufacturer="pgo" ?>
+   <?define ProductName="USBDM Drivers" ?>
+   <!--?define ProductVersion="1.0.0" ?-->                        <!-- Defined on command line -->
+   <?define ProductCode="*" ?> 
+   <?define UpgradeCode="8aad5b13-b89a-4793-9f3f-d29e53e79673" ?> <!-- Don't change        -->
+   <?define InfoURL="http://usbdm.sourceforge.net" ?>
+   <!--?define TargetArchCondition="NOT Msix64" ?-->             <!-- Defined on command line -->
+
+   <?define DriverDir="DriversXP" ?>
+   <?define WdfCoInstaller="WdfCoInstaller01009" ?>
+   <?define WinusbCoinstaller="winusbcoinstaller2" ?>
+   
+   <Product
+      Name="$(var.ProductName)"
+      Id="$(var.ProductCode)"
+      UpgradeCode="$(var.UpgradeCode)"
+      Version="$(var.ProductVersion)"
+      Manufacturer="$(var.Manufacturer)"
+      Language='1033'
+      Codepage='1252' >
+
+      <Package
+         Id='*'
+         Keywords='USBDMDriver' 
+         Description="$(var.ProductName) Installer"
+         Comments="$(var.ProductName) Package"
+         Manufacturer="$(var.Manufacturer)"
+         InstallerVersion='100' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
+         
+      <Condition Message="You are attempting to run the wrong version of the installer for this version of Windows.">
+        <![CDATA[$(var.TargetArchCondition)]]>
+      </Condition>
+      
+      <Media Id='1' Cabinet="disk1.cab" EmbedCab='yes' DiskPrompt="$(var.ProductCode) Media" />
+
+      <MajorUpgrade
+         AllowSameVersionUpgrades="no"
+         DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." />
+
+      <Property Id='ARPCOMMENTS'>BDM Drivers for USBDM</Property>
+      <Property Id='ARPURLINFOABOUT'>$(var.InfoURL)</Property>
+      <Property Id='DiskPrompt' Value="$(var.ProductName) $(var.ProductVersion) Installation" />
+      <Property Id="ARPPRODUCTICON" Value="ChipIcon.ico" />
+<!--
+      <Property Id='ARPCONTACT'>contact info</Property>
+      <Property Id='ARPHELPLINK'>URL for technical support</Property>
+      <Property Id='ARPURLUPDATEINFO'>URL for product updates</Property>
+      <Property Id='ARPHELPTELEPHONE'>URL for technical support</Property>
+      <Property Id='ARPREADME'>path</Property>
+      <Property Id='ARPSIZE'>app size in kilobytes</Property>
+-->
+  
+      <!--====================================================== -->
+      <!--           Directory structure                         -->
+      <Directory Id='TARGETDIR' Name='SourceDir'>
+         <Directory Id='ProgramFilesFolder' Name='PFiles'>
+            <Directory Id='MANUFACTURER_FOLDER' Name="$(var.Manufacturer)">
+               <Directory Id='INSTALLDIR' Name="$(var.ProductName) $(var.ProductVersion)" />
+            </Directory>
+         </Directory>
+
+         <!-- Desktop Folder -->
+         <Directory Id="DesktopFolder" Name="Desktop" />
+      </Directory>
+
+      <!-- ========================================================================== -->
+      <!-- Driver Components -->      
+      <DirectoryRef Id='INSTALLDIR'>
+         <Directory Id="D.USBDM_CDC_DRIVER" Name="CDC_driver">
+            <Component Id='C.USBDM_CDC_Interface' Guid='e146ad98-e634-4de8-94af-52a7863124e4' >
+               <File Id='F.USBDM_CDC_InterfaceCAT' Name='usbdm_cdc_interface.cat' DiskId='1' Source='$(var.DriverDir)/usbdm_cdc_interface.cat' KeyPath='yes'/>
+               <File Id='F.USBDM_CDC_InterfaceINF' Name='usbdm_cdc_interface.inf' DiskId='1' Source='$(var.DriverDir)/usbdm_cdc_interface.inf'/>
+               <difx:Driver Sequence='2' PlugAndPlayPrompt='no' />
+            </Component>
+         </Directory>
+      </DirectoryRef>
+
+      <DirectoryRef Id='INSTALLDIR'>
+         <Directory Id="D.USBDM_BDM_DRIVER" Name="Debugger_driver">
+            <Directory Id="D.USBDM_BDM_DRIVER.amd64" Name="amd64">
+               <Component Id='C.USBDM_BDM_DRIVER.amd64.WinUSB' Guid='8e0f95fc-6454-4835-a0c5-2f4d879a7c07' >
+                  <File Id='F.USBDM_BDM_DRIVER.amd64.WdfCoInstallerDLL'    Name='$(var.WdfCoInstaller).dll'    DiskId='1' Source='$(var.DriverDir)/amd64/$(var.WdfCoInstaller).dll'/>
+                  <File Id='F.USBDM_BDM_DRIVER.amd64.winusbcoinstallerDLL' Name='$(var.WinusbCoinstaller).dll' DiskId='1' Source='$(var.DriverDir)/amd64/$(var.WinusbCoinstaller).dll'/>
+               </Component>
+            </Directory>
+            <Directory Id="D.USBDM_BDM_DRIVER.x86" Name="x86">
+               <Component Id='C.USBDM_BDM_DRIVER.x86.WinUSB' Guid='7d6aad85-818a-412d-b872-d0cabdfa74dc' >
+                  <File Id='F.USBDM_BDM_DRIVER.x86.WdfCoInstallerDLL'    Name='$(var.WdfCoInstaller).dll'    DiskId='1' Source='$(var.DriverDir)/x86/$(var.WdfCoInstaller).dll'/>
+                  <File Id='F.USBDM_BDM_DRIVER.x86.winusbcoinstallerDLL' Name='$(var.WinusbCoinstaller).dll' DiskId='1' Source='$(var.DriverDir)/x86/$(var.WinusbCoinstaller).dll'/>
+               </Component>
+            </Directory>
+            <Component Id='C.USBDM_BDM_DRIVER.drivers' Guid='dde50811-f12f-440a-bbca-516dc731fb10' >
+               <File Id='F.USBDM_BDM_DRIVER.USBDM_BDM_InterfaceCAT' Name='usbdm_bdm_interface.cat' DiskId='1' Source='$(var.DriverDir)/usbdm_bdm_interface.cat' KeyPath='yes'/>
+               <File Id='F.USBDM_BDM_DRIVER.USBDM_BDM_InterfaceINF' Name='usbdm_bdm_interface.inf' DiskId='1' Source='$(var.DriverDir)/usbdm_bdm_interface.inf'/>
+               <difx:Driver Sequence='1' PlugAndPlayPrompt='no' />
+            </Component>
+         </Directory>
+      </DirectoryRef>
+
+      <ComponentGroup Id='CG.USBDM_BDM_DRIVER'>
+          <ComponentRef Id='C.USBDM_BDM_DRIVER.x86.WinUSB'   />
+          <ComponentRef Id='C.USBDM_BDM_DRIVER.amd64.WinUSB' />
+          <ComponentRef Id='C.USBDM_BDM_DRIVER.drivers'    />
+      </ComponentGroup>
+      
+      <!-- License file -->
+      <WixVariable Id="WixUILicenseRtf" Value="Drivers\license.rtf" />
+               
+      <Feature Id='Complete' Level='1'>
+         <ComponentRef      Id='C.USBDM_CDC_Interface' />
+         <ComponentGroupRef Id='CG.USBDM_BDM_DRIVER' />
+      </Feature>
+	  
+      <UIRef Id="WixUI_Minimal" />
+      <Icon Id="ChipIcon.ico" SourceFile="Hardware-Chip.ico" />
+   </Product>
+</Wix>
