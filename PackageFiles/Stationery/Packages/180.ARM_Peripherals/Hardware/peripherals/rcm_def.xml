@@ -37,6 +37,31 @@
       <choice value="2" enum="LowPowerOscillator" name="LPO clock based filter" />
    </choiceOption>
 
+   <choiceOption key="rcm_srs" condition="rcm_srs0_present"
+      hidden="true"
+      derived="true"
+      valueFormat="(%s)"
+      generateOperators="true"
+      baseType="uint32_t"
+      typeName="RcmSource"
+      toolTip="This register includes read-only status flags to indicate the source\n
+               of the most recent reset."
+      description="System Reset Status Registers" >
+      <choice value="1&lt;&lt;0"  enum="Wakeup"        name="Low leakage wake-up reset"         />
+      <choice value="1&lt;&lt;1"  enum="Lvd"           name="Low-voltage detect reset"          />
+      <choice value="1&lt;&lt;2"  enum="Loc"           name="Loss-of-clock reset"               />
+      <choice value="1&lt;&lt;3"  enum="Lol"           name="Loss-of-lock reset"                />
+      <choice value="1&lt;&lt;5"  enum="Wdog"          name="Watchdog"                          />
+      <choice value="1&lt;&lt;6"  enum="Pin"           name="External reset pin"                />
+      <choice value="1&lt;&lt;7"  enum="Por"           name="Power-on reset"                    />
+      <choice value="1&lt;&lt;8"  enum="Jtag"          name="JTAG generated reset"              />
+      <choice value="1&lt;&lt;9"  enum="Lockup"        name="Core Lockup"                       />
+      <choice value="1&lt;&lt;10" enum="Sw"            name="Software"                          />
+      <choice value="1&lt;&lt;11" enum="Mdm_Ap"        name="MDM-AP system reset request"       />
+      <choice value="1&lt;&lt;12" enum="Ezpt"          name="EzPort Reset"                      />
+      <choice value="1&lt;&lt;13" enum="Sackerr"       name="Stop Mode Acknowledge Error Reset" />
+   </choiceOption>
+
    <!-- ____ RPFW _________ -->
 
    <choiceOption key="rcm_rpfw_rstfltsel" condition="rcm_rpfw_rstfltsel_present"

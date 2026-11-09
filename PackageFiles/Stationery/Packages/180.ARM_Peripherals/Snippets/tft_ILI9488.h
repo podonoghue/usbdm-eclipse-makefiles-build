@@ -1291,14 +1291,14 @@ public:
 
 //      console.writeln("drawBitmap(", x, ", ", y, ", ", w, ", ", h, ", ", scale, ")");
 
-#if 0
+#if 1
       // Works but upsets Touch controller
       // Needs work
 
 
       // Must be a multiple of 3 so pixels pack evenly
       // 2 pixels -> 3 entries, array represents 2*(3*8)/3 = 16 pixels
-      constexpr unsigned BUF_SIZE = 3*8;
+      constexpr unsigned BUF_SIZE = 3*8*4;
       uint32_t  elementBuffer[BUF_SIZE];
 
       // Counter for elementBuffer

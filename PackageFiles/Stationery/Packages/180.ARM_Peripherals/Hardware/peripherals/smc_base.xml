@@ -21,7 +21,8 @@
       typeName="SmcAllowHighSpeedRun"
       baseType="uint8_t"
       description="Allow High Speed Run mode"
-      toolTip="Allows the MCU to enter High Speed Run mode (HSRUN)" >
+      toolTip="Allows the MCU to enter High Speed Run mode (HSRUN).\n
+               This is a write-once selection" >
       <choice name="HSRUN is not allowed" enum="Disabled" value="0" />
       <choice name="HSRUN is allowed"     enum="Enabled"  value="1" isDefault="true" />
    </binaryOption>
@@ -32,7 +33,8 @@
       baseType="uint8_t"
       enumOr="auto"
       description="Allow Very Low Power modes"
-      toolTip="Allows the MCU to enter any very low power modes: VLPR, VLPW, and VLPS" >
+      toolTip="Allows the MCU to enter any very low power modes: VLPR, VLPW, and VLPS.\n
+               This is a write-once selection" >
       <choice name="VLPR, VLPW and VLPS are not allowed" enum="Disabled" value="0" />
       <choice name="VLPR, VLPW and VLPS are allowed"     enum="Enabled"  value="1" isDefault="true" />
    </binaryOption>
@@ -43,7 +45,8 @@
       baseType="uint8_t"
       enumOr="auto"
       description="Allow Low Leakage Stop mode"
-      toolTip="Allows the MCU to enter any low leakage stop mode: LLS" >
+      toolTip="Allows the MCU to enter any low leakage stop mode: LLS.\n
+               This is a write-once selection" >
       <choice name="LLS is not allowed" enum="Disabled" value="0" />
       <choice name="LLS is allowed"     enum="Enabled"  value="1" isDefault="true" />
    </binaryOption>
@@ -54,7 +57,8 @@
       baseType="uint8_t"
       enumOr="auto"
       description="Allow Very Low Leakage Stop mode"
-      toolTip="Allows the MCU to enter any low leakage stop mode: VLLSx" >
+      toolTip="Allows the MCU to enter any low leakage stop mode: VLLSx.\n
+               This is a write-once selection" >
       <choice name="VLLSx is not allowed" enum="Disabled" value="0" />
       <choice name="VLLSx is allowed"     enum="Enabled"  value="1" isDefault="true" />
    </binaryOption>
@@ -541,8 +545,8 @@
          \t/**
          \t * Enter Run Mode.
          \t *
-         \t * This may be used to change between supported RUN modes (RUN, VLPR, HSRUN).\n
-         \t * Only the following transitions are allowed: VLPR <-> RUN <-> HSRUN.
+         \t * This may be used to change between supported RUN modes (RUN, VLPR).\n
+         \t * Only the following transitions are allowed: VLPR <-> RUN.
          \t *
          \t * @param[in] clockConfig Clock configuration (Includes run mode to enter)
          \t *
@@ -552,7 +556,8 @@
          \t */
          \tstatic ErrorCode enterRunMode(ClockConfig clockConfig) {
          \t
-         \t   SmcRunMode smcRunMode = Mcg::clockInfo[clockConfig].runMode;
+         \t   const ClockInfo &newClockInfo = Mcg::clockInfo[clockConfig];
+         \t   SmcRunMode smcRunMode = newClockInfo.runMode;
          \t
          \t   ErrorCode rc = E_NO_ERROR;
          \t
@@ -564,29 +569,33 @@
          \t   switch(smcRunMode) {
          \t
          \t      case SmcRunMode_Normal:
-         \t         // Change power mode
-         \t         SMC->PMCTRL = (SMC->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
+         \t         if (getStatus() != SmcStatus_RUN) {
+         \t            // Change power mode as needed
+         \t            SMC->PMCTRL = (SMC->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
          \t
-         \t         // Wait for power status to change
-         \t         while (getStatus() != SmcStatus_RUN) {
-         \t            __asm__("nop");
+         \t            // Wait for power status to change
+         \t            while (getStatus() != SmcStatus_RUN) {
+         \t               __asm__("nop");
+         \t            }
          \t         }
          \t         // Change clock mode
-         \t         rc = Mcg::clockTransition(Mcg::clockInfo[clockConfig]);
+         \t         rc = Mcg::clockTransition(newClockInfo);
          \t         break;
          \t
          \t      case SmcRunMode_VeryLowPower:
          \t         // Change clock mode
-         \t         rc = Mcg::clockTransition(Mcg::clockInfo[clockConfig]);
+         \t         rc = Mcg::clockTransition(newClockInfo);
          \t         if (rc != E_NO_ERROR) {
          \t            break;
          \t         }
-         \t         // Change power mode
-         \t         SMC->PMCTRL = (SMC->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
+         \t         if (getStatus() != SmcStatus_VLPR) {
+         \t            // Change power mode as needed
+         \t            SMC->PMCTRL = (SMC->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
          \t
-         \t         // Wait for power status to change
-         \t         while (getStatus() != SmcStatus_VLPR) {
-         \t            __asm__("nop");
+         \t            // Wait for power status to change
+         \t            while (getStatus() != SmcStatus_VLPR) {
+         \t               __asm__("nop");
+         \t            }
          \t         }
          \t         break;
          \t      default:
@@ -684,7 +693,7 @@
    ]]></template>
 
    <template where="usbdm" codeGenCondition="$(_BasicInfoGuard)" ><![CDATA[
-   \tconsteval uint32_t make16(uint8_t pmctrl, uint8_t stopctrl=0, uint8_t bias=0) {
+   \tconstexpr uint32_t make16(uint8_t pmctrl, uint8_t stopctrl=0, uint8_t bias=0) {
    \t   return pmctrl+(stopctrl<<8)+(bias<<16);
    \t}
 
@@ -811,67 +820,73 @@
       \t    */
       \t   constexpr Init() = default;
       \t
-      \tpublic:
+      \t\n
+   ]]>
+   </template>
+   <variableTemplate
+      variables="smc_stopctrl_pstopo,smc_stopctrl_porpo,smc_stopctrl_llsm,smc_stopctrl_vllsm,
+                 smc_pmctrl_lpwui,smc_pmctrl_stopm"
+      codeGenCondition="$(_BasicInfoGuard)">
+   <![CDATA[
       \t   /**
-      \t    * Configure STOP mode options as specified in the constructor.
+      \t    * Configure power mode options as specified in the constructor.
       \t    * This does not include write-once registers.
+      \t    * (%variables)
       \t    */
       \t   inline void setOptions() const {
       \t      smc->STOPCTRL  = stopctrl;
-      \t      smc->PMCTRL    = (smc->PMCTRL & ~(SMC_PMCTRL_STOPM_MASK))|pmctrl;
+      \t      smc->PMCTRL    = pmctrl;
       \t   }
-      \t
+      \t\n
+   ]]>
+   </variableTemplate>
+   <variableTemplate
+      variables="smc_pmprot_ahsrun,smc_pmprot_avlp,smc_pmprot_alls,smc_pmprot_avlls,
+                 smc_stopctrl_pstopo,smc_stopctrl_porpo,smc_stopctrl_llsm,smc_stopctrl_vllsm,
+                 smc_pmctrl_lpwui,smc_pmctrl_stopm"
+      codeGenCondition="$(_BasicInfoGuard)">
+   <![CDATA[
       \t   /**
-      \t    * Configure all STOP mode options as specified in the constructor.
+      \t    * Configure all power mode options as specified in the constructor.
       \t    * This includes write-once registers
+      \t    * (%variables)
       \t    */
       \t   inline void initialise() const {
       \t      smc->PMPROT    = pmprot;
-      \t      setOptions();
+      \t      smc->STOPCTRL  = stopctrl;
+      \t      smc->PMCTRL    = pmctrl;
       \t   }
       \t
       \t   /**
-      \t    * Read the current STOP mode options from hardware registers
+      \t    * Read the current power mode options from hardware registers
+      \t    * (%variables)
       \t    */
       \t   void readConfig() {
       \t      pmprot   = smc->PMPROT;
       \t      stopctrl = smc->STOPCTRL;
-      \t      pmctrl   = smc->PMCTRL & SMC_PMCTRL_STOPM_MASK;
+      \t      pmctrl   = smc->PMCTRL & ~SMC_PMCTRL_RUNM_MASK;
       \t   }
       \t\n
    ]]>
-   </template>
+   </variableTemplate>
 
    <!-- ____ Init class Member variables ________ -->
 
-   <variableTemplate codeGenCondition="$(_BasicInfoGuard)"
-      variables="smc_pmprot_ahsrun,smc_pmprot_avlp,smc_pmprot_alls,smc_pmprot_avlls"
-   ><![CDATA[
-      \t   /// Power Mode Protection Register
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate codeGenCondition="$(_BasicInfoGuard)"
-      variables="smc_pmctrl_runm,smc_pmctrl_stopm"
-   ><![CDATA[
-      \t   /// Power Mode Control Register
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate codeGenCondition="$(_BasicInfoGuard)"
-      variables="smc_stopctrl_pstopo,smc_stopctrl_porpo,smc_stopctrl_llsm,smc_stopctrl_vllsm"
-   ><![CDATA[
-      \t   /// Stop Control Register
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
-   <variableTemplate codeGenCondition="$(_BasicInfoGuard)"
-      variables="smc_vllsctrl_pstopo,smc_vllsctrl_porpo,smc_vllsctrl_llsm,smc_vllsctrl_vllsm"
-   ><![CDATA[
-      \t   /// VLLS Control Register (old name)
-      \t   uint8_t %registerName = 0;\n\n
-   ]]></variableTemplate>
-
+   <for keys=" type        : variables                                          : init    "
+       values="%baseType   : smc_pmprot_ahsrun,smc_pmprot_avlp,smc_pmprot_alls,
+                             smc_pmprot_avlls                                   :   0      ;
+               %baseType   : smc_pmctrl_lpwui,smc_pmctrl_stopm                  :   0      ;
+               %baseType   : smc_stopctrl_pstopo,smc_stopctrl_porpo,
+                             smc_stopctrl_llsm,smc_stopctrl_vllsm               :   0      " >
+      <variableTemplate codeGenCondition="$(_BasicInfoGuard)"
+         variables="%(variables)"
+         linePadding="xxx" >
+      <![CDATA[
+         %multilineDescription
+         \t   %(type) %registerName = %(init);\n\n
+      ]]>
+      </variableTemplate>
+   </for>
    <!-- ____ Init class Constructors ____________ -->
 
    <for keys="r"
@@ -933,15 +948,13 @@
    <variableTemplate key="/$(_BASENAME)/DefaultInitValue" where="all" codeGenCondition="$(_InfoGuard)"
       separator=","
       terminator=","
-      padToComments="35"
+      padToComments="45"
       variables="
             smc_pmprot_ahsrun,smc_pmprot_avlp,smc_pmprot_alls,
             smc_pmprot_avlls,
             smc_pmctrl_lpwui,smc_pmctrl_stopm,
             smc_stopctrl_pstopo,smc_stopctrl_porpo,smc_stopctrl_llsm,
-            smc_stopctrl_vllsm,smc_stopctrl_ram2po,smc_stopctrl_lpopo,
-            smc_vllsctrl_pstopo,smc_vllsctrl_porpo,
-            smc_vllsctrl_llsm,smc_vllsctrl_vllsm
+            smc_stopctrl_vllsm,smc_stopctrl_ram2po,smc_stopctrl_lpopo
          "
    ><![CDATA[
       \t/**

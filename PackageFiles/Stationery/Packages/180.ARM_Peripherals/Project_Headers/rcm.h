@@ -28,27 +28,6 @@ namespace USBDM {
 $(/RCM/peripheral_h_definition:// $/RCM/peripheral_h_definition not found)
 
 #if $(/RCM/_BasicInfoGuard) // /RCM/_BasicInfoGuard
-/**
- * Indicates reason for reset
- */
-enum RcmSource {
-   RcmSource_Wakeup  = (1<<0),   ///<  Low Leakage Wake-up Reset
-   RcmSource_lvd     = (1<<1),   ///<  Low-Voltage Detect Reset
-   RcmSource_Loc     = (1<<2),   ///<  Loss-of-Clock Reset
-   RcmSource_Lol     = (1<<3),   ///<  Loss-of-Lock Reset
-   RcmSource_4       = (1<<4),   ///<  Reserved
-   RcmSource_Wdog    = (1<<5),   ///<  Watchdog
-   RcmSource_Pin     = (1<<6),   ///<  External Reset Pin
-   RcmSource_Por     = (1<<7),   ///<  Power-On Reset
-   RcmSource_Jtag    = (1<<8),   ///<  JTAG Generated Reset
-   RcmSource_Lockup  = (1<<9),   ///<  Core Lockup
-   RcmSource_Sw      = (1<<10),  ///<  Software
-   RcmSource_Mdm_Ap  = (1<<11),  ///<  MDM-AP System Reset Request
-   RcmSource_Ezpt    = (1<<12),  ///<  EzPort Reset
-   RcmSource_Sackerr = (1<<13),  ///<  Stop Mode Acknowledge Error Reset
-   RcmSource_14      = (1<<14),  ///<  Reserved
-   RcmSource_15      = (1<<15),  ///<  Reserved
-};
 
 #ifdef RCM_FM_FORCEROM_MASK
 /**
@@ -102,8 +81,8 @@ $(/RCM/InitMethod:// /RCM/InitMethod not found)
     *
     * @return Bit mask representing sources
     */
-   static uint32_t getResetSource() {
-      return (rcm->SRS1<<8)|rcm->SRS0;
+   static RcmSource getResetSource() {
+      return (RcmSource)((rcm->SRS1<<8)|rcm->SRS0);
    }
 
 #ifdef RCM_SSRS0_SWAKEUP_MASK

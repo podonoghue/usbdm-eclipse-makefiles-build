@@ -341,8 +341,7 @@
       \t   /**
       \t    * Copy Constructor
       \t    */
-      \t   constexpr DmaTcdCsr(const DmaTcdCsr &other) {
-      \t      csr = other.csr;
+      \t   constexpr DmaTcdCsr(const DmaTcdCsr &other) : csr(other.csr) {
       \t   }
       \t
       \t   /**

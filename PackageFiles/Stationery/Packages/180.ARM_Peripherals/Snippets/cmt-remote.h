@@ -54,6 +54,10 @@ protected:
       return (device<<24)|(subDevice<<16)|(function<<8)|(0x00<<0);
    }
 
+   static constexpr uint32_t makePanasonicCode(uint8_t device, uint8_t subDevice, uint8_t function) {
+      return (device<<0)|(subDevice<<8)|(function<<16)|((device^subDevice^function)<<24);
+   }
+
    enum Control : uint16_t {
 //      ....           = 0b0000'0000'0000'0000U,
 //      ....           = 0b0001'0000'0000'0000U,
@@ -1666,51 +1670,54 @@ public:
    /**
     * Common codes
     */
-   enum Code : uint32_t {
-      A_B                 =    0xF84800B0,
-      AUDIO               =    0x833300B0,
-      CANCEL              =    0x338300B0,
-      DISPLAY             =    0x229200B0,
-      DOWN                =    0x368600B0,
-      EJECT               =    0xB10100B0,
-      FORWARD             =    0xB50500B0,
-      FORWARD_SCENE       =    0xFA4A00B0,
-      LEFT                =    0x378700B0,
-      MENU                =    0x308000B0,
-      NUM0                =    0xA91900B0,
-      NUM1                =    0xA01000B0,
-      NUM10_PLUS          =    0x398900B0,
-      NUM2                =    0xA11100B0,
-      NUM3                =    0xA21200B0,
-      NUM4                =    0xA31300B0,
-      NUM5                =    0xA41400B0,
-      NUM6                =    0xA51500B0,
-      NUM7                =    0xA61600B0,
-      NUM8                =    0xA71700B0,
-      NUM9                =    0xA81800B0,
-      OK                  =    0x328200B0,
-      ON_OFF              =    0x8D3D00B0,
-      PAUSE_PLAY          =    0xBA0A00B0,
-      PROG                =    0xFD4D00B0,
-      RANDOM              =    0x209000B0,
-      REPEAT              =    0x3C8C00B0,
-      RETURN              =    0x318100B0,
-      REVERSE             =    0xB40400B0,
-      REVERSE_SCENE       =    0xF94900B0,
-      RIGHT               =    0x388800B0,
-      SEARCH              =    0x56E600B0,
-      SETUP               =    0x249400B0,
-      SLOW                =    0xBF0F00B0,
-      STEP                =    0xBC0C00B0,
-      STOP                =    0xB00000B0,
-      SUBTITLE            =    0x219100B0,
-      TITLE               =    0x2B9B00B0,
-      UP                  =    0x358500B0,
-      USB                 =    0xB20200B0,
-      USB_REC             =    0x3A8A00B0,
-      ZOOM                =    0x71C100B0,
-
-   };
+   enum Code : uint32_t {   //                   Dev  Sub  F
+      A_B                 =    makePanasonicCode(0xB0,0x00,0x48), // 176,0,72
+      AUDIO               =    makePanasonicCode(0xB0,0x00,0x33), // 176,0,51
+      CANCEL              =    makePanasonicCode(0xB0,0x00,0x83), // 176,0,131
+      DISPLAY             =    makePanasonicCode(0xB0,0x00,0x92), // 176,0,146
+      DOWN                =    makePanasonicCode(0xB0,0x00,0x86), // 176,0,134
+      EJECT               =    makePanasonicCode(0xB0,0x00,0x01), // 176,0,1
+      FORWARD             =    makePanasonicCode(0xB0,0x00,0x05), // 176,0,5
+      FORWARD_SCENE       =    makePanasonicCode(0xB0,0x00,0x4A), // 176,0,74
+      LEFT                =    makePanasonicCode(0xB0,0x00,0x87), // 176,0,135
+      MENU                =    makePanasonicCode(0xB0,0x00,0x80), // 176,0,128
+      NUM0                =    makePanasonicCode(0xB0,0x00,0x19), // 176,0,25
+      NUM1                =    makePanasonicCode(0xB0,0x00,0x10), // 176,0,16
+      NUM10_PLUS          =    makePanasonicCode(0xB0,0x00,0x89), // 176,0,137
+      NUM2                =    makePanasonicCode(0xB0,0x00,0x11), // 176,0,17
+      NUM3                =    makePanasonicCode(0xB0,0x00,0x12), // 176,0,18
+      NUM4                =    makePanasonicCode(0xB0,0x00,0x13), // 176,0,19
+      NUM5                =    makePanasonicCode(0xB0,0x00,0x14), // 176,0,20
+      NUM6                =    makePanasonicCode(0xB0,0x00,0x15), // 176,0,21
+      NUM7                =    makePanasonicCode(0xB0,0x00,0x16), // 176,0,22
+      NUM8                =    makePanasonicCode(0xB0,0x00,0x17), // 176,0,23
+      NUM9                =    makePanasonicCode(0xB0,0x00,0x18), // 176,0,24
+      OK                  =    makePanasonicCode(0xB0,0x00,0x82), // 176,0,130
+//      ON                  =    makePanasonicCode(0xB0,0x00,0x3E), // 176,0,62 -- doesn't work
+//      OFF                 =    makePanasonicCode(0xB0,0x00,0x3F), // 176,0,63 -- doesn't work
+      ON_OFF              =    makePanasonicCode(0xB0,0x00,0x3D), // 176,0,61
+      PAUSE               =    makePanasonicCode(0xB0,0x00,0x06), // 176,0,6
+      PAUSE_PLAY          =    makePanasonicCode(0xB0,0x00,0x0A), // 176,0,10
+      PLAY                =    makePanasonicCode(0xB0,0x00,0x0A), // 176,0,10
+      PROG                =    makePanasonicCode(0xB0,0x00,0x4D), // 176,0,77
+      RANDOM              =    makePanasonicCode(0xB0,0x00,0x90), // 176,0,144
+      REPEAT              =    makePanasonicCode(0xB0,0x00,0x8C), // 176,0,140
+      RETURN              =    makePanasonicCode(0xB0,0x00,0x81), // 176,0,129
+      REVERSE             =    makePanasonicCode(0xB0,0x00,0x04), // 176,0,4
+      REVERSE_SCENE       =    makePanasonicCode(0xB0,0x00,0x49), // 176,0,73
+      RIGHT               =    makePanasonicCode(0xB0,0x00,0x88), // 176,0,136
+      SEARCH              =    makePanasonicCode(0xB0,0x00,0xE6), // 176,0,230
+      SETUP               =    makePanasonicCode(0xB0,0x00,0x94), // 176,0,148
+      SLOW                =    makePanasonicCode(0xB0,0x00,0x0F), // 176,0,15
+      STEP                =    makePanasonicCode(0xB0,0x00,0x0C), // 176,0,12
+      STOP                =    makePanasonicCode(0xB0,0x00,0x00), // 176,0,0
+      SUBTITLE            =    makePanasonicCode(0xB0,0x00,0x91), // 176,0,145
+      TITLE               =    makePanasonicCode(0xB0,0x00,0x9B), // 176,0,155
+      UP                  =    makePanasonicCode(0xB0,0x00,0x85), // 176,0,133
+      USB                 =    makePanasonicCode(0xB0,0x00,0x02), // 176,0,2
+      USB_REC             =    makePanasonicCode(0xB0,0x00,0x8A), // 176,0,138
+      ZOOM                =    makePanasonicCode(0xB0,0x00,0xC1), // 176,0,193
+};
 
    /**
     * Start transmission of sequence.

@@ -27,52 +27,89 @@
 // The following macros allow the selective use of the console routines
 // In release versions of the code the macros are null.
 
-// Variable Argument Macro (VA_MACRO) up to 6 arguments
-#define NUM_ARGS_(_1, _2, _3, _4, _5, _6, _7, _8, TOTAL, ...) TOTAL
-#define NUM_ARGS(...) NUM_ARGS_(__VA_ARGS__, 8, 7, 6, 5, 4, 3, 2, 1)
+// Variable Argument Macro (VA_MACRO) up to 16 arguments
 
-#define CONCATE_(X, Y) X##Y  // Fixed the double '_' from previous code
+#define NUM_ARGS_(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, TOTAL, ...) TOTAL
+#define NUM_ARGS(...) NUM_ARGS_(__VA_ARGS__, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
+
+#define CONCATE_(X, Y) X##Y
 #define CONCATE(MACRO, NUMBER) CONCATE_(MACRO, NUMBER)
 #define VA_MACRO(MACRO, ...) CONCATE(MACRO, NUM_ARGS(__VA_ARGS__))(__VA_ARGS__)
 
-// This is how user may define own set of variadic macros
+// Dummy write routines
 #define WRITE(...)   VA_MACRO(WRITE, __VA_ARGS__)
 #define WRITELN(...) VA_MACRO(WRITELN, __VA_ARGS__)
 
 #if defined(DEBUG_BUILD) && USE_CONSOLE
-#define WRITE1(_1)                               write(_1)
-#define WRITE2(_1, _2)                           write(_1,_2)
-#define WRITE3(_1, _2, _3)                       write(_1,_2,_3)
-#define WRITE4(_1, _2, _3, _4)                   write(_1,_2,_3,_4)
-#define WRITE5(_1, _2, _3, _4, _5)               write(_1,_2,_3,_4,_5)
-#define WRITE6(_1, _2, _3, _4, _5, _6)           write(_1,_2,_3,_4,_5,_6)
-#define WRITE7(_1, _2, _3, _4, _5, _6, _7)       write(_1,_2,_3,_4,_5,_6,_7)
-#define WRITE8(_1, _2, _3, _4, _5, _6, _7, _8)   write(_1,_2,_3,_4,_5,_6,_7,_8)
-#define WRITELN1(_1)                             writeln(_1)
-#define WRITELN2(_1, _2)                         writeln(_1,_2)
-#define WRITELN3(_1, _2, _3)                     writeln(_1,_2,_3)
-#define WRITELN4(_1, _2, _3, _4)                 writeln(_1,_2,_3,_4)
-#define WRITELN5(_1, _2, _3, _4, _5)             writeln(_1,_2,_3,_4,_5)
-#define WRITELN6(_1, _2, _3, _4, _5, _6)         writeln(_1,_2,_3,_4,_5,_6)
-#define WRITELN7(_1, _2, _3, _4, _5, _6, _7)     writeln(_1,_2,_3,_4,_5,_6,_7)
-#define WRITELN8(_1, _2, _3, _4, _5, _6, _7, _8) writeln(_1,_2,_3,_4,_5,_6,_7,_8)
+#define WRITE1(_1)                                                                           write(_1)
+#define WRITE2(_1, _2)                                                                       write(_1, _2)
+#define WRITE3(_1, _2, _3)                                                                   write(_1, _2, _3)
+#define WRITE4(_1, _2, _3, _4)                                                               write(_1, _2, _3, _4)
+#define WRITE5(_1, _2, _3, _4, _5)                                                           write(_1, _2, _3, _4, _5)
+#define WRITE6(_1, _2, _3, _4, _5, _6)                                                       write(_1, _2, _3, _4, _5, _6)
+#define WRITE7(_1, _2, _3, _4, _5, _6, _7)                                                   write(_1, _2, _3, _4, _5, _6, _7)
+#define WRITE8(_1, _2, _3, _4, _5, _6, _7, _8)                                               write(_1, _2, _3, _4, _5, _6, _7, _8)
+#define WRITE9(_1, _2, _3, _4, _5, _6, _7, _8, _9)                                           write(_1, _2, _3, _4, _5, _6, _7, _8, _9)
+#define WRITE10(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10)                                     write(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10)
+#define WRITE11(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11)                                write(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11)
+#define WRITE12(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12)                           write(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12)
+#define WRITE13(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13)                      write(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13)
+#define WRITE14(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14)                 write(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14)
+#define WRITE15(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15)            write(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15)
+#define WRITE16(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16)       write(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16)
 #else
-#define WRITE1(_1)                                 null()
-#define WRITE2(_1, _2)                             null()
-#define WRITE3(_1, _2, _3)                         null()
-#define WRITE4(_1, _2, _3, _4)                     null()
-#define WRITE5(_1, _2, _3, _4, _5)                 null()
-#define WRITE6(_1, _2, _3, _4, _5, _6)             null()
-#define WRITE7(_1, _2, _3, _4, _5, _6, _7)         null()
-#define WRITE8(_1, _2, _3, _4, _5, _6, _7, _8)     null()
-#define WRITELN1(_1)                               null()
-#define WRITELN2(_1, _2)                           null()
-#define WRITELN3(_1, _2, _3)                       null()
-#define WRITELN4(_1, _2, _3, _4)                   null()
-#define WRITELN5(_1, _2, _3, _4, _5)               null()
-#define WRITELN6(_1, _2, _3, _4, _5, _6)           null()
-#define WRITELN7(_1, _2, _3, _4, _5, _6, _7)       null()
-#define WRITELN8(_1, _2, _3, _4, _5, _6, _7, _8)   null()
+#define WRITE1(_1)                                                                           null()
+#define WRITE2(_1, _2)                                                                       null()
+#define WRITE3(_1, _2, _3)                                                                   null()
+#define WRITE4(_1, _2, _3, _4)                                                               null()
+#define WRITE5(_1, _2, _3, _4, _5)                                                           null()
+#define WRITE6(_1, _2, _3, _4, _5, _6)                                                       null()
+#define WRITE7(_1, _2, _3, _4, _5, _6, _7)                                                   null()
+#define WRITE8(_1, _2, _3, _4, _5, _6, _7, _8)                                               null()
+#define WRITE9(_1, _2, _3, _4, _5, _6, _7, _8, _9)                                           null()
+#define WRITE10(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10)                                     null()
+#define WRITE11(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11)                                null()
+#define WRITE12(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12)                           null()
+#define WRITE13(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13)                      null()
+#define WRITE14(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14)                 null()
+#define WRITE15(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15)            null()
+#define WRITE16(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16)       null()
+#endif
+
+#if defined(DEBUG_BUILD) && USE_CONSOLE
+#define WRITELN1(_1)                                                                           writeln(_1)
+#define WRITELN2(_1, _2)                                                                       writeln(_1, _2)
+#define WRITELN3(_1, _2, _3)                                                                   writeln(_1, _2, _3)
+#define WRITELN4(_1, _2, _3, _4)                                                               writeln(_1, _2, _3, _4)
+#define WRITELN5(_1, _2, _3, _4, _5)                                                           writeln(_1, _2, _3, _4, _5)
+#define WRITELN6(_1, _2, _3, _4, _5, _6)                                                       writeln(_1, _2, _3, _4, _5, _6)
+#define WRITELN7(_1, _2, _3, _4, _5, _6, _7)                                                   writeln(_1, _2, _3, _4, _5, _6, _7)
+#define WRITELN8(_1, _2, _3, _4, _5, _6, _7, _8)                                               writeln(_1, _2, _3, _4, _5, _6, _7, _8)
+#define WRITELN9(_1, _2, _3, _4, _5, _6, _7, _8, _9)                                           writeln(_1, _2, _3, _4, _5, _6, _7, _8, _9)
+#define WRITELN10(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10)                                     writeln(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10)
+#define WRITELN11(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11)                                writeln(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11)
+#define WRITELN12(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12)                           writeln(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12)
+#define WRITELN13(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13)                      writeln(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13)
+#define WRITELN14(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14)                 writeln(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14)
+#define WRITELN15(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15)            writeln(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15)
+#define WRITELN16(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16)       writeln(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16)
+#else
+#define WRITELN1(_1)                                                                           null()
+#define WRITELN2(_1, _2)                                                                       null()
+#define WRITELN3(_1, _2, _3)                                                                   null()
+#define WRITELN4(_1, _2, _3, _4)                                                               null()
+#define WRITELN5(_1, _2, _3, _4, _5)                                                           null()
+#define WRITELN6(_1, _2, _3, _4, _5, _6)                                                       null()
+#define WRITELN7(_1, _2, _3, _4, _5, _6, _7)                                                   null()
+#define WRITELN8(_1, _2, _3, _4, _5, _6, _7, _8)                                               null()
+#define WRITELN9(_1, _2, _3, _4, _5, _6, _7, _8, _9)                                           null()
+#define WRITELN10(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10)                                     null()
+#define WRITELN11(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11)                                null()
+#define WRITELN12(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12)                           null()
+#define WRITELN13(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13)                      null()
+#define WRITELN14(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14)                 null()
+#define WRITELN15(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15)            null()
+#define WRITELN16(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16)       null()
 #endif
 
 #if USE_CONSOLE

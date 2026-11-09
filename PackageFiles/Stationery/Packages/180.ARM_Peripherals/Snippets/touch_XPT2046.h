@@ -155,10 +155,10 @@ protected:
     * 91 1'001'0001 START+A1+M0+DIFF+PD1
     * D0 1'101'0001 START+A5+M0+DIFF+PD1
     */
-   static constexpr uint8_t Z1      = Start|Address_Z1|Conversion_Diff|Mode_12Bits|Power_FullPower;      // 0b1'011'0'0'01 = B1
-   static constexpr uint8_t Z2      = Start|Address_Z2|Conversion_Diff|Mode_12Bits|Power_FullPower;      // 0b1'100'0'0'01 = C1
-   static constexpr uint8_t X       = Start|Address_X |Conversion_Diff|Mode_12Bits|Power_FullPower;      // 0b1'101'0'0'01 = D1
-   static constexpr uint8_t Y       = Start|Address_Y |Conversion_Diff|Mode_12Bits|Power_FullPower;      // 0b1'001'0'0'01 = 91
+   static constexpr uint8_t Z1      = Start|Address_Z1|Conversion_Diff|Mode_12Bits|Power_FullPower;      // 0b1'011'0'0'11 = B1
+   static constexpr uint8_t Z2      = Start|Address_Z2|Conversion_Diff|Mode_12Bits|Power_FullPower;      // 0b1'100'0'0'11 = C1
+   static constexpr uint8_t X       = Start|Address_X |Conversion_Diff|Mode_12Bits|Power_FullPower;      // 0b1'101'0'0'11 = D1
+   static constexpr uint8_t Y       = Start|Address_Y |Conversion_Diff|Mode_12Bits|Power_FullPower;      // 0b1'001'0'0'11 = 91
    static constexpr uint8_t Last    = Start|Power_MinPower_Irq;                                          // 0b1'000'0'0'00 = 80
 
    static constexpr unsigned Z_THRESHOLD = 500;

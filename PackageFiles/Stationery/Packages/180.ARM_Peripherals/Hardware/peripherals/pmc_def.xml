@@ -200,7 +200,7 @@
    </binaryOption>
 
    <!-- ____ HVDSC1 ____ -->
-   <title description="High Voltage Detect" />
+   <title description="High Voltage Detect" condition="pmc_hvdsc1_hvdf_present" />
 
    <binaryOption key="pmc_hvdsc1_hvdf" condition="pmc_hvdsc1_hvdf_present"
       hidden="true"
@@ -248,7 +248,7 @@
    </binaryOption >
 
    <!-- ____ SRAMCTL ____ -->
-   <title description="SRAM Power-down in VLLS" />
+   <title description="SRAM Power-down in VLLS" condition="pmc_sramctl_vlls2pd_present" />
    <bitfieldOption key="pmc_sramctl_vlls2pd" condition="pmc_sramctl_vlls2pd_present"
       enabledBy="enablePeripheralSupport"
       typeName="PmcSramOffInLowPower"

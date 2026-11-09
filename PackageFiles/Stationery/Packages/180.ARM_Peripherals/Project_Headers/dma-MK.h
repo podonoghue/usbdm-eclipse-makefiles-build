@@ -715,18 +715,19 @@ $(/DMA/Setters:#error "/DMA/Setters not found" )
 
    /**
     * Waits until the channel indicates the transaction has completed.
+    * (DMA_CSR_DONE set)
     *
     * @param[in] dmaChannelNum DMA channel number
     */
    static void waitUntilComplete(DmaChannelNum dmaChannelNum) {
 
-      int lastCiter = dma->TCD[dmaChannelNum].CITER_ELINKNO;
+//      int lastCiter = dma->TCD[dmaChannelNum].CITER_ELINKNO;
       while ((dma->TCD[dmaChannelNum].CSR & DMA_CSR_DONE_MASK) == 0) {
-         int currentCiter = dma->TCD[dmaChannelNum].CITER_ELINKNO;
-         if (lastCiter != currentCiter) {
-            lastCiter = currentCiter;
-            __asm__ volatile("nop");
-         }
+//         int currentCiter = dma->TCD[dmaChannelNum].CITER_ELINKNO;
+//         if (lastCiter != currentCiter) {
+//            lastCiter = currentCiter;
+//         }
+         __asm__ volatile("nop");
       }
    }
 

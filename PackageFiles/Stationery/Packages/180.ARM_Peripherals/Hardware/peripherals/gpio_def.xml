@@ -852,6 +852,7 @@
       <variableTemplate key="/PCR/pcr_enums" discardRepeats="true" variables="%(left)" ><![CDATA[
       \t/**
       \t *  Convert PcrValue to %paramType0
+      \t * (%variables)
       \t *
       \t *  @param pcrValue Value to convert
       \t */
@@ -951,6 +952,7 @@
       \t   /**
       \t    * Constructor
       \t    * This version is appropriate for a pin used as a digital output
+      \t    * (%variables)
       \t    *
       %paramDescription
       \t    */
@@ -964,10 +966,11 @@
       key="/PCR/extra_methods"
       discardRepeats="true"
       linePadding="\t      "
-      nonDefaultParams="10" ><![CDATA[
+      nonDefaultParams="3" ><![CDATA[
       \t   /**
       \t    * Constructor
       \t    * This version is appropriate for a pin used as a digital input
+      \t    * (%variables)
       \t    *
       %paramDescription
       \t    */
@@ -981,10 +984,11 @@
       key="/PCR/extra_methods"
       discardRepeats="true"
       linePadding="\t      "
-      nonDefaultParams="10" ><![CDATA[
+      nonDefaultParams="6" ><![CDATA[
       \t   /**
       \t    * Constructor
       \t    * This version is appropriate for a pin used as a digital input/output
+      \t    * (%variables)
       \t    *
       %paramDescription
       \t    */
@@ -997,6 +1001,7 @@
       <variableTemplate variables="%(n)" key="/PCR/extra_methods"  discardRepeats="true" ><![CDATA[
          \t   /**
          \t    * Constructor
+         \t    * (%variables)
          \t    *
          \t    * @tparam   Types
          \t    * @param    rest
@@ -1109,6 +1114,7 @@
       \t * Set Pin Control Register Attributes
       \t * Parameters default to values appropriate for the pin function being used.
       \t * The clock to the port will be enabled before changing the PCR
+      \t * (%variables)
       \t *
          %paramDescription
       \t */
@@ -1172,6 +1178,7 @@
       \t *
       \t * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
       \t * The clock to the port will be enabled before changing the PCR.
+      \t * (%variables)
       \t *
          %paramDescription
       \t */
@@ -1214,6 +1221,7 @@
       \t *
       \t * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
       \t * The clock to the port will be enabled before changing the PCR.
+      \t * (%variables)
       \t *
          %paramDescription
       \t */
@@ -1240,30 +1248,30 @@
    </for>
 
    <variableTemplate
-      variables="/port_pcr_pd,/port_pcr_dse,/port_pcr_ode,/port_pcr_irqc,/port_pcr_isf,/port_pcr_pfe,/port_pcr_sre"
+      variables="/port_pcr_pd,/port_pcr_dse,/port_pcr_ode,/port_pcr_irqc,/port_pcr_pfe,/port_pcr_sre,/port_pcr_isf"
       key="/GPIO/set_in_out"
-      nonDefaultParams="10"
+      nonDefaultParams="6"
       discardRepeats="true" ><![CDATA[
-         \t/**
-         \t * Set pin as digital I/O.
-         \t * Pin is initially set as an input.
-         \t * Use SetIn() and SetOut() to change direction.
-         \t * If open-drain then input function may meaningfully be used while set as output
-         \t *
-         \t * @note Resets the Pin Control Register value (PCR value).
-         \t * @note Resets the pin output value to the inactive state
-         \t *
-            %paramDescription
-         \t */
-         \tstatic void setInOut(%params)  {
-         \t
-         \t   // Make input initially
-         \t   setIn();
-         \t   // Set inactive pin state (if later made output)
-         \t   setInactive();
-         \t   // Configure PCR
-         \t   Pcr::setPCR(%paramExpression);
-         \t}\n
+   \t/**
+   \t * Set pin as digital I/O.
+   \t * Pin is initially set as an input.
+   \t * Use SetIn() and SetOut() to change direction.
+   \t * If open-drain then input function may meaningfully be used while set as output
+   \t *
+   \t * @note Resets the Pin Control Register value (PCR value).
+   \t * @note Resets the pin output value to the inactive state
+   \t *
+      %paramDescription
+   \t */
+   \tstatic void setInOut(%params)  {
+   \t
+   \t   // Make input initially
+   \t   setIn();
+   \t   // Set inactive pin state (if later made output)
+   \t   setInactive();
+   \t   // Configure PCR
+   \t   Pcr::setPCR(%paramExpression);
+   \t}\n
    ]]></variableTemplate>
 
    <variableTemplate
@@ -1271,38 +1279,40 @@
       key="/GPIO/set_output"
       nonDefaultParams="10"
       discardRepeats="true" ><![CDATA[
-         \t/**
-         \t * @brief
-         \t * Enable pin as digital output with initial inactive level
-         \t * Configures <b>all</b> Pin Control Register (PCR) values\n
-         \t * Unreferenced fields are cleared.
-         \t *
-         \t * @note Resets the Pin Control Register value (PCR value).
-         \t * @note Resets the pin value to the inactive state
-         \t * @note Use setOut() for a lightweight change of direction without affecting other pin settings.
-         \t *
-            %paramDescription
-         \t */
-         \tstatic void setOutput(%params)  {
-         \t
-         \t   // Set initial level before enabling pin drive
-         \t   setInactive();
-         \t   // Make pin an output
-         \t   setOut();
-         \t   // Configure PCR
-         \t   Pcr::setPCR(%paramExpression);
-         \t}\n
+   \t/**
+   \t * @brief
+   \t * Enable pin as digital output with initial inactive level
+   \t * Configures <b>all</b> Pin Control Register (PCR) values
+   \t * Unreferenced fields are cleared.
+   \t * (%variables)
+   \t *
+   \t * @note Resets the Pin Control Register value (PCR value).
+   \t * @note Resets the pin value to the inactive state
+   \t * @note Use setOut() for a lightweight change of direction without affecting other pin settings.
+   \t *
+      %paramDescription
+   \t */
+   \tstatic void setOutput(%params)  {
+   \t
+   \t   // Set initial level before enabling pin drive
+   \t   setInactive();
+   \t   // Make pin an output
+   \t   setOut();
+   \t   // Configure PCR
+   \t   Pcr::setPCR(%paramExpression);
+   \t}\n
    ]]></variableTemplate>
 
    <variableTemplate
-      variables="/port_pcr_pd,/port_pcr_irqc,/port_pcr_isf,/port_pcr_pfe"
+      variables="/port_pcr_pd,/port_pcr_irqc,/port_pcr_pfe,/port_pcr_isf"
       key="/GPIO/set_input"
-      nonDefaultParams="10"
+      nonDefaultParams="3"
       discardRepeats="true" ><![CDATA[
    \t/**
    \t * Enable pin as digital input.
    \t * Configures <b>all</b> Pin Control Register (PCR) values
    \t * Unreferenced fields are cleared.
+   \t * (%variables)
    \t *
    \t * @note Resets the Pin Control Register value (PCR value).
    \t * @note Use setIn() for a lightweight change of direction without affecting other pin settings.
@@ -1328,6 +1338,7 @@
    \t * Pins are initially set as inputs.
    \t * Use setIn(), setOut() and setDirection() to change pin directions.
    \t * If open-drain then input function may meaningfully be used while set as output
+   \t * (%variables)
    \t *
    \t * @note Resets the Pin Control Register value (PCR value).
    \t * @note Resets the pin output value to the inactive state
@@ -1350,6 +1361,7 @@
    \t * Set all pins as digital outputs with initial inactive level
    \t * Configures <b>all</b> Pin Control Register (PCR) values\n
    \t * Unreferenced PCR fields are cleared.
+   \t * (%variables)
    \t *
    \t * @note Resets the Pin Control Register value (PCR value).
    \t * @note Resets the pin value to the inactive state
@@ -1364,14 +1376,15 @@
    ]]></variableTemplate>
 
    <variableTemplate
-      variables="/port_pcr_pd,/port_pcr_irqc,/port_pcr_isf,/port_pcr_pfe"
+      variables="/port_pcr_pd,/port_pcr_irqc,/port_pcr_pfe,/port_pcr_isf"
       key="/GPIO/field_set_input"
-      nonDefaultParams="10"
+      nonDefaultParams="3"
       discardRepeats="true" ><![CDATA[
    \t/**
    \t * Set all pins as digital inputs
    \t * Configures <b>all</b> Pin Control Register (PCR) values
    \t * Unreferenced fields are cleared.
+   \t * (%variables)
    \t *
    \t * @note Resets the Pin Control Register value (PCR value).
    \t * @note Use setIn() for a lightweight change of direction without affecting other pin settings.

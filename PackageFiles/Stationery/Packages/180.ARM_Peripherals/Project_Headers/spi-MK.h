@@ -34,6 +34,9 @@ namespace USBDM {
  * @brief C++ Class allowing access to SPI interface
  * @{
  */
+// /SPI/peripheral_h_types
+$(/SPI/peripheral_h_types:// $/SPI/peripheral_h_types not found)
+// /SPI/peripheral_h_definition
 $(/SPI/peripheral_h_definition:// $/SPI/peripheral_h_definition not found)
 
 #if $(/SPI/dmaSupport:false)

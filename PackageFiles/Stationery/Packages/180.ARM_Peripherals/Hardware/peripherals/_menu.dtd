@@ -938,7 +938,13 @@ forceInfo  | info       | -                      | false                  | Forc
    <!ATTLIST choiceOption generateAsConstants (true)       #IMPLIED>
    <!-- Used to control generation of enum (default is true) -->
    <!ATTLIST choiceOption generateEnum       (false)      #IMPLIED>
-   <!-- Template for generateAsConstants -->
+   <!-- Template for generateAsConstants 
+      %t  type
+      %b  baseType
+      %n  name
+      %v" value
+      %c" comment   
+   -->
    <!ATTLIST choiceOption constantTemplate    CDATA        #IMPLIED>
    <!-- Generate logical operators to combine enum values -->
    <!ATTLIST choiceOption generateOperators   (true)       #IMPLIED>

@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MK10D5
       MK10D7
       MK10D10
@@ -83,7 +83,7 @@ Devices using this peripheral:
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
                <name>REG%s</name>
-               <description>VBAT register file register</description>
+               <description>VBAT register file as uint32_t</description>
                <addressOffset>0x0</addressOffset>
                <fields>
                   <field>
@@ -111,6 +111,22 @@ Devices using this peripheral:
                      <bitWidth>8</bitWidth>
                   </field>
                </fields>
+            </register>
+            <register>
+               <dim>32</dim>
+               <dimIncrement>1</dimIncrement>
+               <name>REG8%s</name>
+               <description>VBAT register file as uint8_t</description>
+               <addressOffset>0x0</addressOffset>
+               <size>8</size>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>1</dimIncrement>
+               <name>REG16%s</name>
+               <description>VBAT register file as uint16_t</description>
+               <addressOffset>0x0</addressOffset>
+               <size>16</size>
             </register>
          </registers>
       </peripheral>

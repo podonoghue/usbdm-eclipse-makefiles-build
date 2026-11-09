@@ -43,7 +43,7 @@
       hidden="true"
       typeName="SpiTransferFlag"
       baseType="uint32_t"
-      toolTip=""
+      toolTip="Indicates that all bits in a frame have been shifted out"
       description="Transfer Complete Flag" >
       <choice name="Transfer not complete"  value="0" enum="NotComplete" />
       <choice name="Transfer complete"      value="1" enum="Complete" />
@@ -589,7 +589,8 @@
       <choice value="1" name="Clear counter"  enum="Clear"     />
    </binaryOption>
 
-   <choiceOption key="spi_pushr_pcs_enum"
+   <choiceOption key="/SPI/spi_pushr_pcs" condition="spi_pushr_pcs_present&amp;&amp;!/SPI/spi_pushr_pcs"
+      templateKey="/$(_BASENAME)/peripheral_h_types"
       hidden="true"
       derived="true"
       valueFormat="SPI_PUSHR_PCS(%s)"
@@ -603,19 +604,38 @@
             name="Assert PCS%(c) during transaction"
             value="1U&lt;&lt;%(c)"
             enum="Pcs%(c)"
-            signal="$(_NAME)_PCS%(c)"
-            condition='@SignalExists("$(_NAME)_PCS%(c)")'
             keys="c"
             dim="6" />
       <choice          name="PCSx not asserted" value="0"  enum="None" />
    </choiceOption>
 
+   <choiceOption key="spi_pushr_pcs_enum" condition="spi_pushr_pcs_present"
+      valueFormat="SpiPeripheralSelect_%s"
+      hidden="true"
+      derived="true"
+      templateKey="/$(_BASENAME)/peripheral_h_types"
+      typeName="Spi$(_instance)PeripheralSelect"
+      baseType="SpiPeripheralSelect"
+      generateEnum="false"
+      constantTemplate="\tinline constexpr %b %n   = %v; ///&lt; %c"
+      description="SPI$(_instance) Peripheral Chip Select"
+      toolTip="Mask to select which Peripheral Chip Select Line (PCS) to assert during transaction\n
+               Note: more than one PCS may be asserted (allows use of an external decoder)" >
+      <choiceExpansion
+            name='@SignalDescription("$(_NAME)_PCS%(i)","^(.*?)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
+            condition='@SignalExists("$(_NAME)_PCS%(i)")'
+            value="Pcs%(i)" enum="Pcs%(i)"
+            keys="i" dim="5"
+            signal="SPI$(_instance)_PCS%(i)" />
+   </choiceOption>
+
    <bitmaskOption key="spi_pushr_pcs" condition="spi_pushr_pcs_present"
-      derivedFrom="spi_pushr_pcs_enum"
+      derivedFrom="/SPI/spi_pushr_pcs"
       bitmask="0x0"
-      bitList='@SignalList("^SPI\d_(PCS\d)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
+      bitList='@SignalList("^SPI\d_PCS(\d)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","Pcs$1")'
       value="0"
-      bitDescription='@"Assert PCS%i during transaction"'
+      generateOperators="true"
+      bitDescription='@SignalList("^SPI\d_(PCS\d)\|(.*?)\|(.*?)\|(.*?)\|(.*?)$","$4")'
    />
 
 <!-- ====================================================================================================== -->
@@ -725,6 +745,14 @@
 
    <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
    <![CDATA[
+      \t// Size of Tx and Rx FIFOs
+      \tconst uint8_t FifoSize;
+      \t\n
+   ]]>
+   </template>
+
+   <template where="basicInfo" codeGenCondition="$(_BasicInfoGuard)" >
+   <![CDATA[
       \t/**
       \t * Basic enable of SPI
       \t * Includes enabling clock and configuring all pins if mapPinsOnEnable is selected in configuration
@@ -746,7 +774,7 @@
       \t *
       \t * @param $(_basename) $(_BASENAME) hardware instance
       \t */
-      \tconstexpr $(_BasicInfo)(volatile $(_Type) * $(_basename)) : $(_basename)($(_basename)) {
+      \tconstexpr $(_BasicInfo)(volatile $(_Type) * $(_basename), uint8_t fifoSize) : $(_basename)($(_basename)), FifoSize(fifoSize) {
       \t}
       \t
       \t/**
@@ -1029,7 +1057,7 @@
       </variableTemplate>
 
       <variableTemplate location="%(where)" codeGenCondition="%(guard)"
-         variables="spi_mcr_pcsis,spi_pushr_pcs"
+         variables="spi_mcr_pcsis,/SPI/spi_pushr_pcs"
          tooltipPadding="x*x" >
       <![CDATA[
          \t/**
@@ -1236,12 +1264,39 @@
       \t      ctar(ctar) {
       \t   }
       \t
+      \t  /**
+      \t   * May be used to create the first data value in a padded array for SPI DMA.
+      \t   * Generated value has Clear Transmit Count flag set so that the Tx count
+      \t   * (in TCR register) will be cleared before this data value is transmitted.
+      \t   *
+      \t   * @param data Data value (<= 16 bits)
+      \t   *
+      \t   * @return  Padded 32-bit value (PUSHR value combined with data)
+      \t   */
       \t   uint32_t firstValue(uint16_t data) const {
       \t      return (pushrCommand.value<<16)|data|SpiCountAction_Clear;
       \t   }
+      \t
+      \t  /**
+      \t   * May be used to create a middle data value in a padded array for SPI DMA.
+      \t   *
+      \t   * @param data Data value (<= 16 bits)
+      \t   *
+      \t   * @return  Padded 32-bit value (PUSHR value combined with data)
+      \t   */
       \t   uint32_t middleValue(uint16_t data) const {
       \t      return (pushrCommand.value<<16)|data;
       \t   }
+      \t
+      \t  /**
+      \t   * May be used to create the last data value in a padded array for SPI DMA.
+      \t   * Generated value has End Of Queue flag set so that the EOF flag in SPI Status
+      \t   * register will be set when this data value completes transmission.
+      \t   *
+      \t   * @param data Data value (<= 16 bits)
+      \t   *
+      \t   * @return  Padded 32-bit value (PUSHR value combined with data)
+      \t   */
       \t   uint32_t lastValue(uint16_t data) const {
       \t      return (pushrFinalCommand.value<<16)|data|SpiEndOfQueue_Assert;
       \t   }
@@ -1401,7 +1456,7 @@
    <variableTemplate where="basicInfo" codeGenCondition="$(_BasicInfoGuard)"
       variables="
          spi_ctar_sel,
-         spi_pushr_pcs,
+         /SPI/spi_pushr_pcs,
          PeripheralSelectMode"
          linePadding="xxx"
    ><![CDATA[
@@ -1503,7 +1558,7 @@
       \t\n
    ]]></variableTemplate>
 
-   <variableTemplate where="basicInfo" variables="spi_pushr_pcs_enum"
+   <variableTemplate where="basicInfo" variables="/SPI/spi_pushr_pcs"
       linePadding="xxx"
    ><![CDATA[
       \t   /**
@@ -1608,9 +1663,9 @@
              " var                                                    : statement            "
       values=" spi_mcr_mstr,spi_mcr_cont_scke,spi_mcr_frz,
                spi_mcr_mtfe,spi_mcr_rooe,spi_mcr_pcsis,spi_mcr_doze,
-               spi_mcr_mdis,spi_mcr_dis_fifox,
-               spi_mcr_clr_fifox,
-               spi_mcr_halt       : %register = init.%registerName.value|SpiClearFifo_Both ;
+               spi_mcr_mdis,
+               spi_mcr_halt       : %register = init.%registerName.value ;
+               spi_mcr_dis_fifox,spi_mcr_clr_fifox  : %register = init.%registerName.value|SpiClearFifo_Both ;
                spi_sr_tcf,spi_sr_txrxs,spi_sr_eoqf,spi_sr_tfuf,
                spi_sr_tfff,spi_sr_rfof,spi_sr_rfdf                    : %register = %mask  ;
                spi_rser_tcf_re,spi_rser_eoqf_re,spi_rser_tfuf_re,
@@ -1942,44 +1997,49 @@
       \t
       \t   static_assert (((sizeof(T) == 1)||(sizeof(T) == 2)), "Size of data type T must be 8 or 16-bits");
       \t
-      \t   // Clear FIFOs just in case they are corrupted
+      \t   // Clear FIFOs and initial status
       \t   clearFifos(SpiClearFifo_Both);
+      \t   clearStatusFlags(SpiStatusFlag_AllFlags);
       \t
-      \t   clearStatusFlags();
+      \t   // For SPI Tx is one-for-one with Rx
+      \t   int rxDataSize = (int)dataSize;
+      \t   int txDataSize = (int)dataSize;
       \t
-      \t   uint32_t rxDataSize = dataSize;
-      \t   uint32_t txDataSize = dataSize;
-      \t   do {
-      \t      // Keep Tx FIFO full while monitoring Rx FIFO
+      \t   int fifoSize = this->FifoSize;
       \t
-      \t      // Clear Tx FIFO fill flag (it will remain set if Tx FIFO still has space available)
-      \t      spi->SR = SPI_SR_TFFF_MASK;
+      \t   if ((spi->MCR&SpiEnableFifo_None) != SpiEnableFifo_Both) {
+      \t      fifoSize = 1;
+      \t   }
       \t
-      \t      while ((txDataSize>0) && ((spi->SR&SPI_SR_TFFF_MASK)!=0)) {
+      \t   // Loop tries to keep Tx FIFO full
+      \t   // Only empties Rx FIFO when Tx FIFO is full or no more Tx values
+      \t   while (txDataSize>0) {
       \t
-      \t         // Send data value (may be dummy)
-      \t         uint32_t sendData = 0xFFFF;
-      \t         if (txData != nullptr) {
-      \t            sendData = (uint16_t)*txData++;
-      \t         }
+      \t      // Wait for TX FIFO not full
+      \t      while (!(getStatusFlags()&SpiStatusFlag_TransmitFifoFillFlag)) {
+      \t         clearStatusFlags(SpiStatusFlag_TransmitFifoFillFlag);
+      \t      }
+      \t      // Send data value (may be dummy)
+      \t      uint32_t sendData = 0xFFFF;
+      \t      if (txData != nullptr) {
+      \t         sendData = (uint16_t)*txData++;
+      \t      }
+      \t      // Push to Tx FIFO
+      \t      if (lastTransaction && (txDataSize == 1)) {
+      \t         // Mark last data
+      \t         spi->PUSHR = sendData|pushrMaskFinal.value;
+      \t      }
+      \t      else {
+      \t         // Keep SPI_PCS control
+      \t         spi->PUSHR = sendData|pushrMask.value;
+      \t      }
+      \t      txDataSize--;
+      \t      clearStatusFlags(SpiStatusFlag_TransmitFifoFillFlag);
       \t
-      \t         txDataSize--;
+      \t      while (((txDataSize == 0) && (rxDataSize>0)) ||
+      \t            (rxDataSize >= (fifoSize + txDataSize))) {
       \t
-      \t         // Push to Tx FIFO
-      \t         if (lastTransaction && (txDataSize == 0)) {
-      \t            // Mark last data
-      \t            spi->PUSHR = sendData|pushrMaskFinal.value;
-      \t         }
-      \t         else {
-      \t            // Keep SPI_PCS control
-      \t            spi->PUSHR = sendData|pushrMask.value;
-      \t         }
-      \t
-      \t         // Clear Rx FIFO drain flag (it will remain set if Rx FIFO still not empty)
-      \t         spi->SR = SPI_SR_RFDF_MASK|SPI_SR_TFFF_MASK;
-      \t
-      \t         // Check Rx FIFO
-      \t         if ((spi->SR&SPI_SR_RFDF_MASK)!=0) {
+      \t         if (getStatusFlags()&SpiStatusFlag_ReceiveFifoDrainFlag) {
       \t
       \t            // Get Rx data (may be discarded)
       \t            uint32_t receiveData = spi->POPR;
@@ -1987,22 +2047,10 @@
       \t               *rxData++ = receiveData;
       \t            }
       \t            rxDataSize--;
+      \t            clearStatusFlags(SpiStatusFlag_ReceiveFifoDrainFlag);
       \t         }
       \t      }
-      \t      // Drain Rx FIFO of remaining data
-      \t
-      \t      // Clear Rx FIFO drain flag (it will remain set if there is still data)
-      \t      spi->SR = SPI_SR_RFDF_MASK;
-      \t      if ((spi->SR&SPI_SR_RFDF_MASK)!=0) {
-      \t
-      \t         // Get Rx data (may be discarded)
-      \t         uint32_t receiveData = spi->POPR;
-      \t         if (rxData != nullptr) {
-      \t            *rxData++ = receiveData;
-      \t         }
-      \t         rxDataSize--;
-      \t      }
-      \t   } while(rxDataSize>0);
+      \t   }
       \t}
       \t#pragma GCC pop_options
       \t
@@ -2397,6 +2445,15 @@
 <!--     START Info class      -->
 <!-- ====================================================================================================== -->
 
+   <template where="info" codeGenCondition='$(_InfoGuard)'
+         immediateVariables="spi_txfr_dim" >
+   <![CDATA[
+      \t// Size of Tx and Rx FIFOs
+      \tstatic constexpr int FifoSize = $(spi_txfr_dim);
+      \t\n
+   ]]>
+   </template>
+
    <for keys="   pinName       : name  : function      : pcrFunction"
         values=" $(_NAME)_PCS0 : Pcs0  : setPcs0Output : setOutput ;
                  $(_NAME)_PCS1 : Pcs1  : setPcs1Output : setOutput ;
@@ -2495,14 +2552,14 @@
       \t/**
       \t *   Default Constructor
       \t */
-      \t$(_Info)() : $(_BasicInfo)($(_basename)) {
+      \t$(_Info)() : $(_BasicInfo)($(_basename), FifoSize) {
       \t   defaultConfigure();
       \t}
       \t
       \t/**
       \t *   Constructor
       \t */
-      \t$(_Info)(const Init &init) : $(_BasicInfo)($(_basename)) {
+      \t$(_Info)(const Init &init) : $(_BasicInfo)($(_basename), FifoSize) {
       \t   configure(init);
       \t   static_assert(info[SckPinIndex].pinIndex  != PinIndex::UNMAPPED_PCR, "SPIx_SCK has not been assigned to a pin - Modify Configure.usbdm");
       \t   static_assert(info[SinPinIndex].pinIndex  != PinIndex::UNMAPPED_PCR, "SPIx_SIN has not been assigned to a pin - Modify Configure.usbdm");
@@ -2595,6 +2652,7 @@
       terminator=","
       padToComments="45"
       variables="
+            spi_pushr_pcs,
             spi_mcr_mstr,spi_mcr_cont_scke,spi_mcr_frz,
             spi_mcr_mtfe,spi_mcr_rooe,spi_mcr_pcsis,spi_mcr_doze,
             spi_mcr_mdis,spi_mcr_dis_fifox,

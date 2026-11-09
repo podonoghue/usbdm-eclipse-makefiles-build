@@ -180,7 +180,7 @@ public:
       ChannelCommon(ChannelCommon&&) = delete;
 
    public:
-      constexpr ChannelCommon() : AdcChannel(AdcInfo::baseAddress, channel) {}
+      constexpr ChannelCommon() : AdcChannel((volatile ADC_Type*)AdcInfo::baseAddress, (uint8_t)channel) {}
 
       /** The ADC that owns this channel */
       using Owner = AdcBase_T;

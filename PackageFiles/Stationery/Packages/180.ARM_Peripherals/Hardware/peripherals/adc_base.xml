@@ -1789,7 +1789,7 @@ public:
          adc_sc3_adco,
          adc_sample" >
    <![CDATA[
-      \t%initNonZeroValues\n
+      \t%initExpression\n
    ]]></variableTemplate>
    <variableTemplate codeGenCondition="$(_InfoGuard)&amp;&amp;(adc_sc2_compare!=0)"
       separator=","

@@ -588,6 +588,49 @@
       tooltipPadding="x*x" >
    <![CDATA[
       \t/**
+      \t * Cumulatively calculate CRC over an array
+      \t * Assumes CRC has been initialised before 1st use using
+      \t * configure(...) or calculateCrc(const Init &init, ...).
+      \t * (%variables)
+      \t *
+      \t * @tparam T         Type of data in array (inferred)
+      \t *
+      \t * @param data       Data to calculate CRC over
+      \t * @param numEntries Size of data array in elements
+      \t *
+      \t * @return  Calculated CRC
+      \t */
+      \ttemplate<typename T>
+      \t%(static)uint32_t calculateCrc(const T data[], unsigned numEntries) %(const){
+      \t
+      \t   // Write data to CRC unit i.e. calculate CRC
+      \t   for(unsigned index=0; index<numEntries; index++) {
+      \t      %register = data[index];
+      \t   }
+      \t   // Return result
+      \t   return getCalculatedCrc();
+      \t}
+      \t
+      \t/**
+      \t * Calculate CRC over an array
+      \t * (%variables)
+      \t *
+      \t * @tparam T         Type of data in array (inferred)
+      \t *
+      \t * @param init       CRC initialisation information
+      \t * @param data       Data to calculate CRC over
+      \t * @param numEntries Size of data array in elements
+      \t *
+      \t * @return  Calculated CRC
+      \t */
+      \ttemplate<typename T>
+      \t%(static)uint32_t calculateCrc(const Init &init, const T *data, unsigned numEntries) %(const){
+      \t
+      \t   configure(init);
+      \t   return calculateCrc(data, numEntries);
+      \t}
+      \t
+      \t/**
       \t * Calculate CRC over an array
       \t * (%variables)
       \t *
@@ -602,14 +645,7 @@
       \ttemplate<typename T, size_t N>
       \t%(static)uint32_t calculateCrc(const Init &init, const T (&data)[N]) %(const){
       \t
-      \t   configure(init);
-      \t
-      \t   // Write data to CRC unit i.e. calculate CRC
-      \t   for(unsigned index=0; index<N; index++) {
-      \t      %register = data[index];
-      \t   }
-      \t   // Return result
-      \t   return getCalculatedCrc();
+      \t   return calculateCrc(init, data, N);
       \t}
       \t\n
    ]]>

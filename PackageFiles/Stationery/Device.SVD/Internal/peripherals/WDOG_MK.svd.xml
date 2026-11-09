@@ -1,5 +1,5 @@
 <!--
-Devices using this peripheral: 
+Devices using this peripheral:
       MK02F12810
       MK10D5
       MK10D7
@@ -427,7 +427,10 @@ In this mode the watchdog can be refreshed only when the timer has reached a val
             </register>
             <register>
                <name>REFRESH</name>
-               <description>Refresh Register</description>
+               <description>Refresh Register\n
+Writing a sequence of 0xA602 followed by 0xB480 to this register within 20 bus clock cycles\n
+refreshes the WDOG and prevents it from resetting the system.\n
+Writing another value or, a too-long sequence, will reset the system. </description>
                <addressOffset>0xC</addressOffset>
                <size>16</size>
                <resetValue>0xB480</resetValue>

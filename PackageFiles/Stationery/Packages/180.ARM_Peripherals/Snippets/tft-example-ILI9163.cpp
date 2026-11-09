@@ -29,18 +29,16 @@ using namespace USBDM;
 int main() {
 
    static const Spi0::Init spiConfig {
-      {
-         // Common setting that are seldom changed
-         SpiModifiedTiming_Normal ,                   // Modified Timing Format - Normal Timing
-         SpiDoze_Enabled ,                            // Enables Doze mode (when processor is waiting?) - Suspend in doze
-         SpiFreeze_Enabled ,                          // Controls SPI operation while in debug mode - Suspend in debug
-         SpiRxOverflowHandling_Overwrite ,            // Handling of Rx Overflow Data - Overwrite existing
-         SpiContinuousClock_Disable,                  // Continuous SCK Enable - Clock during transfers only
-         SpiPcsActiveLow_None,                        // Polarity for PCS signals
-         SpiPeripheralSelectMode_Transaction          // Negate PCS between Transactions
-      },
-      { /* CTARs default */ }
-   };
+      // Common setting that are seldom changed
+      SpiModifiedTiming_Normal ,                   // Modified Timing Format - Normal Timing
+      SpiDoze_Enabled ,                            // Enables Doze mode (when processor is waiting?) - Suspend in doze
+      SpiFreeze_Enabled ,                          // Controls SPI operation while in debug mode - Suspend in debug
+      SpiRxOverflowHandling_Overwrite ,            // Handling of Rx Overflow Data - Overwrite existing
+      SpiContinuousClock_Disable,                  // Continuous SCK Enable - Clock during transfers only
+      SpiPcsActiveLow_None,                        // Polarity for PCS signals
+      SpiPeripheralSelectMode_Transaction,         // Negate PCS between Transactions
+      SpiEnableFifo_None,
+};
 
    // Shared SPI to use
    Spi0 spi(spiConfig);
